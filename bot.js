@@ -119,4 +119,12 @@ client.on("message", message => {
   }
 });
 
+client.on("message", message => {
+  if (message.channel.id !== "672516067440197693") return;
+  if (message.author.id !== "699901599509905429") return;
+  if (!message.embed) return;
+  const mudaeEmbed = message.embed;
+  console.log(mudaeEmbed);
+};
+
 client.login(process.env.token);
