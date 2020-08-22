@@ -1,0 +1,98 @@
+[
+  {
+    "en": "Bulbasaur",
+    "fr": "Bulbizarre",
+    "img": "001",
+    "drop": 0.7
+  },
+  {
+    "en": "Ivysaur",
+    "fr": "Herbizarre",
+    "img": "002",
+    "drop": 0.6
+  },
+  {
+    "en": "Venusaur",
+    "fr": "Florizarre",
+    "img": "003",
+    "drop": 0.5,
+    "mega": "003_f2",
+    "giga": "003_f3"
+  },
+  {
+    "en": "Charmander",
+    "fr": "Salamèche",
+    "img": "004",
+    "drop": 0.7
+  },
+  {
+    "en": "Charmeleon",
+    "fr": "Reptincel",
+    "img": "005",
+    "drop": 0.6
+  },
+  {
+    "en": "Charizard",
+    "fr": "Dracaufeu",
+    "img": "006",
+    "drop": 0.5,
+    "megax": "006_f2",
+    "megay": "006_f3",
+    "giga": "006_f4"
+  },
+  {
+    "en": "Squirtle",
+    "fr": "Carapuce",
+    "img": "007",
+    "drop": 0.7
+  },
+  {
+    "en": "Wartortle",
+    "fr": "Carabaffe",
+    "img": "008",
+    "drop": 0.6
+  },
+  {
+    "en": "Blastoise",
+    "fr": "Tortank",
+    "img": "009",
+    "drop": 0.5,
+    "mega": "009_f2"
+  },
+  {
+    "en": "Caterpie",
+    "fr": "Chenipan",
+    "img": "010",
+    "drop": 1
+  },
+  {
+    "en": "Metapod",
+    "fr": "Chrysacier",
+    "img": "011",
+    "drop": 0.9
+  },
+  {
+    "en": "Butterfree",
+    "fr": "Papilusion",
+    "img": "012",
+    "drop": 0.8
+  },
+  {
+    "en": "Weedle",
+    "fr": "Aspicot",
+    "img": "013",
+    "drop": 1
+  },
+  {
+    "en": "Kakuna",
+    "fr": "Coconfort",
+    "img": "014",
+    "drop": 0.9
+  },
+  {
+    "en": "Beedrill",
+    "fr": "Dardargnan",
+    "img": "015",
+    "drop": 0.8
+  }
+]
