@@ -125,6 +125,6 @@ client.on("message", message => {
   if (!message.embed) return;
   const mudaeEmbed = message.embed;
   console.log(mudaeEmbed);
-};
+});
 
 client.login(process.env.token);
