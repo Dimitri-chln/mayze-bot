@@ -7,7 +7,7 @@ module.exports = {
     if (mudaeEmbed.color !== 16751916) return;
     if (mudaeEmbed.footer) return;
     const characterName = mudaeEmbed.author.name;
-    const characterSerie = mudaeEmbed.description.split("\n")[0];
+    const characterSeries = mudaeEmbed.description.split("\n")[0];
     console.log("// wish detection");
   }
 };
