@@ -1,0 +1,46 @@
+{
+  "307815349699608577": [
+    {
+      "name": "Mario|Luigi",
+      "stars": 5
+    },
+    {
+      "name": "Kirby",
+      "stars": 3
+    },
+    {
+      "name": "Zelda|Hyrule",
+      "stars": 5
+    },
+    {
+      "name": "Sword Art Online",
+      "stars": 5
+    },
+    {
+      "name": "Ao no Exorcist",
+      "stars": 4
+    },
+    {
+      "name": "Ansatsu Kyoushitsu",
+      "stars": 3
+    },
+    {
+      "name": "No Game No Life",
+      "stars": 2
+    }
+  ],
+  "394633964138135563": [
+    {
+      "name": "One Piece",
+      "stars": 5
+    },
+    {
+      "name": "Tokyo Ghoul",
+      "stars": 3
+    },
+    {
+      "name": "Pokémon Black/White",
+      "stars": 2
+    }
+  ]
+}
