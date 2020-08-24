@@ -5,6 +5,10 @@
       "stars": 5
     },
     {
+      "name": "Splatoon",
+      "stars": 5
+    },
+    {
       "name": "Kirby",
       "stars": 3
     },
@@ -41,6 +45,12 @@
     {
       "name": "Pokémon Black/White",
       "stars": 2
+    }
+  ],
+  "638640935021838347": [
+    {
+      "name": "Fairy Tail",
+      "stars": 5
     }
   ]
 }

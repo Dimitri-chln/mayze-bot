@@ -15,9 +15,13 @@ module.exports = {
       for (const wish of wishes) {
         const regex = new RegExp(wish.name, "i");
         if (regex.test(characterSeries)) {
-          message.channel.send(`**${characterName}** est souhaité par <@${user}> !\n(${characterSeries})\nImportance: ${"❤️".repeat(wish.stars) + "🖤".repeat(5 - wish.stars)}`);
-        };
-      };
-    };
+          message.channel.send(
+            `**${characterName}** est souhaité par <@${user}> !\n(${characterSeries})\nImportance: ${"❤️".repeat(
+              wish.stars
+            ) + "🖤".repeat(5 - wish.stars)}`
+          );
+        }
+      }
+    }
   }
 };
