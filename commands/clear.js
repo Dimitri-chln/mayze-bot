@@ -11,9 +11,9 @@ module.exports = {
     message.channel.messages.fetch({"limit": number+1}).then(messages => {
       const userRegex = /<@!?\d{18}>/;
       var messagesToDelete = messages;
-      if (args[1].toLowerCase() === "bot") {
+      if (args.length >= 1 && args[1].toLowerCase() === "bot") {
         messagesToDelete = messages.filter(msg => msg.author.bot);
-      } else if (args[1] === "-r" && args.length >= 3) {
+      } else if (args.length >= 3 && args[1] === "-r") {
         const regex = new RegExp(args[2], "i");
         messagesToDelete = messages.filter(msg => regex.test(msg));
       };
