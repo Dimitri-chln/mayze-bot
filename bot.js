@@ -28,10 +28,10 @@ client.molkky = new Discord.Collection();
 client.on("ready", () => {
   console.log("--------------------");
   console.log("BOT STARTED UP");
-  console.log(client);
   const owner = client.users.cache.get(config.ownerID);
   owner.send("BOT STARTED UP");
   client.user.setActivity("le meilleur clan", { type: "WATCHING" });
+  console.log(client._events);
 });
 
 client.on("message", message => {
