@@ -7,7 +7,7 @@ module.exports = {
   execute(message, args) {
     const images = require("../fixedData/images.json");
     if (args.length >= 1) {
-      var hug = message.guild.members.cache.get(args[0].replace(/<@!?|>/g, ""));
+      var hug = message.guild.members.cache.get(args[0].replace(/[<@!>]/g, ""));
       if (hug) {
         message.channel.send({
           embed: {
