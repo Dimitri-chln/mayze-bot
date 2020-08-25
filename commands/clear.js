@@ -20,7 +20,7 @@ module.exports = {
         messagesToDelete = messages.filter(msg => regex.test(msg));
       };
       message.channel.bulkDelete(messagesToDelete);
-      message.channel.send(`${messagesToDelete.size} messages ont été supprimés !\`\`\`${messagesToDelete.map(m => m.content).join("\n")}\`\`\``)
+      message.channel.send(`${messagesToDelete.size} messages ont été supprimés !`)
       .then(m => m.delete(4000));
     });
   }
