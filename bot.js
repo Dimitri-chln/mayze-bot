@@ -31,7 +31,7 @@ client.on("ready", () => {
   const owner = client.users.cache.get(config.ownerID);
   owner.send("BOT STARTED UP");
   client.user.setActivity("le meilleur clan", { type: "WATCHING" });
-  console.log(client._events);
+  console.log(client.user, client.presence);
 });
 
 client.on("message", message => {
