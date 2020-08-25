@@ -6,7 +6,7 @@ module.exports = {
   args: 1,
   usage: "<nombre> [\"bot\"|-r <regex>]",
   execute(message, args) {
-    if (message.member.hasPermission("ADMINISTRATOR") {
+    if (message.member.hasPermission("ADMINISTRATOR")) {
       const number = parseInt(args[0], 10);
       if (isNaN(number) || number <= 0 || number > 100) return message.reply("le premier argument doit être un nombre entier compris entre 1 et 100!");
       message.channel.messages.fetch({"limit": number+1}).then(messages => {
