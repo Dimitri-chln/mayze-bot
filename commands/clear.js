@@ -6,11 +6,12 @@ module.exports = {
   args: 1,
   usage: "<nombre> [\"bot\"|mention/id] [-r <regex>]",
   execute(message, args) {
-    const number = args[0];
-    message.channel.messages.fetch({"limit": number}).then(messages => {
+    const number = parseInt(args[0], 10);
+    if (isNaN number || number <= 0 || number > 100) return message.reply("Le premier argument doit être un nombre entier compris entre 1 et 100!");
+    message.channel.messages.fetch({"limit": number+1}).then(messages => {
       const userRegex = /<@!?\d{18}>/;
       var messagesToDelete = messages;
-      if (args.length >= 2 && userRegex.test(args[1]) {
+      if (args.length >= 2 && userRegex.test(args[1])) {
         messagesToDelete = messages.filter(msg => msg.author.id === args[1].replace(/[<@!>]/, ""));
       } else if (args [1] === "bot") {
         messagesToDelete = messages.filter(msg => msg.author.bot);
@@ -18,10 +19,9 @@ module.exports = {
         const regex = args[2];
         messagesToDelete = messages.filter(msg => regex.test(msg));
       };
-      message.channel.send(`${messageToDelete.length} messages ont été supprimés !\`\`\`${messagesToDelete.map(m => m.content).join("\n")}\`\`\``)
+      console.log(messagesToDelete);
+      message.channel.send(`${messagesToDelete.length} messages ont été supprimés !\`\`\`${messagesToDelete.map(m => m.content).join("\n")}\`\`\``)
       //.then(m => m.delete());
-    }).catch(err => {
-      console.log("Error while doing bulk delete");
     });
   }
 };
