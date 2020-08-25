@@ -5,10 +5,6 @@ module.exports = {
   args: 0,
   usage: "",
   execute(message, args) {
-    message.channel
-      .send("Pinging...")
-      .then(msg =>
-        msg.edit(`Pong! **${Math.abs(Date.now() - msg.createdTimestamp)}**ms`)
-      );
+    message.channel.send(`Pong! ${message.client.ws.ping}ms`);
   }
 };
