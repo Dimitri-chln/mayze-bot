@@ -8,7 +8,7 @@ module.exports = {
     const images = require("../fixedData/images.json");
     if (args.length >= 1) {
       var kiss = message.guild.members.cache.get(
-        args[0].replace(/<@!?|>/g, "")
+        args[0].replace(/[<@!>]/g, "")
       );
       if (kiss) {
         message.channel.send({
