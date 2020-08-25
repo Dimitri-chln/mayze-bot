@@ -21,7 +21,7 @@ module.exports = {
       };
       message.channel.bulkDelete(messagesToDelete);
       message.channel.send(`${messagesToDelete.size} messages ont été supprimés !`)
-      .then(m => m.delete(4000));
+      .then(m => m.delete({timeout: 4000}));
     });
   }
 };
