@@ -12,7 +12,7 @@ module.exports = {
       message.channel
         .send("Bot is restarting...")
         .then(msg => message.client.destroy())
-        .then(() => message.client.login(config.token));
+        .then(() => message.client.login(process.env.TOKEN));
     }
   }
 };
