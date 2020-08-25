@@ -7,7 +7,7 @@ module.exports = {
   execute(message, args) {
     const ownerID = require("../config.json").ownerID;
     if (message.author.id === ownerID) {
-      const userID = args[0].replace(/<@|>/g, "");
+      const userID = args[0].replace(/[<@!>]/g, "");
       const commandName = args[1].toLowerCase();
       const command =
         message.client.commands.get(commandName) ||
