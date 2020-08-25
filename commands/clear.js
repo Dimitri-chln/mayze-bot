@@ -1,7 +1,7 @@
 module.exports = {
   name: "clear",
   description: "Supprime plusieurs messages en même temps",
-  aliases: ["clean"],
+  aliases: ["clean", "cl"],
   cooldown: 5,
   args: 1,
   usage: "<nombre> [\"bot\"|-r <regex>]",
