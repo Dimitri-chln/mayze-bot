@@ -9,11 +9,10 @@ module.exports = {
     if (message.author.id === config.ownerID) {
       console.log("--------------------");
       console.log("BOT RESTART");
-      console.log("--------------------");
       message.channel
         .send("Bot is restarting...")
         .then(msg => message.client.destroy())
-        .then(() => message.client.login(process.env.token));
+        .then(() => message.client.login(config.token));
     }
   }
 };
