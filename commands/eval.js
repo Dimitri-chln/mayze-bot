@@ -2,6 +2,7 @@ module.exports = {
   name: "eval",
   description: "👀",
   aliases: [],
+  cooldown: 0,
   args: 1,
   usage: "<expression>",
   execute(message, args) {
