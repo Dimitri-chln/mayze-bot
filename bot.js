@@ -58,7 +58,7 @@ client.on("message", message => {
       !command.perms.every(perm => message.member.hasPermission(perm))
     )
       return message.reply(
-        `tu n'as pas les permissions nécessaires \n→ \`${command.perms.join(", ")}\``
+        `tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``
       );
     
     if (command.ownerOnly && message.author.id !== client.owner.id) return;
