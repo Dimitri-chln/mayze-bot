@@ -69,7 +69,7 @@ module.exports = {
         message.reply(
           "ce pokémon n'existe pas. Utilise uniquement des noms anglais"
         );
-      }
+      };
     });
   }
 };

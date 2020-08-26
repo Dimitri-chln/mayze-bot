@@ -29,6 +29,7 @@ client.on("ready", () => {
   console.log("--------------------");
   console.log("BOT STARTED UP");
   const owner = client.users.cache.get(config.ownerID);
+  client.owner = owner;
   owner.send("BOT STARTED UP");
   client.user.setActivity("le meilleur clan", { type: "WATCHING" });
 });
@@ -51,6 +52,17 @@ client.on("message", message => {
         cmd => cmd.aliases && cmd.aliases.includes(commandName)
       );
     if (!command) return;
+
+    if (
+      command.perms &&
+      !command.perms.every(perm => message.member.hasPermission(perm))
+    )
+      return message.reply(
+        `tu n'as pas les permissions nécessaires \n→ \`${command.perms.join(", ")}\``
+      );
+    
+    if (command.ownerOnly && message.author.id !== client.owner.id) return;
+
     if (!client.cooldowns.has(command.name)) {
       client.cooldowns.set(command.name, new Discord.Collection());
     }
@@ -72,6 +84,7 @@ client.on("message", message => {
     }
     timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+
     if (args.length < command.args) {
       message.channel.send(
         `Utilisation : \`${config.prefix}${commandName} ${command.usage}\``
@@ -93,8 +106,8 @@ client.on("message", message => {
       autoresponse.execute(message);
     } catch (error) {
       console.error(error);
-    };
-  };
+    }
+  }
 });
 
 client.login(process.env.TOKEN);
