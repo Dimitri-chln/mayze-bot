@@ -61,7 +61,7 @@ module.exports = {
           molkkyData.players[molkkyData.currentPlayer].failed += 1;
         } else {
           molkkyData.players[molkkyData.currentPlayer].failed = 0;
-        }
+        };
         if (molkkyData.players[molkkyData.currentPlayer].failed === 3)
           newScore = 0;
         if (newScore > 50) newScore = 25;
@@ -72,14 +72,14 @@ module.exports = {
         if (molkkyData.players[molkkyData.currentPlayer].failed === 3) {
           newScore = 0;
           molkkyData.players[molkkyData.currentPlayer].failed = 0;
-        }
+        };
         molkkyData.players[molkkyData.currentPlayer].scores.push(newScore);
         var gameEnd = false;
         if (molkkyData.winners.length === molkkyData.players.length - 1) {
           message.client.molkky.delete(message.author.id);
           message.reply("la partie est terminée!");
           gameEnd = true;
-        }
+        };
         do {
           molkkyData.currentPlayer += 1;
           if (molkkyData.currentPlayer === molkkyData.players.length)
@@ -103,7 +103,7 @@ module.exports = {
         break;
       default:
         message.reply("arguments incorrects !");
-    }
+    };
     function molkkyDesc(molkkyData) {
       const embedDesc = `Joueur actuel: __***${
         molkkyData.players[molkkyData.currentPlayer].name
@@ -125,6 +125,6 @@ module.exports = {
         .map((w, i) => `\`${i + 1}.\` ${w}`)
         .join("\n") || "-"}`;
       return embedDesc;
-    }
+    };
   }
 };

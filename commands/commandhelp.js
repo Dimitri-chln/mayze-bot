@@ -42,19 +42,19 @@ module.exports = {
         commands.find(c => c.aliases && c.aliases.includes(name));
       if (!command) {
         return message.reply("cette commande n'existe pas!");
-      }
+      };
       data = `**Nom:** ${command.name}`;
       if (command.aliases.length) {
         data = data + `\n**Aliases:** ${command.aliases.join(", ")}`;
-      }
+      };
       if (command.description) {
         data = data + `\n**Description:** ${command.description}`;
-      }
+      };
       if (command.usage) {
         data =
           data +
           `\n**Utilisation:** \`${prefix}${command.name} ${command.usage}\``;
-      }
+      };
       data = data + `\n**Cooldown:** ${command.cooldown || 3} seconde(s)`;
       message.channel.send({
         embed: {
@@ -66,6 +66,6 @@ module.exports = {
           }
         }
       });
-    }
+    };
   }
 };
