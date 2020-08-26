@@ -7,6 +7,8 @@ module.exports = {
     if (mudaeEmbed.color !== 16751916) return;
     const footerRegex = /\d+ \/ \d+/;
     if (footerRegex.test(mudaeEmbed.footer)) return;
+    const descriptionRegex = /<:(male|female):(685927852406734884|685928377726533669)>/;
+    if (descriptionRegex.test(mudaeEmbed.description)) return;
     const characterName = mudaeEmbed.author.name;
     const characterSeries = mudaeEmbed.description.split("\n")[0];
     // wish detection
