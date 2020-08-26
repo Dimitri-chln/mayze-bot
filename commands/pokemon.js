@@ -8,8 +8,8 @@ module.exports = {
   execute(message, args) {
     // const fs = require("fs");
     const ownerID = require("../config.json").ownerID;
-    const loots = require("../fixedData/pokeLoots.json");
-    const pokedex = require("../fixedData/pokedex.json");
+    const loots = require("../database/pokeLoots.json");
+    const pokedex = require("../database/pokedex.json");
     const shinyFrequency = 0.004;
     var pokemon;
 

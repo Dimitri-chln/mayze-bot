@@ -5,7 +5,7 @@ module.exports = {
   args: 1,
   usage: "<mention>",
   execute(message, args) {
-    const images = require("../fixedData/images.json");
+    const images = require("../database/images.json");
     if (args.length >= 1) {
       var hug = message.guild.members.cache.get(args[0].replace(/[<@!>]/g, ""));
       if (hug) {

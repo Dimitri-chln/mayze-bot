@@ -6,7 +6,7 @@ module.exports = {
   args: 0,
   usage: "",
   execute(message, args) {
-    const images = require("../fixedData/images.json");
+    const images = require("../database/images.json");
     message.react("😏");
     message.author.send({
       embed: {
