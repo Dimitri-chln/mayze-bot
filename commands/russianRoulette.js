@@ -65,7 +65,7 @@ module.exports = {
               players[Math.floor(Math.random() * players.length)];
             var alivePlayers = players.filter(p => p !== deadPlayer);
             shuffle(alivePlayers);
-            setTimeout(roulette(msg, alivePlayers, deadPlayer, Embed, 0), 2000);
+            roulette(msg, alivePlayers, deadPlayer, Embed, 0);
           });
         message.client.russianRoulette = [];
         break;
@@ -75,15 +75,14 @@ module.exports = {
 
     function roulette(msg, alivePlayers, deadPlayer, Embed, i) {
       if (alivePlayers.length > 0 && i < 5) {
-        msg.edit({
-          embed: Embed.setDescription(
-            `${message.client.users.cache.get(alivePlayers.pop()).username} ...`
-          )
-        });
-        setTimeout(
-          roulette(msg, alivePlayers, deadPlayer, Embed, i+1),
-          2000
-        );
+        setTimeout(function() {
+            msg.edit({
+              embed: Embed.setDescription(
+                `${message.client.users.cache.get(alivePlayers.pop()).username} ...`
+              )
+            });
+            roulette(msg, alivePlayers, deadPlayer, Embed, i+1),
+        },2000);
       } else {
         setTimeout(function() {
           msg.edit({
