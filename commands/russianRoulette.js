@@ -82,7 +82,7 @@ module.exports = {
         });
         setTimeout(
           roulette(msg, alivePlayers, deadPlayer, Embed, i+1),
-          1000
+          2000
         );
       } else {
         setTimeout(function() {
@@ -93,7 +93,7 @@ module.exports = {
               } est mort !`
             )
           });
-        }, 1000);
+        }, 2000);
       }
     }
   }
