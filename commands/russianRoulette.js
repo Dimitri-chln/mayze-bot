@@ -65,7 +65,7 @@ module.exports = {
               players[Math.floor(Math.random() * players.length)];
             var alivePlayers = players.filter(p => p !== deadPlayer);
             shuffle(alivePlayers);
-            roulette(msg, alivePlayers, deadPlayer, Embed, 0);
+            setTimeout(roulette(msg, alivePlayers, deadPlayer, Embed, 0), 2000);
           });
         message.client.russianRoulette = [];
         break;
