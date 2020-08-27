@@ -1,0 +1,100 @@
+module.exports = {
+  name: "russian-roulette",
+  description: "Joue à la roulette russe",
+  aliases: ["rr"],
+  args: 1,
+  usage: "create/join/start",
+  execute(message, args) {
+    const shuffle = require("../functions/shuffle.js");
+    switch (args[0]) {
+      case "create":
+        if (message.client.russianRoulette.length)
+          return message.reply("une partie est déjà en cours!");
+        message.client.russianRoulette.push(message.author.id);
+        message.channel.send({
+          embed: {
+            title: "Une partie de roulette russe a été lancée!",
+            color: "#010101",
+            description:
+              "Rejoins la partie avec la commande `*russian-roulette join` !",
+            footer: {
+              text: "✨Mayze✨"
+            }
+          }
+        });
+        break;
+      case "join":
+        if (!message.client.russianRoulette.length)
+          return message.reply(
+            "il n'y a pas de partie en cours! Crée une partie avec la commande `*russian-roulette create`"
+          );
+        if (message.client.russianRoulette.includes(message.author.id))
+          return message.reply("tu as déjà rejoint cette partie");
+        message.client.russianRoulette.push(message.author.id);
+        message.channel.send(`<@${message.author.id}> a rejoint la partie`);
+        break;
+      case "start":
+        if (!message.client.russianRoulette.length)
+          return message.reply(
+            "il n'y a pas de partie en cours! Crée une partie avec la commande `*russian-roulette create`"
+          );
+        if (message.client.russianRoulette.length < 2)
+          return message.reply(
+            "il faut au minimum 2 joueurs pour lancer la partie"
+          );
+        if (
+          message.client.russianRoulette[0] !== message.author.id &&
+          !message.member.hasPermission("KICK_MEMBERS")
+        )
+          return message.reply(
+            "seule la personne qui a créé la partie peut la lancer"
+          );
+        const players = message.client.russianRoulette;
+        const Discord = require("discord.js");
+        const Embed = new Discord.MessageEmbed()
+          .setTitle("La partie de roulette russe a commencé!")
+          .setColor("#010101")
+          .setFooter("✨Mayze✨")
+          .setTimestamp();
+        message.channel
+          .send({
+            embed: Embed.setDescription("...")
+          })
+          .then(msg => {
+            const deadPlayer =
+              players[Math.floor(Math.random() * players.length)];
+            var alivePlayers = players.filter(p => p !== deadPlayer);
+            shuffle(alivePlayers);
+            roulette(msg, alivePlayers, deadPlayer, Embed, 0);
+          });
+        message.client.russianRoulette = [];
+        break;
+      default:
+        message.reply("Utilisation: `*russian-roulette create/join/start`");
+    }
+
+    function roulette(msg, alivePlayers, deadPlayer, Embed, i) {
+      if (alivePlayers.length > 0 && i < 5) {
+        msg.edit({
+          embed: Embed.setDescription(
+            `${message.client.users.cache.get(alivePlayers.pop()).username} ...`
+          )
+        });
+        setTimeout(
+          roulette(msg, alivePlayers, deadPlayer, Embed, i+1),
+          1000
+        );
+      } else {
+        setTimeout(function() {
+          msg.edit({
+            embed: Embed.setDescription(
+              `🔫 ${
+                message.client.users.cache.get(deadPlayer).username
+              } est mort !`
+            )
+          });
+        }, 1000);
+      }
+    }
+  }
+};

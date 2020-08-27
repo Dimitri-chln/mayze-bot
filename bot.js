@@ -22,8 +22,8 @@ for (const file of autoresponseFiles) {
 }
 
 client.cooldowns = new Discord.Collection();
-
 client.molkky = new Discord.Collection();
+client.russianRoulette = [];
 
 client.on("ready", () => {
   console.log("--------------------");
@@ -109,5 +109,7 @@ client.on("message", message => {
     }
   }
 });
+
+//client.on("messageReactionAdd")
 
 client.login(process.env.TOKEN);
