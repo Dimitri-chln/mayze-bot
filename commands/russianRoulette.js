@@ -67,6 +67,9 @@ module.exports = {
             shuffle(alivePlayers);
             roulette(msg, alivePlayers, deadPlayer, Embed, 0);
           });
+        message.guild.members.cache.get(deadPlayer).kick("Roulette Russe").catch(() => {
+          message.channel.send("Je n'ai pas pu expulser le perdant");
+        });
         message.client.russianRoulette = [];
         break;
       default:
