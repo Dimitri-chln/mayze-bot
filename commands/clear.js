@@ -12,7 +12,8 @@ module.exports = {
       return message.reply(
         "le premier argument doit être un nombre entier compris entre 1 et 100!"
       );
-    message.channel.messages.fetch({ limit: number + 1 }).then(messages => {
+    message.delete();
+    message.channel.messages.fetch({ limit: number }).then(messages => {
       const userRegex = /<@!?\d{18}>/;
       var messagesToDelete = messages;
       if (args.length >= 2) {
