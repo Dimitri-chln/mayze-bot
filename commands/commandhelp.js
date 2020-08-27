@@ -57,7 +57,7 @@ module.exports = {
         data = data + `\n**Permissions:** \`${command.perms.join("`, `")}\``;
       };
       if (command.ownerOnly) {
-        data = data + `Cette commande n'est utilisable que par ${message.client.owner.username}`;
+        data = data + `\nCette commande n'est utilisable que par ${message.client.owner.username}`;
       };
       data = data + `\n**Cooldown:** ${command.cooldown || 3} seconde(s)`;
       message.channel.send({

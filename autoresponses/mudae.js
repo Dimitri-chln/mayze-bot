@@ -5,8 +5,8 @@ module.exports = {
     if (!message.embeds.length) return;
     const mudaeEmbed = message.embeds[0];
     if (mudaeEmbed.color !== 16751916) return;
-    const footerRegex = /\d+ \/ \d+/;
-    if (footerRegex.test(mudaeEmbed.footer)) return;
+    const claimedRegex = new RegExp("(Animanga|Game) roulette", "");
+    if (claimedRegex.test(mudaeEmbed.description)) return;
     const characterName = mudaeEmbed.author.name;
     const characterSeries = mudaeEmbed.description.split("\n")[0];
     // wish detection
