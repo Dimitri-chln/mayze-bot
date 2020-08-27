@@ -81,8 +81,8 @@ module.exports = {
                 `${message.client.users.cache.get(alivePlayers.pop()).username} ...`
               )
             });
-            roulette(msg, alivePlayers, deadPlayer, Embed, i+1),
-        },2000);
+            roulette(msg, alivePlayers, deadPlayer, Embed, i+1)
+        }, 2000);
       } else {
         setTimeout(function() {
           msg.edit({
