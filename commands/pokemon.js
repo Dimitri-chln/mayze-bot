@@ -33,15 +33,14 @@ module.exports = {
     }
     var img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.img}.png`;
 
-    var randomAlolan = Math.random(),
-      alolanText = "";
+    var randomAlolan = Math.random(), alolanText = "";
     if (randomAlolan < alolanFrequency && pokemon.alolan) {
       alolanText = "Alolan ";
       img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.alolan}.png`;
     }
     
     var randomGalarian = Math.random(), galarianText = "";
-    if (randomGalarian < galarianFrequency && pokemon.galarian) {
+    if (randomGalarian < galarianFrequency && pokemon.galarian && alolanText === "") {
       galarianText = "Galarian ";
       img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.galarian}.png`;
     }
