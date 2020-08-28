@@ -25,6 +25,12 @@ client.cooldowns = new Discord.Collection();
 client.molkky = new Discord.Collection();
 client.russianRoulette = [];
 
+const dropSum = (currentSum, currentPokemon) => currentSum + currentPokemon.drop;
+const pokedex = require("./database/pokedex.json");
+const pokedexWeight = [0];
+pokedexWeight.push(...pokedex.map((p, i) => pokedex.slice(0, i + 1).reduce(dropSum, 0)));
+client.pokedexWeight = pokedexWeight;
+
 client.on("ready", () => {
   console.log("--------------------");
   console.log("BOT STARTED UP");

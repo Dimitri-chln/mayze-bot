@@ -8,7 +8,7 @@ module.exports = {
     const Pokedex = require("pokedex-promise-v2");
     const P = new Pokedex();
 
-    const pokemonName = args.join(" ").toLowerCase();
+    const pokemonName = args.join(" ").toLowerCase().replace(/♂/, "m").replace(/♀/, "f");
     P.getPokemonByName(pokemonName, function(pokemon, err) {
       if (!err) {
         if (!pokemon) {
@@ -67,7 +67,7 @@ module.exports = {
         });
       } else {
         message.reply(
-          "ce pokémon n'existe pas. Utilise uniquement des noms anglais"
+          "ce pokémon n'a pas l'air d'exister, essaye uniquement avec des noms anglais"
         );
       };
     });

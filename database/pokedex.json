@@ -1,98 +1,49 @@
 [
-  {
-    "en": "Bulbasaur",
-    "fr": "Bulbizarre",
-    "img": "001",
-    "drop": 0.7
-  },
-  {
-    "en": "Ivysaur",
-    "fr": "Herbizarre",
-    "img": "002",
-    "drop": 0.6
-  },
-  {
-    "en": "Venusaur",
-    "fr": "Florizarre",
-    "img": "003",
-    "drop": 0.5,
-    "mega": "003_f2",
-    "giga": "003_f3"
-  },
-  {
-    "en": "Charmander",
-    "fr": "Salamèche",
-    "img": "004",
-    "drop": 0.7
-  },
-  {
-    "en": "Charmeleon",
-    "fr": "Reptincel",
-    "img": "005",
-    "drop": 0.6
-  },
-  {
-    "en": "Charizard",
-    "fr": "Dracaufeu",
-    "img": "006",
-    "drop": 0.5,
-    "megax": "006_f2",
-    "megay": "006_f3",
-    "giga": "006_f4"
-  },
-  {
-    "en": "Squirtle",
-    "fr": "Carapuce",
-    "img": "007",
-    "drop": 0.7
-  },
-  {
-    "en": "Wartortle",
-    "fr": "Carabaffe",
-    "img": "008",
-    "drop": 0.6
-  },
-  {
-    "en": "Blastoise",
-    "fr": "Tortank",
-    "img": "009",
-    "drop": 0.5,
-    "mega": "009_f2"
-  },
-  {
-    "en": "Caterpie",
-    "fr": "Chenipan",
-    "img": "010",
-    "drop": 1
-  },
-  {
-    "en": "Metapod",
-    "fr": "Chrysacier",
-    "img": "011",
-    "drop": 0.9
-  },
-  {
-    "en": "Butterfree",
-    "fr": "Papilusion",
-    "img": "012",
-    "drop": 0.8
-  },
-  {
-    "en": "Weedle",
-    "fr": "Aspicot",
-    "img": "013",
-    "drop": 1
-  },
-  {
-    "en": "Kakuna",
-    "fr": "Coconfort",
-    "img": "014",
-    "drop": 0.9
-  },
-  {
-    "en": "Beedrill",
-    "fr": "Dardargnan",
-    "img": "015",
-    "drop": 0.8
-  }
+  { "en": "Bulbasaur", "fr": "Bulbizarre", "img": "001", "drop": 0.7 },
+  { "en": "Ivysaur", "fr": "Herbizarre", "img": "002", "drop": 0.6 },
+  { "en": "Venusaur", "fr": "Florizarre", "img": "003", "drop": 0.5, "mega": "003_f2", "giga": "003_f3" },
+  { "en": "Charmander", "fr": "Salamèche", "img": "004", "drop": 0.7 },
+  { "en": "Charmeleon", "fr": "Reptincel", "img": "005", "drop": 0.6 },
+  { "en": "Charizard", "fr": "Dracaufeu", "img": "006", "drop": 0.5, "megax": "006_f2", "megay": "006_f3", "giga": "006_f4" },
+  { "en": "Squirtle", "fr": "Carapuce", "img": "007", "drop": 0.7 },
+  { "en": "Wartortle", "fr": "Carabaffe", "img": "008", "drop": 0.6 },
+  { "en": "Blastoise", "fr": "Tortank", "img": "009", "drop": 0.5, "mega": "009_f2" },
+  { "en": "Caterpie", "fr": "Chenipan", "img": "010", "drop": 1 },
+  { "en": "Metapod", "fr": "Chrysacier", "img": "011", "drop": 0.9 },
+  { "en": "Butterfree", "fr": "Papilusion", "img": "012", "drop": 0.8 },
+  { "en": "Weedle", "fr": "Aspicot", "img": "013", "drop": 1 },
+  { "en": "Kakuna", "fr": "Coconfort", "img": "014", "drop": 0.9 },
+  { "en": "Beedrill", "fr": "Dardargnan", "img": "015", "drop": 0.8, "mega": "015_f2" },
+  { "en": "Pidgey", "fr": "Roucool", "img": "016", "drop": 1 },
+  { "en": "Pidgeotto", "fr": "Roucoups", "img": "017", "drop": 0.9 },
+  { "en": "Pidgeot", "fr": "Roucarnage", "img": "018", "drop": 0.8, "mega": "018_f2" },
+  { "en": "Rattata", "fr": "Rattata", "img": "019", "drop": 1, "alolan": "019_f2" },
+  { "en": "Raticate", "fr": "Rattatac", "img": "020", "drop": 0.9, "alolan": "020_f2" },
+  { "en": "Spearow", "fr": "Piafabec", "img": "021", "drop": 1 },
+  { "en": "Fearow", "fr": "Rapasdepic", "img": "022", "drop": 0.9 },
+  { "en": "Ekans", "fr": "Abo", "img": "023", "drop": 1 },
+  { "en": "Arbok", "fr": "Arbok", "img": "024", "drop": 0.9 },
+  { "en": "Pikachu", "fr": "Pikachu", "img": "025", "drop": 0.9 },
+  { "en": "Raichu", "fr": "Raichu", "img": "026", "drop": 0.8, "alolan": "026_f2" },
+  { "en": "Sandshrew", "fr": "Sabelette", "img": "027", "drop": 1, "alolan": "027_f2" },
+  { "en": "Sandslash", "fr": "Sablaireau", "img": "028", "drop": 0.9, "alolan": "028_f2" },
+  { "en": "Nidoran♀", "fr": "Nidoran♀", "img": "029", "drop": 1 },
+  { "en": "Nidorina", "fr": "Nidorina", "img": "030", "drop": 0.9 },
+  { "en": "Nidoqueen", "fr": "Nidoqueen", "img": "031", "drop": 0.8 },
+  { "en": "Nidoran♂", "fr": "Nidoran♂", "img": "032", "drop": 1 },
+  { "en": "Nidorino", "fr": "Nidorino", "img": "033", "drop": 0.9 },
+  { "en": "Nidoking", "fr": "Nidoking", "img": "034", "drop": 0.8 },
+  { "en": "Clefairy", "fr": "Mélofée", "img": "035", "drop": 0.9 },
+  { "en": "Clefable", "fr": "Mélodelfe", "img": "036", "drop": 0.8 },
+  { "en": "Vulpix", "fr": "Goupix", "img": "037", "drop": 1, "alolan": "037_f2" },
+  { "en": "Ninetales", "fr": "Feunard", "img": "038", "drop": 0.9, "alolan": "038_f2" },
+  { "en": "Jigglypuff", "fr": "Rondoudou", "img": "039", "drop": 0.9 },
+  { "en": "Wigglytuff", "fr": "Grodoudou", "img": "040", "drop": 0.8 },
+  { "en": "Zubat", "fr": "Nosferapti", "img": "041", "drop": 1 },
+  { "en": "Golbat", "fr": "Nosferalto", "img": "042", "drop": 0.9 },
+  { "en": "Oddish", "fr": "Mystherbe", "img": "043", "drop": 1 },
+  { "en": "Gloom", "fr": "Ortide", "img": "044", "drop": 0.9 },
+  { "en": "Vileplume", "fr": "Rafflesia", "img": "045", "drop": 0.8 },
+  { "en": "Paras", "fr": "Paras", "img": "046", "drop": 1 },
+  { "en": "Parasect", "fr": "Parasect", "img": "047", "drop": 0.9 }
 ]

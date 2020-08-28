@@ -75,15 +75,14 @@ module.exports = {
 
     function roulette(msg, alivePlayers, deadPlayer, Embed, i) {
       if (alivePlayers.length > 0 && i < 5) {
-        msg.edit({
-          embed: Embed.setDescription(
-            `${message.client.users.cache.get(alivePlayers.pop()).username} ...`
-          )
-        });
-        setTimeout(
-          roulette(msg, alivePlayers, deadPlayer, Embed, i+1),
-          1000
-        );
+        setTimeout(function() {
+            msg.edit({
+              embed: Embed.setDescription(
+                `${message.client.users.cache.get(alivePlayers.pop()).username} ...`
+              )
+            });
+            roulette(msg, alivePlayers, deadPlayer, Embed, i+1)
+        }, 2000);
       } else {
         setTimeout(function() {
           msg.edit({
@@ -93,7 +92,10 @@ module.exports = {
               } est mort !`
             )
           });
-        }, 1000);
+          message.guild.members.cache.get(deadPlayer).kick({"reason": "Roulette Russe"}).catch(() => {
+            message.channel.send("Je n'ai pas pu expulser le perdant");
+          });
+        }, 2000);
       }
     }
   }

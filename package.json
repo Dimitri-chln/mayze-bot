@@ -1,6 +1,6 @@
 {
   "name": "mayze-bot",
-  "version": "1.1.2",
+  "version": "1.2.1",
   "description": "Pour le meilleur clan!",
   "main": "bot.js",
   "scripts": {
@@ -13,8 +13,5 @@
   },
   "engines": {
     "node": "12.x"
-  },
-  "repository": {
-    "url": "https://glitch.com/edit/#!/hello-express"
   }
 }

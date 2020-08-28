@@ -8,7 +8,7 @@ module.exports = {
     const claimedRegex = new RegExp("(Animanga|Game) roulette", "");
     if (claimedRegex.test(mudaeEmbed.description)) return;
     const characterName = mudaeEmbed.author.name;
-    const characterSeries = mudaeEmbed.description.split("\n")[0];
+    const characterSeries = mudaeEmbed.description.split("\nClaims:")[0].replace(/\\n/g, " ");
     // wish detection
     const wishData = require("../database/wishes.json");
     const entries = Object.entries(wishData);

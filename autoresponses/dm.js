@@ -2,7 +2,7 @@ module.exports = {
   execute(message) {
     if (
       message.channel.type === "dm" &&
-      message.author.id !== "703161067982946334"
+      message.author.id !== message.client.user.id
     ) {
       var msg = message.content;
       if (message.attachments) {

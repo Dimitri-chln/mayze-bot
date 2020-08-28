@@ -10,7 +10,9 @@ module.exports = {
     const ownerID = require("../config.json").ownerID;
     const loots = require("../database/pokeLoots.json");
     const pokedex = require("../database/pokedex.json");
-    const shinyFrequency = 0.004;
+
+    const shinyFrequency = 0.004, alolanFrequency = 0.1, galarianFrequency = 0.1;
+
     var pokemon;
 
     if (message.author.id !== ownerID || args[0] == ".") {
@@ -22,33 +24,40 @@ module.exports = {
       };
     } else {
       // new Pokemon selection
-      const dropSum = (currentSum, currentPokemon) =>
-        currentSum + currentPokemon.drop;
-      const pokedexWeight = [0];
-      pokedexWeight.push(
-        ...pokedex.map((p, i) => pokedex.slice(0, i + 1).reduce(dropSum, 0))
+      const random = Math.random() * message.client.pokedexWeight.slice(-1)[0];
+      const randomPokemon = message.client.pokedexWeight.find(
+        (n, i, a) => random <= n && random > a[i - 1]
       );
-      const randomPokemon = Math.random() * pokedexWeight.slice(-1)[0];
-      const pokeN = pokedexWeight.find(
-        (n, i, a) => randomPokemon <= n && randomPokemon > a[i - 1]
-      );
-      pokemon = pokedex[pokedexWeight.lastIndexOf(pokeN) - 1];
+      pokemon =
+        pokedex[message.client.pokedexWeight.lastIndexOf(randomPokemon) - 1];
+    }
+    var img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.img}.png`;
+
+    var randomAlolan = Math.random(),
+      alolanText = "";
+    if (randomAlolan < alolanFrequency && pokemon.alolan) {
+      alolanText = "Alolan ";
+      img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.alolan}.png`;
+    }
+    
+    var randomGalarian = Math.random(), galarianText = "";
+    if (randomGalarian < galarianFrequency && pokemon.galarian) {
+      galarianText = "Galarian ";
+      img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.galarian}.png`;
     }
 
-    var randomShiny = Math.random();
-    var shiny = "";
-    var embedColor = "#010101";
-    var img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.img}.png`;
+    var randomShiny = Math.random(), shinyText = "", embedColor = "#010101";
     if (randomShiny < shinyFrequency) {
-      shiny = " ⭐ ";
+      shinyText = " ⭐ ";
       embedColor = "#ddbb20";
       img = `https://img.pokemondb.net/sprites/home/shiny/${pokemon.en.toLowerCase()}.png`;
     }
+
     message.channel.send({
       embed: {
         title: "Nouveau pokémon!",
         color: embedColor,
-        description: `<@${message.author.id}> a attrapé un ${pokemon.en}${shiny}!`,
+        description: `<@${message.author.id}> a attrapé un ${alolanText}${galarianText}${pokemon.en}${shinyText}!`,
         image: {
           url: img
         },
@@ -57,21 +66,5 @@ module.exports = {
         }
       }
     });
-
-    /* const pokemonJson = fs.readFileSync("../userData/pokemonData.json");
-        const pokemonData = JSON.parse(pokemonData);
-        userData = pokemonData.get(message.author.id);
-        if (!userData) {
-            pokemonData.get(message.author.id) = {}.set(pokemon.en, 1);
-        } else {
-            if (!userData.get(pokemon.en)) {
-                userData.get(pokemon.en) = 1;
-            } else {
-                userData.get(pokemon.en) += 1;
-            };
-            pokemonData.get(message.author.id) = userData;
-        };
-        const newPokemonJson = JSON.stringify(pokemonData, null, 4);
-        fs.writeFileSync("../userData/pokemonData.json", newPokemonJson); */
   }
 };
