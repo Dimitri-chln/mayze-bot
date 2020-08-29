@@ -7,7 +7,6 @@
     "start": "node ."
   },
   "dependencies": {
-    "express": "^4.17.1",
     "discord.js": "^12.3.1",
     "pokedex-promise-v2": "^3.1.1"
   },

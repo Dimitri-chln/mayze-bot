@@ -18,12 +18,18 @@ module.exports = {
           .toLowerCase()
           .includes(roleIdOrName)
       );
-    
+
     if (!role) return message.reply("je n'ai pas réussi à trouver ce rôle");
-    
-    const hexColor = `${(Math.floor(role.color / (256 * 256))).toString(16)}${(Math.floor((role.color % (256 * 256)) / 256)).toString(16)}${(role.color % 256).toString(16)}`;
-    const roleMembers = message.guild.members.cache.filter(m => m.roles.cache.some(r => r.id === role.id)).map(m => m.user.username).join(", ");
-    
+
+    const hexColor =
+      Math.floor(role.color / (256 * 256)).toString(16) +
+      Math.floor((role.color % (256 * 256)) / 256).toString(16) +
+      (role.color % 256).toString(16);
+    const roleMembers =
+      message.guild.members.cache
+        .filter(m => m.roles.cache.some(r => r.id === role.id))
+        .map(m => m.user.username) || " ";
+
     message.channel.send({
       embed: {
         author: {
@@ -31,7 +37,13 @@ module.exports = {
           icon_url: `https://dummyimage.com/50/${hexColor}/${hexColor}`
         },
         color: "#010101",
-        description: `**ID:** \`${role.id}\`\n**Couleur** (dec)**:** \`${role.color}\`\n**Couleur** (hex)**:** \`#${hexColor}\`\n**Position:** \`${role.rawPosition}\`\n**Membres:** \`\`\`${roleMembers}\`\`\``,
+        description: `**ID:** \`${role.id}\`\n**Couleur** (dec)**:** \`${
+          role.color
+        }\`\n**Couleur** (hex)**:** \`#${hexColor}\`\n**Position:** \`${
+          role.rawPosition
+        }\`\n**Membres:** \`${roleMembers.length}\`\n\`\`\`${roleMembers.join(
+          ", "
+        )}\`\`\``,
         footer: {
           text: "✨Mayze✨"
         }
