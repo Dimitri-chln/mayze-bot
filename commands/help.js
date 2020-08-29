@@ -14,12 +14,12 @@ module.exports = {
         fields: [
           {
             name: "🛠️ - Admin",
-            value: `\`${prefix}rolecolor\`\n\`${prefix}message\``,
+            value: `\`${prefix}rolecolor\`\n\`${prefix}role\`\n\`${prefix}message\`\n\`${prefix}clear\``,
             inline: true
           },
           {
             name: "🎉 - Fun",
-            value: `\`${prefix}say\`\n\`${prefix}love\`\n\`${prefix}nude\`\n\`${prefix}molkky\``,
+            value: `\`${prefix}say\`\n\`${prefix}love\`\n\`${prefix}nude\`\n\`${prefix}molkky\`\n\`${prefix}russian-roulette\``,
             inline: true
           },
           {
@@ -35,6 +35,11 @@ module.exports = {
           {
             name: "❔ - Autres",
             value: `\`${prefix}ping\`\n\`${prefix}uptime\`\n\`${prefix}commandhelp\``,
+            inline: true
+          },
+          {
+            name: "🕹️ - Mudae",
+            value: `\`${prefix}wish\`\n\`${prefix}wishlist\``,
             inline: true
           }
         ],
