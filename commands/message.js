@@ -8,7 +8,7 @@ module.exports = {
   execute(message, args) {
     if (args.length >= 2) {
       var channel = message.client.channels.cache.get(
-        args[0].replace(/<#|>/g, "")
+        args[0].replace(/[<#>]/g, "")
       );
       channel.send(args.splice(1).join(" "));
     } else {

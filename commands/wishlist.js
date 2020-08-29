@@ -6,7 +6,7 @@ module.exports = {
   usage: "[mention/id]",
   execute(message, args) {
     const wishData = require("../database/wishes.json");
-    const user = (args[0] || message.author.id).replace(/<@|>/g, "");
+    const user = (args[0] || message.author.id).replace(/[<@!>]/g, "");
     const wishlist = wishData[user];
     if (!wishlist) return message.reply("aucun wish trouvé !");
     message.channel.send({

@@ -7,7 +7,7 @@ module.exports = {
   perms: ["MANAGE_ROLES"],
   execute(message, args) {
     if (args.length >= 2) {
-      const roleID = args[0].replace(/<@&|>/g, "");
+      const roleID = args[0].replace(/[<@&>]/g, "");
       message.guild.roles.cache.get(roleID).setColor(args[1]);
       message.channel.send({
         embed: {

@@ -15,7 +15,7 @@ module.exports = {
 
     var pokemon;
 
-    if (message.author.id !== ownerID || args[0] == ".") {
+    if (args[0] !== "new") {
       const randomPokemon = Math.floor(Math.random() * loots.dex.length);
       pokemon = {
         en: loots.dex[randomPokemon],
