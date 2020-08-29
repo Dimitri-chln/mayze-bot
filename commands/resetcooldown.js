@@ -6,7 +6,8 @@ module.exports = {
   usage: "<mention/id> <commande>",
   ownerOnly: true,
   execute(message, args) {
-    const userID = args[0].replace(/[<@!>]/g, "");
+    const user = message.mentions.users.first();
+    if (!user) return message.reply("mentionne une personne")
     const commandName = args[1].toLowerCase();
     const command =
       message.client.commands.get(commandName) ||
@@ -22,11 +23,11 @@ module.exports = {
       return message.reply(
         "il n'y a pas de cooldown actif pour cette commande!"
       );
-    if (timestamps.has(userID)) {
-      timestamps.delete(userID);
+    if (timestamps.has(user.id)) {
+      timestamps.delete(user.id);
     }
     message.channel.send(
-      `Le cooldown de la commande \`${command.name}\` a été réinitialisé pour <@${userID}>`
+      `Le cooldown de la commande \`${command.name}\` a été réinitialisé pour <@${user.id}>`
     );
   }
 };

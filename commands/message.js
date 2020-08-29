@@ -7,9 +7,7 @@ module.exports = {
   perms: ["MANAGE_MESSAGES"],
   execute(message, args) {
     if (args.length >= 2) {
-      var channel = message.client.channels.cache.get(
-        args[0].replace(/[<#>]/g, "")
-      );
+      const channel = message.client.channels.cache.get(args[0].replace(/[<#>]/g, ""));
       channel.send(args.splice(1).join(" "));
     } else {
       message.channel.send("Utilisation: `*message <channel> <text>`");

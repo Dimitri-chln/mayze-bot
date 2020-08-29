@@ -6,22 +6,18 @@ module.exports = {
   usage: "<mention>",
   execute(message, args) {
     const images = require("../database/images.json");
-    if (args.length >= 1) {
-      var hug = message.guild.members.cache.get(args[0].replace(/[<@!>]/g, ""));
-      if (hug) {
-        message.channel.send({
-          embed: {
-            title: `${message.author.username} fait un câlin à ${hug.user.username} 🤗`,
-            color: "#010101",
-            image: {
-              url: images.hugs[Math.floor(Math.random() * images.hugs.length)]
-            },
-            footer: {
-              text: "✨Mayze✨"
-            }
-          }
-        });
-      };
-    };
+    const user = message.mentions.users.first() || message.client.user;
+    message.channel.send({
+      embed: {
+        title: `${message.author.username} fait un câlin à ${user.username} 🤗`,
+        color: "#010101",
+        image: {
+          url: images.hugs[Math.floor(Math.random() * images.hugs.length)]
+        },
+        footer: {
+          text: "✨Mayze✨"
+        }
+      }
+    });
   }
 };
