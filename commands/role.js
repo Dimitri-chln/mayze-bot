@@ -28,7 +28,7 @@ module.exports = {
     const roleMembers =
       message.guild.members.cache
         .filter(m => m.roles.cache.some(r => r.id === role.id))
-        .map(m => m.user.username) || " ";
+        .map(m => m.user.username);
 
     message.channel.send({
       embed: {
@@ -43,7 +43,7 @@ module.exports = {
           role.rawPosition
         }\`\n**Membres:** \`${roleMembers.length}\`\n\`\`\`${roleMembers.join(
           ", "
-        )}\`\`\``,
+        ) || " "}\`\`\``,
         footer: {
           text: "✨Mayze✨"
         }
