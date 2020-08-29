@@ -11,7 +11,7 @@ module.exports = {
     const commands = message.client.commands;
 
     if (!args.length) {
-      data = commands.map(cmd => cmd.name).join(", ");
+      data = commands.filter(cmd => !cmd.ownerOnly).map(cmd => cmd.name).join(", ");
       message.author
         .send({
           embed: {

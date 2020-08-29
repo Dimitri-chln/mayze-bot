@@ -1,30 +1,24 @@
 module.exports = {
-  name: "kiss",
-  description: "Fais un bisous à quelqu'un !",
+  name: "love",
+  description: "Calcule le pourcentage d'amour entre 2 personnes",
   aliases: [],
   args: 1,
-  usage: "<mention>",
+  usage: "<mention/texte> [mention/texte]",
   execute(message, args) {
-    const images = require("../fixedData/images.json");
-    if (args.length >= 1) {
-      var kiss = message.guild.members.cache.get(
-        args[0].replace(/[<@!>]/g, "")
-      );
-      if (kiss) {
-        message.channel.send({
-          embed: {
-            title: `${message.author.username} fait un bisou à ${kiss.user.username} 😘`,
-            color: "#010101",
-            image: {
-              url:
-                images.kisses[Math.floor(Math.random() * images.kisses.length)]
-            },
-            footer: {
-              text: "✨Mayze✨"
-            }
-          }
-        });
-      };
-    };
+    const love1 = message.mentions.users.first() || args[0];
+    const love2 =
+      message.mentions.users.first(2)[1] || args[1] || message.author;
+    message.channel.send({
+      embed: {
+        title: "💕 Love Calculator 💕",
+        color: "#010101",
+        description: `${love1} + ${love2} = ${Math.round(
+          Math.random() * 100
+        )}%`,
+        footer: {
+          text: "✨Mayze✨"
+        }
+      }
+    });
   }
 };

@@ -14,7 +14,6 @@ module.exports = {
       );
     message.delete().then(() => {
       message.channel.messages.fetch({ limit: number }).then(messages => {
-        const userRegex = /<@!?\d{18}>/;
         var messagesToDelete = messages;
         if (args.length >= 2) {
           if (args[1].toLowerCase() === "bot") {
@@ -22,8 +21,8 @@ module.exports = {
           } else if (args[1] === "-r" && args.length >= 3) {
             const regex = new RegExp(args[2], "i");
             messagesToDelete = messages.filter(msg => regex.test(msg));
-          };
-        };
+          }
+        }
         message.channel.bulkDelete(messagesToDelete);
         message.channel
           .send(`${messagesToDelete.size} messages ont été supprimés !`)
