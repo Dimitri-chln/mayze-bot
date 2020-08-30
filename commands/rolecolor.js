@@ -24,7 +24,10 @@ module.exports = {
       role.setColor(args[1]);
       message.channel.send({
         embed: {
-          title: "Couleur modifiée avec succès",
+          auhtor: {
+            name: "Couleur modifiée avec succès",
+            icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
+          },
           color: "#010101",
           description: `La couleur du rôle ${role} a été changée en ${args[1]}`,
           footer: {

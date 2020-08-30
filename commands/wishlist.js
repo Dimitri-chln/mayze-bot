@@ -19,9 +19,10 @@ module.exports = {
     if (!wishlist) return message.reply("aucun wish trouvé !");
     message.channel.send({
       embed: {
-        title: `Wishlist de ${
-          message.client.users.cache.get(user.id).username
-        }`,
+        author: {
+          name: `Wishlist de ${message.client.users.cache.get(user.id).username}`,
+          icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+        },
         color: "#010101",
         description: wishlist
           .map(

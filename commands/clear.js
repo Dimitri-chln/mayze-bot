@@ -4,7 +4,7 @@ module.exports = {
   aliases: ["clean", "cl"],
   cooldown: 5,
   args: 1,
-  usage: "<nombre> [mention/id] [-bot / -r <regex>]",
+  usage: "<nombre> [mention/id] [-bot] [-r <regex>]",
   perms: ["MANAGE_MESSAGES"],
   execute(message, args) {
     const number = parseInt(args[0], 10);
