@@ -8,7 +8,10 @@ module.exports = {
     const prefix = require("../config.json").prefix;
     message.channel.send({
       embed: {
-        title: "__Message d'aide__",
+        author: {
+          name: "__Message d'aide__",
+          icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
+        },
         color: "#010101",
         description: "Commandes disponibles actuellement:",
         fields: [

@@ -6,7 +6,7 @@ module.exports = {
   usage: "<rôle>",
   perms: ["MANAGE_ROLES"],
   execute(message, args) {
-    const roleIdOrName = args[0].replace(/[<@&>\W]/g, "").toLowerCase();
+    const roleIdOrName = args.join(" ").replace(/[<@&>\W]/g, "").toLowerCase();
     const role =
       message.guild.roles.cache.get(roleIdOrName) ||
       message.guild.roles.cache.find(
@@ -25,10 +25,7 @@ module.exports = {
       Math.floor(role.color / (256 * 256)).toString(16) +
       Math.floor((role.color % (256 * 256)) / 256).toString(16) +
       (role.color % 256).toString(16);
-    const roleMembers =
-      message.guild.members.cache
-        .filter(m => m.roles.cache.some(r => r.id === role.id))
-        .map(m => m.user.username);
+    const roleMembers = role.members.map(m => m.user.username);
 
     message.channel.send({
       embed: {
@@ -40,7 +37,7 @@ module.exports = {
         description: `**ID:** \`${role.id}\`\n**Couleur** (dec)**:** \`${
           role.color
         }\`\n**Couleur** (hex)**:** \`#${hexColor}\`\n**Position:** \`${
-          role.rawPosition
+          role.position
         }\`\n**Membres:** \`${roleMembers.length}\`\n\`\`\`${roleMembers.join(
           ", "
         ) || " "}\`\`\``,

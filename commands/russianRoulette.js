@@ -13,7 +13,10 @@ module.exports = {
         message.client.russianRoulette.push(message.author.id);
         message.channel.send({
           embed: {
-            title: "Une partie de roulette russe a été lancée!",
+            auhtor: {
+              name: "Une partie de roulette russe a été lancée!",
+              icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
+            },
             color: "#010101",
             description:
               "Rejoins la partie avec la commande `*russian-roulette join` !",
