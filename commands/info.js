@@ -15,7 +15,7 @@ module.exports = {
         },
         title: "• Informations sur le bot",
         color: "#010101",
-        description: `**Préfixe:** \`${config.prefix}\`\n**Propriétaire:** \`${message.client.users.cache.get(config.ownerID).username}\`\n**Version:** \`${version}\``,
+        description: `**Préfixe:** \`${config.prefix[message.client.user.id]}\`\n**Propriétaire:** \`${message.client.users.cache.get(config.ownerID).username}\`\n**Version:** \`${version}\``,
         footer: {
           text: "✨Mayze✨"
         }

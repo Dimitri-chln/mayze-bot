@@ -53,12 +53,10 @@ client.on("ready", () => {
 });
 
 client.on("message", message => {
-  if (
-    message.author.bot === false &&
-    message.content.toLowerCase().startsWith(config.prefix)
-  ) {
+  if (message.author.bot) return;
+  if (message.content.toLowerCase().startsWith(config.prefix[client.user.id])) {
     const input = message.content
-      .slice(config.prefix.length)
+      .slice(config.prefix[client.user.id].length)
       .trim()
       .split(/ +/g);
     const commandName = input[0].toLowerCase();
@@ -98,7 +96,7 @@ client.on("message", message => {
           .replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
           .replace(/00h |00m /g, "");
         return message.reply(
-          `attends encore **${timeLeftHumanized}** avant d'utiliser la commande \`${config.prefix}${command.name}\``
+          `attends encore **${timeLeftHumanized}** avant d'utiliser la commande \`${config.prefix[client.user.id]}${command.name}\``
         );
       }
     }
@@ -107,7 +105,7 @@ client.on("message", message => {
 
     if (args.length < command.args) {
       message.channel.send(
-        `Utilisation : \`${config.prefix}${commandName} ${command.usage}\``
+        `Utilisation : \`${config.prefix[client.user.id]}${commandName} ${command.usage}\``
       );
     } else {
       try {

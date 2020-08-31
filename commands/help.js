@@ -5,7 +5,7 @@ module.exports = {
   args: 0,
   usage: "",
   execute(message, args) {
-    const prefix = require("../config.json").prefix;
+    const prefix = require("../config.json").prefix[message.client.user.id];
     message.channel.send({
       embed: {
         author: {
