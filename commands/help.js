@@ -9,15 +9,15 @@ module.exports = {
     message.channel.send({
       embed: {
         author: {
-          name: "__Message d'aide__",
+          name: "Message d'aide",
           icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
         },
         color: "#010101",
-        description: "Commandes disponibles actuellement:",
+        description: "__Commandes disponibles actuellement:__",
         fields: [
           {
             name: "🛠️ - Admin",
-            value: `\`${prefix}rolecolor\`\n\`${prefix}role\`\n\`${prefix}message\`\n\`${prefix}clear\``,
+            value: `\`${prefix}rolecolor\`\n\`${prefix}message\`\n\`${prefix}clear\``,
             inline: true
           },
           {
@@ -37,7 +37,7 @@ module.exports = {
           },
           {
             name: "❔ - Autres",
-            value: `\`${prefix}ping\`\n\`${prefix}uptime\`\n\`${prefix}commandhelp\``,
+            value: `\`${prefix}ping\`\n\`${prefix}uptime\`\n\`${prefix}role\`\n\`${prefix}commandhelp\``,
             inline: true
           },
           {

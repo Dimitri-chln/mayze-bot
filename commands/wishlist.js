@@ -21,7 +21,7 @@ module.exports = {
       embed: {
         author: {
           name: `Wishlist de ${message.client.users.cache.get(user.id).username}`,
-          icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+          icon_url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
         },
         color: "#010101",
         description: wishlist

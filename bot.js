@@ -21,14 +21,26 @@ for (const file of autoresponseFiles) {
   client.autoresponses.push(autoresponse);
 }
 
+client.reactionCommands = [];
+const reactionCommandsFiles = fs
+  .readdirSync("./reactionCommands")
+  .filter(file => file.endsWith(".js"));
+for (const file of reactionCommandsFiles) {
+  const reactionCommand = require(`./reactionCommands/${file}`);
+  client.reactionCommands.push(reactionCommand);
+}
+
 client.cooldowns = new Discord.Collection();
 client.molkky = new Discord.Collection();
 client.russianRoulette = [];
 
-const dropSum = (currentSum, currentPokemon) => currentSum + currentPokemon.drop;
+const dropSum = (currentSum, currentPokemon) =>
+  currentSum + currentPokemon.drop;
 const pokedex = require("./database/pokedex.json");
 const pokedexWeight = [0];
-pokedexWeight.push(...pokedex.map((p, i) => pokedex.slice(0, i + 1).reduce(dropSum, 0)));
+pokedexWeight.push(
+  ...pokedex.map((p, i) => pokedex.slice(0, i + 1).reduce(dropSum, 0))
+);
 client.pokedexWeight = pokedexWeight;
 
 client.on("ready", () => {
@@ -64,9 +76,11 @@ client.on("message", message => {
       !command.perms.every(perm => message.member.hasPermission(perm))
     )
       return message.reply(
-        `tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``
+        `tu n'as pas les permissions nécessaires \n→ \`${command.perms.join(
+          "`, `"
+        )}\``
       );
-    
+
     if (command.ownerOnly && message.author.id !== client.owner.id) return;
 
     if (!client.cooldowns.has(command.name)) {
@@ -116,6 +130,14 @@ client.on("message", message => {
   }
 });
 
-//client.on("messageReactionAdd")
+client.on("messageReactionAdd", reaction => {
+  for (const reactionCommand of client.reactionCommands) {
+    try {
+      reactionCommand.execute(reaction);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+});
 
 client.login(process.env.TOKEN);

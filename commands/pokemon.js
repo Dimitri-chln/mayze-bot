@@ -54,7 +54,13 @@ module.exports = {
 
     message.channel.send({
       embed: {
-        title: "Nouveau pokémon!",
+        author: {
+          name: "Nouveau pokémon!",
+          icon_url: "https://i.imgur.com/uJlfMAd.png"
+        },
+        thumbnail: {
+          url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+        },
         color: embedColor,
         description: `<@${message.author.id}> a attrapé un ${alolanText}${galarianText}${pokemon.en}${shinyText}!`,
         image: {

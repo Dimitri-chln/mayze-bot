@@ -16,7 +16,7 @@ module.exports = {
         .send({
           embed: {
             author: {
-              name: "__Liste automatisée des commandes__",
+              name: "Liste automatisée des commandes",
               icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
             },
             color: "#010101",
