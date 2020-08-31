@@ -6,7 +6,7 @@ module.exports = {
   args: 0,
   usage: "[commande]",
   execute(message, args) {
-    const prefix = require("../config.json").prefix;
+    const prefix = require("../config.json").prefix[message.client.user.id];
     var data;
     const commands = message.client.commands;
 

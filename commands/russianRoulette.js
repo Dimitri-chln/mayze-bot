@@ -6,6 +6,7 @@ module.exports = {
   usage: "create/join/start",
   execute(message, args) {
     const shuffle = require("../functions/shuffle.js");
+    const prefix = require("../config.json").prefix[message.client.user.id];
     switch (args[0]) {
       case "create":
         if (message.client.russianRoulette.length)
@@ -19,7 +20,7 @@ module.exports = {
             },
             color: "#010101",
             description:
-              "Rejoins la partie avec la commande `*russian-roulette join` !",
+              "Rejoins la partie avec la commande `${prefix]russian-roulette join` !",
             footer: {
               text: "✨Mayze✨"
             }
@@ -29,7 +30,7 @@ module.exports = {
       case "join":
         if (!message.client.russianRoulette.length)
           return message.reply(
-            "il n'y a pas de partie en cours! Crée une partie avec la commande `*russian-roulette create`"
+            "il n'y a pas de partie en cours! Crée une partie avec la commande `${prefix}russian-roulette create`"
           );
         if (message.client.russianRoulette.includes(message.author.id))
           return message.reply("tu as déjà rejoint cette partie");
@@ -39,7 +40,7 @@ module.exports = {
       case "start":
         if (!message.client.russianRoulette.length)
           return message.reply(
-            "il n'y a pas de partie en cours! Crée une partie avec la commande `*russian-roulette create`"
+            "il n'y a pas de partie en cours! Crée une partie avec la commande `${prefix}russian-roulette create`"
           );
         if (message.client.russianRoulette.length < 2)
           return message.reply(
@@ -73,7 +74,7 @@ module.exports = {
         message.client.russianRoulette = [];
         break;
       default:
-        message.reply("Utilisation: `*russian-roulette create/join/start`");
+        message.reply("Utilisation: `${prefix}russian-roulette create/join/start`");
     }
 
     function roulette(msg, alivePlayers, deadPlayer, Embed, i) {
