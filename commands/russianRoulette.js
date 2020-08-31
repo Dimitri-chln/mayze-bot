@@ -95,7 +95,7 @@ module.exports = {
               } est mort !`
             )
           });
-          message.guild.members.cache.get(deadPlayer).kick({"reason": "Roulette Russe"}).catch(() => {
+          message.guild.members.cache.get(deadPlayer).kick("Roulette Russe").catch(() => {
             message.channel.send("Je n'ai pas pu expulser le perdant");
           });
         }, 2000);
