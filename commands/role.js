@@ -22,9 +22,9 @@ module.exports = {
     if (!role) return message.reply("je n'ai pas réussi à trouver ce rôle");
 
     const hexColor =
-      Math.floor(role.color / (256 * 256)).toString(16) +
-      Math.floor((role.color % (256 * 256)) / 256).toString(16) +
-      (role.color % 256).toString(16);
+      Math.floor(role.color / (256 * 256)).toString(16).replace(/(^.$)/, "0$1") +
+      Math.floor((role.color % (256 * 256)) / 256).toString(16).replace(/(^.$)/, "0$1") +
+      (role.color % 256).toString(16).replace(/(^.$)/, "0$1");
     const roleMembers = role.members.map(m => m.user.username);
 
     message.channel.send({

@@ -13,9 +13,9 @@ module.exports = {
         message.client.russianRoulette.push(message.author.id);
         message.channel.send({
           embed: {
-            auhtor: {
+            author: {
               name: "Une partie de roulette russe a été lancée!",
-              icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
+              icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.authoravatar}.png`
             },
             color: "#010101",
             description:
@@ -55,7 +55,7 @@ module.exports = {
         const players = message.client.russianRoulette;
         const Discord = require("discord.js");
         const Embed = new Discord.MessageEmbed()
-          .setTitle("La partie de roulette russe a commencé!")
+          .setAuthor("La partie de roulette russe a commencé!", `https://cdn.discordapp.com/avatars/${message.author.id}/${message.authoravatar}.png`)
           .setColor("#010101")
           .setFooter("✨Mayze✨")
           .setTimestamp();
@@ -95,7 +95,7 @@ module.exports = {
               } est mort !`
             )
           });
-          message.guild.members.cache.get(deadPlayer).kick({"reason": "Roulette Russe"}).catch(() => {
+          message.guild.members.cache.get(deadPlayer).kick("Roulette Russe").catch(() => {
             message.channel.send("Je n'ai pas pu expulser le perdant");
           });
         }, 2000);

@@ -10,7 +10,7 @@ module.exports = {
     message.channel.send({
       embed: {
         author: {
-          name: "Mayze",
+          name: message.client.user.username,
           icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
         },
         title: "• Informations sur le bot",
