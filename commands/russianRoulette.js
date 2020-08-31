@@ -15,7 +15,7 @@ module.exports = {
           embed: {
             author: {
               name: "Une partie de roulette russe a été lancée!",
-              icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.authoravatar}.png`
+              icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
             },
             color: "#010101",
             description:
