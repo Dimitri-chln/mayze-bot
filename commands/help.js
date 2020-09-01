@@ -37,7 +37,7 @@ module.exports = {
           },
           {
             name: "❔ - Autres",
-            value: `\`${prefix}ping\`\n\`${prefix}uptime\`\n\`${prefix}role\`\n\`${prefix}commandhelp\``,
+            value: `\`${prefix}ping\`\n\`${prefix}uptime\`\n\`${prefix}role\`\n\`${prefix}commandhelp\`\n\`${prefix}ranks\`\n\`${prefix}rank\``,
             inline: true
           },
           {
