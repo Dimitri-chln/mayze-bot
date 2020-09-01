@@ -53,8 +53,8 @@ client.on("ready", () => {
 });
 
 client.on("message", message => {
-  if (message.author.bot) return;
   if (message.content.toLowerCase().startsWith(config.prefix[client.user.id])) {
+    if (message.author.bot) return;
     const input = message.content
       .slice(config.prefix[client.user.id].length)
       .trim()
