@@ -34,13 +34,17 @@ client.cooldowns = new Discord.Collection();
 client.molkky = new Discord.Collection();
 client.russianRoulette = [];
 
-const dropSum = (currentSum, currentPokemon) =>
-  currentSum + currentPokemon.drop;
 const pokedex = require("./database/pokedex.json");
+/* const dropSum = (currentSum, currentPokemon) =>
+  currentSum + currentPokemon.drop;
 const pokedexWeight = [0];
 pokedexWeight.push(
   ...pokedex.map((p, i) => pokedex.slice(0, i + 1).reduce(dropSum, 0))
-);
+); */
+var pokedexWeight = [0];
+for (var i = 0; i < pokedex.length; i++) {
+  pokedexWeight.push(pokedexWeight[i] + pokedex[i].drop);
+};
 client.pokedexWeight = pokedexWeight;
 
 client.on("ready", () => {

@@ -11,41 +11,40 @@ module.exports = {
     const loots = require("../database/pokeLoots.json");
     const pokedex = require("../database/pokedex.json");
 
-    const shinyFrequency = 0.004, alolanFrequency = 0.1, galarianFrequency = 0.1;
+    const shinyFrequency = 0.004,
+      alolanFrequency = 0.1,
+      galarianFrequency = 0.1;
 
-    var pokemon;
+    const random = Math.random() * message.client.pokedexWeight.slice(-1)[0];
+    const randomPokemon = message.client.pokedexWeight.find(
+      (n, i, a) => random <= n && random > a[i - 1]
+    );
+    const pokemon =
+      pokedex[message.client.pokedexWeight.lastIndexOf(randomPokemon) - 1];
 
-    if (args[0] !== "new") {
-      const randomPokemon = Math.floor(Math.random() * loots.dex.length);
-      pokemon = {
-        en: loots.dex[randomPokemon],
-        fr: "",
-        img: ("00" + (randomPokemon + 1)).substr(-3)
-      };
-    } else {
-      // new Pokemon selection
-      const random = Math.random() * message.client.pokedexWeight.slice(-1)[0];
-      const randomPokemon = message.client.pokedexWeight.find(
-        (n, i, a) => random <= n && random > a[i - 1]
-      );
-      pokemon =
-        pokedex[message.client.pokedexWeight.lastIndexOf(randomPokemon) - 1];
-    }
     var img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.img}.png`;
 
-    var randomAlolan = Math.random(), alolanText = "";
+    var randomAlolan = Math.random(),
+      alolanText = "";
     if (randomAlolan < alolanFrequency && pokemon.alolan) {
       alolanText = "Alolan ";
       img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.alolan}.png`;
     }
-    
-    var randomGalarian = Math.random(), galarianText = "";
-    if (randomGalarian < galarianFrequency && pokemon.galarian && alolanText === "") {
+
+    var randomGalarian = Math.random(),
+      galarianText = "";
+    if (
+      randomGalarian < galarianFrequency &&
+      pokemon.galarian &&
+      alolanText === ""
+    ) {
       galarianText = "Galarian ";
       img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.galarian}.png`;
     }
 
-    var randomShiny = Math.random(), shinyText = "", embedColor = "#010101";
+    var randomShiny = Math.random(),
+      shinyText = "",
+      embedColor = "#010101";
     if (randomShiny < shinyFrequency) {
       shinyText = " ⭐ ";
       embedColor = "#ddbb20";

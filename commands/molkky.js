@@ -61,17 +61,15 @@ module.exports = {
         } else {
           molkkyData.players[molkkyData.currentPlayer].failed = 0;
         };
-        if (molkkyData.players[molkkyData.currentPlayer].failed === 3)
+        if (molkkyData.players[molkkyData.currentPlayer].failed === 3) {
           newScore = 0;
+          molkkyData.players[molkkyData.currentPlayer].failed = 0;
+        };
         if (newScore > 50) newScore = 25;
         if (newScore === 50)
           molkkyData.winners.push(
             molkkyData.players[molkkyData.currentPlayer].name
           );
-        if (molkkyData.players[molkkyData.currentPlayer].failed === 3) {
-          newScore = 0;
-          molkkyData.players[molkkyData.currentPlayer].failed = 0;
-        };
         molkkyData.players[molkkyData.currentPlayer].scores.push(newScore);
         var gameEnd = false;
         if (molkkyData.winners.length === molkkyData.players.length - 1) {
