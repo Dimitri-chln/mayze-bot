@@ -20,19 +20,13 @@ module.exports = {
     message.channel.send({
       embed: {
         author: {
-          name: `Wishlist de ${message.client.users.cache.get(user.id).username}`,
+          name: `Wishlist de ${
+            message.client.users.cache.get(user.id).username
+          }`,
           icon_url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
         },
         color: "#010101",
-        description: wishlist
-          .map(
-            w =>
-              "❤️".repeat(w.stars) +
-              "🖤".repeat(5 - w.stars) +
-              "\t" +
-              w.name.split("|")[0]
-          )
-          .join("\n"),
+        description: wishlist.map(w => w.split("|")[0]).join("\n"),
         footer: {
           text: "✨Mayze✨"
         }

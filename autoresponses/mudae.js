@@ -8,18 +8,19 @@ module.exports = {
     const claimedRegex = new RegExp("(Animanga|Game) roulette", "");
     if (claimedRegex.test(mudaeEmbed.description)) return;
     const characterName = mudaeEmbed.author.name;
-    const characterSeries = mudaeEmbed.description.split("\nClaims:")[0].replace(/\\n/g, " ");
+    const characterSeries = mudaeEmbed.description
+      .split("\nClaims:")[0]
+      .replace(/\\n/g, " ");
     // wish detection
     const wishData = require("../database/wishes.json");
     const entries = Object.entries(wishData);
-    for (const [user, wishes] of entries) {
+    for (const [userID, wishes] of entries) {
       for (const wish of wishes) {
-        const regex = new RegExp(wish.name, "i");
+        const regex = new RegExp(wish, "i");
         if (regex.test(characterSeries)) {
-          message.channel.send(
-            `**${characterName}** est souhaité par <@${user}> !\n(${characterSeries})\nImportance: ${"❤️".repeat(
-              wish.stars
-            ) + "🖤".repeat(5 - wish.stars)}`
+          const user = message.client.users.cache.get(userID);
+          user.send(
+            `**${characterName}** a été roll dans <#${message.channel.id}> !\n(${characterSeries})`
           );
         }
       }

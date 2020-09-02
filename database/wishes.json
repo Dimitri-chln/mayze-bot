@@ -1,60 +1,6 @@
 {
-  "307815349699608577": [
-    {
-      "name": "Mario|Luigi",
-      "stars": 5
-    },
-    {
-      "name": "Splatoon",
-      "stars": 5
-    },
-    {
-      "name": "Animal Crossing",
-      "stars": 4
-    },
-    {
-      "name": "Kirby",
-      "stars": 3
-    },
-    {
-      "name": "Zelda|Hyrule",
-      "stars": 5
-    },
-    {
-      "name": "Sword Art Online",
-      "stars": 5
-    },
-    {
-      "name": "Ao no Exorcist",
-      "stars": 4
-    },
-    {
-      "name": "Ansatsu Kyoushitsu",
-      "stars": 3
-    },
-    {
-      "name": "No Game No Life",
-      "stars": 2
-    }
-  ],
-  "394633964138135563": [
-    {
-      "name": "One Piece",
-      "stars": 5
-    },
-    {
-      "name": "Tokyo Ghoul",
-      "stars": 3
-    },
-    {
-      "name": "Pokémon Black\/White",
-      "stars": 2
-    }
-  ],
-  "638640935021838347": [
-    {
-      "name": "Fairy Tail",
-      "stars": 5
-    }
-  ]
+  "307815349699608577": ["Mario|Luigi", "Splatoon", "Animal Crossing", "Kirby", "Zelda|Hyrule", "Sword Art Online", "Ao no Exorcist", "Ansatsu Kyoushitsu", "No Game No Life", "Harry Potter"],
+  "394633964138135563": ["One Piece", "Tokyo Ghoul", "Pokémon Black\/White"],
+  "638640935021838347": ["Fairy Tail"],
+  "513298162278989834": ["Fairy Tail"]
 }
