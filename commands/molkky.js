@@ -15,13 +15,12 @@ module.exports = {
 
     switch (args[0]) {
       case "setup":
-        const molkkySetup = require("../fixedData/images.json").molkky;
         message.channel.send({
           embed: {
             title: "Placement Mölkky",
             color: "#010101",
             image: {
-              url: molkkySetup
+              url: "https://i.imgur.com/aj6CMIC.jpg"
             },
             footer: {
               text: "✨Mayze✨"
@@ -105,9 +104,9 @@ module.exports = {
         message.reply("arguments incorrects !");
     };
     function molkkyDesc(molkkyData) {
-      const embedDesc = `Joueur actuel: __***${
+      const embedDesc = `Joueur actuel: __**${
         molkkyData.players[molkkyData.currentPlayer].name
-      }***__\`\`\`${molkkyData.players
+      }**__\`\`\`${molkkyData.players
         .map(
           p =>
             `${(p.name + "      ").substr(0, 7)}|${p.scores
