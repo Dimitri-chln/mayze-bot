@@ -27,7 +27,7 @@ module.exports = {
     var randomAlolan = Math.random(),
       alolanText = "";
     if (randomAlolan < alolanFrequency && pokemon.alolan) {
-      alolanText = "Alolan ";
+      alolanText = " d'Alola";
       img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.alolan}.png`;
     }
 
@@ -38,7 +38,7 @@ module.exports = {
       pokemon.galarian &&
       alolanText === ""
     ) {
-      galarianText = "Galarian ";
+      galarianText = " de Galar";
       img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.galarian}.png`;
     }
 
@@ -46,7 +46,7 @@ module.exports = {
       shinyText = "",
       embedColor = "#010101";
     if (randomShiny < shinyFrequency) {
-      shinyText = " ⭐ ";
+      shinyText = "⭐ ";
       embedColor = "#ddbb20";
       img = `https://img.pokemondb.net/sprites/home/shiny/${pokemon.en.toLowerCase()}.png`;
     }
@@ -61,7 +61,7 @@ module.exports = {
           url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
         },
         color: embedColor,
-        description: `<@${message.author.id}> a attrapé un ${alolanText}${galarianText}${pokemon.en}${shinyText}!`,
+        description: `<@${message.author.id}> a attrapé un ${shinyText}${pokemon.fr}${alolanText}${galarianText}!`,
         image: {
           url: img
         },
