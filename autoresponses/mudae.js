@@ -10,7 +10,7 @@ module.exports = {
     const characterName = mudaeEmbed.author.name;
     const characterSeries = mudaeEmbed.description
       .split("\nClaims:")[0]
-      .replace(/\\n/g, " ");
+      .replace(/\n/g, " ");
     // wish detection
     const wishData = require("../database/wishes.json");
     const entries = Object.entries(wishData);
@@ -19,9 +19,19 @@ module.exports = {
         const regex = new RegExp(wish, "i");
         if (regex.test(characterSeries)) {
           const user = message.client.users.cache.get(userID);
-          user.send(
-            `**${characterName}** a été roll dans <#${message.channel.id}> !\n(${characterSeries})`
-          );
+          user.send({
+            embed: {
+              author: {
+                name: "Personnage souhaité",
+                icon_url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+              },
+              color: "#010101",
+              description: `**[${characterName}](https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id})** a été roll dans <#${message.channel.id}> !\n(${characterSeries})`,
+              footer: {
+                text: "✨Mayze✨"
+              }
+            }
+          });
         }
       }
     }
