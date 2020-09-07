@@ -74,7 +74,7 @@ module.exports = {
         message.client.russianRoulette = [];
         break;
       default:
-        message.reply("Utilisation: `${prefix}russian-roulette create/join/start`");
+        message.reply("arguments incorrects !");
     }
 
     function roulette(msg, alivePlayers, deadPlayer, Embed, i) {
