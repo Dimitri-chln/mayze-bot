@@ -46,9 +46,9 @@ module.exports = {
       if (!command) {
         return message.reply("cette commande n'existe pas!");
       };
-      data = `**Nom:** ${command.name}`;
+      data = `**Nom:** \`${command.name}\``;
       if (command.aliases.length) {
-        data = data + `\n**Aliases:** ${command.aliases.join(", ")}`;
+        data = data + `\n**Aliases:** \`${command.aliases.join("`, `")}\``;
       };
       if (command.description) {
         data = data + `\n**Description:** ${command.description}`;
