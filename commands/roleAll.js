@@ -29,28 +29,23 @@ module.exports = {
     if (args.includes("-human")) {
       members = members.filter(m => !m.user.bot);
     }
-
+    
     switch (args[0]) {
       case "add":
         members = members.filter(
           m => !m.roles.cache.some(r => r.id === role.id)
         );
         members.forEach(member => member.roles.add(role));
-        message.channel.send(
-          `${members.length} membres ont reçu le rôle ${role.name}`
-        );
         break;
       case "remove":
         members = members.filter(m =>
           m.roles.cache.some(r => r.id === role.id)
         );
         members.forEach(member => member.roles.remove(role));
-        message.channel.send(
-          `${members.length} membres ont perdu le rôle ${role.name}`
-        );
         break;
       default:
         message.reply("arguments incorrects !");
     }
+    message.channel.send(`Les rôles de ${members.length} membre(s) ont été mis à jour`);
   }
 };
