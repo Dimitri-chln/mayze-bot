@@ -34,6 +34,22 @@ module.exports = {
       userRanks.forEach(rank => member.roles.remove(rank.id));
       jailedUserRanks.forEach(jailedRank => member.roles.add(jailedRank.id));
       member.roles.add("695943648235487263");
+      if (member.roles.cache.some(r => r.id === "689180158359371851")) {  // Administrateur
+        member.roles.remove("689180158359371851");
+        member.roles.add("753245162469064795");
+      }
+      if (member.roles.cache.some(r => r.id === "737646140362850364")) {  // Modérateur
+        member.roles.remove("737646140362850364");
+        member.roles.add("753250476891439185");
+      }
+      if (member.roles.cache.some(r => r.id === "696751614177837056")) {  // Sous Chef
+        member.roles.remove("696751614177837056");
+        member.roles.add("753251533768097933");
+      }
+      if (member.roles.cache.some(r => r.id === "689218691560505472")) {  // 👑🐍•🐣✨•🌙🐒•⚡🦅•🦄❄️
+        member.roles.remove("689218691560505472");
+        member.roles.add("753253307052589176");
+      }
       message.react("🔗");
     } else {
       const jailedUserRanks = member.roles.cache.filter(
@@ -46,6 +62,22 @@ module.exports = {
       userRanks.forEach(rank => member.roles.add(rank.id));
       jailedUserRanks.forEach(jailedRank => member.roles.remove(jailedRank.id));
       member.roles.remove("695943648235487263");
+      if (member.roles.cache.some(r => r.id === "753245162469064795")) {  // Administrateur
+        member.roles.remove("753245162469064795");
+        member.roles.add("689180158359371851");
+      }
+      if (member.roles.cache.some(r => r.id === "753250476891439185")) {  // Modérateur
+        member.roles.remove("753250476891439185");
+        member.roles.add("737646140362850364");
+      }
+      if (member.roles.cache.some(r => r.id === "753251533768097933")) {  // Sous Chef
+        member.roles.remove("753251533768097933");
+        member.roles.add("696751614177837056");
+      }
+      if (member.roles.cache.some(r => r.id === "753253307052589176")) {  // 👑🐍•🐣✨•🌙🐒•⚡🦅•🦄❄️
+        member.roles.remove("753253307052589176");
+        member.roles.add("689218691560505472");
+      }
       message.react("👋");
     }
   }
