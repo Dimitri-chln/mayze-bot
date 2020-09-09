@@ -29,7 +29,7 @@ module.exports = {
     if (args.includes("-human")) {
       members = members.filter(m => !m.user.bot);
     }
-    
+
     switch (args[0]) {
       case "add":
         members = members.filter(
@@ -44,8 +44,10 @@ module.exports = {
         members.forEach(member => member.roles.remove(role));
         break;
       default:
-        message.reply("arguments incorrects !");
+        return message.reply("arguments incorrects !");
     }
-    message.channel.send(`Les rôles de ${members.length} membre(s) ont été mis à jour`);
+    message.channel.send(
+      `Le rôle \`${role.name}\` a été mis à jour pour ${members.length} membre(s)`
+    );
   }
 };

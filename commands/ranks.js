@@ -8,7 +8,12 @@ module.exports = {
   execute(message, args) {
     const roleTop = message.guild.roles.cache.get("735810286719598634");
     const roleBottom = message.guild.roles.cache.get("735810462872109156");
-    const ranks = message.guild.roles.cache.filter(r => r.position < roleTop.position && r.position > roleBottom.position);
+    const ranks = message.guild.roles.cache.filter(
+      r =>
+        r.position < roleTop.position &&
+        r.position > roleBottom.position &&
+        !r.name.includes("(Jailed)")
+    );
     message.channel.send({
       embed: {
         author: {
