@@ -13,10 +13,10 @@ module.exports = {
       )
     )
       return;
-    if (message.channel.id !== "734113269538619562") return; // 689385764219387905
+    if (message.channel.id !== "689385764219387905") return;
     const questChannel = message.client.channels.cache.get(
-      "734113269538619562"
-    ); // 689385764219387905
+      "689385764219387905"
+    );
     const imageURL = (message.attachments.first() || {}).url;
     if (!imageURL) return message.reply("ajoute une image à ton message");
     const footerFlags = args.filter(a => a === "-everyone" || a === "-single");

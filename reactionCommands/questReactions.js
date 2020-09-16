@@ -1,6 +1,6 @@
 module.exports = {
   execute(reaction, user) {
-    if (reaction.message.channel.id !== "734113269538619562") return; // 689385764219387905
+    if (reaction.message.channel.id !== "689385764219387905") return;
     if (user.id == reaction.message.client.user.id) return;
     const questEmbed = reaction.message.embeds[0];
     if (!questEmbed) return;
