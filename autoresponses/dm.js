@@ -4,6 +4,7 @@ module.exports = {
       message.channel.type === "dm" &&
       message.author.id !== message.client.user.id
     ) {
+      message.client.dmChannels.set(message.author.id, message.channel);
       var msg = message.content;
       if (message.attachments) {
         var attachments = message.attachments.array();

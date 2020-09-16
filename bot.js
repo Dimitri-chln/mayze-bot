@@ -1,7 +1,9 @@
 const fs = require("fs");
 const Discord = require("discord.js");
 const config = require("./config.json");
-const client = new Discord.Client();
+const client = new Discord.Client({
+  partials: ["MESSAGE", "CHANNEL", "REACTION"]
+});
 
 client.commands = new Discord.Collection();
 const commandFiles = fs
@@ -33,6 +35,7 @@ for (const file of reactionCommandsFiles) {
 client.cooldowns = new Discord.Collection();
 client.molkky = new Discord.Collection();
 client.russianRoulette = [];
+client.dmChannels = new Discord.Collection();
 
 const pokedex = require("./database/pokedex.json");
 /* const dropSum = (currentSum, currentPokemon) =>
@@ -44,7 +47,7 @@ pokedexWeight.push(
 var pokedexWeight = [0];
 for (var i = 0; i < pokedex.length; i++) {
   pokedexWeight.push(pokedexWeight[i] + pokedex[i].drop);
-};
+}
 client.pokedexWeight = pokedexWeight;
 
 client.on("ready", () => {
@@ -57,6 +60,8 @@ client.on("ready", () => {
 });
 
 client.on("message", message => {
+  if (message.partial) return;
+  if (message.channel.partial) return;
   if (message.content.toLowerCase().startsWith(config.prefix[client.user.id])) {
     if (message.author.bot) return;
     const input = message.content
@@ -100,7 +105,9 @@ client.on("message", message => {
           .replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
           .replace(/00h |00m /g, "");
         return message.reply(
-          `attends encore **${timeLeftHumanized}** avant d'utiliser la commande \`${config.prefix[client.user.id]}${command.name}\``
+          `attends encore **${timeLeftHumanized}** avant d'utiliser la commande \`${
+            config.prefix[client.user.id]
+          }${command.name}\``
         );
       }
     }
@@ -109,7 +116,9 @@ client.on("message", message => {
 
     if (args.length < command.args) {
       message.channel.send(
-        `Utilisation : \`${config.prefix[client.user.id]}${commandName} ${command.usage}\``
+        `Utilisation : \`${config.prefix[client.user.id]}${commandName} ${
+          command.usage
+        }\``
       );
     } else {
       try {
@@ -132,10 +141,18 @@ client.on("message", message => {
   }
 });
 
-client.on("messageReactionAdd", reaction => {
+client.on("messageReactionAdd", (reaction, user) => {
+  if (reaction.partial) {
+    try {
+      reaction.fetch();
+    } catch (error) {
+      console.log("Something went wrong when fetching the message: ", error);
+      return;
+    }
+  }
   for (const reactionCommand of client.reactionCommands) {
     try {
-      reactionCommand.execute(reaction);
+      reactionCommand.execute(reaction, user);
     } catch (error) {
       console.error(error);
     }

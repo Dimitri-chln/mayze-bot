@@ -40,7 +40,7 @@ module.exports = {
       case "start":
         if (!message.client.russianRoulette.length)
           return message.reply(
-            "il n'y a pas de partie en cours! Crée une partie avec la commande `${prefix}russian-roulette create`"
+            `il n'y a pas de partie en cours! Crée une partie avec la commande \`${prefix}russian-roulette create\``
           );
         if (message.client.russianRoulette.length < 2)
           return message.reply(
