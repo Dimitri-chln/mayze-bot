@@ -27,6 +27,7 @@ module.exports = {
     });
     questChannel
       .send({
+      content: "<@&689169027922526235>",
         embed: {
           title: "Nouvelles quêtes disponibles!",
           color: "#010101",
