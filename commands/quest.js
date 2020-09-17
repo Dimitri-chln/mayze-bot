@@ -4,7 +4,7 @@ module.exports = {
   aliases: [],
   cooldown: 5,
   args: 0,
-  usage: "[-everyone] [-single]",
+  usage: "[-everyone] [-single] [-noping]",
   perms: ["ADMINISTRATOR"],
   execute(message, args) {
     if (
@@ -19,15 +19,18 @@ module.exports = {
     );
     const imageURL = (message.attachments.first() || {}).url;
     if (!imageURL) return message.reply("ajoute une image à ton message");
+    const flags = args.filter(a => a === "-noping");
     const footerFlags = args.filter(a => a === "-everyone" || a === "-single");
     const footerFlagsString = ["Membres uniquement", "Plusieurs votes"];
     footerFlags.forEach(function(f) {
       if (f === "-everyone") footerFlagsString[0] = "Tout le monde";
       if (f === "-single") footerFlagsString[1] = "Un seul vote";
     });
+    var messageContent = "<@&689169027922526235>";
+    if (flags.includes("-noping")) messageContent = "";
     questChannel
       .send({
-        content: "<@&689169027922526235>",
+        content: messageContent,
         embed: {
           title: "Nouvelles quêtes disponibles!",
           color: "#010101",
