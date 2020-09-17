@@ -1,7 +1,7 @@
 module.exports = {
   execute(reaction, user) {
     if (reaction.message.channel.id !== "689385764219387905") return;
-    if (user.id == reaction.message.client.user.id) return;
+    if (reaction.message.author.id !== reaction.message.client.user.id) return;
     const questEmbed = reaction.message.embeds[0];
     if (!questEmbed) return;
     if (questEmbed.title !== "Nouvelles quêtes disponibles!") return;

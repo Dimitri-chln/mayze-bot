@@ -2,7 +2,7 @@ module.exports = {
   name: "quest",
   description: "Affiche un message de vote pour les quêtes WWO",
   aliases: [],
-  ooldown: 5,
+  cooldown: 5,
   args: 0,
   usage: "[-everyone] [-single]",
   perms: ["ADMINISTRATOR"],
