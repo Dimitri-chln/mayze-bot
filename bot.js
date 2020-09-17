@@ -153,7 +153,7 @@ client.on("messageReactionAdd", (reaction, user) => {
   if (user.bot) return;
   for (const reactionCommand of client.reactionCommands) {
     try {
-      reactionCommand.execute(reaction);
+      reactionCommand.execute(reaction, user);
     } catch (error) {
       console.error(error);
     }

@@ -43,10 +43,11 @@ module.exports = {
         }
       })
       .then(msg => {
-        msg.react("1️⃣");
-        msg.react("2️⃣");
-        msg.react("3️⃣");
-        msg.react("🔁");
+        msg
+          .react("1️⃣")
+          .then(() => msg.react("2️⃣"))
+          .then(() => msg.react("3️⃣"))
+          .then(() => msg.react("🔁"));
       })
       .then(() => {
         message.react("✅");
