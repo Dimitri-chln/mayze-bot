@@ -13,7 +13,7 @@ module.exports = {
       )
     )
       return;
-    if (message.channel.id !== "689385764219387905") return;
+    if (message.channel.id !== "689385764219387905") return message.react("❌");
     const questChannel = message.client.channels.cache.get(
       "689385764219387905"
     );
