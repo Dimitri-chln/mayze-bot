@@ -4,7 +4,7 @@ module.exports = {
   aliases: ["lastQuest", "lq"],
   cooldown: 5,
   args: 1,
-  usage: "[-image (+ image)] [-everyone/-members] [-single/multiple]",
+  usage: "[-image (+image)] [-everyone/-members] [-single/-multiple]",
   perms: ["ADMINISTRATOR"],
   execute(message, args) {
     if (
@@ -22,7 +22,6 @@ module.exports = {
       .fetch({ limit: 100 })
       .then(messages => {
         const quests = messages.filter(m => m.embeds.length && m.author.id === message.client.user.id);
-        if (!quests.length) return;
         const quest = quests.first();
 
         var imageURL = quest.embeds[0].image.url;
