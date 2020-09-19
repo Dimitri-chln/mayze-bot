@@ -22,17 +22,20 @@ module.exports = {
         }
       });
     }
-    
+
     if (args[0] === "add") {
       toDo.push(args.splice(1).join(" "));
       const newToDo = toDo;
       message.client.dataWrite("toDo.json", newToDo);
       message.react("✅");
     }
-    
+
     if (args[0] === "remove") {
       const index = parseInt(args[1], 10);
-      if (isNaN(index) || index <= 0 || index > toDo.length) return message.reply(`le deuxième argument doit être un nombre compris entre 1 et ${toDo.length}`);
+      if (isNaN(index) || index <= 0 || index > toDo.length)
+        return message.reply(
+          `le deuxième argument doit être un nombre compris entre 1 et ${toDo.length}`
+        );
       const newToDo = toDo.filter((t, i) => i + 1 !== index);
       message.client.dataWrite("toDo.json", newToDo);
       message.react("✅");

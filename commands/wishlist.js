@@ -27,7 +27,7 @@ module.exports = {
           icon_url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
         },
         color: "#010101",
-        description: wishlist.map(w => w.split("|")[0]).join("\n"),
+        description: wishlist.map((w, i) => `\`${i + 1}.\` ${w.split("|")[0]}`).join("\n"),
         footer: {
           text: "✨Mayze✨"
         }
