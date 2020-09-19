@@ -37,6 +37,9 @@ client.molkky = new Discord.Collection();
 client.russianRoulette = [];
 client.dmChannels = new Discord.Collection();
 
+client.dataRead = require("./functions/dataRead.js");
+client.dataWrite = require("./functions/dataWrite.js");
+
 const pokedex = require("./database/pokedex.json");
 /* const dropSum = (currentSum, currentPokemon) =>
   currentSum + currentPokemon.drop;

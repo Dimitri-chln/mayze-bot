@@ -1,14 +1,14 @@
 module.exports = {
-  name: "wish",
-  description: "Wish des séries pour Mudae",
-  aliases: [],
+  name: "wish-remove",
+  description: "Retire le wish d'une série pour Mudae",
+  aliases: ["wishRemove", "wr"],
   args: 1,
   usage: "<série>",
   execute(message, args) {
     const wishData = message.client.dataRead("wishes.json");
     const series = args.join(" ");
-    const wishlist = wishData[message.author.id] || [];
-    wishlist.push(series)
+    var wishlist = wishData[message.author.id] || [];
+    wishlist = wishlist.filter(w => w !== series)
     wishData[message.author.id] = wishlist;
     message.client.dataWrite("wishes.json", wishData);
     message.react("✅");
