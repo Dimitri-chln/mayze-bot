@@ -5,7 +5,8 @@ module.exports = {
   args: 0,
   usage: "[mention/id]",
   execute(message, args) {
-    const wishData = require("../database/wishes.json");
+    const fs = require("fs");
+    const wishData = JSON.parse(fs.readFileSync("database/wishes.json"));
     const user =
       message.mentions.users.first() ||
       message.client.users.cache.find(

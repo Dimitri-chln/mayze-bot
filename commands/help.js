@@ -9,7 +9,7 @@ module.exports = {
     message.channel.send({
       embed: {
         author: {
-          name: "Message d'aide",
+          name: "Message d'aide (pas du tout à jour mais flm)",
           icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
         },
         color: "#010101",
