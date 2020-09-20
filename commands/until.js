@@ -9,7 +9,9 @@ module.exports = {
     const UTCOffset = 2;
     const now = Date.now();
     const date = stringToDate(args[0], 2);
+    if (!date) return message.reply("le format de la date doit être dd/mm/yyyy");
     const timeLeft = (date - now) / 1000;
+    if (timeLeft < 0) return message.reply("la date ne doit pas être dépassée");
     var days = Math.floor(timeLeft / 86400);
     var hours = Math.floor((timeLeft % 86400) / 3600);
     var minutes = Math.floor((timeLeft % 3600) / 60);
