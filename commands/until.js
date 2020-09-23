@@ -5,28 +5,42 @@ module.exports = {
   args: 1,
   usage: "<date>",
   execute(message, args) {
-    const stringToDate = require("../functions/stringToDate.js");
-    const UTCOffset = 2;
+    const dateToString = require("../functions/dateToString.js");
+    //const UTCOffset = 2;
     const now = Date.now();
-    const date = stringToDate(args[0], 2);
-    if (!date) return message.reply("le format de la date doit être dd/mm/yyyy");
+    const date = Date.parse(args.join(" ") + " GMT+0200");
+    if (isNaN(date)) return message.reply("le format de la date est incorrect (mm/dd/yyyy)");
+
     const timeLeft = (date - now) / 1000;
     if (timeLeft < 0) return message.reply("la date ne doit pas être dépassée");
-    var days = Math.floor(timeLeft / 86400);
-    var hours = Math.floor((timeLeft % 86400) / 3600);
-    var minutes = Math.floor((timeLeft % 3600) / 60);
-    var seconds = Math.floor(timeLeft % 60 / 1);
-    if (days < 10) days = "0" + days;
-    if (hours < 10) hours = "0" + hours;
-    if (minutes < 10) minutes = "0" + minutes;
-    if (seconds < 10) seconds = "0" + seconds;
-    
+    const timeLeftString = dateToString(timeLeft);
+
+    const seconds = Math.floor((date / 1000) % 60);
+    const minutes = Math.floor((date / (1000 * 60)) % 60);
+    const hours = Math.floor((date / (1000 * 60 * 60)) % 24);
+    const days = Math.floor((date / (1000 * 60 * 60 * 24)) % 365);
+    const years = Math.floor(date / (1000 * 60 * 60 * 24 * 365));
+
     const parts = args[0].split("/");
-    const months = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-    const dateString = parts[0] + " " + months[parts[1] - 1] + " " + parts[2];
-    
+    if (parts.length !== 3) return message.reply("le format de la date est incorrect (mm/dd/yyy)");
+    const monthList = [
+      "janvier",
+      "février",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "août",
+      "septembre",
+      "octobre",
+      "novembre",
+      "décembre"
+    ];
+    const dateString = parts[1] + " " + monthList[parts[0] - 1] + " " + parts[2] + " à "+ (args[1] || "minuit");
+
     message.channel.send(
-      `Il reste **${days}** jours, **${hours}** heures, **${minutes}** minutes et **${seconds}** secondes avant le **${dateString}**`
+      `Il reste ${timeLeftString} avant le **${dateString}**`
     );
   }
 };
