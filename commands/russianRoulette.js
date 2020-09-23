@@ -20,7 +20,7 @@ module.exports = {
             },
             color: "#010101",
             description:
-              "Rejoins la partie avec la commande `${prefix]russian-roulette join` !",
+              `Rejoins la partie avec la commande \`${prefix}russian-roulette join\``,
             footer: {
               text: "✨Mayze✨"
             }
@@ -30,7 +30,7 @@ module.exports = {
       case "join":
         if (!message.client.russianRoulette.length)
           return message.reply(
-            "il n'y a pas de partie en cours! Crée une partie avec la commande `${prefix}russian-roulette create`"
+            `il n'y a pas de partie en cours! Crée une partie avec la commande\`${prefix}russian-roulette create\``
           );
         if (message.client.russianRoulette.includes(message.author.id))
           return message.reply("tu as déjà rejoint cette partie");
