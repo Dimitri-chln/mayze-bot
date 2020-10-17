@@ -22,10 +22,8 @@ module.exports = {
       .toLowerCase();
     const rank =
       message.guild.roles.cache.get(rankIdOrName) ||
-      message.guild.roles.cache.find(
-        r => r.name.replace(/[<@&>\W]/, "").toLowerCase() === rankIdOrName
-      ) ||
-      message.guild.roles.cache.find(r =>
+      ranks.find(r => r.name.replace(/[<@&>\W]/, "").toLowerCase() === rankIdOrName) ||
+      ranks.find(r =>
         r.name
           .replace(/[<@&>\W]/, "")
           .toLowerCase()

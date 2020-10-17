@@ -8,7 +8,7 @@ module.exports = {
   ownerOnly: true,
   execute(message, args) {
     try {
-      eval(args.join(" "));
+      eval(args.join(" ").replace(/##/g, "message.channel.send"));
     } catch (e) {
       message.channel.send(`__Error:__\`\`\`${e}\`\`\``);
     };

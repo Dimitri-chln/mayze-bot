@@ -1,74 +1,46 @@
 module.exports = {
-  name: "pokemon",
-  description: "Attrape un pokémon !",
-  aliases: ["poke", "pkm", "p"],
-  cooldown: 900,
-  args: 0,
-  usage: "",
-  execute(message, args) {
-    // const fs = require("fs");
-    const ownerID = require("../config.json").ownerID;
-    const loots = require("../database/pokeLoots.json");
-    const pokedex = require("../database/pokedex.json");
-
-    const shinyFrequency = 0.004,
-      alolanFrequency = 0.1,
-      galarianFrequency = 0.1;
-
-    const random = Math.random() * message.client.pokedexWeight.slice(-1)[0];
-    const randomPokemon = message.client.pokedexWeight.find(
-      (n, i, a) => random <= n && random > a[i - 1]
-    );
-    const pokemon =
-      pokedex[message.client.pokedexWeight.lastIndexOf(randomPokemon) - 1];
-
-    var img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.img}.png`;
-
-    var randomAlolan = Math.random(),
-      alolanText = "";
-    if (randomAlolan < alolanFrequency && pokemon.alolan) {
-      alolanText = " d'Alola";
-      img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.alolan}.png`;
+    name: "pokemon",
+    description: "Regarde la liste des pokémons que tu as attrapés",
+    aliases: ["pokemons", "pkmn", "pkm", "poke"],
+    args: 0,
+    usage: "[-legendary] [-shiny] [-alolan] [-galarian]",
+    execute(message, args) {
+        const Discord = require("discord.js");
+        const paginationEmbed = require("discord.js-pagination");
+        const dataRead = require("../functions/dataRead.js");
+        const pokemonDatabase = dataRead("pokemonDatabase.json");
+        var userPokemons = pokemonDatabase[message.author.id] || [];
+        
+        if (args.includes("-legendary")) {
+            
+        };
+        if (args.includes("-shiny")) {
+            userPokemons = userPokemons.filter(p => p.name.includes("⭐"));
+        };
+        if (args.includes("-alolan")) {
+            userPokemons = userPokemons.filter(p => p.name.includes("d'Alola"));
+        };
+        if (args.includes("-galarian")) {
+            userPokemons = userPokemons.filter(p => p.name.includes("de Galar"));
+        };
+        
+        const pkmPerPage = 15;
+        var pages = [];
+        var embed = new Discord.MessageEmbed()
+            .setAuthor(`Pokémons de ${message.author.username}`, `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
+            .setColor("#010101")
+            .setDescription("*Aucun pokémon ne correspond à la recherche*");
+        if (!userPokemons.length) {
+            pages.push(embed);
+        };
+        for (i = 0; i < userPokemons.length; i += pkmPerPage) {
+            embed = new Discord.MessageEmbed()
+                .setAuthor(`Pokémons de ${message.author.username}`, `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
+                .setColor("#010101")
+                .setDescription(userPokemons.slice(i, i+pkmPerPage).map(p => `**${p.name}**: ${p.caught}`).join("\n"));
+            pages.push(embed);
+        };
+        
+        paginationEmbed(message, pages, ["⏪", "⏩"], 180000);
     }
-
-    var randomGalarian = Math.random(),
-      galarianText = "";
-    if (
-      randomGalarian < galarianFrequency &&
-      pokemon.galarian &&
-      alolanText === ""
-    ) {
-      galarianText = " de Galar";
-      img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.galarian}.png`;
-    }
-
-    var randomShiny = Math.random(),
-      shinyText = "",
-      embedColor = "#010101";
-    if (randomShiny < shinyFrequency) {
-      shinyText = "⭐ ";
-      embedColor = "#ddbb20";
-      img = `https://img.pokemondb.net/sprites/home/shiny/${pokemon.en.toLowerCase()}.png`;
-    }
-
-    message.channel.send({
-      embed: {
-        author: {
-          name: "Nouveau pokémon!",
-          icon_url: "https://i.imgur.com/uJlfMAd.png"
-        },
-        thumbnail: {
-          url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
-        },
-        color: embedColor,
-        description: `<@${message.author.id}> a attrapé un ${shinyText}${pokemon.fr}${alolanText}${galarianText}!`,
-        image: {
-          url: img
-        },
-        footer: {
-          text: "✨Mayze✨"
-        }
-      }
-    });
-  }
-};
+}

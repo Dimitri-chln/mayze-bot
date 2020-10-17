@@ -3,7 +3,7 @@ module.exports = {
   description: "Envoie un message dans un salon",
   aliases: ["msg", "m"],
   args: 2,
-  usage: "<channel> <texte>",
+  usage: "<salon> <texte>",
   perms: ["MANAGE_MESSAGES"],
   execute(message, args) {
     if (args.length >= 2) {

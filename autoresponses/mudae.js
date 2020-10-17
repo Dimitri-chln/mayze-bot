@@ -1,7 +1,7 @@
 module.exports = {
   execute(message) {
     // if (message.channel.id !== "672516067440197693") return;
-    if (message.author.id !== "699901599509905429") return;
+    if (message.author.id !== "432610292342587392") return;
     if (!message.embeds.length) return;
     const mudaeEmbed = message.embeds[0];
     if (mudaeEmbed.color !== 16751916) return;
