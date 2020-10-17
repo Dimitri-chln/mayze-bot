@@ -36,6 +36,7 @@ client.cooldowns = new Discord.Collection();
 client.molkky = new Discord.Collection();
 client.russianRoulette = [];
 client.dmChannels = new Discord.Collection();
+client.werewolfPlayers = new Discord.Collection();
 
 client.dataRead = require("./functions/dataRead.js");
 client.dataWrite = require("./functions/dataWrite.js");
@@ -163,4 +164,4 @@ client.on("messageReactionAdd", (reaction, user) => {
   }
 });
 
-client.login(process.env.TOKEN);
+client.login("NzAzMTYxMDY3OTgyOTQ2MzM0.XqKjxg.mpHQgKP91Leq6DD8RNEW8T6dahg");
