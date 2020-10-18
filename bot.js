@@ -163,4 +163,4 @@ client.on("messageReactionAdd", (reaction, user) => {
   }
 });
 
-client.login("NzAzMTYxMDY3OTgyOTQ2MzM0.XqKjxg.mpHQgKP91Leq6DD8RNEW8T6dahg");
+client.login(process.env.TOKEN);
