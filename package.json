@@ -9,6 +9,7 @@
   "dependencies": {
     "discord.js": "^12.3.1",
     "discord.js-pagination": "^1.0.2",
+    "dotenv": "^8.2.0",
     "pokedex-promise-v2": "^3.2.0"
   },
   "engines": {
