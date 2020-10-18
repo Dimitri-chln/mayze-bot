@@ -6,6 +6,7 @@ module.exports = {
   usage: "[add/remove <tâche>]",
   ownerOnly: true,
   execute(message, args) {
+    if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
     const toDo = message.client.dataRead("toDo.json");
     if (!args.length) {
       message.channel.send({

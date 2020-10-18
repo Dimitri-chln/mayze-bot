@@ -5,6 +5,7 @@ module.exports = {
   args: 1,
   usage: "<mention>",
   execute(message, args) {
+    if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
     const images = require("../database/images.json");
     const user = message.mentions.users.first() || message.client.user;
     message.channel.send({

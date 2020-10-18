@@ -41,22 +41,21 @@ client.werewolfPlayers = new Discord.Collection();
 client.dataRead = require("./functions/dataRead.js");
 client.dataWrite = require("./functions/dataWrite.js");
 
-const pokedex = require("./database/pokedex.json");
-/* const dropSum = (currentSum, currentPokemon) =>
-  currentSum + currentPokemon.drop;
-const pokedexWeight = [0];
-pokedexWeight.push(
-  ...pokedex.map((p, i) => pokedex.slice(0, i + 1).reduce(dropSum, 0))
-); */
-var pokedexWeight = [0];
-for (var i = 0; i < pokedex.length; i++) {
-  pokedexWeight.push(pokedexWeight[i] + pokedex[i].drop);
-}
-client.pokedexWeight = pokedexWeight;
+try {
+  const pokedex = require("./database/pokedex.json");
+  var pokedexWeight = [0];
+  for (var i = 0; i < pokedex.length; i++) {
+    pokedexWeight.push(pokedexWeight[i] + pokedex[i].drop);
+  };
+  client.pokedexWeight = pokedexWeight;
+} catch (err) {
+  client.herokuMode = true;
+};
 
 client.on("ready", () => {
   console.log("--------------------");
   console.log("BOT STARTED UP");
+  if (client.herokuMode) console.log("RUNNING ON HEROKU MODE");
   const owner = client.users.cache.get(config.ownerID);
   client.owner = owner;
   owner.send("BOT STARTED UP");

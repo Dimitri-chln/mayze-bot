@@ -5,6 +5,7 @@ module.exports = {
   args: 1,
   usage: "<pokémon>",
   execute(message, args) {
+    if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
     const pokedexBot = require("../database/pokedex.json");
     const Pokedex = require("pokedex-promise-v2");
     const P = new Pokedex();

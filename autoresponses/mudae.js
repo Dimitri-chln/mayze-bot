@@ -1,6 +1,7 @@
 module.exports = {
   execute(message) {
     // if (message.channel.id !== "672516067440197693") return;
+    if (message.client.herokuMode) return;
     if (message.author.id !== "432610292342587392") return;
     if (!message.embeds.length) return;
     const mudaeEmbed = message.embeds[0];
@@ -12,7 +13,8 @@ module.exports = {
       .split("\nClaims:")[0]
       .replace(/\n/g, " ");
     // wish detection
-    const wishData = require("../database/wishes.json");
+    const dataRead = require("../functions/dataRead.js");
+    const wishData = dataRead("wishes.json");
     const entries = Object.entries(wishData);
     for (const [userID, wishes] of entries) {
       for (const wish of wishes) {

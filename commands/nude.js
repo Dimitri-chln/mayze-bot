@@ -6,6 +6,7 @@ module.exports = {
   args: 0,
   usage: "",
   execute(message, args) {
+    if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
     const images = require("../database/images.json");
     message.react("😏");
     message.author.send({

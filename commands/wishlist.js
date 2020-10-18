@@ -5,8 +5,9 @@ module.exports = {
   args: 0,
   usage: "[mention/id]",
   execute(message, args) {
-    const fs = require("fs");
-    const wishData = JSON.parse(fs.readFileSync("database/wishes.json"));
+    if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
+    const dataRead = require("../functions/dataRead.js");
+    const wishData = dataRead("wishes.json");
     const user =
       message.mentions.users.first() ||
       message.client.users.cache.find(

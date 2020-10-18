@@ -5,6 +5,7 @@ module.exports = {
     args: 0,
     usage: "[add <code> [description]] [delete]",
     execute(message, args) {
+        if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
         const dataRead = require("../functions/dataRead.js");
         const dataWrite = require("../functions/dataWrite.js");
         const dateToString = require("../functions/dateToString.js");

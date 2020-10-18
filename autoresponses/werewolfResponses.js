@@ -1,5 +1,6 @@
 module.exports = {
     execute(message) {
+        if (message.client.herokuMode) return;
         const dataRead = require("../functions/dataRead.js");
         const dataWrite = require("../functions/dataWrite.js");
         var gameData = dataRead("werewolfGameData.json");

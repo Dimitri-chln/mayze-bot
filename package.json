@@ -13,5 +13,7 @@
   },
   "engines": {
     "node": "12.x"
-  }
+  },
+  "repository": "https://github.com/Dimitri-chln/mayze.git",
+  "license": ""
 }

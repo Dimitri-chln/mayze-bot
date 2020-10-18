@@ -5,7 +5,10 @@ module.exports = {
   args: 1,
   usage: "<n° série>",
   execute(message, args) {
-    const wishData = message.client.dataRead("wishes.json");
+    if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
+    const dataRead = require("../functions/dataRead.js");
+    const dataWrite = require("../functions/dataWrite.js");
+    const wishData = dataRead("wishes.json");
     var wishlist = wishData[message.author.id] || [];
     const index = parseInt(args[0], 10);
     if (isNaN(index) || index <= 0 || index > wishlist.length)
@@ -14,7 +17,7 @@ module.exports = {
       );
     wishlist = wishlist.filter((w, i) => i + 1 !== index);
     wishData[message.author.id] = wishlist;
-    message.client.dataWrite("wishes.json", wishData);
+    dataWrite("wishes.json", wishData);
     message.react("✅");
   }
 };

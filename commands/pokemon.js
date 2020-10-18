@@ -5,6 +5,7 @@ module.exports = {
     args: 0,
     usage: "[-legendary] [-shiny] [-alolan] [-galarian]",
     execute(message, args) {
+        if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
         const Discord = require("discord.js");
         const paginationEmbed = require("discord.js-pagination");
         const dataRead = require("../functions/dataRead.js");

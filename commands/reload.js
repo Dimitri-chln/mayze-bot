@@ -6,6 +6,7 @@ module.exports = {
   usage: "<commande>",
   ownerOnly: true,
   execute(message, args) {
+    if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
     const commandName = args[0].toLowerCase();
     const command =
       message.client.commands.get(commandName) ||
