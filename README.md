@@ -1,13 +1,15 @@
 # ✨ Mayze Bot ✨
 
 ## Discord
-> ### Propriétaire
+> Propriétaire
 > - `Đιмιτяι • ⚡🦅#1004`
-> ### Serveur
+
+> Serveur
 > - ✨ Mayze ✨
 
 ## Werewolf Online
-> ### Pseudo
+> Pseudo
 > - `Dimitri_`
-> ### Clan
+
+> Clan
 > - Mayze ✨
