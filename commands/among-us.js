@@ -5,18 +5,15 @@ module.exports = {
     args: 0,
     usage: "[add <code> [description]] [delete]",
     execute(message, args) {
-        if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
-        const dataRead = require("../functions/dataRead.js");
-        const dataWrite = require("../functions/dataWrite.js");
         const dateToString = require("../functions/dateToString.js");
-        var games = dataRead("amongUsGames.json");
+        var games = message.client.amongUsGames || {};
         if (args[0] === "add" && /\w{6}/.test(args[1])) {
             games[message.author.id] = {"code": args[1], "description": args.splice(2).join(" ") || "Partie classique", "time": Date.now()};
-            dataWrite("amongUsGames.json", games);
+            message.client.amongUsGames = games;
             message.channel.send("Partie ajoutée!");
         } else if (args[0] === "delete" && games[message.author.id]) {
             delete games[message.author.id];
-            dataWrite("amongUsGames.json", games);
+            message.client.amongUsGames = games;
             message.channel.send("Partie supprimée!");
         } else {
             message.channel.send({
