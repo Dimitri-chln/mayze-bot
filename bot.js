@@ -53,13 +53,16 @@ try {
 };
 
 client.on("ready", () => {
-  console.log("--------------------");
-  console.log("BOT STARTED UP");
-  if (client.herokuMode) console.log("RUNNING ON HEROKU MODE");
   const owner = client.users.cache.get(config.ownerID);
   client.owner = owner;
   owner.send("BOT STARTED UP");
   client.user.setActivity("le meilleur clan", { type: "WATCHING" });
+  console.log("--------------------");
+  console.log("BOT STARTED UP");
+  if (client.herokuMode) {
+	console.log("RUNNING ON HEROKU MODE");
+  };
+  console.log("--------------------");
 });
 
 client.on("message", message => {
@@ -163,4 +166,4 @@ client.on("messageReactionAdd", (reaction, user) => {
   }
 });
 
-client.login("NzAzMTYxMDY3OTgyOTQ2MzM0.XqKjxg.mpHQgKP91Leq6DD8RNEW8T6dahg");
+client.login(process.env.TOKEN);
