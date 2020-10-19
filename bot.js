@@ -56,14 +56,16 @@ try {
 client.on("ready", () => {
   const owner = client.users.cache.get(config.ownerID);
   client.owner = owner;
-  owner.send("BOT STARTED UP");
-  client.user.setActivity("le meilleur clan", { type: "WATCHING" });
+  var herokuText = "";
   console.log("--------------------");
   console.log("BOT STARTED UP");
   if (client.herokuMode) {
-	console.log("RUNNING ON HEROKU MODE");
+    console.log("RUNNING ON HEROKU MODE");
+    herokuText = " ON HEROKU MODE";
   };
   console.log("--------------------");
+  owner.send("BOT STARTED UP" + herokuText);
+  client.user.setActivity("le meilleur clan", { type: "WATCHING" });
 });
 
 client.on("message", message => {
