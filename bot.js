@@ -39,9 +39,6 @@ client.russianRoulette = [];
 client.dmChannels = new Discord.Collection();
 client.werewolfPlayers = new Discord.Collection();
 
-client.dataRead = require("./functions/dataRead.js");
-client.dataWrite = require("./functions/dataWrite.js");
-
 try {
   const pokedex = require("./database/pokedex.json");
   var pokedexWeight = [0];
@@ -91,11 +88,7 @@ client.on("message", message => {
       command.perms &&
       !command.perms.every(perm => message.member.hasPermission(perm))
     )
-      return message.reply(
-        `tu n'as pas les permissions nécessaires \n→ \`${command.perms.join(
-          "`, `"
-        )}\``
-      );
+      return message.reply(`tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``);
 
     if (command.ownerOnly && message.author.id !== client.owner.id) return;
 

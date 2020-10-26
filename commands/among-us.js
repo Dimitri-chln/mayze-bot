@@ -7,7 +7,7 @@ module.exports = {
     execute(message, args) {
         const dateToString = require("../functions/dateToString.js");
         var games = message.client.amongUsGames || {};
-        if (args[0] === "add" && /\w{6}/.test(args[1])) {
+        if (["add", "create"].includes(args[0]) && /\w{6}/.test(args[1])) {
             games[message.author.id] = {"code": args[1], "description": args.splice(2).join(" ") || "Partie classique", "time": Date.now()};
             message.client.amongUsGames = games;
             message.channel.send("Partie ajoutée!");
