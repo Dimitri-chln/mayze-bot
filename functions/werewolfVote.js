@@ -1,6 +1,6 @@
 module.exports = function vote(message) {
-    const dataRead = require("../functions/dataRead.js");
-    const dataWrite = require("../functions/dataWrite.js");
+    const dataRead = require("./dataRead.js");
+    const dataWrite = require("./dataWrite.js");
     var gameData = dataRead("werewolfGameData.json");
     const villageChannel = message.guild.channels.cache.get("759700750803927061");
     
@@ -36,13 +36,18 @@ module.exports = function vote(message) {
             });
             const max = Math.max(...votes);
             const lynched = votes.indexOf(max);
+            // --------
+            villageChannel.send(JSON.stringify(votes));
+            villageChannel.send(JSON.stringify(max));
+            villageChannel.send(JSON.stringify(lynched));
+            // --------
             if (votes.filter(v => v === max).length > 1) lynched = null;
             if (lynched) {
                 // ++
             } else {
                 msg.channel.send("Personne n'a été éliminé aujourd'hui");
             };
-            const night = require("../functions/night.js");
+            const night = require("./werewolfNight.js");
             night(message);
         });
         

@@ -51,17 +51,36 @@ try {
 };
 
 client.on("ready", () => {
-  const owner = client.users.cache.get(config.ownerID);
-  client.owner = owner;
+  const logChannel = client.channels.cache.get(config.logChannel);
+  client.logChannel =logChannel;
   var herokuText = "";
+  var mode = "Classique";
   console.log("--------------------");
   console.log("BOT STARTED UP");
   if (client.herokuMode) {
     console.log("RUNNING ON HEROKU MODE");
-    herokuText = " ON HEROKU MODE";
+    herokuText = " - Mode Heroku";
+    mode = "Heroku";
   };
   console.log("--------------------");
-  owner.send("BOT STARTED UP" + herokuText);
+  const { version } = require ("./package.json");
+  logChannel.send({
+    embed: {
+      author: {
+        name: "Démarrage du bot...",
+        icon_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
+      },
+      color: "#010101",
+      description: `• **Version:** \`${version}\`\n• **Ping:** Calcul...\n• **Mode:** ${mode}`,
+      footer: {
+        text: "✨ Mayze ✨"
+      },
+      timestamp: Date.now()
+    }
+  }).then(msg => {
+      const embed = new Discord.MessageEmbed(msg.embeds[0]);
+      msg.edit(embed.setDescription(`• **Version:** \`${version}\`\n• **Ping:** \`${Math.abs(Date.now() - msg.createdTimestamp)}ms\`\n• **Mode:** ${mode}`));
+  }).catch(err => console.log(err));
   client.user.setActivity("le meilleur clan", { type: "WATCHING" });
 });
 
@@ -90,7 +109,7 @@ client.on("message", message => {
     )
       return message.reply(`tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``);
 
-    if (command.ownerOnly && message.author.id !== client.owner.id) return;
+    if (command.ownerOnly && message.author.id !== config.ownerID) return;
 
     if (!client.cooldowns.has(command.name)) {
       client.cooldowns.set(command.name, new Discord.Collection());

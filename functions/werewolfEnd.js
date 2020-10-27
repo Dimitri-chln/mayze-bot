@@ -1,7 +1,7 @@
 module.exports = function werewolfEnd(message) {
-    const dataRead = require("../functions/dataRead.js");
-    const dataWrite = require ("../functions/dataWrite.js");
-    const gameData = dataRead("werewolfGameData.json");
+    const dataRead = require("./dataRead.js");
+    const dataWrite = require("./dataWrite.js");
+    var gameData = dataRead("werewolfGameData.json");
     const roles = [/*"759699864191107072", */"759701843864584202", "759702019207725089", "759703669221359637", "759703558445727786", "759703743104548894", "759703827133497386", "759703894720380928", "759703955956957205", "759704017570889728", "759704083173998604", "759704177587912704"];
     
     if (!gameData.players.length) return message.reply("je n'ai pas pu terminer la partie");

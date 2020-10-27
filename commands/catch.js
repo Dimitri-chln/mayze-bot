@@ -57,10 +57,13 @@ module.exports = {
     caughtPokemon.caught ++;
     userPokemons.push(caughtPokemon);
     userPokemons.sort(function(a, b) {
+        const sortName = n => n.replace(/^[ÉÈÊ]/, "E");
+        if (a.name.startsWith("⭐") && !b.name.startsWith("⭐")) return -1;
+        if (!a.name.startsWith("⭐") && b.name.startsWith("⭐")) return 1;
         if (a.caught - b.caught > 0) return -1;
         if (a.caught - b.caught < 0) return 1;
-        if (a.name > b.name) return 1;
-        if (a.name < b.name) return -1;
+        if (sortName(a.name) > sortName(b.name)) return 1;
+        if (sortName(a.name) < sortName(b.name)) return -1;
         return 0;
     });
     

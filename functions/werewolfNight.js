@@ -1,6 +1,6 @@
 module.exports = function werewolfNight(message) {
-    const dataRead = require("../functions/dataRead.js");
-    const dataWrite = require("../functions/dataWrite.js");
+    const dataRead = require("./dataRead.js");
+    const dataWrite = require("./dataWrite.js");
     var gameData = dataRead("werewolfGameData.json");
     const villageChannel = message.guild.channels.cache.get("759700750803927061");
     villageChannel.updateOverwrite(message.guild.roles.cache.get("759699864191107072"), {"SEND_MESSAGES": false});

@@ -7,7 +7,9 @@ module.exports = {
   ownerOnly: true,
   execute(message, args) {
     if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
-    const toDo = message.client.dataRead("toDo.json");
+    const dataRead = require("../functions/dataRead.js");
+    const dataWrite = require ("../functions/dataWrite.js");
+    const toDo = dataRead("toDo.json");
     if (!args.length) {
       message.channel.send({
         embed: {
@@ -27,7 +29,7 @@ module.exports = {
     if (args[0] === "add") {
       toDo.push(args.splice(1).join(" "));
       const newToDo = toDo;
-      message.client.dataWrite("toDo.json", newToDo);
+      dataWrite("toDo.json", newToDo);
       message.react("✅");
     }
 
@@ -38,7 +40,7 @@ module.exports = {
           `le deuxième argument doit être un nombre compris entre 1 et ${toDo.length}`
         );
       const newToDo = toDo.filter((t, i) => i + 1 !== index);
-      message.client.dataWrite("toDo.json", newToDo);
+      dataWrite("toDo.json", newToDo);
       message.react("✅");
     }
   }

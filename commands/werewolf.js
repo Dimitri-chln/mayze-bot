@@ -6,6 +6,9 @@ module.exports = {
     usage: "<commande> [arguments supplémentaires]",
     execute(message, fullArgs) {
         if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
+        // à supprimer après
+        if (!message.member.roles.cache.some(r => r.id === "759699864191107072")) return;
+        // -----------------
         const command = fullArgs[0].toLowerCase();
         const args = fullArgs.splice(1);
         const dataRead = require("../functions/dataRead.js");
