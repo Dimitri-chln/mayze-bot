@@ -53,7 +53,6 @@ module.exports = function werewolfNight(message) {
                 console.log(`Could not send message to ${p.user.username} (${p.id})`);
             });
         } else if (p.role === "Voyante") {
-            gameData.seerCanCheck = true;
             message.client.users.cache.get(p.id).send({
                 embed: {
                     title: "Indique le numéro de la personne dont tu veux connaître le rôle",
@@ -71,12 +70,10 @@ module.exports = function werewolfNight(message) {
                 msg.channel.awaitMessages(filter, {max: 1, time: 60000, errors: ["time"]})
                 .then(collected => {
                     const n = parseInt(collected.first());
-                    gameData.seerCanCheck = false;
                     msg.channel.send(`**${message.client.users.cache.get(alivePlayers.filter(player => player.id !== p.id)[n-1].id).username}** est __${alivePlayers.filter(player => player.id !== p.id)[n-1].role}__!`);
                 }).catch(collected => {
-                    if (dataRead("werewolfGameData.json").players.length) {
-                        msg.channel.send("Tu n'as pas répondu à temps");
-                    };
+                    if (!dataRead("werewolfGameData.json").players.length) return;
+                    msg.channel.send("Tu n'as pas répondu à temps");
                 });
             }).catch(error => {
                 console.error(error);

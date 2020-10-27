@@ -56,7 +56,8 @@ module.exports = {
                 if (gameData.players.length) return message.reply("la partie a déjà commencé!");
                 var players = message.guild.members.cache.filter(m => m.roles.cache.some(r => r.id === "759699864191107072")).array();
                 players = shuffle(players);
-                if (players.length < 4) return message.reply(`il faut au minimum 4 joueurs pour pouvoir lancer la partie (actuellement ${players.length})`);
+                // Rechanger à 4 !
+                if (players.length < 3) return message.reply(`il faut au minimum 4 joueurs pour pouvoir lancer la partie (actuellement ${players.length})`);
                 const composition = werewolfData[players.length];
                 var playersData = [];
                 players.forEach((p, i) => {
@@ -88,7 +89,7 @@ module.exports = {
                     if (role === "Petite fille") {
                         message.guild.channels.cache.get("764767902124474378").updateOverwrite(p.user, {"VIEW_CHANNEL": true, "SEND_MESSAGES": false});
                     };
-                    p.send(`Bienvenue dans cette partie de Loups-garous! Ton rôle est **${role}** 🐺`).catch(error => {
+                    p.user.send(`Bienvenue dans cette partie de Loups-garous! Ton rôle est **${role}** 🐺`).catch(error => {
                         console.error(error);
                         console.log(`Could not send message to ${p.user.username} (${p.id})`);
                     });
@@ -140,7 +141,7 @@ module.exports = {
                 if (!gameData.players.find(w => w.role === "Sorcière").alive) {
                     const day = require("../functions/werewolfDay.js");
                     return setTimeout(function() {
-                        day(message)
+                        day(message);
                     }, 30000);
                 };
                 var desc = `**${message.client.users.cache.get(gameData.death[0]).username}**, souhaite tu le sauver?`;
@@ -162,7 +163,7 @@ module.exports = {
                         const filter = (reaction, user) => {
                             return ["✅", "❌"].includes(reaction.emoji.name) && !user.bot;
                         };
-                        msg.awaitReactions(filter, {max: 1, time: 60000, errors: ["time"]})
+                        msg.awaitReactions(filter, {max: 1, time: 30000, errors: ["time"]})
                         .then(collected => {
                             if (collected.first().emoji.name === "✅") {
                                 msg.edit({
@@ -204,10 +205,6 @@ module.exports = {
                         });
                     };
                 });
-                const day = require("../functions/werewolfDay.js");
-                setTimeout(function() {
-                    day(message)
-                }, 20000);
                 break;
             default:
                 message.reply("cette commande n'existe pas");

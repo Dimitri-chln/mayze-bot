@@ -26,6 +26,7 @@ module.exports = function vote(message) {
             const number = parseInt(response, 10);
             return !isNaN(number) && number > 0 && number <= alivePlayers.length;
         };
+        if (!dataRead("werewolfGameData.json").players.length) return;
         msg.channel.awaitMessages(filter, {time: 30000})
         .then(collected => {
             alivePlayers.forEach(p => {
@@ -35,7 +36,7 @@ module.exports = function vote(message) {
                 };
             });
             const max = Math.max(...votes);
-            const lynched = votes.indexOf(max);
+            var lynched = votes.indexOf(max);
             // --------
             villageChannel.send(JSON.stringify(votes));
             villageChannel.send(JSON.stringify(max));
