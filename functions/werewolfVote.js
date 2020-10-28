@@ -42,7 +42,7 @@ module.exports = function vote(message) {
                 const kill = require("./werewolfKill.js");
                 const lynchedPlayer = gameData.players.filter(p => p.alive)[lynched];
                 msg.channel.send(`Le village a décidé d'éliminer **${message.client.users.cache.get(lynchedPlayer.id).username}**`)
-                kill(message, lynchedPlayer.id);
+                gameData = kill(message, lynchedPlayer.id);
             } else {
                 msg.channel.send("Personne n'a été éliminé aujourd'hui");
             };

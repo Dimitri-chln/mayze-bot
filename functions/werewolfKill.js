@@ -18,7 +18,8 @@ module.exports = function werewolfKill(message, playerID) {
     };
     
     // couple check then
-    dataWrite("werewolfGameData.json", gameData);
+    
+    return gameData;
     const checkWin = require("./werewolfCheckWin.js");
     checkWin(message);
 };

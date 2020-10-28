@@ -34,6 +34,8 @@ module.exports = {
         };
         
         paginationEmbed(message, pages, ["⏪", "⏩"], 180000);
+        }).catch(collected => {
+            // ---
         });
     }
 };
