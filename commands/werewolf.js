@@ -16,6 +16,7 @@ module.exports = {
         const shuffle = require("../functions/shuffle.js");
         const end = require ("../functions/werewolfEnd.js");
         const night = require ("../functions/werewolfNight");
+        const day = require("../functions/werewolfDay.js");
         const werewolfData = require("../database/werewolfData.json");
         const villageChannel = message.client.channels.cache.get("759700750803927061");
         var gameData = dataRead("werewolfGameData.json");
@@ -56,21 +57,14 @@ module.exports = {
                 if (gameData.players.length) return message.reply("la partie a déjà commencé!");
                 var players = message.guild.members.cache.filter(m => m.roles.cache.some(r => r.id === "759699864191107072")).array();
                 players = shuffle(players);
-                // Rechanger à 4 !
-                if (players.length < 3) return message.reply(`il faut au minimum 4 joueurs pour pouvoir lancer la partie (actuellement ${players.length})`);
-                const composition = werewolfData[players.length];
+                if (players.length < 4) return message.reply(`il faut au minimum 4 joueurs pour pouvoir lancer la partie (actuellement ${players.length})`);
+                const composition = werewolfData.composition[players.length];
                 var playersData = [];
+                const werewolves = ["Loup-garou"];
+                var villagers = werewolfData.villagerRoles;
                 players.forEach((p, i) => {
-                    const werewolves = ["Loup-garou"];
-                    var villagers = werewolfData.villagerRoles;
                     var role;
-                    // ---------
-                    if (p.id === "307815349699608577") {
-                        role = "Sorcière";
-                        p.roles.add("759702019207725089");
-                    }
-                    // ---------
-                    else if (i < composition.werewolves) {
+                    if (i < composition.werewolves) {
                         role = werewolves[i];
                         p.roles.add("759701843864584202");
                     } else if (i === composition.werewolves) {
@@ -80,7 +74,7 @@ module.exports = {
                         role = villagers[Math.floor(Math.random()*villagers.length)];
                         p.roles.add("759702019207725089");
                         if (role !== "Villageois simple") {
-                            villagers = villagers.splice(villagers.indexOf(role), 1);
+                            villagers.splice(villagers.indexOf(role), 1);
                         };
                     };
                     if (role === "Chaman") {
@@ -136,14 +130,10 @@ module.exports = {
                 gameData.death.push(alivePlayers[number-1].id);
                 dataWrite("werewolfGameData.json", gameData);
                 message.channel.send(`Les loups-garous ont décidé de tuer **${message.client.users.cache.get(alivePlayers[number-1].id).username}**`);
+                setTimeout(() => { day(message) }, 30000);
                 if (!gameData.players.some(player => player.role === "Sorcière")) return;
                 const witch = message.client.users.cache.get(gameData.players.find(player => player.role === "Sorcière").id);
-                if (!gameData.players.find(w => w.role === "Sorcière").alive) {
-                    const day = require("../functions/werewolfDay.js");
-                    return setTimeout(function() {
-                        day(message);
-                    }, 30000);
-                };
+                if (!gameData.players.find(w => w.role === "Sorcière").alive) return;
                 var desc = `**${message.client.users.cache.get(gameData.death[0]).username}**, souhaite tu le sauver?`;
                 if (!gameData.canWitchSave) {
                     desc = `**${message.client.users.cache.get(gameData.death[0]).username}**, mais tu ne peux pas le sauver`;

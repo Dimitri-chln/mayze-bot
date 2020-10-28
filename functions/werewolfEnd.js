@@ -45,5 +45,5 @@ module.exports = function werewolfEnd(message) {
     });
     
     dataWrite("werewolfGameData.json", {"players": []});
-    villageChannel.channel.send("Partie terminée!");
+    villageChannel.send("Partie terminée!");
 };

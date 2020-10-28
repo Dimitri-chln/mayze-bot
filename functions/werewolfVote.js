@@ -37,19 +37,17 @@ module.exports = function vote(message) {
             });
             const max = Math.max(...votes);
             var lynched = votes.indexOf(max);
-            // --------
-            villageChannel.send(JSON.stringify(votes));
-            villageChannel.send(JSON.stringify(max));
-            villageChannel.send(JSON.stringify(lynched));
-            // --------
             if (votes.filter(v => v === max).length > 1) lynched = null;
             if (lynched) {
-                // ++
+                const kill = require("./werewolfKill.js");
+                const lynchedPlayer = gameData.players.filter(p => p.alive)[lynched];
+                msg.channel.send(`Le village a décidé d'éliminer **${message.client.users.cache.get(lynchedPlayer.id).username}**`)
+                kill(message, lynchedPlayer.id);
             } else {
                 msg.channel.send("Personne n'a été éliminé aujourd'hui");
             };
             const night = require("./werewolfNight.js");
-            night(message);
+            setTimeout(() => { night(message) }, 3000);
         });
         
         gameData.votes = {};
