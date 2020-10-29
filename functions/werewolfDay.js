@@ -12,7 +12,7 @@ module.exports = function day(message) {
     const kill = require("./werewolfKill.js");
     gameData.players.forEach((p, i) => {
         if (gameData.death.includes(p.id)) {
-            gameData = kill(message, p.id);
+            gameData = kill(message, gameData, p.id);
         };
     });
     var desc = `Les joueurs morts cette nuit sont:\n${gameData.death.map(d => `• _**${message.client.users.cache.get(d).username}** qui était ${gameData.players.find(p => p.id === d).role}`).join("\n")}_`;

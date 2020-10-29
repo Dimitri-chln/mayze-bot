@@ -2,14 +2,14 @@ module.exports = {
     name: "werewolf",
     description: "Joue aux Loups-garous sur Discord",
     aliases: ["ww", "lg"],
-    args: 1,
+    args: 0,
     usage: "<commande> [arguments supplémentaires]",
     execute(message, fullArgs) {
         if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
         // à supprimer après
-        if (!message.member.roles.cache.some(r => r.id === "759699864191107072")) return;
+        //if (!message.member.roles.cache.some(r => r.id === "759699864191107072")) return;
         // -----------------
-        const command = fullArgs[0].toLowerCase();
+        const command = (fullArgs[0] || "").toLowerCase();
         const args = fullArgs.splice(1);
         const dataRead = require("../functions/dataRead.js");
         const dataWrite = require("../functions/dataWrite.js");
@@ -108,7 +108,7 @@ module.exports = {
             case "end":
                 if (message.channel.id !== "759700750803927061") return;
                 if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply("tu n'as pas les permissions nécessaires");
-                end(message);
+                end(message, dataRead("werewolfGameData.json"));
                 break;
             case "night":
                 if (message.channel.id !== "759700750803927061") return;
@@ -130,7 +130,7 @@ module.exports = {
                 gameData.death.push(alivePlayers[number-1].id);
                 dataWrite("werewolfGameData.json", gameData);
                 message.channel.send(`Les loups-garous ont décidé de tuer **${message.client.users.cache.get(alivePlayers[number-1].id).username}**`);
-                setTimeout(() => { day(message) }, 30000);
+                setTimeout(() => { day(message) }, 60000);
                 if (!gameData.players.some(player => player.role === "Sorcière")) return;
                 const witch = message.client.users.cache.get(gameData.players.find(player => player.role === "Sorcière").id);
                 if (!gameData.players.find(w => w.role === "Sorcière").alive) return;
@@ -197,7 +197,20 @@ module.exports = {
                 });
                 break;
             default:
-                message.reply("cette commande n'existe pas");
+                var players = message.guild.members.cache.filter(m => m.roles.cache.some(r => r.id === "759699864191107072")).array();
+                message.channel.send({
+                    embed: {
+                        author: {
+                            name: "Liste des joueurs:",
+                            icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
+                        },
+                        color: "#010101",
+                        description: players.map(p => `• ${p.user.username}`).join("\n"),
+                        footer: {
+                            text: "🐺 Mayze 🐺"
+                        }
+                    }
+                });
         }
     }
 };

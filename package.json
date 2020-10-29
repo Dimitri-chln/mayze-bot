@@ -1,6 +1,6 @@
 {
   "name": "mayze-bot",
-  "version": "1.8.0",
+  "version": "2.0.0-werewolf-beta",
   "description": "Pour le meilleur clan!",
   "main": "bot.js",
   "scripts": {

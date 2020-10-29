@@ -17,7 +17,6 @@ module.exports = function vote(message) {
             }
         }
     }).then(msg => {
-        gameData.votes = {};
         const votes = [];
         for (i = 0; i < alivePlayers.length; i++) {
             votes.push(0);
@@ -35,22 +34,33 @@ module.exports = function vote(message) {
                     votes[parseInt(vote.content, 10) -1] ++;
                 };
             });
+            villageChannel.send({
+                embed: {
+                    title: "Résultat des votes:",
+                    color: "#010101",
+                    description: alivePlayers.map((p, i) => `\`${i+1}.\` **${message.client.users.cache.get(p.id).username}** - ${votes[i]} vote(s)`).join("\n"),
+                    footer: {
+                        text: "🐺 Mayze 🐺"
+                    }
+                }
+            });
             const max = Math.max(...votes);
             var lynched = votes.indexOf(max);
-            if (votes.filter(v => v === max).length > 1) lynched = null;
-            if (lynched) {
+            if (votes.filter(v => v === max).length > 1) lynched = -1;
+            if (lynched + 1) {
                 const kill = require("./werewolfKill.js");
-                const lynchedPlayer = gameData.players.filter(p => p.alive)[lynched];
-                msg.channel.send(`Le village a décidé d'éliminer **${message.client.users.cache.get(lynchedPlayer.id).username}**`)
-                gameData = kill(message, lynchedPlayer.id);
+                const lynchedPlayer = alivePlayers[lynched];
+                villageChannel.send(`Le village a décidé d'éliminer **${message.client.users.cache.get(lynchedPlayer.id).username}** qui était ${lynchedPlayer.role}`);
+                gameData = kill(message, gameData, lynchedPlayer.id);
             } else {
-                msg.channel.send("Personne n'a été éliminé aujourd'hui");
+                villageChannel.send("Personne n'a été éliminé aujourd'hui");
             };
+            dataWrite("werewolfGameData.json", gameData);
             const night = require("./werewolfNight.js");
-            setTimeout(() => { night(message) }, 3000);
+            setTimeout(() => {
+                if (!dataRead("werewolfGameData.json").players.length) return
+                night(message);
+            }, 3000);
         });
-        
-        gameData.votes = {};
-        dataWrite("werewolfGameData.json", gameData);
     });
 };

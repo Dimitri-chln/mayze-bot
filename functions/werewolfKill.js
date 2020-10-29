@@ -1,7 +1,4 @@
-module.exports = function werewolfKill(message, playerID) {
-    const dataRead = require("./dataRead.js");
-    const dataWrite = require("./dataWrite.js");
-    var gameData = dataRead("werewolfGameData.json");
+module.exports = function werewolfKill(message, gameData, playerID) {
     
     const player = gameData.players.find(p => p.id === playerID);
     const index = gameData.players.indexOf(player);
@@ -21,5 +18,5 @@ module.exports = function werewolfKill(message, playerID) {
     
     return gameData;
     const checkWin = require("./werewolfCheckWin.js");
-    checkWin(message);
+    checkWin(message, gameData);
 };
