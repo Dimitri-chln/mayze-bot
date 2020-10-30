@@ -20,7 +20,7 @@ module.exports = {
                 message.channel.send({
                     embed: {
                         author: {
-                            name: message.author.username,
+                            name: `${message.author.username}#${message.author.discriminator}`,
                             icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
                         },
                         color: "#010101",

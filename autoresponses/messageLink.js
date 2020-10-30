@@ -18,7 +18,7 @@ module.exports = {
                     color: "#010101",
                     description: msg.content,
                     image: {
-                        url: msg.attachments.first().url
+                        url: (msg.attachments.first() || {}).url
                     },
                     footer: {
                         text: `Cité par ${message.author.username}`

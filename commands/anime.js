@@ -12,6 +12,7 @@ module.exports = {
         
         switch ((args[0] || "").toLowerCase()) {
             case "info":
+                if (!userAnimes) return;
                 const input = args.slice(1).join(" ");
                 const anime = userAnimes.find(a => 
                     a.name.toLowerCase() === input.toLowerCase() ||
@@ -35,6 +36,7 @@ module.exports = {
                 });
                 break;
             default:
+                if (!userAnimes) return;
                 message.channel.send({
                     embed: {
                         author: {
