@@ -1,6 +1,6 @@
 {
   "name": "mayze-bot",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Pour le meilleur clan!",
   "main": "bot.js",
   "scripts": {
@@ -16,6 +16,8 @@
   "engines": {
     "node": "12.x"
   },
-  "repository": "https://github.com/Dimitri-chln/mayze.git",
+  "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Dimitri-chln/mayze.git",
   "license": ""
 }
