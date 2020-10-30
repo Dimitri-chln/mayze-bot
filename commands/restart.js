@@ -9,7 +9,7 @@ module.exports = {
     console.log("----- BOT RESTART -----");
     message.channel.send("Bot is restarting...");
     const shellExec = require("../functions/shellExec.js");
-    shellExec("node .");
+    shellExecc("node .");
     process.exit(1);
   }
 };
