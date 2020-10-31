@@ -11,14 +11,9 @@ module.exports = {
     const member = message.guild.members.cache.find(m => m.user === user);
     if (!user) return message.reply("mentionne la personne à mettre en prison");
 
-    if (
-      member.roles.highest.position >= message.member.roles.highest.position &&
-      !(
-        member.id === "394633964138135563" &&
-        message.author.id === "394633964138135563"
-      )
-    )
+    if (member.roles.highest.position >= message.member.roles.highest.position) {
       return message.reply("tu ne peux pas mettre cette personne en prison");
+    };
 
     const roleTop = message.guild.roles.cache.get("735810286719598634");
     const roleBottom = message.guild.roles.cache.get("735810462872109156");

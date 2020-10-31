@@ -11,7 +11,7 @@ module.exports = {
             message.channel.send({
                 embed: {
                     author: {
-                        name: msg.author.username,
+                        name: `${msg.author.username}#${msg.author.discriminator}`,
                         icon_url: `https://cdn.discordapp.com/avatars/${msg.author.id}/${msg.author.avatar}.png`
                     },
                     title: `#${channel.name}`,

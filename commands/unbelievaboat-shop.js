@@ -18,7 +18,7 @@ module.exports = {
         },
         {
             name: "Mute à double tranchant",
-            description: "Choisis une personne. Un de vous deux sera mute pendant 10 minutes",
+            description: "Choisis une personne et une durée. Un de vous deux sera mute pendant cette durée (<1h)",
             price: 7500,
             async buy(message) {
                 const muteRole = message.guild.roles.cache.get("695330946844721312");
@@ -26,24 +26,30 @@ module.exports = {
                 const filter = function(response) {
                     return /<@!?\d{18}>/.test(response.content) && response.author.id === message.author.id;
                 };
-                const msg = await message.reply("mentionne la personne que tu veux mute");
+                const msg = await message.reply("mentionne la personne que tu veux mute: →`<mention> <durée>`");
                 message.channel.awaitMessages(filter, {max: 1, time: 60000, errors: ["time"]})
                 .then(collected => {
-                    const user = collected.first().mentions.users.first();
+                    const r = Math.random() * 2;
+                    var muted = message.author.id;
+                    if (r < 1) {
+                        muted = collected.first().mentions.users.first().id;
+                    };
+                    
+                    const dhms = require("dhms");
+                    const mute = require ("./mute.js");
+                    var duration = collected.first().content.trim().slice(22);
+                    if (dhms(duration, true) <= 0 || dhms(duration, true) > 3600) {
+                        duration = "2m";
+                    };
+                    message.channel.send(`*mute <@${muted}> ${duration}`).then(m => {
+                        mute.execute(m, [muted, duration]);
+                    });
+                    
                     msg.delete();
                     collected.first().delete();
-                    const r = Math.random() * 2;
-                    var muted = message.member;
-                    if (r < 1) {
-                        muted = message.guild.members.cache.get(user.id);
-                    };
-                    muted.roles.add(muteRole.id);
-                    message.channel.send(`${muted.user} a été mute pendant 10 minutes`);
-                    setTimeout(function() {
-                        muted.roles.remove(muteRole.id);
-                    }, 600000);
-                }).catch(collected => {
-                    throw "tu n'as pas répondu à temps";
+                }).catch(err => {
+                    console.log(err);
+                    message.reply("tu n'as pas répondu à temps");
                 });
             }
         }

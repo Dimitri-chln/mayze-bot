@@ -6,11 +6,10 @@ module.exports = function dateToString(date) {
   const seconds = Math.floor((date % 60) / 1);
   const dateString = [years, days, hours, minutes, seconds]
     .join(":")
-    .replace(
-      /(\d+):(\d+):(\d+):(\d+):(\d+)/,
-      "**$1** ans, **$2** jours, **$3** heures, **$4** minutes, **$5** secondes"
-    )
-    .replace(/\*\*0\*\* \w+(, )?/g, "")
-    .replace(/, (\*\*\d+\*\* \w+)$/, " et $1");
-  return dateString
+    .replace(/(\d+):(\d+):(\d+):(\d+):(\d+)/,"**$1** ans, **$2** jours, **$3** heures, **$4** minutes, **$5** secondes, ")
+    .replace(/\*\*0\*\* \w+, /g, "")
+    .replace(/(\*\*1\*\* \w+)s/g, "$1")
+    .replace(/, (\*\*\d+\*\* \w+), $/, " et $1")
+    .replace(/^(\*\*\d+\*\* \w+), $/, "$1");
+  return dateString;
 };
