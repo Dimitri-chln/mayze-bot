@@ -28,6 +28,7 @@ module.exports = function vote(message) {
         if (!dataRead("werewolfGameData.json").players.length) return;
         msg.channel.awaitMessages(filter, {time: 30000})
         .then(collected => {
+            if (!dataRead("werewolfGameData.json").players.length) return;
             alivePlayers.forEach(p => {
                 const vote = collected.filter(c => c.author.id === p.id).last();
                 if (vote) {
@@ -48,9 +49,14 @@ module.exports = function vote(message) {
             var lynched = votes.indexOf(max);
             if (votes.filter(v => v === max).length > 1) lynched = -1;
             if (lynched + 1) {
-                const kill = require("./werewolfKill.js");
                 const lynchedPlayer = alivePlayers[lynched];
                 villageChannel.send(`Le village a décidé d'éliminer **${message.client.users.cache.get(lynchedPlayer.id).username}** qui était ${lynchedPlayer.role}`);
+                if (lynchedPlayer.role === "Ange") {
+                    villageChannel.send("L'ange a gagné !");
+                    const end = require("../functions/werewolfEnd.js");
+                    return end(message, gameData);
+                };
+                const kill = require("./werewolfKill.js");
                 gameData = kill(message, gameData, lynchedPlayer.id);
             } else {
                 villageChannel.send("Personne n'a été éliminé aujourd'hui");

@@ -65,7 +65,7 @@ module.exports = {
                 players.forEach((p, i) => {
                     var role;
                     if (i < composition.werewolves) {
-                        role = werewolves[i];
+                        role = werewolves[i] || "Loup-garou";
                         p.roles.add("759701843864584202");
                     } else if (i === composition.werewolves) {
                         role = "Voyante";

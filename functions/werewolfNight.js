@@ -65,7 +65,7 @@ module.exports = function werewolfNight(message) {
             }).then(msg => {
                 const filter = function(response) {
                     const number = parseInt(response, 10);
-                    return !isNaN(number) && number > 0 && number <= alivePlayers.length;
+                    return !isNaN(number) && number > 0 && number < alivePlayers.length;
                 };
                 msg.channel.awaitMessages(filter, {max: 1, time: 60000, errors: ["time"]})
                 .then(collected => {
@@ -107,6 +107,34 @@ module.exports = function werewolfNight(message) {
                         text: "🐺 Mayze 🐺"
                     }
                 }
+            }).catch(error => {
+                console.error(error);
+                console.log(`Could not send message to ${p.user.username} (${p.id})`);
+            });
+        } else if (p.role === "Chasseur") {
+            message.client.users.cache.get(p.id).send({
+                embed: {
+                    title: "Indique le numéro de la personne que tu veux tuer lors de ta mort",
+                    color: "#010101",
+                    description: alivePlayers.filter(player => player.id !== p.id).map((player, i) => `\`${i+1}.\` ${message.client.users.cache.get(player.id).username}`).join("\n"),
+                    footer: {
+                        text: "🐺 Mayze 🐺"
+                    }
+                }
+            }).then(msg => {
+                const filter = function(response) {
+                    const number = parseInt(response, 10);
+                    return !isNaN(number) && number > 0 && number < alivePlayers.length;
+                };
+                msg.channel.awaitMessages(filter, {max: 1, time: 60000, errors: ["time"]})
+                .then(collected => {
+                    const n = parseInt(collected.first());
+                    gameData.chasseurAvenge = alivePlayers.filter(player => player.id !== p.id)[n-1].id;
+                    msg.channel.send(`**${message.client.users.cache.get(gameData.chasseurAvenge).username} sera tué lors de ta mort`);
+                }).catch(collected => {
+                    if (!dataRead("werewolfGameData.json").players.length) return;
+                    msg.channel.send("Tu n'as pas répondu à temps");
+                });
             }).catch(error => {
                 console.error(error);
                 console.log(`Could not send message to ${p.user.username} (${p.id})`);

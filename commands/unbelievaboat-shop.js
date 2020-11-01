@@ -30,18 +30,18 @@ module.exports = {
                 message.channel.awaitMessages(filter, {max: 1, time: 60000, errors: ["time"]})
                 .then(collected => {
                     const r = Math.random() * 2;
-                    var muted = message.author.id;
+                    var muted = message.author;
                     if (r < 1) {
-                        muted = collected.first().mentions.users.first().id;
+                        muted = collected.first().mentions.users.first();
                     };
                     
                     const dhms = require("dhms");
                     const mute = require ("./mute.js");
-                    var duration = collected.first().content.trim().slice(22);
+                    var duration = collected.first().content.replace(/^<@!?\d{18}>/, "").trim();
                     if (dhms(duration, true) <= 0 || dhms(duration, true) > 3600) {
                         duration = "2m";
                     };
-                    message.channel.send(`*mute <@${muted}> ${duration}`).then(m => {
+                    message.channel.send(`*mute ${muted} ${duration}`).then(m => {
                         mute.execute(m, [muted, duration]);
                     });
                     
