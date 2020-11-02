@@ -24,7 +24,5 @@ module.exports = function werewolfKill(message, gameData, playerID) {
     
     // couple check then
     
-    const checkWin = require("./werewolfCheckWin.js");
-    checkWin(message, gameData);
     return gameData;
 };

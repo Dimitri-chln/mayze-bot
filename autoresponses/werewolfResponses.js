@@ -10,7 +10,6 @@ module.exports = {
         if (message.channel.id === "759702367800786964" && !message.author.bot && !message.content.startsWith("*ww kill ")) {
             const petiteFilleChannel = message.client.channels.cache.get("764767902124474378");
             petiteFilleChannel.send(message.content);
-            gameData.petiteFilleMessages ++;
         };
         dataWrite("werewolfGameData.json", gameData);
     }

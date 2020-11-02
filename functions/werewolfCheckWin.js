@@ -1,4 +1,4 @@
-module.exports = function werewolfCheckWin(message, gameData) {
+module.exports = function werewolfCheckWin(message, gameData, night) {
     const dataRead = require("./dataRead.js");
     const werewolves = gameData.players.filter(p => p.role === "Loup-garou");
     const villagers = gameData.players.filter(p => p.role !== "Loup-garou");

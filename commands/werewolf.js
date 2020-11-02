@@ -87,7 +87,7 @@ module.exports = {
                         console.error(error);
                         console.log(`Could not send message to ${p.user.username} (${p.id})`);
                     });
-                    playersData.push({"id": p.id, "role": role, "alive": true});
+                    playersData.push({"id": p.id, "username": p.user.username, "role": role, "alive": true});
                 });
                 dataWrite("werewolfGameData.json", {"players": playersData, "death": [], "canWitchSave": true});
                 console.log(playersData);
@@ -129,7 +129,7 @@ module.exports = {
                 };
                 gameData.death.push(alivePlayers[number-1].id);
                 dataWrite("werewolfGameData.json", gameData);
-                message.channel.send(`Les loups-garous ont décidé de tuer **${message.client.users.cache.get(alivePlayers[number-1].id).username}**`);
+                message.channel.send(`Les loups-garous ont décidé de tuer **${alivePlayers[number-1].username}**`);
                 setTimeout(() => { day(message) }, 60000);
                 if (!gameData.players.some(player => player.role === "Sorcière")) return;
                 const witch = message.client.users.cache.get(gameData.players.find(player => player.role === "Sorcière").id);

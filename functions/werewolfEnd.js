@@ -35,7 +35,7 @@ module.exports = function werewolfEnd(message, gameData) {
             description: gameData.players.map(function(p) {
                 var dead = "";
                 if (!p.alive) dead = " (mort)";
-                return `${message.client.users.cache.get(p.id)} - ${p.role}${dead}`;
+                return `${p.username} - ${p.role}${dead}`;
             }).join("\n"),
             footer: {
                 text: "🐺 Mayze 🐺"

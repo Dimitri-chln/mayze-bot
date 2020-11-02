@@ -5,8 +5,13 @@ module.exports = {
   args: 0,
   usage: "",
   execute(message, args) {
+    const dataRead = require("../functions/dataRead.js");
     const config = require("../config.json");
     const version = require("../package.json").version;
+    var battery = "-";
+    if (!message.client.herokuMode) {
+        battery = dataRead("phoneBattery.json").battery;
+    };
     message.channel.send({
       embed: {
         author: {
@@ -15,7 +20,7 @@ module.exports = {
         },
         title: "• Informations sur le bot",
         color: "#010101",
-        description: `**Préfixe:** \`${config.prefix[message.client.user.id]}\`\n**Propriétaire:** \`${message.client.users.cache.get(config.ownerID).username}\`\n**Version:** \`${version}\``,
+        description: `**Préfixe:** \`${config.prefix[message.client.user.id]}\`\n**Propriétaire:** \`${message.client.users.cache.get(config.ownerID).username}\`\n**Version:** \`${version}\`\n**Batterie:** \`${battery} %\``,
         footer: {
           text: "✨Mayze✨"
         }

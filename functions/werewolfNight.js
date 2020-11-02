@@ -20,10 +20,16 @@ module.exports = function werewolfNight(message) {
     const roleWerewolf = message.guild.roles.cache.get("759701843864584202");
     message.guild.channels.cache.get("759702367800786964").updateOverwrite(rolePartie, {"SEND_MESSAGES": null});
     const petiteFilleChannel = message.client.channels.cache.get("764767902124474378");
-    petiteFilleChannel.messages.fetch({limit: (gameData.petiteFilleMessages || 1)}).then(messages => {
-        petiteFilleChannel.bulkDelete(messages);
+    petiteFilleChannel.send({
+        embed: {
+            title: "Début de la nuit",
+            color: "#010101",
+            description: "Espionne les loups-garous !",
+            footer: {
+                text: "🐺 Mayze 🐺"
+            }
+        }
     });
-    gameData.petiteFilleMessages = 0;
     const alivePlayers = gameData.players.filter(p => p.alive);
     const werewolvesChannel = message.guild.channels.cache.get("759702367800786964");
     gameData.canWerewolvesKill = true;
@@ -31,7 +37,7 @@ module.exports = function werewolfNight(message) {
         embed: {
             title: "Indiquez la personne que vous voulez tuer avec la commande `*ww kill <numéro>`",
             color: "#010101",
-            description: alivePlayers.filter(player => player.role !== "Loup-garou").map((player, i) => `\`${i+1}.\` ${message.client.users.cache.get(player.id).username}`).join("\n"),
+            description: alivePlayers.filter(player => player.role !== "Loup-garou").map((player, i) => `\`${i+1}.\` ${player.username}`).join("\n"),
             footer: {
                 text: "🐺 Mayze 🐺"
             }
@@ -57,7 +63,7 @@ module.exports = function werewolfNight(message) {
                 embed: {
                     title: "Indique le numéro de la personne dont tu veux connaître le rôle",
                     color: "#010101",
-                    description: alivePlayers.filter(player => player.id !== p.id).map((player, i) => `\`${i+1}.\` ${message.client.users.cache.get(player.id).username}`).join("\n"),
+                    description: alivePlayers.filter(player => player.id !== p.id).map((player, i) => `\`${i+1}.\` ${player.username}`).join("\n"),
                     footer: {
                         text: "🐺 Mayze 🐺"
                     }
@@ -70,7 +76,7 @@ module.exports = function werewolfNight(message) {
                 msg.channel.awaitMessages(filter, {max: 1, time: 60000, errors: ["time"]})
                 .then(collected => {
                     const n = parseInt(collected.first());
-                    msg.channel.send(`**${message.client.users.cache.get(alivePlayers.filter(player => player.id !== p.id)[n-1].id).username}** est __${alivePlayers.filter(player => player.id !== p.id)[n-1].role}__!`);
+                    msg.channel.send(`**${alivePlayers.filter(player => player.id !== p.id)[n-1].username}** est __${alivePlayers.filter(player => player.id !== p.id)[n-1].role}__!`);
                 }).catch(collected => {
                     if (!dataRead("werewolfGameData.json").players.length) return;
                     msg.channel.send("Tu n'as pas répondu à temps");
@@ -87,7 +93,7 @@ module.exports = function werewolfNight(message) {
                     embed: {
                         title: "Indique les numéros des deux personnes que tu veux mettre en couple, séparés par une virgule",
                         color: "#010101",
-                        description: alivePlayers.filter(player => player.id !== p.id).map((player, i) => `\`${i+1}.\` ${message.client.users.cache.get(player.id).username}`).join("\n"),
+                        description: alivePlayers.filter(player => player.id !== p.id).map((player, i) => `\`${i+1}.\` ${player.username}`).join("\n"),
                         footer: {
                             text: "🐺 Mayze 🐺"
                         }
@@ -116,7 +122,7 @@ module.exports = function werewolfNight(message) {
                 embed: {
                     title: "Indique le numéro de la personne que tu veux tuer lors de ta mort",
                     color: "#010101",
-                    description: alivePlayers.filter(player => player.id !== p.id).map((player, i) => `\`${i+1}.\` ${message.client.users.cache.get(player.id).username}`).join("\n"),
+                    description: alivePlayers.filter(player => player.id !== p.id).map((player, i) => `\`${i+1}.\` ${player.username}`).join("\n"),
                     footer: {
                         text: "🐺 Mayze 🐺"
                     }

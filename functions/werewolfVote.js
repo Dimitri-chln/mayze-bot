@@ -11,7 +11,7 @@ module.exports = function vote(message) {
         embed: {
             title: "Votes pour savoir qui éliminer !",
             color: "#010101",
-            description: alivePlayers.map((p, i) => `\`${i+1}.\` ${message.client.users.cache.get(p.id).username}`).join("\n"),
+            description: alivePlayers.map((p, i) => `\`${i+1}.\` ${p.username}`).join("\n"),
             footer: {
                 text: "🐺 Mayze 🐺"
             }
@@ -39,7 +39,7 @@ module.exports = function vote(message) {
                 embed: {
                     title: "Résultat des votes:",
                     color: "#010101",
-                    description: alivePlayers.map((p, i) => `\`${i+1}.\` **${message.client.users.cache.get(p.id).username}** - ${votes[i]} vote(s)`).join("\n"),
+                    description: alivePlayers.map((p, i) => `\`${i+1}.\` **${p.username}** - ${votes[i]} vote(s)`).join("\n"),
                     footer: {
                         text: "🐺 Mayze 🐺"
                     }
@@ -50,7 +50,7 @@ module.exports = function vote(message) {
             if (votes.filter(v => v === max).length > 1) lynched = -1;
             if (lynched + 1) {
                 const lynchedPlayer = alivePlayers[lynched];
-                villageChannel.send(`Le village a décidé d'éliminer **${message.client.users.cache.get(lynchedPlayer.id).username}** qui était ${lynchedPlayer.role}`);
+                villageChannel.send(`Le village a décidé d'éliminer **${lynchedPlayer.username}** qui était ${lynchedPlayer.role}`);
                 if (lynchedPlayer.role === "Ange") {
                     villageChannel.send("L'ange a gagné !");
                     const end = require("../functions/werewolfEnd.js");
@@ -63,6 +63,8 @@ module.exports = function vote(message) {
             };
             dataWrite("werewolfGameData.json", gameData);
             const night = require("./werewolfNight.js");
+            const checkWin = require("./werewolfCheckWin.js");
+            checkWin(message, gameData);
             setTimeout(() => {
                 if (!dataRead("werewolfGameData.json").players.length) return
                 night(message);
