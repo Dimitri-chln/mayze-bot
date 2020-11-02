@@ -15,7 +15,7 @@ module.exports = function day(message) {
             gameData = kill(message, gameData, p.id);
         };
     });
-    var desc = `Les joueurs morts cette nuit sont:\n${gameData.death.map(d => `• _**${.get(d).username}** qui était ${gameData.players.find(p => p.id === d).role}`).join("\n")}_`;
+    var desc = `Les joueurs morts cette nuit sont:\n${gameData.death.map(d => `• _**${message.client.users.cache.get(d).username}** qui était ${gameData.players.find(p => p.id === d).role}`).join("\n")}_`;
     if (!gameData.death.length) desc = "Aucun joueur n'est mort cette nuit !";
     villageChannel.send({
         embed: {
