@@ -17,6 +17,7 @@ module.exports = {
                     title: `#${channel.name}`,
                     color: "#010101",
                     description: msg.content,
+                    fields: [{name: "• Lien", value: `[Aller au message](https://discord.com/channels/${IDs.join("/")})`}],
                     image: {
                         url: (msg.attachments.first() || {}).url
                     },
