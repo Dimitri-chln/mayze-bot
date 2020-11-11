@@ -6,7 +6,7 @@ module.exports = {
     usage: "<question> [proposition]/[proposition]/... [-pin]",
     execute(message, args) {
         var emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
-        const question = (args.join(" ").match(/["'«][^"'»]*["'»]/) || [null])[0];
+        const question = (args.join(" ").match(/["«][^"»]*["»]/) || [null])[0];
         if (!question) return message.reply("écris ta question entre guillemets");
         var answers = args.join(" ").replace(question + " ", "").split("/");
         if (answers.length < 2) {
@@ -32,7 +32,7 @@ module.exports = {
             }
         }).then(msg => {
            emojis.slice(0, answers.length).forEach(async e => {
-                await msg.react(e)
+                await msg.react(e);
             });
         });
     }

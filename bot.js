@@ -2,6 +2,8 @@ const fs = require("fs");
 const Discord = require("discord.js");
 const config = require("./config.json");
 require('dotenv').config();
+const dataRead = require("./functions/dataRead.js");
+const dataWrite = require("./functions/dataWrite.js");
 const client = new Discord.Client({
   partials: ["MESSAGE", "CHANNEL", "REACTION"]
 });
@@ -179,6 +181,41 @@ client.on("messageReactionAdd", (reaction, user) => {
       console.error(error);
     }
   }
+});
+
+client.on("guildMemberAdd", async member => {
+    const roles = ["759694957132513300", "735810462872109156", "735810286719598634", "735809874205737020", "735811339888361472"];
+    roles.forEach(r => {
+        try {
+            member.roles.add(r);
+        } catch (err) {
+            console.log(err);
+        }
+    });
+    var joinTimestamps = await dataRead("joinTimestamps.json");
+    var memberTimestamp = joinTimestamps[member.user.id];
+    if (!memberTimestamp) {
+        memberTimestamp = { "joined": Date.now(), "left": null };
+        joinTimestamps[member.user.id] = memberTimestamp;
+        dataWrite("joinTimestamps.json", joinTimestamps);
+        member.user.send({
+            embed: {
+                author: {
+                    name: member.user.tag,
+                    icon_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
+                },
+                thumbnail: {
+                    url: `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png`
+                },
+                title: "Bienvenue sur Mayze !",
+                color: "#010101",
+                description: "Amuse-toi bien sur le serveur 😉",
+                footer: {
+                    text: "✨ Mayze ✨"
+                }
+            }
+        });
+    }
 });
 
 client.login(process.env.TOKEN);
