@@ -7,7 +7,7 @@ module.exports = {
     perms: ["ADMINISTRATOR"],
     async execute(message, args) {
         const dataWrite = require("../functions/dataWrite.js");
-        const channels = message.guild.channels.cache.filter(c => c.type === (args[2] || "text")).sort(function(a, b) {
+        const channels = message.guild.channels.cache.filter(c => c.type === (args[2] || "text") || c.type === (args[2] || "voice")).sort(function(a, b) {
             return a.rawPosition - b.rawPosition;
         });
         const regex = new RegExp(args[0], "g");

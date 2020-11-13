@@ -25,7 +25,7 @@ module.exports = {
       Math.floor(role.color / (256 * 256)).toString(16).replace(/(^.$)/, "0$1") +
       Math.floor((role.color % (256 * 256)) / 256).toString(16).replace(/(^.$)/, "0$1") +
       (role.color % 256).toString(16).replace(/(^.$)/, "0$1");
-    const roleMembers = role.members.map(m => m.user.username);
+    const roleMembers = role.members.filter(m => m.roles.cache.has(role.id)).map(m => m.user.username);
 
     message.channel.send({
       embed: {
