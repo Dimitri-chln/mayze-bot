@@ -10,10 +10,13 @@ async function databaseSQL(query) {
         if (err) {
             throw err;
         } else {
-            client.query(query).then(res => {
-                return res;
-            }).catch(err => console.log(err));
-        };
+            try {
+                const res = client.query(query);
+            } catch (err) {
+                console.log(err);
+            }
+        }
     });
+    if (res) return res;
 }
 module.exports = databaseSQL;
