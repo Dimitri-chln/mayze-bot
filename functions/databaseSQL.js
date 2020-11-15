@@ -8,13 +8,9 @@ async function databaseSQL(query) {
 
     try {
         await client.connect();
-        try {
-            const res = client.query(query);
-            client.end();
-            return res;
-        } catch (err) {
-            console.log(err);
-        }
+        const res = await client.query(query);
+        client.end();
+        return res;
     } catch (err) {
         throw err;
     }
