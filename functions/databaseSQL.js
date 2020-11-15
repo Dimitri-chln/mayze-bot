@@ -8,11 +8,17 @@ async function databaseSQL(query) {
 
     client.connect(err => {
         if (err) throw err;
+        const result = databaseQuery(query);
+        client.end();
+        return result;
+    });
+
+    function databaseQuery(query) {
         client.query(query, (err, res) => {
-            if (err) throw err;
-            client.end();
+            if (err)
+                throw err;
             return res;
         });
-    });
+    }
 }
 module.exports = databaseSQL;
