@@ -9,7 +9,7 @@ module.exports = {
         const databaseSQL = require("../functions/databaseSQL.js");
         try {
             const res = await databaseSQL(args.join(" "));
-            switch (args[0].toUpperCase()) {
+            switch (res.command) {
                 case "SELECT":
                     message.channel.send(`\`\`\`js\n${JSON.stringify(res.rows, null, 4)}\`\`\``);
                     break;

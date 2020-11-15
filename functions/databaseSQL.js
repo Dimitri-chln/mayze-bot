@@ -6,16 +6,15 @@ async function databaseSQL(query) {
     };
     const client = new pg.Client(connectionString);
 
-    var result;
     client.connect(err => {
         if (err) throw err;
         client.query(query, (err, res) => {
-            if (err) throw err;
+            if (err)
+                throw err;
             console.log(res);
             client.end();
-            result = res;
         });
     });
-    return result;
+    return res;
 }
 module.exports = databaseSQL;
