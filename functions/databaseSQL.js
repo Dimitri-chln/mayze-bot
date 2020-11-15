@@ -10,18 +10,11 @@ async function databaseSQL(query) {
         if (err) {
             throw err;
         } else {
-            queryDatabase(query);
-        }
+            client.query(query).then(res => {
+                client.disconnect();
+                return res;
+            }).catch(err => console.log(err));
+        };
     });
-
-    async function queryDatabase(query) {
-        try {
-            const res = await client.query(query);
-            return res;
-            client.disconnect();
-        } catch (err) {
-            console.log(err);
-        }
-    };
 }
-module.exports = databaseSQL;
+export default databaseSQL;
