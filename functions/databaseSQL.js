@@ -17,4 +17,4 @@ async function databaseSQL(query) {
         };
     });
 }
-export default databaseSQL;
+module.exports = databaseSQL;
