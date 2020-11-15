@@ -11,6 +11,7 @@
     "discord.js": "^12.3.1",
     "discord.js-pagination": "^1.0.2",
     "dotenv": "^8.2.0",
+    "pg": "^8.5.1",
     "pokedex-promise-v2": "^3.2.0",
     "unb-api": "^1.2.0"
   },
