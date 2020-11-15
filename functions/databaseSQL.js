@@ -11,7 +11,6 @@ async function databaseSQL(query) {
             throw err;
         } else {
             client.query(query).then(res => {
-                
                 return res;
             }).catch(err => console.log(err));
         };
