@@ -8,7 +8,7 @@ module.exports = {
     async execute(message, args) {
         const databaseSQL = require("../functions/databaseSQL.js");
         try {
-            const res = await databaseSQL(query);
+            const res = await databaseSQL(args.join(" "));
             message.channel.send(`\`\`\`js\n${JSON.stringify(res, null, 4)}\`\`\``);
         } catch (err) {
             console.log(err);
