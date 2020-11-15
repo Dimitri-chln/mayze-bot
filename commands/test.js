@@ -9,7 +9,7 @@ module.exports = {
     async execute(message, args) {
         const databaseSQL = require("../functions/databaseSQL.js");
         try {
-            const res = await databaseSQL(`INSERT INTO pokemons (caught_by, pokedex_id, pokedex_name, is_shiny) VALUES (${message.author.id}, ${args[0]}, ${args[1]}, ${args[2]})`);
+            const res = await databaseSQL(`INSERT INTO pokemons (caught_by, pokedex_id, pokedex_name, is_shiny) VALUES (\`${message.author.id}\`, ${args[0]}, \`${args[1]}\`, ${args[2]})`);
             message.channel.send(`La table contient désormais ${res.rowCount} rows`);
         } catch (err) {
             console.log(err);
