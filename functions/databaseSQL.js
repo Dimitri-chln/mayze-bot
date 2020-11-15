@@ -10,12 +10,9 @@ async function databaseSQL(query) {
         if (err) {
             throw err;
         } else {
-            try {
-                const res = client.query(query);
+            client.query(query).then(res => {
                 return res;
-            } catch (err) {
-                console.log(err);
-            }
+            }).catch(err => console.log(err));
         }
     });
 }
