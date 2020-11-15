@@ -9,7 +9,16 @@ module.exports = {
         const databaseSQL = require("../functions/databaseSQL.js");
         try {
             const res = await databaseSQL(args.join(" "));
-            message.channel.send(`\`\`\`js\n${JSON.stringify(res, null, 4)}\`\`\``);
+            switch (args[0].toUppeerCase()) {
+                case "SELECT":
+                    message.channel.send(`\`\`\`js\n${JSON.stringify(res.rows, null, 4)}\`\`\``);
+                    break;
+                case "INSERT":
+                    message.channel.send(`Le tableau contient désormais ${res.rowCount} lignes`);
+                    break;
+                default:
+                    message.channel.send("Requête effectuée");
+            }
         } catch (err) {
             console.log(err);
             if (res) console.log(res);
