@@ -12,11 +12,11 @@ async function databaseSQL(query) {
         } else {
             try {
                 const res = client.query(query);
+                return res;
             } catch (err) {
                 console.log(err);
             }
         }
     });
-    if (res) return res;
 }
 module.exports = databaseSQL;
