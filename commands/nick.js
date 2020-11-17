@@ -1,4 +1,4 @@
-module.exports = {
+const command = {
     name: "nick",
     description: "Modifie ou réinitialise ton pseudo sur le serveur",
     aliases: ["name", "rename"],
@@ -8,9 +8,13 @@ module.exports = {
     async execute(message, args) {
         try {
             message.member.setNickname(args.join(" "));
-            message.delete();
+            try { message.delete(); }
+            catch (err) { console.log(err); }
         } catch (err) {
-            message.channel.send("Je n'ai pas la permission de changer ton pseudo");
+            try { message.channel.send("Je n'ai pas la permission de changer ton pseudo"); }
+            catch (err) { console.log(err); }
         }
     }
 };
+
+module.exports = command;

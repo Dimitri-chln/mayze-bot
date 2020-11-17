@@ -1,23 +1,22 @@
-module.exports = {
-  name: "wish-remove",
-  description: "Retire le wish d'une série pour Mudae",
-  aliases: ["wishRemove", "wr"],
-  args: 1,
-  usage: "<n° série>",
-  execute(message, args) {
-    if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
-    const dataRead = require("../functions/dataRead.js");
-    const dataWrite = require("../functions/dataWrite.js");
-    const wishData = dataRead("wishes.json");
-    var wishlist = wishData[message.author.id] || [];
-    const index = parseInt(args[0], 10);
-    if (isNaN(index) || index <= 0 || index > wishlist.length)
-      return message.reply(
-        `l'argument doit être un nombre compris entre 1 et ${wishlist.length}`
-      );
-    wishlist = wishlist.filter((w, i) => i + 1 !== index);
-    wishData[message.author.id] = wishlist;
-    dataWrite("wishes.json", wishData);
-    message.react("✅");
-  }
+const command = {
+	name: "wish-remove",
+	description: "Retire le wish d'une série pour Mudae",
+	aliases: ["wishRemove", "wr"],
+	args: 1,
+	usage: "<série>",
+	async execute(message, args) {
+		const databaseSQL = require("../modules/databaseSQL.js");
+		const series = args.join(" ").toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase() });
+		try { await databaseSQL(`DELETE FROM wishes WHERE user='${message.author.id}' AND series='${series}'`); }
+		catch (err) {
+			console.log(err);
+			try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/"); }
+			catch (err) { console.log(err); }
+			return;
+		}
+		try { message.react("✅"); }
+		catch (err) { console.log(err); }
+	}
 };
+
+module.exports = command;

@@ -1,19 +1,22 @@
-module.exports = {
-  name: "wish",
-  description: "Wish des séries pour Mudae",
-  aliases: [],
-  args: 1,
-  usage: "<série>",
-  execute(message, args) {
-    if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
-    const dataRead = require("../functions/dataRead.js");
-    const dataWrite = require("../functions/dataWrite.js");
-    const wishData = dataRead("wishes.json");
-    const series = args.join(" ");
-    const wishlist = wishData[message.author.id] || [];
-    wishlist.push(series)
-    wishData[message.author.id] = wishlist;
-    dataWrite("wishes.json", wishData);
-    message.react("✅");
-  }
+const command = {
+	name: "wish",
+	description: "Wish des séries pour Mudae",
+	aliases: [],
+	args: 1,
+	usage: "<série>",
+	async execute(message, args) {
+		const databaseSQL = require("../modules/databaseSQL.js");
+		const series = args.join(" ").toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase() });
+		try { await databaseSQL(`INSERT INTO wishes (user, series) VALUES ('${message.author.id}', '${series}')`); }
+		catch (err) {
+			console.log(err);
+			try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/"); }
+			catch (err) { console.log(err); }
+			return;
+		}
+		try { message.react("✅"); }
+		catch (err) { console.log(err); }
+	}
 };
+
+module.exports = command;

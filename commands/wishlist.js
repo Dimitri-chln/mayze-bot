@@ -1,38 +1,40 @@
-module.exports = {
-  name: "wishlist",
-  description: "Liste des wish pour Mudae",
-  aliases: ["wl"],
-  args: 0,
-  usage: "[mention/id]",
-  execute(message, args) {
-    if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
-    const dataRead = require("../functions/dataRead.js");
-    const wishData = dataRead("wishes.json");
-    const user =
-      message.mentions.users.first() ||
-      message.client.users.cache.find(
-        u =>
-          u.id === args[0] ||
-          u.username === args[0] ||
-          u.username.includes(args[0])
-      ) ||
-      message.author;
-    const wishlist = wishData[user.id];
-    if (!wishlist) return message.reply("aucun wish trouvé !");
-    message.channel.send({
-      embed: {
-        author: {
-          name: `Wishlist de ${
-            message.client.users.cache.get(user.id).username
-          }`,
-          icon_url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
-        },
-        color: "#010101",
-        description: wishlist.map((w, i) => `\`${i + 1}.\` ${w.split("|")[0]}`).join("\n"),
-        footer: {
-          text: "✨Mayze✨"
-        }
-      }
-    });
-  }
+const command = {
+	name: "wishlist",
+	description: "Liste des wish pour Mudae",
+	aliases: ["wl"],
+	args: 0,
+	usage: "[mention/pseudo/id]",
+	async execute(message, args) {
+		const databaseSQL = require("../modules/databaseSQL.js");
+		const user = message.mentions.users.first() || message.client.users.cache.find(u =>u.id === args[0] || u.username === args[0] || u.username.includes(args[0])) || message.author;
+		var wishlist;
+		try { wishlist = await databaseSQL(`SELECT * FROM wishes WHERE user='${user.id}'`); }
+		catch (err) {
+			console.log(err);
+			try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/"); }
+			catch (err) { console.log(err); }
+			return;
+		}
+		if (!wishlist) {
+			try { message.reply("aucun souahait trouvé"); }
+			catch (err) { console.log(err); }
+		}
+		try {
+			message.channel.send({
+				embed: {
+					author: {
+						name: `Wishlist de ${user.tag}`,
+						icon_url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+					},
+					color: "#010101",
+					description: wishlist.map((w, i) => `\`${i + 1}.\` ${w.series}`).join("\n"),
+					footer: {
+						text: "✨Mayze✨"
+					}
+				}
+			});
+		} catch (err) { console.log(err); }
+	}
 };
+
+module.exports = command;
