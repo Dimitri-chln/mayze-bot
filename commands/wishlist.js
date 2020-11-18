@@ -8,7 +8,10 @@ const command = {
 		const databaseSQL = require("../modules/databaseSQL.js");
 		const user = message.mentions.users.first() || message.client.users.cache.find(u =>u.id === args[0] || u.username === args[0] || u.username.includes(args[0])) || message.author;
 		var wishlist;
-		try { wishlist = await databaseSQL(`SELECT * FROM wishes WHERE user='${user.id}'`); }
+		try {
+			const { rows } = await databaseSQL(`SELECT * FROM wishes WHERE user='${user.id}'`);
+			wishlist = rows;
+		}
 		catch (err) {
 			console.log(err);
 			try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/"); }

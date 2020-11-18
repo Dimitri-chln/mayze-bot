@@ -8,8 +8,10 @@ const command = {
 	async execute(message, args) {
 		const databaseSQL = require("../modules/databaseSQL.js");
 		var toDo;
-		try { toDo = await databaseSQL("SELECT * FROM to_do WHERE finished_at=null").rows; }
-		catch (err) {
+		try {
+			const { rows } = await databaseSQL("SELECT * FROM to_do WHERE finished_at=null");
+			toDo = rows;
+		} catch (err) {
 			console.log(err);
 			try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/"); }
 			catch (err) { console.log(err); }

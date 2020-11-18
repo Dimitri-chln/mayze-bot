@@ -12,9 +12,12 @@ const command = {
 		
 		const databaseSQL = require("../modules/databaseSQL.js");
 		var wishes;
-		try { wishes = await databaseSQL(`SELECT * FROM wishes`).rows; }
-		catch (err) { return console.log(err); }
-		wishes.forEach(async wish => {
+		try {
+			const { rows }  = await databaseSQL(`SELECT * FROM wishes`);
+			wishes = rows;
+		} catch (err) { console.log(err);	}
+		if (!wishes) return;
+		wishes.rows.forEach(async wish => {
 			const regex = new RegExp(wish.series, "i");
 			if (regex.test(characterSeries)) {
 				var user;

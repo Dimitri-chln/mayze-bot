@@ -10,7 +10,8 @@ const command = {
 		const databaseSQL = require("../modules/databaseSQL.js");
 		var pokemons;
 		try {
-			pokemons = await databaseSQL(`SELECT * FROM pokemons WHERE caught_by='${message.author.id}' ORDER BY id`).rows;
+			const { rows }  = await databaseSQL(`SELECT * FROM pokemons WHERE caught_by='${message.author.id}' ORDER BY id`);
+			pokemons = rows;
 		} catch (err) {
 			console.log(err);
 			try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données"); }

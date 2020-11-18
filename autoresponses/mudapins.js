@@ -19,8 +19,10 @@ const command = {
 		catch (err) { return console.log(err); }
 		var msg = message.content;
 		if (message.editedTimestamp) {
-			try { msg = await message.channel.messages.fetch(message.id).content; }
-			catch (err) { console.log(err); }
+			try { 
+				const newMsg = await message.fetch();
+				msg = newMsg.content;
+			} catch (err) { console.log(err); }
 		};
 
 		var pins = msg.match(/<:(logo)?pin\d{0,3}:\d{18}>/g);

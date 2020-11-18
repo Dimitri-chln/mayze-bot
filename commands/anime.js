@@ -8,7 +8,8 @@ const command = {
 		const databaseSQL = require("../modules/databaseSQL.js");
 		var animes;
 		try {
-			animes = await databaseSQL(`SELECT * FROM animes WHERE user_id='${message.author.id}'`).rows;
+			const { rows } = await databaseSQL(`SELECT * FROM animes WHERE user_id='${message.author.id}'`);
+			animes = rows;
 		} catch (err) {
 			console.log(err);
 			try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/"); }
