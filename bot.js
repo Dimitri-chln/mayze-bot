@@ -67,8 +67,11 @@ client.on("ready", async () => {
 });
 
 client.on("message", async message => {
-	if (message.partial) return;
-	if (message.channel.partial) return;
+	if (message.partial) {
+		try { await message.fetch(); }
+		catch (err) { console.log(err); }
+	}
+	if (message.channel.type === "dm") return;
 	if (message.content.toLowerCase().startsWith(config.prefix[client.user.id])) {
 		if (message.author.bot) return;
 		const input = message.content.slice(config.prefix[client.user.id].length).trim().split(/ +/g);
@@ -123,10 +126,14 @@ client.on("message", async message => {
 	}
 });
 
-client.on("messageReactionAdd", async(reaction, user) => {
+client.on("messageReactionAdd", async (reaction, user) => {
 	if (reaction.partial) {
-		try { reaction.fetch(); }
-		catch (err) { return console.log("Something went wrong when fetching the message: ", err); }
+		try { await reaction.fetch(); }
+		catch (err) { return console.log(err); }
+	}
+	if (reaction.message.partial) {
+		try { await reaction.message.fetch(); }
+		catch (err) { return console.log(err); }
 	}
 	if (user.bot) return;
 	for (const reactionCommand of client.reactionCommands) {
