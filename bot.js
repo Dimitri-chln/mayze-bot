@@ -137,35 +137,29 @@ client.on("messageReactionAdd", async(reaction, user) => {
 
 client.on("guildMemberAdd", async member => {
 	const roles = ["759694957132513300", "735810462872109156", "735810286719598634", "735809874205737020", "735811339888361472"];
-	roles.forEach(r => {
+	roles.forEach(async r => {
 		try { member.roles.add(r); }
 		catch (err) { console.log(err); }
 	});
 	try {
-		var joinedTimestamp = await databaseSQL(`SELECT * FROM members WHERE id='${member.id}'`)[0].joined_at;
-	} catch (err) { console.log(err); }
-	if (!joinedTimestamp) {
-		try {
-			databaseSQL(`INSERT INTO members (id) VALUES (${member.id})`);
-			member.user.send({
-				embed: {
-					author: {
-						name: member.user.tag,
-						icon_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
-					},
-					thumbnail: {
-						url: `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png`
-					},
-					title: "Bienvenue sur Mayze !",
-					color: "#010101",
-					description: "Amuse-toi bien sur le serveur 😉",
-					footer: {
-						text: "✨ Mayze ✨"
-					}
+		member.user.send({
+			embed: {
+				author: {
+					name: member.user.tag,
+					icon_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
+				},
+				thumbnail: {
+					url: `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png`
+				},
+				title: "Bienvenue sur Mayze !",
+				color: "#010101",
+				description: "Amuse-toi bien sur le serveur 😉",
+				footer: {
+					text: "✨ Mayze ✨"
 				}
-			});
-		} catch (err) { console.log(err); }
-	}
+			}
+		});
+	} catch (err) { console.log(err); }
 });
 
 client.login(process.env.TOKEN);
