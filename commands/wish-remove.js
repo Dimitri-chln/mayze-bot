@@ -7,7 +7,7 @@ const command = {
 	async execute(message, args) {
 		const databaseSQL = require("../modules/databaseSQL.js");
 		const series = args.join(" ").toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase() });
-		try { await databaseSQL(`DELETE FROM wishes WHERE user='${message.author.id}' AND series='${series}'`); }
+		try { await databaseSQL(`DELETE FROM wishes WHERE user_id='${message.author.id}' AND series='${series}'`); }
 		catch (err) {
 			console.log(err);
 			try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/"); }
