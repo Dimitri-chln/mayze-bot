@@ -30,9 +30,6 @@ for (const file of reactionCommandsFiles) {
 }
 
 client.cooldowns = new Discord.Collection();
-client.russianRoulette = [];
-client.dmChannels = new Discord.Collection();
-client.werewolfPlayers = new Discord.Collection();
 
 const pokedex = dataRead("pokedex.json");
 pokedex[0].dropSum = 0;
@@ -121,7 +118,7 @@ client.on("message", async message => {
 	}
 
 	for (const autoresponse of client.autoresponses) {
-		try { /*autoresponse.execute(message);*/ }
+		try { autoresponse.execute(message); }
 		catch (err) { console.log(err); }
 	}
 });
