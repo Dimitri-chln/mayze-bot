@@ -14,7 +14,7 @@ const command = {
 		var wishes;
 		try { wishes = await databaseSQL(`SELECT * FROM wishes`).rows; }
 		catch (err) { return console.log(err); }
-		wishes.forEach(wish => {
+		wishes.forEach(async wish => {
 			const regex = new RegExp(wish.series, "i");
 			if (regex.test(characterSeries)) {
 				var user;
