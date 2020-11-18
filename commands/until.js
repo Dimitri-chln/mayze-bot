@@ -8,7 +8,7 @@ const command = {
 		const dateToString = require("../modules/dateToString.js");
 		//const UTCOffset = 2;
 		const now = Date.now();
-		const date = Date.parse(args.join(" ") + " GMT+0200");
+		const date = Date.parse(args.join(" ") + " GMT+0100");
 		if (isNaN(date)) {
 			try { message.reply("le format de la date est incorrect (mm/dd/yyyy)"); }
 			catch (err) { console.log(err); }
