@@ -13,7 +13,7 @@ const command = {
 		const pokemonBot = pokedexBot.find(p => (p.en || "").toLowerCase() === pokemonName || (p.fr || "").toLowerCase() === pokemonName) || {};
 		var pokemon; 
 
-		try { pokemon = await Pokedex.getPokemonByName(((pokemonBot || {}).en || "").toLowerCase()); }
+		try { pokemon = await Pokedex.getPokemonByName(((pokemonBot || {en: pokemonName}).en || "").toLowerCase()); }
 		catch (err) {
 			console.log(err);
 			try { message.reply("ce pokémon n'existe pas"); }
