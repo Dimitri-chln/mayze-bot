@@ -10,7 +10,7 @@ const command = {
 		const Pokedex = new PokedexClient();
 
 		const pokemonName = args.join(" ").toLowerCase().replace(/♂/, "m").replace(/♀/, "f");
-		const pokemonBot = pokedexBot.find(p => (p.en || "").toLowerCase() === pokemonName || (p.fr || "").toLowerCase() === pokemonName);
+		const pokemonBot = pokedexBot.find(p => (p.en || "").toLowerCase() === pokemonName || (p.fr || "").toLowerCase() === pokemonName) || {};
 		var pokemon; 
 
 		try { pokemon = await Pokedex.getPokemonByName(((pokemonBot || {}).en || "").toLowerCase()); }
