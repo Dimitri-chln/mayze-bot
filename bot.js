@@ -171,7 +171,8 @@ client.on("guildMemberAdd", async member => {
 
 client.on("messageDelete", async message => {
 	if (!client.deletedMessages) client.deletedMessages = {};
-	if (!message.partial) return;
+	if (message.partial) return;
+	if (message.author.bot) return;
 	client.deletedMessages[message.channel.id] = {
 		author: {
 			id: message.author.id,
@@ -185,11 +186,12 @@ client.on("messageDelete", async message => {
 
 client.on("messageUpdate", async (oldMessage, newMessage) => {
 	if (!client.editedMessages) client.editedMessages = {};
-	if (!oldMessage.partial) return;
+	if (oldMessage.partial) return;
+	if (oldMessage.author.bot) return;
 	client.editedMessages[oldMessage.channel.id] = {
 		author: {
 			id: oldMessage.author.id,
-			tag: oldMmessage.author.tag,
+			tag: oldMessage.author.tag,
 			avatar: oldMessage.author.avatar
 		},
 		content: oldMessage.content
