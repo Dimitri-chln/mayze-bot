@@ -183,18 +183,18 @@ client.on("messageDelete", async message => {
 	setTimeout(() => { delete client.deletedMessages[message.channel.id] }, 300000);
 });
 
-client.on("messageUpdate", async message => {
+client.on("messageUpdate", async (oldMessage, newMessage) => {
 	if (!client.editedMessages) client.editedMessages = {};
-	if (!message.partial) return;
-	client.editedMessages[message.channel.id] = {
+	if (!oldMessage.partial) return;
+	client.editedMessages[oldMessage.channel.id] = {
 		author: {
-			id: message.author.id,
-			tag: message.author.tag,
-			avatar: message.author.avatar
+			id: oldMessage.author.id,
+			tag: oldMmessage.author.tag,
+			avatar: oldMessage.author.avatar
 		},
-		content: message.content
+		content: oldMessage.content
 	};
-	setTimeout(() => { delete client.editedMessages[message.channel.id] }, 300000);
+	setTimeout(() => { delete client.editedMessages[oldMessage.channel.id] }, 300000);
 });
 
 client.on("error", async error => {
