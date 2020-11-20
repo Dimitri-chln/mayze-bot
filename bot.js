@@ -169,4 +169,37 @@ client.on("guildMemberAdd", async member => {
 	} catch (err) { console.log(err); }
 });
 
+client.on("messageDelete", async message => {
+	if (!client.deletedMessages) client.deletedMessages = {};
+	client.deletedMessages[message.channel.id] = {
+		author: {
+			id: message.author.id,
+			tag: message.author.tag,
+			avatar: message.author.avatar
+		},
+		content: message.content
+	};
+	setTimeout(() => { delete client.deletedMessages[message.channel.id] }, 300000);
+});
+
+client.on("error", async error => {
+	try {
+		const { errorChannel } = config;
+		errorChannel.send({
+			embed: {
+				author: {
+					name: "Erreur rencontrée",
+					icon_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
+				},
+				color: "#010101",
+				title: error.name,
+				description: error.stack,
+				footer: {
+					text: "✨ Mayze ✨"
+				}
+			}
+		});
+	} catch (err) { console.log(err); }
+});
+
 client.login(process.env.TOKEN);
