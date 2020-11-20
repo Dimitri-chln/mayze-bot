@@ -183,6 +183,20 @@ client.on("messageDelete", async message => {
 	setTimeout(() => { delete client.deletedMessages[message.channel.id] }, 300000);
 });
 
+client.on("messageUpdate", async message => {
+	if (!client.editedMessages) client.editedMessages = {};
+	if (!message.partial) return;
+	client.editedMessages[message.channel.id] = {
+		author: {
+			id: message.author.id,
+			tag: message.author.tag,
+			avatar: message.author.avatar
+		},
+		content: message.content
+	};
+	setTimeout(() => { delete client.editedMessages[message.channel.id] }, 300000);
+});
+
 client.on("error", async error => {
 	try {
 		const { errorChannel } = config;

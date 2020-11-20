@@ -1,16 +1,16 @@
 const command = {
-    name: "snipe",
-    description: "Montre sur le salon le message que quelqu'un vient de supprimer",
+    name: "editsnipe",
+    description: "Montre sur le salon le message que quelqu'un vient de modifier",
     aliases: [],
     args: 0,
     usage: "",
     async execute(message, args) {
-        if (!message.client.deletedMessages || !message.client.deletedMessages[message.channel.id]) {
+        if (!message.client.editedMessages || !message.client.editedMessages[message.channel.id]) {
             try { message.reply("il n'y a aucun message à snipe dans ce salon") }
             catch (err) { console.log(err); }
             return;
         }
-        const snipedMsg = message.client.deletedMessages[message.channel.id];
+        const snipedMsg = message.client.editedMessages[message.channel.id];
         try {
             message.channel.send({
                 embed: {
