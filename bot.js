@@ -82,7 +82,9 @@ client.on("message", async message => {
 		if (!command) return;
 
 		if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm))) {
-			return message.reply(`tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``);
+			try { message.reply(`tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``); }
+			catch (err) { console.log(err); }
+			return;
 		}
 		if (command.ownerOnly && message.author.id !== config.ownerID) return;
 
