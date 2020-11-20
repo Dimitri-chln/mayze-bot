@@ -171,6 +171,7 @@ client.on("guildMemberAdd", async member => {
 
 client.on("messageDelete", async message => {
 	if (!client.deletedMessages) client.deletedMessages = {};
+	if (!message.partial) return;
 	client.deletedMessages[message.channel.id] = {
 		author: {
 			id: message.author.id,
