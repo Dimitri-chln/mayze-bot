@@ -10,8 +10,7 @@ const command = {
 		const n = parseInt(args[1], 10) || 10;
 		message.delete();
 		if (isNaN(n) || n < 0 || n > 100) {
-			try { message.reply("le nombre doit être compris entre 0 et 100"); }
-			catch (err) { console.log(err); }
+			message.reply("le nombre doit être compris entre 0 et 100").catch(console.error);
 		}
 		for (i = 0; i < n; i++) {
 			try {

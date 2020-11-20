@@ -6,9 +6,7 @@ const command = {
 	usage: "",
 	async execute(message, args) {
 		if (!message.client.deletedMessages || !message.client.deletedMessages[message.channel.id]) {
-			try { message.reply("il n'y a aucun message à snipe dans ce salon") }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("il n'y a aucun message à snipe dans ce salon").catch(console.error);
 		}
 		const snipedMsg = message.client.deletedMessages[message.channel.id];
 		try {

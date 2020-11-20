@@ -37,15 +37,11 @@ const command = {
 				}
 			});
 		} catch (err) { console.log(err);
-			try { message.channel.send("Le message est trop long pour que je puisse l'envoyer :/"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.channel.send("Le message est trop long pour que je puisse l'envoyer :/").catch(console.error);
 		}
 		const validation = await userValidation(message, msg);
 		if (!validation) {
-			try { message.channel.send("Procédure annulée"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.channel.send("Procédure annulée").catch(console.error);
 		}
 		try {
 			const loadingMsg = await message.channel.send(`Modification de ${channels.size} salons...`);

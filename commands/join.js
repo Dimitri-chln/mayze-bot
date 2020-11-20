@@ -6,20 +6,16 @@ const command = {
 	usage: "",
 	async execute(message, args) {
 		if (!message.member.voice.channel) {
-			try { message.reply("tu n'es pas dans un salon vocal"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("tu n'es pas dans un salon vocal").catch(console.error);
 		}
 		try {
 			const connection = await message.member.voice.channel.join();
 			if (!message.client.voiceConnections) message.client.voiceConnections = {};
 			message.client.voiceConnections[message.guild.id] = connection;
-			try { message.react("✅"); }
-			catch (err) { console.log(err); }
+			message.react("✅").catch(console.error);
 		} catch (err) {
 			console.log(err);
-			try { message.reply("Quelque chose s'est mal passé en rejoignant le salon vocal :/"); }
-			catch (err) { console.log(err); }
+			message.reply("Quelque chose s'est mal passé en rejoignant le salon vocal :/").catch(console.error);
 		}
 	}
 };

@@ -13,9 +13,7 @@ const command = {
 			toDo = rows;
 		} catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
 		}
 		switch ((args[0] || "").toLowerCase()) {
 			case "":
@@ -41,9 +39,7 @@ const command = {
 				try { await databaseSQL(`INSERT INTO to_do (name, extra) VALUES ('${name}', '${extra}')`); }
 				catch (err) {
 					console.log(err);
-					try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/"); }
-					catch (err) { console.log(err); }
-					return;
+					return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
 				}
 				try { message.react("✅"); }
 				catch (err) { console.log(err); }
@@ -52,13 +48,13 @@ const command = {
 				const index = parseInt(args[1], 10);
 				if (isNaN(index) || index < 1 )
 					try { message.reply("le deuxième argument doit être un nombre positif"); }
-					catch (err) { console.log(err); }
+					catch (err) { console.log(err); 
+					return;
+				}
 				try { await databaseSQL(`UPDATE to_do SET finished_at = CURRENT_TIMESTAMP() WHERE id=${index}`); }
 				catch (err) {
 					console.log(err);
-					try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/"); }
-					catch (err) { console.log(err); }
-					return;
+					return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
 				}
 				try { message.react("✅"); }
 				catch (err) { console.log(err); }

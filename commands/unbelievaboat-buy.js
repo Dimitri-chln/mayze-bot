@@ -9,8 +9,7 @@ const command = {
 		const input = args.join(" ").toLowerCase();
 		const item = shop.find(i => i.name.toLowerCase() === input || i.name.toLowerCase().includes(input));
 		if (!item) {
-			try { message.reply("cet objet n'existe pas"); }
-			catch (err) { console.log(err); }
+			message.reply("cet objet n'existe pas").catch(console.error);
 		}
 		const unbAPI = require("unb-api");
 		const unbClient = new unbAPI.Client(process.env.UNB_TOKEN);
@@ -19,28 +18,20 @@ const command = {
 		try { user = await unbClient.getUserBalance(message.guild.id, message.author.id);}
 		catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé en joignant l'API d'UnbelievaBoat :/"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.channel.send("Quelque chose s'est mal passé en joignant l'API d'UnbelievaBoat :/").catch(console.error);
 		}
 		if (item.price > user.cash) {
-			try { message.reply("tu n'as pas assez d'argent pour acheter cet objet"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("tu n'as pas assez d'argent pour acheter cet objet").catch(console.error);
 		}
 		try { await unbClient.editUserBalance(message.guild.id, message.author.id, {cash: - item.price, bank: 0}, `Bought '${item.name}'`); }
 		catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé en joignant l'API d'UnbelievaBoat :/"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.channel.send("Quelque chose s'est mal passé en joignant l'API d'UnbelievaBoat :/").catch(console.error);
 		}
 		try { item.buy(message); }
 		catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé en achetant l'objet :/"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.channel.send("Quelque chose s'est mal passé en achetant l'objet :/").catch(console.error);
 		}
 		try {
 			message.channel.send({

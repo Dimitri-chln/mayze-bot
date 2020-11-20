@@ -21,9 +21,7 @@ const command = {
 		try { messages = await message.channel.messages.fetch({ limit: 100 }); }
 		catch (err) {
 			console.log(err);
-			try { message.reply("quelque chose s'est mal passé en récupérant les messages :/"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
 		}
 		
 		if (message.mentions.users.size) {
@@ -42,9 +40,7 @@ const command = {
 		try { await message.channel.bulkDelete(messages); }
 		catch (err) {
 			console.log(err);
-			try { message.reply("quelque chose s'est mal passé en supprimant les messages :/"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("quelque chose s'est mal passé en supprimant les messages :/").catch(console.error);
 		}
 		var response = `${messages.length} messages ont été supprimés`;
 		if (messages.length === 1) response = "1 message a été supprimé";

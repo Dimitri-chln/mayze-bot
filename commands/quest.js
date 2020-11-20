@@ -16,9 +16,7 @@ const command = {
 
 	const imageURL = (message.attachments.first() || {}).url;
 	if (!imageURL) {
-		try { message.reply("ajoute une image à ton message"); }
-		catch (err) { console.log(err); }
-		return;
+		return message.reply("ajoute une image à ton message").catch(console.error);
 	}
 	const flags = args.filter(a => a === "-noping");
 	const footerFlags = args.filter(a => a === "-everyone" || a === "-single");
@@ -47,9 +45,7 @@ const command = {
 		});
 	} catch (err) {
 		console.log(err);
-		try { message.channel.send("Quelque chise s'est mal passé en envoyant le message :/"); }
-		catch (err) { console.log(err); }
-		return;
+		return message.channel.send("Quelque chise s'est mal passé en envoyant le message :/").catch(console.error);
 	}
 	try {
 		await msg.react("1️⃣");
@@ -58,9 +54,7 @@ const command = {
 		await msg.react("🔁");
 	} catch (err) {
 		console.log(err);
-		try { message.channel.send("Quelque chose s'est mal passé en ajoutant les réactions :/"); }
-		catch (err) { console.log(err); }
-		return;
+		return message.channel.send("Quelque chose s'est mal passé en ajoutant les réactions :/").catch(console.error);
 	}
 	try { message.react("✅"); }
 	catch (err) { console.log(err); }

@@ -16,9 +16,7 @@ const command = {
 			ranks.find(r => r.name.toLowerCase().includes(rankIdOrName));
 
 		if (!ranks.array().includes(rank)) {
-			try { message.reply("ce rank n'existe pas"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("ce rank n'existe pas").catch(console.error);
 		}
 
 		if (!message.member.roles.cache.has(rank.id)) {

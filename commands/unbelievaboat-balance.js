@@ -12,9 +12,7 @@ const command = {
 		try { user = await unbClient.getUserBalance(message.guild.id, message.author.id); }
 		catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé en joignant l'API d'UnbelievaBoat :/"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.channel.send("Quelque chose s'est mal passé en joignant l'API d'UnbelievaBoat :/").catch(console.error);
 		}
 		try {
 			message.channel.send({

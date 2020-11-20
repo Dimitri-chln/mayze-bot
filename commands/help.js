@@ -26,15 +26,13 @@ const command = {
 				})
 			} catch (err) {
 				console.log(err);
-				try { message.reply("je n'ai pas pu te DM... As-tu désactivé les messages privés?"); }
-				catch (err) { console.log(err); }
+				message.reply("je n'ai pas pu te DM... As-tu désactivé les messages privés?").catch(console.error);
 			}
 		} else {
 			const name = args[0].toLowerCase();
 			const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 			if (!command) {
-				try { message.reply("cette commande n'existe pas!"); }
-				catch (err) { console.log(err); }
+				message.reply("cette commande n'existe pas!").catch(console.error);
 			};
 			var data = `**Nom:** \`${command.name}\``;
 			if (command.aliases.length) {

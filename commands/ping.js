@@ -5,8 +5,7 @@ const command = {
 	args: 0,
 	usage: "",
 	async execute(message, args) {
-	try { message.channel.send(`Pong! **${ message.client.ws.ping }**ms`); }
-	catch (err) { console.log(err); }
+	message.channel.send(`Pong! **${ message.client.ws.ping }**ms`).catch(console.error);
 	}
 };
 

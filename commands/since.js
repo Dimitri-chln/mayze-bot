@@ -10,24 +10,18 @@ const command = {
 		const now = Date.now();
 		const date = Date.parse(args.join(" ") + " GMT+0100");
 		if (isNaN(date)) {
-			try { message.reply("le format de la date est incorrect (mm/dd/yyyy)"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("le format de la date est incorrect (mm/dd/yyyy)").catch(console.error);
 		}
 
 		const timePassed = (now - date) / 1000;
 		if (timePassed < 0) {
-			try { message.reply("la date doit déjà être dépassée"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("la date doit déjà être dépassée").catch(console.error);
 		}
 		const timePassedString = dateToString(timePassed);
 
 		const parts = args[0].split("/");
 		if (parts.length !== 3) {
-			try { message.reply("le format de la date est incorrect (mm/dd/yyy)"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("le format de la date est incorrect (mm/dd/yyy)").catch(console.error);
 		}
 		const monthList = [
 			"janvier",
@@ -45,8 +39,7 @@ const command = {
 		];
 		const dateString = parts[1] + " " + monthList[parts[0] - 1] + " " + parts[2] + " à "+ (args[1] || "minuit");
 
-		try { message.channel.send(`Il s'est écoulé ${timePassedString} depuis le **${dateString}**`); }
-		catch (err) { console.log(err); }
+		message.channel.send(`Il s'est écoulé ${timePassedString} depuis le **${dateString}**`).catch(console.error);
 	}
 };
 

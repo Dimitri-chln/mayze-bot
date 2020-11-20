@@ -12,9 +12,7 @@ const command = {
 			animes = rows;
 		} catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
 		}
 		
 		switch ((args[0] || "").toLowerCase()) {

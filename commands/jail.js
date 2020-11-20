@@ -9,15 +9,11 @@ const command = {
 	async execute(message, args) {
 		const user = message.mentions.users.first();
 		if (!user) {
-			try { message.reply("mentionne la personne à mettre en prison"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("mentionne la personne à mettre en prison").catch(console.error);
 		}
 		const member = message.guild.members.cache.find(m => m.user === user);
 		if (member.roles.highest.position >= message.member.roles.highest.position) {
-			try { message.reply("tu ne peux pas mettre cette personne en prison"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("tu ne peux pas mettre cette personne en prison").catch(console.error);
 		};
 
 		const roleTop = message.guild.roles.cache.get("735810286719598634");
@@ -29,8 +25,7 @@ const command = {
 			try { member.roles.add("695943648235487263"); }
 			catch (err) {
 				console.log(err);
-				try { message.channel.send("le rôle jailed n'existe plus ou je n'ai pas les permissions suffisantes"); }
-				catch (err) { console.log(err); }
+				message.channel.send("le rôle jailed n'existe plus ou je n'ai pas les permissions suffisantes").catch(console.error);
 			}
 			const notJailedRanks = ranks.filter(r => !r.name.includes("(Jailed)"));
 			notJailedRanks.forEach(rank => {
@@ -41,8 +36,7 @@ const command = {
 					try { member.roles.add(jailedRank.id); }
 					catch (err) {
 						console.log(err);
-						try { message.channel.send(`Je n'ai pas trouvé le rôle correspondant au rank "${rank.name}"`); }
-						catch (err) { console.log(err); }
+						message.channel.send(`Je n'ai pas trouvé le rôle correspondant au rank "${rank.name}"`).catch(console.error);
 					}
 				}
 			});
@@ -90,8 +84,7 @@ const command = {
 				try { member.roles.add(notJailedRank.id); }
 				catch (err) {
 					console.log(err);
-					try { message.channel.send(`Je n'ai pas trouvé le rôle correspondant au rank "${rank.name}"`); }
-					catch (err) { console.log(err); }
+					message.channel.send(`Je n'ai pas trouvé le rôle correspondant au rank "${rank.name}"`).catch(console.error);
 				}
 			}
 		});

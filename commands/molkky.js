@@ -35,36 +35,25 @@ const command = {
 		case "create":
 			const players = args.splice(1);
 			if (gameData) {
-				try { message.reply(" une partie est déjà en cours"); }
-				catch (err) { console.log(err); }
-				return;
+				return message.reply(" une partie est déjà en cours").catch(console.error);
 			}
 			if (players.length < 2) {
-				try { message.reply("il faut au moins 2 joueurs pour lancer une partie"); }
-				catch (err) { console.log(err); }
-				return;
+				return message.reply("il faut au moins 2 joueurs pour lancer une partie").catch(console.error);
 			}
 			gameData = { currentPlayer: 0, players: players.map(p => { return { name: p, scores: [0], failed: 0 }; }), winners: [] };
-			try { message.channel.send(Embed.setDescription(molkkyDesc(gameData))); }
-			catch (err) { console.log(err); }
+			message.channel.send(Embed.setDescription(molkkyDesc(gameData))).catch(console.error);
 			message.client.molkky[message.author.id] = gameData;
 			break;
 		case "score":
 			if (!gameData) {
-				try { message.reply("tu n'as pas de partie en cours"); }
-				catch (err) { console.log(err); }
-				return;
+				return message.reply("tu n'as pas de partie en cours").catch(console.error);
 			}
 			const points = parseInt(args[1], 10);
 			if (isNaN(points)) {
-				try { message.reply("le score doit être un nombre"); }
-				catch (err) { console.log(err); }
-				return;
+				return message.reply("le score doit être un nombre").catch(console.error);
 			}
 			if (points > 12 || points < 0) {
-				try { message.reply("le score doit être compris entre 0 et 12"); }
-				catch (err) { console.log(err); }
-				return;
+				return message.reply("le score doit être compris entre 0 et 12").catch(console.error);
 			}
 			var newScore = gameData.players[gameData.currentPlayer].scores.slice(-1)[0] + points;
 			if (points === 0) {
@@ -84,8 +73,7 @@ const command = {
 			var gameEnd = false;
 			if (gameData.winners.length === gameData.players.length - 1) {
 				delete message.client.molkky[message.author.id];
-				try { message.reply("la partie est terminée!"); }
-				catch (err) { console.log(err); }
+				message.reply("la partie est terminée!").catch(console.error);
 				gameEnd = true;
 			};
 			do {
@@ -100,17 +88,14 @@ const command = {
 			} else {
 				message.client.molkky[message.author.id]= gameData;
 			}
-			try { message.channel.send(Embed.setDescription(molkkyDesc(gameData))) }
-			catch (err) { console.log(err); }
+			message.channel.send(Embed.setDescription(molkkyDesc(gameData))).catch(console.error);
 			break;
 		case "delete":
 			delete message.client.molkky[message.author.id];
-			try { message.reply("partie supprimée avec succès"); }
-			catch (err) { console.log(err); }
+			message.reply("partie supprimée avec succès").catch(console.error);
 			break;
 		default:
-			try { message.reply("arguments incorrects !"); }
-			catch (err) { console.log(err); }
+			message.reply("arguments incorrects !").catch(console.error);
 		}
 
 		function molkkyDesc(gameData) {

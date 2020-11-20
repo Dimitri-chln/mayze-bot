@@ -39,8 +39,7 @@ const command = {
 		try { paginationEmbed(message, pages, ["⏪", "⏩"], 180000); }
 		catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé en créant le paginateur :/"); }
-			catch (err) { console.log(err); }
+			message.channel.send("Quelque chose s'est mal passé en créant le paginateur :/").catch(console.error);
 		}
 	}
 };

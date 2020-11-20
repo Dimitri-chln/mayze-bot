@@ -11,9 +11,7 @@ const command = {
 		switch (args[0]) {
 			case "create":
 				if (message.client.russianRoulette.length) {
-					try { message.reply("une partie est déjà en cours!"); }
-					catch (err) { console.log(err); }
-					return;
+					return message.reply("une partie est déjà en cours!").catch(console.error);
 				}
 				message.client.russianRoulette.push(message.author.id);
 				try {
@@ -35,18 +33,13 @@ const command = {
 				break;
 			case "join":
 				if (!message.client.russianRoulette.length) {
-					try { message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande\`${prefix}russian-roulette create\``); }
-					catch (err) { console.log(err); }
-					return;
+					return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande\`${prefix}russian-roulette create\``).catch(console.error);
 				}
 				if (message.client.russianRoulette.includes(message.author.id)) {
-					try { message.reply("tu as déjà rejoint cette partie"); }
-					catch (err) { console.log(err); }
-					return;
+					return message.reply("tu as déjà rejoint cette partie").catch(console.error);
 				}
 				message.client.russianRoulette.push(message.author.id);
-				try { message.channel.send(`<@${message.author.id}> a rejoint la partie`); }
-				catch (err) { console.log(err); }
+				message.channel.send(`<@${message.author.id}> a rejoint la partie`).catch(console.error);
 				break;
 			case "start":
 				if (!message.client.russianRoulette.length) {
@@ -55,14 +48,10 @@ const command = {
 					return;
 				}
 				if (message.client.russianRoulette.length < 2) {
-					try { message.reply("il faut au minimum 2 joueurs pour lancer la partie"); }
-					catch (err) { console.log(err); }
-					return;
+					return message.reply("il faut au minimum 2 joueurs pour lancer la partie").catch(console.error);
 				}
 				if (message.client.russianRoulette[0] !== message.author.id && !message.member.hasPermission("KICK_MEMBERS")) {
-					try { message.reply("seule la personne qui a créé la partie peut la lancer"); }
-					catch (err) { console.log(err); }
-					return;
+					return message.reply("seule la personne qui a créé la partie peut la lancer").catch(console.error);
 				}
 				const players = message.client.russianRoulette;
 				const Discord = require("discord.js");
@@ -100,8 +89,7 @@ const command = {
 						try { message.guild.members.cache.get(deadPlayer).kick("Roulette Russe"); }
 						catch (err) {
 							console.log(err);
-							try { message.channel.send("Je n'ai pas pu expulser le perdant"); }
-							catch (err) { console.log(err); }
+							message.channel.send("Je n'ai pas pu expulser le perdant").catch(console.error);
 						}
 					}
 				}, 2000);

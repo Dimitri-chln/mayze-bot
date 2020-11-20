@@ -8,9 +8,7 @@ const command = {
 		var emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
 		const question = (args.join(" ").match(/^["«][^"»]*["»]/) || [null])[0];
 		if (!question) {
-			try { message.reply("écris ta question entre guillemets"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("écris ta question entre guillemets").catch(console.error);
 		}
 		var answers = args.join(" ").replace(question, "").trim().split("/");
 		if (answers.length < 2) {
@@ -40,8 +38,7 @@ const command = {
 			});
 		} catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé en créant le sondage :/"); }
-			catch (err) { console.log(err); }
+			message.channel.send("Quelque chose s'est mal passé en créant le sondage :/").catch(console.error);
 		}
 		emojis.slice(0, answers.length).forEach(e => {
 			try { msg.react(e); }

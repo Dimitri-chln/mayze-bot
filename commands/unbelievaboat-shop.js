@@ -44,8 +44,7 @@ const command = {
 						collected.first().delete();
 					} catch (err) { console.log(err); }
 				} catch (err) {
-					try { message.reply("tu n'as pas répondu à temps"); }
-					catch (err) { console.log(err); }
+					message.reply("tu n'as pas répondu à temps").catch(console.error);
 				}
 			}
 		}

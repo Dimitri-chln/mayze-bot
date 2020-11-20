@@ -14,9 +14,7 @@ const command = {
 			pokemons = rows;
 		} catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.channel.send("Quelque chose s'est mal passé en joignant la base de données").catch(console.error);
 		}
 
 		if (args.includes("-legendary")) {
@@ -53,8 +51,7 @@ const command = {
 		try { paginationEmbed(message, pages, ["⏪", "⏩"], 180000); }
 		catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé en créant le paginateur"); }
-			catch (err) { console.log(err); }
+			message.channel.send("Quelque chose s'est mal passé en créant le paginateur").catch(console.error);
 		}
 	}
 }

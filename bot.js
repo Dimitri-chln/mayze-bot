@@ -61,7 +61,8 @@ client.on("ready", async () => {
 			}
 		});
 		const embed = new Discord.MessageEmbed(msg.embeds[0]);
-		msg.edit(embed.setDescription(`• **Version:** \`${version}\`\n• **Ping:** \`${Math.abs(Date.now() - msg.createdTimestamp)}ms\``));
+		const editedMsg = await msg.edit(embed);
+		msg.edit(embed.setDescription(`• **Version:** \`${version}\`\n• **Ping:** \`${Math.abs(editedMsg.editedTimestamp - editedMsg.createdTimestamp)}ms\``));
 	} catch (err) { console.log(err); }
 	client.user.setActivity("le meilleur clan", { type: "WATCHING" });
 });
@@ -82,9 +83,7 @@ client.on("message", async message => {
 		if (!command) return;
 
 		if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm))) {
-			try { message.reply(`tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply(`tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``).catch(console.error);
 		}
 		if (command.ownerOnly && message.author.id !== config.ownerID) return;
 
@@ -116,8 +115,7 @@ client.on("message", async message => {
 			try { command.execute(message, args); }
 			catch (err) {
 				console.log(err);
-				try { message.reply("quelque chose s'est mal passé en exécutant la commande :/"); }
-				catch (err) { console.log(err); }
+				message.reply("quelque chose s'est mal passé en exécutant la commande :/").catch(console.error);
 			}
 		}
 	}

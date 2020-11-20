@@ -10,9 +10,7 @@ const command = {
 		try { await databaseSQL(`INSERT INTO wishes (user_id, series) VALUES ('${message.author.id}', '${series}')`); }
 		catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
 		}
 		try { message.react("✅"); }
 		catch (err) { console.log(err); }

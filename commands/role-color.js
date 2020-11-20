@@ -12,16 +12,13 @@ const command = {
 			message.guild.roles.cache.find(r => r.name.toLowerCase() === roleIdOrName) ||
 			message.guild.roles.cache.find(r => r.name.toLowerCase().includes(roleIdOrName));
 		if (!role) {
-			try { message.reply("je n'ai pas réussi à trouver ce rôle"); }
-			catch (err) { console.log(err); }
+			message.reply("je n'ai pas réussi à trouver ce rôle").catch(console.error);
 		}
 
 		try { await role.setColor(args[1]); }
 		catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé en changeant la couleur du rôle"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.channel.send("Quelque chose s'est mal passé en changeant la couleur du rôle").catch(console.error);
 		}
 		try {
 			message.channel.send({

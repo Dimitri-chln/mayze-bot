@@ -24,8 +24,7 @@ const command = {
 			});
 		} catch (err) {
 			console.log(err);
-			try { message.reply("je n'ai pas pu t'envoyer de DM :/ As-tu désactivé les messages privés?"); }
-			catch (err) { console.log(err); }
+			message.reply("je n'ai pas pu t'envoyer de DM :/ As-tu désactivé les messages privés?").catch(console.error);
 		}
 	}
 };

@@ -10,8 +10,7 @@ const command = {
 		try { eval(args.join(" ").replace(/##/g, "message.channel.send")); }
 		catch (err) {
 			console.log(err);
-			try { message.channel.send(`__Error:__\`\`\`${err}\`\`\``); }
-			catch (err) { console.log(err); }
+			message.channel.send(`__Error:__\`\`\`${err}\`\`\``).catch(console.error);
 		};
 	}
 };

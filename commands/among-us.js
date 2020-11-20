@@ -10,13 +10,11 @@ const command = {
 		if (["add", "create"].includes(args[0]) && /\w{6}/.test(args[1])) {
 			games[message.author.id] = { code: args[1], description: args.splice(2).join(" ") || "Partie classique", time: Date.now() };
 			message.client.amongUsGames = games;
-			try { message.channel.send("Partie ajoutée!"); }
-			catch (err) { console.log(err); }
+			message.channel.send("Partie ajoutée!").catch(console.error);
 		} else if (args[0] === "delete" && games[message.author.id]) {
 			delete games[message.author.id];
 			message.client.amongUsGames = games;
-			try { message.channel.send("Partie supprimée!"); }
-			catch (err) { console.log(err); }
+			message.channel.send("Partie supprimée!").catch(console.error);
 		} else {
 			try {
 				message.channel.send({

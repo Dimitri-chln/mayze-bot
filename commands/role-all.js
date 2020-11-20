@@ -15,18 +15,14 @@ const command = {
 			message.guild.roles.cache.find(r => r.name.toLowerCase() === roleIdOrName) ||
 			message.guild.roles.cache.find(r => r.name.toLowerCase().includes(roleIdOrName));
 		if (!role) {
-			try { message.reply("je n'ai pas réussi à trouver ce rôle"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("je n'ai pas réussi à trouver ce rôle").catch(console.error);
 		}
 
 		var response = `Le rôle \`${role.name}\` sera`;
 		if (args[0].toLowerCase() === "add") response += " ajouté à";
 		else if (args[0].toLowerCase() === "remove") response += " retiré de";
 		else {
-			try { message.reply("le premier argument est incorrect!"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("le premier argument est incorrect!").catch(console.error);
 		}
 		if (args.includes("-bot")) response += " tous les bots.";
 		else if (args.includes("-human")) response += " tous les utilisateurs.";
@@ -38,15 +34,11 @@ const command = {
 		try {
 			const validation = await userValidation(message, msg);
 			if (!validation) {
-				try { message.channel.send("Procédure annulée"); }
-				catch (err) { console.log(err); }
-				return;
+				return message.channel.send("Procédure annulée").catch(console.error);
 			}
 		} catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé avec la validation :/"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.channel.send("Quelque chose s'est mal passé avec la validation :/").catch(console.error);
 		}
 
 		try { msg.edit("Récupération des membres..."); }
@@ -88,8 +80,7 @@ const command = {
 				});
 				break;
 			default:
-				try { message.reply("arguments incorrects !"); }
-				catch (err) { console.log(err); }
+				message.reply("arguments incorrects !").catch(console.error);
 		}
 		try {
 			const text = `${members.size - errors} membres ont été mis à jour ! (${errors} erreurs)`

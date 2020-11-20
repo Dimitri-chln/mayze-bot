@@ -14,14 +14,10 @@ const command = {
 		const mutedRole = message.guild.roles.cache.get("695330946844721312");
 		
 		if (!member) {
-			try { message.reply("tu n'as mentionné personne ou la mention était incorrecte"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("tu n'as mentionné personne ou la mention était incorrecte").catch(console.error);
 		}
 		if (member.roles.highest.position >= message.member.roles.highest.position) {
-			try { message.reply("tu ne peux pas mute cette personne"); }
-			catch (err) { console.log(err); }
-			return;
+			return message.reply("tu ne peux pas mute cette personne").catch(console.error);
 		};
 		
 		const duration = args.slice(1).join(" ");
@@ -39,11 +35,9 @@ const command = {
 		try { member.roles.add(mutedRole.id); }
 		catch (err) {
 			console.log(err);
-			try { message.channel.send("Quelque chose s'est mal passé en ajoutant le rôle Muted"); }
-			catch (err) { console.log(err); }
+			message.channel.send("Quelque chose s'est mal passé en ajoutant le rôle Muted").catch(console.error);
 		}
-		try { message.channel.send(`${member.user} a été mute ${durationResponse}`) }
-		catch (err) { console.log(err); }
+		message.channel.send(`${member.user} a été mute ${durationResponse}`).catch(console.error);
 	}
 };
 
