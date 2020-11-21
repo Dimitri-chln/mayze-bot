@@ -6,6 +6,7 @@ const command = {
 	usage: "[add <code> [description]] [delete]",
 	async execute(message, args) {
 		const dateToString = require("../modules/dateToString.js");
+		
 		var games = message.client.amongUsGames || {};
 		if (["add", "create"].includes(args[0]) && /\w{6}/.test(args[1])) {
 			games[message.author.id] = { code: args[1], description: args.splice(2).join(" ") || "Partie classique", time: Date.now() };

@@ -5,7 +5,7 @@ const command = {
 	args: 0,
 	usage: "",
 	async execute(message, args) {
-		const snipedMsg = (message.client.deletedMessages || {})[message.channel.id];
+		const snipedMsg = message.client.deletedMessages ? message.client.deletedMessages[message.channel.id] : undefined;
 		if (!snipedMsg) return message.reply("il n'y a aucun message à snipe dans ce salon").catch(console.error);
 		
 		message.channel.send({
