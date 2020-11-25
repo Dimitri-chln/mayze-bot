@@ -7,12 +7,13 @@ const command = {
 	usage: "<mention>",
 	perms: ["MANAGE_ROLES"],
 	async execute(message, args) {
+		const { ownerID } = require("../config.json");
 		const user = message.mentions.users.first();
 		if (!user) {
 			return message.reply("mentionne la personne à mettre en prison").catch(console.error);
 		}
 		const member = message.guild.members.cache.find(m => m.user === user);
-		if (member.roles.highest.position >= message.member.roles.highest.position) {
+		if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== ownerID) {
 			return message.reply("tu ne peux pas mettre cette personne en prison").catch(console.error);
 		};
 

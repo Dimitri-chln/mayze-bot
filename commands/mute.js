@@ -6,6 +6,7 @@ const command = {
 	usage: "<mention/id> [durée]",
 	perms: ["MANAGE_ROLES"],
 	async execute(message, args) {
+		const { ownerID } = require("../config.json");
 		const dhms = require ("dhms");
 		const dateToString = require("../modules/dateToString.js");
 		
@@ -16,7 +17,7 @@ const command = {
 		if (!member) {
 			return message.reply("tu n'as mentionné personne ou la mention était incorrecte").catch(console.error);
 		}
-		if (member.roles.highest.position >= message.member.roles.highest.position) {
+		if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== ownerID) {
 			return message.reply("tu ne peux pas mute cette personne").catch(console.error);
 		};
 		

@@ -31,14 +31,6 @@ for (const file of reactionCommandsFiles) {
 
 client.cooldowns = new Discord.Collection();
 
-const pokedex = dataRead("pokedex.json");
-pokedex[0].dropSum = 0;
-for (var i = 0; i < pokedex.length - 1; i++) {
-	var newDrop = Math.round((pokedex[i].dropSum + pokedex[i].drop + Number.EPSILON) * 100) / 100;
-	pokedex[i+1].dropSum = newDrop;
-};
-dataWrite("pokedex.json", pokedex);
-
 client.on("ready", async () => {
 	console.log("--------------------");
 	console.log("BOT STARTED UP");
@@ -145,28 +137,25 @@ client.on("messageReactionAdd", async (reaction, user) => {
 client.on("guildMemberAdd", async member => {
 	const roles = ["759694957132513300", "735810462872109156", "735810286719598634", "735809874205737020", "735811339888361472"];
 	roles.forEach(async r => {
-		try { member.roles.add(r); }
-		catch (err) { console.log(err); }
+		member.roles.add(r).catch(console.error);
 	});
-	try {
-		member.user.send({
-			embed: {
-				author: {
-					name: member.user.tag,
-					icon_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
-				},
-				thumbnail: {
-					url: `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png`
-				},
-				title: "Bienvenue sur Mayze !",
-				color: "#010101",
-				description: "Amuse-toi bien sur le serveur 😉",
-				footer: {
-					text: "✨ Mayze ✨"
-				}
+	member.user.send({
+		embed: {
+			author: {
+				name: member.user.tag,
+				icon_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
+			},
+			thumbnail: {
+				url: `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png`
+			},
+			title: "Bienvenue sur Mayze !",
+			color: "#010101",
+			description: "Amuse-toi bien sur le serveur 😉",
+			footer: {
+				text: "✨ Mayze ✨"
 			}
-		});
-	} catch (err) { console.log(err); }
+		}
+	}).catch(console.error);
 });
 
 client.on("messageDelete", async message => {
@@ -200,23 +189,29 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
 });
 
 client.on("error", async error => {
-	try {
-		const { errorChannel } = config;
-		errorChannel.send({
-			embed: {
-				author: {
-					name: "Erreur rencontrée",
-					icon_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
-				},
-				color: "#010101",
-				title: error.name,
-				description: error.stack,
-				footer: {
-					text: "✨ Mayze ✨"
-				}
+	const { errorChannel } = config;
+	errorChannel.send({
+		embed: {
+			author: {
+				name: "Erreur rencontrée",
+				icon_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
+			},
+			color: "#010101",
+			title: error.name,
+			description: error.stack,
+			footer: {
+				text: "✨ Mayze ✨"
 			}
-		});
-	} catch (err) { console.log(err); }
+		}
+	}).catch(console.error);
 });
 
 client.login(process.env.TOKEN);
+
+const pokedex = dataRead("pokedex.json");
+pokedex[0].dropSum = 0;
+for (var i = 0; i < pokedex.length - 1; i++) {
+	var newDrop = Math.round((pokedex[i].dropSum + pokedex[i].drop + Number.EPSILON) * 100) / 100;
+	pokedex[i+1].dropSum = newDrop;
+};
+dataWrite("pokedex.json", pokedex);
