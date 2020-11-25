@@ -64,11 +64,11 @@ const command = {
 							value: `**PV :** ${pokemon.stats[0].base_stat || "?"}\n**Attaque :** ${pokemon.stats[1].base_stat || "?"}\n**Défense :** ${pokemon.stats[2].base_stat || "?"}\n**Attaque spé. :** ${pokemon.stats[3].base_stat || "?"}\n**Defense spé.:** ${pokemon.stats[4].base_stat || "?"}\n**Vitesse :** ${pokemon.stats[5].base_stat || "?"}\n`,
 							inline: true
 						},{
-							name: "Height:",
+							name: "Taille:",
 							value: `${pokemon.height / 10 || "?"}m`,
 							inline: true
 						},{
-							name: "Weight:",
+							name: "Poids:",
 							value: `${pokemon.weight / 10 || "?"}kg`,
 							inline: true
 						}

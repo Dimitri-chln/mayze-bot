@@ -57,7 +57,7 @@ const command = {
 						name: author,
 						icon_url: "https://i.imgur.com/uJlfMAd.png"
 					},
-					thumbnail: {
+					image: {
 						url: img
 					},
 					color: embedColor,
