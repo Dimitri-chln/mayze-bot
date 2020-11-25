@@ -16,15 +16,9 @@ const command = {
 		try { pokemon = await Pokedex.getPokemonByName((pokemonBot.en || pokemonName).toLowerCase()); }
 		catch (err) {
 			console.log(err);
-			try { message.reply("ce pokémon n'existe pas"); }
-			catch (err) { console.log("\n\n" , err); }
-			return;
+			return message.reply("ce pokémon n'existe pas").catch(console.error);
 		}
-		if (!pokemon) {
-			try { message.reply("ce pokémon n'existe pas"); }
-			catch (err) { console.log("\n\n" , err); }
-			return;
-		}
+		if (!pokemon) return message.reply("ce pokémon n'existe pas").catch(console.error);
 
 		var altNames = [], forms = [];
 		if (pokemonBot.fr)
@@ -64,11 +58,11 @@ const command = {
 							value: `**PV :** ${pokemon.stats[0].base_stat || "?"}\n**Attaque :** ${pokemon.stats[1].base_stat || "?"}\n**Défense :** ${pokemon.stats[2].base_stat || "?"}\n**Attaque spé. :** ${pokemon.stats[3].base_stat || "?"}\n**Defense spé.:** ${pokemon.stats[4].base_stat || "?"}\n**Vitesse :** ${pokemon.stats[5].base_stat || "?"}\n`,
 							inline: true
 						},{
-							name: "Taille:",
+							name: "Taille :",
 							value: `${pokemon.height / 10 || "?"}m`,
 							inline: true
 						},{
-							name: "Poids:",
+							name: "Poids :",
 							value: `${pokemon.weight / 10 || "?"}kg`,
 							inline: true
 						}
