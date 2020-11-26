@@ -11,7 +11,7 @@ const command = {
             const res = await databaseSQL(args.join(" "));
             switch (res.command) {
                 case "SELECT":
-                    message.channel.send(`\`\`\`js\n${JSON.stringify(res.rows, null, 4)}\`\`\``);
+                    message.channel.send(`\`\`\`js\n${JSON.stringify(res.rows, null, 4)}\n\`\`\``);
                     break;
                 case "INSERT":
                     message.channel.send(`Le tableau contient désormais ${res.rowCount} lignes`);

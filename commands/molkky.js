@@ -99,7 +99,7 @@ const command = {
 		}
 
 		function molkkyDesc(gameData) {
-			const embedDesc = `Joueur actuel: __**${gameData.players[gameData.currentPlayer].name}**__\`\`\`${gameData.players.map(p => `${(p.name + "      ").substr(0, 7)}|${p.scores.map(s => (s + " ").substr(0, 2)).join("|")}`).join("\n" +"—".repeat(10 + 3 * gameData.players[gameData.currentPlayer].scores.length) + "\n")}\`\`\`\nRésultats: \n${gameData.winners.map((w, i) => `\`${i + 1}.\` ${w}`).join("\n") || "-"}`;
+			const embedDesc = `Joueur actuel: __**${gameData.players[gameData.currentPlayer].name}**__\`\`\`\n${gameData.players.map(p => `${(p.name + "      ").substr(0, 7)}|${p.scores.map(s => (s + " ").substr(0, 2)).join("|")}`).join("\n" +"—".repeat(10 + 3 * gameData.players[gameData.currentPlayer].scores.length) + "\n")}\n\`\`\`\nRésultats: \n${gameData.winners.map((w, i) => `\`${i + 1}.\` ${w}`).join("\n") || "-"}`;
 			return embedDesc;
 			};
 	}
