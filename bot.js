@@ -134,6 +134,30 @@ client.on("messageReactionAdd", async (reaction, user) => {
 	}
 });
 
+client.on("messageReactionRemove", async (reaction, user) => {
+	if (!client.removedReactions) client.removedReactions = {};
+	
+	if (reaction.message.partial) reaction.message.fetch().catch(e => { return console.error(e) });
+	client.removedReactions[reaction.message.channel.id] = {
+		messageID: reaction.message.id,
+		user: {
+			id: user.id,
+			tag: user.tag,
+			avatar: user.avatar
+		},
+		author: {
+			id: reaction.message.author.id,
+			tag: reaction.message.author.tag,
+			avatar: reaction.message.author.avatar
+		},
+		content: reaction.message.content,
+		emoji: reaction._emoji,
+		emojiID: reaction._emoji.id,
+		emoGif: reaction._emoji.animated
+	};
+	setTimeout(() => { delete client.removedReactions[reaction.message.channel.id] }, 30000);
+});
+
 client.on("guildMemberAdd", async member => {
 	const roles = ["759694957132513300", "735810462872109156", "735810286719598634", "735809874205737020", "735811339888361472"];
 	roles.forEach(async r => {
