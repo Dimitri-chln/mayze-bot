@@ -70,8 +70,7 @@ const command = {
 					member.roles.add("753253307052589176");
 				} catch (err) { console.log(err); }
 			}
-			try { message.react("🔗"); }
-			catch (err) { console.log(err); }
+			message.react("🔗").catch(console.error);
 		} else {
 		// If jailed
 		try { member.roles.remove("695943648235487263"); }
@@ -117,8 +116,7 @@ const command = {
 				member.roles.add("689218691560505472");
 			} catch (err) { console.log(err); }
 		}
-		try { message.react("👋"); }
-		catch (err) { console.log(err); }
+		message.react("👋").catch(console.error);
 		}
 	}
 };

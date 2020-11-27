@@ -6,8 +6,7 @@ const command = {
 		const pinRegex = /<:(logo)?pin\d{0,3}:\d{18}>/g;
 		if (!pinRegex.test(message.content)) return;
 		if (message.content.replace(pinRegex, "").replace(/\n/g, "") === "") return;
-		try { message.react("🔎"); }
-		catch (err) { console.log(err); }
+		message.react("🔎").catch(console.error);
 		
 		var userID;
 		const filter = (reaction, user) => {

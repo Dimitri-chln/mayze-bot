@@ -45,8 +45,7 @@ const command = {
 			message.channel.send("Quelque chose s'est mal passé en modifiant le message :/");
 			return;
 		}
-		try { message.react("✅"); }
-		catch (err) { console.log(err); }
+		message.react("✅").catch(console.error);
 	}
 }
 

@@ -41,8 +41,7 @@ const command = {
 					console.log(err);
 					return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
 				}
-				try { message.react("✅"); }
-				catch (err) { console.log(err); }
+				message.react("✅").catch(console.error);
 				break;
 			case "remove":
 				const index = parseInt(args[1], 10);
@@ -54,8 +53,7 @@ const command = {
 					console.log(err);
 					return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
 				}
-				try { message.react("✅"); }
-				catch (err) { console.log(err); }
+				message.react("✅").catch(console.error);
 		}
 	}
 };

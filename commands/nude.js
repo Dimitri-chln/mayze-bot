@@ -7,8 +7,7 @@ const command = {
 	usage: "",
 	async execute(message, args) {
 		const nudes = require("../assets/nudes.json");
-		try { message.react("😏"); }
-		catch (err) { console.log(err); }
+		message.react("😏").catch(console.error);
 		try {
 			message.author.send({
 				embed: {

@@ -8,8 +8,7 @@ const command = {
 	async execute(message, args) {
 	if (!message.member.roles.cache.some(r => ["696751614177837056", "696751852267765872"].includes(r.id))) return;
 	if (message.channel.id !== "689212233439641649") {
-		try { message.react("❌"); }
-		catch (err) { console.log(err); }
+		message.react("❌").catch(console.error);
 		return;
 	}
 	const questChannel = message.client.channels.cache.get("689385764219387905");
@@ -56,8 +55,7 @@ const command = {
 		console.log(err);
 		return message.channel.send("Quelque chose s'est mal passé en ajoutant les réactions :/").catch(console.error);
 	}
-	try { message.react("✅"); }
-	catch (err) { console.log(err); }
+	message.react("✅").catch(console.error);
 	}
 };
 
