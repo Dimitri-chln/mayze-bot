@@ -14,17 +14,15 @@ const command = {
                     message.channel.send(`\`\`\`js\n${JSON.stringify(res.rows, null, 4)}\n\`\`\``);
                     break;
                 case "INSERT":
-                    message.channel.send(`Le tableau contient désormais ${res.rowCount} lignes`);
+                    message.channel.send(`Le tableau contient désormais ${res.rowCount} lignes`).catch(console.error);
                     break;
                 default:
-                    message.channel.send("Requête effectuée");
+                    message.channel.send("Requête effectuée").catch(console.error);
             }
         } catch (err) {
             console.log(err);
-            try { message.channel.send("Quelque chose s'est mal passé :/"); }
-            catch (err) { console.log(err); }
+            message.channel.send(`Quelque chose s'est mal passé :/\n\`\`\`${err.name}\n\`\`\``).catch(console.error);
         }
-        
     }
 };
 

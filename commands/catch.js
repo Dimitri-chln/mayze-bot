@@ -36,7 +36,7 @@ const command = {
 		const pokemonName = pokemon.fr + alolanText + galarianText;
 		
 		try {
-			await databaseSQL(`INSERT INTO pokemons (caught_by, pokedex_id, pokedex_name, is_shiny) VALUES (${message.author.id}, ${pokemon.img.match(/\d{3}/)[0]}, ${pokemonName}, ${is_shiny})`);
+			await databaseSQL(`INSERT INTO pokemons (caught_by, pokedex_id, pokedex_name, is_shiny) VALUES ('${message.author.id}', ${pokemon.img.match(/\d{3}/)[0]}, '${pokemonName}', ${is_shiny})`);
 		} catch (err) {
 			console.log(err);
 			message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);

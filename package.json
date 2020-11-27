@@ -13,7 +13,7 @@
     "dotenv": "^8.2.0",
     "pg": "^8.5.1",
     "pokedex-promise-v2": "^3.2.0",
-    "unb-api": "^1.2.0"
+    "unb-api": "^1.2.2"
   },
   "engines": {
     "node": "12.x"

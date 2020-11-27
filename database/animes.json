@@ -1,0 +1,60 @@
+{
+    "307815349699608577": [
+        {
+            "name": "Assassination Classroom",
+            "altNames": "(ansatsu ky(o|ō|ou)shitsu)|(ass\\s?class)",
+            "seasons": [22, 25],
+            "lastEp": [2, 25],
+            "nextEp": null
+        },
+        {
+            "name": "No Game No Life",
+            "altNames": "ngnl",
+            "seasons": [12],
+            "lastEp": [1, 12],
+            "nextEp": null
+        },
+        {
+            "name": "Demon Slayer",
+            "altNames": "k(imetsu )?n(o )?y(abai)?",
+            "seasons": [26],
+            "lastEp": [1, 26],
+            "nextEp": null
+        },
+        {
+            "name": "Sword Art Online",
+            "altNames": "sao",
+            "seasons": [25, 25, 24, 23],
+            "lastEp": [4, 23],
+            "nextEp": null
+        },
+        {
+            "name": "Blue Exorcist",
+            "altNames": "(a(o )? n(o )? e(xorcist)?)|be",
+            "seasons": [25, 12],
+            "lastEp": [2, 12],
+            "nextEp": null
+        },
+        {
+            "name": "Dr. Stone",
+            "altNames": null,
+            "seasons": [25],
+            "lastEp": [1, 5],
+            "nextEp": [1, 6]
+        },
+        {
+            "name": "Goblin Slayer",
+            "altNames": null,
+            "seasons": [12],
+            "lastEp": [1, 12],
+            "nextEp": null
+        },
+        {
+            "name": "One Piece",
+            "altNames": "op",
+            "seasons": [931],
+            "lastEp": [1, 33],
+            "nextEp": [1, 34]
+        }
+    ]
+}

@@ -9,7 +9,7 @@ const command = {
 		const databaseSQL = require("../modules/databaseSQL.js");
 		var toDo;
 		try {
-			const { rows } = await databaseSQL("SELECT * FROM to_do WHERE finished_at=null");
+			const { rows } = await databaseSQL("SELECT * FROM to_do");
 			toDo = rows;
 		} catch (err) {
 			console.log(err);
