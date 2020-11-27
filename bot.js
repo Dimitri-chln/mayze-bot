@@ -4,9 +4,8 @@ const config = require("./config.json");
 require('dotenv').config();
 const client = new Discord.Client({ partials: ["MESSAGE", "CHANNEL", "REACTION"] });
 const shellExec = require("./modules/shellExec.js");
-const result = shellExec("heroku pg:credentials:url");
+const result = shellExec("heroku pg:credentials:url --app mayze-bot");
 process.env.DATABASE_URL = result.match(/postgres:.*/)[0];
-console.log(process.env.DATABASE_URL);
 
 const databaseSQL = require("./modules/databaseSQL.js");
 const dataRead = require("./modules/dataRead.js");

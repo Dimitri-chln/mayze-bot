@@ -17,26 +17,26 @@ const command = {
 		}
 		switch ((args[0] || "").toLowerCase()) {
 			case "":
-				try {
-						message.channel.send({
-						embed: {
-							author: {
-								name: "To-do list pour ✨Mayze✨",
-								icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
-							},
-							color: "#010101",
-							fields: toDo.map(t => { return { name: `${t.name} - ${t.created_at}`, value: `*${t.extra || "-"}*`, inline: true } }),
-							footer: {
-								text: "✨Mayze✨"
-							}
+				message.channel.send({
+					embed: {
+						author: {
+							name: "To-do list de ✨Mayze✨",
+							icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+						},
+						color: "#010101",
+						fields: toDo.map(t => { return { name: `\`${t.id}.\` ${t.name}`, value: `*${t.created_at.toUTCString()}*`, inline: true } }) || "*Aucun to-do*",
+						footer: {
+							text: "✨Mayze✨"
 						}
-					});
-				} catch (err) { console.log(err); }
+					}
+				}).catch(console.error);
 				break;
 			case "add":
-				const name = args.join(" ").split("$")[0];
+				const name = args.slice(1).join(" ").split("$")[0];
 				const extra = args.join(" ").split("$")[1];
-				try { await databaseSQL(`INSERT INTO to_do (name, extra) VALUES ('${name}', '${extra}')`); }
+				var query = `INSERT INTO to_do (name) VALUES ('${name}')`;
+				if (extra) query = `INSERT INTO to_do (name, extra) VALUES ('${name}', '${extra}')`;
+				try { await databaseSQL(query); }
 				catch (err) {
 					console.log(err);
 					return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
@@ -46,12 +46,10 @@ const command = {
 				break;
 			case "remove":
 				const index = parseInt(args[1], 10);
-				if (isNaN(index) || index < 1 )
-					try { message.reply("le deuxième argument doit être un nombre positif"); }
-					catch (err) { console.log(err); 
-					return;
+				if (isNaN(index) || index < 1 ) {
+					return message.reply("le deuxième argument doit être un nombre positif").catch(console.error);
 				}
-				try { await databaseSQL(`UPDATE to_do SET finished_at = CURRENT_TIMESTAMP() WHERE id=${index}`); }
+				try { await databaseSQL(`DELETE FROM to_do WHERE id=${index}`); }
 				catch (err) {
 					console.log(err);
 					return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);

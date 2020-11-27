@@ -25,10 +25,10 @@ const command = {
 			pokemons = pokemons.filter(p => p.is_shiny);
 		};
 		if (args.includes("-alolan")) {
-			pokemons = pokemons.filter(p => p.name.includes("d'Alola"));
+			pokemons = pokemons.filter(p => p.pokedex_name.includes("d'Alola"));
 		};
 		if (args.includes("-galarian")) {
-			pokemons = pokemons.filter(p => p.name.includes("de Galar"));
+			pokemons = pokemons.filter(p => p.pokedex_name.includes("de Galar"));
 		};
 		
 		const pkmPerPage = 15;
@@ -44,7 +44,7 @@ const command = {
 			embed = new Discord.MessageEmbed()
 				.setAuthor(`Pokémons de ${message.author.username}`, `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
 				.setColor("#010101")
-				.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => `${p.is_shiny} **${p.name}** | ID: ${p.id}`).join("\n"));
+				.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => { if (p.is_shiny) return `⭐ **${p.pokedex_name}** | ID: ${p.id}`; return `**${p.pokedex_name}** | ID: ${p.id}` }).join("\n"));
 			pages.push(embed);
 		};
 		

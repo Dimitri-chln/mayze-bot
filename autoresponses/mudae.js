@@ -17,7 +17,7 @@ const command = {
 			wishes = rows;
 		} catch (err) { console.log(err);	}
 		if (!wishes) return;
-		wishes.rows.forEach(async wish => {
+		wishes.forEach(async wish => {
 			const regex = new RegExp(wish.series, "i");
 			if (regex.test(characterSeries)) {
 				var user;
