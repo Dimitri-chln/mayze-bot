@@ -53,7 +53,7 @@ module.exports = function vote(message) {
                 villageChannel.send(`Le village a décidé d'éliminer **${lynchedPlayer.username}** qui était ${lynchedPlayer.role}`);
                 if (lynchedPlayer.role === "Ange") {
                     villageChannel.send("L'ange a gagné !");
-                    const end = require("../functions/werewolfEnd.js");
+                    const end = require("./werewolfEnd.js");
                     return end(message, gameData);
                 };
                 const kill = require("./werewolfKill.js");

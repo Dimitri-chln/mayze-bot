@@ -15,4 +15,5 @@ async function databaseSQL(query) {
         throw err;
     }
 }
+
 module.exports = databaseSQL;

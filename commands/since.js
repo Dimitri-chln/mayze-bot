@@ -1,6 +1,6 @@
 const command = {
-	name: "until",
-	description: "Donne le temps restant avant une date",
+	name: "since",
+	description: "Donne le temps écoulé depuis une date",
 	aliases: [],
 	args: 1,
 	usage: "<date>",
@@ -13,11 +13,11 @@ const command = {
 			return message.reply("le format de la date est incorrect (mm/dd/yyyy)").catch(console.error);
 		}
 
-		const timeLeft = (date - now) / 1000;
-		if (timeLeft < 0) {
-			return message.reply("la date ne doit pas être dépassée").catch(console.error);
+		const timePassed = (now - date) / 1000;
+		if (timePassed < 0) {
+			return message.reply("la date doit déjà être dépassée").catch(console.error);
 		}
-		const timeLeftString = dateToString(timeLeft);
+		const timePassedString = dateToString(timePassed);
 
 		const parts = args[0].split("/");
 		if (parts.length !== 3) {
@@ -39,7 +39,7 @@ const command = {
 		];
 		const dateString = parts[1] + " " + monthList[parts[0] - 1] + " " + parts[2] + " à "+ (args[1] || "minuit");
 
-		message.channel.send(`Il reste ${timeLeftString} avant le **${dateString}**`).catch(console.error);
+		message.channel.send(`Il s'est écoulé ${timePassedString} depuis le **${dateString}**`).catch(console.error);
 	}
 };
 

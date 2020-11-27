@@ -1,47 +1,65 @@
-module.exports = {
-  name: "to-do",
-  description: "Liste des commandes/fix à faire pour le bot",
-  aliases: ["toDo", "td"],
-  args: 0,
-  usage: "[add/remove <tâche>]",
-  ownerOnly: true,
-  execute(message, args) {
-    if (message.client.herokuMode) return message.reply("Cette commande est indisponible pour le moment (voir `*heroku`)");
-    const dataRead = require("../functions/dataRead.js");
-    const dataWrite = require ("../functions/dataWrite.js");
-    const toDo = dataRead("toDo.json");
-    if (!args.length) {
-      message.channel.send({
-        embed: {
-          author: {
-            name: "To-do list pour ✨Mayze✨",
-            icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
-          },
-          color: "#010101",
-          description: toDo.map((t, i) => `\`${i + 1}.\` ${t}`).join("\n"),
-          footer: {
-            text: "✨Mayze✨"
-          }
-        }
-      });
-    }
-
-    if (args[0] === "add") {
-      toDo.push(args.splice(1).join(" "));
-      const newToDo = toDo;
-      dataWrite("toDo.json", newToDo);
-      message.react("✅");
-    }
-
-    if (args[0] === "remove") {
-      const index = parseInt(args[1], 10);
-      if (isNaN(index) || index <= 0 || index > toDo.length)
-        return message.reply(
-          `le deuxième argument doit être un nombre compris entre 1 et ${toDo.length}`
-        );
-      const newToDo = toDo.filter((t, i) => i + 1 !== index);
-      dataWrite("toDo.json", newToDo);
-      message.react("✅");
-    }
-  }
+const command = {
+	name: "to-do",
+	description: "Liste des commandes/fix à faire pour le bot",
+	aliases: ["toDo", "td"],
+	args: 0,
+	usage: "[add/remove <tâche>$[extras]]",
+	ownerOnly: true,
+	async execute(message, args) {
+		const databaseSQL = require("../modules/databaseSQL.js");
+		var toDo;
+		try {
+			const { rows } = await databaseSQL("SELECT * FROM to_do WHERE finished_at=null");
+			toDo = rows;
+		} catch (err) {
+			console.log(err);
+			return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
+		}
+		switch ((args[0] || "").toLowerCase()) {
+			case "":
+				try {
+						message.channel.send({
+						embed: {
+							author: {
+								name: "To-do list pour ✨Mayze✨",
+								icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+							},
+							color: "#010101",
+							fields: toDo.map(t => { return { name: `${t.name} - ${t.created_at}`, value: `*${t.extra || "-"}*`, inline: true } }),
+							footer: {
+								text: "✨Mayze✨"
+							}
+						}
+					});
+				} catch (err) { console.log(err); }
+				break;
+			case "add":
+				const name = args.join(" ").split("$")[0];
+				const extra = args.join(" ").split("$")[1];
+				try { await databaseSQL(`INSERT INTO to_do (name, extra) VALUES ('${name}', '${extra}')`); }
+				catch (err) {
+					console.log(err);
+					return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
+				}
+				try { message.react("✅"); }
+				catch (err) { console.log(err); }
+				break;
+			case "remove":
+				const index = parseInt(args[1], 10);
+				if (isNaN(index) || index < 1 )
+					try { message.reply("le deuxième argument doit être un nombre positif"); }
+					catch (err) { console.log(err); 
+					return;
+				}
+				try { await databaseSQL(`UPDATE to_do SET finished_at = CURRENT_TIMESTAMP() WHERE id=${index}`); }
+				catch (err) {
+					console.log(err);
+					return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
+				}
+				try { message.react("✅"); }
+				catch (err) { console.log(err); }
+		}
+	}
 };
+
+module.exports = command;

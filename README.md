@@ -9,7 +9,7 @@
 
 ## Werewolf Online
 > Pseudo
-> - `Dimitri_`
+> - `Dimitri`
 
 > Clan
 > - Mayze ✨

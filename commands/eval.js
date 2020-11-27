@@ -1,16 +1,18 @@
-module.exports = {
-  name: "eval",
-  description: "👀",
-  aliases: [],
-  cooldown: 0.1,
-  args: 1,
-  usage: "<expression>",
-  ownerOnly: true,
-  execute(message, args) {
-    try {
-      eval(args.join(" ").replace(/##/g, "message.channel.send"));
-    } catch (e) {
-      message.channel.send(`__Error:__\`\`\`${e}\`\`\``);
-    };
-  }
+const command = {
+	name: "eval",
+	description: "👀",
+	aliases: [],
+	cooldown: 1,
+	args: 1,
+	usage: "<expression>",
+	ownerOnly: true,
+	async execute(message, args) {
+		try { eval(args.join(" ").replace(/##/g, "message.channel.send")); }
+		catch (err) {
+			console.log(err);
+			message.channel.send(`__Error:__\`\`\`\n${err}\n\`\`\``).catch(console.error);
+		};
+	}
 };
+
+module.exports = command;

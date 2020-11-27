@@ -1,4 +1,4 @@
-module.exports = {
+const command = {
     name: "sql",
     description: "Effectue une requête SQL sur la base de données PostgreSQL",
     aliases: ["postgresql", "pg", "psql"],
@@ -6,12 +6,12 @@ module.exports = {
     usage: "<query>",
     ownerOnly: true,
     async execute(message, args) {
-        const databaseSQL = require("../functions/databaseSQL.js");
+        const databaseSQL = require("../modules/databaseSQL.js");
         try {
             const res = await databaseSQL(args.join(" "));
             switch (res.command) {
                 case "SELECT":
-                    message.channel.send(`\`\`\`js\n${JSON.stringify(res.rows, null, 4)}\`\`\``);
+                    message.channel.send(`\`\`\`js\n${JSON.stringify(res.rows, null, 4)}\n\`\`\``);
                     break;
                 case "INSERT":
                     message.channel.send(`Le tableau contient désormais ${res.rowCount} lignes`);
@@ -21,7 +21,11 @@ module.exports = {
             }
         } catch (err) {
             console.log(err);
+            try { message.channel.send("Quelque chose s'est mal passé :/"); }
+            catch (err) { console.log(err); }
         }
         
     }
 };
+
+module.exports = command;
