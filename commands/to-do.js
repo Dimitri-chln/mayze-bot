@@ -24,7 +24,7 @@ const command = {
 							icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
 						},
 						color: "#010101",
-						fields: toDo.map(t => { return { name: `\`${t.id}.\` ${t.name}`, value: `*${t.created_at.toUTCString()}*`, inline: true } }) || "*Aucun to-do*",
+						fields: toDo.map(t => { return { name: `\`${t.id}.\` ${t.name}`, value: `*${t.created_at.toUTCString()}*`, inline: true } }),
 						footer: {
 							text: "✨Mayze✨"
 						}
