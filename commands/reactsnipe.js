@@ -7,9 +7,7 @@ const command = {
 	async execute(message, args) {
 		const snipedReaction = message.client.removedReactions ? message.client.removedReactions[message.channel.id] : undefined;
 		if (!snipedReaction) return message.reply("il n'y a aucune réaction à snipe dans ce salon").catch(console.error);
-        
-        const emoji = snipedReaction.emojiID /*&& snipedReaction.emoGif*/ ? `<a:${snipedReaction.emoji}:${snipedReaction.emojiID}>` : snipedReaction.emoji;
-
+		
 		message.channel.send({
 			embed: {
 				author: {
@@ -22,7 +20,7 @@ const command = {
 				color: "#010101",
                 description: snipedReaction.content,
                 fields: [
-                    { name: "\u200b", value: `**${snipedReaction.user.tag}** [a réagi avec](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${snipedReaction.messageID}) ${emoji}`, inline: false }
+                    { name: "\u200b", value: `**${snipedReaction.user.tag}** [a réagi avec](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${snipedReaction.messageID}) ${snipedReaction.emoji}`, inline: false }
                 ],
 				footer: {
 					text: "✨ Mayze ✨"

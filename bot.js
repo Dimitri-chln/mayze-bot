@@ -158,9 +158,7 @@ client.on("messageReactionRemove", async (reaction, user) => {
 			avatar: reaction.message.author.avatar
 		},
 		content: reaction.message.content,
-		emoji: reaction._emoji,
-		emojiID: reaction._emoji.id,
-		emoGif: reaction._emoji.animated
+		emoji: reaction._emoji
 	};
 	setTimeout(() => { delete client.removedReactions[reaction.message.channel.id] }, 30000);
 });
