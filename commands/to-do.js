@@ -3,7 +3,7 @@ const command = {
 	description: "Liste des commandes/fix à faire pour le bot",
 	aliases: ["toDo", "td"],
 	args: 0,
-	usage: "[add/remove <tâche>$[extras]]",
+	usage: "[add/remove <tâche>]",
 	ownerOnly: true,
 	async execute(message, args) {
 		const databaseSQL = require("../modules/databaseSQL.js");
