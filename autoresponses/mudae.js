@@ -18,7 +18,7 @@ const command = {
 		} catch (err) { console.log(err);	}
 		if (!wishes) return;
 		wishes.forEach(async wish => {
-			const regex = new RegExp(wish.series, "i");
+			const regex = new RegExp(wish.regex || wish.series, "i");
 			if (regex.test(characterSeries)) {
 				var user;
 				try { user = message.client.users.cache.get(wish.user) || await message.client.users.fetch(wish.user); }
