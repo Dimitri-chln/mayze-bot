@@ -21,7 +21,7 @@ const command = {
 			const regex = new RegExp(wish.regex || wish.series, "i");
 			if (regex.test(characterSeries)) {
 				var user;
-				try { user = message.client.users.cache.get(wish.user) || await message.client.users.fetch(wish.user); }
+				try { user = message.client.users.cache.get(wish.user_id) || await message.client.users.fetch(wish.user_id); }
 				catch (err) { console.log(err); }
 				try {
 					user.send({
