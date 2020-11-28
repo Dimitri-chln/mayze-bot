@@ -11,7 +11,34 @@ const command = {
 			const res = await databaseSQL(args.join(" "));
 			switch (res.command) {
 				case "SELECT":
-					message.channel.send(`\`\`\`js\n${JSON.stringify(res.rows, null, 4)}\n\`\`\``).catch(console.error);
+					const charactersPerPage = 2000;
+					const resString = JSON.stringify(res.rows, null, 4);
+					if (resString.length < charactersPerPage) {
+						message.channel.send({
+							embed: {
+								author: {
+									name: args.join(" "),
+									icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+								},
+								description: `\`\`\`js\n${resString}\n\`\`\``,
+								footer: {
+									text: "✨Mayze✨"
+								}
+							}
+						}).catch(console.error);
+					} else {
+						const paginationEmbed = require("discord.js-pagination");
+						const { MessageEmbed } = require("discord.js");
+						var pages = [];
+						for (i = 0; i < Math.ceil(resString.length / charactersPerPage); i += charactersPerPage) {
+							const embed = new MessageEmbed()
+								.setAuthor(args.join(" "), `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
+								.setDescription(`\`\`\`js\n${resString.slice(i, i + charactersPerPage)}\n\`\`\``)
+								.setFooter("✨Mayze✨")
+							pages.push(embed);
+						}
+						paginationEmbed(message, pages).catch(console.error);
+					}
 					break;
 				case "INSERT":
 					message.channel.send(`Le tableau contient désormais ${res.rowCount} lignes`).catch(console.error);
