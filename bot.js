@@ -3,11 +3,15 @@ const Discord = require("discord.js");
 const config = require("./config.json");
 require('dotenv').config();
 const client = new Discord.Client({ partials: ["MESSAGE", "CHANNEL", "REACTION"] });
-const shellExec = require("./modules/shellExec.js");
-const result = shellExec("heroku pg:credentials:url --app mayze-bot");
-process.env.DATABASE_URL = result.match(/postgres:.*/)[0];
 
-const databaseSQL = require("./modules/databaseSQL.js");
+if (process.env.BOT_HOST !== "heroku") {
+	const shellExec = require("./modules/shellExec.js");
+	const result = shellExec("heroku pg:credentials:url --app mayze-bot");
+	process.env.DATABASE_URL = result.match(/postgres:.*/)[0];
+}
+client.pgClient = createPgClient();
+client.pgClient.connect().catch(console.error);
+
 const dataRead = require("./modules/dataRead.js");
 const dataWrite = require("./modules/dataWrite.js");
 
@@ -242,3 +246,13 @@ for (var i = 0; i < pokedex.length - 1; i++) {
 	pokedex[i+1].dropSum = newDrop;
 };
 dataWrite("pokedex.json", pokedex);
+
+function createPgClient() {
+	const pg = require("pg");
+	const connectionString = {
+		connectionString: process.env.DATABASE_URL,
+		ssl: true
+	};
+	const pgClient = new pg.Client(connectionString);
+	return pgClient;
+}

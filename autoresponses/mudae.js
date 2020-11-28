@@ -9,11 +9,9 @@ const command = {
 		if (claimedRegex.test(mudaeEmbed.description)) return;
 		const characterName = mudaeEmbed.author.name;
 		const characterSeries = mudaeEmbed.description.split("\nClaims:")[0].replace(/\n/g, " ");
-		
-		const databaseSQL = require("../modules/databaseSQL.js");
 		var wishes;
 		try {
-			const { rows }  = await databaseSQL(`SELECT * FROM wishes`);
+			const { rows }  = await message.client.pgClient.query(`SELECT * FROM wishes`);
 			wishes = rows;
 		} catch (err) { console.log(err);	}
 		if (!wishes) return;

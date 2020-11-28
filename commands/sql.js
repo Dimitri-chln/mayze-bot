@@ -6,9 +6,8 @@ const command = {
 	usage: "<query>",
 	ownerOnly: true,
 	async execute(message, args) {
-		const databaseSQL = require("../modules/databaseSQL.js");
 		try {
-			const res = await databaseSQL(args.join(" "));
+			const res = await message.client.pgClient.query(args.join(" "));
 			switch (res.command) {
 				case "SELECT":
 					const charactersPerPage = 2000;
@@ -20,6 +19,7 @@ const command = {
 									name: args.join(" "),
 									icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
 								},
+								color: "#010101",
 								description: `\`\`\`js\n${resString}\n\`\`\``,
 								footer: {
 									text: "✨Mayze✨"

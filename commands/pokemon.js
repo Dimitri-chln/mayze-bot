@@ -7,10 +7,9 @@ const command = {
 	async execute(message, args) {
 		const Discord = require("discord.js");
 		const paginationEmbed = require("discord.js-pagination");
-		const databaseSQL = require("../modules/databaseSQL.js");
 		var pokemons;
 		try {
-			const { rows }  = await databaseSQL(`SELECT * FROM pokemons WHERE caught_by='${message.author.id}' ORDER BY id`);
+			const { rows }  = await message.client.pgClient.query(`SELECT * FROM pokemons WHERE caught_by='${message.author.id}' ORDER BY id`);
 			pokemons = rows;
 		} catch (err) {
 			console.log(err);
@@ -25,7 +24,7 @@ const command = {
 			pokemons = pokemons.filter(p => p.is_shiny);
 		};
 		if (args.includes("-alolan")) {
-			pokemons = pokemons.filter(p => p.pokedex_name.includes("d'Alola"));
+			pokemons = pokemons.filter(p => p.pokedex_name.includes("dU+0027Alola"));
 		};
 		if (args.includes("-galarian")) {
 			pokemons = pokemons.filter(p => p.pokedex_name.includes("de Galar"));
@@ -44,7 +43,7 @@ const command = {
 			embed = new Discord.MessageEmbed()
 				.setAuthor(`Pokémons de ${message.author.username}`, `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
 				.setColor("#010101")
-				.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => { if (p.is_shiny) return `⭐ **${p.pokedex_name}** | ID: ${p.id}`; return `**${p.pokedex_name}** | ID: ${p.id}` }).join("\n"));
+				.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => { if (p.is_shiny) return `⭐ **${p.pokedex_name.replace(/U\+0027/g, "'")}** | ID: ${p.id}`; return `**${p.pokedex_name.replace(/U\+0027/g, "'")}** | ID: ${p.id}` }).join("\n"));
 			pages.push(embed);
 		};
 		

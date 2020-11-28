@@ -5,10 +5,9 @@ const command = {
 	args: 0,
 	usage: "?",
 	async execute(message, args) {
-		const databaseSQL = require("../modules/databaseSQL.js");
 		var animes;
 		try {
-			const { rows } = await databaseSQL(`SELECT * FROM animes WHERE user_id='${message.author.id}'`);
+			const { rows } = await message.client.pgClient.query(`SELECT * FROM animes WHERE user_id='${message.author.id}'`);
 			animes = rows;
 		} catch (err) {
 			console.log(err);
