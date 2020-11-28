@@ -20,7 +20,7 @@ const command = {
 									icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
 								},
 								color: "#010101",
-								description: `\`\`\`js\n${resString}\n\`\`\``,
+								description: `\`\`\`json\n${resString}\n\`\`\``,
 								footer: {
 									text: "✨Mayze✨"
 								}
@@ -30,10 +30,11 @@ const command = {
 						const paginationEmbed = require("discord.js-pagination");
 						const { MessageEmbed } = require("discord.js");
 						var pages = [];
-						for (i = 0; i < Math.ceil(resString.length / charactersPerPage); i += charactersPerPage) {
+						for (i = 0; i < resString.length; i += charactersPerPage) {
 							const embed = new MessageEmbed()
+								.setColor("#010101")
 								.setAuthor(args.join(" "), `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
-								.setDescription(`\`\`\`js\n${resString.slice(i, i + charactersPerPage)}\n\`\`\``)
+								.setDescription(`\`\`\`json\n${resString.slice(i, i + charactersPerPage)}\n\`\`\``)
 								.setFooter("✨Mayze✨")
 							pages.push(embed);
 						}
