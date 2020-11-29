@@ -1,5 +1,3 @@
-const { MessageFlags } = require("discord.js");
-
 const command = {
 	name: "role-all",
 	description: "Donne ou retire un rôle à tous les membres",
@@ -14,23 +12,18 @@ const command = {
 		const role = message.guild.roles.cache.get(roleIdOrName) ||
 			message.guild.roles.cache.find(r => r.name.toLowerCase() === roleIdOrName) ||
 			message.guild.roles.cache.find(r => r.name.toLowerCase().includes(roleIdOrName));
-		if (!role) {
-			return message.reply("je n'ai pas réussi à trouver ce rôle").catch(console.error);
-		}
+		if (!role) return message.reply("je n'ai pas réussi à trouver ce rôle").catch(console.error);
 
 		var response = `Le rôle \`${role.name}\` sera`;
 		if (args[0].toLowerCase() === "add") response += " ajouté à";
 		else if (args[0].toLowerCase() === "remove") response += " retiré de";
-		else {
-			return message.reply("le premier argument est incorrect!").catch(console.error);
-		}
+		else return message.reply("le premier argument est incorrect!").catch(console.error);
+
 		if (args.includes("-bot")) response += " tous les bots.";
 		else if (args.includes("-human")) response += " tous les utilisateurs.";
 		else response += " tout le monde.";
 
-		var msg;
-		try { msg = await message.channel.send(`${response} Veux-tu continuer?`); }
-		catch (err) { console.log(err); }
+		const msg = await message.channel.send(`${response} Veux-tu continuer?`).catch(console.error);
 		try {
 			const validation = await userValidation(message, msg);
 			if (!validation) {
@@ -41,12 +34,10 @@ const command = {
 			return message.channel.send("Quelque chose s'est mal passé avec la validation :/").catch(console.error);
 		}
 
-		try { msg.edit("Récupération des membres..."); }
-		catch (err) { console.log(err); }
+		msg.edit("Récupération des membres...").catch(console.error);
+		await message.guild.members.fetch();
 
-		var members = message.guild.members.cache;
-		try { members = await message.guild.members.fetch(); }
-		catch (err) { console.log(err); }
+		const members = message.guild.members.cache;
 
 		if (args.includes("-bot")) {
 			members = members.filter(m => m.user.bot);
@@ -55,8 +46,7 @@ const command = {
 		}
 
 		var errors = 0;
-		try { msg.edit(`Mise à jour de ${members.size} membre(s)...`); }
-		catch (err) { console.log(err); }
+		msg.edit(`Mise à jour de ${members.size} membre(s)...`).catch(console.error);
 
 		switch (args[0].toLowerCase()) {
 			case "add":

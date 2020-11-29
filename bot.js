@@ -1,8 +1,10 @@
 const fs = require("fs");
-const Discord = require("discord.js");
 const config = require("./config.json");
 require('dotenv').config();
-const client = new Discord.Client({ partials: ["MESSAGE", "CHANNEL", "REACTION"] });
+
+const Discord = require("discord.js");
+const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEMBERS" ]);
+const client = new Discord.Client({ partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
 
 if (process.env.BOT_HOST !== "heroku") {
 	const shellExec = require("./modules/shellExec.js");

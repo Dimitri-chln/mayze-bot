@@ -5,22 +5,19 @@ const command = {
 	args: 1,
 	usage: "<rôle>",
 	perms: ["MANAGE_ROLES"],
-	execute(message, args) {
+	async execute(message, args) {
 		const roleIdOrName = args.join(" ").toLowerCase();
 		const role = message.guild.roles.cache.get(roleIdOrName) ||
 			message.guild.roles.cache.find(r => r.name.replace(/[<@&>\W]/, "").toLowerCase() === roleIdOrName) ||
 			message.guild.roles.cache.find(r =>r.name.toLowerCase().includes(roleIdOrName));
 
-		if (!role) {
-			try {
-				message.reply("je n'ai pas réussi à trouver ce rôle"); }
-			catch (err) { console.log(err); }
-		}
+		if (!role) return message.reply("je n'ai pas réussi à trouver ce rôle").catch(console.error);
+		await message.guild.members.fetch();
+		const roleMembers = role.members.filter(m => m.roles.cache.has(role.id)).map(m => m.user.username);
 
 		const hexColor = Math.floor(role.color / (256 * 256)).toString(16).replace(/(^.$)/, "0$1") +
 			Math.floor((role.color % (256 * 256)) / 256).toString(16).replace(/(^.$)/, "0$1") +
 			(role.color % 256).toString(16).replace(/(^.$)/, "0$1");
-		const roleMembers = role.members.filter(m => m.roles.cache.has(role.id)).map(m => m.user.username);
 
 		try {
 			message.channel.send({
