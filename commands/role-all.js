@@ -72,14 +72,13 @@ const command = {
 			default:
 				message.reply("arguments incorrects !").catch(console.error);
 		}
-		try {
-			const text = `${members.size - errors} membres ont été mis à jour ! (${errors} erreurs)`
-				.replace(/(1 \w+)s/g, "$1")
-				.replace(/0 (\w+)s ont/g, "Aucun $1 n'a")
-				.replace(/(1 \w+) ont/g, "$1 a")
-				.replace(/0 (\w+)s/g, "Aucune $1");
-			msg.edit(text);
-		} catch (err) { console.log(err); }
+
+		const text = `${members.size - errors} membres ont été mis à jour ! (${errors} erreurs)`
+			.replace(/(1 \w+)s/g, "$1")
+			.replace(/0 (\w+)s ont/g, "Aucun $1 n'a")
+			.replace(/(1 \w+) ont/g, "$1 a")
+			.replace(/0 (\w+)s/g, "Aucune $1");
+		msg.edit(text).catch(console.error);
 	}
 };
 
