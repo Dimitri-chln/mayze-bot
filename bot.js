@@ -11,8 +11,15 @@ if (process.env.BOT_HOST !== "heroku") {
 	const result = shellExec("heroku pg:credentials:url --app mayze-bot");
 	process.env.DATABASE_URL = result.match(/postgres:.*/)[0];
 }
-client.pgClient = createPgClient();
-client.pgClient.connect().catch(console.error);
+const pg = require("pg");
+client.pg = createPgClient();
+client.pg.connect().catch(console.error);
+setInterval(reconnectPgClient, 36000000);
+client.pg.on("error", err => {
+	console.error(err);
+	client.pg = createPgClient();
+	client.pg.connect().catch(console.error);
+})
 
 const dataRead = require("./modules/dataRead.js");
 const dataWrite = require("./modules/dataWrite.js");
@@ -107,17 +114,17 @@ client.on("message", async message => {
 				} catch (err) { console.log(err); }
 			}
 		}
-		timestamps.set(message.author.id, now);
-		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
 		if (args.length < command.args) {
-			message.channel.send(`Utilisation : \`${config.prefix[client.user.id]}${commandName} ${command.usage}\``);
-		} else {
-			try { command.execute(message, args); }
-			catch (err) {
-				console.log(err);
-				message.reply("quelque chose s'est mal passé en exécutant la commande :/").catch(console.error);
-			}
+			return message.channel.send(`Utilisation : \`${config.prefix[client.user.id]}${commandName} ${command.usage}\``).catch(console.error);
+		}
+		try {
+			command.execute(message, args);
+			timestamps.set(message.author.id, now);
+			setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+		} catch (err) {
+			console.log(err);
+			message.reply("quelque chose s'est mal passé en exécutant la commande :/").catch(console.error);
 		}
 	}
 
@@ -146,7 +153,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
 client.on("messageReactionRemove", async (reaction, user) => {
 	if (!client.removedReactions) client.removedReactions = {};
 	
-	if (reaction.message.partial) reaction.message.fetch().catch(e => { return console.error(e) });
+	if (reaction.message.partial) await reaction.message.fetch().catch(console.error);
 	client.removedReactions[reaction.message.channel.id] = {
 		messageID: reaction.message.id,
 		user: {
@@ -167,9 +174,9 @@ client.on("messageReactionRemove", async (reaction, user) => {
 
 client.on("guildMemberAdd", async member => {
 	const roles = ["759694957132513300", "735810462872109156", "735810286719598634", "735809874205737020", "735811339888361472"];
-	roles.forEach(async r => {
-		member.roles.add(r).catch(console.error);
-	});
+	member.roles.add(message.guild.roles.cache.filter(r => roles.includes(r))).catch(console.error);
+	
+	await member.fetch().catch(console.error);
 	member.user.send({
 		embed: {
 			author: {
@@ -247,12 +254,21 @@ for (var i = 0; i < pokedex.length - 1; i++) {
 };
 dataWrite("pokedex.json", pokedex);
 
+
+/**
+ * @returns {pg.Client} Un client postgreSQL connecté à la base de données de mayze-bot
+ */
 function createPgClient() {
-	const pg = require("pg");
 	const connectionString = {
 		connectionString: process.env.DATABASE_URL,
 		ssl: true
 	};
 	const pgClient = new pg.Client(connectionString);
 	return pgClient;
+}
+
+function reconnectPgClient() {
+	client.pg.end().catch(console.error);
+	client.pg = createPgClient();
+	client.pg.connect().catch(console.error);
 }
