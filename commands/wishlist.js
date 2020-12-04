@@ -8,7 +8,7 @@ const command = {
 		const user = message.mentions.users.first() || message.client.users.cache.find(u =>u.id === args[0] || u.username === args[0] || u.username.includes(args[0])) || message.author;
 		var wishlist;
 		try {
-			const { rows } = await message.client.pgClient.query(`SELECT * FROM wishes WHERE user_id='${user.id}'`);
+			const { rows } = await message.client.pg.query(`SELECT * FROM wishes WHERE user_id='${user.id}'`);
 			wishlist = rows;
 		}
 		catch (err) {

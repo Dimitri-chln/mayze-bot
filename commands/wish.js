@@ -9,7 +9,7 @@ const command = {
 		const regex = (args.join(" ").split("$")[1] || "").toLowerCase();
 		var query = `INSERT INTO wishes (user_id, series) VALUES ('${message.author.id}', '${series}')`;
 		if (regex) query = `INSERT INTO wishes (user_id, series, regex) VALUES ('${message.author.id}', '${series}', '${series.toLowerCase()}|${regex}')`
-		try { await message.client.pgClient.query(query); }
+		try { await message.client.pg.query(query); }
 		catch (err) {
 			console.log(err);
 			return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);

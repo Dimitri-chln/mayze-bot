@@ -8,7 +8,7 @@ const command = {
 		const dateToString = require("../modules/dateToString.js");
 		const uptime = Date.now() - message.client.readyAt;
 		const uptimeString = dateToString(uptime / 1000);
-		message.channel.send(`je suis en ligne depuis ${uptimeString}!`).catch(console.error);
+		message.channel.send(`Je suis en ligne depuis ${uptimeString}!`).catch(console.error);
 	}
 };
 

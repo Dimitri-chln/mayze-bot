@@ -7,7 +7,7 @@ const command = {
 	ownerOnly: true,
 	async execute(message, args) {
 		try {
-			const res = await message.client.pgClient.query(args.join(" "));
+			const res = await message.client.pg.query(args.join(" "));
 			switch (res.command) {
 				case "SELECT":
 					const charactersPerPage = 2000;
@@ -29,12 +29,14 @@ const command = {
 					} else {
 						const paginationEmbed = require("discord.js-pagination");
 						const { MessageEmbed } = require("discord.js");
+						const regex = /\[?\s*\{\n(.|\n){0,2000}\},?\n\]?/yg;
+						const matches = resString.match(regex);
 						var pages = [];
-						for (i = 0; i < resString.length; i += charactersPerPage) {
-							const embed = new MessageEmbed()
+						for (i = 0; i < matches.length; i++) {;
+							var embed = new MessageEmbed()
 								.setColor("#010101")
 								.setAuthor(args.join(" "), `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
-								.setDescription(`\`\`\`json\n${resString.slice(i, i + charactersPerPage)}\n\`\`\``)
+								.setDescription(`\`\`\`json\n${matches[i]}\n\`\`\``)
 								.setFooter("✨Mayze✨")
 							pages.push(embed);
 						}

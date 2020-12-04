@@ -8,7 +8,7 @@ const command = {
 	async execute(message, args) {
 		var toDo;
 		try {
-			const { rows } = await message.client.pgClient.query("SELECT * FROM to_do");
+			const { rows } = await message.client.pg.query("SELECT * FROM to_do");
 			toDo = rows;
 		} catch (err) {
 			console.log(err);
@@ -35,7 +35,7 @@ const command = {
 				const extra = args.join(" ").split("$")[1];
 				var query = `INSERT INTO to_do (name) VALUES ('${name}')`;
 				if (extra) query = `INSERT INTO to_do (name, extra) VALUES ('${name}', '${extra}')`;
-				try { await message.client.pgClient.query(query); }
+				try { await message.client.pg.query(query); }
 				catch (err) {
 					console.log(err);
 					return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
@@ -47,7 +47,7 @@ const command = {
 				if (isNaN(index) || index < 1 ) {
 					return message.reply("le deuxième argument doit être un nombre positif").catch(console.error);
 				}
-				try { await message.client.pgClient.query(`DELETE FROM to_do WHERE id=${index}`); }
+				try { await message.client.pg.query(`DELETE FROM to_do WHERE id=${index}`); }
 				catch (err) {
 					console.log(err);
 					return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);

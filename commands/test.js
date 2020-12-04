@@ -17,7 +17,7 @@ const command = {
 						shiny = true;
 					}
 					let dexid = pokedex.find(pk => p.name.toLowerCase().includes(pk.fr.toLowerCase())).img.match(/\d{3}/)[0];
-					message.client.pgClient.query(`INSERT INTO pokemons (caught_by, pokedex_id, pokedex_name, is_shiny) VALUES ('${user[0]}', ${dexid}, '${p.name.replace(/'/g, "U+0027").replace(/⭐ /g, "")}', ${shiny})`).catch(console.error);
+					message.client.pg.query(`INSERT INTO pokemons (caught_by, pokedex_id, pokedex_name, is_shiny) VALUES ('${user[0]}', ${dexid}, '${p.name.replace(/'/g, "U+0027").replace(/⭐ /g, "")}', ${shiny})`).catch(console.error);
 				}
 			});
 		});

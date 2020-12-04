@@ -7,7 +7,7 @@ const command = {
 	async execute(message, args) {
 		var animes;
 		try {
-			const { rows } = await message.client.pgClient.query(`SELECT * FROM animes WHERE user_id='${message.author.id}'`);
+			const { rows } = await message.client.pg.query(`SELECT * FROM animes WHERE user_id='${message.author.id}'`);
 			animes = rows;
 		} catch (err) {
 			console.log(err);

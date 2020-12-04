@@ -7,6 +7,7 @@
     "start": "node ."
   },
   "dependencies": {
+    "cron": "^1.8.2",
     "dhms": "^1.0.0",
     "discord.js": "^12.3.1",
     "discord.js-pagination": "^1.0.2",

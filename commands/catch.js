@@ -35,7 +35,7 @@ const command = {
 		const pokemonName = pokemon.fr + alolanText + galarianText;
 		
 		try {
-			await message.client.pgClient.query(`INSERT INTO pokemons (caught_by, pokedex_id, pokedex_name, is_shiny) VALUES ('${message.author.id}', ${pokemon.img.match(/\d{3}/)[0]}, '${pokemonName}', ${is_shiny})`);
+			await message.client.pg.query(`INSERT INTO pokemons (caught_by, pokedex_id, pokedex_name, is_shiny) VALUES ('${message.author.id}', ${pokemon.img.match(/\d{3}/)[0]}, '${pokemonName}', ${is_shiny})`);
 		} catch (err) {
 			console.log(err);
 			return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
@@ -43,7 +43,7 @@ const command = {
 		
 		var author = "Pokémon capturé!";
 		try {
-			const { rows } = await message.client.pgClient.query(`SELECT * FROM pokemons WHERE caught_by='${message.author.id}' AND pokedex_name='${pokemonName}'`);
+			const { rows } = await message.client.pg.query(`SELECT * FROM pokemons WHERE caught_by='${message.author.id}' AND pokedex_name='${pokemonName}'`);
 			if (rows.length === 1) {
 				author = "Nouveau pokémon! 🎗️";
 			}

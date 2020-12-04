@@ -11,7 +11,7 @@ const command = {
 		const characterSeries = mudaeEmbed.description.split("\nClaims:")[0].replace(/\n/g, " ");
 		var wishes;
 		try {
-			const { rows }  = await message.client.pgClient.query(`SELECT * FROM wishes`);
+			const { rows }  = await message.client.pg.query(`SELECT * FROM wishes`);
 			wishes = rows;
 		} catch (err) { console.log(err);	}
 		if (!wishes) return;

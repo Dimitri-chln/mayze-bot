@@ -9,7 +9,7 @@ const command = {
 		const paginationEmbed = require("discord.js-pagination");
 		var pokemons;
 		try {
-			const { rows }  = await message.client.pgClient.query(`SELECT * FROM pokemons WHERE caught_by='${message.author.id}' ORDER BY id`);
+			const { rows }  = await message.client.pg.query(`SELECT * FROM pokemons WHERE caught_by='${message.author.id}' ORDER BY id`);
 			pokemons = rows;
 		} catch (err) {
 			console.log(err);
