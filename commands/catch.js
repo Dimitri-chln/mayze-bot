@@ -79,7 +79,6 @@ const command = {
 
 		/**
 		 * @param {number} random A random number
-		 * @returns {Pokemon} The pokemon corresponding to the random number
 		 */
 		function findDrop(random) {
 			for (i = 0; i < catchRates.length; i ++) {
