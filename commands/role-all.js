@@ -37,7 +37,7 @@ const command = {
 		msg.edit("Récupération des membres...").catch(console.error);
 		await message.guild.members.fetch();
 
-		const members = message.guild.members.cache;
+		var members = message.guild.members.cache;
 
 		if (args.includes("-bot")) {
 			members = members.filter(m => m.user.bot);
