@@ -1,3 +1,7 @@
+/**
+ * @param {string} fileName The file to read
+ * @returns {*} The file parsed into an object
+ */
 function dataRead(fileName) {
 	const fs = require("fs");
 	try {
