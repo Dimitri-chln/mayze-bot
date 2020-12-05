@@ -246,13 +246,10 @@ client.on("error", async error => {
 
 client.login(process.env.TOKEN);
 
-const pokedex = dataRead("pokedex.json");
-pokedex[0].dropSum = 0;
-for (var i = 0; i < pokedex.length - 1; i++) {
-	var newDrop = Math.round((pokedex[i].dropSum + pokedex[i].drop + Number.EPSILON) * 100) / 100;
-	pokedex[i+1].dropSum = newDrop;
-};
-dataWrite("pokedex.json", pokedex);
+const pokedex = require("oakdex-pokedex");
+const values = pokedex.allPokemon().sort((a, b) => a.national_id - b.national_id).map(p => p.catch_rate);
+const catchRates = values.map((_v, i, a) => a.slice(0, i).reduce((partialSum, a) => partialSum + a, 0));
+client.catchRates = catchRates;
 
 
 /**

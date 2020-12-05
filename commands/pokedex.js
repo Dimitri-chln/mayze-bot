@@ -1,81 +1,66 @@
+const { Message } = require("discord.js");
+
 const command = {
 	name: "pokedex",
 	description: "Obtiens des informations sur un pokémon",
 	aliases: ["dex", "pd"],
 	args: 1,
-	usage: "<pokémon>",
+	usage: "<pokémon/pokédex ID>",
+	/**
+	 * @param {Message} message 
+	 * @param {string[]} args 
+	 */
 	async execute(message, args) {
-		const pokedexBot = require("../assets/pokedex.json");
-		const PokedexClient = require("pokedex-promise-v2");
-		const Pokedex = new PokedexClient();
+		const pokedex = require("oakdex-pokedex");
 
-		const pokemonName = args.join(" ").toLowerCase().replace(/♂/, "m").replace(/♀/, "f");
-		const pokemonBot = pokedexBot.find(p => (p.en || "").toLowerCase() === pokemonName || (p.fr || "").toLowerCase() === pokemonName) || {};
-		var pokemon; 
+		const input = args.join(" ").toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase() });
+		const pokemon = pokedex.findPokemon(input);
 
-		try { pokemon = await Pokedex.getPokemonByName((pokemonBot.en || pokemonName).toLowerCase()); }
-		catch (err) {
-			console.log(err);
-			return message.reply("ce pokémon n'existe pas").catch(console.error);
-		}
 		if (!pokemon) return message.reply("ce pokémon n'existe pas").catch(console.error);
 
-		var altNames = [], forms = [];
-		if (pokemonBot.fr)
-			altNames.push("🇫🇷 " + pokemonBot.fr);
-		if (pokemonBot.mega)
-			forms.push("• Mega");
-		if (pokemonBot.megax && pokemonBot.megay)
-			forms.push("• Méga X/Y");
-		if (pokemonBot.giga)
-			forms.push("• Gigamax");
-		if (pokemonBot.alolan)
-			forms.push("• Alolan");
-		if (pokemonBot.galarian)
-			forms.push("• Galarian");
-
-		try {
-			message.channel.send({
-				embed: {
-					title: `${pokemon.name.substr(0, 1).toUpperCase() + pokemon.name.substr(1)} #${("00" + pokemon.id).substr(-3)}`,
-					color: "#010101",
-					//description: pokemon.description,
-					fields: [
-						{
-							name: "Autres noms :",
-							value: altNames.join("\n") || "?",
-							inline: true
-						},{
-							name: "Formes :",
-							value: forms.join("\n") || "?",
-							inline: true
-						},{
-							name: "Type(s) :",
-							value: pokemon.types.map(t => t.type.name.substr(0, 1).toUpperCase() + t.type.name.substr(1)).join(" - ") || "?",
-							inline: true
-						},{
-							name: "Stats de base :",
-							value: `**PV :** ${pokemon.stats[0].base_stat || "?"}\n**Attaque :** ${pokemon.stats[1].base_stat || "?"}\n**Défense :** ${pokemon.stats[2].base_stat || "?"}\n**Attaque spé. :** ${pokemon.stats[3].base_stat || "?"}\n**Defense spé.:** ${pokemon.stats[4].base_stat || "?"}\n**Vitesse :** ${pokemon.stats[5].base_stat || "?"}\n`,
-							inline: true
-						},{
-							name: "Taille :",
-							value: `${pokemon.height / 10 || "?"}m`,
-							inline: true
-						},{
-							name: "Poids :",
-							value: `${pokemon.weight / 10 || "?"}kg`,
-							inline: true
-						}
-					],
-					image: {
-						url: pokemon.sprites.other["official-artwork"].front_default || `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${("00" + pokemon.id).substr(-3)}.png`
+		message.channel.send({
+			embed: {
+				title: `${pokemon.names.fr} #${("00" + pokemon.national_id).substr(-3)}`,
+				image: {
+					url: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${("00" + pokemon.national_id).substr(-3)}.png`
+				},
+				footer: {
+					text: "✨Mayze✨"
+				},
+				fields: [
+					{
+						name: "Autres noms :",
+						value: `🇬🇧 ${pokemon.names.en}\n🇩🇪 ${pokemon.names.de}`,
+						inline: true
 					},
-					footer: {
-						text: "✨Mayze✨"
+					{
+						name: "Taille :",
+						value: pokemon.height_eu,
+						inline: true
+					},
+					{
+						name: "Poids :",
+						value: pokemon.weight_eu,
+						inline: true
+					},
+					{
+						name: "Stats de base :",
+						value: `**PV:** ${pokemon.base_stats.hp}\n**Attaque:** ${pokemon.base_stats.atk}\n**Défense:** ${pokemon.base_stats.def}\n**Attaque Spé:** ${pokemon.base_stats.sp_atk}\n**Défense Spé:** ${pokemon.base_stats.sp_def}\n**Vitesse:** ${pokemon.base_stats.speed}`,
+						inline: true
+					},
+					{
+						name: "Formes :",
+						value: "?",
+						inline: true
+					},
+					{
+						name: "Type(s) :",
+						value: pokemon.types.map(type => `• ${type}`).join("\n"),
+						inline: true
 					}
-				}
-			});
-		} catch (err) { console.log(err); }
+				]
+			}
+		}).catch(console.error)
 	}
 };
 

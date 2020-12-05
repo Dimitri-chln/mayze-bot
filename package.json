@@ -7,13 +7,12 @@
     "start": "node ."
   },
   "dependencies": {
-    "cron": "^1.8.2",
     "dhms": "^1.0.0",
-    "discord.js": "^12.3.1",
-    "discord.js-pagination": "^1.0.2",
+    "discord.js": "^12.5.1",
+    "discord.js-pagination": "^1.0.3",
     "dotenv": "^8.2.0",
+    "oakdex-pokedex": "^0.4.5",
     "pg": "^8.5.1",
-    "pokedex-promise-v2": "^3.2.0",
     "unb-api": "^1.2.2"
   },
   "engines": {

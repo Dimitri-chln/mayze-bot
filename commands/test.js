@@ -1,3 +1,5 @@
+const { Message } = require("discord.js");
+
 const command = {
 	name: "test",
 	description: "testest",
@@ -5,23 +7,16 @@ const command = {
 	args: 0,
 	usage: "",
 	ownerOnly: true,
-	async execute(message, args) {
-		return;
-		const pokemons = require("../database/pokemonDatabase.json");
-		const pokedex = require("../assets/pokedex.json");
-		await Object.entries(pokemons).forEach(user => {
-			user[1].forEach(p => {
-				for (i = 0; i < p.caught; i++) {
-					let shiny = false;
-					if (p.name.includes("⭐")) {
-						shiny = true;
-					}
-					let dexid = pokedex.find(pk => p.name.toLowerCase().includes(pk.fr.toLowerCase())).img.match(/\d{3}/)[0];
-					message.client.pg.query(`INSERT INTO pokemons (caught_by, pokedex_id, pokedex_name, is_shiny) VALUES ('${user[0]}', ${dexid}, '${p.name.replace(/'/g, "U+0027").replace(/⭐ /g, "")}', ${shiny})`).catch(console.error);
-				}
-			});
-		});
-		message.react("⭐").catch(console.error);
+	/**
+	 * 
+	 * @param {Message} message 
+	 * @param {string[]} _args 
+	 */
+	async execute(message, _args) {
+		const dex = require("oakdex-pokedex");
+		const values = dex.allPokemon().sort((a, b) => a.national_id - b.national_id).map(p => p.catch_rate);
+		const catchRates = values.map((v, i, a) => a.slice(0, i).reduce((partialSum, a) => partialSum + a, 0));
+		console.log(catchRates.join(", "));
 	}
 };
 
