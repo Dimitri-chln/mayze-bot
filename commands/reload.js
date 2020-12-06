@@ -25,7 +25,7 @@ const command = {
 			message.channel.send(`La commande \`${command.name}\` a été rechargée !`);
 		} catch (err) {
 			console.error(err);
-			message.channel.send(`Quelque chose s'est mal passé en rechargeant la commande \`${command.name}\`:\n\`\`\`${error.message}\`\`\``).catch(console.error);
+			message.channel.send(`Quelque chose s'est mal passé en rechargeant la commande \`${command.name}\`:\n\`\`\`${err.message}\`\`\``).catch(console.error);
 		}
 	}
 }

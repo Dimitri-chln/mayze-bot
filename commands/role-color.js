@@ -25,7 +25,7 @@ const command = {
 				embed: {
 					auhtor: {
 						name: "Couleur modifiée avec succès",
-						icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
+						icon_url: message.client.user.avatarURL()
 					},
 					color: "#010101",
 					description: `La couleur du rôle ${role} a été changée en ${args[1]}`,

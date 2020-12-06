@@ -38,7 +38,7 @@ const command = {
 				embed: {
 					author: {
 						name: `${message.author.username}#${message.author.discriminator}`,
-						icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+						icon_url: message.author.avatarURL({ dynamic: true })
 					},
 					color: "#010101",
 					description: `${message.author} a acheté "${item.name}" pour ✨${item.price}`,

@@ -21,7 +21,7 @@ const command = {
 				embed: {
 					author: {
 						name: "Parties Among Us en cours",
-						icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
+						icon_url: message.client.user.avatarURL()
 					},
 					color: "#010101",
 					description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(il y a ${dateToString((Date.now() - e[1].time)/1000)})`).join("\n——————————\n") || "Aucune partie en cours!",

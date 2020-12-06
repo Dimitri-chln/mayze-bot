@@ -12,7 +12,7 @@ const command = {
 				embed: {
 					author: {
 						name: `${message.author.username} fait un bisous à ${user.username} 😘`,
-						icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+						icon_url: message.author.avatarURL({ dynamic: true })
 					},
 					color: "#010101",
 					image: {

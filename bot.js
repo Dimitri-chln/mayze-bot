@@ -73,6 +73,7 @@ client.on("ready", async () => {
 		msg.edit(embed.setDescription(`• **Version:** \`${version}\`\n• **Ping:** \`${Math.abs(editedMsg.editedTimestamp - editedMsg.createdTimestamp)}ms\``));
 	} catch (err) { console.log(err); }
 	client.user.setActivity("le meilleur clan", { type: "WATCHING" });
+	if (client.user.id === "740848584882126939") client.beta = true;
 });
 
 client.on("message", async message => {
@@ -128,6 +129,7 @@ client.on("message", async message => {
 		}
 	}
 
+	if (client.beta) return;
 	for (const autoresponse of client.autoresponses) {
 		try { autoresponse.execute(message); }
 		catch (err) { console.log(err); }

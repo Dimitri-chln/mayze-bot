@@ -56,7 +56,7 @@ const command = {
 				embed: {
 					author: {
 						name: "Shop Unbelievaboat",
-						icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
+						icon_url: message.client.user.avatarURL()
 					},
 					color: "#010101",
 					fields: shop.map(item => { return { "name": `• ${item.name} - ✨${item.price}`, "value": `*${item.description}*`, "inline": true } }),

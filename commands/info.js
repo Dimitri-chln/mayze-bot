@@ -12,7 +12,7 @@ const command  = {
 				embed: {
 					author: {
 						name: message.client.user.username,
-						icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
+						icon_url: message.client.user.avatarURL()
 					},
 					title: "• Informations sur le bot",
 					color: "#010101",

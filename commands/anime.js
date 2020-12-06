@@ -26,7 +26,7 @@ const command = {
 						embed: {
 							author: {
 								name: anime.name,
-								icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+								icon_url: message.author.avatarURL({ dynamic: true })
 							},
 							color: "#010101",
 							description: `${anime.seasons.map((s, i) => `• **Saison ${i+1}**: ${s} épisodes`).join("\n")}\n\n__**Prochain épisode:**__ **${nextEpisode}**`,
@@ -44,7 +44,7 @@ const command = {
 						embed: {
 							author: {
 								name: `Animés de ${message.author.tag}`,
-								icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+								icon_url: message.author.avatarURL({ dynamic: true })
 							},
 							color: "#010101",
 							description: animes.map(a => {

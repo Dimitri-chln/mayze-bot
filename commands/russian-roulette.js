@@ -19,7 +19,7 @@ const command = {
 						embed: {
 							author: {
 								name: "Une partie de roulette russe a été lancée!",
-								icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+								icon_url: message.author.avatarURL({ dynamic: true })
 							},
 							color: "#010101",
 							description:
@@ -56,7 +56,7 @@ const command = {
 				const players = message.client.russianRoulette;
 				const Discord = require("discord.js");
 				const Embed = new Discord.MessageEmbed()
-					.setAuthor("La partie de roulette russe a commencé!", `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
+					.setAuthor("La partie de roulette russe a commencé!", message.author.avatarURL({ dynamic: true }))
 					.setColor("#010101")
 					.setFooter("✨Mayze✨")
 					.setTimestamp();

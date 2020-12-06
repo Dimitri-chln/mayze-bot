@@ -17,7 +17,7 @@ const command = {
 							embed: {
 								author: {
 									name: args.join(" "),
-									icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+									icon_url: message.author.avatarURL({ dynamic: true })
 								},
 								color: "#010101",
 								description: `\`\`\`json\n${resString}\n\`\`\``,
@@ -35,7 +35,7 @@ const command = {
 						for (i = 0; i < matches.length; i++) {;
 							var embed = new MessageEmbed()
 								.setColor("#010101")
-								.setAuthor(args.join(" "), `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
+								.setAuthor(args.join(" "), message.author.avatarURL({ dynamic: true }))
 								.setDescription(`\`\`\`json\n${matches[i]}\n\`\`\``)
 								.setFooter("✨Mayze✨")
 							pages.push(embed);

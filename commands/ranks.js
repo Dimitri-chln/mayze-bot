@@ -13,7 +13,7 @@ const command = {
 				embed: {
 					author: {
 					name: "Ranks du serveur 🎗️",
-					icon_url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
+					icon_url: message.client.user.avatarURL()
 					},
 					color: "#010101",
 					description: ranks.map(rank => {

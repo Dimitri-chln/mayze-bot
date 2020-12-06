@@ -72,7 +72,7 @@ const command = {
 				description: `${message.author} a attrapé un ${shinyText}${pokemonName} !`,
 				footer: {
 					text: "✨Mayze✨",
-					icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+					icon_url: message.author.avatarURL({ dynamic: true })
 				}
 			}
 		}).catch(console.error);

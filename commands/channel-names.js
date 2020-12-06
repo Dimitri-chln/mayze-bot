@@ -23,10 +23,10 @@ const command = {
 				embed: {
 					author: {
 						name: "Vérification avant changement",
-						icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+						icon_url: message.author.avatarURL({ dynamic: true })
 					},
 					thumbnail: {
-						url: `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png`
+						url: message.client.user.avatarURL()
 					},
 					title: "• Voici à quoi ressembleront les salons après modification. Veux-tu continuer?",
 					color: "#010101",

@@ -19,7 +19,7 @@ const command = {
 				embed: {
 					author: {
 						name: `Balance Unbelievaboat de ${message.author.tag}`,
-						icon_url: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
+						icon_url: message.author.avatarURL({ dynamic: true })
 					},
 					color: "#010101",
 					description: `• Rang: **#${user.rank.toLocaleString()}**\n• Cash: **✨${user.cash.toLocaleString()}**\n• Bank: **✨${user.bank.toLocaleString()}**\n• Total: **✨${user.total.toLocaleString()}**`,
