@@ -27,7 +27,7 @@ const command = {
 							}
 						}).catch(console.error);
 					} else {
-						const paginationEmbed = require("discord.js-pagination");
+						const pagination = require("../modules/pagination.js");
 						const { MessageEmbed } = require("discord.js");
 						const regex = /\[?\s*\{\n(.|\n){0,2000}\},?\n\]?/yg;
 						const matches = resString.match(regex);
@@ -40,7 +40,7 @@ const command = {
 								.setFooter("✨Mayze✨")
 							pages.push(embed);
 						}
-						paginationEmbed(message, pages).catch(console.error);
+						pagination(message, pages).catch(console.error);
 					}
 					break;
 				case "INSERT":

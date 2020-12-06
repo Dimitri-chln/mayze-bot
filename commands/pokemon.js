@@ -6,7 +6,7 @@ const command = {
 	usage: "[-legendary] [-shiny] [-alolan] [-galarian]",
 	async execute(message, args) {
 		const Discord = require("discord.js");
-		const paginationEmbed = require("discord.js-pagination");
+		const pagination = require("../modules/pagination.js");
 		var pokemons;
 		try {
 			const { rows }  = await message.client.pg.query(`SELECT * FROM pokemons WHERE caught_by='${message.author.id}' ORDER BY id`);
@@ -47,7 +47,7 @@ const command = {
 			pages.push(embed);
 		};
 		
-		try { paginationEmbed(message, pages, ["⏪", "⏩"], 180000); }
+		try { pagination(message, pages, ["⏪", "⏩"], 180000); }
 		catch (err) {
 			console.log(err);
 			message.channel.send("Quelque chose s'est mal passé en créant le paginateur").catch(console.error);

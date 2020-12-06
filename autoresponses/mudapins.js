@@ -2,7 +2,7 @@ const command = {
 	async execute(message) {
 		if (message.author.id !== "432610292342587392") return;
 		const Discord = require("discord.js");
-		const paginationEmbed = require("discord.js-pagination");
+		const pagination = require("../modules/pagination.js");
 		const pinRegex = /<:(logo)?pin\d{0,3}:\d{18}>/g;
 		if (!pinRegex.test(message.content)) return;
 		if (message.content.replace(pinRegex, "").replace(/\n/g, "") === "") return;
@@ -35,7 +35,7 @@ const command = {
 			pages.push(embed);
 		};
 		
-		try { paginationEmbed(message, pages, ["⏪", "⏩"], 180000); }
+		try { pagination(message, pages, ["⏪", "⏩"], 180000); }
 		catch (err) {
 			console.log(err);
 			message.channel.send("Quelque chose s'est mal passé en créant le paginateur :/").catch(console.error);
