@@ -5,7 +5,7 @@ const command = {
 	description: "Affiche un message de vote pour les quêtes WWO",
 	aliases: [],
 	args: 0,
-	usage: "[-everyone] [-single] [-noping]",
+	usage: "[-everyone] [-single] [-noping] [-votes <nombre de votes>]",
 	perms: ["ADMINISTRATOR"],
 	/**
 	 * @param {Message} message
