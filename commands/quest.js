@@ -1,3 +1,5 @@
+const { Message } = require("discord.js");
+
 const command = {
 	name: "quest",
 	description: "Affiche un message de vote pour les quêtes WWO",
@@ -5,31 +7,28 @@ const command = {
 	args: 0,
 	usage: "[-everyone] [-single] [-noping]",
 	perms: ["ADMINISTRATOR"],
+	/**
+	 * @param {Message} message
+	 * @param {string[]} args
+	 */
 	async execute(message, args) {
 	if (!message.member.roles.cache.some(r => ["696751614177837056", "696751852267765872"].includes(r.id))) return;
 	if (message.channel.id !== "689212233439641649") {
-		message.react("❌").catch(console.error);
-		return;
+		return message.react("❌").catch(console.error);
 	}
-	const questChannel = message.client.channels.cache.get("689385764219387905");
+	const questChannel = message.client.channels.cache.get("689212233439641649");
 
 	const imageURL = (message.attachments.first() || {}).url;
 	if (!imageURL) {
 		return message.reply("ajoute une image à ton message").catch(console.error);
 	}
-	const flags = args.filter(a => a === "-noping");
-	const footerFlags = args.filter(a => a === "-everyone" || a === "-single");
-	const footerFlagsString = ["Membres uniquement", "Plusieurs votes"];
-	footerFlags.forEach(f => {
-		if (f === "-everyone") footerFlagsString[0] = "Tout le monde";
-		if (f === "-single") footerFlagsString[1] = "Un seul vote";
-	});
-	var messageContent = "<@&689169027922526235>";
-	if (flags.includes("-noping")) messageContent = "";
 	
-	var msg;
-	try {
-		msg = await questChannel.send({
+	const allowed = args.includes("-everyone") ? "Tout le monde" : "Membres uniquement";
+	const votes = args.includes("-single") ? "Un seul vote" : "Plusieurs votes";
+	const messageContent = args.includes("-noping") ? "" : "<@&689169027922526235>";
+	const reactionsNumber = args.includes("-votes") ? parseInt(args[args.indexOf("-votes") + 1]) || 3 : 3;
+	
+	const msg = await questChannel.send({
 			content: messageContent,
 			embed: {
 				title: "Nouvelles quêtes disponibles!",
@@ -38,23 +37,17 @@ const command = {
 					url: imageURL
 				},
 				footer: {
-					text: footerFlagsString.join(" - ")
+					text: `${allowed} - ${votes}`
 				}
 			}
-		});
-	} catch (err) {
+		}).catch(err => {
 		console.log(err);
-		return message.channel.send("Quelque chise s'est mal passé en envoyant le message :/").catch(console.error);
-	}
-	try {
-		await msg.react("1️⃣");
-		await msg.react("2️⃣");
-		await msg.react("3️⃣");
-		await msg.react("🔁");
-	} catch (err) {
-		console.log(err);
-		return message.channel.send("Quelque chose s'est mal passé en ajoutant les réactions :/").catch(console.error);
-	}
+		message.channel.send("Quelque chose s'est mal passé en envoyant le message :/").catch(console.error);
+	});
+	const emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].slice(0, reactionsNumber);
+	emojis.forEach(async e => await msg.react(e).catch(console.error));
+	await msg.react("🔄").catch(console.error);
+
 	message.react("✅").catch(console.error);
 	}
 };
