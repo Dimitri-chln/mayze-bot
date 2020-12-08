@@ -16,7 +16,7 @@ const command = {
 	if (message.channel.id !== "689212233439641649") {
 		return message.react("❌").catch(console.error);
 	}
-	const questChannel = message.client.channels.cache.get("689212233439641649");
+	const questChannel = message.client.channels.cache.get("689385764219387905");
 
 	const imageURL = (message.attachments.first() || {}).url;
 	if (!imageURL) {
