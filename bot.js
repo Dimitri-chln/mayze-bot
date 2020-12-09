@@ -84,7 +84,7 @@ client.on("message", async message => {
 	if (message.channel.type === "dm") return;
 
 	const chatXP = require("./modules/chatXP.js");
-	if (!message.author.bot) {
+	if (!message.author.bot && message.guild.id === "689164798264606784") {
 		await message.guild.members.fetch().catch(console.error);
 		const bots = message.guild.members.cache.filter(m => m.user.bot);
 		const prefixes = bots.map(b => b.nickname.match(/\[.+\]/)[0].replace(/[\[\]]/g, ""));
