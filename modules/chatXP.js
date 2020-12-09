@@ -16,7 +16,7 @@ async function chatXP(message, newXP) {
 			message.client.pg.query(`INSERT INTO levels VALUES ('${message.author.id}', ${xp})`).catch(console.error());
 		}
 		if (xp % xpPerLevel < newXP) {
-			message.channel.send(`**${message.author}** est passé au niveau **${Math.floor(client.xpMessages[message.author.id] / xpPerLevel)}**`).catch(console.error);
+			message.channel.send(`**${message.author}** est passé au niveau **${Math.floor(client.xpMessages[message.author.id] / xpPerLevel)}** ! <:foxmayze:763146438120046632>`).catch(console.error);
 		}
 	} catch (err) {
 		console.error(err);
