@@ -152,9 +152,6 @@ client.on("message", async message => {
 				}, 60000);
 			}
 			client.xpMessages[message.author.id] ++;
-			if (client.xpMessages[message.author.id] % xpPerLevel < newXP) {
-				message.channel.send(`**${message.author}** est passé au niveau **${Math.floor(client.xpMessages[message.author.id] / xpPerLevel)}**`).catch(console.error);
-			}
 		}
 	}
 

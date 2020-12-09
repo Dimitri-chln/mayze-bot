@@ -5,6 +5,7 @@ const { Message } = require("discord.js");
  * @param {number} newXP The XP to add to the member
  */
 async function chatXP(message, newXP) {
+	const xpPerLevel = 1000;
 	try {
 		var xp = newXP;
 		const { rows } = await message.client.pg.query(`SELECT * FROM levels WHERE user_id='${message.author.id}'`);
@@ -14,7 +15,9 @@ async function chatXP(message, newXP) {
 		} else {
 			message.client.pg.query(`INSERT INTO levels VALUES ('${message.author.id}', ${xp})`).catch(console.error());
 		}
-		console.log(`${newXP} XP given to ${message.author.tag}`);
+		if (xp % xpPerLevel < newXP) {
+			message.channel.send(`**${message.author}** est passé au niveau **${Math.floor(client.xpMessages[message.author.id] / xpPerLevel)}**`).catch(console.error);
+		}
 	} catch (err) {
 		console.error(err);
 	}
