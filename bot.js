@@ -82,6 +82,27 @@ client.on("message", async message => {
 		catch (err) { console.log(err); }
 	}
 	if (message.channel.type === "dm") return;
+
+	const chatXP = require("./modules/chatXP.js");
+	if (!message.author.bot) {
+		await message.guild.members.fetch().catch(console.error);
+		const bots = message.guild.members.cache.filter(m => m.user.bot);
+		const prefixes = bots.map(b => b.nickname.match(/\[.+\]/)[0].replace(/[\[\]]/g, ""));
+		if (!prefixes.some(p => message.content.startsWith(p))) {
+			if (!client.xpMessages) client.xpMessages = {};
+			const f = x => Math.floor(15 / x);
+			const newXP = f(client.xpMessages[message.author.id] || 1);
+			chatXP(message, newXP);
+			if (newXP === f(1)) {
+				client.xpMessages[message.author.id] = 2;
+				setTimeout(() => {
+					delete client.xpMessages[message.author.id];
+				}, 60000);
+			}
+			client.xpMessages[message.author.id] ++;
+		}
+	}
+
 	if (message.content.toLowerCase().startsWith(config.prefix[client.user.id])) {
 		if (message.author.bot) return;
 		const input = message.content.slice(config.prefix[client.user.id].length).trim().split(/ +/g);
@@ -121,6 +142,7 @@ client.on("message", async message => {
 		}
 		try {
 			command.execute(message, args);
+			chatXP(message, command.xp || 30);
 			timestamps.set(message.author.id, now);
 			setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 		} catch (err) {
