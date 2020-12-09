@@ -7,6 +7,7 @@ const command = {
 	cooldown: 3600,
 	args: 0,
 	usage: "",
+	xp: 100,
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} _args 

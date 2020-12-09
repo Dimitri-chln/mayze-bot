@@ -142,7 +142,7 @@ client.on("message", async message => {
 		}
 		try {
 			command.execute(message, args);
-			chatXP(message, command.xp || 30);
+			chatXP(message, command.xp || 20);
 			timestamps.set(message.author.id, now);
 			setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 		} catch (err) {
