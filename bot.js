@@ -84,24 +84,6 @@ client.on("message", async message => {
 	if (message.channel.type === "dm") return;
 
 	const chatXP = require("./modules/chatXP.js");
-	if (!message.author.bot && message.guild.id === "689164798264606784") {
-		await message.guild.members.fetch().catch(console.error);
-		const bots = message.guild.members.cache.filter(m => m.user.bot);
-		const prefixes = bots.map(b => b.nickname.match(/\[.+\]/)[0].replace(/[\[\]]/g, ""));
-		if (!prefixes.some(p => message.content.startsWith(p))) {
-			if (!client.xpMessages) client.xpMessages = {};
-			const f = x => Math.floor(15 / x);
-			const newXP = f(client.xpMessages[message.author.id] || 1);
-			chatXP(message, newXP);
-			if (newXP === f(1)) {
-				client.xpMessages[message.author.id] = 2;
-				setTimeout(() => {
-					delete client.xpMessages[message.author.id];
-				}, 60000);
-			}
-			client.xpMessages[message.author.id] ++;
-		}
-	}
 
 	if (message.content.toLowerCase().startsWith(config.prefix[client.user.id])) {
 		if (message.author.bot) return;
@@ -142,7 +124,7 @@ client.on("message", async message => {
 		}
 		try {
 			command.execute(message, args);
-			chatXP(message, command.xp || 20);
+			//chatXP(message, command.xp || 20);
 			timestamps.set(message.author.id, now);
 			setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 		} catch (err) {
@@ -152,6 +134,30 @@ client.on("message", async message => {
 	}
 
 	if (client.beta) return;
+
+	if (!message.author.bot && message.guild.id === "689164798264606784") {
+		await message.guild.members.fetch().catch(console.error);
+		const xpPerLevel = 1000;
+		const bots = message.guild.members.cache.filter(m => m.user.bot);
+		const prefixes = bots.map(b => b.nickname.match(/\[.+\]/)[0].replace(/[\[\]]/g, ""));
+		if (!prefixes.some(p => message.content.startsWith(p))) {
+			if (!client.xpMessages) client.xpMessages = {};
+			const f = x => Math.floor(15 / x);
+			const newXP = f(client.xpMessages[message.author.id] || 1);
+			chatXP(message, newXP);
+			if (newXP === f(1)) {
+				client.xpMessages[message.author.id] = 2;
+				setTimeout(() => {
+					delete client.xpMessages[message.author.id];
+				}, 60000);
+			}
+			client.xpMessages[message.author.id] ++;
+			if (client.xpMessages[message.author.id] % xpPerLevel < newXP) {
+				message.channel.send(`**${message.author}** est passé au niveau **${Math.floor(client.xpMessages[message.author.id] / xpPerLevel)}**`).catch(console.error);
+			}
+		}
+	}
+
 	for (const autoresponse of client.autoresponses) {
 		try { autoresponse.execute(message); }
 		catch (err) { console.log(err); }
