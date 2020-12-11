@@ -38,7 +38,7 @@ const command = {
 			embed = new MessageEmbed()
 				.setAuthor(`Classement de ${message.guild.name}`, message.client.user.avatarURL())
 				.setColor("#010101")
-				.setDescription(top.slice(i, i + memberPerPage).map((user, i) => `\`${i + 1}.\` <@${user.user_id}> - **Niveau \`${Math.floor(user.xp / xpPerLevel)}\`**`).join("\n"));
+				.setDescription(top.slice(i, i + memberPerPage).map((user, i) => `\`${i + 1}.\` **${(message.guild.members.cache.get(user.user_id) || { user: { username: "*Inconnu*" } }).user.username}** - **Niveau \`${Math.floor(user.xp / xpPerLevel)}\`**`).join("\n"));
 			pages.push(embed);
 		};
 		
