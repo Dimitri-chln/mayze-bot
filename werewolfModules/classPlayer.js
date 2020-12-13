@@ -1,5 +1,5 @@
-import { GuildMember } from "discord.js";
-import selectPlayer from "./selectPlayer";
+const { GuildMember } = require("discord.js");
+const selectPlayer = require("./selectPlayer");
 
 class Player {
 	/**
@@ -90,24 +90,31 @@ class Player {
 				}).catch(console.error);
 				break;
 			case "Voyante":
-				const player = await selectPlayer(this.member, players, "De quel joueur souhaites-tu connaître le rôle ?");
-				this.member.send(`**${ player.member.user.username }** est **${ player.role }** !`).catch(console.error);
+				{
+					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "De quel joueur souhaites-tu connaître le rôle ?");
+					if (!player) return this.member.send("Tu n'as pas répondu à temps");
+					this.member.send(`**${ player.member.user.username }** est **${ player.role }** !`).catch(console.error);
+				}
 				break;
 			case "Sorcière":
 				this.member.send("Le joueur que les loups-garous ont décidé d'attaquer s'affichera lorsqu'ils auront fait le choix").catch(console.error);
 				break;
 			case "Cupidon":
 				if (players.some(player => player.options.couple)) return;
-				const player_1 = await selectPlayer(this.member, players, "Quel joueur souhaites-tu mettre en couple ? (1er joueur)");
-				const player_2 = await selectPlayer(this.member, players, "Quel joueur souhaites-tu mettre en couple ? (2ème joueur)");
+				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "Quel joueur souhaites-tu mettre en couple ? (1er joueur)");
+				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), "Quel joueur souhaites-tu mettre en couple ? (2ème joueur)");
+				if (!player_1 || !player_2) return this.member.send("Tu n'as pas répondu à temps");
 				player_1.setOption("couple", player_2);
 				player_2.setOption("couple", player_1);
 				this.member.send(`**${player_1.member.user.username}** et **${player_2.member.user.username}** sont maintenant en couple !`).catch(console.error);
 				break;
 			case "Chasseur":
-				const player = await selectPlayer(this.member, players, "Quel joueur souhaites-tu tuer lors de ta mort ?");
-				this.setOption("avenge", player);
-				this.member.send(`**${ player.member.user.username }** mourra avec toi !`).catch(console.error);
+				{
+					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "Quel joueur souhaites-tu tuer lors de ta mort ?");
+					if (!player) return this.member.send("Tu n'as pas répondu à temps");
+					this.setOption("avenge", player);
+					this.member.send(`**${ player.member.user.username }** mourra avec toi !`).catch(console.error);
+				}
 				break;
 			case "Petite fille":
 				this.member.send({
@@ -124,13 +131,11 @@ class Player {
 			default:
 				this.member.send({
 					embed: {
-						embed: {
-							title: "Rien à faire cette nuit...",
-							color: "#010101",
-							description: "Fais de beaux rêves 😴",
-							footer: {
-								text: "🐺 Mayze 🐺"
-							}
+						title: "Rien à faire cette nuit...",
+						color: "#010101",
+						description: "Fais de beaux rêves 😴",
+						footer: {
+							text: "🐺 Mayze 🐺"
 						}
 					}
 				}).catch(console.error);
@@ -138,4 +143,4 @@ class Player {
 	}
 };
 
-export default Player;
+module.exports = Player;
