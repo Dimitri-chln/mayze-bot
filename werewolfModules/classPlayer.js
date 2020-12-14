@@ -109,6 +109,8 @@ class Player {
 				player_1.setOption("couple", player_2);
 				player_2.setOption("couple", player_1);
 				this.member.send(`**${player_1.member.user.username}** et **${player_2.member.user.username}** sont maintenant en couple !`).catch(console.error);
+				player_1.member.send(`Tu es désormais en couple avec **${player_2.member.user.username}** ! Son rôle est **${player_2.role}**`).catch(console.error);
+				player_2.member.send(`Tu es désormais en couple avec **${player_1.member.user.username}** ! Son rôle est **${player_1.role}**`).catch(console.error);
 				break;
 			case "Chasseur":
 				{
