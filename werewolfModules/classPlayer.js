@@ -74,8 +74,9 @@ class Player {
 
 	/**
 	 * @param {Player[]} players The list of all players
+	 * @param {number} night The current night
 	 */
-	async action(players) {
+	async action(players, night) {
 		switch (this.role) {
 			case "Loup-garou":
 				this.member.send({
@@ -100,6 +101,7 @@ class Player {
 				this.member.send("Le joueur que les loups-garous ont décidé d'attaquer s'affichera lorsqu'ils auront fait le choix").catch(console.error);
 				break;
 			case "Cupidon":
+				if (night !== 1) return;
 				if (players.some(player => player.options.couple)) return;
 				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "Quel joueur souhaites-tu mettre en couple ? (1er joueur)");
 				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), "Quel joueur souhaites-tu mettre en couple ? (2ème joueur)");
@@ -121,7 +123,7 @@ class Player {
 					embed: {
 						title: "Espionne les loups-garous !",
 						color: "#010101",
-						description: "Vas voir <#764767902124474378> pour espionner le chat des loups-garous",
+						description: "Le chat des loups-garous s'affichera ici 👀",
 						footer: {
 							text: "🐺 Mayze 🐺"
 						}

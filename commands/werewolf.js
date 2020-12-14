@@ -59,7 +59,7 @@ const command = {
 			case "start":
 				if (message.channel.id !== "759700750803927061") return;
 				if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply("tu n'as pas les permissions nécessaires").catch(console.error);
-				if (message.client.werewolfGame) return message.reply("la partie a déjà commencé!").catch(console.error);
+				if (message.client.werewolfGame && !message.client.werewolfGame.options.ended) return message.reply("la partie a déjà commencé!").catch(console.error);
 
 				{
 					const game = new Game(message.guild, roleIngame, roleVillage, roleWerewolves, villageChannel, werewolvesChannel, deadChannel);
@@ -86,9 +86,7 @@ const command = {
 						let options = {};
 						if (role === "Sorcière") options.canSave = true;
 						if (role === "Chaman") {
-							deadChannel.updateOverwrite(playerMember.user, {"VIEW_CHANNEL": true, "SEND_MESSAGES": false}).catch(console.error);
-							const chamanOverwrite = deadChannel.permissionOverwrites.get(playerMember.id);
-							options.channelOverwrite = chamanOverwrite;
+							deadChannel.updateOverwrite(playerMember, {"VIEW_CHANNEL": true, "SEND_MESSAGES": false}).catch(console.error);
 						};
 						
 						game.addPlayer(playerMember, role, options);

@@ -36,6 +36,14 @@ class Game {
 	 */
 	#players;
 	/**
+	 * @type {number}
+	 */
+	#night;
+	/**
+	 * @type {number}
+	 */
+	#day;
+	/**
 	 * @type {object}
 	 */
 	#options;
@@ -61,6 +69,8 @@ class Game {
 		this.#deadChannel = deadChannel;
 		this.#players = players;
 		this.#options = options;
+		this.#night = 0;
+		this.#day = 0;
 	}
 
 	/**
@@ -113,6 +123,16 @@ class Game {
 	}
 
 	/**
+	 * @returns {number} The current night
+	 */
+	get night() { return this.#night; }
+
+	/**
+	 * @returns {number} The current day
+	 */
+	get day() { return this.#day; }
+
+	/**
 	 * @returns {object} Other information about the game
 	 */
 	get options() { return this.#options; }
@@ -159,11 +179,12 @@ class Game {
 	 * Sets the beginning of the night
 	 */
 	async setNight() {
+		this.#night ++;
 		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": false });
 		this.werewolvesChannel.updateOverwrite(this.roleWerwolves, { "SEND_MESSAGES": null });
 		this.villageChannel.send({
 			embed: {
-				title: "La nuit tombe sur le village...",
+				title: `La nuit tombe sur le village... (nuit ${this.night})`,
 				color: "#010101",
 				footer: {
 					text: "🐺 Mayze 🐺"
@@ -179,7 +200,7 @@ class Game {
 			});
 		}
 		this.alivePlayers.forEach(async player => {
-			player.action(this.players);
+			player.action(this.players, this.night);
 		});
 		setTimeout(() => {
 			if (!this.options.ended) this.setDay();
@@ -237,12 +258,13 @@ class Game {
 	 * Sets the beginning of the day
 	 */
 	async setDay() {
+		this.#day ++;
 		const attackedPlayer = this.alivePlayers.find(player => player.options.isAttacked);
 		const dead = this.kill(attackedPlayer) || [];
 		this.villageChannel.send({
 			content: `${this.roleIngame}`,
 			embed: {
-				title: "Le jour se lève sur le village...",
+				title: `Le jour se lève sur le village... (jour ${this.day})`,
 				color: "#010101",
 				description: `Les joueurs qui sont morts cette nuit sont:\n${dead.map(player => `• **${player.member.user.username}** qui était **${player.role}**`).join("\n") || "*Personne !*"}`,
 				footer: {
