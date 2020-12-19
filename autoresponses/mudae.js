@@ -1,4 +1,9 @@
+const { Message } = require("discord.js");
+
 const command = {
+	/**
+	 * @param {Message} message 
+	 */
 	async execute(message) {
 		// if (message.channel.id !== "672516067440197693") return;
 		if (message.author.id !== "432610292342587392") return;
@@ -29,7 +34,7 @@ const command = {
 								icon_url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
 							},
 							color: "#010101",
-							description: `**[${characterName}](https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id})** a été roll dans <#${message.channel.id}> !\n(${characterSeries})`,
+							description: `**[${characterName}](${message.url})** a été roll dans <#${message.channel.id}> !\n(${characterSeries})`,
 							footer: {
 								text: "✨Mayze✨"
 							}

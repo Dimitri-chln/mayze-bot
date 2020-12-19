@@ -20,7 +20,7 @@ const command = {
 				color: "#010101",
                 description: snipedReaction.message.content,
                 fields: [
-                    { name: "\u200b", value: `**${snipedReaction.user.tag}** [a réagi avec](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${snipedReaction.message.id}) ${snipedReaction.emoji}` }
+                    { name: "\u200b", value: `**${snipedReaction.user.tag}** [a réagi avec](${snipedReaction.message.url}) ${snipedReaction.emoji}` }
                 ],
 				footer: {
 					text: "✨ Mayze ✨",
