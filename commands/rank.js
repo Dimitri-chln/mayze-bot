@@ -56,9 +56,8 @@ const command = {
 					},
 					color: "#010101",
 					description: ranks.map(rank => {
-						var hasRank;
-						if (message.member.roles.cache.has(rank.id)) hasRank = "✅";
-						return `• ${rank} | ${hasRank}`;
+						if (message.member.roles.cache.has(rank.id)) return `• ${rank} | ✅`;
+						return `• ${rank}`;
 					}).join("\n"),
 					footer: {
 					text: "✨Mayze✨"
