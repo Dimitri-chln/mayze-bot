@@ -178,22 +178,13 @@ client.on("messageReactionAdd", async (reaction, user) => {
 
 client.on("messageReactionRemove", async (reaction, user) => {
 	if (!client.removedReactions) client.removedReactions = {};
-	
 	if (reaction.message.partial) await reaction.message.fetch().catch(console.error);
+
 	client.removedReactions[reaction.message.channel.id] = {
-		messageID: reaction.message.id,
-		user: {
-			id: user.id,
-			tag: user.tag,
-			avatar: user.avatar
-		},
-		author: {
-			id: reaction.message.author.id,
-			tag: reaction.message.author.tag,
-			avatar: reaction.message.author.avatar
-		},
-		content: reaction.message.content,
-		emoji: reaction._emoji
+		message: reaction.message,
+		user: user,
+		author: reaction.message.author,
+		emoji: reaction.emoji
 	};
 	setTimeout(() => { delete client.removedReactions[reaction.message.channel.id] }, 30000);
 });
