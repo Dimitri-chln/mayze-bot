@@ -12,18 +12,19 @@ const command = {
 			embed: {
 				author: {
 					name: snipedReaction.author.tag,
-					icon_url: `https://cdn.discordapp.com/avatars/${snipedReaction.author.id}/${snipedReaction.author.avatar}.png`
+					icon_url: snipedReaction.author.avatarURL({ dynamic: true})
                 },
                 thumbnail: {
-                    url: `https://cdn.discordapp.com/avatars/${snipedReaction.user.id}/${snipedReaction.user.avatar}.png`
+                    url: snipedReaction.emoji.url
                 },
 				color: "#010101",
-                description: snipedReaction.content,
+                description: snipedReaction.message.content,
                 fields: [
-                    { name: "\u200b", value: `**${snipedReaction.user.tag}** [a réagi avec](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${snipedReaction.messageID}) ${snipedReaction.emoji}`, inline: false }
+                    { name: "\u200b", value: `**${snipedReaction.user.tag}** [a réagi avec](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${snipedReaction.message.id}) ${snipedReaction.emoji}` }
                 ],
 				footer: {
-					text: "✨ Mayze ✨"
+					text: "✨ Mayze ✨",
+					icon_url: snipedReaction.user.avatarURL({ dynamic: true })
 				}
 			}
 		}).catch(console.error);
