@@ -7,7 +7,6 @@ const command = {
 	cooldown: 3600,
 	args: 0,
 	usage: "",
-	xp: 100,
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} _args 
@@ -46,7 +45,7 @@ const command = {
 		const pokemonName = pokemon.names.fr;
 		
 		try {
-			await message.client.pg.query(`INSERT INTO pokemons (caught_by, pokedex_id, pokedex_name, is_shiny) VALUES ('${message.author.id}', ${pokemon.national_id}, '${pokemonName}', ${is_shiny})`);
+			await message.client.pg.query(`INSERT INTO pokemons (caught_by, pokedex_id, pokedex_name, is_shiny) VALUES ('${message.author.id}', ${pokemon.national_id}, '${pokemonName.replace(/'/g, "U+0027")}', ${is_shiny})`);
 		} catch (err) {
 			console.log(err);
 			return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
