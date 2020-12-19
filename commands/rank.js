@@ -4,7 +4,7 @@ const command = {
 	name: "rank",
 	description: "Rejoins ou quitte un rank",
 	aliases: [],
-	args: 1,
+	args: 0,
 	usage: "[rank]",
 	/**
 	 * @param {Message} message 

@@ -31,9 +31,6 @@ const command = {
 						name: message.author.tag,
 						icon_url: message.author.avatarURL({ dynamic: true })
 					},
-					thumbnail: {
-						url: message.client.user.avatarURL()
-					},
 					title: `« ${question.replace(/["'«»]/g, "")} »`,
 					color: "#010101",
 					description: answers.map((a, i) => `${emojis[i]} ${a}`).join("\n"),
