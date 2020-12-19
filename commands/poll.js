@@ -1,9 +1,15 @@
+const { Message } = require("discord.js");
+
 const command = {
 	name: "poll",
 	description: "Crée un sondage dans le salon actuel",
 	aliases: ["ask", "question"],
 	args: 1,
 	usage: "<question> [proposition]/[proposition]/...",
+	/**
+	 * @param {Message} message 
+	 * @param {string[]} args 
+	 */
 	async execute(message, args) {
 		var emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
 		const question = (args.join(" ").match(/^["«][^"»]*["»]/) || [null])[0];
@@ -23,10 +29,10 @@ const command = {
 				embed: {
 					author: {
 						name: message.author.tag,
-						icon_url: message.client.user.avatarURL()
+						icon_url: message.author.avatarURL({ dynamic: true })
 					},
 					thumbnail: {
-						url: message.author.avatarURL({ dynamic: true })
+						url: message.client.user.avatarURL()
 					},
 					title: `« ${question.replace(/["'«»]/g, "")} »`,
 					color: "#010101",
