@@ -5,7 +5,7 @@ const command = {
 	args: 1,
 	usage: "<date>",
 	async execute(message, args) {
-		const dateToString = require("../modules/dateToString.js");
+		const timeToString = require("../modules/timeToString.js");
 		//const UTCOffset = 2;
 		const now = Date.now();
 		const date = Date.parse(args.join(" ") + " GMT+0100");
@@ -17,7 +17,7 @@ const command = {
 		if (timeLeft < 0) {
 			return message.reply("la date ne doit pas être dépassée").catch(console.error);
 		}
-		const timeLeftString = dateToString(timeLeft);
+		const timeLeftString = timeToString(timeLeft);
 
 		const parts = args[0].split("/");
 		if (parts.length !== 3) {

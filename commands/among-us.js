@@ -5,7 +5,7 @@ const command = {
 	args: 0,
 	usage: "[add <code> [description]] [delete]",
 	async execute(message, args) {
-		const dateToString = require("../modules/dateToString.js");
+		const timeToString = require("../modules/timeToString.js");
 		
 		var games = message.client.amongUsGames || {};
 		if (["add", "create"].includes(args[0]) && /\w{6}/.test(args[1])) {
@@ -24,7 +24,7 @@ const command = {
 						icon_url: message.client.user.avatarURL()
 					},
 					color: "#010101",
-					description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(il y a ${dateToString((Date.now() - e[1].time)/1000)})`).join("\n——————————\n") || "Aucune partie en cours!",
+					description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(il y a ${timeToString((Date.now() - e[1].time)/1000)})`).join("\n——————————\n") || "Aucune partie en cours!",
 					footer: {
 						text: "✨ Mayze ✨"
 					}

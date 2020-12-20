@@ -5,9 +5,9 @@ const command = {
 	args: 0,
 	usage: "",
 	async execute(message, args) {
-		const dateToString = require("../modules/dateToString.js");
+		const timeToString = require("../modules/timeToString.js");
 		const uptime = Date.now() - message.client.readyAt;
-		const uptimeString = dateToString(uptime / 1000);
+		const uptimeString = timeToString(uptime / 1000);
 		message.channel.send(`Je suis en ligne depuis ${uptimeString}!`).catch(console.error);
 	}
 };

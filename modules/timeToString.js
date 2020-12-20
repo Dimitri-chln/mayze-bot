@@ -1,4 +1,7 @@
-function dateToString(date) {
+/**
+ * @param {number} time The time in milliseconds
+ */
+function timeToString(date) {
 	const years = Math.floor(date / 31536000);
 	const days = Math.floor((date % 31536000) / 86400);
 	const hours = Math.floor((date % 86400) / 3600);
@@ -14,4 +17,4 @@ function dateToString(date) {
 	return dateString;
 };
 
-module.exports = dateToString
+module.exports = timeToString

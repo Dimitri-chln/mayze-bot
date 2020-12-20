@@ -8,7 +8,7 @@ const command = {
 	async execute(message, args) {
 		const { ownerID } = require("../config.json");
 		const dhms = require ("dhms");
-		const dateToString = require("../modules/dateToString.js");
+		const timeToString = require("../modules/timeToString.js");
 		
 		const userID = (message.mentions.users.first() || {id: args[0]}).id;
 		const member = message.guild.members.cache.get(userID);
@@ -24,7 +24,7 @@ const command = {
 		const duration = args.slice(1).join(" ");
 		var durationResponse = "indéfiniment";
 		if (duration) {
-			const durationHumanized = dateToString(dhms(duration, true));
+			const durationHumanized = timeToString(dhms(duration, true));
 			if (durationHumanized) {
 				durationResponse = `pendant ${durationHumanized}`;
 				setTimeout(function() {
