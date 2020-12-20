@@ -135,21 +135,21 @@ client.on("message", async message => {
 
 	if (client.beta && message.author.id !== config.ownerID) return;
 
-	if (!message.author.bot && message.guild.id === "689164798264606784") {
+	if (!message.author.bot /*&& message.guild.id === "689164798264606784"*/) {
 		await message.guild.members.fetch().catch(console.error);
 		const bots = message.guild.members.cache.filter(m => m.user.bot);
 		const prefixes = bots.map(b => b.nickname.match(/\[.+\]/)[0].replace(/[\[\]]/g, ""));
 		if (!prefixes.some(p => message.content.toLowerCase().startsWith(p))) {
 			if (!client.xpMessages) client.xpMessages = {};
-			const f = x => Math.floor(15 / x);
-			const newXP = f(client.xpMessages[message.author.id] || 1);
-			chatXP(message, newXP);
-			if (newXP === f(1)) {
-				client.xpMessages[message.author.id] = 2;
+			if (!client.xpMessages[message.author.id]) {
+				client.xpMessages[message.author.id] = 1;
 				setTimeout(() => {
 					delete client.xpMessages[message.author.id];
 				}, 60000);
 			}
+			const f = x => Math.round(Math.sqrt(message.content.length) * config.xpMultiplier / x);
+			const newXP = f(client.xpMessages[message.author.id]);
+			chatXP(message, newXP);
 			client.xpMessages[message.author.id] ++;
 		}
 	}

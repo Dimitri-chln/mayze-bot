@@ -25,7 +25,8 @@ const command = {
 			return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
 		}
 
-		const memberPerPage = 15, xpPerLevel = 1000;
+		const memberPerPage = 15;
+		const { xpPerLevel } = require("../config.json");
 		var pages = [];
 		var embed = new MessageEmbed()
 			.setAuthor(`Classement de ${message.guild.name}`, message.client.user.avatarURL())

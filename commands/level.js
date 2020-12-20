@@ -11,7 +11,8 @@ const command = {
      * @param {string[]} args 
      */
     async execute(message, args) {
-        const xpPerLevel = 1000, xpBar = ["█", "▁"], barSize = 20;
+        const { xpPerLevel } = require("../config.json");
+        const xpBar = ["█", "▁"], barSize = 20;
         const user = message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.author;
 
         var data;

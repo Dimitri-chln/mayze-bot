@@ -5,5 +5,7 @@
   },
   "ownerID": "307815349699608577",
   "logChannel": "770569866846928897",
-  "errorChannel": "779272074458824704"
+  "errorChannel": "779272074458824704",
+  "xpPerLevel": 1000,
+  "xpMultiplier": 2.25
 }
