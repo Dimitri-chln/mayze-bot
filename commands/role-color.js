@@ -36,7 +36,7 @@ const command = {
 						url: `https://dummyimage.com/50/${color}/${color}.png`
 					},
 					color: "#010101",
-					description: `La couleur du rôle ${role} a été changée en ${args[1]}`,
+					description: `La couleur du rôle ${role} a été changée en \`${args[1]}\``,
 					footer: {
 						text: "✨Mayze✨"
 					}
