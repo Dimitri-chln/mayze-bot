@@ -14,8 +14,9 @@ const command = {
 			return reaction.emoji.name === "🔎" && !user.bot;
 		};
 		
-		try { await message.awaitReactions(filter, {max: 1, time: 60000, errors: ["time"]}) }
+		try { await message.awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] }) }
 		catch (err) { return console.log(err); }
+		
 		var msg = message.content;
 		if (message.editedTimestamp) {
 			try { 
