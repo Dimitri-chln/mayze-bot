@@ -9,11 +9,15 @@ const command = {
 		if (message.guild.id !== "689164798264606784") return;
 		const pinChannel = message.guild.channels.cache.get("788428208298000435");
 		const legRegex = /Félicitations, vous venez de gagner un\.\.\. Un\.\.\. <:.+:(\d{18})> \*\*(\w+)\*\*\?!/;
-		const shinyRegex = /<:.+:(\d{18})> \*\*(\w+)\*\* <:shinySparkles:653808283244560402>/;
+		const ubRegex =/un <:.+:(\d{18})> \*\*(\w+)\*\*\. Euh, QUOI \?/;
+		const shinyRegex = /<:.+:(\d{18})> \*\*(\w+) <:shinySparkles:653808283244560402>\*\*/;
+		// https://cdn.discordapp.com/emojis/653808283244560402.png?v=1
 
 		const [ , legEmoji, legPokemon ] = message.content.match(legRegex) || [];
+		const [ , ubEmoji, ubPokemon ] = message.content.match(ubRegex) || [];
 		const [ , shinyEmoji, shinyPokemon ] = message.content.match(shinyRegex) || [];
-		if (!legPokemon && !shinyPokemon) return;
+
+		if (!legPokemon && !shinyPokemon && !ubPokemon) return;
 		
 		let user = message.mentions.users.first();
 		if (!user) {
@@ -30,9 +34,9 @@ const command = {
 				},
 				color: "#010101",
 				thumbnail: {
-					url: `https://cdn.discordapp.com/emojis/${legEmoji || shinyEmoji}.png?v=1`
+					url: `https://cdn.discordapp.com/emojis/${legEmoji || ubEmoji || shinyEmoji}.png?v=1`
 				},
-				description: `a attrapé un ${shiny}**[${legPokemon || shinyPokemon}](${message.url})** dans ${message.channel} !`,
+				description: `a attrapé un ${shiny}**[${legPokemon || ubPokemon || shinyPokemon}](${message.url})** dans ${message.channel} !`,
 				footer: {
 					text: "✨ Mayze ✨"
 				},
