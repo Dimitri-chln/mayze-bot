@@ -1,14 +1,20 @@
+const { Message } = require("discord.js");
+
 const command = {
 	name: "wish",
 	description: "Wish des séries pour Mudae",
 	aliases: [],
 	args: 1,
-	usage: "<série>$[regex]",
+	usage: "<série>$[autres noms]",
+	/**
+	 * @param {Message} message 
+	 * @param {string[]} args 
+	 */
 	async execute(message, args) {
 		const series = args.join(" ").split("$")[0].toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase() });
-		const regex = (args.join(" ").split("$")[1] || "").toLowerCase();
-		var query = `INSERT INTO wishes (user_id, series) VALUES ('${message.author.id}', '${series}')`;
-		if (regex) query = `INSERT INTO wishes (user_id, series, regex) VALUES ('${message.author.id}', '${series}', '${series.toLowerCase()}|${regex}')`
+		const altNames = (args.join(" ").split("$")[1] || "").toLowerCase();
+		var query = `INSERT INTO wishes (user_id, series) VALUES ('${ message.author.id }', '${ series }')`;
+		if (regex) query = `INSERT INTO wishes (user_id, series, regex) VALUES ('${ message.author.id }', '${ series }', '${ series.toLowerCase() }|${ altNames }')`
 		try { await message.client.pg.query(query); }
 		catch (err) {
 			console.log(err);

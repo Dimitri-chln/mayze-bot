@@ -5,7 +5,7 @@ const command = {
 	 * @param {Message} message 
 	 */
 	async execute(message) {
-		// if (message.channel.id !== "672516067440197693") return;
+		// if (message.guild.id !== "689164798264606784") return;
 		if (message.author.id !== "432610292342587392") return;
 		if (!message.embeds.length) return;
 		const mudaeEmbed = message.embeds[0];
@@ -21,7 +21,10 @@ const command = {
 		} catch (err) { console.log(err);	}
 		if (!wishes) return;
 		wishes.forEach(async wish => {
-			const regex = new RegExp(wish.regex || wish.series, "i");
+			const regex = wish.regex ?
+				new RegExp(wish.regex.replace(/^|(\|)|$/g, a => { if (a) return `\b${ a }\b`; return "\b";}), "i") :
+				new RegExp(`\b${ wish.series }\b`, "i");
+			console.log(regex);
 			if (regex.test(characterSeries)) {
 				var user;
 				try { user = message.client.users.cache.get(wish.user_id) || await message.client.users.fetch(wish.user_id); }
