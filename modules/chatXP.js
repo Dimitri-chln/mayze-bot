@@ -21,7 +21,7 @@ async function chatXP(message, newXP) {
 			message.channel.send(`**${message.author}** est passé au niveau **${Math.floor(xp / xpPerLevel)}** ! <:foxmayze:763146438120046632>`).catch(console.error);
 		}
 
-		console.log(`Gave ${newXP}xp to ${message.author.tag}`);
+		// console.log(`Gave ${newXP}xp to ${message.author.tag}`);
 	} catch (err) {
 		console.error(err);
 	}
