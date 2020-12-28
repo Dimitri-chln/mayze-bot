@@ -35,9 +35,10 @@ const command = {
 						for (i = 0; i < matches.length; i++) {;
 							var embed = new MessageEmbed()
 								.setColor("#010101")
+								.setTitle(`Le résultat contient ${ res.rowCount } lignes`)
 								.setAuthor(args.join(" "), message.author.avatarURL({ dynamic: true }))
 								.setDescription(`\`\`\`json\n${matches[i]}\n\`\`\``)
-								.setFooter("✨Mayze✨")
+								.setFooter(`${ res.rowCount } lignes`);
 							pages.push(embed);
 						}
 						pagination(message, pages).catch(console.error);
