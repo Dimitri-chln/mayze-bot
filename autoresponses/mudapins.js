@@ -1,21 +1,24 @@
 const command = {
+	/**
+	 * @param {Discord.Message} message 
+	 */
 	async execute(message) {
 		if (message.author.id !== "432610292342587392") return;
 		const Discord = require("discord.js");
 		const pagination = require("../modules/pagination.js");
 		const pinRegex = /<:(logo)?pin\d{0,3}:\d{18}>/g;
 		if (!pinRegex.test(message.content)) return;
-		if (message.content.replace(pinRegex, "").replace(/\n/g, "") === "") return;
+
 		message.react("🔎").catch(console.error);
 		
-		var userID;
+		var reactUser;
 		const filter = (reaction, user) => {
-			userID = user.id;
+			reactUser = user;
 			return reaction.emoji.name === "🔎" && !user.bot;
 		};
 		
-		try { await message.awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] }) }
-		catch (err) { return console.log(err); }
+		const collected =  await message.awaitReactions(filter, { max: 1, time: 60000 }).catch(console.error);
+		if (!collected.size) return message.reactions.removeAll().catch(console.error);
 		
 		var msg = message.content;
 		if (message.editedTimestamp) {
@@ -31,7 +34,7 @@ const command = {
 		for (i = 0; i < pins.length; i++) {
 			embed = new Discord.MessageEmbed()
 				.setColor("#010101")
-				.setAuthor(`Mudapins: ${pins[i].match(/(?:logo)?pin\d+/)[0]}`, `https://cdn.discordapp.com/avatars/${userID}/${(message.client.users.cache.get(userID) || {}).avatar}.png`)
+				.setAuthor(`Mudapins: ${pins[i].match(/(?:logo)?pin\d+/)[0]}`, reactUser.avatarURL({ dynamic: true }))
 				.setThumbnail(`https://cdn.discordapp.com/emojis/${pins[i].match(/\d{18}/)}.png`);
 			pages.push(embed);
 		};
