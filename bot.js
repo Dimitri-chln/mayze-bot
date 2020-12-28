@@ -135,7 +135,7 @@ client.on("message", async message => {
 
 	if (client.beta && message.author.id !== config.ownerID) return;
 
-	if (!message.author.bot && message.guild.id === "689164798264606784") {
+	if (!message.author.bot && message.guild.id === "689164798264606784" && !message.channel.name.includes("spam")) {
 		await message.guild.members.fetch().catch(console.error);
 		const bots = message.guild.members.cache.filter(m => m.user.bot);
 		const prefixes = bots.map(b => b.nickname.match(/\[.+\]/)[0].replace(/[\[\]]/g, ""));
