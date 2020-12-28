@@ -33,7 +33,7 @@ const command = {
 		const pkmPerPage = 15;
 		var pages = [];
 		var embed = new Discord.MessageEmbed()
-			.setAuthor(`Pokémons de ${message.author.username}`, message.author.avatarURL({ dynamic: true }))
+			.setAuthor(`Pokémons de ${message.author.tag}`, message.author.avatarURL({ dynamic: true }))
 			.setColor("#010101")
 			.setDescription("*Aucun pokémon ne correspond à la recherche*");
 		if (!pokemons.length) {
