@@ -192,16 +192,14 @@ client.on("messageReactionRemove", async (reaction, user) => {
 client.on("guildMemberAdd", async member => {
 	const roles = ["759694957132513300", "735810462872109156", "735810286719598634", "735809874205737020", "735811339888361472"];
 	member.roles.add(message.guild.roles.cache.filter(r => roles.includes(r))).catch(console.error);
-	
-	await member.fetch().catch(console.error);
 	member.user.send({
 		embed: {
 			author: {
 				name: member.user.tag,
-				icon_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
+				icon_url: client.user.avatarURL()
 			},
 			thumbnail: {
-				url: `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.png`
+				url: member.user.avatarURL({ dynamic: true })
 			},
 			title: "Bienvenue sur Mayze !",
 			color: "#010101",
