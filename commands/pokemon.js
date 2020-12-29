@@ -1,11 +1,17 @@
+const { Message } = require("discord.js");
+
 const command = {
 	name: "pokemon",
 	description: "Regarde la liste des pokémons que tu as attrapés",
 	aliases: ["pokemons", "pkmn", "pkm", "poke"],
 	args: 0,
 	usage: "[-legendary] [-shiny] [-alolan] [-galarian]",
+	/**
+	 * @param {Message} message 
+	 * @param {string[]} args 
+	 */
 	async execute(message, args) {
-		const Discord = require("discord.js");
+		const { MessageEmbed } = require("discord.js");
 		const pagination = require("../modules/pagination.js");
 		var pokemons;
 		try {
@@ -32,7 +38,7 @@ const command = {
 		
 		const pkmPerPage = 15;
 		var pages = [];
-		var embed = new Discord.MessageEmbed()
+		var embed = new MessageEmbed()
 			.setAuthor(`Pokémons de ${message.author.tag}`, message.author.avatarURL({ dynamic: true }))
 			.setColor("#010101")
 			.setDescription("*Aucun pokémon ne correspond à la recherche*");
@@ -40,7 +46,7 @@ const command = {
 			pages.push(embed);
 		};
 		for (i = 0; i < pokemons.length; i += pkmPerPage) {
-			embed = new Discord.MessageEmbed()
+			embed = new MessageEmbed()
 				.setAuthor(`Pokémons de ${message.author.tag}`, message.author.avatarURL({ dynamic: true }))
 				.setColor("#010101")
 				.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => { if (p.is_shiny) return `⭐ **${p.pokedex_name.replace(/U\+0027/g, "'")}** | ID: ${p.id}`; return `**${p.pokedex_name.replace(/U\+0027/g, "'")}** | ID: ${p.id}` }).join("\n"));
