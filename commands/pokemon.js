@@ -41,7 +41,7 @@ const command = {
 		};
 		for (i = 0; i < pokemons.length; i += pkmPerPage) {
 			embed = new Discord.MessageEmbed()
-				.setAuthor(`Pokémons de ${message.author.username}`, message.author.avatarURL({ dynamic: true }))
+				.setAuthor(`Pokémons de ${message.author.tag}`, message.author.avatarURL({ dynamic: true }))
 				.setColor("#010101")
 				.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => { if (p.is_shiny) return `⭐ **${p.pokedex_name.replace(/U\+0027/g, "'")}** | ID: ${p.id}`; return `**${p.pokedex_name.replace(/U\+0027/g, "'")}** | ID: ${p.id}` }).join("\n"));
 			pages.push(embed);
