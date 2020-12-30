@@ -23,8 +23,6 @@ const command = {
 		const villageChannel = message.guild.channels.cache.get("759700750803927061");
 		const werewolvesChannel = message.guild.channels.cache.get("759702367800786964");
 		const deadChannel = message.guild.channels.cache.get("759702659530883095");
-
-		await message.guild.members.fetch();
 		
 		switch (cmd) {
 			case "join":

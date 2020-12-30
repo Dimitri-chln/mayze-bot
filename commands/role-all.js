@@ -34,9 +34,6 @@ const command = {
 			return message.channel.send("Quelque chose s'est mal passé avec la validation :/").catch(console.error);
 		}
 
-		msg.edit("Récupération des membres...").catch(console.error);
-		await message.guild.members.fetch();
-
 		var members = message.guild.members.cache;
 
 		if (args.includes("-bot")) {

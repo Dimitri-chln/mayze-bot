@@ -75,7 +75,7 @@ client.on("ready", async () => {
 
 	client.user.setActivity("le meilleur clan", { type: "WATCHING" });
 	if (client.user.id === "740848584882126939") client.beta = true;
-	const mayze = await client.users.fetch("703161067982946334").catch(console.error);
+	const mayze = client.users.cache.get("703161067982946334");
 	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.prefix : config.prefixBeta ) : config.prefix;
 	client.prefix = prefix;
 });
@@ -135,10 +135,10 @@ client.on("message", async message => {
 		}
 	}
 
-	if (client.beta && message.author.id !== config.ownerID) return;
+	const mayze = client.users.cache.get("703161067982946334");
+	if (client.beta && mayze.presence.status !== "offline") return;
 
 	if (!message.author.bot && message.guild.id === "689164798264606784" && !message.channel.name.includes("spam")) {
-		await message.guild.members.fetch().catch(console.error);
 		const bots = message.guild.members.cache.filter(m => m.user.bot);
 		const prefixes = bots.map(b => b.nickname.match(/\[.+\]/)[0].replace(/[\[\]]/g, ""));
 		if (!prefixes.some(p => message.content.toLowerCase().startsWith(p))) {
