@@ -15,11 +15,6 @@ const pg = require("pg");
 client.pg = createPgClient();
 client.pg.connect().catch(console.error);
 setInterval(reconnectPgClient, 36000000);
-client.pg.on("error", err => {
-	console.error(err);
-	client.pg = createPgClient();
-	client.pg.connect().catch(console.error);
-})
 
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
@@ -281,6 +276,9 @@ function createPgClient() {
 		ssl: true
 	};
 	const pgClient = new pg.Client(connectionString);
+	pgClient.on("error", err => {
+		console.error(err);
+	});
 	return pgClient;
 }
 
