@@ -22,9 +22,8 @@ const command = {
 		if (!wishes) return;
 		wishes.forEach(async wish => {
 			const regex = wish.regex ?
-				new RegExp(wish.regex.replace(/^|(\|)|$/g, a => { if (a) return `\b${ a }\b`; return "\b";}), "i") :
-				new RegExp(`\b${ wish.series }\b`, "i");
-			console.log(regex);
+				new RegExp(wish.regex.replace(/^|(\|)|$/g, a => { if (a) return `\\b${ a }\\b`; return "\\b";}), "i") :
+				new RegExp(`\\b${ wish.series }\\b`, "i");
 			if (regex.test(characterSeries)) {
 				var user;
 				try { user = message.client.users.cache.get(wish.user_id) || await message.client.users.fetch(wish.user_id); }
