@@ -7,22 +7,20 @@ const command  = {
 	async execute(message, args) {
 		const config = require("../config.json");
 		const { version } = require("../package.json");
-		try {
-			message.channel.send({
-				embed: {
-					author: {
-						name: message.client.user.username,
-						icon_url: message.client.user.avatarURL()
-					},
-					title: "• Informations sur le bot",
-					color: "#010101",
-					description: `**Préfixe:** \`${config.prefix[message.client.user.id]}\`\n**Propriétaire:** \`${message.client.users.cache.get(config.ownerID).username}\`\n**Version:** \`${version}\``,
-					footer: {
-						text: "✨Mayze✨"
-					}
+		message.channel.send({
+			embed: {
+				author: {
+					name: message.client.user.username,
+					icon_url: message.client.user.avatarURL()
+				},
+				title: "• Informations sur le bot",
+				color: "#010101",
+				description: `**Préfixe:** \`${message.client.prefix}\`\n**Propriétaire:** \`${message.client.users.cache.get(config.ownerID).username}\`\n**Version:** \`${version}\``,
+				footer: {
+					text: "✨Mayze✨"
 				}
-			});
-		} catch (err) { console.log(err); }
+			}
+		}).catch(console.error);
 	}
 };
 

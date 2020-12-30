@@ -6,7 +6,6 @@ const command = {
 	usage: "create/join/start [-kick]",
 	async execute(message, args) {
 		const shuffle = require("../modules/shuffle.js");
-		const prefix = require("../config.json").prefix[message.client.user.id];
 		if (!message.client.russianRoulette) message.client.russianRoulette = [];
 		switch (args[0]) {
 			case "create":
@@ -23,7 +22,7 @@ const command = {
 							},
 							color: "#010101",
 							description:
-								`Rejoins la partie avec la commande \`${prefix}russian-roulette join\``,
+								`Rejoins la partie avec la commande \`${message.client.prefix}russian-roulette join\``,
 							footer: {
 								text: "✨Mayze✨"
 							}
@@ -33,7 +32,7 @@ const command = {
 				break;
 			case "join":
 				if (!message.client.russianRoulette.length) {
-					return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande\`${prefix}russian-roulette create\``).catch(console.error);
+					return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande\`${message.client.prefix}russian-roulette create\``).catch(console.error);
 				}
 				if (message.client.russianRoulette.includes(message.author.id)) {
 					return message.reply("tu as déjà rejoint cette partie").catch(console.error);
@@ -43,7 +42,7 @@ const command = {
 				break;
 			case "start":
 				if (!message.client.russianRoulette.length) {
-					try{ message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande \`${prefix}russian-roulette create\``); }
+					try{ message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``); }
 					catch (err) { console.log(err); }
 					return;
 				}

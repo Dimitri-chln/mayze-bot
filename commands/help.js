@@ -1,11 +1,16 @@
+const { Message } = require("discord.js");
+
 const command = {
 	name: "help",
 	description: "Obtiens la liste complète des commandes ou des informations sur une commande spécifique",
 	aliases: ["h"],
 	args: 0,
 	usage: "[commande]",
+	/**
+	 * @param {Message} message 
+	 * @param {string[]} args 
+	 */
 	async execute(message, args) {
-		const prefix = require("../config.json").prefix[message.client.user.id];
 		const commands = message.client.commands;
 
 		if (!args.length) {
@@ -23,7 +28,7 @@ const command = {
 							text: "✨Mayze✨"
 						}
 					}
-				})
+				});
 			} catch (err) {
 				console.log(err);
 				message.reply("je n'ai pas pu te DM... As-tu désactivé les messages privés?").catch(console.error);
@@ -42,7 +47,7 @@ const command = {
 				data = data + `\n**Description:** ${command.description}`;
 			};
 			if (command.usage) {
-				data = data + `\n**Utilisation:** \`${prefix}${command.name} ${command.usage}\``;
+				data = data + `\n**Utilisation:** \`${message.client.prefix}${command.name} ${command.usage}\``;
 			};
 			if (command.perms) {
 				data = data + `\n**Permissions:** \`${command.perms.join("`, `")}\``;

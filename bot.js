@@ -48,9 +48,9 @@ for (const file of reactionCommandsFiles) {
 client.cooldowns = new Discord.Collection();
 
 client.on("ready", async () => {
-	console.log("--------------------");
-	console.log("BOT STARTED UP");
-	console.log("--------------------");
+	console.log("----------------");
+	console.log(" BOT STARTED UP ");
+	console.log("----------------");
 	const { version } = require ("./package.json");
 	const logChannel = client.channels.cache.get(config.logChannel);
 	try {
@@ -58,7 +58,7 @@ client.on("ready", async () => {
 			embed: {
 				author: {
 					name: "Démarrage du bot...",
-					icon_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
+					icon_url: client.user.avatarURL()
 				},
 				color: "#010101",
 				description: `• **Version:** \`${version}\`\n• **Ping:** Calcul...`,
@@ -85,18 +85,22 @@ client.on("message", async message => {
 
 	const chatXP = require("./modules/chatXP.js");
 
-	if (message.content.toLowerCase().startsWith(config.prefix[client.user.id])) {
+	const mayze = client.users.cache.get("703161067982946334") || await client.users.fetch("703161067982946334").catch(console.error);
+	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.prefix : config.prefixBeta ) : config.prefix;
+	client.prefix = prefix;
+
+	if (message.content.toLowerCase().startsWith(prefix)) {
 		if (message.author.bot) return;
-		const input = message.content.slice(config.prefix[client.user.id].length).trim().split(/ +/g);
+		const input = message.content.slice(prefix.length).trim().split(/ +/g);
 		const commandName = input[0].toLowerCase();
 		const args = input.splice(1);
 
 		const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 		if (!command) return;
 
-		if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm))) {
+		if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm)))
 			return message.reply(`tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``).catch(console.error);
-		}
+
 		if (command.ownerOnly && message.author.id !== config.ownerID) return;
 
 		if (!client.cooldowns.has(command.name)) {
@@ -114,13 +118,13 @@ client.on("message", async message => {
 				.replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
 				.replace(/00h |00m /g, "");
 				try {
-					return message.reply(`attends encore **${timeLeftHumanized}** avant d'utiliser la commande \`${config.prefix[client.user.id]}${command.name}\``);
+					return message.reply(`attends encore **${timeLeftHumanized}** avant d'utiliser la commande \`${prefix}${command.name}\``);
 				} catch (err) { console.log(err); }
 			}
 		}
 
 		if (args.length < command.args) {
-			return message.channel.send(`Utilisation : \`${config.prefix[client.user.id]}${commandName} ${command.usage}\``).catch(console.error);
+			return message.channel.send(`Utilisation : \`${prefix}${commandName} ${command.usage}\``).catch(console.error);
 		}
 		try {
 			command.execute(message, args);

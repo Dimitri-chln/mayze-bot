@@ -12,8 +12,6 @@ const command = {
 	 * @param {string[]} args 
 	 */
 	async execute(message, args) {
-		const prefix = require("../config.json").prefix[message.client.user.id];
-
 		const res = await axios.get("https://api.memegen.link/templates").catch(console.error);
 		const memes = res.data.map(meme => meme.key);
 
@@ -36,7 +34,7 @@ const command = {
 			const top = (args.slice(1).join(" ").split("$")[0] || " ").replace(/[_-\s\n\?&%#\/\\"]/g, a => replacement[a]);
 			const bottom = (args.slice(1).join(" ").split("$")[1] || " ").replace(/[_-\s\n\?&%#\/\\"]/g, a => replacement[a]);
 
-			if (!memes.includes(image)) return message.reply(`cette image n'existe pas, tu peux voir la liste de toutes les images avec la commande \`${prefix}meme\``)
+			if (!memes.includes(image)) return message.reply(`cette image n'existe pas, tu peux voir la liste de toutes les images avec la commande \`${message.client.prefix}meme\``)
 
 			const url = `https://api.memegen.link/images/${image}/${top}/${bottom}.png`;
 

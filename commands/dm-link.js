@@ -12,8 +12,6 @@ const command = {
 	 * @param {string[]} _args 
 	 */
 	async execute(message, _args) {
-		const prefix = require("../config.json").prefix[message.client.user.id];
-
 		const channel = message.mentions.channels.first();
 		if (!channel) return message.reply("mentionne un salon").catch(console.error);
 		const { "channel": dmChannel } = await message.author.send({
@@ -24,7 +22,7 @@ const command = {
 				},
 				title: `Début de la conversation avec #${ channel.name }`,
 				color: "#010101",
-				description: `Tu vas recevoir tous les messages du salon ici. Envoie un message pour qu'il soit envoyé dans ${ channel }\n\n> Tu peux arrêter à tout moment en envoyant ${ prefix }stop`,
+				description: `Tu vas recevoir tous les messages du salon ici. Envoie un message pour qu'il soit envoyé dans ${ channel }\n\n> Tu peux arrêter à tout moment en envoyant ${ message.client.prefix }stop`,
 				footer: {
 					text: "✨ Mayze ✨"
 				}
@@ -43,7 +41,7 @@ const command = {
 		});
 
 		dmCollector.on("collect", async msg => {
-			if (msg.content === `${ prefix }stop`) {
+			if (msg.content === `${ message.client.prefix }stop`) {
 				channelCollector.stop();
 				dmCollector.stop();
 				dmChannel.send({
