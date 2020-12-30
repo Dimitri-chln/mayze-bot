@@ -21,9 +21,6 @@ client.pg.on("error", err => {
 	client.pg.connect().catch(console.error);
 })
 
-const dataRead = require("./modules/dataRead.js");
-const dataWrite = require("./modules/dataWrite.js");
-
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
 for (const file of commandFiles) {
