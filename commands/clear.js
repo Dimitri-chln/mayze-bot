@@ -1,3 +1,5 @@
+const { Message } = require("discord.js");
+
 const command = {
 	name: "clear",
 	description: "Supprime plusieurs messages en même temps",
@@ -6,21 +8,23 @@ const command = {
 	args: 1,
 	usage: "<nombre> [mention/id] [-bot] [-r <regex>]",
 	perms: ["MANAGE_MESSAGES"],
+	/**
+	 * @param {Message} message 
+	 * @param {string[]} args 
+	 */
 	async execute(message, args) {
-		const number = parseInt(args[0], 10);
-		if (isNaN(number) || number <= 0 || number > 100) {
+		let number = parseInt(args[0], 10);
+		if (isNaN(number) || number <= 0 || number > 100)
 			return message.reply("le premier argument doit être un nombre entier compris entre 1 et 100!");
-		}
-		try { await message.delete(); }
-		catch (err) {
-			number ++;
-			console.log(err);
-		}
+		await message.delete().catch(err => {
+			number++;
+			console.error(err);
+		});
 
 		var messages;
 		try { messages = await message.channel.messages.fetch({ limit: 100 }); }
 		catch (err) {
-			console.log(err);
+			console.error(err);
 			return message.reply("quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
 		}
 		
@@ -39,16 +43,14 @@ const command = {
 		messages = messages.first(number);
 		try { await message.channel.bulkDelete(messages); }
 		catch (err) {
-			console.log(err);
+			console.error(err);
 			return message.reply("quelque chose s'est mal passé en supprimant les messages :/").catch(console.error);
 		}
 		var response = `${messages.length} messages ont été supprimés`;
 		if (messages.length === 1) response = "1 message a été supprimé";
 		if (messages.length === 0) response = "Aucun message n'a été supprimé";
-		try {
-			const msg = await message.channel.send(response);
-			msg.delete({ timeout: 4000 });
-		} catch (err) { console.log(err); }
+		const msg = await message.channel.send(response).catch(console.error);
+		msg.delete({ timeout: 4000 }).catch(console.error);
 	}
 };
 
