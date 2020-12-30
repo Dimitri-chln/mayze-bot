@@ -14,7 +14,9 @@ const command = {
 	async execute(message, _args) {
 		const channel = message.mentions.channels.first();
 		if (!channel) return message.reply("mentionne un salon").catch(console.error);
-		const { "channel": dmChannel } = await message.author.send({
+		const { dmChannel } = message.author;
+		
+		message.author.send({
 			embed: {
 				author: {
 					name: message.author.tag,
