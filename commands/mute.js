@@ -36,7 +36,7 @@ const command = {
 		try { member.roles.add(mutedRole.id); }
 		catch (err) {
 			console.log(err);
-			message.channel.send("Quelque chose s'est mal passé en ajoutant le rôle Muted").catch(console.error);
+			return message.channel.send("Quelque chose s'est mal passé en ajoutant le rôle Muted").catch(console.error);
 		}
 		message.channel.send(`${member.user} a été mute ${durationResponse}`).catch(console.error);
 	}

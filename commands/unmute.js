@@ -21,7 +21,7 @@ const command = {
 		try { member.roles.remove(mutedRole.id); }
 		catch (err) {
 			console.log(err);
-			message.channel.send("Quelque chose s'est mal passé en retirant le rôle").catch(console.error);
+			return message.channel.send("Quelque chose s'est mal passé en retirant le rôle").catch(console.error);
 		}
 		message.channel.send(`${member.user} a été unmute`).catch(console.error);
 	}
