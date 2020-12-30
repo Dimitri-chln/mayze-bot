@@ -3,8 +3,8 @@ const config = require("./config.json");
 require('dotenv').config();
 
 const Discord = require("discord.js");
-const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEMBERS" ]);
-const client = new Discord.Client({ partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
+const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEMBERS", "GUILD_PRESENCES" ]);
+const client = new Discord.Client({ fetchAllMembers: true, partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
 
 if (process.env.BOT_HOST !== "heroku") {
 	const shellExec = require("./modules/shellExec.js");
@@ -68,12 +68,16 @@ client.on("ready", async () => {
 				timestamp: Date.now()
 			}
 		});
-		const embed = new Discord.MessageEmbed(msg.embeds[0]);
+		const embed = msg.embeds[0];
 		const editedMsg = await msg.edit(embed);
 		msg.edit(embed.setDescription(`• **Version:** \`${version}\`\n• **Ping:** \`${Math.abs(editedMsg.editedTimestamp - editedMsg.createdTimestamp)}ms\``));
-	} catch (err) { console.log(err); }
+	} catch (err) { console.error(err); }
+
 	client.user.setActivity("le meilleur clan", { type: "WATCHING" });
 	if (client.user.id === "740848584882126939") client.beta = true;
+	const mayze = await client.users.fetch("703161067982946334").catch(console.error);
+	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.prefix : config.prefixBeta ) : config.prefix;
+	client.prefix = prefix;
 });
 
 client.on("message", async message => {
@@ -85,13 +89,9 @@ client.on("message", async message => {
 
 	const chatXP = require("./modules/chatXP.js");
 
-	const mayze = client.users.cache.get("703161067982946334") || await client.users.fetch("703161067982946334").catch(console.error);
-	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.prefix : config.prefixBeta ) : config.prefix;
-	client.prefix = prefix;
-
-	if (message.content.toLowerCase().startsWith(prefix)) {
+	if (message.content.toLowerCase().startsWith(client.prefix)) {
 		if (message.author.bot) return;
-		const input = message.content.slice(prefix.length).trim().split(/ +/g);
+		const input = message.content.slice(client.prefix.length).trim().split(/ +/g);
 		const commandName = input[0].toLowerCase();
 		const args = input.splice(1);
 
@@ -117,14 +117,12 @@ client.on("message", async message => {
 				.toUTCString()
 				.replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
 				.replace(/00h |00m /g, "");
-				try {
-					return message.reply(`attends encore **${timeLeftHumanized}** avant d'utiliser la commande \`${prefix}${command.name}\``);
-				} catch (err) { console.log(err); }
+				return message.reply(`attends encore **${timeLeftHumanized}** avant d'utiliser la commande \`${client.prefix}${command.name}\``).catch(console.error);
 			}
 		}
 
 		if (args.length < command.args) {
-			return message.channel.send(`Utilisation : \`${prefix}${commandName} ${command.usage}\``).catch(console.error);
+			return message.channel.send(`Utilisation : \`${client.prefix}${commandName} ${command.usage}\``).catch(console.error);
 		}
 		try {
 			command.execute(message, args);
@@ -251,16 +249,22 @@ client.on("error", async error => {
 		embed: {
 			author: {
 				name: "Erreur rencontrée",
-				icon_url: `https://cdn.discordapp.com/avatars/${client.user.id}/${client.user.avatar}.png`
+				icon_url: client.user.avatarURL()
 			},
 			color: "#010101",
 			title: error.name,
-			description: error.stack,
+			description: `\`\`\`\n${ error.stack }\n\`\`\``,
 			footer: {
 				text: "✨ Mayze ✨"
 			}
 		}
 	}).catch(console.error);
+});
+
+client.on("presenceUpdate", async (_oldMember, newMember) => {
+	if (newMember.user.id === "703161067982946334" && client.beta) {
+		client.prefix = newMember.user.presence.status === "offline" ? config.prefix : config.prefixBeta;
+	}
 });
 
 client.login(process.env.TOKEN);
