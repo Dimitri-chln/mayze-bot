@@ -132,7 +132,7 @@ client.on("message", async message => {
 
 	if (!message.author.bot && message.guild.id === "689164798264606784" && !message.channel.name.includes("spam")) {
 		const bots = message.guild.members.cache.filter(m => m.user.bot);
-		const prefixes = bots.map(b => b.nickname.match(/\[.+\]/)[0].replace(/[\[\]]/g, ""));
+		const prefixes = bots.map(b => (b.nickname.match(/\[.+\]/) || ["[!]"])[0].replace(/[\[\]]/g, ""));
 		if (!prefixes.some(p => message.content.toLowerCase().startsWith(p))) {
 			if (!client.xpMessages) client.xpMessages = {};
 			if (!client.xpMessages[message.author.id]) {

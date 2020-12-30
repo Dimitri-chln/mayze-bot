@@ -6,7 +6,7 @@ const command = {
 	aliases: ["dmLink", "link"],
 	args: 1,
 	usage: "<salon>",
-	ownerOnly: true,
+	ownerOnly: false,
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} _args 
@@ -14,9 +14,7 @@ const command = {
 	async execute(message, _args) {
 		const channel = message.mentions.channels.first();
 		if (!channel) return message.reply("mentionne un salon").catch(console.error);
-		const { dmChannel } = message.author;
-		
-		message.author.send({
+		const { "channel": dmChannel } = await message.author.send({
 			embed: {
 				author: {
 					name: message.author.tag,
