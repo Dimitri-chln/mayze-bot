@@ -11,7 +11,7 @@ const command = {
 	 * @param {string[]} args 
 	 */
 	async execute(message, args) {
-		const color = hexToRGB(args[0] || "");
+		let color = hexToRGB(args[0] || "");
 		const msg = await message.channel.send({
 			embed: {
 				author: {
@@ -41,15 +41,55 @@ const command = {
 
 		const reactionFilter = (reaction, user) => Object.values(emojis).includes(reaction.emoji.name) && !user.bot;
 		const reactionCollector = msg.createReactionCollector(reactionFilter);
-		const messageFilter = m => /(r|g|b)[0-2]?\d?\d/i.test(m.content) && !message.author.bot;
+		const messageFilter = m => /(r|g|b)(\+|-)[0-2]?\d?\d/i.test(m.content) && !message.author.bot;
 		const messageCollector = message.channel.createMessageCollector(messageFilter);
 
 		reactionCollector.on("collect", async (reaction, user) => {
-
+			reaction.users.remove(user);
+			switch (reaction.emoji.name) {
+				case emojis.redPlus:
+					color[0]++;
+					break;
+				case emojis.redMinus:
+					color[0]--;
+					break;
+				case emojis.greenPlus:
+					color[1]++;
+					break;
+				case emojis.greeenMinus:
+					color[1]--;
+					break;
+				case emojis.bluePlus:
+					color[2]++;
+					break;
+				case emojis.blueMinus:
+					color[2]--;
+					break;
+				case emojis.exit:
+					reactionCollector.stop();
+					messageCollector.stop();
+					msg.reactions.removeAll().catch(console.error);
+					break;
+			}
+			updateMsg();
 		});
 
-		messageCollector.on("collect", async message => {
-
+		messageCollector.on("collect", async m => {
+			m.delete().catch(console.error);
+			const regex = /(r|g|b)((?:\+|-)[0-2]?\d?\d)/i;
+			const [ , colorUpdate, value ] = m.content.match(regex);
+			switch(colorUpdate.toLowerCase()) {
+				case "r":
+					color[0] += parseInt(value, 10);
+					break;
+				case "g":
+					color[1] += parseInt(value, 10);
+					break;
+				case "b":
+					color[2] += parseInt(value, 10);
+					break;
+			}
+			updateMsg();
 		});
 
 		/**
@@ -78,6 +118,25 @@ const command = {
 		function RGBToDec(RGBColor) {
 			if (RGBColor.length !== 3) return 0;
 			return 256 * 256 * RGBColor[0] + 256 * RGBColor[1] + RGBColor[2];
+		}
+
+		async function updateMsg() {
+			msg.edit({
+				embed: {
+					author: {
+						name: "Sélecteur de couleur",
+						icon_url: message.client.user.avatarURL()
+					},
+					color: "#010101",
+					description: `**Hexadécimal :** \`${ RGBToHex(color) }\`\n**RGB :** 🟥 \`${ color[0] }\` 🟩 \`${ color[1] }\` 🟦 \`${ color[2] }\`\n**Décimal :** \`${ RGBToDec(color) }\``,
+					thumbnail: {
+						url: `https://dummyimage.com/100/${ RGBToHex(color).replace("#", "") }/00.png?text=+`
+					},
+					footer: {
+						text: "✨ Mayze ✨"
+					}
+				}
+			}).catch(console.error);
 		}
 	}
 };
