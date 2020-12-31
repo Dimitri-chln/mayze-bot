@@ -14,9 +14,9 @@ const command = {
 		if (!role) return message.reply("je n'ai pas réussi à trouver ce rôle").catch(console.error);
 		const roleMembers = role.members.filter(m => m.roles.cache.has(role.id)).map(m => m.user.username);
 
-		const hexColor = Math.floor(role.color / (256 * 256)).toString(16).replace(/(^.$)/, "0$1") +
-			Math.floor((role.color % (256 * 256)) / 256).toString(16).replace(/(^.$)/, "0$1") +
-			(role.color % 256).toString(16).replace(/(^.$)/, "0$1");
+		const hexColor = Math.floor(role.color / (256 * 256)).toString(16).replace(/^(.)$/, "0$1") +
+			Math.floor((role.color % (256 * 256)) / 256).toString(16).replace(/^(.)$/, "0$1") +
+			(role.color % 256).toString(16).replace(/^(.)$/, "0$1");
 
 		message.channel.send({
 			embed: {

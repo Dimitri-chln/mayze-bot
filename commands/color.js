@@ -11,17 +11,17 @@ const command = {
 	 * @param {string[]} args 
 	 */
 	async execute(message, args) {
-		const color = hexToDec(args[0] || "");
+		const color = hexToRGB(args[0] || "");
 		const msg = await message.channel.send({
 			embed: {
 				author: {
-					name: message.author.tag,
-					icon_url: message.author.avatarURL({ dynamic: true })
+					name: "Sélecteur de couleur",
+					icon_url: message.client.user.avatarURL()
 				},
 				color: "#010101",
-				description: `🟥 \`${ color[0] }\` - 🟩 \`${ color[1] }\` - 🟦 \`${ color[2] }\``,
+				description: `**Hexadécimal :** \`${ RGBToHex(color) }\`\n**RGB :** 🟥 \`${ color[0] }\` 🟩 \`${ color[1] }\` 🟦 \`${ color[2] }\`\n**Décimal :** \`${ RGBToDec(color) }\``,
 				thumbnail: {
-					url: `https://dummyimage.com/100/${ decToHex(color).replace("#", "") }/00.png?text=+`
+					url: `https://dummyimage.com/100/${ RGBToHex(color).replace("#", "") }/00.png?text=+`
 				},
 				footer: {
 					text: "✨ Mayze ✨"
@@ -32,7 +32,7 @@ const command = {
 		/**
 		 * @param {string} hexColor An hexadecimal color
 		 */
-		function hexToDec(hexColor) {
+		function hexToRGB(hexColor) {
 			const hexColorRegex = /#(\d|[a-f]){6}/i;
 			if (!hexColorRegex.test(hexColor)) return [0, 0, 0];
 			const red = parseInt(hexColor.slice(1, 3), 16);
@@ -42,11 +42,24 @@ const command = {
 		}
 
 		/**
-		 * @param {number[]} color An array of red, green and blue color values
+		 * @param {number[]} RGBColor An array of red, green and blue color values
 		 */
-		function decToHex(color) {
-			if (color.length !== 3) return "#000000";
-			return `#${ color[0].toString(16) }${ color[1].toString(16) }${ color[2].toString(16) }`;
+		function RGBToHex(RGBColor) {
+			if (RGBColor.length !== 3) return "#000000";
+			return `#${ RGBColor[0].toString(16).replace(/^(.)$/, "0$1") }${ RGBColor[1].toString(16).replace(/^(.)$/, "0$1") }${ RGBColor[2].toString(16).replace(/^(.)$/, "0$1") }`;
+		}
+
+		/**
+		 * @param {number[]} RGBColor 
+		 */
+		function RGBToDec(RGBColor) {
+			if (RGBColor.length !== 3) return 0;
+			return 256 * 256 * RGBColor[0] + 256 * RGBColor[1] + RGBColor[2];
+		}
+
+		function dontIndent(str) {
+			console.log(str)
+			return ("" + str).replace(/\n\t*/, "\n");
 		}
 	}
 };
