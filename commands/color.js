@@ -28,6 +28,29 @@ const command = {
 				}
 			}
 		}).catch(console.error);
+		const emojis = {
+			redPlus: "🟥",
+			redMinus: "🔴",
+			greenPlus: "🟩",
+			greeenMinus: "🟢",
+			bluePlus: "🟦",
+			blueMinus: "🔵",
+			exit: "❌"
+		};
+		Object.values(emojis).forEach(async e => await msg.react(e).catch(console.error));
+
+		const reactionFilter = (reaction, user) => Object.values(emojis).includes(reaction.emoji.name) && !user.bot;
+		const reactionCollector = msg.createReactionCollector(reactionFilter);
+		const messageFilter = m => /(r|g|b)[0-2]?\d?\d/i.test(m.content) && !message.author.bot;
+		const messageCollector = message.channel.createMessageCollector(messageFilter);
+
+		reactionCollector.on("collect", async (reaction, user) => {
+
+		});
+
+		messageCollector.on("collect", async message => {
+
+		});
 
 		/**
 		 * @param {string} hexColor An hexadecimal color
@@ -55,11 +78,6 @@ const command = {
 		function RGBToDec(RGBColor) {
 			if (RGBColor.length !== 3) return 0;
 			return 256 * 256 * RGBColor[0] + 256 * RGBColor[1] + RGBColor[2];
-		}
-
-		function dontIndent(str) {
-			console.log(str)
-			return ("" + str).replace(/\n\t*/, "\n");
 		}
 	}
 };
