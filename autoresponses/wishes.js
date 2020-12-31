@@ -5,7 +5,7 @@ const command = {
 	 * @param {Message} message 
 	 */
 	async execute(message) {
-		// if (message.guild.id !== "689164798264606784") return;
+		if (message.guild.id !== "689164798264606784") return;
 		if (message.author.id !== "432610292342587392") return;
 		if (!message.embeds.length) return;
 		const mudaeEmbed = message.embeds[0];
