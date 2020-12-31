@@ -12,7 +12,7 @@ if (process.env.BOT_HOST !== "heroku") {
 	process.env.DATABASE_URL = result.match(/postgres:.*/)[0];
 }
 const pg = require("pg");
-client.pg = createPgClient();
+newPgClient();
 client.pg.connect().catch(console.error);
 setInterval(reconnectPgClient, 36000000);
 
@@ -235,22 +235,8 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
 	setTimeout(() => { delete client.editedMessages[oldMessage.channel.id] }, 300000);
 });
 
-client.on("error", async error => {
-	const { errorChannel } = config;
-	errorChannel.send({
-		embed: {
-			author: {
-				name: "Erreur rencontrée",
-				icon_url: client.user.avatarURL()
-			},
-			color: "#010101",
-			title: error.name,
-			description: `\`\`\`\n${ error.stack }\n\`\`\``,
-			footer: {
-				text: "✨ Mayze ✨"
-			}
-		}
-	}).catch(console.error);
+client.on("error", async err => {
+	console.error(err);
 });
 
 client.on("presenceUpdate", async (_oldMember, newMember) => {
@@ -270,20 +256,23 @@ client.catchRates = catchRates;
 /**
  * @returns {pg.Client} Un client postgreSQL connecté à la base de données de mayze-bot
  */
-function createPgClient() {
+function newPgClient() {
 	const connectionString = {
 		connectionString: process.env.DATABASE_URL,
 		ssl: true
 	};
 	const pgClient = new pg.Client(connectionString);
+	client.pg = pgClient;
+
 	pgClient.on("error", err => {
 		console.error(err);
+		client.pg.end().catch(console.error);
+		newPgClient();
 	});
-	return pgClient;
 }
 
 function reconnectPgClient() {
 	client.pg.end().catch(console.error);
-	client.pg = createPgClient();
+	newPgClient();
 	client.pg.connect().catch(console.error);
 }
