@@ -33,7 +33,7 @@ const command = {
 						icon_url: message.client.user.avatarURL()
 					},
 					thumbnail: {
-						url: `https://dummyimage.com/50/${color}/${color}.png`
+						url: `https://dummyimage.com/50/${color}/${color}.png?text=+`
 					},
 					color: "#010101",
 					description: `La couleur du rôle ${role} a été changée en \`${args[1]}\``,
