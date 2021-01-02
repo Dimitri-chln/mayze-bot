@@ -10,7 +10,7 @@ const command = {
 		if (!message.embeds.length) return;
 		const mudaeEmbed = message.embeds[0];
 		if (mudaeEmbed.color !== 16751916) return;
-		const claimedRegex = new RegExp("(Animanga|Game) roulette");
+		const claimedRegex = /(Animanga|Game)/;
 		if (claimedRegex.test(mudaeEmbed.description)) return;
 		const characterName = mudaeEmbed.author.name;
 		const characterSeries = mudaeEmbed.description.split("\nClaims:")[0].replace(/\n/g, " ");
