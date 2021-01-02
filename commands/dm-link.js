@@ -6,7 +6,7 @@ const command = {
 	aliases: ["dmLink", "link"],
 	args: 1,
 	usage: "<salon>",
-	ownerOnly: false,
+	ownerOnly: true,
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} _args 
