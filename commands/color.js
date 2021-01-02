@@ -1,3 +1,4 @@
+const { time } = require("cron");
 const { Message } = require("discord.js");
 
 const command = {
@@ -41,52 +42,65 @@ const command = {
 
 		const reactionFilter = (reaction, user) => Object.values(emojis).includes(reaction.emoji.name) && !user.bot;
 		const reactionCollector = msg.createReactionCollector(reactionFilter);
-		const messageFilter = m => /(r|g|b)(\+|-)[0-2]?\d?\d/i.test(m.content) && !message.author.bot;
+		const messageFilter = m => /^(r|g|b)(\+|-)\d+$/i.test(m.content) && !message.author.bot;
 		const messageCollector = message.channel.createMessageCollector(messageFilter);
 
+		const duration = 120;
+		let countdown = duration;
+		const timer = setInterval(() => {
+			--countdown;
+			if (countdown <= 0) reactionCollector.stop();
+		}, 1000);
+
 		reactionCollector.on("collect", async (reaction, user) => {
+			countdown = duration;
 			reaction.users.remove(user);
 			switch (reaction.emoji.name) {
 				case emojis.redPlus:
-					color[0]++;
+					color[0] = color[0] === 255 ? 0 : ++color[0];
 					break;
 				case emojis.redMinus:
-					color[0]--;
+					color[0] = color[0] === 0 ? 255 : --color[0];
 					break;
 				case emojis.greenPlus:
-					color[1]++;
+					color[1] = color[1] === 255 ? 0 : ++color[1];
 					break;
 				case emojis.greeenMinus:
-					color[1]--;
+					color[1] = color[1] === 0 ? 255 : --color[1];
 					break;
 				case emojis.bluePlus:
-					color[2]++;
+					color[2] = color[2] === 255 ? 0 : ++color[2];
 					break;
 				case emojis.blueMinus:
-					color[2]--;
+					color[2] = color[2] === 0 ? 255 : --color[2];
 					break;
 				case emojis.exit:
 					reactionCollector.stop();
-					messageCollector.stop();
-					msg.reactions.removeAll().catch(console.error);
 					break;
 			}
 			updateMsg();
 		});
 
+		reactionCollector.on("end", () => {
+			messageCollector.stop();
+			msg.reactions.removeAll().catch(console.error);
+			clearInterval(timer);
+		});
+
 		messageCollector.on("collect", async m => {
+			countdown = duration;
 			m.delete().catch(console.error);
-			const regex = /(r|g|b)((?:\+|-)[0-2]?\d?\d)/i;
+			const regex = /^(r|g|b)((?:\+|-)\d+)$/i;
 			const [ , colorUpdate, value ] = m.content.match(regex);
 			switch(colorUpdate.toLowerCase()) {
 				case "r":
-					color[0] += parseInt(value, 10);
+					color[0] = color[0] + parseInt(value, 10) >= 0 ? (color[0] + parseInt(value, 10) <= 255 ? color[0] + parseInt(value, 10) : 255) : 0;
 					break;
 				case "g":
-					color[1] += parseInt(value, 10);
+					color[1] = color[1] + parseInt(value, 10) >= 0 ? (color[1] + parseInt(value, 10) <= 255 ? color[1] + parseInt(value, 10) : 255) : 0;
 					break;
 				case "b":
-					color[2] += parseInt(value, 10);
+					color[2] = color[2] + parseInt(value, 10) >= 0 ? (color[2] + parseInt(value, 10) <= 255 ? color[2] + parseInt(value, 10) : 255) : 0;
 					break;
 			}
 			updateMsg();
