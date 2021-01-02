@@ -13,6 +13,14 @@ const command = {
 	 */
 	async execute(message, args) {
 		let color = hexToRGB(args[0] || "");
+		let colorRole = undefined;
+		if (message.guild.id === "689164798264606784") {
+			colorRole = await message.guild.roles.cache.get("795034205876781136").setName(message.member.nickname || message.author.username).catch(console.error);
+			colorRole.setColor(RGBToHex(color)).catch(console.error);
+		} else {
+			colorRole = "*Indisponible*";
+		}
+
 		const msg = await message.channel.send({
 			embed: {
 				author: {
@@ -20,7 +28,7 @@ const command = {
 					icon_url: message.client.user.avatarURL()
 				},
 				color: "#010101",
-				description: `**Hexadécimal :** \`${ RGBToHex(color) }\`\n**RGB :** 🟥 \`${ color[0] }\` 🟩 \`${ color[1] }\` 🟦 \`${ color[2] }\`\n**Décimal :** \`${ RGBToDec(color) }\``,
+				description: `**Hexadécimal :** \`${ RGBToHex(color) }\`\n**RGB :** 🟥 \`${ color[0] }\` 🟩 \`${ color[1] }\` 🟦 \`${ color[2] }\`\n**Décimal :** \`${ RGBToDec(color) }\`\n**Visualisation :** ${ colorRole }`,
 				thumbnail: {
 					url: `https://dummyimage.com/100/${ RGBToHex(color).replace("#", "") }/00.png?text=+`
 				},
@@ -42,7 +50,7 @@ const command = {
 
 		const reactionFilter = (reaction, user) => Object.values(emojis).includes(reaction.emoji.name) && !user.bot;
 		const reactionCollector = msg.createReactionCollector(reactionFilter);
-		const messageFilter = m => /^(r|g|b)(\+|-)\d+$/i.test(m.content) && !message.author.bot;
+		const messageFilter = m => /^(r|g|b)(\+|-)\d+$/i.test(m.content) && m.author.id === message.author.id;
 		const messageCollector = message.channel.createMessageCollector(messageFilter);
 
 		const duration = 120;
@@ -78,6 +86,7 @@ const command = {
 					reactionCollector.stop();
 					break;
 			}
+			if (message.guild.id === "689164798264606784") colorRole.setColor(RGBToHex(color)).catch(console.error);
 			updateMsg();
 		});
 
@@ -103,6 +112,7 @@ const command = {
 					color[2] = color[2] + parseInt(value, 10) >= 0 ? (color[2] + parseInt(value, 10) <= 255 ? color[2] + parseInt(value, 10) : 255) : 0;
 					break;
 			}
+			if (message.guild.id === "689164798264606784") colorRole.setColor(RGBToHex(color)).catch(console.error);
 			updateMsg();
 		});
 
@@ -142,7 +152,7 @@ const command = {
 						icon_url: message.client.user.avatarURL()
 					},
 					color: "#010101",
-					description: `**Hexadécimal :** \`${ RGBToHex(color) }\`\n**RGB :** 🟥 \`${ color[0] }\` 🟩 \`${ color[1] }\` 🟦 \`${ color[2] }\`\n**Décimal :** \`${ RGBToDec(color) }\``,
+					description: `**Hexadécimal :** \`${ RGBToHex(color) }\`\n**RGB :** 🟥 \`${ color[0] }\` 🟩 \`${ color[1] }\` 🟦 \`${ color[2] }\`\n**Décimal :** \`${ RGBToDec(color) }\`\n**Visualisation :** ${ colorRole }`,
 					thumbnail: {
 						url: `https://dummyimage.com/100/${ RGBToHex(color).replace("#", "") }/00.png?text=+`
 					},
