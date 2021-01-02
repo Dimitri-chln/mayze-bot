@@ -6,7 +6,7 @@ const Discord = require("discord.js");
 const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEMBERS", "GUILD_PRESENCES" ]);
 const client = new Discord.Client({ fetchAllMembers: true, partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
 
-if (process.env.BOT_HOST !== "heroku") {
+if (process.env.HOST !== "HEROKU") {
 	const shellExec = require("./modules/shellExec.js");
 	const result = shellExec("heroku pg:credentials:url --app mayze-bot");
 	process.env.DATABASE_URL = result.match(/postgres:.*/)[0];
