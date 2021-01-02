@@ -54,7 +54,7 @@ const command = {
 
 		reactionCollector.on("collect", async (reaction, user) => {
 			countdown = duration;
-			reaction.users.remove(user);
+			reaction.users.remove(user).catch(console.error);
 			switch (reaction.emoji.name) {
 				case emojis.redPlus:
 					color[0] = color[0] === 255 ? 0 : ++color[0];
