@@ -23,6 +23,7 @@ const command = {
 		if (!user) {
 			const [ , username ] = message.content.match(/^(.+): /m) || [];
 			user = message.client.users.cache.find(u => u.username === username);
+			if (!user) return;
 		}
 		
 		const shiny = shinyPokemon ? "⭐ " : "";
