@@ -12,9 +12,9 @@ if (process.env.BOT_HOST !== "heroku") {
 	process.env.DATABASE_URL = result.match(/postgres:.*/)[0];
 }
 const pg = require("pg");
-newPgClient();
-client.pg.connect().catch(console.error);
-setInterval(reconnectPgClient, 36000000);
+client.pg = newPgClient();
+client.pg.connect().then(() => console.log("Connected to the database")).catch(console.error);
+setInterval(reconnectPgClient, 3600000);
 
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
@@ -40,9 +40,7 @@ for (const file of reactionCommandsFiles) {
 client.cooldowns = new Discord.Collection();
 
 client.on("ready", async () => {
-	console.log("----------------");
-	console.log(" BOT STARTED UP ");
-	console.log("----------------");
+	console.log("Connected to Discord");
 	const { version } = require ("./package.json");
 	const logChannel = client.channels.cache.get(config.logChannel);
 	try {
@@ -262,17 +260,18 @@ function newPgClient() {
 		ssl: true
 	};
 	const pgClient = new pg.Client(connectionString);
-	client.pg = pgClient;
 
 	pgClient.on("error", err => {
 		console.error(err);
 		client.pg.end().catch(console.error);
 		newPgClient();
 	});
+
+	return pgClient;
 }
 
 function reconnectPgClient() {
 	client.pg.end().catch(console.error);
-	newPgClient();
-	client.pg.connect().catch(console.error);
+	client.pg = newPgClient();
+	client.pg.connect().then(() => console.log("Connected to the database")).catch(console.error);
 }
