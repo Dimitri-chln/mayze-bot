@@ -182,7 +182,7 @@ client.on("messageReactionRemove", async (reaction, user) => {
 });
 
 client.on("guildMemberAdd", async member => {
-	const roles = ["735810462872109156", "735810286719598634", "735809874205737020", "735811339888361472"];
+	const roles = ["735811339888361472", "735809874205737020", "735810286719598634", "735810462872109156"];
 	member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r))).catch(console.error);
 	member.user.send({
 		embed: {
