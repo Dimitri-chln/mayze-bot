@@ -13,13 +13,6 @@ const command = {
 	 */
 	async execute(message, args) {
 		let color = hexToRGB(args[0] || "");
-		let colorRole = undefined;
-		if (message.guild.id === "689164798264606784") {
-			colorRole = await message.guild.roles.cache.get("795034205876781136").setName(message.member.nickname || message.author.username).catch(console.error);
-			colorRole.setColor(RGBToHex(color)).catch(console.error);
-		} else {
-			colorRole = "*Indisponible*";
-		}
 
 		const msg = await message.channel.send({
 			embed: {
@@ -28,7 +21,7 @@ const command = {
 					icon_url: message.client.user.avatarURL()
 				},
 				color: "#010101",
-				description: `**Hexadécimal :** \`${ RGBToHex(color) }\`\n**RGB :** 🟥 \`${ color[0] }\` 🟩 \`${ color[1] }\` 🟦 \`${ color[2] }\`\n**Décimal :** \`${ RGBToDec(color) }\`\n**Visualisation :** ${ colorRole }`,
+				description: `**Hexadécimal :** \`${ RGBToHex(color) }\`\n**RGB :** 🟥 \`${ color[0] }\` 🟩 \`${ color[1] }\` 🟦 \`${ color[2] }\`\n**Décimal :** \`${ RGBToDec(color) }\``,
 				thumbnail: {
 					url: `https://dummyimage.com/100/${ RGBToHex(color).replace("#", "") }/00.png?text=+`
 				},
