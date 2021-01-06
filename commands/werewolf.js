@@ -119,20 +119,50 @@ const command = {
 				delete message.client.werewolfGame;
 				break;
 			default:
-				const joined = message.guild.members.cache.filter(m => m.roles.cache.has("759699864191107072"));
-				message.channel.send({
-					embed: {
-						author: {
-							name: "Liste des joueurs:",
-							icon_url: message.client.user.avatarURL()
-						},
-						color: "#010101",
-						description: joined.map(m => `• ${m.user.username}`).join("\n"),
-						footer: {
-							text: "🐺 Mayze 🐺"
+				if (message.client.werewolfGame && message.channel.id === villageChannel.id) {
+					const { players } = message.client.werewolfGame;
+					message.channel.send({
+						embed: {
+							author: {
+								name: "Liste des joueurs:",
+								icon_url: message.client.user.avatarURL()
+							},
+							color: "#010101",
+							fields: [
+								{
+									name: "Joueurs :",
+									value: players.map((p, i) => {
+										if (p.isAlive) return `\`${i}.\` ${p.member.user.username}`;
+										return `\`${i}.\` ~~${p.member.user.username}~~ (${p.role})`;
+									}).join("\n"),
+									inline: true
+								}, {
+									name: "Rôles :",
+									value: shuffle(players).map(p => `• ${p.role}`).join("\n"),
+									inline: true
+								}
+							],
+							footer: {
+								text: "🐺 Mayze 🐺"
+							}
 						}
-					}
-				}).catch(console.error);
+					}).catch(console.error);
+				} else {
+					const joined = message.guild.members.cache.filter(m => m.roles.cache.has("759699864191107072"));
+					message.channel.send({
+						embed: {
+							author: {
+								name: "Liste des joueurs:",
+								icon_url: message.client.user.avatarURL()
+							},
+							color: "#010101",
+							description: joined.map((m, i) => `\`${i}.\` ${m.user.username}`).join("\n"),
+							footer: {
+								text: "🐺 Mayze 🐺"
+							}
+						}
+					}).catch(console.error);
+				}
 		}
 	}
 };

@@ -205,6 +205,10 @@ class Game {
 		this.alivePlayers.forEach(async player => {
 			player.action(this.players, this.night);
 		});
+		const startOfNight = Date.now();
+		const dayTimer = setTimeout(() => {
+			this.setDay();
+		}, 90000);
 
 		const attackedPlayer = await selectPlayer(this.werewolvesChannel, this.alivePlayers.filter(player => player.role !== "Loup-garou"), "Quel joueur souhaitez-vous attaquer cette nuit ?");
 		const witch = this.players.find(player => player.role === "Sorcière");
@@ -252,7 +256,10 @@ class Game {
 				witch.member.send("Les loups-garous n'ont attaqué personne cette nuit").catch(console.error);
 			}
 		}
-		if (!this.options.ended) this.setDay();
+		if (!this.options.ended && Date.now() - startOfNight > 60000) {
+			clearInterval(dayTimer);
+			this.setDay();
+		}
 	}
 
 	/**
