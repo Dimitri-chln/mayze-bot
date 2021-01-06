@@ -1,6 +1,7 @@
 const { Guild, GuildChannel, Role } = require("discord.js");
 const Player = require("./classPlayer");
 const selectPlayer = require("../werewolfModules/selectPlayer");
+const { time } = require("cron");
 
 class Game {
 	/**
@@ -206,9 +207,6 @@ class Game {
 			player.action(this.players, this.night);
 		});
 		const startOfNight = Date.now();
-		const dayTimer = setTimeout(() => {
-			this.setDay();
-		}, 90000);
 
 		const attackedPlayer = await selectPlayer(this.werewolvesChannel, this.alivePlayers.filter(player => player.role !== "Loup-garou"), "Quel joueur souhaitez-vous attaquer cette nuit ?");
 		const witch = this.players.find(player => player.role === "Sorcière");
@@ -256,9 +254,10 @@ class Game {
 				witch.member.send("Les loups-garous n'ont attaqué personne cette nuit").catch(console.error);
 			}
 		}
-		if (!this.options.ended && Date.now() - startOfNight > 60000) {
-			clearInterval(dayTimer);
-			this.setDay();
+		if (!this.options.ended) {
+			const timeLeft = 60000 - Date.now() - startOfNight;
+			if (timeLeft < 0) this.setDay();
+			else setTimeout(this.setDay, timeLeft);
 		}
 	}
 
