@@ -156,7 +156,7 @@ const command = {
 								icon_url: message.client.user.avatarURL()
 							},
 							color: "#010101",
-							description: joined.map((m, i) => `\`${i}.\` ${m.user.username}`).join("\n"),
+							description: joined.map((m, i) => `\`${i}.\` ${m.user.username}`).join("\n") || "*Aucun joueur*",
 							footer: {
 								text: "🐺 Mayze 🐺"
 							}
