@@ -164,8 +164,11 @@ class Game {
 	kill(player) {
 		if (!player) return;
 		player.setDead();
+		if (player.role === "Chaman") this.deadChannel.permissionOverwrites.get(player.member.id).delete().catch(console.error);
 		const deadRole = this.guild.roles.cache.find(role => role.name === player.role);
 		player.member.roles.add(deadRole).catch(console.error);
+		player.member.roles.remove("759701843864584202").catch(console.error);
+		player.member.roles.remove("759702019207725089").catch(console.error);
 
 		const dead = [player];
 		if (player.options.couple && player.options.couple.isAlive)
@@ -202,9 +205,6 @@ class Game {
 		this.alivePlayers.forEach(async player => {
 			player.action(this.players, this.night);
 		});
-		setTimeout(() => {
-			if (!this.options.ended) this.setDay();
-		}, 90000);
 
 		const attackedPlayer = await selectPlayer(this.werewolvesChannel, this.alivePlayers.filter(player => player.role !== "Loup-garou"), "Quel joueur souhaitez-vous attaquer cette nuit ?");
 		const witch = this.players.find(player => player.role === "Sorcière");
@@ -252,6 +252,7 @@ class Game {
 				witch.member.send("Les loups-garous n'ont attaqué personne cette nuit").catch(console.error);
 			}
 		}
+		if (!this.options.ended) this.setDay();
 	}
 
 	/**
@@ -382,7 +383,7 @@ class Game {
 		this.werewolvesChannel.updateOverwrite(this.roleWerwolves, { "SEND_MESSAGES": false }).catch(console.error);
 		this.players.forEach(async player => {
 			player.member.roles.remove(this.guild.roles.cache.filter(role => roles.includes(role.id) && player.member.roles.cache.has(role.id))).catch(console.error);
-			if (player.role === "Chaman") {
+			if (player.role === "Chaman" && player.isAlive) {
 				this.deadChannel.permissionOverwrites.get(player.member.id).delete().catch(console.error);
 			}
 		});
