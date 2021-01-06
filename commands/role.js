@@ -4,7 +4,6 @@ const command = {
 	aliases: [],
 	args: 1,
 	usage: "<rôle>",
-	perms: ["MANAGE_ROLES"],
 	async execute(message, args) {
 		const roleIdOrName = args.join(" ").toLowerCase();
 		const role = message.guild.roles.cache.get(roleIdOrName) ||
