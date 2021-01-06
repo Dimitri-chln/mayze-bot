@@ -66,6 +66,11 @@ const command = {
 							const deadPlayer = players.pop();
 							msg.edit(embed.setDescription(`🔫 ${deadPlayer.username} est mort !`)).catch(console.error);
 							if (args.includes("-kick")) deadPlayer.kick("Roulette Russe").catch(console.error);
+							else if (args.includes("-mute")) {
+								const mute = require("../commands/mute.js");
+								const muteMsg = await message.channel.send(`*mute ${deadPlayer}`).catch(console.error);
+								mute.execute(muteMsg, ["5m"]);
+							}
 						}, 2000);
 					}
 				}
