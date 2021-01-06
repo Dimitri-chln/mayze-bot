@@ -11,6 +11,7 @@ const command = {
 	 * @param {string[]} fullArgs
 	 */
 	async execute(message, fullArgs) {
+		const { ownerID } = require("../config.json");
 		const cmd = (fullArgs[0] || "").toLowerCase();
 		const args = fullArgs.slice(1);
 		const Game = require("../werewolfModules/classGame");
@@ -56,7 +57,7 @@ const command = {
 				break;
 			case "start":
 				if (message.channel.id !== "759700750803927061") return;
-				if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply("tu n'as pas les permissions nécessaires").catch(console.error);
+				if (!message.member.hasPermission("ADMINISTRATOR") && message.author.id !== ownerID) return message.reply("tu n'as pas les permissions nécessaires").catch(console.error);
 				if (message.client.werewolfGame && !message.client.werewolfGame.options.ended) return message.reply("la partie a déjà commencé!").catch(console.error);
 
 				{

@@ -259,6 +259,8 @@ class Game {
 	 */
 	async setDay() {
 		this.#day ++;
+		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": null });
+		this.werewolvesChannel.updateOverwrite(this.roleWerwolves, { "SEND_MESSAGES": false });
 		const attackedPlayer = this.alivePlayers.find(player => player.options.isAttacked);
 		const dead = this.kill(attackedPlayer) || [];
 		this.villageChannel.send({
@@ -397,6 +399,7 @@ class Game {
 				}
 			}
 		}).catch(console.error);
+		delete this.guild.client.werewolfGame;
 	}
 };
 
