@@ -201,6 +201,25 @@ client.on("guildMemberAdd", async member => {
 			}
 		}
 	}).catch(console.error);
+
+	const { rows } = await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error);
+	if (rows.length) {
+		rows[0].roles.forEach(async role => {
+			member.roles.add(role).catch(console.error);
+		});
+	}
+});
+
+client.on("guildMemberRemove", async member => {
+	if (member.guild.id !== "689164798264606784") return;
+	const roleIDs = member.roles.cache.filter(role => role.id !== member.guild.id).map(role => role.id);
+	const roleString = `'{"${roleIDs.join("\",\"")}"}'`;
+	const { rows } = await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error)
+	if (rows.length) {
+		client.pg.query(`UPDATE member_roles SET roles = ${roleString} WHERE user_id = '${member.id}'`).catch(console.error);
+	} else {
+		client.pg.query(`INSERT INTO member_roles VALUES (${member.id}, ${roleString})`).catch(console.error);
+	}
 });
 
 client.on("messageDelete", async message => {
