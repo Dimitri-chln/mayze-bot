@@ -200,7 +200,7 @@ class Game {
 		const littleGirl = this.players.find(player => player.role === "Petite fille");
 		if (littleGirl) {
 			messageCollector.on("collect", async message => {
-				littleGirl.member.send(message.content).catch(console.error);
+				littleGirl.member.send(`- ${message.content}`).catch(console.error);
 			});
 		}
 		this.alivePlayers.forEach(async player => {
