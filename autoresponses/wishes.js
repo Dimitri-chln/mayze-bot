@@ -14,11 +14,8 @@ const command = {
 		if (claimedRegex.test(mudaeEmbed.description)) return;
 		const characterName = mudaeEmbed.author.name;
 		const characterSeries = mudaeEmbed.description.split("\nClaims:")[0].replace(/\n/g, " ");
-		var wishes;
-		try {
-			const { rows }  = await message.client.pg.query(`SELECT * FROM wishes`);
-			wishes = rows;
-		} catch (err) { console.log(err);	}
+		const [ , kakeraValue ] = mudaeEmbed.description.match(/\*\*(\d+)\*\* <:kakera:469835869059153940>/);
+		const { "rows": wishes }  = await message.client.pg.query(`SELECT * FROM wishes`).catch(console.error);
 		if (!wishes) return;
 		wishes.forEach(async wish => {
 			const regex = wish.regex ?
@@ -36,7 +33,7 @@ const command = {
 								icon_url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
 							},
 							color: "#010101",
-							description: `**[${characterName}](${message.url})** a été roll dans <#${message.channel.id}> !\n(${characterSeries})`,
+							description: `**[${characterName}](${message.url})** a été roll dans <#${message.channel.id}> !\n(${characterSeries}) **${kakeraValue}** <:kakeraMudae:796822222110720106>`,
 							footer: {
 								text: "✨Mayze✨"
 							}
