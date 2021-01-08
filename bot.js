@@ -72,14 +72,8 @@ client.on("ready", async () => {
 
 client.on("message", async message => {
 	if (message.partial) await message.fetch().catch(console.error);
-	
-	if (message.channel.type === "dm") {
-		for (const autoresponse of client.autoresponses) {
-			try { autoresponse.execute(message); }
-			catch (err) { console.error(err); }
-		}
-	} else {
 
+	if (message.channel.type !== "dm") {
 		const chatXP = require("./modules/chatXP.js");
 		if (message.content.toLowerCase().startsWith(client.prefix)) {
 			if (message.author.bot) return;
@@ -148,6 +142,12 @@ client.on("message", async message => {
 			}
 		}
 	}
+
+	for (const autoresponse of client.autoresponses) {
+		try { autoresponse.execute(message); }
+		catch (err) { console.error(err); }
+	}
+
 });
 
 client.on("messageReactionAdd", async (reaction, user) => {
