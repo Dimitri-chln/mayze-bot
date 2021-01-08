@@ -6,6 +6,7 @@ const command = {
 	 */
 	async execute(message) {
 		if (message.author.id !== "432610292342587392") return;
+		if (message.channel.type === "dm") return;
 		if (message.guild.id !== "689164798264606784") return;
 		const pinChannel = message.client.channels.cache.get("788428208298000435");
 		const legRegex = /Félicitations, vous venez de gagner un\.\.\. Un\.\.\. <:.+:(\d{18})> \*\*(\w+)\*\*\?!/;

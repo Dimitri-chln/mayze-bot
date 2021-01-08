@@ -6,6 +6,7 @@ const command = {
 	 */
 	async execute(message) {
 		if (message.author.bot) return;
+		if (message.channel.type === "dm") return;
 		const regex = /https:\/\/(?:cdn\.)?discord(?:app)?\.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})/;
 		if (!regex.test(message.content)) return;
 		
