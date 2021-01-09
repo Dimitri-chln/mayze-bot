@@ -199,7 +199,7 @@ class Game {
 			else immediateDay = true;
 		}, 30000);
 
-		const attackedPlayer = await selectPlayer(this.werewolvesChannel, this.alivePlayers.filter(player => player.role !== "Loup-garou"), "Quel joueur souhaitez-vous attaquer cette nuit ?", 60000);
+		const attackedPlayer = await selectPlayer(this.werewolvesChannel, this.alivePlayers.filter(player => player.role !== "Loup-garou"), "Quel joueur souhaitez-vous attaquer cette nuit ?", 60000).catch(console.error);
 		const witch = this.players.find(player => player.role === "Sorcière");
 		if (attackedPlayer) {
 			this.werewolvesChannel.send(`Les loups-garous attaqueront **${attackedPlayer.member.user.username}**`).catch(console.error);
@@ -398,7 +398,6 @@ class Game {
 				}
 			}
 		}).catch(console.error);
-		delete this.guild.client.werewolfGame;
 	}
 };
 

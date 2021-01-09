@@ -99,7 +99,7 @@ class Player {
 				break;
 			case "Voyante":
 				{
-					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "De quel joueur souhaites-tu connaître le rôle ?");
+					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "De quel joueur souhaites-tu connaître le rôle ?").catch(console.error);
 					if (!player) return this.member.send("Tu n'as pas répondu à temps");
 					this.member.send(`**${ player.member.user.username }** est **${ player.role }** !`).catch(console.error);
 				}
@@ -110,8 +110,8 @@ class Player {
 			case "Cupidon":
 				if (night !== 1) return;
 				if (players.some(player => player.couple)) return;
-				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "Quel joueur souhaites-tu mettre en couple ? (1er joueur)");
-				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), "Quel joueur souhaites-tu mettre en couple ? (2ème joueur)");
+				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "Quel joueur souhaites-tu mettre en couple ? (1er joueur)").catch(console.error);
+				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), "Quel joueur souhaites-tu mettre en couple ? (2ème joueur)").catch(console.error);
 				if (!player_1 || !player_2) return this.member.send("Tu n'as pas répondu à temps");
 				player_1.setCouple(player_2);
 				player_2.setCouple(player_1);
@@ -121,7 +121,7 @@ class Player {
 				break;
 			case "Chasseur":
 				{
-					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "Quel joueur souhaites-tu tuer lors de ta mort ?");
+					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "Quel joueur souhaites-tu tuer lors de ta mort ?").catch(console.error);
 					if (!player) return this.member.send("Tu n'as pas répondu à temps");
 					this.setOption("avenge", player);
 					this.member.send(`**${ player.member.user.username }** mourra avec toi !`).catch(console.error);
