@@ -20,7 +20,7 @@ const command = {
 		sendPoll();
 
 		async function sendPoll(previousMsg) {
-			const m = await message.channel.send({
+			let msg = await message.channel.send({
 				embed: {
 					author: {
 						name: message.author.tag,
@@ -46,7 +46,7 @@ const command = {
 			});
 
 			const reactionFilter = (reaction, user) => emojis.includes(reaction.emoji.name) && !user.bot;
-			const reactionCollector = m.createReactionCollector(reactionFilter);
+			const reactionCollector = msg.createReactionCollector(reactionFilter);
 			reactionCollector.on("collect", async (reaction, user) => {
 				if (reaction.emoji.name === "🛑" && user.tag === reaction.message.embeds[0].author.name) {
 					reaction.message.reactions.removeAll().catch(console.error);
@@ -77,16 +77,16 @@ const command = {
 			let counter = 5;
 			const messageCollector = message.channel.createMessageCollector(() => true);
 			messageCollector.on("collect", async () => {
-			--counter;
-			if (counter ===  0) {
-				reactionCollector.stop();
-				sendPoll(msg);
-				msg.delete().catch(console.error);
-			}
-		});
+				--counter;
+				if (counter ===  0) {
+					reactionCollector.stop();
+					sendPoll(msg);
+					msg.delete().catch(console.error);
+				}
+			});
 
-			if (m) emojis.forEach(async e => await m.react(e).catch(console.error));
-			return m;
+			if (msg) emojis.forEach(async e => await msg.react(e).catch(console.error));
+			return msg;
 		}
 	}
 };
