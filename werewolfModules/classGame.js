@@ -255,7 +255,7 @@ class Game {
 			}
 		}
 		if (!this.options.ended) {
-			const timeLeft = 60000 - Date.now() - startOfNight;
+			const timeLeft = 60000 - (Date.now() - startOfNight);
 			if (timeLeft < 0) this.setDay();
 			else setTimeout(this.setDay, timeLeft);
 		}
@@ -365,6 +365,8 @@ class Game {
 	endCheck() {
 		const werewolves = this.alivePlayers.filter(player => player.role === "Loup-garou");
 		const villagers = this.alivePlayers.filter(player => player.role !== "Loup-garou");
+
+		
 
 		if (werewolves.length >= villagers.length) {
 			this.villageChannel.send("Les loups-garous ont gagné !").catch(console.error);
