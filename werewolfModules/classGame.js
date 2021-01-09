@@ -271,7 +271,7 @@ class Game {
 		}).catch(console.error);
 		if (this.ended) return;
 		const ended = this.endCheck();
-		if (!ended) setTimeout(this.setVote, 90000);
+		if (!ended) setTimeout(() => this.setVote(), 90000);
 	}
 
 	/**
@@ -339,7 +339,7 @@ class Game {
 				}
 				if (this.ended) return;
 				const ended = this.endCheck();
-				if (!ended) setTimeout(this.setNight, 3000);
+				if (!ended) setTimeout(() => this.setNight(), 3000);
 			}, 3000);
 		});
 	}
@@ -389,10 +389,7 @@ class Game {
 			embed: {
 				title: "Partie terminée !",
 				color: "#010101",
-				description: this.players.map(player => {
-						const dead = player.isAlive ? "" : " (mort)";
-						return `${player.member.user.username} - ${player.role}${dead}`;
-					}).join("\n"),
+				description: this.players.map(player => player.isAlive ? `${player.member.user.username} - ${player.role}` : `~~${player.member.user.username} - ${player.role}~~`).join("\n"),
 				footer: {
 					text: "🐺 Mayze 🐺"
 				}
