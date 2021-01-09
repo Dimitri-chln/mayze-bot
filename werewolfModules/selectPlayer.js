@@ -13,7 +13,7 @@ async function selectPlayer(channel, players, embedTitle, timeout = 30000) {
 			title: embedTitle,
 			color: "#010101",
 			description: players.map((player, i) => `\`${ (i + 1).toString(16).toUpperCase() }.\` ${ player.member.user.username }`).join("\n"),
-			footer: "🐺 Mayze 🐺 | Les réactions seront supprimées dans 60s"
+			footer: "🐺 Mayze 🐺 - Les réactions seront supprimées dans 60s"
 		}
 	}).catch(console.error);
 	const emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "🇦", "🇧", "🇨", "🇩", "🇪" ,"🇫"].slice(0, players.length);

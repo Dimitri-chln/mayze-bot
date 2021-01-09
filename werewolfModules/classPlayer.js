@@ -111,8 +111,9 @@ class Player {
 				if (night !== 1) return;
 				if (players.some(player => player.couple)) return;
 				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "Quel joueur souhaites-tu mettre en couple ? (1er joueur)").catch(console.error);
+				if (!player_1) return this.member.send("Tu n'as pas répondu à temps");
 				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), "Quel joueur souhaites-tu mettre en couple ? (2ème joueur)").catch(console.error);
-				if (!player_1 || !player_2) return this.member.send("Tu n'as pas répondu à temps");
+				if (!player_2) return this.member.send("Tu n'as pas répondu à temps");
 				player_1.setCouple(player_2);
 				player_2.setCouple(player_1);
 				this.member.send(`**${player_1.member.user.username}** et **${player_2.member.user.username}** sont maintenant en couple !`).catch(console.error);
