@@ -173,7 +173,7 @@ class Game {
 	 * Sets the beginning of the night
 	 */
 	async setNight() {
-		if (this.#night === 0) this.shufflePlayers();
+		if (this.night === 0) this.shufflePlayers();
 		this.#night ++;
 		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": false });
 		this.werewolvesChannel.updateOverwrite(this.roleWerwolves, { "SEND_MESSAGES": null });
