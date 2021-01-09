@@ -15,7 +15,7 @@ const command = {
 		if (claimedRegex.test(mudaeEmbed.description)) return;
 		const characterName = mudaeEmbed.author.name;
 		const characterSeries = mudaeEmbed.description.split("\nClaims:")[0].replace(/\n/g, " ");
-		const [ , kakeraValue ] = mudaeEmbed.description.match(/\*\*(\d+)\*\* <:kakera:469835869059153940>/);
+		const [ , kakeraValue ] = mudaeEmbed.description.match(/\*\*(\d+)\*\* <:kakera:469835869059153940>/m);
 		const { "rows": wishes }  = await message.client.pg.query(`SELECT * FROM wishes`).catch(console.error);
 		if (!wishes) return;
 		wishes.forEach(async wish => {
