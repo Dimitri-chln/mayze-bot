@@ -132,7 +132,7 @@ const command = {
 								{
 									name: "Joueurs :",
 									value: players.map((p, i) => {
-										if (p.isAlive) return `\`${i}.\` ${p.member.user.username}`;
+										if (p.isAlive) return `\`${i+1}.\` ${p.member.user.username}`;
 										return `\`${i}.\` ~~${p.member.user.username}~~ (${p.role})`;
 									}).join("\n"),
 									inline: true
@@ -156,7 +156,7 @@ const command = {
 								icon_url: message.client.user.avatarURL()
 							},
 							color: "#010101",
-							description: joined.map((m, i) => `\`${i}.\` ${m.user.username}`).join("\n") || "*Aucun joueur*",
+							description: joined.map((m, i) => `\`${i+1}.\` ${m.user.username}`).join("\n") || "*Aucun joueur*",
 							footer: {
 								text: "🐺 Mayze 🐺"
 							}
