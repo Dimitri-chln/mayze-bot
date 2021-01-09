@@ -196,7 +196,7 @@ class Game {
 		let readyForDay = false;
 		let immediateDay = false;
 		setTimeout(() => {
-			if (readyForDay) this.setDay();
+			if (readyForDay && !this.ended) this.setDay();
 			else immediateDay = true;
 		}, 30000);
 
@@ -247,7 +247,7 @@ class Game {
 			}
 		}
 		readyForDay = true;
-		if (immediateDay) this.setDay();
+		if (immediateDay && !this.ended) this.setDay();
 	}
 
 	/**
