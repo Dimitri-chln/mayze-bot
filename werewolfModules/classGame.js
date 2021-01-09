@@ -326,7 +326,7 @@ class Game {
 						embed: {
 							title: "Les joueurs qui sont morts aujourd'hui sont:",
 							color: "#010101",
-							description: dead.map(player => `- **${player.member.user.username}** qui était **${player.role}**`).join(", "),
+							description: dead.map(player => `• **${player.member.user.username}** qui était **${player.role}**`).join(", "),
 							footer: {
 								text: "🐺 Mayze 🐺"
 							}
