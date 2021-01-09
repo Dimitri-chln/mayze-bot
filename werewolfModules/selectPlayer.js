@@ -7,7 +7,7 @@ const Player = require("./classPlayer");
  * @param {string} embedTitle The title of the embed that will be sent
  * @returns {Promise<Player>} The chosen player
  */
-async function selectPlayer(channel, players, embedTitle) {
+async function selectPlayer(channel, players, embedTitle, timeout = 30000) {
 	const msg = await channel.send({
 		embed: {
 			title: embedTitle,
@@ -20,7 +20,7 @@ async function selectPlayer(channel, players, embedTitle) {
 	emojis.forEach(async e => await msg.react(e).catch(console.error));
 	const filter = (reaction, user) => emojis.includes(reaction.emoji.name) && !user.bot;
 	try {
-		const collected = await msg.awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] });
+		const collected = await msg.awaitReactions(filter, { max: 1, time: timeout, errors: ["time"] });
 		if (channel.type && channel.type !== "dm") msg.reactions.removeAll().catch(console.error);
 		return players[emojis.indexOf(collected.first().emoji.name)];
 	} catch (err) {

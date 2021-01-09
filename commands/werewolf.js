@@ -32,12 +32,12 @@ const command = {
 				message.member.roles.add(roleIngame).catch(console.error);
 				message.member.roles.add("759694957132513300").catch(console.error);
 				if (message.member.roles.cache.has("689180158359371851")) { // Administrateur
-					message.member.roles.remove("689180158359371851").catch(console.error);
 					message.member.roles.add("753245162469064795").catch(console.error);
+					message.member.roles.remove("689180158359371851").catch(console.error);
 				}
 				if (message.member.roles.cache.has("737646140362850364")) { // Modérateur
-					message.member.roles.remove("737646140362850364").catch(console.error);
 					message.member.roles.add("753250476891439185").catch(console.error);
+					message.member.roles.remove("737646140362850364").catch(console.error);
 				}
 				message.channel.send(`${message.author} a rejoint la partie de Loups-garous`).catch(console.error);
 				break;
@@ -46,19 +46,19 @@ const command = {
 				message.member.roles.remove(roleIngame).catch(console.error);
 				message.member.roles.remove("759694957132513300").catch(console.error);
 				if (message.member.roles.cache.has("753245162469064795")) { // Administrateur
-					message.member.roles.remove("753245162469064795").catch(console.error);
 					message.member.roles.add("689180158359371851").catch(console.error);
+					message.member.roles.remove("753245162469064795").catch(console.error);
 				}
 				if (message.member.roles.cache.has("753250476891439185")) { // Modérateur
-					message.member.roles.remove("753250476891439185").catch(console.error);
 					message.member.roles.add("737646140362850364").catch(console.error);
+					message.member.roles.remove("753250476891439185").catch(console.error);
 				}
 				message.channel.send(`${message.author} a quitté la partie de Loups-garous`).catch(console.error);
 				break;
 			case "start":
 				if (message.channel.id !== "759700750803927061") return;
 				if (!message.member.hasPermission("ADMINISTRATOR") && message.author.id !== ownerID) return message.reply("tu n'as pas les permissions nécessaires").catch(console.error);
-				if (message.client.werewolfGame && !message.client.werewolfGame.options.ended) return message.reply("la partie a déjà commencé!").catch(console.error);
+				if (message.client.werewolfGame && !message.client.werewolfGame.ended) return message.reply("la partie a déjà commencé!").catch(console.error);
 
 				{
 					const game = new Game(message.guild, roleIngame, roleVillage, roleWerewolves, villageChannel, werewolvesChannel, deadChannel);
@@ -148,7 +148,7 @@ const command = {
 						}
 					}).catch(console.error);
 				} else {
-					const joined = message.guild.members.cache.filter(m => m.roles.cache.has("759699864191107072"));
+					const joined = message.guild.members.cache.filter(m => m.roles.cache.has("759699864191107072")).array();
 					message.channel.send({
 						embed: {
 							author: {
@@ -156,7 +156,7 @@ const command = {
 								icon_url: message.client.user.avatarURL()
 							},
 							color: "#010101",
-							description: Array.from(joined).map((m, i) => `\`${i}.\` ${m.user.username}`).join("\n") || "*Aucun joueur*",
+							description: joined.map((m, i) => `\`${i}.\` ${m.user.username}`).join("\n") || "*Aucun joueur*",
 							footer: {
 								text: "🐺 Mayze 🐺"
 							}

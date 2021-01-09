@@ -4,50 +4,30 @@ const selectPlayer = require("../werewolfModules/selectPlayer");
 const { time } = require("cron");
 
 class Game {
-	/**
-	 * @type {Guild}
-	 */
+	/** @type {Guild} */
 	#guild;
-	/**
-	 * @type {Role}
-	 */
+	/** @type {Role} */
 	#roleIngame;
-	/**
-	 * @type {Role}
-	 */
+	/** @type {Role} */
 	#roleVillage;
-	/**
-	 * @type {Role}
-	 */
+	/** @type {Role} */
 	#roleWerwolves;
-	/**
-	 * @type {Channel}
-	 */
+	/** @type {Channel} */
 	#villageChannel;
-	/**
-	 * @type {Channel}
-	 */
+	/** @type {Channel} */
 	#werewolvesChannel;
-	/**
-	 * @type {Channel}
-	 */
+	/** @type {Channel} */
 	#deadChannel;
-	/**
-	 * @type {Player[]}
-	 */
+	/** @type {Player[]} */
 	#players;
-	/**
-	 * @type {number}
-	 */
+	/** @type {number} */
 	#night;
-	/**
-	 * @type {number}
-	 */
+	/** @type {number} */
 	#day;
-	/**
-	 * @type {object}
-	 */
+	/** @type {object} */
 	#options;
+	/** @type {boolean} */
+	#ended;
 
 	/**
 	 * @param {Guild} guild The guild where the game is created
@@ -72,6 +52,7 @@ class Game {
 		this.#options = options;
 		this.#night = 0;
 		this.#day = 0;
+		this.#ended = false;
 	}
 
 	/**
@@ -159,6 +140,11 @@ class Game {
 	get alivePlayers() { return this.#players.filter(player => player.isAlive); }
 
 	/**
+	 * @returns {boolean} If the game ended or not
+	 */
+	get ended() { return this.#ended; }
+
+	/**
 	 * @param {Player} player The player to kill
 	 * @returns {Player[]} All the players that got killed
 	 */
@@ -172,8 +158,8 @@ class Game {
 		player.member.roles.remove("759702019207725089").catch(console.error);
 
 		const dead = [player];
-		if (player.options.couple && player.options.couple.isAlive)
-			dead.push(...this.kill(player.options.couple));
+		if (player.couple && player.couple.isAlive)
+			dead.push(...this.kill(player.couple));
 		if (player.options.avenge && player.options.avenge.isAlive)
 			dead.push(...this.kill(player.options.avenge));
 		return dead;
@@ -208,7 +194,7 @@ class Game {
 		});
 		const startOfNight = Date.now();
 
-		const attackedPlayer = await selectPlayer(this.werewolvesChannel, this.alivePlayers.filter(player => player.role !== "Loup-garou"), "Quel joueur souhaitez-vous attaquer cette nuit ?");
+		const attackedPlayer = await selectPlayer(this.werewolvesChannel, this.alivePlayers.filter(player => player.role !== "Loup-garou"), "Quel joueur souhaitez-vous attaquer cette nuit ?", 60000);
 		const witch = this.players.find(player => player.role === "Sorcière");
 		if (attackedPlayer) {
 			this.werewolvesChannel.send(`Les loups-garous attaqueront **${attackedPlayer.member.user.username}**`).catch(console.error);
@@ -254,8 +240,9 @@ class Game {
 				witch.member.send("Les loups-garous n'ont attaqué personne cette nuit").catch(console.error);
 			}
 		}
-		if (!this.options.ended) {
-			const timeLeft = 60000 - (Date.now() - startOfNight);
+		if (!this.ended) {
+			const timeLeft = 30000 - (Date.now() - startOfNight);
+			console.log(timeLeft);
 			if (timeLeft < 0) this.setDay();
 			else setTimeout(this.setDay, timeLeft);
 		}
@@ -281,7 +268,7 @@ class Game {
 				}
 			}
 		}).catch(console.error);
-		if (!this.options.ended) {
+		if (!this.ended) {
 			const ended = this.endCheck();
 			if (!ended) setTimeout(() => this.setVote(), 90000);
 		}
@@ -350,7 +337,7 @@ class Game {
 				} else {
 					this.villageChannel.send("Le village n'a pas pu décider qui éliminer").catch(console.error);
 				}
-				if (!this.options.ended) {
+				if (!this.ended) {
 					const ended = this.endCheck();
 					if (!ended) setTimeout(() => this.setNight(), 3000);
 				}
@@ -366,7 +353,11 @@ class Game {
 		const werewolves = this.alivePlayers.filter(player => player.role === "Loup-garou");
 		const villagers = this.alivePlayers.filter(player => player.role !== "Loup-garou");
 
-		
+		if (this.alivePlayers.every(player => player.couple || player.role === "Cupidon")) {
+			this.villageChannel.send("Les amoureux ont gagné !").catch(console.error);
+			this.end();
+			return true;
+		}
 
 		if (werewolves.length >= villagers.length) {
 			this.villageChannel.send("Les loups-garous ont gagné !").catch(console.error);
@@ -385,7 +376,7 @@ class Game {
 	 * Ends the game
 	 */
 	async end() {
-		this.setOption("ended", true);
+		this.#ended = true;
 		const roles = [/*"759699864191107072", "759694957132513300", */"759701843864584202", "759702019207725089", "759703669221359637", "759703558445727786", "759703743104548894", "759703827133497386", "759703894720380928", "759703955956957205", "759704017570889728", "759704083173998604", "759704177587912704"];
 		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": null }).catch(console.error);
 		this.werewolvesChannel.updateOverwrite(this.roleWerwolves, { "SEND_MESSAGES": false }).catch(console.error);

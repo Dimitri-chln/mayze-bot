@@ -2,21 +2,15 @@ const { GuildMember } = require("discord.js");
 const selectPlayer = require("./selectPlayer");
 
 class Player {
-	/**
-	 * @type {GuildMember}
-	 */
+	/** @type {GuildMember} */
 	#member;
-	/**
-	 * @type {string}
-	 */
+	/** @type {string} */
 	#role;
-	/**
-	 * @type {boolean}
-	 */
+	/** @type {boolean} */
 	#isAlive;
-	/**
-	 * @type {object}
-	 */
+	/** @type {Player} */
+	#couple;
+	/** @type {object} */
 	#options;
 
 	/**
@@ -27,6 +21,7 @@ class Player {
 		this.#member = member;
 		this.#role = role;
 		this.#isAlive = true,
+		this.#couple = null;
 		this.#options = options;
 	}
 
@@ -44,6 +39,18 @@ class Player {
 	 * @returns {boolean} If the player is alive
 	 */
 	get isAlive() {	return this.#isAlive; }
+
+	/**
+	 * @returns {Player} The lover of the player
+	 */
+	get couple() { return this.#couple; }
+
+	/**
+	 * @param {Player} player 
+	 */
+	setCouple(player) {
+		this.#couple = player;
+	}
 
 	/**
 	 * @returns {Object} Other information about the player
@@ -102,12 +109,12 @@ class Player {
 				break;
 			case "Cupidon":
 				if (night !== 1) return;
-				if (players.some(player => player.options.couple)) return;
+				if (players.some(player => player.couple)) return;
 				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "Quel joueur souhaites-tu mettre en couple ? (1er joueur)");
 				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), "Quel joueur souhaites-tu mettre en couple ? (2ème joueur)");
 				if (!player_1 || !player_2) return this.member.send("Tu n'as pas répondu à temps");
-				player_1.setOption("couple", player_2);
-				player_2.setOption("couple", player_1);
+				player_1.setCouple(player_2);
+				player_2.setCouple(player_1);
 				this.member.send(`**${player_1.member.user.username}** et **${player_2.member.user.username}** sont maintenant en couple !`).catch(console.error);
 				player_1.member.send(`Tu es désormais en couple avec **${player_2.member.user.username}** ! Son rôle est **${player_2.role}**`).catch(console.error);
 				player_2.member.send(`Tu es désormais en couple avec **${player_1.member.user.username}** ! Son rôle est **${player_1.role}**`).catch(console.error);
