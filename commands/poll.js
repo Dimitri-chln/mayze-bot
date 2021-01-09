@@ -11,25 +11,13 @@ const command = {
 	 * @param {string[]} args 
 	 */
 	async execute(message, args) {
-		const updateRate = 6;
 		const question = (args.join(" ").match(/^["«][^"»]*["»]/) || [null])[0];
 		if (!question) return message.reply("écris ta question entre guillemets").catch(console.error);
 		const answers = args.join(" ").replace(question, "").trim().split("/").length < 2 ? ["Oui", "Non"] : args.join(" ").replace(question, "").trim().split("/");
 		const emojis = answers.length === 2 ? ["✅", "❌"] : ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].slice(0, answers.length);
 		emojis.push("🛑");
 		message.delete().catch(console.error);
-		let msg = await sendPoll(), messageCounter = 0;
-
-		let reactionCollector = msg.createMessageCollector(() => true);
-		const messageCollector = message.channel.createMessageCollector(() => true);
-		messageCollector.on("collect", async _m => {
-			++messageCounter;
-			if (messageCounter % updateRate ===  0) {
-				reactionCollector.stop();
-				msg.delete().catch(console.error);
-				msg = await sendPoll(msg);
-			}
-		});
+		sendPoll();
 
 		async function sendPoll(previousMsg) {
 			const m = await message.channel.send({
@@ -58,7 +46,7 @@ const command = {
 			});
 
 			const reactionFilter = (reaction, user) => emojis.includes(reaction.emoji.name) && !user.bot;
-			reactionCollector = m.createReactionCollector(reactionFilter);
+			const reactionCollector = m.createReactionCollector(reactionFilter);
 			reactionCollector.on("collect", async (reaction, user) => {
 				if (reaction.emoji.name === "🛑" && user.tag === reaction.message.embeds[0].author.name) {
 					reaction.message.reactions.removeAll().catch(console.error);
@@ -85,6 +73,17 @@ const command = {
 					}).catch(console.error);
 				}
 			});
+
+			let counter = 5;
+			const messageCollector = message.channel.createMessageCollector(() => true);
+			messageCollector.on("collect", async () => {
+			--counter;
+			if (counter ===  0) {
+				reactionCollector.stop();
+				sendPoll(msg);
+				msg.delete().catch(console.error);
+			}
+		});
 
 			if (m) emojis.forEach(async e => await m.react(e).catch(console.error));
 			return m;
