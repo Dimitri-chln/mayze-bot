@@ -1,7 +1,6 @@
 const { Guild, GuildChannel, Role } = require("discord.js");
 const Player = require("./classPlayer");
 const selectPlayer = require("../werewolfModules/selectPlayer");
-const { time } = require("cron");
 
 class Game {
 	/** @type {Guild} */

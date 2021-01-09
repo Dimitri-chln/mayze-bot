@@ -124,7 +124,7 @@ const command = {
 					message.channel.send({
 						embed: {
 							author: {
-								name: "Liste des joueurs:",
+								name: "Liste des joueurs :",
 								icon_url: message.client.user.avatarURL()
 							},
 							color: "#010101",
@@ -152,7 +152,7 @@ const command = {
 					message.channel.send({
 						embed: {
 							author: {
-								name: "Liste des joueurs:",
+								name: "Liste des joueurs :",
 								icon_url: message.client.user.avatarURL()
 							},
 							color: "#010101",
