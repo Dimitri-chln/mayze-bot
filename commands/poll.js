@@ -18,7 +18,7 @@ const command = {
 		const emojis = answers.length === 2 ? ["✅", "❌"] : ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].slice(0, answers.length);
 		emojis.push("🛑");
 		message.delete().catch(console.error);
-		let msg = sendPoll(), messageCounter = 0;
+		let msg = await sendPoll(), messageCounter = 0;
 
 		let reactionCollector = msg.createMessageCollector(() => true);
 		const messageCollector = message.channel.createMessageCollector(() => true);
