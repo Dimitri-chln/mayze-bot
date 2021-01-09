@@ -1,6 +1,7 @@
 const { Guild, GuildChannel, Role } = require("discord.js");
 const Player = require("./classPlayer");
 const selectPlayer = require("../werewolfModules/selectPlayer");
+const shuffle = require("../modules/shuffle.js");
 
 class Game {
 	/** @type {Guild} */
@@ -103,6 +104,10 @@ class Game {
 		this.#players.push(new Player(member, role, options));
 	}
 
+	shufflePlayers() {
+		this.#players = shuffle(this.#players);
+	}
+
 	/**
 	 * @returns {number} The current night
 	 */
@@ -168,6 +173,7 @@ class Game {
 	 * Sets the beginning of the night
 	 */
 	async setNight() {
+		if (this.#night === 0) this.shufflePlayers();
 		this.#night ++;
 		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": false });
 		this.werewolvesChannel.updateOverwrite(this.roleWerwolves, { "SEND_MESSAGES": null });
