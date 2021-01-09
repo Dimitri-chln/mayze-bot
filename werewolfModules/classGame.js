@@ -270,10 +270,9 @@ class Game {
 				}
 			}
 		}).catch(console.error);
-		if (!this.ended) {
-			const ended = this.endCheck();
-			if (!ended) setTimeout(() => this.setVote(), 90000);
-		}
+		if (this.ended) return;
+		const ended = this.endCheck();
+		if (!ended) setTimeout(this.setVote, 90000);
 	}
 
 	/**
@@ -339,10 +338,9 @@ class Game {
 				} else {
 					this.villageChannel.send("Le village n'a pas pu décider qui éliminer").catch(console.error);
 				}
-				if (!this.ended) {
-					const ended = this.endCheck();
-					if (!ended) setTimeout(() => this.setNight(), 3000);
-				}
+				if (this.ended) return;
+				const ended = this.endCheck();
+				if (!ended) setTimeout(this.setNight, 3000);
 			}, 3000);
 		});
 	}
