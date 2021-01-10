@@ -110,9 +110,9 @@ class Player {
 			case "Cupidon":
 				if (night !== 1) return;
 				if (players.some(player => player.couple)) return;
-				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "Quel joueur souhaites-tu mettre en couple ? (1er joueur)").catch(console.error);
+				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "Quel joueur souhaites-tu mettre en couple ? (1er joueur)", 15000).catch(console.error);
 				if (!player_1) return this.member.send("Tu n'as pas répondu à temps");
-				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), "Quel joueur souhaites-tu mettre en couple ? (2ème joueur)").catch(console.error);
+				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), "Quel joueur souhaites-tu mettre en couple ? (2ème joueur)", 15000).catch(console.error);
 				if (!player_2) return this.member.send("Tu n'as pas répondu à temps");
 				player_1.setCouple(player_2);
 				player_2.setCouple(player_1);

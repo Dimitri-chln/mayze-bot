@@ -122,7 +122,7 @@ client.on("message", async message => {
 		}
 
 		const mayze = client.users.cache.get("703161067982946334");
-		//if (client.beta && mayze.presence.status !== "offline") return;
+		if (client.beta && mayze.presence.status !== "offline") return;
 
 		if (!message.author.bot && !message.channel.name.includes("spam")) {
 			const bots = message.guild.members.cache.filter(m => m.user.bot);
