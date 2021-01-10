@@ -17,7 +17,7 @@ const command = {
 		if (AKFmessage) message.client.pg.query(`INSERT INTO afk (user_id, message) VALUES ('${message.author.id}', '${AKFmessage}')`).catch(console.error);
 		else message.client.pg.query(`INSERT INTO afk (user_id) VALUES ('${message.author.id}')`).catch(console.error);
 
-		message.channel.send(`> ${message.author} est maintenant AFK 💤\n${AKFmessage ? `**→ ${AKFmessage}**` : ""}`).catch(console.error);
+		message.channel.send(`${message.author} est maintenant AFK 💤\n${AKFmessage ? `**→ ${AKFmessage}**` : ""}`).catch(console.error);
 	}
 };
 
