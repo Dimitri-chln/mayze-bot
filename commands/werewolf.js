@@ -78,7 +78,7 @@ const command = {
 				});
 
 				reactionCollector.on("end", () => {
-					const players = message.guild.members.cache.filter(member => member.roles.cache.has(roleIngame.id)).array();
+					const players = shuffle(message.guild.members.cache.filter(member => member.roles.cache.has(roleIngame.id)).array());
 					if (players.length < 4) {
 						players.forEach(player => player.roles.remove(roleIngame).catch(console.error));
 						return villageChannel.send(`il faut au minimum 4 joueurs pour pouvoir lancer la partie (${players.length} joueur(s) actuellement)`).catch(console.error);
