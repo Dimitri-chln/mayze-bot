@@ -34,7 +34,7 @@ const command = {
 								icon_url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
 							},
 							color: "#010101",
-							description: `**[${characterName}](${message.url})** a été roll dans <#${message.channel.id}> !\n(${characterSeries}) **${kakeraValue}** <:kakeraMudae:796822222110720106>`,
+							description: `**[${characterName}](${message.url})** a été roll dans <#${message.channel.id}> !\n→ ${characterSeries}\n**${kakeraValue}**<:kakeraMudae:796822222110720106>`,
 							footer: {
 								text: "✨Mayze✨"
 							}
