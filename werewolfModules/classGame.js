@@ -382,11 +382,13 @@ class Game {
 	 */
 	async end() {
 		this.#ended = true;
-		const roles = [/*"759699864191107072", "759694957132513300", */"759701843864584202", "759702019207725089", "759703669221359637", "759703558445727786", "759703743104548894", "759703827133497386", "759703894720380928", "759703955956957205", "759704017570889728", "759704083173998604", "759704177587912704"];
 		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": null }).catch(console.error);
 		this.werewolvesChannel.updateOverwrite(this.roleWerwolves, { "SEND_MESSAGES": false }).catch(console.error);
 		this.players.forEach(async player => {
-			player.member.roles.remove(this.guild.roles.cache.filter(role => roles.includes(role.id) && player.member.roles.cache.has(role.id))).catch(console.error);
+			player.member.roles.remove(this.roleIngame).catch(console.error);
+			player.member.roles.remove("759701843864584202").catch(console.error);
+			player.member.roles.remove("759702019207725089").catch(console.error);
+			player.member.roles.remove(this.guild.roles.cache.find(role => role.name === player.role)).catch(console.error);
 			if (player.role === "Chaman" && player.isAlive) {
 				this.deadChannel.permissionOverwrites.get(player.member.id).delete().catch(console.error);
 			}
