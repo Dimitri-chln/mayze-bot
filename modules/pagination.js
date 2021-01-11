@@ -12,7 +12,7 @@ const { Message, MessageEmbed } = require("discord.js");
     
 	let page = 0;
     const currentPage = await message.channel.send(pages[page].setFooter(`Page ${page + 1} / ${pages.length}`));
-    for (const emoji of emojiList) await currentPage.react(emoji);
+    for (const emoji of emojiList) await currentPage.react(emoji).catch(console.error);
     
     const filter = (reaction, user) => emojiList.includes(reaction.emoji.name) && !user.bot;
     const reactionCollector = currentPage.createReactionCollector(filter, { time: timeout });
@@ -29,7 +29,7 @@ const { Message, MessageEmbed } = require("discord.js");
 			default:
 				break;
 		}
-		currentPage.edit(pages[page].setFooter(`Page ${page + 1} / ${pages.length}`));
+		currentPage.edit(pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)).catch(console.error);
     });
     
 	reactionCollector.on("end", () => {
