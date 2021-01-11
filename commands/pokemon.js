@@ -5,7 +5,7 @@ const command = {
 	description: "Regarde la liste des pokémons que tu as attrapés",
 	aliases: ["pokemons", "pkmn", "pkm", "poke"],
 	args: 0,
-	usage: "[-legendary] [-shiny] [-alolan] [-galarian] [-id <nombre>] [-name <nom>]",
+	usage: "[-legendary] [-shiny] [-alolan] [-galarian] [-id [nombre]] [-name <nom>]",
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 

@@ -62,7 +62,7 @@ const command = {
 				image: {
 					url: img
 				},
-				color: shiny ? "#ddbb20" : "#010101",
+				color: shiny ? "#ddbb20" : (legendary ? "#ce2f20" : "#010101"),
 				description: `${message.author} a attrapé un ${shiny ? "⭐ " : ""}${pokemon.names.fr} !`,
 				footer: {
 					text: "✨Mayze✨",
