@@ -10,13 +10,12 @@ const command = {
 	/**
 	 * 
 	 * @param {Message} message 
-	 * @param {string[]} _args 
+	 * @param {string[]} args 
 	 */
-	async execute(message, _args) {
-		const dex = require("oakdex-pokedex");
-		const values = dex.allPokemon().sort((a, b) => a.national_id - b.national_id).map(p => p.catch_rate);
-		const catchRates = values.map((v, i, a) => a.slice(0, i).reduce((partialSum, a) => partialSum + a, 0));
-		console.log(catchRates.join(", "));
+	async execute(message, args) {
+		const fs = require("fs");
+		const { rows } = await message.client.pg.query("SELECT * FROM pokemons").catch(console.error);
+		fs.writeFile("backups/database_1.json", JSON.stringify(rows, null, 4), "utf8", () => console.log("Backup complete"));
 	}
 };
 
