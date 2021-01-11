@@ -12,6 +12,8 @@ const command = {
 	 * @param {string[]} _args 
 	 */
 	async execute(message, _args) {
+		return message.reply("cette commande est désactivée pour le moment").catch(console.error);
+
 		const pokedex = require("oakdex-pokedex");
 
 		const shinyFrequency = 0.004, alolanFrequency = 0.1, galarianFrequency = 0.1;
