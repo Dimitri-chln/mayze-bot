@@ -12,14 +12,9 @@ const command = {
 	 * @param {string[]} args 
 	 */
 	async execute(message, args) {
-		var toDo;
-		try {
-			const { rows } = await message.client.pg.query("SELECT * FROM to_do");
-			toDo = rows;
-		} catch (err) {
-			console.log(err);
-			return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
-		}
+		const { "rows": toDo } = await message.client.pg.query("SELECT * FROM to_do").catch(console.error);
+		if (!toDo) return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
+
 		switch ((args[0] || "").toLowerCase()) {
 			case "add":
 				const name = args.slice(1).join(" ");
