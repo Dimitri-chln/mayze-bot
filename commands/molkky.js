@@ -6,6 +6,7 @@ const command = {
 	usage: "setup | create <joueur> <joueur> ... | score <score> | delete",
 	async execute(message, args) {
 		const Discord = require("discord.js");
+		const { "molkky_setup": setup } = require("../assets/misc.json");
 		const molkkyData = message.client.molkky || {};
 		if (!Object.keys(molkkyData).length) message.client.molkky = {};
 		var gameData = molkkyData[message.author.id];
@@ -23,7 +24,7 @@ const command = {
 							title: "Placement Mölkky",
 							color: "#010101",
 							image: {
-								url: "https://i.imgur.com/aj6CMIC.jpg"
+								url: setup
 							},
 							footer: {
 								text: "✨Mayze✨"
