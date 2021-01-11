@@ -79,7 +79,6 @@ const command = {
 					reactionCollector.stop();
 					break;
 			}
-			if (message.guild.id === "689164798264606784") colorRole.setColor(RGBToHex(color)).catch(console.error);
 			updateMsg();
 		});
 
@@ -105,7 +104,6 @@ const command = {
 					color[2] = color[2] + parseInt(value, 10) >= 0 ? (color[2] + parseInt(value, 10) <= 255 ? color[2] + parseInt(value, 10) : 255) : 0;
 					break;
 			}
-			if (message.guild.id === "689164798264606784") colorRole.setColor(RGBToHex(color)).catch(console.error);
 			updateMsg();
 		});
 
