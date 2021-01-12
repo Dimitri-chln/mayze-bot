@@ -37,8 +37,7 @@ const command = {
 								.setColor("#010101")
 								.setTitle(`Le résultat contient ${ res.rowCount } lignes`)
 								.setAuthor(args.join(" "), message.author.avatarURL({ dynamic: true }))
-								.setDescription(`\`\`\`json\n${matches[i]}\n\`\`\``)
-								.setFooter(`${ res.rowCount } lignes`);
+								.setDescription(`\`\`\`json\n${matches[i]}\n\`\`\``);
 							pages.push(embed);
 						}
 						pagination(message, pages).catch(console.error);
