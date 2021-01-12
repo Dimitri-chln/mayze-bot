@@ -15,7 +15,6 @@ const command = {
 		const pokedex = require("oakdex-pokedex");
 		const pagination = require("../modules/pagination.js");
 
-		message.channel.startTyping();
 		let { "rows": pokemons }  = await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}' ORDER BY legendary DESC, shiny DESC, caught DESC, pokedex_id ASC`).catch(console.error);
 		if (!pokemons) return message.channel.send("Quelque chose s'est mal passé en accédant à la base de données").catch(console.error);
 
@@ -47,7 +46,6 @@ const command = {
 			console.log(err);
 			message.channel.send("Quelque chose s'est mal passé en créant le paginateur").catch(console.error);
 		}
-		message.channel.stopTyping();
 	}
 }
 
