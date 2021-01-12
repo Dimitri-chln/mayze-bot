@@ -8,8 +8,10 @@ const client = new Discord.Client({ fetchAllMembers: true, partials: ["MESSAGE",
 
 if (process.env.HOST !== "HEROKU") {
 	const shellExec = require("./modules/shellExec.js");
-	const result = shellExec("heroku pg:credentials:url --app mayze-bot");
-	process.env.DATABASE_URL = result.match(/postgres:.*/)[0];
+	const output = shellExec("heroku pg:credentials:url --app mayze-bot");
+	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
+	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
+	process.env.DATABASE_URL = connectionURL;
 }
 const pg = require("pg");
 client.pg = newPgClient();
