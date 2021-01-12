@@ -4,7 +4,7 @@ const command = {
 	name: "catch",
 	description: "Attrape un pokémon !",
 	aliases: ["c"],
-	cooldown: 3600,
+	cooldown: 1200,
 	args: 0,
 	usage: "",
 	/**
