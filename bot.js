@@ -56,8 +56,8 @@ client.on("ready", async () => {
 			});
 			if (!slashCommand) return;
 			client.slashCommands.set(slashCommand.name, slashCommand);
-			if (slashData.some(slash => slash.name === slashCommand.name)) client.pg.query(`UPDATE slash_commands SET json_data = '${JSON.stringify(slashCommand).replace("'", "U+0027")}' WHERE name = '${slashCommand.name}'`).catch(console.error);
-			else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.name}', '${JSON.stringify(slashCommand).replace("'", "U+0027")}')`).catch(console.error);
+			if (slashData.some(slash => slash.name === slashCommand.name)) client.pg.query(`UPDATE slash_commands SET json_data = '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}' WHERE name = '${slashCommand.name}'`).catch(console.error);
+			else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.name}', '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}')`).catch(console.error);
 		}
 	});
 
