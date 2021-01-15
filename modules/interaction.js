@@ -1,6 +1,8 @@
 const { Client, Guild, Channel, User, GuildMember } = require("discord.js");
 
 class InteractionTrigger {
+	/**@type {Object} */
+	#base;
 	/**@type {Client} */
 	#client;
 	/**@type {Guild} */
@@ -17,6 +19,7 @@ class InteractionTrigger {
 	 * @param {Client} client 
 	 */
 	constructor(interaction, client) {
+		this.#base = interaction;
 		this.#client = client;
 		if (interaction.guild_id) this.#guild = this.#client.guilds.cache.get(interaction.guild_id);
 		if (interaction.channel_id) this.#channel = this.#client.channels.cache.get(interaction.channel_id);
@@ -24,6 +27,7 @@ class InteractionTrigger {
 		this.#author = this.#member.user;
 	}
 
+	get base() { return this.#base; }
 	get client() { return this.#client; }
 	get guild() { return this.#guild; }
 	get channel() { return this.#channel; }

@@ -128,11 +128,11 @@ client.on("message", async message => {
 });
 
 client.ws.on("INTERACTION_CREATE", async interaction => {
-	console.log(interaction);
 	const command = client.commands.get(interaction.data.name) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.data.name));
 	const options = interaction.data.options;
 	const InteractionTrigger = require("./modules/interaction");
 	const enhancedInteraction = new InteractionTrigger(interaction, client);
+	console.log(`${enhancedInteraction.author.tag} used /${enhancedInteraction.base.data.name} in #${enhancedInteraction.channel.name}\n${enhancedInteraction.base.data}`);
 	if (command) processCommand(command, enhancedInteraction, null, options);
 });
 
