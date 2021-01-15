@@ -132,7 +132,7 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
 	const options = interaction.data.options;
 	const InteractionTrigger = require("./modules/interaction");
 	const enhancedInteraction = new InteractionTrigger(interaction, client);
-	console.log(`${enhancedInteraction.author.tag} used /${enhancedInteraction.base.data.name} in #${enhancedInteraction.channel.name}\n${enhancedInteraction.base.data}`);
+	console.log(`${enhancedInteraction.author.tag} used /${enhancedInteraction.base.data.name} in #${enhancedInteraction.channel.name}\n${JSON.stringify(enhancedInteraction.base.data, null, 4)}`);
 	if (command) processCommand(command, enhancedInteraction, null, options);
 });
 
