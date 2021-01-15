@@ -49,7 +49,7 @@ client.on("ready", async () => {
 		if (!command.disableSlash && !command.ownerOnly) {
 			const slashOptions = { name: command.name, description: command.description };
 			if (command.slashOptions) slashOptions.options = command.slashOptions;
-			const slashCommand = await client.api.applications(client.user.id).guilds("672516066756395031").commands.post({ data: slashOptions });
+			const slashCommand = await client.api.applications(client.user.id).guilds("689164798264606784").commands.post({ data: slashOptions });
 			client.slashCommands.set(slashCommand.name, slashCommand);
 		}
 	});
