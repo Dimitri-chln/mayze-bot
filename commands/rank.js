@@ -6,32 +6,40 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "[rank]",
+	onlyInGuilds: ["689164798264606784"],
+	slashOptions: [
+		{
+			name: "rank",
+			description: "Le rank à rejoindre ou à quitter",
+			type: 3,
+			required: false
+		}
+	],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
+	 * @param {Object[]} options
 	 */
-	async execute(message, args) {
-		if (args.length) {
-			if (message.member.roles.cache.some(r => r.id === "695943648235487263")) return;
+	async execute(message, args, options) {
+		const rankIdOrName = args
+			? (args.join(" ") || "").toLowerCase()
+			: (options[0] || { value: "" }).value.toLowerCase();
+		if (message.member.roles.cache.has("695943648235487263")) return; // If jailed
 		
-			const roleTop = message.guild.roles.cache.get("735810286719598634");
-			const roleBottom = message.guild.roles.cache.get("735810462872109156");
-			const ranks = message.guild.roles.cache.filter(r => r.position < roleTop.position && r.position > roleBottom.position && !r.name.includes("(Jailed)"));
-			const rankIdOrName = args.join(" ").toLowerCase();
-			const rank = message.guild.roles.cache.get(rankIdOrName) ||
-				ranks.find(r => r.name.toLowerCase() === rankIdOrName) ||
-				ranks.find(r => r.name.toLowerCase().includes(rankIdOrName));
+		const roleTop = message.guild.roles.cache.get("735810286719598634");
+		const roleBottom = message.guild.roles.cache.get("735810462872109156");
+		const ranks = message.guild.roles.cache.filter(r => r.position < roleTop.position && r.position > roleBottom.position && !r.name.includes("(Jailed)"));
 
-			if (!ranks.array().includes(rank)) {
-				return message.reply("ce rank n'existe pas").catch(console.error);
-			}
-
+		if (rankIdOrName) {
+			const rank = message.guild.roles.cache.get(rankIdOrName) || ranks.find(r => r.name.toLowerCase() === rankIdOrName) || ranks.find(r => r.name.toLowerCase().includes(rankIdOrName)) || { id: "" };
+			if (!ranks.has(rank.id)) return message.reply("ce rank n'existe pas").catch(console.error);
+		
 			if (!message.member.roles.cache.has(rank.id)) {
-				try {
+				try{
 					await message.member.roles.add(rank);
 					message.channel.send(`${message.author} a rejoint le rank \`${rank.name}\``).catch(console.error);
 				} catch (err) {
-					console.log(err);
+					console.error(err);
 					message.channel.send("Quelque chose s'est mal passé en te donnant le rôle :/").catch(console.error);
 				}
 			}
@@ -45,9 +53,6 @@ const command = {
 				}
 			}
 		} else {
-			const roleTop = message.guild.roles.cache.get("735810286719598634");
-			const roleBottom = message.guild.roles.cache.get("735810462872109156");
-			const ranks = message.guild.roles.cache.filter(r => r.position < roleTop.position && r.position > roleBottom.position && !r.name.includes("(Jailed)"));
 			message.channel.send({
 				embed: {
 					author: {
@@ -55,10 +60,7 @@ const command = {
 					icon_url: message.client.user.avatarURL()
 					},
 					color: "#010101",
-					description: ranks.map(rank => {
-						if (message.member.roles.cache.has(rank.id)) return `• ${rank} | ✅`;
-						return `• ${rank}`;
-					}).join("\n"),
+					description: ranks.map(rank => `• ${rank}${message.member.roles.cache.has(rank.id) ? ` | ✅` : ""}`).join("\n"),
 					footer: {
 					text: "✨Mayze✨"
 					}

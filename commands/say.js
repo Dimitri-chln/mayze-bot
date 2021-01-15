@@ -1,14 +1,31 @@
+const { Message } = require("discord.js");
+
 const command = {
 	name: "say",
-	description: "Fais dire n'importe quoi au bot",
+	description: "Faire dire n'importe quoi au bot",
 	aliases: [],
 	args: 0,
 	usage: "<texte>",
-	async execute(message, args) {
-		try {
-			message.channel.send(args.join(" "));
-			message.delete();
-		} catch (err) { console.log(err); }
+	slashOptions: [
+		{
+			name: "texte",
+			description: "Le texte à envoyer",
+			type: 3,
+			required: true
+		}
+	],
+	/**
+	 * @param {Message} message 
+	 * @param {string[]} args 
+	 * @param {Object[]} options
+	 */
+	async execute(message, args, options) {
+		const msg = args
+			? args.join(" ")
+			: (options ? options[0].value : null);
+		if (!msg) return;
+		message.channel.send(msg).catch(console.error);
+		if (message.deletable) message.delete().catch(console.error);
 	}
 };
 

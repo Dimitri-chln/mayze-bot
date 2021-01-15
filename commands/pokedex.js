@@ -6,24 +6,35 @@ const command = {
 	aliases: ["dex", "pd"],
 	args: 1,
 	usage: "<pokémon/pokédex ID>",
+	slashOptions: [
+		{
+			name: "pokémon",
+			description: "Le nom ou l'ID du pokémon",
+			type: 3,
+			required: true
+		}
+	],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
+	 * @param {Object[]} options
 	 */
-	async execute(message, args) {
+	async execute(message, args, options) {
 		const pokedex = require("oakdex-pokedex");
 
-		const input = args.join(" ").toLowerCase().replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase() });
-		const pokemon = pokedex.findPokemon(input);
+		const input = args
+			? args.join(" ").toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase())
+			: options[0].value.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
+		const pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => pkm.names.fr === input);
 
 		if (!pokemon) return message.reply("ce pokémon n'existe pas").catch(console.error);
 
 		message.channel.send({
 			embed: {
-				title: `${pokemon.names.fr} #${("00" + pokemon.national_id).substr(-3)}`,
+				title: `${pokemon.names.fr} #${(`00${pokemon.national_id}`).substr(-3)}`,
 				color: "#010101",
 				image: {
-					url: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${("00" + pokemon.national_id).substr(-3)}.png`
+					url: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}.png`
 				},
 				footer: {
 					text: "✨Mayze✨"

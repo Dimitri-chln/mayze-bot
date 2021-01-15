@@ -1,15 +1,13 @@
-async function userValidation(userMessage, botMessage) {
+async function userValidation(user, message) {
     try {
-        await botMessage.react("✅");
-        await botMessage.react("❌");
+        await message.react("✅");
+        await message.react("❌");
     } catch (err) { throw err; }
-    const filter = (reaction, user) => {
-        return ["✅", "❌"].includes(reaction.emoji.name) && user.id === userMessage.author.id;
+    const filter = (reaction, u) => {
+        return ["✅", "❌"].includes(reaction.emoji.name) && user.id === u.id;
     };
-    var collected;
-    try {
-        collected = await botMessage.awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] });
-    } catch (err) { return false; }
+    const collected = await message.awaitReactions(filter, { max: 1, time: 60000 }).catch(console.error);
+    if (!collected) return false;
     if (collected.first().emoji.name === "✅") return true;
     return false;
 }

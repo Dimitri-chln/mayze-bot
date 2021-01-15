@@ -2,21 +2,40 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "poll",
-	description: "Crée un sondage dans le salon actuel",
+	description: "Créer un sondage dans le salon actuel",
 	aliases: ["ask", "question"],
 	args: 1,
 	usage: "<question> [proposition]/[proposition]/...",
+	slashOptions: [
+		{
+			name: "question",
+			description: "La question à poser",
+			type: 3,
+			required: true
+		},
+		{
+			name: "propositions",
+			description: "Une liste de propositions séparées par un /",
+			type: 3,
+			required: false
+		}
+	],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
+	 * @param {Object[]} options
 	 */
-	async execute(message, args) {
-		const question = (args.join(" ").match(/^["«][^"»]*["»]/) || [null])[0];
+	async execute(message, args, options) {
+		const [ question ] = args
+			? args.join(" ").match(/^["«][^"»]*["»]/) || []
+			: [ options[0].value ];
 		if (!question) return message.reply("écris ta question entre guillemets").catch(console.error);
-		const answers = args.join(" ").replace(question, "").trim().split("/").length < 2 ? ["Oui", "Non"] : args.join(" ").replace(question, "").trim().split("/");
+		const answers = args
+			? args.join(" ").replace(question, "").trim().split("/").length < 2 ? [ "Oui", "Non" ] : args.join(" ").replace(question, "").trim().split("/").map(answer => answer.replace(/^./, a => a.toUpperCase()))
+			: (options[1] || { value: "" }).value.trim().split("/").length < 2 ? [ "Oui", "Non" ] : (options[1] || { value: "" }).value.trim().split("/").map(answer => answer.replace(/^./, a => a.toUpperCase()));
 		const emojis = answers.length === 2 ? ["✅", "❌"] : ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].slice(0, answers.length);
 		emojis.push("🛑");
-		message.delete().catch(console.error);
+		if (message.deletable) message.delete().catch(console.error);
 		sendPoll();
 
 		async function sendPoll(previousMsg) {

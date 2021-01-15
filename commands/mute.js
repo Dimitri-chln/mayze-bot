@@ -1,44 +1,56 @@
+const { Message } = require("discord.js");
+
 const command = {
 	name: "mute",
 	description: "Mute une personne sur le serveur pendant un temps donné",
 	aliases: [],
 	args: 1,
-	usage: "<mention/id> [durée]",
+	usage: "<mention> [durée]",
+	onlyInGuilds: ["689164798264606784"],
 	perms: ["MANAGE_ROLES"],
-	async execute(message, args) {
+	slashOptions: [
+		{
+			name: "utilisateur",
+			description: "La personne à mute",
+			type: 6,
+			required: true
+		},
+		{
+			name: "durée",
+			description: "La durée pendant laquelle mute la personne",
+			type: 3,
+			required: false
+		}
+	],
+	/**
+	* @param {Message} message 
+	* @param {string[]} args 
+	* @param {Object[]} options
+	*/
+	async execute(message, args, options) {
 		const { ownerID } = require("../config.json");
 		const dhms = require ("dhms");
 		const timeToString = require("../modules/timeToString.js");
 		
-		const userID = (message.mentions.users.first() || {id: args[0]}).id;
-		const member = message.guild.members.cache.get(userID);
+		const member = args
+			? message.guild.members.cache.get((message.mentions.users.first() || {}).id)
+			: message.guild.members.cache.get(options[0].value);
 		const mutedRole = message.guild.roles.cache.get("695330946844721312");
 		
-		if (!member) {
-			return message.reply("tu n'as mentionné personne ou la mention était incorrecte").catch(console.error);
-		}
-		if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== ownerID) {
+		if (!member) return message.reply("mentionne une personne").catch(console.error);
+		if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== ownerID)
 			return message.reply("tu ne peux pas mute cette personne").catch(console.error);
-		};
 		
-		const duration = args.slice(1).join(" ");
-		var durationResponse = "indéfiniment";
-		if (duration) {
-			const durationHumanized = timeToString(dhms(duration, true));
-			if (durationHumanized) {
-				durationResponse = `pendant ${durationHumanized}`;
-				setTimeout(function() {
-					try { member.roles.remove(mutedRole.id); }
-					catch (err) { console.log(err); }
-				}, duration * 1000);
-			};
-		};
-		try { member.roles.add(mutedRole.id); }
-		catch (err) {
-			console.log(err);
-			return message.channel.send("Quelque chose s'est mal passé en ajoutant le rôle Muted").catch(console.error);
-		}
-		message.channel.send(`${member.user} a été mute ${durationResponse}`).catch(console.error);
+		const duration = args
+			? dhms(args.slice(1).join(" "))
+			: dhms((options[1] || {}).value);
+		if (duration) setTimeout(() => member.roles.remove(mutedRole).catch(console.error), duration);
+		member.roles.add(mutedRole)
+			.then(() => message.channel.send(`${member.user} a été mute ${duration ? `pendant ${timeToString(duration)}` : "indéfiniment"}`).catch(console.error))
+			.catch(err => {
+				console.error(err);
+				message.channel.send("Quelque chose s'est mal passé en mutant cette personne :/").catch(console.error);
+			});
 	}
 };
 

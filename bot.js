@@ -33,9 +33,9 @@ for (const file of autoresponseFiles) {
 }
 
 client.reactionCommands = [];
-const reactionCommandsFiles = fs.readdirSync("./reactionCommands").filter(file => file.endsWith(".js"));
+const reactionCommandsFiles = fs.readdirSync("./reaction-commands").filter(file => file.endsWith(".js"));
 for (const file of reactionCommandsFiles) {
-	const reactionCommand = require(`./reactionCommands/${file}`);
+	const reactionCommand = require(`./reaction-commands/${file}`);
 	client.reactionCommands.push(reactionCommand);
 }
 
@@ -43,6 +43,17 @@ client.cooldowns = new Discord.Collection();
 
 client.on("ready", async () => {
 	console.log("Connected to Discord");
+
+	client.slashCommands = new Discord.Collection();
+	client.commands.forEach(async command => {
+		if (!command.disableSlash && !command.ownerOnly) {
+			const slashOptions = { name: command.name, description: command.description };
+			if (command.slashOptions) slashOptions.options = command.slashOptions;
+			const slashCommand = await client.api.applications(client.user.id).guilds("672516066756395031").commands.post({ data: slashOptions });
+			client.slashCommands.set(slashCommand.name, slashCommand);
+		}
+	});
+
 	const { version } = require ("./package.json");
 	const logChannel = client.channels.cache.get(config.logChannel);
 	try {
@@ -74,74 +85,33 @@ client.on("ready", async () => {
 
 client.on("message", async message => {
 	if (message.partial) await message.fetch().catch(console.error);
+	if (message.channel.type !== "dm" && message.content.toLowerCase().startsWith(client.prefix) && !message.author.bot) {
+		const input = message.content.slice(client.prefix.length).trim().split(/ +/g);
+		const commandName = input[0].toLowerCase();
+		const args = input.splice(1);
+		const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+		if (command) processCommand(command, message, args);
+	}
 
-	if (message.channel.type !== "dm") {
-		const chatXP = require("./modules/chatXP.js");
-		if (message.content.toLowerCase().startsWith(client.prefix)) {
-			if (message.author.bot) return;
-			const input = message.content.slice(client.prefix.length).trim().split(/ +/g);
-			const commandName = input[0].toLowerCase();
-			const args = input.splice(1);
+	const mayze = client.users.cache.get("703161067982946334");
+	if (client.beta && mayze.presence.status !== "offline") return;
 
-			const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-			if (!command) return;
-
-			if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm)))
-				return message.reply(`tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``).catch(console.error);
-
-			if (command.ownerOnly && message.author.id !== config.ownerID) return;
-
-			if (!client.cooldowns.has(command.name)) {
-				client.cooldowns.set(command.name, new Discord.Collection());
+	const chatXP = require("./modules/chatXP.js");
+	if (message.channel.type !== "dm" && !message.author.bot && !message.channel.name.includes("spam")) {
+		const bots = message.guild.members.cache.filter(m => m.user.bot);
+		const prefixes = bots.map(b => ((b.nickname || b.user.username).match(/\[.+\]/) || ["[!]"])[0].replace(/[\[\]]/g, ""));
+		if (!prefixes.some(p => message.content.toLowerCase().startsWith(p))) {
+			if (!client.xpMessages) client.xpMessages = {};
+			if (!client.xpMessages[message.author.id]) {
+				client.xpMessages[message.author.id] = 1;
+				setTimeout(() => {
+					delete client.xpMessages[message.author.id];
+				}, 60000);
 			}
-			const now = Date.now();
-			const timestamps = client.cooldowns.get(command.name);
-			const cooldownAmount = (command.cooldown || 2) * 1000;
-			if (timestamps.has(message.author.id)) {
-				const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-				if (now < expirationTime) {
-					const timeLeft = (expirationTime - now) / 1000;
-					const timeLeftHumanized = new Date((timeLeft % 86400) * 1000)
-					.toUTCString()
-					.replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
-					.replace(/00h |00m /g, "");
-					return message.reply(`attends encore **${timeLeftHumanized}** avant d'utiliser la commande \`${client.prefix}${command.name}\``).catch(console.error);
-				}
-			}
-
-			if (args.length < command.args) {
-				return message.channel.send(`Utilisation : \`${client.prefix}${commandName} ${command.usage}\``).catch(console.error);
-			}
-			try {
-				command.execute(message, args);
-				//chatXP(message, command.xp || 20);
-				timestamps.set(message.author.id, now);
-				setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-			} catch (err) {
-				console.error(err);
-				message.reply("quelque chose s'est mal passé en exécutant la commande :/").catch(console.error);
-			}
-		}
-
-		const mayze = client.users.cache.get("703161067982946334");
-		if (client.beta && mayze.presence.status !== "offline") return;
-
-		if (!message.author.bot && !message.channel.name.includes("spam")) {
-			const bots = message.guild.members.cache.filter(m => m.user.bot);
-			const prefixes = bots.map(b => ((b.nickname || b.user.username).match(/\[.+\]/) || ["[!]"])[0].replace(/[\[\]]/g, ""));
-			if (!prefixes.some(p => message.content.toLowerCase().startsWith(p))) {
-				if (!client.xpMessages) client.xpMessages = {};
-				if (!client.xpMessages[message.author.id]) {
-					client.xpMessages[message.author.id] = 1;
-					setTimeout(() => {
-						delete client.xpMessages[message.author.id];
-					}, 60000);
-				}
-				const f = x => Math.round(Math.sqrt(message.content.length) * config.xpMultiplier / x);
-				const newXP = f(client.xpMessages[message.author.id]);
-				chatXP(message, newXP);
-				client.xpMessages[message.author.id] ++;
-			}
+			const f = x => Math.round(Math.sqrt(message.content.length) * config.xpMultiplier / x);
+			const newXP = f(client.xpMessages[message.author.id]);
+			chatXP(message, newXP);
+			client.xpMessages[message.author.id] ++;
 		}
 	}
 
@@ -149,8 +119,48 @@ client.on("message", async message => {
 		try { autoresponse.execute(message); }
 		catch (err) { console.error(err); }
 	}
-
 });
+
+client.ws.on("INTERACTION_CREATE", async interaction => {
+	console.log(interaction);
+	const command = client.commands.get(interaction.data.name) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.data.name));
+	const options = interaction.data.options;
+	const InteractionTrigger = require("./modules/interaction");
+	const enhancedInteraction = new InteractionTrigger(interaction, client);
+	if (command) processCommand(command, enhancedInteraction, null, options);
+});
+
+async function processCommand(command, message, args, options) {
+	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return message.reply("cette commande ne fonctionne pas sur ce serveur").catch(console.error);
+	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm))) return message.reply(`tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``).catch(console.error);
+	if (command.ownerOnly && message.author.id !== config.ownerID) return;
+	if (args && args.length < command.args) return message.channel.send(`Utilisation : \`${client.prefix}${command.name} ${command.usage}\``).catch(console.error);
+
+	if (!client.cooldowns.has(command.name)) client.cooldowns.set(command.name, new Discord.Collection());
+	const now = Date.now();
+	const timestamps = client.cooldowns.get(command.name);
+	const cooldownAmount = (command.cooldown || 2) * 1000;
+	if (timestamps.has(message.author.id)) {
+		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+		if (now < expirationTime) {
+			const timeLeft = (expirationTime - now) / 1000;
+			const timeLeftHumanized = new Date((timeLeft % 86400) * 1000)
+				.toUTCString()
+				.replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
+				.replace(/00h |00m /g, "");
+			return message.reply(`attends encore **${timeLeftHumanized}** avant d'utiliser la commande \`${client.prefix}${command.name}\``).catch(console.error);
+		}
+	}
+
+	try {
+		command.execute(message, args, options);
+		timestamps.set(message.author.id, now);
+		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+	} catch (err) {
+		console.error(err);
+		message.channel.send("Quelque chose s'est mal passé en exécutant la commande :/").catch(console.error);
+	}
+}
 
 client.on("messageReactionAdd", async (reaction, user) => {
 	if (reaction.partial) {

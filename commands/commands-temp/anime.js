@@ -4,7 +4,12 @@ const command = {
 	aliases: ["a"],
 	args: 0,
 	usage: "?",
-	async execute(message, args) {
+	/**
+	* @param {Message} message 
+	* @param {string[]} args 
+	* @param {Object[]} options
+	*/
+	async execute(message, args, options) {
 		var animes;
 		try {
 			const { rows } = await message.client.pg.query(`SELECT * FROM animes WHERE user_id='${message.author.id}'`);

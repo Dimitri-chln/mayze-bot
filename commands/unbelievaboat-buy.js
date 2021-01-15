@@ -1,53 +1,69 @@
+const { Message } = require("discord.js");
+const { shop } = require("./unbelievaboat-shop.js");
+
 const command = {
 	name: "unbelievaboat-buy",
-	description: "Achète un objet de shop Unbelievaboat",
+	description: "Acheter un objet du shop Unbelievaboat",
 	aliases: ["unb-buy", "buy"],
 	args: 1,
 	usage: "<objet>",
-	async execute(message, args) {
-		const { shop } = require("./unbelievaboat-shop.js");
-		const input = args.join(" ").toLowerCase();
-		const item = shop.find(i => i.name.toLowerCase() === input || i.name.toLowerCase().includes(input));
-		if (!item) {
-			message.reply("cet objet n'existe pas").catch(console.error);
+	onlyInGuilds: ["689164798264606784"],
+	slashOptions: [
+		{
+			name: "objet",
+			description: "L'objet à acheter",
+			type: 3,
+			required: true,
+			choices: shop.map(i => {
+				return { name: i.name, value: i.name }
+			})
 		}
-		const unbAPI = require("unb-api");
-		const unbClient = new unbAPI.Client(process.env.UNB_TOKEN);
+	],
+	/**
+	* @param {Message} message 
+	* @param {string[]} args 
+	* @param {Object[]} options
+	*/
+	async execute(message, args, options) {
+		const item = args
+			? shop.find(i => i.name.toLowerCase() === args.join(" ").toLowerCase() || i.name.toLowerCase().includes(args.join(" ").toLowerCase()))
+			: shop.find(i => i.name.toLowerCase() === options[0].value);
+		if (!item) return message.reply("cet objet n'existe pas").catch(console.error);
+		const { Client } = require("unb-api");
+		const unbClient = new Client(process.env.UNB_TOKEN);
 		
-		var user;
-		try { user = await unbClient.getUserBalance(message.guild.id, message.author.id);}
-		catch (err) {
-			console.log(err);
-			return message.channel.send("Quelque chose s'est mal passé en joignant l'API d'UnbelievaBoat :/").catch(console.error);
+		const user = await unbClient.getUserBalance(message.guild.id, message.author.id).catch(console.error);
+		if (!user) return message.reply("Quelque chose s'est mal passé en accédant à l'API d'Unbelieveboat").catch(console.error);
+
+		if (item.price > user.cash) return message.reply("tu n'as pas assez d'argent pour acheter cet objet").catch(console.error);
+
+		try {
+			await unbClient.editUserBalance(message.guild.id, message.author.id, {cash: - item.price, bank: 0}, `Bought '${item.name}'`);
+		} catch (err) {
+			console.error(err);
+			return message.channel.send("Quelque chose s'est mal passé en accédant à l'API d'UnbelievaBoat :/").catch(console.error);
 		}
-		if (item.price > user.cash) {
-			return message.reply("tu n'as pas assez d'argent pour acheter cet objet").catch(console.error);
-		}
-		try { await unbClient.editUserBalance(message.guild.id, message.author.id, {cash: - item.price, bank: 0}, `Bought '${item.name}'`); }
-		catch (err) {
-			console.log(err);
-			return message.channel.send("Quelque chose s'est mal passé en joignant l'API d'UnbelievaBoat :/").catch(console.error);
-		}
-		try { item.buy(message); }
-		catch (err) {
+
+		try {
+			item.buy(message);
+		} catch (err) {
 			console.log(err);
 			return message.channel.send("Quelque chose s'est mal passé en achetant l'objet :/").catch(console.error);
 		}
-		try {
-			message.channel.send({
-				embed: {
-					author: {
-						name: `${message.author.username}#${message.author.discriminator}`,
-						icon_url: message.author.avatarURL({ dynamic: true })
-					},
-					color: "#010101",
-					description: `${message.author} a acheté "${item.name}" pour ✨${item.price}`,
-					footer: {
-						text: "✨ Mayze ✨"
-					}
+
+		message.channel.send({
+			embed: {
+				author: {
+					name: message.author.tag,
+					icon_url: message.author.avatarURL({ dynamic: true })
+				},
+				color: "#010101",
+				description: `${message.author} a acheté "${item.name}" pour ✨${item.price}`,
+				footer: {
+					text: "✨ Mayze ✨"
 				}
-			});
-		} catch (err) { console.log(err); }
+			}
+		}).catch(console.error);
 	}
 };
 

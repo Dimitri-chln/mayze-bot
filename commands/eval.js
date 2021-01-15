@@ -1,16 +1,27 @@
+const { Message } = require("discord.js");
+
 const command = {
 	name: "eval",
-	description: "👀",
+	description: "Évaluer une expression",
 	aliases: [],
 	cooldown: 1,
 	args: 1,
 	usage: "<expression>",
 	ownerOnly: true,
-	async execute(message, args) {
-		try { eval(args.join(" ").replace(/##/g, "message.channel.send")); }
-		catch (err) {
+	/**
+	* @param {Message} message 
+	* @param {string[]} args 
+	* @param {Object[]} options
+	*/
+   async execute(message, args, options) {
+		const expression = args
+			? args.join(" ").replace("##", "message.channel.send")
+			: options[0].value.replace("##", "message.channel.send");
+		try {
+			eval(expression);
+		} catch (err) {
 			console.log(err);
-			message.channel.send(`__Error:__\`\`\`\n${err}\n\`\`\``).catch(console.error);
+			message.channel.send(`__Erreur:__\`\`\`\n${err}\n\`\`\``).catch(console.error);
 		};
 	}
 };

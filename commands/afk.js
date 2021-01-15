@@ -2,16 +2,27 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "afk",
-	description: "Te mets AFK pour prévenir les autres membres",
+	description: "Se mettre AFK",
 	aliases: [],
 	args: 0,
 	usage: "[message]",
+	slashOptions: [
+		{
+			name: "message",
+			description: "Le message à afficher lorsqu'on te mentionne",
+			type: 3,
+			required: false
+		}
+	],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
+	 * @param {Object[]} options
 	 */
-	async execute(message, args) {
-		const AKFmessage = args.join(" ").replace(/^./, a => a.toUpperCase());
+	async execute(message, args, options) {
+		const AKFmessage = args
+			? args.join(" ").replace(/^./, a => a.toUpperCase())
+			: options[0].value.replace(/^./, a => a.toUpperCase());
 		const { rows } = await message.client.pg.query(`SELECT * FROM afk WHERE user_id = '${message.author.id}'`).catch(console.error);
 		if (rows.length) message.client.pg.query(`DELETE FROM afk WHERE user_id = '${message.author.id}'`).catch(console.error);
 		if (AKFmessage) message.client.pg.query(`INSERT INTO afk (user_id, message) VALUES ('${message.author.id}', '${AKFmessage}')`).catch(console.error);

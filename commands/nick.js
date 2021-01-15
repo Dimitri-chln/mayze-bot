@@ -7,16 +7,21 @@ const command = {
 	args: 0,
 	usage: "[pseudo]",
 	perms: ["CHANGE_NICKNAME"],
+	disableSlash: true,
 	/**
-	 * @param {Message} message 
-	 * @param {string[]} args 
-	 */
-	async execute(message, args) {
-		message.delete().catch(console.error);
-		message.member.setNickname(args.join(" ")).catch(async err => {
+	* @param {Message} message 
+	* @param {string[]} args 
+	* @param {Object[]} options
+	*/
+	async execute(message, args, options) {
+		if (message.deletable) message.delete().catch(console.error);
+		const nickname = args
+			? args.join(" ")
+			: options[0].value;
+		message.member.setNickname(nickname).catch(async err => {
 			if (err.message === "Missing Permissions") {
 				const msg = await message.reply("je n'ai pas la permission de changer ton pseudo").catch(console.error);
-				msg.delete({ timeout: 5000 }).catch(console.error);
+				msg.delete({ timeout: 4000 }).catch(console.error);
 				return;
 			}
 			console.error(err);

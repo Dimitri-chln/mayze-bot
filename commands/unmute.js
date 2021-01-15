@@ -1,29 +1,43 @@
+const { Message } = require("discord.js");
+
 const command = {
 	name: "unmute",
 	description: "Unmute une personne sur le serveur",
 	aliases: [],
 	args: 1,
 	usage: "<mention/id>",
+	onlyInGuilds: ["689164798264606784"],
 	perms: ["MANAGE_ROLES"],
-	hierarchy: true,
-	async execute(message, args) {
+	slashOptions: [
+		{
+			name: "utilisateur",
+			description: "La personne à unmute",
+			type: 6,
+			required: true
+		}
+	],
+	/**
+	* @param {Message} message 
+	* @param {string[]} args 
+	* @param {Object[]} options
+	*/
+	async execute(message, args, options) {
 		const { ownerID } = require("../config.json");
-		const userID = (message.mentions.users.first() || {"id": args[0]}).id;
-		const member = message.guild.members.cache.get(userID);
-		if (!member) {
-			return message.reply("tu n'as mentionné personne ou la mention était incorrecte").catch(console.error);
-		}
-		if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== ownerID) {
-			return message.reply("tu ne peux pas unmute cette personne").catch(console.error);
-		};
-
+		const member = args
+			? message.guild.members.cache.get((message.mentions.users.first() || {}).id)
+			: message.guild.members.cache.get(options[0].value);
 		const mutedRole = message.guild.roles.cache.get("695330946844721312");
-		try { member.roles.remove(mutedRole.id); }
-		catch (err) {
-			console.log(err);
-			return message.channel.send("Quelque chose s'est mal passé en retirant le rôle").catch(console.error);
-		}
-		message.channel.send(`${member.user} a été unmute`).catch(console.error);
+		
+		if (!member) return message.reply("mentionne une personne").catch(console.error);
+		if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== ownerID)
+			return message.reply("tu ne peux pas unmute cette personne").catch(console.error);
+
+		member.roles.remove(mutedRole)
+			.then(() => message.channel.send(`${member.user} a été unmute`).catch(console.error))
+			.catch(err => {
+				console.error(err);
+				message.channel.send("Quelque chose s'est mal passé en unmutant cette personne :/").catch(console.error);
+			});
 	}
 };
 

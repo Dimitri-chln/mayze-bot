@@ -4,8 +4,14 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "",
-	async execute(message, args) {
-		const snipedReaction = message.client.removedReactions ? message.client.removedReactions[message.channel.id] : undefined;
+	slashOptions: null,
+	/**
+	* @param {Message} message 
+	* @param {string[]} args 
+	* @param {Object[]} options
+	*/
+	async execute(message, args, options) {
+		const snipedReaction = message.client.removedReactions ? message.client.removedReactions[message.channel.id] : null;
 		if (!snipedReaction) return message.reply("il n'y a aucune réaction à snipe dans ce salon").catch(console.error);
 		
 		message.channel.send({

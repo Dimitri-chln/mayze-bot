@@ -6,7 +6,7 @@ const { Message } = require("discord.js");
  */
 async function chatXP(message, xp) {
 	const newXp = xp;
-	const { baseXp } = require("../config.json");
+	const { baseXp, xpIncrement } = require("../config.json");
 	const { rows } = await message.client.pg.query(`SELECT * FROM levels WHERE user_id='${message.author.id}'`).catch(console.error);
 
 	if (rows.length) {
@@ -21,7 +21,7 @@ async function chatXP(message, xp) {
 	// console.log(`Gave ${xp}xp to ${message.author.tag}`);
 
 	function getLevel(xp, lvl = 0) {
-		const xpPerLevel = baseXp + lvl * 250;
+		const xpPerLevel = baseXp + lvl * xpIncrement;
 		if (xp < xpPerLevel) return { level: lvl, xpLeft: xp};
 		return getLevel(xp - xpPerLevel, lvl + 1);
 	}
