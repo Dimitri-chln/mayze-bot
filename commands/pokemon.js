@@ -29,7 +29,7 @@ const command = {
 
 		const params = args
 			? args
-			: (options[0] || { value: "" }).value.split(" ");
+			: (options ? options[0] : { value: "" }).value.split(" ");
 
 		if (params.includes("-legendary")) pokemons = pokemons.filter(p => p.legendary);
 		if (params.includes("-shiny")) pokemons = pokemons.filter(p => p.shiny);

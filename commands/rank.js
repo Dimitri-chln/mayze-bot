@@ -23,7 +23,7 @@ const command = {
 	async execute(message, args, options) {
 		const rankIdOrName = args
 			? (args.join(" ") || "").toLowerCase()
-			: (options[0] || { value: "" }).value.toLowerCase();
+			: (options ? options[0] : {}).value.toLowerCase();
 		if (message.member.roles.cache.has("695943648235487263")) return; // If jailed
 		
 		const roleTop = message.guild.roles.cache.get("735810286719598634");

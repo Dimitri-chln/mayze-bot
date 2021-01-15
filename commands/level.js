@@ -24,7 +24,7 @@ const command = {
 		const xpBar = ["█", "▁"], barSize = 20;
 		const user = args
 			? message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.author
-			: message.client.users.cache.get(options[0].value) || message.author;
+			: message.client.users.cache.get(options ? options[0].value : null) || message.author;
 
 		const { "rows": top } = await message.client.pg.query("SELECT * FROM levels ORDER BY xp DESC").catch(console.err);
 		const userData = top.find(u => u.user_id === user.id);

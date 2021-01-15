@@ -39,7 +39,7 @@ const command = {
 
 		const image = args
 			? (args[0] || "").toLowerCase()
-			: (options.find(o => o.name === "image") || { value: "" }).value.toLowerCase();
+			: (options ? options.find(o => o.name === "image") : { value: "" } ).value.toLowerCase();
 
 		if (image) {
 			if (!memes.includes(image)) return message.reply(`cette image n'existe pas, tu peux voir la liste de toutes les images avec la commande \`${message.client.prefix}meme\``);

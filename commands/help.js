@@ -23,7 +23,7 @@ const command = {
 		const { commands } = message.client;
 		const commandName = args
 			? (args[0] || "").toLowerCase()
-			: (options[0].value || "").toLowerCase();
+			: (options ? options[0].value : "").toLowerCase();
 
 		if (!commandName) {
 			message.channel.send({
