@@ -1,9 +1,9 @@
 const { Message } = require("discord.js");
 
 const command = {
-	name: "snipe",
-	description: "Envoyer sur le salon le message que quelqu'un vient de supprimer",
-	aliases: [],
+	name: "edit-snipe",
+	description: "Envoyer sur le salon le message que quelqu'un vient de modifier",
+	aliases: ["editsnipe"],
 	args: 0,
 	usage: "",
 	slashOptions: null,
@@ -13,8 +13,8 @@ const command = {
 	* @param {Object[]} options
 	*/
 	async execute(message, args, options) {
-		const snipedMsg = message.client.deletedMessages ? message.client.deletedMessages[message.channel.id] : null;
-		if (!snipedMsg) return message.reply("il n'y a aucun message à snipe dans ce salon").catch(console.error);
+		const snipedMsg = message.client.editedMessages ? message.client.editedMessages[message.channel.id] : null;
+		if (!snipedMsg) return message.reply("il n'y a pas de message à snipe dans ce salon").catch(console.error);
 		
 		message.channel.send({
 			embed: {

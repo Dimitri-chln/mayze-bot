@@ -6,6 +6,7 @@ const command = {
 	 */
 	async execute(message) {
 		const DMGuild = message.client.guilds.cache.get("744291144946417755");
+		if(!DMGuild) return;
 		const DMcategory = DMGuild.channels.cache.get("744292272300097549");
 		if (message.channel.type === "dm" && message.author.id !== message.client.user.id) {
 			const msg = `${message.content}\n${message.attachments.map(attachment => attachment.url).join("\n")}`;

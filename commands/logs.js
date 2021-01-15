@@ -2,7 +2,7 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "logs",
-	description: "Regarde les logs récent du bot",
+	description: "Obtenir les logs récent du bot",
 	aliases: [],
 	args: 0,
 	usage: "",
@@ -10,8 +10,10 @@ const command = {
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
+	 * @param {Object[]} options
 	 */
-	async execute(message, args) {
+	async execute(message, args, options) {
+		if (process.env.HOST === "HEROKU") return message.reply("cette commande ne fonctionne pas sur Heroku").catch(console.error);
 		const shellExec = require("../modules/shellExec.js");
 		const output = shellExec("heroku logs --app mayze-bot");
 		const charactersPerPage = 2000;

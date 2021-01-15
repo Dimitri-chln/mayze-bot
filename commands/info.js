@@ -1,10 +1,17 @@
+const { Message } = require("discord.js");
+
 const command  = {
 	name: "info",
-	description: "Montre quelques info sur le bot",
+	description: "Montrer quelques info sur le bot",
 	aliases: ["i"],
 	args: 0,
 	usage: "",
-	async execute(message, args) {
+	/**
+	* @param {Message} message 
+	* @param {string[]} args 
+	* @param {Object[]} options
+	*/
+	async execute(message, args, options) {
 		const config = require("../config.json");
 		const { version } = require("../package.json");
 		message.channel.send({
@@ -15,7 +22,7 @@ const command  = {
 				},
 				title: "• Informations sur le bot",
 				color: "#010101",
-				description: `**Préfixe:** \`${message.client.prefix}\`\n**Propriétaire:** \`${message.client.users.cache.get(config.ownerID).username}\`\n**Version:** \`${version}\``,
+				description: `**Préfixe:** \`${message.client.prefix}\`\n**Propriétaire:** \`${(message.client.users.cache.get(config.ownerID) || { username: "*Inconnu*" }).username}\`\n**Version:** \`${version}\``,
 				footer: {
 					text: "✨Mayze✨"
 				}

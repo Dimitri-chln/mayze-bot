@@ -2,25 +2,36 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "level",
-	description: "Regarde ton niveau sur Mayze",
+	description: "Obtenir ton niveau sur Mayze",
 	aliases: ["lvl"],
 	args: 0,
 	usage: "[mention/id]",
+	slashOptions: [
+		{
+			name: "utilisateur",
+			description: "L'utilisateur dont tu veux connaître le niveau",
+			type: 6,
+			required: false
+		}
+	],
 	/**
-	 * @param {Message} message 
-	 * @param {string[]} args 
-	 */
-	async execute(message, args) {
-		const { baseXp } = require("../config.json");
+	* @param {Message} message 
+	* @param {string[]} args 
+	* @param {Object[]} options
+	*/
+	async execute(message, args, options) {
+		const { baseXp, xpIncrement } = require("../config.json");
 		const xpBar = ["█", "▁"], barSize = 20;
-		const user = message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.author;
+		const user = args
+			? message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.author
+			: message.client.users.cache.get(options[0].value) || message.author;
 
 		const { "rows": top } = await message.client.pg.query("SELECT * FROM levels ORDER BY xp DESC").catch(console.err);
-		const userXp = top.find(u => u.user_id === user.id);
-		const xp = userXp ? userXp.xp : 0;
-		const rank = top.indexOf(userXp) + 1;
+		const userData = top.find(u => u.user_id === user.id);
+		const xp = userData ? userData.xp : 0;
+		const rank = top.indexOf(userData) + 1;
 		const [ level, xpLeft ] = getLevel(xp);
-		const xpForNextLevel = baseXp + level * 250;
+		const xpForNextLevel = baseXp + level * xpIncrement;
 
 		message.channel.send({
 			embed: {
@@ -37,7 +48,7 @@ const command = {
 		}).catch(console.error);
 
 		function getLevel(xp, lvl = 0) {
-			const xpPerLevel = baseXp + lvl * 250;
+			const xpPerLevel = baseXp + lvl * xpIncrement;
 			if (xp < xpPerLevel) return [ lvl, xp ];
 			return getLevel(xp - xpPerLevel, lvl + 1);
 		}

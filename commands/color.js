@@ -1,18 +1,28 @@
-const { time } = require("cron");
 const { Message } = require("discord.js");
 
 const command = {
 	name: "color",
-	description: "Teste des codes couleurs RGB",
+	description: "Tester et visualiser des codes couleurs RGB",
 	aliases: [],
 	args: 0,
 	usage: "<couleur>",
+	slashOptions: [
+		{
+			name: "couleur",
+			description: "Le code hexadécimal de la couleur à visualiser",
+			type: 3,
+			required: true
+		}
+	],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
+	 * @param {Object[]} options
 	 */
-	async execute(message, args) {
-		let color = hexToRGB(args[0] || "");
+	async execute(message, args, options) {
+		let color = args
+			? hexToRGB(args[0])
+			: hexToRGB(options[0].value);
 
 		const msg = await message.channel.send({
 			embed: {
@@ -30,6 +40,7 @@ const command = {
 				}
 			}
 		}).catch(console.error);
+
 		const emojis = {
 			redPlus: "🟥",
 			redMinus: "🔴",
@@ -95,13 +106,25 @@ const command = {
 			const [ , colorUpdate, value ] = m.content.match(regex);
 			switch(colorUpdate.toLowerCase()) {
 				case "r":
-					color[0] = color[0] + parseInt(value, 10) >= 0 ? (color[0] + parseInt(value, 10) <= 255 ? color[0] + parseInt(value, 10) : 255) : 0;
+					color[0] = color[0] + parseInt(value, 10) >= 0
+						? color[0] + parseInt(value, 10) <= 255
+							? color[0] + parseInt(value, 10)
+							: 255
+						: 0;
 					break;
 				case "g":
-					color[1] = color[1] + parseInt(value, 10) >= 0 ? (color[1] + parseInt(value, 10) <= 255 ? color[1] + parseInt(value, 10) : 255) : 0;
+					color[1] = color[1] + parseInt(value, 10) >= 0
+						? color[1] + parseInt(value, 10) <= 255
+							? color[1] + parseInt(value, 10)
+							: 255
+						: 0;
 					break;
 				case "b":
-					color[2] = color[2] + parseInt(value, 10) >= 0 ? (color[2] + parseInt(value, 10) <= 255 ? color[2] + parseInt(value, 10) : 255) : 0;
+					color[2] = color[2] + parseInt(value, 10) >= 0
+						? color[2] + parseInt(value, 10) <= 255
+							? color[2] + parseInt(value, 10)
+							: 255
+						: 0;
 					break;
 			}
 			updateMsg();

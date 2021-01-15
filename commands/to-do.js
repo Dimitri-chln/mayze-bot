@@ -5,38 +5,42 @@ const command = {
 	description: "Liste des commandes/fix à faire pour le bot",
 	aliases: ["toDo", "td"],
 	args: 0,
-	usage: "[add/remove <tâche>]",
+	usage: "[add <tâche> | remove <tâche>]",
 	ownerOnly: true,
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
+	 * @param {Object[]} options
 	 */
-	async execute(message, args) {
+	async execute(message, args, options) {
 		const { "rows": toDo } = await message.client.pg.query("SELECT * FROM to_do").catch(console.error);
 		if (!toDo) return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
+		const subCommand = args
+			? (args[0] || "").toLowerCase()
+			: (options[0] || { value: "" }).value.toLowerCase();
+		const task = args
+			? args.slice(1).join("")
+			: (options[1] || {}).value;
 
-		switch ((args[0] || "").toLowerCase()) {
+		switch (subCommand) {
 			case "add":
-				const name = args.slice(1).join(" ");
-				const query = `INSERT INTO to_do (name) VALUES ('${name.replace(/'/g, "U+0027")}')`;
-				try { await message.client.pg.query(query); }
-				catch (err) {
-					console.log(err);
-					return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
+				const query = `INSERT INTO to_do (name) VALUES ('${task.replace(/'/g, "U+0027")}')`;
+				{
+					const res = await message.client.pg.query(query).catch(console.error);
+					if (!res) return message.reply("Quelque chose s'est mal passé en accédant à la base de données").catch(console.error);
+					if (message.deletable) message.react("✅").catch(console.error);
+					else message.reply("tâche ajoutée").catch(console.error);
 				}
-				message.react("✅").catch(console.error);
 				break;
 			case "remove":
-				const index = parseInt(args[1], 10);
-				if (isNaN(index) || index < 1 ) {
-					return message.reply("le deuxième argument doit être un nombre positif").catch(console.error);
+				const index = parseInt(task, 10);
+				if (isNaN(index) || index < 1 ) return message.reply("le deuxième argument doit être un nombre positif").catch(console.error);
+				{
+					const res = await message.client.pg.query(`DELETE FROM to_do WHERE id=${index}`).catch(console.error);
+					if (!res) return message.reply("Quelque chose s'est mal passé en accédant à la base de données").catch(console.error);
+		if (message.deletable) message.react("✅").catch(console.error);
+		else message.reply("tâche retirée").catch(console.error);
 				}
-				try { await message.client.pg.query(`DELETE FROM to_do WHERE id=${index}`); }
-				catch (err) {
-					console.log(err);
-					return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
-				}
-				message.react("✅").catch(console.error);
 				break;
 			default:
 				message.channel.send({
@@ -46,7 +50,9 @@ const command = {
 							icon_url: message.author.avatarURL({ dynamic: true })
 						},
 						color: "#010101",
-						fields: toDo.map(t => { return { name: `\`${t.id}.\` ${t.name.replace(/U\+0027/g, "'")}`, value: `*${t.created_at.toUTCString()}*`, inline: true } }),
+						fields: toDo.map(t => {
+							return { name: `\`${t.id}.\` ${t.name.replace(/U\+0027/g, "'")}`, value: `*${t.created_at.toUTCString()}*`, inline: true }
+						}),
 						footer: {
 							text: "✨Mayze✨"
 						}

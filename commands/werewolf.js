@@ -2,18 +2,47 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "werewolf",
-	description: "Joue aux Loups-garous sur Discord",
+	description: "Jouer aux Loups-garous sur Discord",
 	aliases: ["ww", "lg"],
 	args: 0,
-	usage: "<commande> [arguments supplémentaires]",
+	usage: "join | leave | start | end",
+	onlyInGuilds: ["689164798264606784"],
+	slashOptions: [
+		{
+			name: "join",
+			description: "Rejoindre la partie de Loups-garous",
+			type: 1
+		},
+		{
+			name: "leave",
+			description: "Quitter la partie de Loups-garous",
+			type: 1
+		},
+		{
+			name: "start",
+			description: "Lancer une partie de Loups-garous",
+			type: 1
+		},
+		{
+			name: "end",
+			description: "Terminer une partie de Loups-garous de force",
+			type: 1
+		},
+		{
+			name: "players",
+			description: "Obtenir la liste des joueurs",
+			type: 1
+		}
+	],
 	/**
 	 * @param {Message} message 
-	 * @param {string[]} fullArgs
+	 * @param {string[]} args
 	 */
-	async execute(message, fullArgs) {
+	async execute(message, args) {
 		const { ownerID } = require("../config.json");
-		const cmd = (fullArgs[0] || "").toLowerCase();
-		const args = fullArgs.slice(1);
+		const subCommand = args
+			? (args[0] || "").toLowerCase() || "players"
+			: (options ? options[0] : {}).value.toLowerCase();
 		const Game = require("../werewolfModules/classGame");
 		const shuffle = require("../modules/shuffle");
 		const werewolfInfo = require("../assets/werewolfInfo.json");
@@ -25,7 +54,7 @@ const command = {
 		const werewolvesChannel = message.guild.channels.cache.get("759702367800786964");
 		const deadChannel = message.guild.channels.cache.get("759702659530883095");
 		
-		switch (cmd) {
+		switch (subCommand) {
 			case "join":
 				if (message.client.werewolfGame && !message.client.werewolfGame.ended) return message.reply("une partie est déjà en cours, reviens plus tard!").catch(console.error);
 				if (message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame.id)).size === 16) return message.reply("il y a déjà 16 joueurs dans la partie :/").catch(console.error);
@@ -118,7 +147,7 @@ const command = {
 						let options = {};
 						if (role === "Sorcière") options.canSave = true;
 						if (role === "Chaman") {
-							deadChannel.updateOverwrite(playerMember, {"VIEW_CHANNEL": true, "SEND_MESSAGES": false}).catch(console.error);
+							deadChannel.updateOverwrite(playerMember, { "VIEW_CHANNEL": true, "SEND_MESSAGES": false }).catch(console.error);
 						};
 						
 						game.addPlayer(playerMember, role, options);
@@ -151,7 +180,7 @@ const command = {
 				}
 				delete message.client.werewolfGame;
 				break;
-			default:
+			case "players":
 				if (message.client.werewolfGame && message.channel.id === villageChannel.id) {
 					const { players } = message.client.werewolfGame;
 					message.channel.send({
@@ -196,6 +225,9 @@ const command = {
 						}
 					}).catch(console.error);
 				}
+				break;
+			default:
+				message.reply("arguments incorrects").catch(console.error);
 		}
 	}
 };

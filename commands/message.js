@@ -7,19 +7,38 @@ const command = {
 	args: 2,
 	usage: "<salon> <texte>",
 	perms: ["MANAGE_MESSAGES"],
+	slashOptions: [
+		{
+			name: "salon",
+			description: "Le salon où le message doit être envoyé",
+			type: 7,
+			required: true
+		},
+		{
+			name: "message",
+			description: "Le message à envoyer",
+			type: 3,
+			required: true
+		}
+	],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
+	 * @param {Object[]} options
 	 */
-	async execute(message, args) {
-		const channel = message.mentions.channels.first();
+	async execute(message, args, options) {
+		const channel = args
+			? message.mentions.channels.first()
+			: message.client.channels.cache.get(options[0].value);
+		const msg = args
+			? args.slice(1).join(" ")
+			: options[1].value;
 		if (!channel) return message.reply("indique le salon dans lequel je dois envoyer le message").catch(console.error);
-		channel.send(args.splice(1).join(" "))
-		.then(() => message.react("✅"))
-		.catch(err => {
-			console.error(err);
-			message.react("❌");
-		});
+		const m = await channel.send(msg).catch(console.error);
+		if (m) {
+			if (message.deletable) message.react("✅").catch(console.error);
+			else message.reply("message envoyé !").catch(console.error);
+		} else message.channel.send("Quelque chose s'est mal passé en envoyant le message :/").catch(console.error);
 	}
 };
 

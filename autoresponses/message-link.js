@@ -26,7 +26,7 @@ const command = {
 				color: "#010101",
 				description: msg.content,
 				fields: [
-					{ name: "• Lien", value: `[Aller au message](${msg.url})` }
+					{ name: "\u200b", value: `Aller au [message](${msg.url})` }
 				],
 				image: {
 					url: (msg.attachments.first() || {}).url

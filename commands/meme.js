@@ -1,42 +1,53 @@
 const { Message } = require("discord.js");
-const axios = require("axios");
+const axios = require("axios").default;
 
 const command = {
 	name: "meme",
-	description: "Génère un meme depuis Discord",
+	description: "Générer un meme depuis Discord",
 	aliases: [],
 	args: 0,
-	usage: "<image> [texte haut]$[texte bas]",
+	usage: "[image] \"[texte haut]\" \"[texte bas]\"",
+	slashOptions: [
+		{
+			name: "image",
+			description: "Le nom de l'image de fond",
+			type: 3,
+			required: false
+		},
+		{
+			name: "texte-haut",
+			description: "Le texte à afficher en haut de l'image",
+			type: 3,
+			required: false
+		},
+		{
+			name: "texte-bas",
+			description: "Le texte à afficher en bas de l'image",
+			type: 3,
+			required: false
+		}
+	],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
+	 * @param {Object[]} options
 	 */
-	async execute(message, args) {
-		const res = await axios.get("https://api.memegen.link/templates").catch(console.error);
-		const memes = res.data.map(meme => meme.key);
+	async execute(message, args, options) {
+		const { data } = message.client.memes || await axios.get("https://api.memegen.link/templates").catch(console.error);
+		message.client.memes = { data: data };
+		const memes = data.map(meme => meme.key);
 
-		if (args.length) {
-			const replacement = {
-				"_": "__",
-				"-": "--",
-				" ": "_",
-				"\n": "~n",
-				"?": "~q",
-				"&": "~a",
-				"%": "~p",
-				"#": "~h",
-				"/": "~s",
-				"\\": "~b",
-				"\"": "''"
-			};
+		const image = args
+			? (args[0] || "").toLowerCase()
+			: (options.find(o => o.name === "image") || { value: "" }).value.toLowerCase();
 
-			const image = args[0];
-			const top = (args.slice(1).join(" ").split("$")[0] || " ").replace(/[_-\s\n\?&%#\/\\"]/g, a => replacement[a]);
-			const bottom = (args.slice(1).join(" ").split("$")[1] || " ").replace(/[_-\s\n\?&%#\/\\"]/g, a => replacement[a]);
+		if (image) {
+			if (!memes.includes(image)) return message.reply(`cette image n'existe pas, tu peux voir la liste de toutes les images avec la commande \`${message.client.prefix}meme\``);
+			const [ top, bottom ] = args
+				? args.join(" ").match(/"([^"])*"/g) || []
+				: [ (options.find(o => o.name === "texte-haut") || {}).value, (options.find(o => o.name === "texte-bas") || {}).value ];
 
-			if (!memes.includes(image)) return message.reply(`cette image n'existe pas, tu peux voir la liste de toutes les images avec la commande \`${message.client.prefix}meme\``)
-
-			const url = `https://api.memegen.link/images/${image}/${top}/${bottom}.png`;
+			const url = `https://api.memegen.link/images/${image}/${replacement(top || " ")}/${replacement(bottom || " ")}.png`;
 
 			message.channel.send({
 				embed: {
@@ -44,7 +55,7 @@ const command = {
 						name: message.author.tag,
 						icon_url: message.author.avatarURL({ dynamic: true })
 					},
-					description: `Lien de l'image - [copier](${url})`,
+					description: `• Copier le [lien](${url})`,
 					color: "#010101",
 					image: {
 						url: url
@@ -66,6 +77,23 @@ const command = {
 					}
 				}
 			}).catch(console.error);
+		}
+
+		function replacement(text) {
+			const characters = {
+				"_": "__",
+				"-": "--",
+				" ": "_",
+				"\n": "~n",
+				"?": "~q",
+				"&": "~a",
+				"%": "~p",
+				"#": "~h",
+				"/": "~s",
+				"\\": "~b",
+				"\"": "''"
+			};
+			return text.replace(/(^")|("$)/g, "").replace(/[_-\s\n\?&%#\/\\"]/g, a => characters[a]);
 		}
 	}
 };

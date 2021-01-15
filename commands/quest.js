@@ -2,16 +2,19 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "quest",
-	description: "Affiche un message de vote pour les quêtes WWO",
+	description: "Afficher un message de vote pour les quêtes WWO",
 	aliases: [],
 	args: 0,
 	usage: "[-everyone] [-single] [-noping] [-votes <nombre de votes>]",
+	onlyInGuilds: ["689164798264606784"],
 	perms: ["ADMINISTRATOR"],
+	disableSlash: true,
 	/**
 	 * @param {Message} message
 	 * @param {string[]} args
+	 * @param {Object[]} options
 	 */
-	async execute(message, args) {
+	async execute(message, args, options) {
 	if (!message.member.roles.cache.some(r => ["696751614177837056", "696751852267765872"].includes(r.id))) return;
 	if (message.channel.id !== "689212233439641649") {
 		return message.react("❌").catch(console.error);
