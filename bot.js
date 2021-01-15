@@ -43,14 +43,21 @@ client.cooldowns = new Discord.Collection();
 
 client.on("ready", async () => {
 	console.log("Connected to Discord");
+	if (client.user.id === "740848584882126939") client.beta = true;
 
+	const { "rows": slashData } = await client.pg.query("SELECT * FROM slash_commands").catch(console.error) || { rows: [ ]};
 	client.slashCommands = new Discord.Collection();
 	client.commands.forEach(async command => {
 		if (!command.disableSlash && !command.ownerOnly) {
 			const slashOptions = { name: command.name, description: command.description };
 			if (command.slashOptions) slashOptions.options = command.slashOptions;
-			const slashCommand = await client.api.applications(client.user.id).guilds("689164798264606784").commands.post({ data: slashOptions });
+			const slashCommand = await client.api.applications(client.user.id).guilds("689164798264606784").commands.post({ data: slashOptions }).catch(err => {
+				if (!client.beta) console.error(err);
+			});
+			if (!slashCommand) return;
 			client.slashCommands.set(slashCommand.name, slashCommand);
+			if (slashData.some(slash => slash.name === slashCommand.name)) client.pg.query(`UPDATE slash_commands SET json_data = '${JSON.stringify(slashCommand)}' WHERE name = '${slashCommand.name}'`).catch(console.error);
+			else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.name}', '${JSON.stringify(slashCommand)}')`).catch(console.error);
 		}
 	});
 
@@ -77,7 +84,6 @@ client.on("ready", async () => {
 	} catch (err) { console.error(err); }
 
 	client.user.setActivity("le meilleur clan", { type: "WATCHING" });
-	if (client.user.id === "740848584882126939") client.beta = true;
 	const mayze = client.users.cache.get("703161067982946334");
 	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.prefix : config.prefixBeta ) : config.prefix;
 	client.prefix = prefix;
