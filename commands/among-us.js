@@ -5,7 +5,7 @@ const command = {
 	description: "Obtenir ou modifier les codes de partie d'Among Us",
 	aliases: ["amongUs", "au"],
 	args: 0,
-	usage: "[add <code> [description]] [delete]",
+	usage: "games | add <code> [description] | delete",
 	slashOptions: [
 		{
 			name: "add",
@@ -42,11 +42,11 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const timeToString = require("../modules/timeToString");
 
 		const subCommand = args
-			? args[0].toLowerCase()
+			? (args[0] || "").toLowerCase() || "games"
 			: options[0].name;
 		
 		const games = message.client.amongUsGames || {};
