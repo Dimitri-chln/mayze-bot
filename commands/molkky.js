@@ -49,7 +49,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const Discord = require("discord.js");
 		const { "molkky_setup": setup } = require("../assets/misc.json");
 		if (!message.client.molkky) message.client.molkky = {};

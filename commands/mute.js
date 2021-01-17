@@ -27,7 +27,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const { ownerID } = require("../config.json");
 		const dhms = require ("dhms");
 		const timeToString = require("../modules/timeToString.js");

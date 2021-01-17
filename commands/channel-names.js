@@ -2,7 +2,7 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "channel-names",
-	description: "Modifie le nom de tous les salons en une seule commande",
+	description: "Modifier le nom de tous les salons en une seule commande",
 	aliases: ["channelNames", "cn"],
 	args: 2,
 	usage: "<regex> <remplacement> [type]",
@@ -32,7 +32,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const userValidation = require("../modules/userValidation.js");
 		const type = args
 			? args[2]

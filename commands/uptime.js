@@ -12,7 +12,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const timeToString = require("../modules/timeToString.js");
 		const uptime = Date.now() - message.client.readyAt;
 		const uptimeString = timeToString(uptime / 1000);

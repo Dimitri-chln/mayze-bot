@@ -2,7 +2,7 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "pokedex",
-	description: "Obtiens des informations sur un pokémon",
+	description: "Obtenir des informations sur un pokémon",
 	aliases: ["dex", "pd"],
 	args: 1,
 	usage: "<pokémon/pokédex ID>",
@@ -19,7 +19,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const pokedex = require("oakdex-pokedex");
 
 		const input = args

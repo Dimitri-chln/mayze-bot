@@ -2,7 +2,7 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "jail",
-	description: "Met un membre en prison",
+	description: "Mettre un membre en prison ou le libérer",
 	aliases: [],
 	cooldown: 5,
 	args: 1,
@@ -22,7 +22,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const { ownerID } = require("../config.json");
 
 		const user = args

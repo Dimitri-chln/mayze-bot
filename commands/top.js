@@ -12,7 +12,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const pagination = require("../modules/pagination.js");
 		const { MessageEmbed } = require("discord.js");
 

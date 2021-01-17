@@ -13,7 +13,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		if (message.deletable) message.delete().catch(console.error);
 		const nickname = args
 			? args.join(" ")

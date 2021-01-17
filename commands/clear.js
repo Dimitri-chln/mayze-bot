@@ -33,7 +33,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		let number = args
 			? parseInt(args[0], 10)
 			: options[0].value;

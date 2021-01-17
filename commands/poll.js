@@ -25,7 +25,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const [ question ] = args
 			? args.join(" ").match(/^["«][^"»]*["»]/) || []
 			: [ options[0].value ];

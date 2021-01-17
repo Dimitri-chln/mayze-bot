@@ -12,7 +12,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const snipedMsg = message.client.editedMessages ? message.client.editedMessages[message.channel.id] : null;
 		if (!snipedMsg) return message.reply("il n'y a pas de message à snipe dans ce salon").catch(console.error);
 		

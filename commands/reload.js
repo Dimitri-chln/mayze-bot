@@ -12,7 +12,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const commandName = args
 			? args[0].toLowerCase()
 			: options[0].value.toLowerCase();
@@ -26,11 +26,13 @@ const command = {
 			message.client.commands.set(newCommand.name, newCommand);
 
 			const slashCommand = message.client.slashCommands.get(command.name);
-			const slashOptions = { name: command.name, description: command.description };
-			if (command.slashOptions) slashOptions.options = command.slashOptions;
-			await message.client.api.applications(message.client.user.id).guilds("672516066756395031").commands(slashCommand.id).patch({
-				data: slashOptions
-			});
+			if (slashCommand) {
+				const slashOptions = { name: command.name, description: command.description };
+				if (command.slashOptions) slashOptions.options = command.slashOptions;
+				await message.client.api.applications(message.client.user.id).guilds("672516066756395031").commands(slashCommand.id).patch({
+					data: slashOptions
+				});
+			}
 
 			message.channel.send(`La commande \`${command.name}\` a été rechargée !`);
 		} catch (err) {

@@ -19,7 +19,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const { baseXp, xpIncrement } = require("../config.json");
 		const xpBar = ["█", "▁"], barSize = 20;
 		const user = args

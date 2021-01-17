@@ -2,7 +2,7 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "message",
-	description: "Envoie un message dans un salon",
+	description: "Envoyer un message dans un salon",
 	aliases: ["msg", "m"],
 	args: 2,
 	usage: "<salon> <texte>",
@@ -26,7 +26,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const channel = args
 			? message.mentions.channels.first()
 			: message.client.channels.cache.get(options[0].value);

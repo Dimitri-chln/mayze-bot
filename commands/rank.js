@@ -2,7 +2,7 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "rank",
-	description: "Rejoins ou quitte un rank",
+	description: "Rejoindre ou quitter un rank",
 	aliases: [],
 	args: 0,
 	usage: "[rank]",
@@ -20,7 +20,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const rankIdOrName = args
 			? (args.join(" ") || "").toLowerCase()
 			: (options ? options[0] : {}).value.toLowerCase();

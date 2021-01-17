@@ -12,7 +12,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const channel = args
 			? message.mentions.channels.first()
 			: message.client.channels.cache.get(options[0].value);

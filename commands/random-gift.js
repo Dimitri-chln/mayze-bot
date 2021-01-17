@@ -2,7 +2,7 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "random-gift",
-	description: "Donne un cadeau aléatoire à quelqu'un",
+	description: "Donner un cadeau aléatoire à quelqu'un",
 	aliases: ["randomGift", "gift"],
 	args: 1,
 	usage: "<mention/pseudo>",
@@ -20,7 +20,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const gifts = require("../assets/gifts.json");
 		const user = args
 			? message.mentions.users.first() || (message.guild.members.cache.find(member => member.user.username.toLowerCase() === args.join(" ").toLowerCase() || member.user.username.toLowerCase().includes(args.join(" ").toLowerCase())) || {}).user

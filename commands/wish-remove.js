@@ -2,7 +2,7 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "wish-remove",
-	description: "Retire le wish d'une série pour Mudae",
+	description: "Retirer le wish d'une série pour Mudae",
 	aliases: ["wr"],
 	args: 1,
 	usage: "<série>",
@@ -19,7 +19,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const series = args
 			? args.join(" ").toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase())
 			: options[0].value.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());

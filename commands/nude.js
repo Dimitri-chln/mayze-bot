@@ -13,7 +13,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const nudes = require("../assets/nudes.json");
 		if (message.deletable) message.react("😏").catch(console.error);
 		message.author.send({

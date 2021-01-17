@@ -14,7 +14,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		if (!message.member.roles.cache.some(r => ["696751614177837056", "696751852267765872"].includes(r.id))) 
 			return message.reply("tu n'es ni chef ni sous-chef du clan").catch(console.error);
 

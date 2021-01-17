@@ -12,7 +12,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const member = await message.member.kick("S'est kick lui-même").catch(console.error);
 		if (member) message.channel.send(`**${message.author.username}** s'est kick lui-même 👀`).catch(console.error);
 		else message.channel.send(`Quelque chose s'est mal passé en t'expulsant du serveur :/`).catch(console.error);

@@ -13,7 +13,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const { Client } = require("unb-api");
 		const unbClient = new Client(process.env.UNB_TOKEN);
 		

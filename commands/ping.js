@@ -12,7 +12,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		message.channel.send(`Pong! **${message.client.ws.ping}**ms`).catch(console.error);
 	}
 };

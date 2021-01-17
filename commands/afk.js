@@ -19,7 +19,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	async execute(message, args, options) {
+	execute: async (message, args, options) => {
 		const AKFmessage = args
 			? args.join(" ").replace(/^./, a => a.toUpperCase())
 			: (options ? options[0].value : "").replace(/^./, a => a.toUpperCase());
