@@ -114,7 +114,7 @@ const command = {
 								icon_url: message.author.avatarURL({ dynamic: true })
 							},
 							color: "#010101",
-							description: `\`\`\`\n${n.note}\n\`\`\``,
+							description: `\`\`\`\n${n.note.replace(/<a?(:.+:)\d{18}>/, "$1")}\n\`\`\``,
 							footer: {
 								text: "✨Mayze✨"
 							}
