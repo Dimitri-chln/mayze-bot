@@ -102,7 +102,6 @@ const command = {
 					}
 					[ currentMsg, currentNote ] = await sendMsg(currentMsg);
 					if (!notesToSend.length) {
-						currentMsg.delete().catch(console.error);
 						messageCollector.stop();
 						return;
 					}
