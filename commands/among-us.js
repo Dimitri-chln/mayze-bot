@@ -56,12 +56,12 @@ const command = {
 					? args[1].toUpperCase()
 					: options[0].options[0].value.toUpperCase();
 				const description = args
-					? args.slice(2)
-					: options[0].options[1].value;
+					? args.slice(2).join(" ") || "Partie classique"
+					: options[0].options[1].value || "Partie classique";
 				if (!code || !/\w{6}/.test(code)) return message.reply("entre un code valide").catch(console.error);
 				games[message.author.id] = {
 					code: code,
-					description: description || "Partie classique",
+					description: description,
 					time: Date.now()
 				};
 				message.client.amongUsGames = games;
@@ -80,7 +80,7 @@ const command = {
 							icon_url: message.client.user.avatarURL()
 						},
 						color: "#010101",
-						description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(il y a ${timeToString((Date.now() - e[1].time)/1000)})`).join("\n——————————\n") || "Aucune partie en cours!",
+						description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(il y a ${timeToString((Date.now() - e[1].time)/1000)})`).join("\n——————————\n") || "*Aucune partie en cours!*",
 						footer: {
 							text: "✨ Mayze ✨"
 						}
