@@ -18,7 +18,7 @@ const command = {
 			type: 1,
 			options: [
 				{
-					name: "notes",
+					name: "note",
 					description: "La nouvelle note",
 					type: 3,
 					required: true
@@ -31,7 +31,7 @@ const command = {
 			type: 1,
 			options: [
 				{
-					name: "notes",
+					name: "n° note",
 					description: "Le numéro de la note à retirer",
 					type: 4,
 					required: true
@@ -101,7 +101,11 @@ const command = {
 						return;
 					}
 					[ currentMsg, currentNote ] = await sendMsg(currentMsg);
-					if (!notesToSend.length) return messageCollector.stop();
+					if (!notesToSend.length) {
+						currentMsg.delete().catch(console.error);
+						messageCollector.stop();
+						return;
+					}
 				});
 				
 				async function sendMsg(msgToDelete) {
