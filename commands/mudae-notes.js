@@ -31,7 +31,7 @@ const command = {
 			type: 1,
 			options: [
 				{
-					name: "n° note",
+					name: "note",
 					description: "Le numéro de la note à retirer",
 					type: 4,
 					required: true
