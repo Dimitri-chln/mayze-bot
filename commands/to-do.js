@@ -19,7 +19,7 @@ const command = {
 			? (args[0] || "").toLowerCase()
 			: (options[0] || { value: "" }).value.toLowerCase();
 		const task = args
-			? args.slice(1).join("")
+			? args.slice(1).join(" ")
 			: (options[1] || {}).value;
 
 		switch (subCommand) {
