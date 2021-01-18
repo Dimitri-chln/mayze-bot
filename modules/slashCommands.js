@@ -11,7 +11,7 @@ class SlashCommands {
 	constructor(token, clientID) {
 		this.#token = token;
 		this.#clientID = clientID;
-		this.#apiURL = `https://discord.com/api/v8/applications/${this.clientID}`;
+		this.#apiURL = `https://discord.com/api/applications/${this.clientID}`;
 	}
 
 	get token() { return this.#token; }
