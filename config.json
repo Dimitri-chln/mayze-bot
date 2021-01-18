@@ -5,5 +5,6 @@
   "logChannel": "770569866846928897",
   "baseXp": 1000,
   "xpIncrement": 250,
-  "xpMultiplier": 2.25
+  "xpMultiplier": 2.25,
+  "webhookID": "800803785949577266"
 }
