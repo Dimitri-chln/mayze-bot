@@ -4,7 +4,7 @@ const command = {
 	name: "role-all",
 	description: "Donner ou retirer un rôle à tous les membres",
 	aliases: ["ra"],
-	cooldown: 30,
+	cooldown: 10,
 	args: 2,
 	usage: "add/remove <rôle> [-bot | -human]",
 	perms: ["MANAGE_ROLES"],
