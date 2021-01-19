@@ -3,7 +3,7 @@ const { Message } = require("discord.js");
 const command = {
 	name: "dm-link",
 	description: "Relier un salon à tes DM pour pouvoir parler à travers le bot",
-	aliases: ["dmLink", "link"],
+	aliases: ["link"],
 	args: 1,
 	usage: "<salon> [utilisateur]",
 	ownerOnly: true,
