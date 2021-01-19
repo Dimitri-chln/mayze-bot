@@ -80,19 +80,20 @@ const command = {
 				}).catch(console.error);
 				break;
 			case "join":
-				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande\`${message.client.prefix}russian-roulette create\``).catch(console.error);
-				if (message.client.russianRoulette.includes(message.author.id)) return message.reply("tu as déjà rejoint cette partie").catch(console.error);
+				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
+				if (message.client.russianRoulette.some(u => u.id === message.author.id)) return message.reply("tu as déjà rejoint cette partie").catch(console.error);
 				message.client.russianRoulette.push(message.author);
 				message.channel.send(`<@${message.author.id}> a rejoint la partie de roulette russe`).catch(console.error);
 				break;
 			case "delete":
 				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
-				if (message.client.russianRoulette[0] !== message.author.id && !message.member.hasPermission("KICK_MEMBERS")) return message.reply("seuls les modérateurs ainsi que la personne qui a créé la partie peuvent supprimer la partie").catch(console.error);
+				if (message.client.russianRoulette[0].id !== message.author.id && !message.member.hasPermission("KICK_MEMBERS")) return message.reply("seuls les modérateurs ainsi que la personne qui a créé la partie peuvent supprimer la partie").catch(console.error);
 				delete message.client.russianRoulette;
+				message.reply("partie supprimée").catch(console.error);
 			case "start":
 				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
 				if (message.client.russianRoulette.length < 2) return message.reply("il faut au minimum 2 joueurs pour lancer la partie").catch(console.error);
-				if (message.client.russianRoulette[0] !== message.author.id && !message.member.hasPermission("KICK_MEMBERS")) return message.reply("seuls les modérateurs ainsi que la personne qui a créé la partie peuvent lancer la partie").catch(console.error);
+				if (message.client.russianRoulette[0].id !== message.author.id && !message.member.hasPermission("KICK_MEMBERS")) return message.reply("seuls les modérateurs ainsi que la personne qui a créé la partie peuvent lancer la partie").catch(console.error);
 				const shuffle = require("../modules/shuffle.js");
 				const players = shuffle(message.client.russianRoulette);
 				const { MessageEmbed } = require("discord.js");
