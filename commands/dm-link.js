@@ -19,7 +19,7 @@ const command = {
 		if (!channel) return message.reply("entre un salon textuel valide").catch(console.error);
 		if (channel.type !== "text") return message.reply("entre un salon textuel valide").catch(console.error);
 		const user = args
-			? message.mentions.users.first() || message.author
+			? message.mentions.users.first() || (message.guild.members.cache.find(m => m.id === args[1].toLowerCase() || m.nickname.toLowerCase() === args[1].toLowerCase().toLowerCase() || m.nickname.toLowerCase().includes(args[1].toLowerCase() || m.user.username.toLowerCase() === args[1].toLowerCase() || m.user.username.toLowerCase().includes(args[1].toLowerCase()))) || {}).user || message.author
 			: message.client.users.cache.get(options[1] ? options[1].value : null) || message.author;
 
 		const loadingMsg = await message.channel.send("Création d'un webhook...").catch(console.error);
