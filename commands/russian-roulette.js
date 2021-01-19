@@ -58,7 +58,7 @@ const command = {
 			: options[0].name.toLowerCase();
 		const params = args
 			? args.slice(1)
-			: options[0].options.map(o => o.value);
+			: options[0].options ? options[0].options.map(o => o.value) : [];
 
 		switch (subCommand) {
 			case "create":
@@ -90,6 +90,7 @@ const command = {
 				if (message.client.russianRoulette[0].id !== message.author.id && !message.member.hasPermission("KICK_MEMBERS")) return message.reply("seuls les modérateurs ainsi que la personne qui a créé la partie peuvent supprimer la partie").catch(console.error);
 				delete message.client.russianRoulette;
 				message.reply("partie supprimée").catch(console.error);
+				break;
 			case "start":
 				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
 				if (message.client.russianRoulette.length < 2) return message.reply("il faut au minimum 2 joueurs pour lancer la partie").catch(console.error);
