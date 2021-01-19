@@ -15,9 +15,8 @@ const command = {
 
 		const newMsg = message.content.replace(regex, a => message.client.emojis.cache.find(e => e.name === a.replace(/:/g, "")));
 
-		const webhooks = await message.guild.fetchWebhooks().catch(console.error);
-		if (!webhooks) return;
-		const webhook = webhooks.get(webhookID);
+		const webhook = await message.client.fetchWebhook(webhookID).catch(console.error);
+		if (!webhook) return;
 		await webhook.edit({ channel: message.channel.id });
 
 		message.delete().catch(console.error);
