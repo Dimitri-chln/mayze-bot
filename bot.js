@@ -285,6 +285,12 @@ const values = pokedex.allPokemon().sort((a, b) => a.national_id - b.national_id
 const catchRates = values.map((_v, i, a) => a.slice(0, i).reduce((partialSum, a) => partialSum + a, 0));
 client.catchRates = catchRates;
 
+/**
+ * Returns the first member of the guild corresponding to the string
+ * @param {Discord.Guild} guild The guild where to find the member
+ * @param {string} string The ID, nickname or username of the member
+ */
+client.findMember = (guild, string) => guild.members.cache.find(member => member.id === string || member.nickname.toLowerCase() === string.toLowerCase() || member.nickname.toLowerCase().includes(string.toLowerCase()) || member.user.username.toLowerCase() === string.toLowerCase() || member.user.username.toLowerCase().includes(string.toLowerCase())) || null;
 
 /**
  * @returns {pg.Client} Un client postgreSQL connecté à la base de données de mayze-bot
