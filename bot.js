@@ -139,7 +139,11 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
 async function processCommand(command, message, args, options) {
 	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return message.reply("cette commande ne fonctionne pas sur ce serveur").catch(console.error);
 	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm))) return message.reply(`tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``).catch(console.error);
-	if (command.ownerOnly && message.author.id !== config.ownerID) return;
+	if (command.ownerOnly) {
+		if (command.allowedUsers) {
+			if (!command.allowedUsers.includes(message.author.id) && message.author.id !== config.ownerID) return;
+		} else if (message.author.id !== config.ownerID) return;
+	} else if (command.allowedUsers && !command.allowedUsers.includes(message.author.id)) return;
 	if (args && args.length < command.args) return message.channel.send(`Utilisation : \`${client.prefix}${command.name} ${command.usage}\``).catch(console.error);
 
 	if (!client.cooldowns.has(command.name)) client.cooldowns.set(command.name, new Discord.Collection());

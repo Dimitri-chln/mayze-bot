@@ -7,6 +7,7 @@ const command = {
 	args: 1,
 	usage: "<salon> [utilisateur]",
 	ownerOnly: true,
+	allowedUsers: ["394633964138135563"],
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 
