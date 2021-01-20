@@ -20,7 +20,7 @@ const command = {
 		if (!channel) return message.reply("entre un salon textuel valide").catch(console.error);
 		if (channel.type !== "text") return message.reply("entre un salon textuel valide").catch(console.error);
 		const user = args
-			? message.mentions.users.first() || (message.client.findMember(message.guild, args[1]) || {}).user || message.author
+			? message.mentions.users.first() || args[1] ? (message.client.findMember(message.guild, args[1]) || {}).user : null || message.author
 			: message.client.users.cache.get(options[1] ? options[1].value : null) || message.author;
 
 		const loadingMsg = await message.channel.send("Création d'un webhook...").catch(console.error);
@@ -72,7 +72,7 @@ const command = {
 						}
 					}
 				}).catch(console.error);
-			} else if (!message.content.startsWith(message.client.prefix)) {
+			} else {
 				webhook.send(msg.content, { avatarURL: user.avatarURL(), username: message.guild.member(user).nickname || user.username}).catch(console.error);
 			}
 		});
