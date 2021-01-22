@@ -28,7 +28,7 @@ const command = {
 		
 		const roleTop = message.guild.roles.cache.get("735810286719598634");
 		const roleBottom = message.guild.roles.cache.get("735810462872109156");
-		const ranks = message.guild.roles.cache.filter(r => r.position < roleTop.position && r.position > roleBottom.position && !r.name.includes("(Jailed)"));
+		const ranks = message.guild.roles.cache.filter(r => r.position < roleTop.position && r.position > roleBottom.position);
 
 		if (rankIdOrName) {
 			const rank = message.guild.roles.cache.get(rankIdOrName) || ranks.find(r => r.name.toLowerCase() === rankIdOrName) || ranks.find(r => r.name.toLowerCase().includes(rankIdOrName)) || { id: "" };

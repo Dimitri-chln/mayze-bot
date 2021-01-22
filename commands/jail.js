@@ -40,14 +40,6 @@ const command = {
 
 		if (!member.roles.cache.has(jailedRole)) { // If not jailed
 			member.roles.add(jailedRole).catch(console.error);
-			const notJailedRanks = ranks.filter(r => !r.name.includes("(Jailed)"));
-			notJailedRanks.forEach(rank => {
-				const jailedRank = ranks.find(r => r.name === rank.name + " (Jailed)");
-				if (member.roles.cache.has(rank.id)) {
-					member.roles.remove(rank).catch(console.error);
-					member.roles.add(jailedRank).catch(console.error);
-				}
-			});
 
 			if (member.roles.cache.has("689180158359371851")) { // Administrateur
 				member.roles.remove("689180158359371851").catch(console.error);
@@ -68,32 +60,25 @@ const command = {
 			if (message.deletable) message.react("🔗").catch(console.error);
 
 		} else { // If jailed
-		member.roles.remove(jailedRole).catch(console.error);
-		const jailedRanks = ranks.filter(r => r.name.includes("(Jailed)"));
-		jailedRanks.forEach(rank => {
-			const notJailedRank = ranks.find(r => r.name + " (Jailed)" === rank.name);
-			if (member.roles.cache.has(rank.id)) {
-				member.roles.remove(rank).catch(console.error);
-				member.roles.add(notJailedRank).catch(console.error);
+			member.roles.remove(jailedRole).catch(console.error);
+		
+			if (member.roles.cache.has("753245162469064795")) { // Administrateur
+				member.roles.remove("753245162469064795").catch(console.error);
+				member.roles.add("689180158359371851").catch(console.error);
 			}
-		});
-		if (member.roles.cache.has("753245162469064795")) { // Administrateur
-			member.roles.remove("753245162469064795").catch(console.error);
-			member.roles.add("689180158359371851").catch(console.error);
-		}
-		if (member.roles.cache.has("753250476891439185")) { // Modérateur
-			member.roles.remove("753250476891439185").catch(console.error);
-			member.roles.add("737646140362850364").catch(console.error);
-		}
-		if (member.roles.cache.has("753251533768097933")) { // Sous Chef
-			member.roles.remove("753251533768097933").catch(console.error);
-			member.roles.add("696751614177837056").catch(console.error);
-		}
-		if (member.roles.cache.has("753253307052589176")) { // 👑🐍•🐣✨•🌙🐒•⚡🦅•🦄❄️
-			member.roles.remove("753253307052589176").catch(console.error);
-			member.roles.add("689218691560505472").catch(console.error);
-		}
-		if (message.deletable) message.react("👋").catch(console.error);
+			if (member.roles.cache.has("753250476891439185")) { // Modérateur
+				member.roles.remove("753250476891439185").catch(console.error);
+				member.roles.add("737646140362850364").catch(console.error);
+			}
+			if (member.roles.cache.has("753251533768097933")) { // Sous Chef
+				member.roles.remove("753251533768097933").catch(console.error);
+				member.roles.add("696751614177837056").catch(console.error);
+			}
+			if (member.roles.cache.has("753253307052589176")) { // 👑🐍•🐣✨•🌙🐒•⚡🦅•🦄❄️
+				member.roles.remove("753253307052589176").catch(console.error);
+				member.roles.add("689218691560505472").catch(console.error);
+			}
+			if (message.deletable) message.react("👋").catch(console.error);
 		}
 	}
 };
