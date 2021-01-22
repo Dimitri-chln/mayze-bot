@@ -1,5 +1,6 @@
 const command = {
-	async execute(reaction, user) {
+	async execute(reaction, user, added) {
+		if (!added) return;
 		if (reaction.message.channel.id !== "689385764219387905") return;
 		if (reaction.message.author.id !== reaction.message.client.user.id) return;
 		const questEmbed = reaction.message.embeds[0];
@@ -25,7 +26,7 @@ const command = {
 				for (const reaction of userReactions.values()) {
 					reaction.users.remove(user.id);
 				}
-			} catch (err) { console.log(err); }
+			} catch (err) { console.error(err); }
 		}
 	}
 };

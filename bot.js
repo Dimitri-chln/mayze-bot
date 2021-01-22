@@ -33,7 +33,7 @@ for (const file of autoresponseFiles) {
 }
 
 client.reactionCommands = [];
-const reactionCommandsFiles = fs.readdirSync("./reaction-commands").filter(file => file.endsWith(".js"));
+const reactionCommandsFiles = fs.readdirSync("./reaction_commands").filter(file => file.endsWith(".js"));
 for (const file of reactionCommandsFiles) {
 	const reactionCommand = require(`./reaction-commands/${file}`);
 	client.reactionCommands.push(reactionCommand);
@@ -44,22 +44,6 @@ client.cooldowns = new Discord.Collection();
 client.on("ready", async () => {
 	console.log("Connected to Discord");
 	if (client.user.id === "740848584882126939") client.beta = true;
-
-	const { "rows": slashData } = await client.pg.query("SELECT * FROM slash_commands").catch(console.error) || { rows: [ ]};
-	client.slashCommands = new Discord.Collection();
-	client.commands.forEach(async command => {
-		if (!command.disableSlash && !command.ownerOnly) {
-			const slashOptions = { name: command.name, description: command.description };
-			if (command.slashOptions) slashOptions.options = command.slashOptions;
-			const slashCommand = await client.api.applications(client.user.id).guilds("689164798264606784").commands.post({ data: slashOptions }).catch(err => {
-				if (!client.beta) console.error(err);
-			});
-			if (!slashCommand) return;
-			client.slashCommands.set(slashCommand.name, slashCommand);
-			if (slashData.some(slash => slash.name === slashCommand.name)) client.pg.query(`UPDATE slash_commands SET json_data = '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}' WHERE name = '${slashCommand.name}'`).catch(console.error);
-			else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.name}', '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}')`).catch(console.error);
-		}
-	});
 
 	const { version } = require ("./package.json");
 	const logChannel = client.channels.cache.get(config.logChannel);
@@ -82,6 +66,23 @@ client.on("ready", async () => {
 		const editedMsg = await msg.edit(embed);
 		msg.edit(embed.setDescription(`• **Version:** \`${version}\`\n• **Ping:** \`${Math.abs(editedMsg.editedTimestamp - editedMsg.createdTimestamp)}ms\``));
 	} catch (err) { console.error(err); }
+
+	const { "rows": slashData } = await client.pg.query("SELECT * FROM slash_commands").catch(console.error) || { rows: [ ]};
+	client.slashCommands = new Discord.Collection();
+	client.commands.forEach(command => {
+		if (!command.disableSlash && !command.ownerOnly) {
+			const slashOptions = { name: command.name, description: command.description };
+			if (command.slashOptions) slashOptions.options = command.slashOptions;
+			const slashCommand = await client.api.applications(client.user.id).guilds("689164798264606784").commands.post({ data: slashOptions }).catch(err => {
+				if (!client.beta) console.error(err);
+			});
+			if (!slashCommand) return;
+			client.slashCommands.set(slashCommand.name, slashCommand);
+			if (slashData.some(slash => slash.name === slashCommand.name)) client.pg.query(`UPDATE slash_commands SET json_data = '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}' WHERE name = '${slashCommand.name}'`).catch(console.error);
+			else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.name}', '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}')`).catch(console.error);
+		}
+	});
+	console.log("Slash commands created");
 
 	client.user.setActivity("le meilleur clan", { type: "WATCHING" });
 	const mayze = client.users.cache.get("703161067982946334");
@@ -175,20 +176,34 @@ async function processCommand(command, message, args, options) {
 client.on("messageReactionAdd", async (reaction, user) => {
 	if (reaction.partial) {
 		try { await reaction.fetch(); }
-		catch (err) { return console.log(err); }
+		catch (err) { return console.error(err); }
 	}
 	if (reaction.message.partial) {
 		try { await reaction.message.fetch(); }
-		catch (err) { return console.log(err); }
+		catch (err) { return console.error(err); }
 	}
 	if (user.bot) return;
 	for (const reactionCommand of client.reactionCommands) {
-		try { reactionCommand.execute(reaction, user); }
-		catch (err) { console.log(err); }
+		try { reactionCommand.execute(reaction, user, true); }
+		catch (err) { console.error(err); }
 	}
 });
 
 client.on("messageReactionRemove", async (reaction, user) => {
+	if (reaction.partial) {
+		try { await reaction.fetch(); }
+		catch (err) { return console.error(err); }
+	}
+	if (reaction.message.partial) {
+		try { await reaction.message.fetch(); }
+		catch (err) { return console.error(err); }
+	}
+	if (user.bot) return;
+	for (const reactionCommand of client.reactionCommands) {
+		try { reactionCommand.execute(reaction, user, false); }
+		catch (err) { console.error(err); }
+	}
+
 	if (!client.removedReactions) client.removedReactions = {};
 	if (reaction.message.partial) await reaction.message.fetch().catch(console.error);
 
