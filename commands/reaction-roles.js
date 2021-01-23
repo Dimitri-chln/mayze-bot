@@ -27,7 +27,7 @@ const command = {
 			type: 1,
 			options: [
 				{
-					name: "messageID",
+					name: "message",
 					description: "L'ID du message auquel ajouter le rôle",
 					type: 3,
 					required: true
@@ -52,7 +52,7 @@ const command = {
 			type: 1,
 			options: [
 				{
-					name: "messageID",
+					name: "message",
 					description: "L'ID du message duquel retirer le rôle",
 					type: 3,
 					required: true
