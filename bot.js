@@ -69,7 +69,7 @@ client.on("ready", async () => {
 
 	const { "rows": slashData } = await client.pg.query("SELECT * FROM slash_commands").catch(console.error) || { rows: [ ]};
 	client.slashCommands = new Discord.Collection();
-	client.commands.forEach(command => {
+	client.commands.forEach(async command => {
 		if (!command.disableSlash && !command.ownerOnly) {
 			const slashOptions = { name: command.name, description: command.description };
 			if (command.slashOptions) slashOptions.options = command.slashOptions;
