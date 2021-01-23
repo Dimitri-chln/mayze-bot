@@ -27,7 +27,7 @@ const command = {
 		if (message.member.roles.cache.has("695943648235487263")) return; // If jailed
 		
 		const roleTop = message.guild.roles.cache.get("735810286719598634");
-		const roleBottom = message.guild.roles.cache.get("735810462872109156");
+		const roleBottom = message.guild.roles.cache.get("802143220984971275");
 		const ranks = message.guild.roles.cache.filter(r => r.position < roleTop.position && r.position > roleBottom.position);
 
 		if (rankIdOrName) {

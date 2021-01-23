@@ -33,9 +33,6 @@ const command = {
 		if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== ownerID) 
 			return message.reply("tu ne peux pas mettre cette personne en prison").catch(console.error);
 
-		const roleTop = message.guild.roles.cache.get("735810286719598634");
-		const roleBottom = message.guild.roles.cache.get("735810462872109156");
-		const ranks = message.guild.roles.cache.filter(r => r.position < roleTop.position && r.position > roleBottom.position);
 		const jailedRole = "695943648235487263";
 
 		if (!member.roles.cache.has(jailedRole)) { // If not jailed
