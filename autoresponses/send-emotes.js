@@ -8,7 +8,7 @@ const command = {
 		const { webhookID } = require("../config.json");
 		if (message.channel.type === "dm" || message.author.bot || message.guild.id !== "689164798264606784") return;
 
-		const regex = /(^|\s):[\w-_]+:(\s|$)/g;
+		const regex = /(?:^|\s):[\w-_]+:(?:\s|$)/g;
 		if (!regex.test(message.content)) return;
 		const emojiNames = message.content.match(regex).map(e => e.replace(/:/g, ""));
 		if (!emojiNames.every(emojiName => message.guild.emojis.cache.find(emoji => emoji.name === emojiName))) return;
