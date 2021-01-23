@@ -35,7 +35,7 @@ for (const file of autoresponseFiles) {
 client.reactionCommands = [];
 const reactionCommandsFiles = fs.readdirSync("./reaction_commands").filter(file => file.endsWith(".js"));
 for (const file of reactionCommandsFiles) {
-	const reactionCommand = require(`./reaction-commands/${file}`);
+	const reactionCommand = require(`./reaction_commands/${file}`);
 	client.reactionCommands.push(reactionCommand);
 }
 
