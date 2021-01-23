@@ -11,7 +11,7 @@ const command = {
         if (!reaction.message.embeds.length) return;
         const embed = reaction.message.embeds[0];
         const roles = embed.description.split("\n").map(e => {
-            return { emoji: e.slice(0, 1), role: reaction.message.guild.roles.cache.get(e.match(/\d{18}/)[0]) };
+            return { emoji: e.replace(/ •.*/, ""), role: reaction.message.guild.roles.cache.get(e.match(/\d{18}/)[0]) };
         });
 
         const role = roles.find(r => r.emoji === reaction.emoji.name);

@@ -90,12 +90,13 @@ const command = {
 								icon_url: message.client.user.avatarURL()
 							},
 							color: "#010101",
+							description: "*Aucun rôle pour le moment*",
 							footer: {
 								text: "✨ Mayze ✨"
 							}
 						}
 					}).catch(console.error);
-					if (msg) message.reply(`message créé (ID: ${msg.id})`).catch(console.error);
+					if (msg) message.reply(`message créé\n**ID:** \`${msg.id}\``).catch(console.error);
 					else message.channel.send("Quelque chose s'est mal passé en envoyant le message :/").catch(console.error);
 					break;
 				}
@@ -114,12 +115,34 @@ const command = {
 						: options[0].options[2].value;
 					if (!emoji) return message.reply("ajoute un emoji").catch(console.error);
 
-					const m = await msg.edit(msg.embeds[0].setDescription(`${msg.embeds[0].description}\n${emoji} • ${role}`)).catch(console.error);
+					const m = await msg.edit(msg.embeds[0].setDescription(`${msg.embeds[0].description.replace("*Aucun rôle pour le moment*", "")}\n${emoji} • ${role}`)).catch(console.error);
 					if (!m) return message.channel.send("Quelque chose s'est mal passé en modifiant le message :/").catch(console.error);
+					msg.react(emoji).catch(console.error);
 					if (message.deletable) message.react("✅").catch(console.error);
 					else message.reply("rôle ajouté").catch(console.error);
 					break;
 				}
+				case "remove": {
+					const msgID = args
+						? args[1]
+						: options[0].options[0].value;
+					const msg = await rolesChannel.messages.fetch(msgID);
+					if (!msg) return message.reply("l'ID du message est incorrect").catch(console.error);
+					const role = args
+						? message.guild.roles.cache.find(r => r.id === args[2] || r.name.toLowerCase() === args[2] || r.name.toLowerCase().includes(args[2]))
+						: message.guild.roles.cache.get(options[0].options[1].value);
+					if (!role) return message.reply("ce rôle n'existe pas").catch(console.error);
+					const [ , emoji ] = msg.embeds[0].description.match(new RegExp(`(.*) • ${role}`));
+
+					const m = await msg.edit(msg.embeds[0].setDescription(msg.embeds[0].description.replace(new RegExp(`${emoji} • ${role}\n?`), "") || "*Aucun rôle pour le moment*")).catch(console.error);
+					if (!m) return message.channel.send("Quelque chose s'est mal passé en modifiant le message :/").catch(console.error);
+					msg.reactions.cache.get(emoji).users.cache.forEach(u => msg.reactions.cache.get(emoji).users.remove(u).catch(console.error));
+					if (message.deletable) message.react("✅").catch(console.error);
+					else message.reply("rôle ajouté").catch(console.error);
+					break;
+				}
+				default:
+					message.reply("arguments incorrects").catch(console.error);
 			}
 	}
 };

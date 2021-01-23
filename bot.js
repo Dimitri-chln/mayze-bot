@@ -174,15 +174,11 @@ async function processCommand(command, message, args, options) {
 }
 
 client.on("messageReactionAdd", async (reaction, user) => {
-	if (reaction.partial) {
-		try { await reaction.fetch(); }
-		catch (err) { return console.error(err); }
-	}
-	if (reaction.message.partial) {
-		try { await reaction.message.fetch(); }
-		catch (err) { return console.error(err); }
-	}
+	if (reaction.partial) await reaction.fetch().catch(console.error);
+	if (reaction.message.partial) await reaction.message.fetch().catch(console.error);
+	if (reaction.partial || reaction.message.partial) return;
 	if (user.bot) return;
+
 	for (const reactionCommand of client.reactionCommands) {
 		try { reactionCommand.execute(reaction, user, true); }
 		catch (err) { console.error(err); }
@@ -190,15 +186,11 @@ client.on("messageReactionAdd", async (reaction, user) => {
 });
 
 client.on("messageReactionRemove", async (reaction, user) => {
-	if (reaction.partial) {
-		try { await reaction.fetch(); }
-		catch (err) { return console.error(err); }
-	}
-	if (reaction.message.partial) {
-		try { await reaction.message.fetch(); }
-		catch (err) { return console.error(err); }
-	}
+	if (reaction.partial) await reaction.fetch().catch(console.error);
+	if (reaction.message.partial) await reaction.message.fetch().catch(console.error);
+	if (reaction.partial || reaction.message.partial) return;
 	if (user.bot) return;
+
 	for (const reactionCommand of client.reactionCommands) {
 		try { reactionCommand.execute(reaction, user, false); }
 		catch (err) { console.error(err); }
