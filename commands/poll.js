@@ -33,7 +33,7 @@ const command = {
 		const answers = args
 			? args.join(" ").replace(question, "").trim().split("/").length < 2 ? [ "Oui", "Non" ] : args.join(" ").replace(question, "").trim().split("/").map(answer => answer.replace(/^./, a => a.toUpperCase()))
 			: (options[1] || { value: "" }).value.trim().split("/").length < 2 ? [ "Oui", "Non" ] : (options[1] || { value: "" }).value.trim().split("/").map(answer => answer.replace(/^./, a => a.toUpperCase()));
-		const emojis = answers.length === 2 ? ["✅", "❌"] : ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].slice(0, answers.length);
+		const emojis = answers === ["Oui", "Non"] ? ["✅", "❌"] : ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].slice(0, answers.length);
 		emojis.push("🛑");
 		if (message.deletable) message.delete().catch(console.error);
 		sendPoll();
