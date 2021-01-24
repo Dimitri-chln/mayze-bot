@@ -5,7 +5,7 @@ const command = {
 	description: "Effectuer des opérations mathématiques",
 	aliases: [],
 	args: 2,
-	usage: "eval <expression> | solve <équation> , [variable] | derivative <fonction>, [variable]",
+	usage: "eval <expression> | solve <équation> [, variable] | derivative <fonction> [, variable]",
 	slashOptions: [
 		{
 			name: "eval",
