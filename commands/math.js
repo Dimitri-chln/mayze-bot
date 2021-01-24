@@ -80,7 +80,7 @@ const command = {
 				try {
 					const parsedExp = math.parse(expression);
 					const result = math.evaluate(expression);
-					message.channel.send(`**Expression :** \`${parsedExp.toString()}\`\n**Résultat :** \`${result}\``).catch(console.error);
+					message.channel.send(`\`\`\`\n${parsedExp.toString()}\n= ${result}\n\`\`\``).catch(console.error);
 				} catch (err) {
 					if (err.name === "SyntaxError") message.reply("syntaxe incorrecte").catch(console.error);
 					else message.channel.send(err.message).catch(console.error);
@@ -99,7 +99,7 @@ const command = {
 					const equation = parse(expression);
 					const result = equation.solveFor(variable);
 					console.log(result);
-					message.channel.send(`**Équation :** \`${equation.toString()}\`\n**Résultat :** \`${variable} = ${(result || "Ø").toString()}\``).catch(console.error);
+					message.channel.send(`\`\`\`\n${equation.toString()}\n${variable} = ${(result || "No Solution").toString()}\n\`\`\``).catch(console.error);
 				} catch (err) {
 					if (err.name === "SyntaxError") message.reply("syntaxe incorrecte").catch(console.error);
 					else message.channel.send(err.message).catch(console.error);
@@ -117,7 +117,7 @@ const command = {
 				try {
 					const parsedExp = math.parse(expression);
 					const derivative = math.derivative(expression, variable, { simplify: true });
-					message.channel.send(`**f(${variable}) =** \`${parsedExp.toString()}\`\n**f'(${variable}) =** \`${derivative.toString()}\``).catch(console.error);
+					message.channel.send(`\`\`\`\nf(${variable}) = ${parsedExp.toString()}\nf'(${variable}) = ${derivative.toString()}\n\`\`\``).catch(console.error);
 				} catch (err) {
 					if (err.name === "SyntaxError") message.reply("syntaxe incorrecte").catch(console.error);
 					else message.channel.send(err.message).catch(console.error);
