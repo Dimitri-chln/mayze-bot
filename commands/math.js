@@ -95,7 +95,7 @@ const command = {
 					? (args.join(" ").match(/,\s?(.)$/) || [])[1] || "x"
 					: options[0].options[2] ? options[0].options[2].value : "x";
 
-				try{
+				try {
 					const equation = parse(expression);
 					const result = equation.solveFor(variable);
 					console.log(result);
