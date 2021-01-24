@@ -7,11 +7,13 @@
     "start": "node ."
   },
   "dependencies": {
+    "algebra.js": "^0.2.6",
     "axios": "^0.21.1",
     "cron": "^1.8.2",
     "dhms": "^1.0.0",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
+    "mathjs": "^9.0.0",
     "oakdex-pokedex": "^0.4.5",
     "pg": "^8.5.1",
     "unb-api": "^1.2.2"
