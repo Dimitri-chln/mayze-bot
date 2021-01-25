@@ -98,7 +98,6 @@ const command = {
 				try {
 					const equation = parse(expression);
 					const result = equation.solveFor(variable);
-					console.log(result);
 					message.channel.send(`\`\`\`\n${equation.toString()}\n${variable} = ${(result || "No Solution").toString()}\n\`\`\``).catch(console.error);
 				} catch (err) {
 					if (err.name === "SyntaxError") message.reply("syntaxe incorrecte").catch(console.error);
