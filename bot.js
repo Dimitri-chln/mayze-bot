@@ -24,6 +24,11 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
+const musicCommandFiles = fs.readdirSync("./music_commands").filter(file => file.endsWith(".js"));
+for (const file of musicCommandFiles) {
+	const command = require(`./music_commands/${file}`);
+	client.commands.set(command.name, command);
+}
 
 client.autoresponses = [];
 const autoresponseFiles = fs.readdirSync("./autoresponses").filter(file => file.endsWith(".js"));
@@ -40,6 +45,7 @@ for (const file of reactionCommandsFiles) {
 }
 
 client.cooldowns = new Discord.Collection();
+client.queues = new Discord.Collection();
 
 client.on("ready", async () => {
 	console.log("Connected to Discord");
@@ -290,6 +296,17 @@ client.on("presenceUpdate", async (_oldMember, newMember) => {
 });
 
 client.login(process.env.TOKEN);
+
+// MUSIC CODE
+const Player = require("./util/MusicPlayer.js");
+const player = new Player(client, {
+	leaveOnEnd: false,
+	leaveOnStop: false,
+    leaveOnEmpty: true,
+    timeout: 600000, // 10min
+    quality: "high"
+});
+client.player = player;
 
 const pokedex = require("oakdex-pokedex");
 const values = pokedex.allPokemon().sort((a, b) => a.national_id - b.national_id).map(p => p.catch_rate);
