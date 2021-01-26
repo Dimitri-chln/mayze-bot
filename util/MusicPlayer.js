@@ -628,6 +628,8 @@ class Player {
 				// Creates a new guild with data if needed
 				queue = new Queue(voiceChannel.guild.id);
 				queue.connection = connection;
+				// Add the queue to the list
+				this.queues.push(queue);
 			}
 			// Add all songs to the GuildQueue
 			Promise.all(playlist.videos.map(video => {
@@ -635,10 +637,8 @@ class Player {
 				playlistSongs.push(song);
 				queue.songs.push(song);
 			}));
-			// Add the queue to the list
-			this.queues.push(queue);
-			// Plays the song
 
+			// Plays the song
 			if (!isFirstPlay)
 				this._playSong(queue.guildID, !isFirstPlay);
 
@@ -876,7 +876,7 @@ class Player {
 			if (songFound) {
 				queue.songs = queue.songs.filter((s) => s !== songFound);
 			}
-		} return new MusicPlayerError('NotANumber');
+		} else return new MusicPlayerError('NotANumber');
 		// Resolve
 		return songFound;
 	}
