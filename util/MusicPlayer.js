@@ -667,7 +667,7 @@ class Player {
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return new MusicPlayerError('QueueIsNull');
 		// Pauses the dispatcher
-		queue.dispatcher.pause();
+		queue.dispatcher.pause(true);
 		queue.playing = false;
 		// Resolves the guild queue
 		return queue.songs[0];
@@ -683,8 +683,6 @@ class Player {
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return new MusicPlayerError('QueueIsNull');
 		// Resumes the dispatcher
-		queue.dispatcher.resume();
-		queue.dispatcher.pause();
 		queue.dispatcher.resume();
 		queue.playing = true;
 		// Resolves the guild queue
