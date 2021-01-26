@@ -43,7 +43,7 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options) => {
-		const timeToString = require("../modules/timeToString");
+		const timeToString = require("../util/timeToString");
 
 		const subCommand = args
 			? (args[0] || "").toLowerCase() || "games"

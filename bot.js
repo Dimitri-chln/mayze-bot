@@ -7,7 +7,7 @@ const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEM
 const client = new Discord.Client({ fetchAllMembers: true, partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
 
 if (process.env.HOST !== "HEROKU") {
-	const shellExec = require("./modules/shellExec.js");
+	const shellExec = require("./util/shellExec.js");
 	const output = shellExec("heroku pg:credentials:url --app mayze-bot");
 	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
 	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
@@ -103,7 +103,7 @@ client.on("message", async message => {
 	const mayze = client.users.cache.get("703161067982946334");
 	if (client.beta && mayze.presence.status !== "offline") return;
 
-	const chatXP = require("./modules/chatXP.js");
+	const chatXP = require("./util/chatXP.js");
 	if (message.channel.type !== "dm" && !message.author.bot && !message.channel.name.includes("spam")) {
 		const bots = message.guild.members.cache.filter(m => m.user.bot);
 		const prefixes = bots.map(b => ((b.nickname || b.user.username).match(/\[.+\]/) || ["[!]"])[0].replace(/[\[\]]/g, ""));
@@ -131,7 +131,7 @@ client.on("message", async message => {
 client.ws.on("INTERACTION_CREATE", async interaction => {
 	const command = client.commands.get(interaction.data.name) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.data.name));
 	const options = interaction.data.options;
-	const EnhancedInteraction = require("./modules/EnhancedInteraction");
+	const EnhancedInteraction = require("./util/EnhancedInteraction");
 	const enhancedInteraction = new EnhancedInteraction(interaction, client);
 	console.log(`${enhancedInteraction.author.tag} used /${enhancedInteraction.base.data.name} in #${enhancedInteraction.channel.name}\n${JSON.stringify(enhancedInteraction.base.data, null, 4)}`);
 	if (command) processCommand(command, enhancedInteraction, null, options);

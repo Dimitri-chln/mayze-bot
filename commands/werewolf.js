@@ -44,7 +44,7 @@ const command = {
 			? (args[0] || "").toLowerCase() || "players"
 			: (options ? options[0] : {}).value.toLowerCase();
 		const Game = require("../werewolfModules/classGame");
-		const shuffle = require("../modules/shuffle");
+		const shuffle = require("../util/shuffle");
 		const werewolfInfo = require("../assets/werewolfInfo.json");
 
 		const roleIngame = message.guild.roles.cache.get("759699864191107072");

@@ -14,7 +14,7 @@ const command = {
 	 */
 	execute: async (message, args, options) => {
 		if (process.env.HOST === "HEROKU") return message.reply("cette commande ne fonctionne pas sur Heroku").catch(console.error);
-		const shellExec = require("../modules/shellExec.js");
+		const shellExec = require("../util/shellExec.js");
 		const output = shellExec("heroku logs --app mayze-bot");
 		const charactersPerPage = 2000;
 		if (output.length < charactersPerPage) {
@@ -32,7 +32,7 @@ const command = {
 				}
 			}).catch(console.error);
 		} else {
-			const pagination = require("../modules/pagination.js");
+			const pagination = require("../util/pagination.js");
 			const { MessageEmbed } = require("discord.js");
 			const regex = /(.|\n){0,2000}\n/yg;
 			const matches = output.match(regex);

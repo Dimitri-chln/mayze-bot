@@ -22,7 +22,7 @@ const command = {
 	execute: async (message, args, options) => {
 		const { MessageEmbed } = require("discord.js");
 		const pokedex = require("oakdex-pokedex");
-		const pagination = require("../modules/pagination.js");
+		const pagination = require("../util/pagination.js");
 
 		let { "rows": pokemons }  = await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}' ORDER BY legendary DESC, shiny DESC, caught DESC, pokedex_id ASC`).catch(console.error);
 		if (!pokemons) return message.channel.send("Quelque chose s'est mal passé en accédant à la base de données").catch(console.error);

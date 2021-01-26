@@ -31,7 +31,7 @@ const command = {
 				if (command.slashOptions) slashOptions.options = command.slashOptions;
 				await message.client.api.applications(message.client.user.id).guilds("672516066756395031").commands(slashCommand.id).patch({
 					data: slashOptions
-				});
+				}).catch(console.error);
 			}
 
 			message.channel.send(`La commande \`${command.name}\` a été rechargée !`);
