@@ -298,7 +298,7 @@ client.on("presenceUpdate", async (_oldMember, newMember) => {
 client.login(process.env.TOKEN);
 
 // MUSIC CODE
-const Player = require("../util/MusicPlayer.js");
+const Player = require("./util/MusicPlayer.js");
 const player = new Player(client, {
 	leaveOnEnd: false,
 	leaveOnStop: false,
