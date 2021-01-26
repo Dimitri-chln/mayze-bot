@@ -70,7 +70,7 @@ client.on("ready", async () => {
 	const { "rows": slashData } = await client.pg.query("SELECT * FROM slash_commands").catch(console.error) || { rows: [ ]};
 	client.slashCommands = new Discord.Collection();
 	client.commands.forEach(async command => {
-		if (!command.disableSlash && !command.ownerOnly) {
+		if (command.slashOptions && !command.disableSlash && !command.ownerOnly) {
 			const slashOptions = { name: command.name, description: command.description };
 			if (command.slashOptions) slashOptions.options = command.slashOptions;
 			const slashCommand = await client.api.applications(client.user.id).guilds("689164798264606784").commands.post({ data: slashOptions }).catch(err => {
@@ -131,8 +131,8 @@ client.on("message", async message => {
 client.ws.on("INTERACTION_CREATE", async interaction => {
 	const command = client.commands.get(interaction.data.name) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.data.name));
 	const options = interaction.data.options;
-	const InteractionTrigger = require("./modules/interaction");
-	const enhancedInteraction = new InteractionTrigger(interaction, client);
+	const EnhancedInteraction = require("./modules/EnhancedInteraction");
+	const enhancedInteraction = new EnhancedInteraction(interaction, client);
 	console.log(`${enhancedInteraction.author.tag} used /${enhancedInteraction.base.data.name} in #${enhancedInteraction.channel.name}\n${JSON.stringify(enhancedInteraction.base.data, null, 4)}`);
 	if (command) processCommand(command, enhancedInteraction, null, options);
 });

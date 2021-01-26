@@ -1,6 +1,6 @@
 const { Client, Guild, Channel, User, GuildMember } = require("discord.js");
 
-class InteractionTrigger {
+class EnhancedInteraction {
 	/**@type {Object} */
 	#base;
 	/**@type {Client} */
@@ -43,4 +43,4 @@ class InteractionTrigger {
 	}
 }
 
-module.exports = InteractionTrigger;
+module.exports = EnhancedInteraction;
