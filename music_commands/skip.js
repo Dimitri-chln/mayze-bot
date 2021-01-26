@@ -14,7 +14,7 @@ const command = {
 	 */
 	execute: async (message, args, options) => {
 		const song  = await message.client.player.skip(message.guild.id);
-		message.channel(`<a:blackCheck:803603780666523699> | **Musique passée**\n> ${song.name}`).catch(console.error);
+		message.channel.send(`<a:blackCheck:803603780666523699> | **Musique passée**\n> ${song.name}`).catch(console.error);
 	}
 };
 
