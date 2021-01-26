@@ -17,7 +17,8 @@
     "mathjs": "^9.0.0",
     "oakdex-pokedex": "^0.4.5",
     "pg": "^8.5.1",
-    "unb-api": "^1.2.2"
+    "unb-api": "^1.2.2",
+    "@discordjs/opus": "0.3.2"
   },
   "engines": {
     "node": "12.x"
