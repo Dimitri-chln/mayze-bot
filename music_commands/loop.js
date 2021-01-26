@@ -1,9 +1,9 @@
 const { Message } = require("discord.js");
 
 const command = {
-	name: "looop",
+	name: "loop",
 	description: "Activer ou désactiver la répétition de la musique actuelle",
-	aliases: ["s"],
+	aliases: [],
 	args: 0,
 	usage: "",
 	disableSlash: true,
