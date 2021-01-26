@@ -930,7 +930,7 @@ class Player {
         if (queue.songs.length < 2 && !firstPlay && !queue.repeatMode) {
             // Emits stop event
             if (queue.stopped) {
-                // Remoces the guild from the guilds list
+                // Removes the guild from the guilds list
                 this.queues = this.queues.filter((g) => g.guildID !== guildID);
 
                 if (this.options.leaveOnStop)
@@ -959,6 +959,7 @@ class Player {
         if (!firstPlay) queue.emit('songChanged', (!queue.repeatMode ? queue.songs.shift() : queue.songs[0]), queue.songs[0], queue.skipped, queue.repeatMode);
         queue.skipped = false;
         let song = queue.songs[0];
+        if (!song) return;
         // Download the song
         let Quality = this.options.quality;
         Quality = Quality.toLowerCase() == 'low' ? 'lowestaudio' : 'highestaudio';

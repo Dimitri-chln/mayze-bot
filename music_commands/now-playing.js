@@ -26,7 +26,7 @@ const command = {
 					url: song.thumbnail
 				},
 				color: "#010101",
-				description: `[${song.name}](${song.url})\n\n${message.client.player.createProgressBar(message.guild.id)}\n\n\`Ajouté par:\` **${song.requestedBy.tag}**\n\`Suivant:\` **${song.queue.songs[1] ? song.queue.songs[1].name : "Rien"}**`,
+				description: `[${song.name}](${song.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${song.requestedBy.tag}**\n\`Suivant:\` **${song.queue.songs[1] ? song.queue.songs[1].name : "Rien"}**`,
 				footer: {
 					text: "✨ Mayze ✨"
 				}
