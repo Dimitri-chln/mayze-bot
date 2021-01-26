@@ -925,9 +925,9 @@ class Player {
 	async _playSong(guildID, firstPlay) {
 		// Gets guild queue
 		let queue = this.queues.find((g) => g.guildID === guildID);
+		if (!queue) return;
 		// If there isn't any music in the queue
 		if (queue.songs.length < 2 && !firstPlay && !queue.repeatMode) {
-			console.log("End of queue");
 			// Removes the guild from the guilds list
 			this.queues = this.queues.filter((g) => g.guildID !== guildID);
 
