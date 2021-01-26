@@ -297,11 +297,8 @@ client.on("presenceUpdate", async (_oldMember, newMember) => {
 
 client.login(process.env.TOKEN);
 
-
-
-
 // MUSIC CODE
-const { Player } = require("discord-music-player");
+const Player = require("../util/MusicPlayer.js");
 const player = new Player(client, {
 	leaveOnEnd: false,
 	leaveOnStop: false,
@@ -310,9 +307,6 @@ const player = new Player(client, {
     quality: "high"
 });
 client.player = player;
-
-
-
 
 const pokedex = require("oakdex-pokedex");
 const values = pokedex.allPokemon().sort((a, b) => a.national_id - b.national_id).map(p => p.catch_rate);
