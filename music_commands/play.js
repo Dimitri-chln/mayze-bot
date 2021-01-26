@@ -14,9 +14,11 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options) => {
+		const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#\&\?]*).*/;
 		const search = args
 			? args.join(" ")
 			: options[0].value;
+		if (playlistRegex.test(search)) return message.reply("les playlists ne sont pas supportées pour le moment").catch(console.error);
 
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
         // If there's already a song playing

@@ -13,6 +13,7 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options) => {
+		return message.channel.send("Soon™").catch(console.error);
 		const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#\&\?]*).*/;
 		const playlistLink = args
 			? args[0]
