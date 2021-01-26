@@ -309,17 +309,17 @@ client.player = player;
 client.player
 
 // Send a message when a track starts
-.on("trackStart", (message, track) => message.channel.send(`En train de jouer: \`${track.title}\`...`).catch(console.error))
+.on("trackStart", (message, track) => message.channel.send(`En train de jouer...\n\`${track.title}\``).catch(console.error))
 
 // Send a message when something is added to the queue
-.on("trackAdd", (message, queue, track) => message.channel.send(`\`${track.title}\` a été ajouté à la queue`).catch(console.error))
-.on("playlistAdd", (message, queue, playlist) => message.channel.send(`${playlist.tracks.length} chansons ont été ajoutées depuis \`${track.title}\``).catch(console.error))
+.on("trackAdd", (message, queue, track) => message.channel.send(`Ajout à la queue...\n\`${track.title}\``).catch(console.error))
+.on("playlistAdd", (message, queue, playlist) => message.channel.send(`${playlist.tracks.length} chansons ont été ajoutées depuis \`${playlist.title}\``).catch(console.error))
 
 // Send messages to format search results
 .on("searchResults", (message, query, tracks) => {
 
     const embed = new Discord.MessageEmbed()
-	.setAuthor(`Résultats de la recherche"`, message.client.user.avatarURL())
+	.setAuthor(`Résultats de la recherche`, message.client.user.avatarURL())
 	.setColor("#010101")
     .setDescription(tracks.map((t, i) => `**\`${i + 1}.\`** ${t.title}`).join("\n\n"))
     .setFooter("Choisis le numéro de la chanson à ajouter", message.author.avatarURL({ dynamic: true }));
