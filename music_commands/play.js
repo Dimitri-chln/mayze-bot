@@ -6,6 +6,7 @@ const command = {
 	aliases: ["p"],
 	args: 0,
 	usage: "",
+	cooldown: 5,
 	disableSlash: true,
 	/**
 	 * @param {Message} message 
