@@ -14,12 +14,14 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options) => {
+		if (!message.member.voice.channelID || message.member.voice.channelID !== (message.client.player.getQueue(message.guild.id) || { connection: { channel: {} } }).connection.channel.id) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
+
 		const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#\&\?]*).*/;
 		const search = args
 			? args.join(" ")
 			: options[0].value;
 		if (playlistRegex.test(search)) return message.reply("les playlists ne sont pas supportées pour le moment").catch(console.error);
-
+		
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
         // If there's already a song playing
         if (isPlaying) {

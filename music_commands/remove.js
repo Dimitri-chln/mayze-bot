@@ -14,6 +14,8 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options) => {
+		if (!message.member.voice.channelID || message.member.voice.channelID !== (message.client.player.getQueue(message.guild.id) || { connection: { channel: {} } }).connection.channel.id) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
+
         const songID = args
             ? parseInt(args[0], 10)
             : options[0].value;
@@ -21,7 +23,8 @@ const command = {
 
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
-        const song = message.client.player.remove(message.guild.id, songID);
+		
+		const song = message.client.player.remove(message.guild.id, songID);
         if (!song) return message.reply("je n'ai pas trouvé cette musique dans la queue").catch(console.error);
 		message.channel.send(`<a:blackCheck:803603780666523699> | **Musique supprimée**\n> ${song.name}`).catch(console.error);
 	}

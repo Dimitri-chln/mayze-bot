@@ -14,6 +14,8 @@ const command = {
 	 */
 	execute: async (message, args, options) => {
 		return message.channel.send("Soon™").catch(console.error);
+		if (!message.member.voice.channelID || message.member.voice.channelID !== (message.client.player.getQueue(message.guild.id) || { connection: { channel: {} } }).connection.channel.id) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
+
 		const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#\&\?]*).*/;
 		const playlistLink = args
 			? args[0]
