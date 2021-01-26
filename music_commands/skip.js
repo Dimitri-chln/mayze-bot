@@ -1,9 +1,9 @@
 const { Message } = require("discord.js");
 
 const command = {
-	name: "queue",
-	description: "Obtenir la queue du serveur",
-	aliases: ["q"],
+	name: "skip",
+	description: "Passer la musique actuelle",
+	aliases: ["s"],
 	args: 0,
 	usage: "",
 	disableSlash: true,
