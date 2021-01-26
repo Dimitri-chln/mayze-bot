@@ -959,7 +959,6 @@ class Player {
         if (!firstPlay) queue.emit('songChanged', (!queue.repeatMode ? queue.songs.shift() : queue.songs[0]), queue.songs[0], queue.skipped, queue.repeatMode);
         queue.skipped = false;
         let song = queue.songs[0];
-        if (!song) return;
         // Download the song
         let Quality = this.options.quality;
         Quality = Quality.toLowerCase() == 'low' ? 'lowestaudio' : 'highestaudio';
@@ -970,8 +969,9 @@ class Player {
         dispatcher.setVolumeLogarithmic(queue.volume / 200);
         // When the song ends
         dispatcher.on('finish', () => {
-            // Play the next song
-            return this._playSong(guildID, false);
+            if (queue.length > 1)
+                // Play the next song
+                return this._playSong(guildID, false);
         });
     }
 
