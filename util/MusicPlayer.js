@@ -927,12 +927,11 @@ class Player {
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		// If there isn't any music in the queue
 		if (queue.songs.length < 2 && !firstPlay && !queue.repeatMode) {
-			console.log("End of queue");
+			// Removes the guild from the guilds list
+			this.queues = this.queues.filter((g) => g.guildID !== guildID);
+
 			// Emits stop event
 			if (queue.stopped) {
-				// Removes the guild from the guilds list
-				this.queues = this.queues.filter((g) => g.guildID !== guildID);
-
 				if (this.options.leaveOnStop)
 					queue.connection.channel.leave();
 				// Emits the stop event
@@ -942,8 +941,6 @@ class Player {
 			if (this.options.leaveOnEnd) {
 				// Emits the end event
 				queue.emit('end');
-				// Removes the guild from the guilds list
-				this.queues = this.queues.filter((g) => g.guildID !== guildID);
 				// Timeout
 				let connectionChannel = queue.connection.channel;
 				setTimeout(() => {
@@ -954,6 +951,7 @@ class Player {
 				}, this.options.timeout);
 				return;
 			}
+			return;
 		}
 		// Emit songChanged event
 		if (!firstPlay) queue.emit('songChanged', (!queue.repeatMode ? queue.songs.shift() : queue.songs[0]), queue.songs[0], queue.skipped, queue.repeatMode);
