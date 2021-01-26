@@ -301,68 +301,15 @@ client.login(process.env.TOKEN);
 
 
 // MUSIC CODE
-const { Player } = require("discord-player");
-const player = new Player(client);
-client.player = player;
-
-// Then add some messages that will be sent when the events will be triggered
-client.player
-
-// Send a message when a track starts
-.on("trackStart", (message, track) => message.channel.send(`En train de jouer...\n\`${track.title}\``).catch(console.error))
-
-// Send a message when something is added to the queue
-.on("trackAdd", (message, queue, track) => message.channel.send(`Ajout à la queue...\n\`${track.title}\``).catch(console.error))
-.on("playlistAdd", (message, queue, playlist) => message.channel.send(`${playlist.tracks.length} chansons ont été ajoutées depuis \`${playlist.title}\``).catch(console.error))
-
-// Send messages to format search results
-.on("searchResults", (message, query, tracks) => {
-
-    const embed = new Discord.MessageEmbed()
-	.setAuthor(`Résultats de la recherche`, message.client.user.avatarURL())
-	.setColor("#010101")
-    .setDescription(tracks.map((t, i) => `**\`${i + 1}.\`** ${t.title}`).join("\n\n"))
-    .setFooter("Choisis le numéro de la chanson à ajouter", message.author.avatarURL({ dynamic: true }));
-    message.channel.send(embed).catch(console.error);
-
-})
-.on("searchInvalidResponse", (message, query, tracks, content, collector) => {
-
-    if (content === "cancel") {
-        collector.stop();
-        return message.channel.send("Recherche annulée").catch(console.error);
-    }
-
-    message.reply(`le numéro doit être compris entre 1 et ${tracks.length}`);
-
-})
-.on("searchCancel", (message, query, tracks) => message.channel.send("Recherche annulée").catch(console.error))
-.on("noResults", (message, query) => message.channel.send(`Aucun résultat pour "${query}"`).catch(console.error))
-
-// Send a message when the music is stopped
-.on("queueEnd", (message, queue) => message.channel.send("Fin de la queue!").catch(console.error))
-.on("channelEmpty", (message, queue) => null)
-.on("botDisconnect", (message) => null)
-
-// Error handling
-.on("error", (error, message) => {
-    switch(error){
-        case "NotPlaying":
-            message.reply("il n'y a pas de musique en cours sur ce serveur").catch(console.error);
-            break;
-        case "NotConnected":
-            message.reply("tu n'es pas connecté à un salon vocal").catch(console.error);
-            break;
-        case "UnableToJoin":
-            message.channel.send("Je n'ai pas la permission de rejoindre ce salon").catch(console.error);
-            break;
-        case "LiveVideo":
-            message.reply("les lives Youtube ne sont pas supportés").catch(console.error);
-            break;
-        default:
-            message.channel.send(`Quelque chose s'est mal passé... Erreur: ${error}`).catch(console.error)
-    }
+const { Player } = require("discord-music-player");
+const player = new Player(client, {
+	leaveOnEnd: false,
+	leaveOnStop: false,
+    leaveOnEmpty: true,
+    timeout: 600000, // 10min
+    quality: "high"
 });
+client.player = player;
 
 
 
