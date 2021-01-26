@@ -623,22 +623,22 @@ class Player {
 			let playlistSongs = [];
 
 			if (!queue) {
-				// Joins the voice channel if needed
-				connection = await voiceChannel.join();
-				// Creates a new guild with data if needed
-				queue = new Queue(voiceChannel.guild.id);
-				queue.connection = connection;
-				// Add the queue to the list
-				this.queues.push(queue);
-			}
-			// Add all songs to the GuildQueue
-			Promise.all(playlist.videos.map(video => {
-				let song = new Song(video, queue, requestedBy);
-				playlistSongs.push(song);
-				queue.songs.push(song);
-			}));
-
+                // Joins the voice channel if needed
+                connection = await voiceChannel.join();
+                // Creates a new guild with data if needed
+                queue = new Queue(voiceChannel.guild.id);
+                queue.connection = connection;
+            }
+            // Add all songs to the GuildQueue
+            Promise.all(playlist.videos.map(video => {
+                let song = new Song(video, queue, requestedBy);
+                playlistSongs.push(song);
+                queue.songs.push(song);
+            }));
+            // Add the queue to the list
+            this.queues.push(queue);
 			// Plays the song
+			
 			if (!isFirstPlay)
 				this._playSong(queue.guildID, !isFirstPlay);
 
