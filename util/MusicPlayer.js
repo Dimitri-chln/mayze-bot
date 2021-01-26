@@ -931,14 +931,15 @@ class Player {
 			// Removes the guild from the guilds list
 			this.queues = this.queues.filter((g) => g.guildID !== guildID);
 
-			// Emits stop event
+			// Emit stop event
 			if (queue.stopped) {
 				if (this.options.leaveOnStop)
 					queue.connection.channel.leave();
 				// Emits the stop event
 				return queue.emit('stop');
 			}
-			// Emits end event
+
+			// Emit end event
 			if (this.options.leaveOnEnd) {
 				// Emits the end event
 				queue.emit('end');
@@ -952,26 +953,26 @@ class Player {
 				}, this.options.timeout);
 				return;
 			}
-			return;
-		}
-		// Emit songChanged event
-		if (!firstPlay) queue.emit('songChanged', (!queue.repeatMode ? queue.songs.shift() : queue.songs[0]), queue.songs[0], queue.skipped, queue.repeatMode);
-		queue.skipped = false;
-		let song = queue.songs[0];
-		// Download the song
-		let Quality = this.options.quality;
-		Quality = Quality.toLowerCase() == 'low' ? 'lowestaudio' : 'highestaudio';
+		} else {
+			// Emit songChanged event
+			if (!firstPlay) queue.emit('songChanged', (!queue.repeatMode ? queue.songs.shift() : queue.songs[0]), queue.songs[0], queue.skipped, queue.repeatMode);
+			queue.skipped = false;
+			let song = queue.songs[0];
+			// Download the song
+			let Quality = this.options.quality;
+			Quality = Quality.toLowerCase() == 'low' ? 'lowestaudio' : 'highestaudio';
 
-		let dispatcher = queue.connection.play(ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 1 << 25 }));
-		queue.dispatcher = dispatcher;
-		// Set volume
-		dispatcher.setVolumeLogarithmic(queue.volume / 200);
-		// When the song ends
-		dispatcher.on('finish', () => {
-			dispatcher.end();
-			// Play the next song
-			return this._playSong(guildID, false);
-		});
+			let dispatcher = queue.connection.play(ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 1 << 25 }));
+			queue.dispatcher = dispatcher;
+			// Set volume
+			dispatcher.setVolumeLogarithmic(queue.volume / 200);
+			// When the song ends
+			dispatcher.on('finish', () => {
+				dispatcher.end();
+				// Play the next song
+				return this._playSong(guildID, false);
+			});
+		}
 	}
 
 };
