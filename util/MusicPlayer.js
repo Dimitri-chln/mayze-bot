@@ -969,7 +969,7 @@ class Player {
         dispatcher.setVolumeLogarithmic(queue.volume / 200);
         // When the song ends
         dispatcher.on('finish', () => {
-            if (queue.length > 1)
+            if (queue.songs.length > 1)
                 // Play the next song
                 return this._playSong(guildID, false);
         });

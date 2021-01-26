@@ -21,7 +21,7 @@ const command = {
 					icon_url: message.client.user.avatarURL()
 				},
 				color: "#010101",
-				description: queue.songs.map((song, i) => `${i === 0 ? "**En cours -**" : `\`${i + 1}.\``} ${song.name}`).join('\n'),
+				description: queue.songs.map((song, i) => `${i === 0 ? "**En cours -**" : `\`${i}.\``} ${song.name}`).join('\n'),
 				footer: {
 					text: "✨ Mayze ✨"
 				}

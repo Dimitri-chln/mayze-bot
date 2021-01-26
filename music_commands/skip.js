@@ -1,0 +1,21 @@
+const { Message } = require("discord.js");
+
+const command = {
+	name: "queue",
+	description: "Obtenir la queue du serveur",
+	aliases: ["q"],
+	args: 0,
+	usage: "",
+	disableSlash: true,
+	/**
+	 * @param {Message} message 
+	 * @param {string[]} args 
+	 * @param {Object[]} options 
+	 */
+	execute: async (message, args, options) => {
+		const song  = await message.client.player.skip(message.guild.id);
+		message.channel(`<a:blackCheck:803603780666523699> | **Musique passée**\n> ${song.name}`).catch(console.error);
+	}
+};
+
+module.exports = command;
