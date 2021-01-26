@@ -718,7 +718,7 @@ class Player {
 		if (!queue) return new MusicPlayerError('QueueIsNull');
 		// Updates volume
 		queue.volume = percent;
-		queue.dispatcher.setVolume(percent / 100);
+		queue.dispatcher.setVolumeLogarithmic(percent / 200);
 		// Resolves guild queue
 		return;
 	}
@@ -966,7 +966,7 @@ class Player {
 			let dispatcher = queue.connection.play(ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 1 << 25 }));
 			queue.dispatcher = dispatcher;
 			// Set volume
-			dispatcher.setVolume(queue.volume / 100);
+			dispatcher.setVolumeLogarithmic(percent / 200);
 			// When the song ends
 			dispatcher.on('finish', () => {
 				dispatcher.end();
