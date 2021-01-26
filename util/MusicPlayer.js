@@ -809,6 +809,8 @@ class Player {
         // Ends the dispatcher
         queue.dispatcher.end();
         queue.skipped = true;
+        queue.songs.shift();
+        this._playSong(guildID, true);
         // Resolves the current song
         return currentSong;
     }
