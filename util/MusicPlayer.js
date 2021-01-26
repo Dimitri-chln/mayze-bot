@@ -462,9 +462,9 @@ class Util {
         const emptyProgress = size - progress;
 
         const progressText = loadedIcon.repeat(progress) + arrowIcon;
-        const emptyProgressText = ' '.repeat(emptyProgress);
+        const emptyProgressText = loadedIcon.repeat(emptyProgress);
 
-        return `[${progressText}${emptyProgressText}][${this.MillisecondsToTime(value)}/${this.MillisecondsToTime(maxValue)}]`;
+        return `[[${progressText}](https://google.com)${emptyProgressText}][${this.MillisecondsToTime(value)}/${this.MillisecondsToTime(maxValue)}]`;
     };
 
 
@@ -907,7 +907,7 @@ class Player {
     * @param {String} loadedIcon Loaded Icon
     * @returns {String}
     */
-    createProgressBar(guildID, barSize = 20, arrowIcon = '>', loadedIcon = '=') {
+    createProgressBar(guildID, barSize = 20, arrowIcon = '🔘', loadedIcon = '━') {
         let queue = this.queues.find((g) => g.guildID === guildID);
         if (!queue) return new MusicPlayerError('QueueIsNull');
 
