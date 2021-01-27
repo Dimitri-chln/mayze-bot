@@ -300,10 +300,10 @@ client.login(process.env.TOKEN);
 // MUSIC CODE
 const Player = require("./util/MusicPlayer.js");
 const player = new Player(client, {
-	leaveOnEnd: true,
-	leaveOnStop: true,
+	leaveOnEnd: false,
+	leaveOnStop: false,
     leaveOnEmpty: true,
-    timeout: 120000, // 2min
+    timeout: 600000, // 10min
     quality: "high"
 });
 client.player = player;
