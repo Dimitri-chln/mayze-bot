@@ -472,7 +472,7 @@ class Util {
 
 
 
-const ytdl = require('ytdl-core');
+const ytdl = require('ytdl-core-discord');
 const mergeOptions = require('merge-options');
 const ytsr = require('ytsr');
 const { VoiceChannel, version, User } = require("discord.js");
@@ -898,6 +898,24 @@ class Player {
 		return queue.songs;
 	}
 
+	/**
+	 * Seeks timestamp in the playing song
+	 * @param {string} guildID
+	 * @param {number} time The time in milliseconds
+	 */
+	seek(guildID, time) {
+		// Gets guild queue
+		let queue = this.queues.find((g) => g.guildID === guildID);
+		if (!queue) return new MusicPlayerError('QueueIsNull');
+
+		let currentSong = queue.songs[0];
+		queue.songs.unshift(currentSong);
+		queue.dispatcher.end();
+		this._playSong(guildID, false, time);
+
+		return currentSong;
+	}
+
 
 	/**
 	* Creates a progress bar per current playing song.
@@ -923,7 +941,7 @@ class Player {
 	 * @param {string} guildID
 	 * @param {Boolean} firstPlay Whether the function was called from the play() one
 	 */
-	async _playSong(guildID, firstPlay) {
+	async _playSong(guildID, firstPlay, begin = 0) {
 		// Gets guild queue
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return;
@@ -963,7 +981,7 @@ class Player {
 			let Quality = this.options.quality;
 			Quality = Quality.toLowerCase() == 'low' ? 'lowestaudio' : 'highestaudio';
 
-			let dispatcher = queue.connection.play(ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 1 << 25 }), { bitrate: 96000, higWaterMark: 50 });
+			let dispatcher = queue.connection.play(ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 50, begin: begin }), { bitrate: 96000, higWaterMark: 50 });
 			queue.dispatcher = dispatcher;
 			// Set volume
 			dispatcher.setVolumeLogarithmic(queue.volume / 200);
@@ -977,4 +995,4 @@ class Player {
 
 };
 
-module.exports = Player;
+module.exports = { Player, Util };
