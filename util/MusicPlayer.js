@@ -963,10 +963,10 @@ class Player {
 			let Quality = this.options.quality;
 			Quality = Quality.toLowerCase() == 'low' ? 'lowestaudio' : 'highestaudio';
 
-			let dispatcher = queue.connection.play(ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 1 << 25 }), { bitrate: 96000, higWaterMark: 50 });
+			let dispatcher = queue.connection.play(ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 1 << 25 }), { bitrate: 192000, higWaterMark: 50 });
 			queue.dispatcher = dispatcher;
 			// Set volume
-			dispatcher.setVolumeLogarithmic(percent / 200);
+			dispatcher.setVolumeLogarithmic(queue.volume / 200);
 			// When the song ends
 			dispatcher.on('finish', () => {
 				// Play the next song
