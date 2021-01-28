@@ -388,7 +388,9 @@ class Util {
 
 				// Callback on invalid duration
 				if (typeof video.duration != 'number') {
-					video.duration = parseInt(video.duration) || 0;
+					console.log(video.duration)
+					video.duration = parseInt(video.duration);
+					if (isNaN(video.duration)) video.duration = 0;
 				}
 				console.log(video.duration)
 				let duration = new Date(video.duration * 1000).toISOString().substr(11, 8);
