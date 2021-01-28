@@ -6,13 +6,13 @@ const Discord = require("discord.js");
 const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEMBERS", "GUILD_PRESENCES" ]);
 const client = new Discord.Client({ fetchAllMembers: true, partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
 
-// if (process.env.HOST !== "HEROKU") {
-// 	const shellExec = require("./util/shellExec.js");
-// 	const output = shellExec("heroku pg:credentials:url --app mayze-bot");
-// 	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
-// 	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
-// 	process.env.DATABASE_URL = connectionURL;
-// }
+if (process.env.HOST !== "HEROKU") {
+	const shellExec = require("./util/shellExec.js");
+	const output = shellExec("heroku pg:credentials:url --app mayze-bot");
+	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
+	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
+	process.env.DATABASE_URL = connectionURL;
+}
 const pg = require("pg");
 client.pg = newPgClient();
 client.pg.connect().then(() => console.log("Connected to the database")).catch(console.error);
@@ -128,10 +128,7 @@ client.on("message", async message => {
 		}
 	}
 
-	for (const autoresponse of client.autoresponses) {
-		try { autoresponse.execute(message); }
-		catch (err) { console.error(err); }
-	}
+	client.autoresponses.forEach(async autoresponse => autoresponse.execute(message).catch(console.error));
 });
 
 client.ws.on("INTERACTION_CREATE", async interaction => {
@@ -169,14 +166,15 @@ async function processCommand(command, message, args, options) {
 		}
 	}
 
-	try {
-		command.execute(message, args, options);
+	command.execute(message, args, options)
+	.then(() => {
 		timestamps.set(message.author.id, now);
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-	} catch (err) {
+	})
+	.catch(err => {
 		console.error(err);
 		message.channel.send("Quelque chose s'est mal passé en exécutant la commande :/").catch(console.error);
-	}
+	});
 }
 
 client.on("messageReactionAdd", async (reaction, user) => {
