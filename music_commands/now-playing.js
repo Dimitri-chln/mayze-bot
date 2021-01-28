@@ -35,9 +35,9 @@ const command = {
 			}
 		}).catch(console.error);
 
-		const timer = setInterval(updateMsg, 10000);
 		let previousTimer = message.client.player.npTimers[message.guild.id];
 		if (previousTimer) clearInterval(previousTimer);
+		const timer = setInterval(updateMsg, 10000);
 		message.client.player.npTimers[message.guild.id] = timer;
 
 		queue.on("end", () => clearInterval(timer));
