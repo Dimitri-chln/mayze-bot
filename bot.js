@@ -306,7 +306,7 @@ const player = new Player(client, {
     timeout: 600000, // 10min
     quality: "high"
 });
-client.player = player;
+client.player = { ...player, npTimers: [] };
 
 const pokedex = require("oakdex-pokedex");
 const values = pokedex.allPokemon().sort((a, b) => a.national_id - b.national_id).map(p => p.catch_rate);
