@@ -984,7 +984,10 @@ class Player {
 			let Quality = this.options.quality;
 			Quality = Quality.toLowerCase() == 'low' ? 'lowestaudio' : 'highestaudio';
 
-			let dispatcher = queue.connection.play(await ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 1 << 25 }), { type: "opus", seek: queue.seek, bitrate: 96000, higWaterMark: 50, volume: false });
+			let stream = await ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 1 << 25, begin: queue.seek }).catch(console.error);
+			if (!stream) return this._playSong(guildID, false);
+
+			let dispatcher = queue.connection.play(stream, { type: "opus", bitrate: 96000, higWaterMark: 50, volume: false });
 			queue.dispatcher = dispatcher;
 			queue.seek = 0;
 			// Set volume
