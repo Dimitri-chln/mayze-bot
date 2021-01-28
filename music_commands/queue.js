@@ -13,23 +13,34 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options) => {
+		const pagination = require("../util/pagination");
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
 		
 		const queue = await message.client.player.getQueue(message.guild.id);
-		message.channel.send({
-			embed: {
-				author: {
-					name: `Queue de ${message.guild.name}`,
-					icon_url: message.client.user.avatarURL()
-				},
-				color: "#010101",
-				description: queue.songs.map((song, i) => `${i === 0 ? "**En cours -**" : `\`${i}.\``} ${song.name}`).join('\n'),
-				footer: {
-					text: "✨ Mayze ✨"
-				}
-			}
-		}).catch(console.error);
+
+		const songsPerPage = 15;
+		let pages = [];
+		let embed = new MessageEmbed()
+			.setAuthor(`Queue de ${message.guild.name}`, message.client.user.avatarURL())
+			.setColor("#010101")
+			.setDescription("*Aucune musique*");
+		if (!queue.songs.length) pages.push(embed);
+
+		for (i = 0; i < queue.songs.length; i += songsPerPage) {
+			embed = new MessageEmbed()
+			.setAuthor(`Queue de ${message.guild.name}`, message.client.user.avatarURL())
+			.setColor("#010101")
+			.setDescription(queue.songs.slice(i, i + songsPerPage).map((song, i) => `${i === 0 ? "**En cours -**" : `\`${i}.\``} ${song.name}${i === 0 ? "\n" : ""}`).join("\n"));
+			pages.push(embed);
+		};
+		
+		try {
+			pagination(message, pages);
+		} catch (err) {
+			console.error(err);
+			message.channel.send("Quelque chose s'est mal passé en créant le paginateur :/").catch(console.error);
+		}
 	}
 };
 
