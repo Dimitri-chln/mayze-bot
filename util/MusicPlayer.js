@@ -140,6 +140,11 @@ class Queue extends EventEmitter {
 		 */
 		this.skipped = false;
 		/**
+		 * The start of the audio to seek
+		 * @type {number}
+		 */
+		this.seek = 0;
+		/**
 		 * The stream volume.
 		 * @type {Number}
 		 */
@@ -908,12 +913,11 @@ class Player {
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return new MusicPlayerError('QueueIsNull');
 
-		let currentSong = queue.songs[0];
-		queue.songs.unshift(currentSong);
 		queue.dispatcher.end();
-		this._playSong(guildID, false, time);
+		queue.seek = time;
+		this._playSong(guildID, false);
 
-		return currentSong;
+		return queue.songs[0];
 	}
 
 
@@ -974,17 +978,19 @@ class Player {
 			}
 		} else {
 			// Emit songChanged event
-			if (!firstPlay) queue.emit('songChanged', (!queue.repeatMode ? queue.songs.shift() : queue.songs[0]), queue.songs[0], queue.skipped, queue.repeatMode);
+			if (!firstPlay && queue.seek === 0) queue.emit('songChanged', (!queue.repeatMode ? queue.songs.shift() : queue.songs[0]), queue.songs[0], queue.skipped, queue.repeatMode);
 			queue.skipped = false;
 			let song = queue.songs[0];
 			// Download the song
 			let Quality = this.options.quality;
 			Quality = Quality.toLowerCase() == 'low' ? 'lowestaudio' : 'highestaudio';
 
-			let dispatcher = queue.connection.play(ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 50, begin: begin }), { type: "opus", bitrate: 96000, higWaterMark: 50 });
+			let dispatcher = queue.connection.play(await ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 50, begin: queue.seek }), { type: "opus", bitrate: 96000, higWaterMark: 50 });
 			queue.dispatcher = dispatcher;
+			queue.seek = 0;
 			// Set volume
-			dispatcher.setVolumeLogarithmic(queue.volume / 200);
+			// dispatcher.setVolumeLogarithmic(queue.volume / 200);
+			
 			// When the song ends
 			dispatcher.on('finish', () => {
 				// Play the next song
