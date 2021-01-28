@@ -109,7 +109,7 @@ const command = {
 				
 				async function sendMsg(msgToDelete) {
 					if (msgToDelete) msgToDelete.delete().catch(console.error);
-					const n = notesToSend.pop();
+					const n = notesToSend.shift();
 					const m = await message.channel.send({
 						embed: {
 							author: {
