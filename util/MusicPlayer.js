@@ -983,9 +983,8 @@ class Player {
 			}
 
 			// Emit end event
+			queue.emit('end');
 			if (this.options.leaveOnEnd) {
-				// Emits the end event
-				queue.emit('end');
 				// Timeout
 				let connectionChannel = queue.connection.channel;
 				setTimeout(() => {
