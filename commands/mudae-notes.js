@@ -63,7 +63,7 @@ const command = {
 				break;
 			}
 			case "remove": {
-				const noteToRemove = notes[parseInt(note, 10) - 1];
+				const noteToRemove = notes[parseInt(note) - 1];
 				if (!noteToRemove) return message.reply("cette note n'existe pas").catch(console.error);
 				const res = await message.client.pg.query(`DELETE FROM mudae_notes WHERE user_id = '${message.author.id}' AND note = '${noteToRemove.note}'`).catch(console.error);
 				if (!res) return message.channel.send("Quelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);

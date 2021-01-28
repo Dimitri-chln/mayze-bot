@@ -17,7 +17,7 @@ const command = {
 		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
 
         const songID = args
-            ? parseInt(args[0], 10)
+            ? parseInt(args[0])
             : options[0].value;
         if (isNaN(songID) || songID < 0) return message.reply("le numéro de la chanson doit être positif").catch(console.error);
 

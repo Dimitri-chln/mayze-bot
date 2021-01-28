@@ -99,7 +99,7 @@ const command = {
 				break;
 			case "score":
 				const points = args
-					? parseInt(args[1], 10)
+					? parseInt(args[1])
 					: options[0].options[0].value;
 				if (!gameData) return message.reply("tu n'as pas de partie en cours").catch(console.error);
 				if (isNaN(points)) return message.reply("le score doit être un nombre").catch(console.error);

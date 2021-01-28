@@ -35,7 +35,7 @@ const command = {
 		if (params.includes("-shiny")) pokemons = pokemons.filter(p => p.shiny);
 		if (params.includes("-alolan")) pokemons = pokemons.filter(p => p.pokedex_name.includes("dU+0027Alola"));
 		if (params.includes("-galarian")) pokemons = pokemons.filter(p => p.pokedex_name.includes("de Galar"));
-		if (params.includes("-id")) pokemons = params[params.indexOf("-id") + 1] ? pokemons.filter(p => p.pokedex_id === parseInt(params[params.indexOf("-id") + 1], 10)) : pokemons;
+		if (params.includes("-id")) pokemons = params[params.indexOf("-id") + 1] ? pokemons.filter(p => p.pokedex_id === parseInt(params[params.indexOf("-id") + 1])) : pokemons;
 		if (params.includes("-name")) pokemons = pokemons.filter(p => new RegExp(params[params.indexOf("-name") + 1], "i").test(pokedex.findPokemon(p.pokedex_id).names.fr));
 		
 		const pkmPerPage = 15;

@@ -106,23 +106,23 @@ const command = {
 			const [ , colorUpdate, value ] = m.content.match(regex);
 			switch(colorUpdate.toLowerCase()) {
 				case "r":
-					color[0] = color[0] + parseInt(value, 10) >= 0
-						? color[0] + parseInt(value, 10) <= 255
-							? color[0] + parseInt(value, 10)
+					color[0] = color[0] + parseInt(value) >= 0
+						? color[0] + parseInt(value) <= 255
+							? color[0] + parseInt(value)
 							: 255
 						: 0;
 					break;
 				case "g":
-					color[1] = color[1] + parseInt(value, 10) >= 0
-						? color[1] + parseInt(value, 10) <= 255
-							? color[1] + parseInt(value, 10)
+					color[1] = color[1] + parseInt(value) >= 0
+						? color[1] + parseInt(value) <= 255
+							? color[1] + parseInt(value)
 							: 255
 						: 0;
 					break;
 				case "b":
-					color[2] = color[2] + parseInt(value, 10) >= 0
-						? color[2] + parseInt(value, 10) <= 255
-							? color[2] + parseInt(value, 10)
+					color[2] = color[2] + parseInt(value) >= 0
+						? color[2] + parseInt(value) <= 255
+							? color[2] + parseInt(value)
 							: 255
 						: 0;
 					break;

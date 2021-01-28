@@ -35,7 +35,7 @@ const command = {
 	 */
 	execute: async (message, args, options) => {
 		let number = args
-			? parseInt(args[0], 10)
+			? parseInt(args[0])
 			: options[0].value;
 		if (isNaN(number) || number <= 0 || number > 100)
 			return message.reply("entre un nombre compris entre 1 et 100").catch(console.error);

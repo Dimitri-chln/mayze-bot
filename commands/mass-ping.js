@@ -34,7 +34,7 @@ const command = {
 			: message.client.users.cache.get(options[0].value);
 		if (!user) return message.reply("mentionne une personnne").catch(console.error);
 		const n = args
-			? parseInt(args[1], 10) || 10
+			? parseInt(args[1]) || 10
 			: parseInt((options[1] || {}).value) || 10;
 		if (isNaN(n) || n < 1 || n > 100) return message.reply("le nombre doit être compris entre 1 et 100").catch(console.error);
 

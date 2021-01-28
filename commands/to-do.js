@@ -33,7 +33,7 @@ const command = {
 				}
 				break;
 			case "remove":
-				const index = parseInt(task, 10);
+				const index = parseInt(task);
 				if (isNaN(index) || index < 1 ) return message.reply("le deuxième argument doit être un nombre positif").catch(console.error);
 				{
 					const res = await message.client.pg.query(`DELETE FROM to_do WHERE id=${index}`).catch(console.error);
