@@ -390,9 +390,7 @@ class Util {
 				if (typeof video.duration != 'number') {
 					video.duration = parseInt(video.duration) || 0;
 				}
-				let date = new Date(null);
-				date.setSeconds(video.duration);
-				let duration = date.toISOString().substr(11, 8);
+				let duration = new Date(video.duration * 1000).toISOString().substr(11, 8);
 				duration = duration.replace(/^0(?:0:0?)?/, '');
 
 				return {
