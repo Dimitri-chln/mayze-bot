@@ -37,6 +37,8 @@ const command = {
 
 		const timer = setInterval(updateMsg, 10000);
 		queue.on("songChanged", updateMsg);
+		queue.on("end", () => clearInterval(timer));
+		queue.on("channelEmpty", () => clearInterval(timer));
 		queue.on("stop", () => clearInterval(timer));
 
 		async function updateMsg() {
