@@ -37,7 +37,7 @@ const command = {
 		const timer = setInterval(updateMsg, 5000);
 		message.client.player.on("songChanged", () => clearInterval(timer));
 
-		function updateMsg() {
+		async function updateMsg() {
 			const newSong = await message.client.player.nowPlaying(message.guild.id);
 			msg.edit({
 				embed: {
