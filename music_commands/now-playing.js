@@ -37,6 +37,7 @@ const command = {
 
 		const timer = setInterval(updateMsg, 10000);
 		queue.on("songChanged", () => clearInterval(timer));
+		queue.on("stop", () => clearInterval(timer));
 
 		async function updateMsg() {
 			const newSong = await message.client.player.nowPlaying(message.guild.id);
