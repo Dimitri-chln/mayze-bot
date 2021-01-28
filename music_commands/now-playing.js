@@ -35,7 +35,7 @@ const command = {
 			}
 		}).catch(console.error);
 
-		const timer = setInterval(updateMsg, 5000);
+		const timer = setInterval(updateMsg, 10000);
 		queue.on("songChanged", () => clearInterval(timer));
 
 		async function updateMsg() {

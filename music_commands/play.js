@@ -5,7 +5,7 @@ const command = {
 	description: "Jouer une musique",
 	aliases: ["p"],
 	args: 1,
-	usage: "<recherche>",
+	usage: "<musique>",
 	cooldown: 5,
 	disableSlash: true,
 	/**
