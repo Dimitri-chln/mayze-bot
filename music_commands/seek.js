@@ -18,7 +18,7 @@ const command = {
 		const time = args
 			? args[0]
 			: options[0].value;
-		const timeRegex = /(\d+):([0-5]\d):([0-5]\d)/;
+		const timeRegex = /(?:(\d+):)?([0-5]?\d):([0-5]\d)/;
 		if (!timeRegex.test(time)) return message.reply("le format est incorrect (hh:mm:ss)").catch(console.error);
 
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
