@@ -465,7 +465,8 @@ class Util {
 	static buildBar(value, maxValue, size, loadedIcon, arrowIcon) {
 		const percentage = value / maxValue;
 		const progress = Math.round((size * percentage));
-		const emptyProgress = size - progress;
+		console.log(size - progress);
+		const emptyProgress = size > progress ? size - progress : size;
 
 		const progressText = loadedIcon.repeat(progress) + arrowIcon;
 		const emptyProgressText = loadedIcon.repeat(emptyProgress);
