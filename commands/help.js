@@ -34,13 +34,17 @@ const command = {
 						icon_url: message.client.user.avatarURL()
 					},
 					color: "#010101",
-					description: commands.filter(cmd => !cmd.ownerOnly).map(cmd => cmd.name).join(", "),
+					description: commands.filter(cmd => !cmd.ownerOnly && !cmd.category).map(cmd => cmd.name).join(", "),
+					fields: splitCategories(Array.from(commands.filter(cmd => !cmd.ownerOnly && cmd.category)).map(e => e[1])).map(category => {
+						return { name: category.name.replace(/^./, a => a.toUpperCase()), value: category.commands.map(cmd => cmd.name).join(", "), inline: true };
+					}),
 					footer: {
 						text: "✨Mayze✨"
 					}
 				}
 			}).catch(console.error);
 		} else {
+
 			const command = commands.get(commandName) || commands.find(c => c.aliases && c.aliases.includes(commandName));
 			if (!command) message.reply("cette commande n'existe pas").catch(console.error);
 			let data = `**Nom:** \`${command.name}\``;
@@ -60,6 +64,17 @@ const command = {
 					}
 				}
 			}).catch(console.error);
+		}
+
+		function splitCategories(commands) {
+			let categories = [];
+			let category  = commands[0] ? commands[0].category : null;
+			while (category) {
+				categories.push({ name: category, commands: commands.filter(cmd => cmd.category === category) });
+				commands = commands.filter(cmd => cmd.category !== category);
+				category = commands[0] ? commands[0].category : null;
+			}
+			return categories;
 		}
 	}
 };
