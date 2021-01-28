@@ -878,11 +878,7 @@ class Player {
 		let songFound = null;
 		if (typeof songID == 'number') {
 			songFound = queue.songs[songID];
-			if (position <= queue.songs.length) {
-					let k = position - queue.songs.length + 1;
-					while (k--) queue.songs.push(undefined);
-				queue.songs.splice(position, 0, queue.songs.splice(songID, 1)[0]);
-			}
+			queue.songs.splice(position, 0, queue.songs.splice(songID, 1)[0]);
 		} else return new MusicPlayerError('NotANumber');
 
 		return songFound;
