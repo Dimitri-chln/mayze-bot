@@ -15,6 +15,7 @@ const command = {
 	execute: async (message, args, options) => {
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
+		const queue = message.client.player.getQueue(message.guild.id);
 		
 		const song = await message.client.player.nowPlaying(message.guild.id);
 		const msg = await message.channel.send({
@@ -35,7 +36,7 @@ const command = {
 		}).catch(console.error);
 
 		const timer = setInterval(updateMsg, 5000);
-		message.client.player.on("songChanged", () => clearInterval(timer));
+		queue.on("songChanged", () => clearInterval(timer));
 
 		async function updateMsg() {
 			const newSong = await message.client.player.nowPlaying(message.guild.id);

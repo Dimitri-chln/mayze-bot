@@ -143,7 +143,7 @@ class Queue extends EventEmitter {
 		 * The start of the audio to seek
 		 * @type {number}
 		 */
-		this.seek = "0:00";
+		this.seek = 0;
 		/**
 		 * The stream volume.
 		 * @type {Number}
@@ -907,7 +907,7 @@ class Player {
 	/**
 	 * Seeks timestamp in the playing song
 	 * @param {string} guildID
-	 * @param {number} time The time (HH:MM:SS)
+	 * @param {number} time The time in milliseconds
 	 */
 	seek(guildID, time) {
 		// Gets guild queue
@@ -986,9 +986,9 @@ class Player {
 			let Quality = this.options.quality;
 			Quality = Quality.toLowerCase() == 'low' ? 'lowestaudio' : 'highestaudio';
 
-			let dispatcher = queue.connection.play(await ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 50, begin: queue.seek }), { type: "opus", bitrate: 96000, higWaterMark: 50, volume: false });
+			let dispatcher = queue.connection.play(await ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 1 << 25 }), { type: "opus", seek: queue.seek / 1000, bitrate: 96000, higWaterMark: 50, volume: false });
 			queue.dispatcher = dispatcher;
-			queue.seek = "0:00";
+			queue.seek = 0;
 			// Set volume
 			// dispatcher.setVolumeLogarithmic(queue.volume / 200);
 

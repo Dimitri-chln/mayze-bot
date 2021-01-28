@@ -25,7 +25,8 @@ const command = {
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
 		
 		const { Util } = require("../util/MusicPlayer");
-		const song = message.client.player.seek(message.guild.id, time);
+		const timeInMs = Util.TimeToMilliseconds(time);
+		const song = message.client.player.seek(message.guild.id, timeInMs);
 		message.channel.send(`<a:blackCheck:803603780666523699> | **Temps modifié (${time})**\n> ${song.name}`).catch(console.error);
 	}
 };
