@@ -469,7 +469,7 @@ class Util {
 		const progressText = loadedIcon.repeat(progress) + arrowIcon;
 		const emptyProgressText = loadedIcon.repeat(emptyProgress);
 
-		return `[[${progressText}](https://google.com)${emptyProgressText}][${this.MillisecondsToTime(value)}/${this.MillisecondsToTime(maxValue)}]`;
+		return `[${progressText}](https://google.com)${emptyProgressText} [${this.MillisecondsToTime(value)}/${this.MillisecondsToTime(maxValue)}]`;
 	};
 
 
