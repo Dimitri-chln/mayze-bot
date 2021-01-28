@@ -3,7 +3,7 @@ const { Message } = require("discord.js");
 const command = {
 	name: "reload",
 	description: "Recharger une commande",
-	aliases: "rl",
+	aliases: ["rl"],
 	args: 1,
 	usage: "<commande>",
 	ownerOnly: true,
