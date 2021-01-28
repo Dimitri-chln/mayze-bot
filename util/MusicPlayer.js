@@ -814,7 +814,7 @@ class Player {
 		// Ends the dispatcher
 		queue.dispatcher.end();
 		queue.skipped = true;
-		this._playSong(guildID, false);
+		this._playSong(guildID, true);
 		// Resolves the current song
 		return currentSong;
 	}
@@ -979,14 +979,14 @@ class Player {
 			}
 		} else {
 			// Emit songChanged event
-			if (!firstPlay && queue.seek == 0) queue.emit('songChanged', (!queue.repeatMode ? queue.songs.shift() : queue.songs[0]), queue.songs[0], queue.skipped, queue.repeatMode);
+			if (!firstPlay) queue.emit('songChanged', (!queue.repeatMode ? queue.songs.shift() : queue.songs[0]), queue.songs[0], queue.skipped, queue.repeatMode);
 			queue.skipped = false;
 			let song = queue.songs[0];
 			// Download the song
 			let Quality = this.options.quality;
 			Quality = Quality.toLowerCase() == 'low' ? 'lowestaudio' : 'highestaudio';
 
-			let dispatcher = queue.connection.play(await ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 1 << 25 }), { type: "opus", seek: queue.seek / 1000, bitrate: 96000, higWaterMark: 50, volume: false });
+			let dispatcher = queue.connection.play(await ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 1 << 25 }), { type: "opus", seek: queue.seek, bitrate: 96000, higWaterMark: 50, volume: false });
 			queue.dispatcher = dispatcher;
 			queue.seek = 0;
 			// Set volume
