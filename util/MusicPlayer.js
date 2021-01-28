@@ -390,6 +390,7 @@ class Util {
 				if (typeof video.duration != 'number') {
 					video.duration = parseInt(video.duration) || 0;
 				}
+				console.log(video.duration)
 				let duration = new Date(video.duration * 1000).toISOString().substr(11, 8);
 				duration = duration.replace(/^0(?:0:0?)?/, '');
 
@@ -443,7 +444,7 @@ class Util {
 			s = 0, m = 1;
 
 		while (items.length > 0) {
-			s += m * parseInt(items.pop(), 10);
+			s += m * parseInt(items.pop());
 			m *= 60;
 		}
 
