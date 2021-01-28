@@ -673,7 +673,7 @@ class Player {
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return new MusicPlayerError('QueueIsNull');
 		// Pauses the dispatcher
-		queue.dispatcher.pause(true);
+		queue.dispatcher.pause();
 		queue.playing = false;
 		// Resolves the guild queue
 		return queue.songs[0];
@@ -862,6 +862,31 @@ class Player {
 		queue.repeatMode = !queue.repeatMode;
 		// Resolve
 		return queue.repeatMode;
+	}
+
+	/**
+	 * Moves a song to another position in the queue
+	 * @param {string} guildID 
+	 * @param {number} songID 
+	 * @param {number} position 
+	 */
+	move(guildID, songID, position) {
+		// Gets guild queue
+		let queue = this.queues.find((g) => g.guildID === guildID);
+		if (!queue) return new MusicPlayerError('QueueIsNull');
+
+		let songFound = null;
+		if (typeof songID == 'number') {
+			songFound = queue.songs[songID];
+			if (position >= queue.songs.length) {
+					let k = position - queue.songs.length + 1;
+					while (k--) queue.songs.push(undefined);
+				queue.songs.splice(position, 0, queue.songs.splice(songID, 1)[0]);
+			}
+		} else return new MusicPlayerError('NotANumber');
+
+		return songFound;
+		
 	}
 
 	/**
