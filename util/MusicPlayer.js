@@ -915,7 +915,7 @@ class Player {
 
 		queue.dispatcher.end();
 		queue.seek = time;
-		this._playSong(guildID, false);
+		this._playSong(guildID, true);
 
 		return queue.songs[0];
 	}
@@ -945,7 +945,7 @@ class Player {
 	 * @param {string} guildID
 	 * @param {Boolean} firstPlay Whether the function was called from the play() one
 	 */
-	async _playSong(guildID, firstPlay, begin = 0) {
+	async _playSong(guildID, firstPlay) {
 		// Gets guild queue
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return;
@@ -978,7 +978,7 @@ class Player {
 			}
 		} else {
 			// Emit songChanged event
-			if (!firstPlay && queue.seek === 0) queue.emit('songChanged', (!queue.repeatMode ? queue.songs.shift() : queue.songs[0]), queue.songs[0], queue.skipped, queue.repeatMode);
+			if (!firstPlay && queue.seek == 0) queue.emit('songChanged', (!queue.repeatMode ? queue.songs.shift() : queue.songs[0]), queue.songs[0], queue.skipped, queue.repeatMode);
 			queue.skipped = false;
 			let song = queue.songs[0];
 			// Download the song
@@ -990,7 +990,7 @@ class Player {
 			queue.seek = 0;
 			// Set volume
 			// dispatcher.setVolumeLogarithmic(queue.volume / 200);
-			
+
 			// When the song ends
 			dispatcher.on('finish', () => {
 				// Play the next song
