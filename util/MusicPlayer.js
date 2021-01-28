@@ -810,7 +810,7 @@ class Player {
 		// Gets guild queue
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return new MusicPlayerError('QueueIsNull');
-		let currentSong = queue.songs[0];
+		let currentSong = queue.songs.shift();
 		// Ends the dispatcher
 		queue.dispatcher.end();
 		queue.skipped = true;
