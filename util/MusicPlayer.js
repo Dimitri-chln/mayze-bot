@@ -390,9 +390,9 @@ class Util {
 				if (typeof video.duration != 'number') {
 					console.log(video.duration)
 					video.duration = parseInt(video.duration);
-					if (isNaN(video.duration)) video.duration = 0;
 				}
-				console.log(video.duration)
+
+				if (typeof video.duration != 'number') return null;
 				let duration = new Date(video.duration * 1000).toISOString().substr(11, 8);
 				duration = duration.replace(/^0(?:0:0?)?/, '');
 
