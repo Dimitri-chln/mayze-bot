@@ -55,7 +55,10 @@ const command = {
 						text: "✨ Mayze ✨"
 					}
 				}
-			}).catch(console.error);
+			}).catch(err => {
+				console.error(err);
+				clearInterval(timer);
+			});
 		}
 	}
 };
