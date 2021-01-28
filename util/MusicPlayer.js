@@ -811,10 +811,9 @@ class Player {
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return new MusicPlayerError('QueueIsNull');
 		let currentSong = queue.songs[0];
+		queue.skipped = true;
 		// Ends the dispatcher
 		queue.dispatcher.end();
-		queue.skipped = true;
-		this._playSong(guildID, false);
 		// Resolves the current song
 		return currentSong;
 	}
@@ -914,9 +913,8 @@ class Player {
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return new MusicPlayerError('QueueIsNull');
 
-		queue.dispatcher.end();
 		queue.seek = time;
-		this._playSong(guildID, true);
+		queue.dispatcher.end();
 
 		return queue.songs[0];
 	}
@@ -951,7 +949,7 @@ class Player {
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return;
 		// If there isn't any music in the queue
-		if (queue.songs.length < 2 && !firstPlay && !queue.repeatMode) {
+		if (queue.songs.length < 2 && !firstPlay && !queue.repeatMode && queue.seek == 0) {
 			// Removes the guild from the guilds list
 			this.queues = this.queues.filter((g) => g.guildID !== guildID);
 
