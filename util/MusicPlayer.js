@@ -143,7 +143,7 @@ class Queue extends EventEmitter {
 		 * The start of the audio to seek
 		 * @type {number}
 		 */
-		this.seek = 0;
+		this.seek = "0:00";
 		/**
 		 * The stream volume.
 		 * @type {Number}
@@ -624,7 +624,7 @@ class Player {
 			// Searches the playlist
 			let playlist = await Util.getVideoFromPlaylist(playlistLink, ytsr, maxSongs);
 			let connection = (queue || {}).connection;
-			let isFirstPlay = queue ? true : false;
+			let isFirstPlay = queue ? false : true;
 			let playlistSongs = [];
 
 			if (!queue) {
@@ -635,20 +635,21 @@ class Player {
                 queue.connection = connection;
             }
             // Add all songs to the GuildQueue
-            Promise.all(playlist.videos.map(video => {
+            playlist.videos.map(video => {
                 let song = new Song(video, queue, requestedBy);
                 playlistSongs.push(song);
                 queue.songs.push(song);
-            }));
-            // Add the queue to the list
-            this.queues.push(queue);
-			// Plays the song
+            });
 			
-			if (!isFirstPlay)
-				this._playSong(queue.guildID, !isFirstPlay);
+			if (isFirstPlay) {
+				// Add the queue to the list
+            	this.queues.push(queue);
+				// Plays the song
+				this._playSong(queue.guildID, isFirstPlay);
+			}
 
 			return {
-				error: null, song: isFirstPlay ? null : queue.songs[0], playlist: {
+				error: null, song: isFirstPlay ? queue.songs[0] : null, playlist: {
 					link: playlist.link,
 					playlistSongs,
 					videoCount: playlist.videoCount,
@@ -906,7 +907,7 @@ class Player {
 	/**
 	 * Seeks timestamp in the playing song
 	 * @param {string} guildID
-	 * @param {number} time The time in milliseconds
+	 * @param {number} time The time (HH:MM:SS)
 	 */
 	seek(guildID, time) {
 		// Gets guild queue
@@ -985,9 +986,9 @@ class Player {
 			let Quality = this.options.quality;
 			Quality = Quality.toLowerCase() == 'low' ? 'lowestaudio' : 'highestaudio';
 
-			let dispatcher = queue.connection.play(await ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 50, begin: queue.seek }), { type: "opus", bitrate: 96000, higWaterMark: 50 });
+			let dispatcher = queue.connection.play(await ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 50, begin: queue.seek }), { type: "opus", bitrate: 96000, higWaterMark: 50, volume: false });
 			queue.dispatcher = dispatcher;
-			queue.seek = 0;
+			queue.seek = "0:00";
 			// Set volume
 			// dispatcher.setVolumeLogarithmic(queue.volume / 200);
 

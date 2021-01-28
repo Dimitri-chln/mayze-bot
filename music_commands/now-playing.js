@@ -17,7 +17,7 @@ const command = {
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
 		
 		const song = await message.client.player.nowPlaying(message.guild.id);
-		message.channel.send({
+		const msg = await message.channel.send({
 			embed: {
 				author: {
 					name: "Musique en cours",
@@ -33,7 +33,29 @@ const command = {
 				}
 			}
 		}).catch(console.error);
-		
+
+		const timer = setInterval(updateMsg, 5000);
+		message.client.player.on("songChanged", () => clearInterval(timer));
+
+		function updateMsg() {
+			const newSong = await message.client.player.nowPlaying(message.guild.id);
+			msg.edit({
+				embed: {
+					author: {
+						name: "Musique en cours",
+						icon_url: message.client.user.avatarURL()
+					},
+					thumbnail: {
+						url: newSong.thumbnail
+					},
+					color: "#010101",
+					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${newSong.queue.songs[1] ? newSong.queue.songs[1].name : "Rien"}**`,
+					footer: {
+						text: "✨ Mayze ✨"
+					}
+				}
+			}).catch(console.error);
+		}
 	}
 };
 
