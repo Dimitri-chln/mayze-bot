@@ -470,7 +470,7 @@ class Util {
 		const progressText = loadedIcon.repeat(progress) + arrowIcon;
 		const emptyProgressText = loadedIcon.repeat(emptyProgress);
 
-		return `[${progressText}](https://google.com)${emptyProgressText} [${this.MillisecondsToTime(value)}/${this.MillisecondsToTime(maxValue)}]`;
+		return `[${progressText}](https://google.com)${emptyProgressText} ${this.MillisecondsToTime(value)}/${this.MillisecondsToTime(maxValue)}`;
 	};
 
 
@@ -983,8 +983,9 @@ class Player {
 			}
 
 			// Emit end event
-			queue.emit('end');
 			if (this.options.leaveOnEnd) {
+				// Emits end event
+				queue.emit('end');
 				// Timeout
 				let connectionChannel = queue.connection.channel;
 				setTimeout(() => {

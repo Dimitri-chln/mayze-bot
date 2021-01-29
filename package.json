@@ -15,6 +15,7 @@
     "discord-music-player": "^6.3.6",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
+    "lyrics-finder": "^21.7.0",
     "mathjs": "^9.0.0",
     "oakdex-pokedex": "^0.4.5",
     "pg": "^8.5.1",

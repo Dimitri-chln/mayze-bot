@@ -37,12 +37,12 @@ const command = {
 
 		let previousTimer = message.client.player.npTimers[message.guild.id];
 		if (previousTimer) clearInterval(previousTimer);
-		const timer = setInterval(updateMsg, 10000);
+		const timer = setInterval(updateMsg, 2000);
 		message.client.player.npTimers[message.guild.id] = timer;
 
 		queue.on("end", () => clearInterval(timer));
-		queue.on("channelEmpty", () => clearInterval(timer));
 		queue.on("stop", () => clearInterval(timer));
+		queue.on("channelEmpty", () => clearInterval(timer));
 
 		async function updateMsg() {
 			const newSong = await message.client.player.nowPlaying(message.guild.id);
@@ -53,7 +53,9 @@ const command = {
 						icon_url: message.client.user.avatarURL()
 					},
 					thumbnail: {
-						url: newSong.thumbnail
+						url: newSong.thumbnail,
+						height: 720,
+						width: 1280
 					},
 					color: "#010101",
 					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${newSong.queue.songs[1] ? newSong.queue.songs[1].name : "Rien"}**`,
