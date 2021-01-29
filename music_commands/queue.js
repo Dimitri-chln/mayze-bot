@@ -32,7 +32,7 @@ const command = {
 			embed = new MessageEmbed()
 			.setAuthor(`Queue de ${message.guild.name}`, message.client.user.avatarURL())
 			.setColor("#010101")
-			.setDescription(queue.songs.slice(i, i + songsPerPage).map((song, i) => `${i === 0 ? "**En cours -**" : `\`${i}.\``} ${song.name}${i === 0 ? "\n" : ""}`).join("\n"));
+			.setDescription(queue.songs.slice(i, i + songsPerPage).map((song, j) => `${i + j === 0 ? "**En cours -**" : `\`${i + j}.\``} ${song.name}${i + j === 0 ? "\n" : ""}`).join("\n"));
 			pages.push(embed);
 		};
 		
