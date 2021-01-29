@@ -37,9 +37,10 @@ const command = {
 
 		let previousTimer = message.client.player.npTimers[message.guild.id];
 		if (previousTimer) clearInterval(previousTimer);
-		const timer = setInterval(updateMsg, 2000);
+		const timer = setInterval(updateMsg, 10000);
 		message.client.player.npTimers[message.guild.id] = timer;
 
+		queue.on("songChanged", () => setTimeout(updateMsg, 1000));
 		queue.on("end", () => clearInterval(timer));
 		queue.on("stop", () => clearInterval(timer));
 		queue.on("channelEmpty", () => clearInterval(timer));
