@@ -664,7 +664,7 @@ class Player {
 	 * @param {User} requestedBy The user who requested the song.
 	 * @returns {Promise<Song>}
 	 */
-	async playtop(guildID, voiceChannel, songName, options = {}, requestedBy) {
+	async playskip(guildID, voiceChannel, songName, options = {}, requestedBy) {
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) if ((voiceChannel || {}).type !== 'voice') return new MusicPlayerError('VoiceChannelTypeInvalid', 'song', 'playlist');
 		if (typeof songName !== 'string' || songName.length == 0) return new MusicPlayerError('SongTypeInvalid', 'song');
