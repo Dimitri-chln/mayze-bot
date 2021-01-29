@@ -29,7 +29,7 @@ const command = {
         if (isNaN(position) || position < 0) return message.reply(`la position doit être positive`).catch(console.error);
 		
 		const song = message.client.player.move(message.guild.id, songID, position);
-        if (!song) return message.reply("je n'ai pas trouvé cette musique dans la queue").catch(console.error);
+        if (!song || song.error) return message.reply("je n'ai pas trouvé cette musique dans la queue").catch(console.error);
 		message.channel.send(`<a:blackCheck:803603780666523699> | **Musique déplacée**\n> ${song.name}`).catch(console.error);
 	}
 };
