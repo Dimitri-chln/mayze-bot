@@ -19,8 +19,8 @@ const command = {
 
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		const songName = args
-			? args.length ? args.join(" ") : (isPlaying ? (await message.client.player.nowPlayint(message.guild.id)).name : null)
-			: options[0] ? options[0].value : (isPlaying ? (await message.client.player.nowPlayint(message.guild.id)).name : null);
+			? args.length ? args.join(" ") : (isPlaying ? (await message.client.player.nowPlaying(message.guild.id)).name : null)
+			: options[0] ? options[0].value : (isPlaying ? (await message.client.player.nowPlaying(message.guild.id)).name : null);
 		if (!songName) return message.reply("indique le nom de la chanson").catch(console.error);
 
 		const lyrics = await lyricsFinder(songName);
