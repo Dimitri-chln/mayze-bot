@@ -18,16 +18,15 @@ const command = {
 		
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
-		const queue = message.client.player.getQueue(message.guild.id);
 
         const songID = args
             ? parseInt(args[0])
             : options[0].value;
-        if (isNaN(songID) || songID < 0 || songID >= queue.length) return message.reply(`le numéro de la chanson doit être compris entre 1 et ${queue.length - 1}`).catch(console.error);
+        if (isNaN(songID) || songID < 0) return message.reply(`le numéro de la chanson doit être positif`).catch(console.error);
         const position = args
             ? parseInt(args[1])
             : options[1].value;
-        if (isNaN(position) || position < 0 || position >= queue.length) return message.reply(`la position doit être comprise entre 1 et ${queue.length - 1}`).catch(console.error);
+        if (isNaN(position) || position < 0) return message.reply(`la position doit être positive`).catch(console.error);
 		
 		const song = message.client.player.move(message.guild.id, songID, position);
         if (!song) return message.reply("je n'ai pas trouvé cette musique dans la queue").catch(console.error);

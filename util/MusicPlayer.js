@@ -10,7 +10,8 @@ const customErrors = {
 	'NotANumber': 'The provided argument is not a Number.',
 	'InvalidPlaylist': 'No Playlist was found with that link.',
 	'MaxSongsTypeInvalid': 'The provided argument (MaxSongsTypeInvalid) is not a Number.',
-	'PlaylistTypeInvalid': 'The provided argument (PlaylistURL) was not a String.'
+	'PlaylistTypeInvalid': 'The provided argument (PlaylistURL) was not a String.',
+	'SongNumberInvalid': 'The Song is not in the Guild Queue'
 }
 
 /**
@@ -878,7 +879,8 @@ class Player {
 		let songFound = null;
 		if (typeof songID == 'number') {
 			songFound = queue.songs[songID];
-			queue.songs.splice(position, 0, queue.songs.splice(songID, 1)[0]);
+			if (songFound) queue.songs.splice(position, 0, queue.songs.splice(songID, 1)[0]);
+			else return new MusicPlayerError('SongNumberInvalid');
 		} else return new MusicPlayerError('NotANumber');
 
 		return songFound;
