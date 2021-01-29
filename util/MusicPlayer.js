@@ -608,6 +608,105 @@ class Player {
 
 
 	/**
+	 * Inserts a song in the second position in the queue.
+	 * @param {string} guildID 
+	 * @param {VoiceChannel} voiceChannel The voice channel in which the song will be played.
+	 * @param {string} songName The name of the song to play.
+	 * @param {object} options Search options.
+	 * @param {User} requestedBy The user who requested the song.
+	 * @returns {Promise<Song>}
+	 */
+	async playtop(guildID, voiceChannel, songName, options = {}, requestedBy) {
+		let queue = this.queues.find((g) => g.guildID === guildID);
+		if (!queue) if ((voiceChannel || {}).type !== 'voice') return new MusicPlayerError('VoiceChannelTypeInvalid', 'song', 'playlist');
+		if (typeof songName !== 'string' || songName.length == 0) return new MusicPlayerError('SongTypeInvalid', 'song');
+		if (typeof options !== 'object') return new MusicPlayerError('OptionsTypeInvalid', 'song');
+
+		try {
+			// Searches the song
+			let video = await Util.getVideoBySearch(songName, ytsr, options);
+
+			if (!queue) {
+				// Joins the voice channel
+				let connection = await voiceChannel.join();
+				// Creates a new guild with data
+				queue = new Queue(voiceChannel.guild.id);
+				queue.connection = connection;
+				let song = new Song(video, queue, requestedBy);
+				queue.songs.push(song);
+				// Add the queue to the list
+				this.queues.push(queue);
+				// Plays the song
+				this._playSong(queue.guildID, true);
+
+				return { error: null, song: song };
+
+			} else {
+				let song = new Song(video, queue, requestedBy);
+				// Inserts the song in the 2nd position
+				queue.songs.splice(1, 0, song);
+
+				return { error: null, song: song };
+			}
+		}
+		catch (err) {
+			return new MusicPlayerError('SearchIsNull', 'song');
+		}
+	}
+
+
+	/**
+	 * Adds a song to the Guild Queue and skips to it.
+	 * @param {string} guildID 
+	 * @param {VoiceChannel} voiceChannel The voice channel in which the song will be played.
+	 * @param {string} songName The name of the song to play.
+	 * @param {object} options Search options.
+	 * @param {User} requestedBy The user who requested the song.
+	 * @returns {Promise<Song>}
+	 */
+	async playtop(guildID, voiceChannel, songName, options = {}, requestedBy) {
+		let queue = this.queues.find((g) => g.guildID === guildID);
+		if (!queue) if ((voiceChannel || {}).type !== 'voice') return new MusicPlayerError('VoiceChannelTypeInvalid', 'song', 'playlist');
+		if (typeof songName !== 'string' || songName.length == 0) return new MusicPlayerError('SongTypeInvalid', 'song');
+		if (typeof options !== 'object') return new MusicPlayerError('OptionsTypeInvalid', 'song');
+
+		try {
+			// Searches the song
+			let video = await Util.getVideoBySearch(songName, ytsr, options);
+
+			if (!queue) {
+				// Joins the voice channel
+				let connection = await voiceChannel.join();
+				// Creates a new guild with data
+				queue = new Queue(voiceChannel.guild.id);
+				queue.connection = connection;
+				let song = new Song(video, queue, requestedBy);
+				queue.songs.push(song);
+				// Add the queue to the list
+				this.queues.push(queue);
+				// Plays the song
+				this._playSong(queue.guildID, true);
+
+				return { error: null, song: song };
+
+			} else {
+				let song = new Song(video, queue, requestedBy);
+				// Inserts the song in the 2nd position
+				queue.songs.splice(1, 0, song);
+				// Skip the current song
+				queue.skipped = true;
+				queue.dispatcher.end();
+
+				return { error: null, song: song };
+			}
+		}
+		catch (err) {
+			return new MusicPlayerError('SearchIsNull', 'song');
+		}
+	}
+
+
+	/**
 	 * Plays or adds the Playlist songs to the queue.
 	 * @param {string} guildID
 	 * @param {string} playlistLink The name of the song to play.
