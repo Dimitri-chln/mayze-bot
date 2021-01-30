@@ -133,7 +133,7 @@ const command = {
 							icon_url: message.client.user.avatarURL()
 						},
 						color: "#010101",
-						description: responses.map((response, i) => `\`${i + 1}.\` ${triggerTypes[response.trigger_type]} \`${response.trigger}\`\n\t→ \`"${response.response}"\``).join("\n"),
+						description: responses.map((response, i) => `\`${i + 1}.\` ${triggerTypes[response.trigger_type]} \`${response.trigger}\`\n\t→ \`${response.response}\``).join("\n"),
 						footer: {
 							text: "✨ Mayze ✨"
 						}
