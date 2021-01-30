@@ -1,4 +1,5 @@
 const Http = require('http');
+const Https = require('https');
 const Url = require('url');
 const Fs = require('fs');
 
@@ -21,7 +22,7 @@ Http.createServer(async (request, response) => {
 }).listen(process.env.PORT || 5000);
 
 setInterval(() => {
-	Http.get("https://mayze-v2.herokuapp.com", () => {
+	Https.get("https://mayze-v2.herokuapp.com", () => {
 		console.log("Pinging server...");
 	});
 }, 60000);
