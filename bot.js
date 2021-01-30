@@ -209,7 +209,7 @@ client.on("messageReactionRemove", async (reaction, user) => {
 		author: reaction.message.author,
 		emoji: reaction.emoji
 	};
-	setTimeout(() => { delete client.removedReactions[reaction.message.channel.id] }, 30000);
+	setTimeout(() => { delete client.removedReactions[reaction.message.channel.id] }, 60000);
 });
 
 client.on("guildMemberAdd", async member => {
@@ -265,7 +265,7 @@ client.on("messageDelete", async message => {
 		},
 		content: message.content
 	};
-	setTimeout(() => { delete client.deletedMessages[message.channel.id] }, 300000);
+	setTimeout(() => { delete client.deletedMessages[message.channel.id] }, 600000);
 });
 
 client.on("messageUpdate", async (oldMessage, newMessage) => {
@@ -280,7 +280,7 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
 		},
 		content: oldMessage.content
 	};
-	setTimeout(() => { delete client.editedMessages[oldMessage.channel.id] }, 300000);
+	setTimeout(() => { delete client.editedMessages[oldMessage.channel.id] }, 600000);
 });
 
 client.on("error", async err => {
