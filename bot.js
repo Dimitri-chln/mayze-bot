@@ -30,11 +30,11 @@ for (const file of musicCommandFiles) {
 	client.commands.set(command.name, { ...command, category: "musique" });
 }
 
-client.autoresponses = [];
-const autoresponseFiles = fs.readdirSync("./autoresponses").filter(file => file.endsWith(".js"));
+client.responses = [];
+const autoresponseFiles = fs.readdirSync("./responses").filter(file => file.endsWith(".js"));
 for (const file of autoresponseFiles) {
-	const autoresponse = require(`./autoresponses/${file}`);
-	client.autoresponses.push(autoresponse);
+	const autoresponse = require(`./responses/${file}`);
+	client.responses.push(autoresponse);
 }
 
 client.reactionCommands = [];
@@ -128,7 +128,7 @@ client.on("message", async message => {
 		}
 	}
 
-	client.autoresponses.forEach(async autoresponse => autoresponse.execute(message).catch(console.error));
+	client.responses.forEach(async autoresponse => autoresponse.execute(message).catch(console.error));
 });
 
 client.ws.on("INTERACTION_CREATE", async interaction => {
