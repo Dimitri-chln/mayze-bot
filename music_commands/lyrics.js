@@ -44,7 +44,7 @@ const command = {
 		};
 		
 		try {
-			pagination(message, pages);
+			pagination(message, pages, null, 300000);
 		} catch (err) {
 			console.error(err);
 			message.channel.send("Quelque chose s'est mal passé en créant le paginateur :/").catch(console.error);
