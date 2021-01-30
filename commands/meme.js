@@ -1,5 +1,5 @@
 const { Message } = require("discord.js");
-const axios = require("axios").default;
+const Axios = require("axios").default;
 
 const command = {
 	name: "meme",
@@ -33,7 +33,7 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options) => {
-		const { data } = message.client.memes || await axios.get("https://api.memegen.link/templates").catch(console.error);
+		const { data } = message.client.memes || await Axios.get("https://api.memegen.link/templates").catch(console.error);
 		message.client.memes = { data: data };
 		const memes = data.map(meme => meme.key);
 

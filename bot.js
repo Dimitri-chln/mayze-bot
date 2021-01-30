@@ -1,4 +1,5 @@
-const fs = require("fs");
+const Fs = require("fs");
+const Axios = require("axios").default;
 const config = require("./config.json");
 require('dotenv').config();
 
@@ -19,26 +20,26 @@ client.pg.connect().then(() => console.log("Connected to the database")).catch(c
 setInterval(reconnectPgClient, 3600000);
 
 client.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
+const commandFiles = Fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
-const musicCommandFiles = fs.readdirSync("./music_commands").filter(file => file.endsWith(".js"));
+const musicCommandFiles = Fs.readdirSync("./music_commands").filter(file => file.endsWith(".js"));
 for (const file of musicCommandFiles) {
 	const command = require(`./music_commands/${file}`);
 	client.commands.set(command.name, { ...command, category: "musique" });
 }
 
 client.responses = [];
-const autoresponseFiles = fs.readdirSync("./responses").filter(file => file.endsWith(".js"));
+const autoresponseFiles = Fs.readdirSync("./responses").filter(file => file.endsWith(".js"));
 for (const file of autoresponseFiles) {
 	const autoresponse = require(`./responses/${file}`);
 	client.responses.push(autoresponse);
 }
 
 client.reactionCommands = [];
-const reactionCommandsFiles = fs.readdirSync("./reaction_commands").filter(file => file.endsWith(".js"));
+const reactionCommandsFiles = Fs.readdirSync("./reaction_commands").filter(file => file.endsWith(".js"));
 for (const file of reactionCommandsFiles) {
 	const reactionCommand = require(`./reaction_commands/${file}`);
 	client.reactionCommands.push(reactionCommand);
@@ -129,11 +130,6 @@ client.on("message", async message => {
 	}
 
 	client.responses.forEach(async autoresponse => autoresponse.execute(message).catch(console.error));
-
-	message.attachments.forEach(async (attachment, id) => {
-		if (!/(png)|(jpe?g)|(gif)$/.test(attachment.name)) return;
-		fs.writeFileSync(`attachments/${message.id}-${id}`)
-	});
 });
 
 client.ws.on("INTERACTION_CREATE", async interaction => {

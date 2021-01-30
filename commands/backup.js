@@ -14,7 +14,7 @@ const command = {
 	 */
 	execute: async (message, args, options) => {
 		if (process.env.HOST === "HEROKU") return message.reply("cette commande ne fonctionne pas sur Heroku").catch(console.error);
-		const fs = require("fs");
+		const Fs = require("fs");
 		const { MessageAttachment } = require("discord.js");
 		const subCommand = args
 			? args[0].toLowerCase()
@@ -28,7 +28,7 @@ const command = {
 				const msg = await message.channel.send("Récupération des données...").catch(console.error);
 				const { rows } = await message.client.pg.query(`SELECT * FROM ${table}`).catch(console.error);
 				if (!rows) return message.channel.send("Quelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
-				fs.writeFile(`backups/database_${table}.json`, JSON.stringify(rows, null, 4), "utf8", () => {
+				Fs.writeFile(`backups/database_${table}.json`, JSON.stringify(rows, null, 4), "utf8", () => {
 					console.log("Backup complete");
 					msg.edit("Backup terminée !").catch(console.error);
 				});
@@ -38,7 +38,7 @@ const command = {
 				const table = args
 					? args[1]
 					: options[0].options[0].value;
-				fs.readFile(`backups/database_${table}.json`, async (err, buffer) => {
+				Fs.readFile(`backups/database_${table}.json`, async (err, buffer) => {
 					if (err) {
 						console.error(err);
 						if (err.code === "ENOENT") message.channel.send("Il n'y a pas de backup correspondant à cette table").catch(console.error);

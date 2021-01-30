@@ -1,4 +1,4 @@
-const axios = require("axios").default;
+const Axios = require("axios").default;
 
 class SlashCommands {
 	/** @type {string} */
@@ -25,7 +25,7 @@ class SlashCommands {
 	 */
 	async create(commandOptions, guildID) {
 		const url = guildID ? `${this.apiURL}/guilds/${guildID}/commands` : `${this.apiURL}/commands`;
-		const res = await axios.post(url, commandOptions, { headers: { Authorization: `Bot ${this.token}` } });
+		const res = await Axios.post(url, commandOptions, { headers: { Authorization: `Bot ${this.token}` } });
 		return res.data;
 	}
 
@@ -37,7 +37,7 @@ class SlashCommands {
 	 */
 	async edit(commandID, commandOptions, guildID) {
 		const url = guildID ? `${this.apiURL}/guilds/${guildID}/commands/${commandID}` : `${this.apiURL}/commands/${commandID}`;
-		const res = await axios.patch(url, commandOptions, { headers: { Authorization: `Bot ${this.token}` } });
+		const res = await Axios.patch(url, commandOptions, { headers: { Authorization: `Bot ${this.token}` } });
 		return res.data;
 	}
 
@@ -48,7 +48,7 @@ class SlashCommands {
 	 */
 	async delete(commandID, guildID) {
 		const url = guildID ? `${this.apiURL}/guilds/${guildID}/commands/${commandID}` : `${this.apiURL}/commands/${commandID}`;
-		const res = await axios.delete(url, { headers: { Authorization: `Bot ${this.token}` } });
+		const res = await Axios.delete(url, { headers: { Authorization: `Bot ${this.token}` } });
 		return res.data;
 	}
 
@@ -58,7 +58,7 @@ class SlashCommands {
 	 */
 	async get(guildID) {
 		const url = guildID ? `${this.apiURL}/guilds/${guildID}/commands` : `${this.apiURL}/commands`;
-		const res = await axios.get(url, { headers: { Authorization: `Bot ${this.token}` } });
+		const res = await Axios.get(url, { headers: { Authorization: `Bot ${this.token}` } });
 		return res.data;
 	}
 }
