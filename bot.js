@@ -6,13 +6,13 @@ const Discord = require("discord.js");
 const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEMBERS", "GUILD_PRESENCES" ]);
 const client = new Discord.Client({ fetchAllMembers: true, partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
 
-if (process.env.HOST !== "HEROKU") {
-	const shellExec = require("./util/shellExec.js");
-	const output = shellExec("heroku pg:credentials:url --app mayze-bot");
-	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
-	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
-	process.env.DATABASE_URL = connectionURL;
-}
+// if (process.env.HOST !== "HEROKU") {
+// 	const shellExec = require("./util/shellExec.js");
+// 	const output = shellExec("heroku pg:credentials:url --app mayze-bot");
+// 	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
+// 	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
+// 	process.env.DATABASE_URL = connectionURL;
+// }
 const pg = require("pg");
 client.pg = newPgClient();
 client.pg.connect().then(() => console.log("Connected to the database")).catch(console.error);
@@ -98,6 +98,7 @@ client.on("ready", async () => {
 
 client.on("message", async message => {
 	if (message.partial) await message.fetch().catch(console.error);
+	if (message.author.id === client.user.id) return;
 	if (message.channel.type !== "dm" && message.content.toLowerCase().startsWith(client.prefix) && !message.author.bot) {
 		const input = message.content.slice(client.prefix.length).trim().split(/ +/g);
 		const commandName = input[0].toLowerCase();
@@ -301,7 +302,7 @@ const player = new Player(client, {
 	leaveOnEnd: true,
 	leaveOnStop: true,
     leaveOnEmpty: true,
-    timeout: 120000, // 2min
+    timeout: 900000, // 15min
     quality: "high"
 });
 client.player = player;
