@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const Discord = require("discord.js");
 const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEMBERS", "GUILD_PRESENCES" ]);
-const client = new Discord.Client({ fetchAllMembers: true, partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
+const client = new Discord.Client({ presence: { activity: { name: "le meilleur clan", type: "WATCHING "} }, fetchAllMembers: true, partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
 
 if (process.env.HOST !== "HEROKU") {
 	const shellExec = require("./util/shellExec.js");
@@ -90,7 +90,6 @@ client.on("ready", async () => {
 	});
 	console.log("Slash commands created");
 
-	client.user.setActivity("le meilleur clan", { type: "WATCHING" });
 	const mayze = client.users.cache.get("703161067982946334");
 	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.prefix : config.prefixBeta ) : config.prefix;
 	client.prefix = prefix;
