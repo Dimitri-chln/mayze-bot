@@ -21,5 +21,7 @@ Http.createServer(async (request, response) => {
 }).listen(process.env.PORT || 5000);
 
 setInterval(() => {
-	
+	Http.get("mayze-v2.herokuapp.com", () => {
+		console.log("Pinging server...");
+	});
 }, 60000);
