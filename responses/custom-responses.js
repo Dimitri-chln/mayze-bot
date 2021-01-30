@@ -11,7 +11,7 @@ const command = {
 			2: "REGEX",
 			3: "STARTS_WITH",
 			4: "ENDS_WITH"
-		}
+		};
 
 		const { "rows": responses } = await message.client.pg.query("SELECT * FROM responses").catch(console.error);
 		if (!responses) return;
