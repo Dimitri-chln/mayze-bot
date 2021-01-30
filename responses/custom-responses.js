@@ -5,7 +5,7 @@ const command = {
 	 * @param {Message} message 
 	 */
 	execute: async (message) => {
-		const trigger_types = {
+		const triggerTypes = {
 			0: "MATCH",
 			1: "EXACT_MATCH",
 			2: "REGEX",
@@ -17,7 +17,7 @@ const command = {
 		if (!responses) return;
 
 		responses.forEach(response => {
-			switch(trigger_types[response.trigger_type]) {
+			switch(triggerTypes[response.trigger_type]) {
 				case "MATCH":
 					if (message.content.toLowerCase().includes(response.trigger)) respond(response);
 					break;
