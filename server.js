@@ -25,4 +25,4 @@ setInterval(() => {
 	Https.get("https://mayze-v2.herokuapp.com", () => {
 		console.log("Pinging server...");
 	});
-}, 60000);
+}, 600000);
