@@ -27,7 +27,7 @@ const command = {
 				const query = `INSERT INTO to_do (name) VALUES ('${task.replace(/'/g, "U+0027")}')`;
 				{
 					const res = await message.client.pg.query(query).catch(console.error);
-					if (!res) return message.reply("Quelque chose s'est mal passé en accédant à la base de données").catch(console.error);
+					if (!res) return message.reply("responsesQuelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
 					if (message.deletable) message.react("✅").catch(console.error);
 					else message.reply("tâche ajoutée").catch(console.error);
 				}
@@ -37,7 +37,7 @@ const command = {
 				if (isNaN(index) || index < 1 ) return message.reply("le deuxième argument doit être un nombre positif").catch(console.error);
 				{
 					const res = await message.client.pg.query(`DELETE FROM to_do WHERE id=${index}`).catch(console.error);
-					if (!res) return message.reply("Quelque chose s'est mal passé en accédant à la base de données").catch(console.error);
+					if (!res) return message.reply("responsesQuelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
 		if (message.deletable) message.react("✅").catch(console.error);
 		else message.reply("tâche retirée").catch(console.error);
 				}
