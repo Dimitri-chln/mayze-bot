@@ -1,10 +1,11 @@
 {
-  "name": "mayze-bot",
+  "name": "mayze",
   "version": "5.0.0",
   "description": "Pour le meilleur clan!",
   "main": "bot.js",
   "scripts": {
-    "start": "node ."
+    "bot": "node bot.js",
+    "web": "node server.js"
   },
   "dependencies": {
     "@discordjs/opus": "0.3.2",

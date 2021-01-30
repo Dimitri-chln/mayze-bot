@@ -8,7 +8,7 @@ const client = new Discord.Client({ presence: { activity: { name: "le meilleur c
 
 if (process.env.HOST !== "HEROKU") {
 	const shellExec = require("./util/shellExec.js");
-	const output = shellExec("heroku pg:credentials:url --app mayze-bot");
+	const output = shellExec("heroku pg:credentials:url --app mayze");
 	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
 	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
 	process.env.DATABASE_URL = connectionURL;
@@ -129,6 +129,11 @@ client.on("message", async message => {
 	}
 
 	client.responses.forEach(async autoresponse => autoresponse.execute(message).catch(console.error));
+
+	message.attachments.forEach(async (attachment, id) => {
+		if (!/(png)|(jpe?g)|(gif)$/.test(attachment.name)) return;
+		fs.writeFileSync(`attachments/${message.id}-${id}`)
+	});
 });
 
 client.ws.on("INTERACTION_CREATE", async interaction => {
@@ -320,7 +325,7 @@ client.catchRates = catchRates;
 client.findMember = (guild, string) => guild.members.cache.find(member => member.id === string || (member.nickname || "").toLowerCase() === string.toLowerCase() || (member.nickname || "").toLowerCase().includes(string.toLowerCase()) || member.user.username.toLowerCase() === string.toLowerCase() || member.user.username.toLowerCase().includes(string.toLowerCase())) || null;
 
 /**
- * @returns {pg.Client} Un client postgreSQL connecté à la base de données de mayze-bot
+ * @returns {pg.Client} Un client postgreSQL connecté à la base de données de mayze
  */
 function newPgClient() {
 	const connectionString = {
