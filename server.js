@@ -1,6 +1,6 @@
 const Http = require('http');
 const Url = require('url');
-const Fs = require('Fs');
+const Fs = require('fs');
 
 Http.createServer(async (request, response) => {
 	const url = Url.parse(request.url, true);
