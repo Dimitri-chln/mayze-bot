@@ -2,12 +2,13 @@ const Http = require('http');
 const Https = require('https');
 const Url = require('url');
 const Fs = require('fs');
+const Path = require('path');
 
 Http.createServer(async (request, response) => {
 	const url = Url.parse(request.url, true);
-	const path = url.path == '/favicon.ico'
-		? 'favicon.ico'
-		: 'server' + (url.path == '/' ? '/index.html' : url.path);
+	const path = Path.extname(url.path)
+		? 'server' + url.pathname
+		: 'server' + (url.pathname.endsWith('/') ? url.pathname : `${url.pathname}/`) + 'index.html';
 
 	Fs.readFile(path, (err, data) => {
 		if (err) {
@@ -23,25 +24,25 @@ Http.createServer(async (request, response) => {
 
 // Ping the server every 10 minutes
 setInterval(() => {
-	Https.get("https://mayze-v2.herokuapp.com", () => {
+	Https.get(`https://${process.env.APP_NAME}.herokuapp.com`, () => {
 		console.log("Pinging server...");
 	});
 }, 600000);
 
-function getContentType(fileName) {
-	const ext = (fileName.match(/\..+$/) || [''])[0].replace('.', '');
+function getContentType(path) {
+	const ext = Path.extname(path);
 	
 	switch (ext) {
-		case 'png': return 'image/png';
-		case 'jpg': return 'image/jpg';
-		case 'jpeg': return 'image/jpg';
-		case 'gif': return 'image/gif';
-		case 'ico': return 'image/x-icon';
-		case 'html': return 'text/html';
-		case 'css': return 'text/css';
-		case 'js': return 'application/javascript';
-		case 'json': return 'application/json';
-		case 'txt': return 'text/plain';
+		case '.png': return 'image/png';
+		case '.jpg': return 'image/jpg';
+		case '.jpeg': return 'image/jpg';
+		case '.gif': return 'image/gif';
+		case '.ico': return 'image/x-icon';
+		case '.html': return 'text/html';
+		case '.css': return 'text/css';
+		case '.js': return 'application/javascript';
+		case '.json': return 'application/json';
+		case '.txt': return 'text/plain';
 		default: return 'application/octet-stream';
 	}
 }

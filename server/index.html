@@ -1,16 +1,29 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Mayze</title>
-        <link rel="icon" href="favicon.ico" />
-        <link rel="stylesheet" href="index.css" />
-        <script defer src="index.js" charset="utf-8"></script>
-    </head>
+	<head>
+		<meta charset="utf-8" />
+		<title>Mayze</title>
+		<link rel="icon" href="favicon.ico" />
+		<link rel="stylesheet" href="style.css" />
+		<script defer src="index.js" charset="utf-8"></script>
+	</head>
 
-    <body>
-        <header class="main-header" role="banner">
-            <img id="banner-icon" src="images/mayze.png" alt="Banner logo" />
-        </header>
-    </body>
+	<body>
+		<header id="banner" role="banner">
+			<div id="banner-main">
+				<img id="banner-icon" src="assets/mayze.png" alt="Logo" />
+				<h1 id="banner-title">Mayze</h1>
+			</div>
+			<nav id="banner-categories">
+				<h2 class="banner-category">Menu</h2>
+				<h2 class="banner-category">Serveur</h2>
+			</nav>
+			<input type="button" id="login-button" value="Connection" onclick="redirectLogin();" />
+		</header>
+
+
+		<footer>
+
+		</footer>
+	</body>
 </html>
