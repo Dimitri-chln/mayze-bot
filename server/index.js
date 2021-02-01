@@ -1,5 +1,4 @@
 function redirectLogin() {
-	console.log('Login...');
 	const randStr = generateRandomString();
 	sessionStorage.setItem('state', randStr);
 
