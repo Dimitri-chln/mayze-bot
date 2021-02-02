@@ -21,7 +21,7 @@ const command = {
 	*/
 	execute: async (message, args, options) => {
 		const { commands } = message.client;
-		const { ownerID } = require("../config.json");
+		const { OWNER_ID } = require("../config.json");
 		const commandName = args
 			? (args[0] || "").toLowerCase()
 			: (options ? options[0].value : "").toLowerCase();
@@ -52,7 +52,7 @@ const command = {
 			if (command.description) data += `\n**Description:** ${command.description}`;
 			if (command.usage) data += `\n**Utilisation:** \`${message.client.prefix}${command.name} ${command.usage}\``;
 			if (command.perms) data += `\n**Permissions:** \`${command.perms.join("`, `")}\``;
-			if (command.ownerOnly || command.allowedUsers) data += `\n**Utilisable par:** ${command.ownerOnly ? (command.allowedUsers || []).concat(ownerID).map(u => `<@${u}>`).join(", ") : command.allowedUsers.map(u => `<@${u}>`).join(", ")}`;
+			if (command.ownerOnly || command.allowedUsers) data += `\n**Utilisable par:** ${command.ownerOnly ? (command.allowedUsers || []).concat(OWNER_ID).map(u => `<@${u}>`).join(", ") : command.allowedUsers.map(u => `<@${u}>`).join(", ")}`;
 			data += `\n**Cooldown:** ${command.cooldown || 2} seconde(s)`;
 			message.channel.send({
 				embed: {

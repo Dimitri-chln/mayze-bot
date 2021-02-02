@@ -22,7 +22,7 @@ const command  = {
 				},
 				title: "• Informations sur le bot",
 				color: "#010101",
-				description: `**Préfixe:** \`${message.client.prefix}\`\n**Propriétaire:** \`${(message.client.users.cache.get(config.ownerID) || { username: "*Inconnu*" }).username}\`\n**Version:** \`${version}\``,
+				description: `**Préfixe:** \`${message.client.prefix}\`\n**Propriétaire:** \`${(message.client.users.cache.get(config.OWNER_ID) || { username: "*Inconnu*" }).username}\`\n**Version:** \`${version}\``,
 				footer: {
 					text: "✨Mayze✨"
 				}

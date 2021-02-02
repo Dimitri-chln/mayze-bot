@@ -53,7 +53,7 @@ client.on("ready", async () => {
 	if (client.user.id === "740848584882126939") client.beta = true;
 
 	const { version } = require ("./package.json");
-	const logChannel = client.channels.cache.get(config.logChannel);
+	const logChannel = client.channels.cache.get(config.LOG_CHANNEL_ID);
 	try {
 		const msg = await logChannel.send({
 			embed: {
@@ -92,7 +92,7 @@ client.on("ready", async () => {
 	console.log("Slash commands created");
 
 	const mayze = client.users.cache.get("703161067982946334");
-	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.prefix : config.prefixBeta ) : config.prefix;
+	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.PREFIX : config.PREFIX_BETA ) : config.PREFIX;
 	client.prefix = prefix;
 });
 
@@ -122,7 +122,7 @@ client.on("message", async message => {
 					delete client.xpMessages[message.author.id];
 				}, 60000);
 			}
-			const f = x => Math.round(Math.sqrt(message.content.length) * config.xpMultiplier / x);
+			const f = x => Math.round(Math.sqrt(message.content.length) * config.XP_MULTIPLIER / x);
 			const newXP = f(client.xpMessages[message.author.id]);
 			chatXP(message, newXP);
 			client.xpMessages[message.author.id] ++;
@@ -146,8 +146,8 @@ async function processCommand(command, message, args, options) {
 	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm))) return message.reply(`tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``).catch(console.error);
 	if (command.ownerOnly) {
 		if (command.allowedUsers) {
-			if (!command.allowedUsers.includes(message.author.id) && message.author.id !== config.ownerID) return;
-		} else if (message.author.id !== config.ownerID) return;
+			if (!command.allowedUsers.includes(message.author.id) && message.author.id !== config.OWNER_ID) return;
+		} else if (message.author.id !== config.OWNER_ID) return;
 	} else if (command.allowedUsers && !command.allowedUsers.includes(message.author.id)) return;
 	if (args && args.length < command.args) return message.channel.send(`Utilisation : \`${client.prefix}${command.name} ${command.usage}\``).catch(console.error);
 
@@ -290,7 +290,7 @@ client.on("error", async err => {
 
 client.on("presenceUpdate", async (_oldMember, newMember) => {
 	if (newMember.user.id === "703161067982946334" && client.beta) {
-		client.prefix = newMember.user.presence.status === "offline" ? config.prefix : config.prefixBeta;
+		client.prefix = newMember.user.presence.status === "offline" ? config.PREFIX : config.PREFIX_BETA;
 	}
 });
 

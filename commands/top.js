@@ -18,7 +18,7 @@ const command = {
 
 		const { "rows": top } = await message.client.pg.query("SELECT * FROM levels ORDER BY xp DESC").catch(console.error);
 		const memberPerPage = 15;
-		const { baseXp, xpIncrement } = require("../config.json");
+		const { BASE_XP, XP_INCREMENT } = require("../config.json");
 
 		let pages = [];
 		let embed = new MessageEmbed()
@@ -38,7 +38,7 @@ const command = {
 		pagination(message, pages).catch(console.error);
 
 		function getLevel(xp, lvl = 0) {
-			const xpPerLevel = baseXp + lvl * xpIncrement;
+			const xpPerLevel = BASE_XP + lvl * XP_INCREMENT;
 			if (xp < xpPerLevel) return lvl;
 			return getLevel(xp - xpPerLevel, lvl + 1);
 		}

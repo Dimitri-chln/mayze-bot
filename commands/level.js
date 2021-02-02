@@ -20,7 +20,7 @@ const command = {
 	* @param {Object[]} options
 	*/
 	execute: async (message, args, options) => {
-		const { baseXp, xpIncrement } = require("../config.json");
+		const { BASE_XP, XP_INCREMENT } = require("../config.json");
 		const xpBar = ["█", "▁"], barSize = 20;
 		const user = args
 			? message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.author
@@ -31,7 +31,7 @@ const command = {
 		const xp = userData ? userData.xp : 0;
 		const rank = top.indexOf(userData) + 1;
 		const [ level, xpLeft ] = getLevel(xp);
-		const xpForNextLevel = baseXp + level * xpIncrement;
+		const xpForNextLevel = BASE_XP + level * XP_INCREMENT;
 
 		message.channel.send({
 			embed: {
@@ -48,7 +48,7 @@ const command = {
 		}).catch(console.error);
 
 		function getLevel(xp, lvl = 0) {
-			const xpPerLevel = baseXp + lvl * xpIncrement;
+			const xpPerLevel = BASE_XP + lvl * XP_INCREMENT;
 			if (xp < xpPerLevel) return [ lvl, xp ];
 			return getLevel(xp - xpPerLevel, lvl + 1);
 		}

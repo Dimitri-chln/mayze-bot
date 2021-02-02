@@ -39,7 +39,7 @@ const command = {
 	 * @param {string[]} args
 	 */
 	execute: async (message, args, options) => {
-		const { ownerID } = require("../config.json");
+		const { OWNER_ID } = require("../config.json");
 		const subCommand = args
 			? (args[0] || "").toLowerCase() || "players"
 			: (options ? options[0] : {}).value.toLowerCase();
@@ -84,7 +84,7 @@ const command = {
 				break;
 			case "start":
 				if (message.channel.id !== "759700750803927061") return;
-				if (!message.member.hasPermission("ADMINISTRATOR") && message.author.id !== ownerID) return message.reply("tu n'as pas les permissions nécessaires").catch(console.error);
+				if (!message.member.hasPermission("ADMINISTRATOR") && message.author.id !== OWNER_ID) return message.reply("tu n'as pas les permissions nécessaires").catch(console.error);
 				if (message.client.werewolfGame && !message.client.werewolfGame.ended) return message.reply("la partie a déjà commencé!").catch(console.error);
 				const startMsg = await villageChannel.send({
 					embed: {

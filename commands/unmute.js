@@ -22,14 +22,14 @@ const command = {
 	* @param {Object[]} options
 	*/
 	execute: async (message, args, options) => {
-		const { ownerID } = require("../config.json");
+		const { OWNER_ID } = require("../config.json");
 		const member = args
 			? message.guild.members.cache.get((message.mentions.users.first() || {}).id)
 			: message.guild.members.cache.get(options[0].value);
 		const mutedRole = message.guild.roles.cache.get("695330946844721312");
 		
 		if (!member) return message.reply("mentionne une personne").catch(console.error);
-		if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== ownerID)
+		if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== OWNER_ID)
 			return message.reply("tu ne peux pas unmute cette personne").catch(console.error);
 
 		member.roles.remove(mutedRole)

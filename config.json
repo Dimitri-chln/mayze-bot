@@ -1,10 +1,11 @@
 {
-  "prefix": "*",
-  "prefixBeta": "*!",
-  "ownerID": "307815349699608577",
-  "logChannel": "770569866846928897",
-  "baseXp": 1000,
-  "xpIncrement": 250,
-  "xpMultiplier": 2.25,
-  "webhookID": "800803785949577266"
+  "PREFIX": "*",
+  "PREFIX_BETA": "*!",
+  "OWNER_ID": "307815349699608577",
+  "LOG_CHANNEL_ID": "770569866846928897",
+  "ROLES_CHANNEL_ID": "802144513639972864",
+  "BASE_XP": 1000,
+  "XP_INCREMENT": 250,
+  "XP_MULTIPLIER": 2.25,
+  "WEBHOOK_ID": "800803785949577266"
 }

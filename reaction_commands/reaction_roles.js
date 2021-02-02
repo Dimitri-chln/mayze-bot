@@ -7,7 +7,8 @@ const command = {
      * @param {boolean} added
      */
     execute: async (reaction, user, added) => {
-        if (reaction.message.channel.id !== "802144513639972864") return;
+        const { ROLES_CHANNEL_ID } = require("../config.json");
+        if (reaction.message.channel.id !== ROLES_CHANNEL_ID) return;
         if (!reaction.message.embeds.length) return;
         const embed = reaction.message.embeds[0];
         const roles = embed.description.split("\n").map(e => {
