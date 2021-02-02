@@ -27,8 +27,11 @@ function redirectHome() {
 			}
 		})
 			.then(res => res.json())
-			// .then(console.log);
+			.then(console.log);
 	}
 
-	location.href = sessionStorage.getItem('callback_location') || '/';
+	// location.href = sessionStorage.getItem('callback_location') || '/';
+
+	sessionStorage.removeItem('state');
+	sessionStorage.removeItem('callback_location');
 }

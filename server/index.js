@@ -3,7 +3,7 @@ function redirectLogin() {
 	sessionStorage.setItem('state', randStr);
 
 	sessionStorage.setItem('callback_location', location.href);
-	location.href = `https://discord.com/api/oauth2/authorize?client_id=703161067982946334&redirect_uri=https%3A%2F%2Fmayze-v2.herokuapp.com%2Fcallback&state=${btoa(randStr)}&response_type=code&scope=identify%20guilds&prompt=none`;
+	location.href = `https://discord.com/api/oauth2/authorize?client_id=703161067982946334&redirect_uri=${encodeURI('https://mayze-v2.herokuapp.com/callback')}&state=${btoa(randStr)}&response_type=code&scope=identify%20guilds&prompt=none`;
 }
 
 function generateRandomString() {

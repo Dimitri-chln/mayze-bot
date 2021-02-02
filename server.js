@@ -24,7 +24,7 @@ Http.createServer(async (request, response) => {
 
 // Ping the server every 10 minutes
 setInterval(() => {
-	Https.get(`https://${process.env.APP_NAME}.herokuapp.com`, () => {
+	Https.get(process.env.URL, () => {
 		console.log("Pinging server...");
 	});
 }, 600000);
@@ -41,6 +41,7 @@ function getContentType(path) {
 		case '.html': return 'text/html';
 		case '.css': return 'text/css';
 		case '.js': return 'application/javascript';
+		case '.mjs': return 'application/javascript';
 		case '.json': return 'application/json';
 		case '.txt': return 'text/plain';
 		default: return 'application/octet-stream';
