@@ -4,8 +4,7 @@
   "description": "Pour le meilleur clan!",
   "main": "bot.js",
   "scripts": {
-    "bot": "node bot.js",
-    "web": "node server.js"
+    "start": "node bot.js"
   },
   "dependencies": {
     "@discordjs/opus": "0.3.2",
