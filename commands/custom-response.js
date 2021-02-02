@@ -3,7 +3,7 @@ const { Message } = require("discord.js");
 const command = {
 	name: "custom-response",
 	description: "Gérer les réponses personnalisées",
-	aliases: ["responses", "cr"],
+	aliases: ["response", "cr"],
 	args: 0,
 	usage: "add \"<déclencheur>\" \"<réponse>\" [type] | remove <n° réponse>",
 	perms: ["MANAGE_MESSAGES"],
