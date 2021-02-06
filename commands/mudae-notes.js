@@ -95,7 +95,7 @@ const command = {
 				const msgFilter = m => m.author.id === message.author.id && (m.content === currentNote.note || m.content === `${message.client.prefix}stop`);
 				const messageCollector = message.channel.createMessageCollector(msgFilter, { time: 120000 });
 				messageCollector.on("collect", async m => {
-					if (m.content === `${message.client.prefix}stop`) {
+					if (m.content === `${message.client.prefix}cancel`) {
 						m.react("✅").catch(console.error);
 						messageCollector.stop();
 						return;
