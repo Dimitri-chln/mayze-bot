@@ -919,6 +919,30 @@ class Player {
 	}
 
 	/**
+	 * Skips to a certain song in the Guild Queue
+	 * @param {string} guildID 
+	 * @param {number} songID 
+	 */
+	skipTo(guildID, songID) {
+		// Gets guild queue
+		let queue = this.queues.find((g) => g.guildID === guildID);
+		if (!queue) return new MusicPlayerError('QueueIsNull');
+
+		let songFound = null;
+		if (typeof songID == 'number') {
+			songFound = queue.songs[songID];
+			if (songFound) {
+				queue.songs.splice(0, songID - 1);
+				queue.skipped = true;
+				// Ends the dispatcher
+				queue.dispatcher.end();
+			} else return new MusicPlayerError('SongNumberInvalid');
+		} else return new MusicPlayerError('NotANumber');
+
+		return songFound;
+	}
+
+	/**
 	 * Gets the currently playing song.
 	 * @param {string} guildID
 	 * @returns {Song}
