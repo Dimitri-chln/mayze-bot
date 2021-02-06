@@ -89,7 +89,7 @@ const command = {
 				const startMsg = await villageChannel.send({
 					embed: {
 						author: {
-							name: "La partie va commenceer...",
+							name: "La partie va commencer...",
 							icon_url: message.client.user.avatarURL()
 						},
 						color: "#010101",
