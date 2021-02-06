@@ -14,7 +14,7 @@ const command = {
 			description: "Acheter un billet te permettant de passer tes vacances au goulag",
 			price: 10000,
 			async buy(message) {
-				const jail = require("../commands/jail.js");
+				const jail = message.client.commands.get("jail");
 				const msg = await message.channel.send(`*jail ${message.author}`).catch(console.error);
 				jail.execute(msg, []).catch(err => {
 					console.error(err);
@@ -35,7 +35,7 @@ const command = {
 				let muted = message.author;
 				if (r < 0.5) muted = collected.first().mentions.users.first();
 				const dhms = require("dhms");
-				const mute = require ("./mute.js");
+				const mute = message.client.commands.get("mute");
 				let duration = collected.first().content.replace(/<@!?\d{18}>/, "").trim();
 				if (dhms(duration) <= 0 || dhms(duration) > 3600000) duration = "2m";
 				const muteMsg = await message.channel.send(`*mute ${muted} ${duration}`).catch(console.error);

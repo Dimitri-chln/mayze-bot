@@ -50,7 +50,7 @@ const command = {
 			embed = new MessageEmbed()
 				.setAuthor(`Pokémons de ${message.author.tag}`, message.author.avatarURL({ dynamic: true }))
 				.setColor("#010101")
-				.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => `**${p.shiny ? "⭐ " : ""}${p.legendary ? "🎖️ " : ""}${pokedex.findPokemon(p.pokedex_id).names.fr}**${params.includes("-id") ? `#${p.pokedex_id}` : ""} - ${p.caught} attrapé${p.caught > 1 ? "s" : ""}`).join("\n"));
+				.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => `**${p.legendary ? "🎖️ " : ""}${p.shiny ? "⭐ " : ""}${pokedex.findPokemon(p.pokedex_id).names.fr}**${params.includes("-id") ? `#${p.pokedex_id}` : ""} - ${p.caught} attrapé${p.caught > 1 ? "s" : ""}`).join("\n"));
 			pages.push(embed);
 		};
 		

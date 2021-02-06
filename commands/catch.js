@@ -51,7 +51,7 @@ const command = {
 					url: img
 				},
 				color: shiny ? "#ddbb20" : (legendary ? "#ce2f20" : "#010101"),
-				description: `${message.author} a attrapé un ${shiny ? "⭐ " : ""}${pokemon.names.fr} !`,
+				description: `${message.author} a attrapé un ${legendary ? "🎖️ " : ""}${shiny ? "⭐ " : ""}${pokemon.names.fr} !`,
 				footer: {
 					text: "✨Mayze✨",
 					icon_url: message.author.avatarURL({ dynamic: true })
