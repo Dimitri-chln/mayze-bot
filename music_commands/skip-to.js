@@ -21,7 +21,7 @@ const command = {
         const songID = args
             ? parseInt(args[0])
             : options[0].value;
-        if (isNaN(songID) || songID < 0) return message.reply(`le numéro de la chanson doit être positif`).catch(console.error);
+        if (isNaN(songID) || songID < 1) return message.reply("le numéro de la chanson doit être plus grand que 1").catch(console.error);
 
 		const song = await message.client.player.skipTo(message.guild.id, songID);
 		message.channel.send(`<a:blackCheck:803603780666523699> | **${songID} musique${songID < 2 ? "" : "s"} passée${songID < 2 ? "" : "s"}**\n> ${song.name}`).catch(console.error);
