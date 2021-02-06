@@ -87,6 +87,7 @@ const command = {
 				if (!message.member.hasPermission("ADMINISTRATOR") && message.author.id !== OWNER_ID) return message.reply("tu n'as pas les permissions nécessaires").catch(console.error);
 				if (message.client.werewolfGame && !message.client.werewolfGame.ended) return message.reply("la partie a déjà commencé!").catch(console.error);
 				const startMsg = await villageChannel.send({
+					content: `<@&${roleIngame.id}>`,
 					embed: {
 						author: {
 							name: "La partie va commencer...",
