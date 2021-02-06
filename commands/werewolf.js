@@ -110,7 +110,7 @@ const command = {
 					const players = shuffle(message.guild.members.cache.filter(member => member.roles.cache.has(roleIngame.id)).array());
 					if (players.length < 4) {
 						players.forEach(player => player.roles.remove(roleIngame).catch(console.error));
-						return villageChannel.send(`il faut au minimum 4 joueurs pour pouvoir lancer la partie (${players.length} joueur(s) actuellement)`).catch(console.error);
+						return villageChannel.send(`Il faut au minimum 4 joueurs pour pouvoir lancer la partie (${players.length} joueur${players.length < 2 ? "" : "s"} actuellement)`).catch(console.error);
 					}
 					message.guild.members.cache.forEach(member => {
 						if (member.roles.cache.has("759694957132513300") && !players.some(player => player.id === member.id)) {
