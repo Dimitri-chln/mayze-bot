@@ -7,7 +7,7 @@ const command = {
 	execute: async (message) => {
 		const koya = message.guild.members.cache.get("276060004262477825");
 		if (koya && koya.user.presence.status !== 'offline') return;
-		if (!/^(?:koya\s?)|(?:\^\^)afk/i.test(message.content)) return;
+		if (!/^(?:(?:k|K)oya\s?)|(?:\^\^)afk/.test(message.content)) return;
 
 		const afk = message.client.commands.get("afk");
 		try {
