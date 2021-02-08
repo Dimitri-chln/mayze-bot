@@ -5,7 +5,7 @@ const command = {
 	async execute(message) {
 		if (message.author.id !== "432610292342587392") return;
 		const Discord = require("discord.js");
-		const pagination = require("../util/pagination.js");
+		const pagination = require("../utils/pagination.js");
 		const pinRegex = /<:(logo)?pin\d{0,3}:\d{18}>/g;
 		if (!pinRegex.test(message.content)) return;
 

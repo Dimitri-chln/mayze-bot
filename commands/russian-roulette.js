@@ -95,7 +95,7 @@ const command = {
 				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
 				if (message.client.russianRoulette.length < 2) return message.reply("il faut au minimum 2 joueurs pour lancer la partie").catch(console.error);
 				if (message.client.russianRoulette[0].id !== message.author.id && !message.member.hasPermission("KICK_MEMBERS")) return message.reply("seuls les modérateurs ainsi que la personne qui a créé la partie peuvent lancer la partie").catch(console.error);
-				const shuffle = require("../util/shuffle.js");
+				const shuffle = require("../utils/shuffle.js");
 				const players = shuffle(message.client.russianRoulette);
 				const { MessageEmbed } = require("discord.js");
 				const embed = new MessageEmbed()

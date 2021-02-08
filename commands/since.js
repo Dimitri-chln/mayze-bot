@@ -20,7 +20,7 @@ const command = {
 	* @param {Object[]} options
 	*/
 	execute: async (message, args, options) => {
-		const timeToString = require("../util/timeToString.js");
+		const timeToString = require("../utils/timeToString.js");
 		
 		const now = Date.now();
 		const date = args

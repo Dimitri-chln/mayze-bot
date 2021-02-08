@@ -20,7 +20,7 @@ const command = {
 			embed: {
 				author: {
 					name: snipedMsg.author.tag,
-					icon_url: `https://cdn.discordapp.com/avatars/${snipedMsg.author.id}/${snipedMsg.author.avatar}.png`
+					icon_url: snipedMsg.author.avatar
 				},
 				color: "#010101",
 				description: snipedMsg.content,

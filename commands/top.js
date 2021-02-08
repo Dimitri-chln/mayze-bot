@@ -13,7 +13,7 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options) => {
-		const pagination = require("../util/pagination.js");
+		const pagination = require("../utils/pagination.js");
 		const { MessageEmbed } = require("discord.js");
 
 		const { "rows": top } = await message.client.pg.query("SELECT * FROM levels ORDER BY xp DESC").catch(console.error);
@@ -31,7 +31,12 @@ const command = {
 			embed = new MessageEmbed()
 				.setAuthor(`Classement de ${message.guild.name}`, message.client.user.avatarURL())
 				.setColor("#010101")
-				.setDescription(top.slice(i, i + memberPerPage).map((user, i) => `\`${i + 1}.\` **${(message.guild.members.cache.get(user.user_id) || { user: { username: "*Inconnu*" } }).user.username}** - **Niveau \`${getLevel(user.xp)}\`**`).join("\n"));
+				.setDescription(top.slice(i, i + memberPerPage).map((user, i) => {
+					const username = message.guild.members.cache.has(user.user_id)
+						? message.guild.members.cache.get(user.user_id).user.username
+						: "Inconnu";
+					return `\`${i + 1}.\` **${username}** - **Niveau \`${getLevel(user.xp)}\`**`
+				}).join("\n"));
 			pages.push(embed);
 		};
 		

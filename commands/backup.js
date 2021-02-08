@@ -38,15 +38,18 @@ const command = {
 				const table = args
 					? args[1]
 					: options[0].options[0].value;
+				
+				message.channel.startTyping(1);
 				Fs.readFile(`backups/database_${table}.json`, async (err, buffer) => {
 					if (err) {
-						console.error(err);
 						if (err.code === "ENOENT") message.channel.send("Il n'y a pas de backup correspondant à cette table").catch(console.error);
+						else console.error(err);
 						return;
 					}
 					const file = new MessageAttachment(buffer, `${table}.json`);
-					message.channel.send({ files: [file] }).catch(console.error);
+					message.channel.send({ files: [ file ] }).catch(console.error);
 				});
+				message.channel.stopTyping();
 				break;
 			}
 			default:

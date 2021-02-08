@@ -1,6 +1,6 @@
 {
   "name": "mayze",
-  "version": "5.0.0",
+  "version": "5.2.0",
   "description": "Pour le meilleur clan!",
   "main": "bot.js",
   "scripts": {

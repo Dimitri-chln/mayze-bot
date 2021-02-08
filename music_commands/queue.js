@@ -13,7 +13,7 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options) => {
-		const pagination = require("../util/pagination");
+		const pagination = require("../utils/pagination");
 		const { MessageEmbed } = require("discord.js");
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);

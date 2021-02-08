@@ -1,5 +1,6 @@
 const Fs = require("fs");
 const Axios = require("axios").default;
+const Path = require("path");
 const config = require("./config.json");
 require('dotenv').config();
 
@@ -7,17 +8,22 @@ const Discord = require("discord.js");
 const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEMBERS", "GUILD_PRESENCES" ]);
 const client = new Discord.Client({ presence: { activity: { name: "le meilleur clan", type: "WATCHING "} }, fetchAllMembers: true, partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
 
-if (process.env.HOST !== "HEROKU") {
-	const shellExec = require("./util/shellExec.js");
-	const output = shellExec("heroku pg:credentials:url --app mayze");
-	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
-	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
-	process.env.DATABASE_URL = connectionURL;
-}
+// if (process.env.HOST !== "HEROKU") {
+// 	const shellExec = require("./utils/shellExec.js");
+// 	const output = shellExec("heroku pg:credentials:url --app mayze");
+// 	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
+// 	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
+// 	process.env.DATABASE_URL = connectionURL;
+// }
 const pg = require("pg");
 client.pg = newPgClient();
 client.pg.connect().then(() => console.log("Connected to the database")).catch(console.error);
 setInterval(reconnectPgClient, 3600000);
+
+const imageFiles = Fs.readdirSync("discord-images");
+for (const imageFile of imageFiles) {
+	Fs.unlinkSync(`discord-images/${imageFile}`, () => {});
+}
 
 client.commands = new Discord.Collection();
 const commandFiles = Fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
@@ -108,9 +114,9 @@ client.on("message", async message => {
 	}
 
 	const mayze = client.users.cache.get("703161067982946334");
-	if (client.beta && mayze.presence.status !== "offline") return;
+	// if (client.beta && mayze.presence.status !== "offline") return;
 
-	const chatXP = require("./util/chatXP.js");
+	const chatXP = require("./utils/chatXP.js");
 	if (message.channel.type !== "dm" && !message.author.bot && !message.channel.name.includes("spam")) {
 		const bots = message.guild.members.cache.filter(m => m.user.bot);
 		const prefixes = bots.map(b => ((b.nickname || b.user.username).match(/\[.+\]/) || ["[!]"])[0].replace(/[\[\]]/g, ""));
@@ -130,12 +136,20 @@ client.on("message", async message => {
 	}
 
 	client.responses.forEach(async autoresponse => autoresponse.execute(message).catch(console.error));
+
+	if (!message.attachments.size) return;
+	const download = require("./utils/download");
+
+	message.attachments.forEach(async (attachment, id) => {
+		if (![".png", ".jpg", ".jpeg", ".gif"].includes(Path.extname(attachment.url).toLowerCase())) return;
+		download(attachment.url, `discord-images/${message.id}#${id}${Path.extname(attachment.url).toLowerCase()}`);
+	});
 });
 
 client.ws.on("INTERACTION_CREATE", async interaction => {
 	const command = client.commands.get(interaction.data.name) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.data.name));
 	const options = interaction.data.options;
-	const EnhancedInteraction = require("./util/EnhancedInteraction");
+	const EnhancedInteraction = require("./utils/EnhancedInteraction");
 	const enhancedInteraction = new EnhancedInteraction(interaction, client);
 	console.log(`${enhancedInteraction.author.tag} used /${enhancedInteraction.base.data.name} in #${enhancedInteraction.channel.name}\n${JSON.stringify(enhancedInteraction.base.data, null, 4)}`);
 	if (command) processCommand(command, enhancedInteraction, null, options);
@@ -258,13 +272,16 @@ client.on("messageDelete", async message => {
 	if (!client.deletedMessages) client.deletedMessages = {};
 	if (message.partial) return;
 	if (message.author.bot) return;
+
 	client.deletedMessages[message.channel.id] = {
+		id: message.id,
 		author: {
 			id: message.author.id,
 			tag: message.author.tag,
-			avatar: message.author.avatar
+			avatar: message.author.avatarURL({ dynamic: true })
 		},
-		content: message.content
+		content: message.content,
+		attachments: message.attachments.map((attachment, id) => `${message.id}#${id}${Path.extname(attachment.url).toLowerCase()}`) || null
 	};
 	setTimeout(() => { delete client.deletedMessages[message.channel.id] }, 600000);
 });
@@ -273,11 +290,13 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
 	if (!client.editedMessages) client.editedMessages = {};
 	if (oldMessage.partial) return;
 	if (oldMessage.author.bot) return;
+
 	client.editedMessages[oldMessage.channel.id] = {
+		id: oldMessage.id,
 		author: {
 			id: oldMessage.author.id,
 			tag: oldMessage.author.tag,
-			avatar: oldMessage.author.avatar
+			avatar: oldMessage.author.avatarURL({ dynamic: true })
 		},
 		content: oldMessage.content
 	};
@@ -296,8 +315,10 @@ client.on("presenceUpdate", async (_oldMember, newMember) => {
 
 client.login(process.env.TOKEN);
 
+
+
 // MUSIC CODE
-const { Player } = require("./util/MusicPlayer.js");
+const { Player } = require("./utils/MusicPlayer.js");
 const player = new Player(client, {
 	leaveOnEnd: true,
 	leaveOnStop: true,
@@ -308,10 +329,14 @@ const player = new Player(client, {
 client.player = player;
 client.player.npTimers = {};
 
+
+
 const pokedex = require("oakdex-pokedex");
 const values = pokedex.allPokemon().sort((a, b) => a.national_id - b.national_id).map(p => p.catch_rate);
 const catchRates = values.map((_v, i, a) => a.slice(0, i).reduce((partialSum, a) => partialSum + a, 0));
 client.catchRates = catchRates;
+
+
 
 /**
  * Returns the first member of the guild corresponding to the string

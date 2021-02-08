@@ -17,11 +17,12 @@ const command = {
 
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
-        
+		const { length } = await message.client.player.getQueue(message.guild.id);
+		
         const songID = args
             ? parseInt(args[0])
             : options[0].value;
-        if (isNaN(songID) || songID < 1) return message.reply("le numéro de la chanson doit être plus grand que 1").catch(console.error);
+        if (isNaN(songID) || songID < 1 || songID >= length) return message.reply(`le numéro de la chanson doit être compris entre 1 et ${length - 1}`).catch(console.error);
 
 		const song = await message.client.player.skipTo(message.guild.id, songID);
 		message.channel.send(`<a:blackCheck:803603780666523699> | **${songID} musique${songID < 2 ? "" : "s"} passée${songID < 2 ? "" : "s"}**\n> ${song.name}`).catch(console.error);

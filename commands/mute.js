@@ -30,7 +30,7 @@ const command = {
 	execute: async (message, args, options) => {
 		const { OWNER_ID } = require("../config.json");
 		const dhms = require ("dhms");
-		const timeToString = require("../util/timeToString.js");
+		const timeToString = require("../utils/timeToString.js");
 		
 		const member = args
 			? message.guild.members.cache.get((message.mentions.users.first() || {}).id)

@@ -14,8 +14,7 @@ const command = {
 	*/
 	execute: async (message, args, options) => {
 		const member = await message.member.kick("S'est kick lui-même").catch(console.error);
-		const responses = require("../assets/kickms.json");
-		if (member) message.channel.send(`**${message.author.username}** ${responses[Math.floor(Math.random() * responses.length)]}...`).catch(console.error);
+		if (member) message.channel.send(`**${message.author.username}** a fui ses responsabilités`).catch(console.error);
 		else message.channel.send(`Quelque chose s'est mal passé en t'expulsant du serveur :/`).catch(console.error);
 	}
 };
