@@ -8,21 +8,21 @@ const Discord = require("discord.js");
 const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEMBERS", "GUILD_PRESENCES" ]);
 const client = new Discord.Client({ presence: { activity: { name: "le meilleur clan", type: "WATCHING "} }, fetchAllMembers: true, partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
 
-// if (process.env.HOST !== "HEROKU") {
-// 	const shellExec = require("./utils/shellExec.js");
-// 	const output = shellExec("heroku pg:credentials:url --app mayze");
-// 	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
-// 	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
-// 	process.env.DATABASE_URL = connectionURL;
-// }
+if (process.env.HOST !== "HEROKU") {
+	const shellExec = require("./utils/shellExec.js");
+	const output = shellExec("heroku pg:credentials:url --app mayze");
+	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
+	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
+	process.env.DATABASE_URL = connectionURL;
+}
 const pg = require("pg");
 client.pg = newPgClient();
 client.pg.connect().then(() => console.log("Connected to the database")).catch(console.error);
 setInterval(reconnectPgClient, 3600000);
 
-const imageFiles = Fs.readdirSync("discord-images");
+const imageFiles = Fs.readdirSync("./discord-images");
 for (const imageFile of imageFiles) {
-	Fs.unlinkSync(`discord-images/${imageFile}`, () => {});
+	Fs.unlinkSync(`./discord-images/${imageFile}`, () => {});
 }
 
 client.commands = new Discord.Collection();
@@ -114,7 +114,7 @@ client.on("message", async message => {
 	}
 
 	const mayze = client.users.cache.get("703161067982946334");
-	// if (client.beta && mayze.presence.status !== "offline") return;
+	if (client.beta && mayze.presence.status !== "offline") return;
 
 	const chatXP = require("./utils/chatXP.js");
 	if (message.channel.type !== "dm" && !message.author.bot && !message.channel.name.includes("spam")) {
@@ -142,7 +142,7 @@ client.on("message", async message => {
 
 	message.attachments.forEach(async (attachment, id) => {
 		if (![".png", ".jpg", ".jpeg", ".gif"].includes(Path.extname(attachment.url).toLowerCase())) return;
-		download(attachment.url, `discord-images/${message.id}#${id}${Path.extname(attachment.url).toLowerCase()}`);
+		download(attachment.url, `./discord-images/${message.id}#${id}${Path.extname(attachment.url).toLowerCase()}`);
 	});
 });
 
