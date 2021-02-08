@@ -22,7 +22,8 @@ setInterval(reconnectPgClient, 3600000);
 
 const imageFiles = Fs.readdirSync("./discord-images");
 for (const imageFile of imageFiles) {
-	Fs.unlinkSync(`./discord-images/${imageFile}`, () => {});
+	if (imageFile !== "file.txt")
+		Fs.unlinkSync(`./discord-images/${imageFile}`, () => {});
 }
 
 client.commands = new Discord.Collection();
