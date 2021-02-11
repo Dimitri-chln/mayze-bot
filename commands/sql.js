@@ -35,7 +35,7 @@ const command = {
 						}
 					}).catch(console.error);
 				} else {
-					const pagination = require("../utils/pagination.js");
+					const pagination = require("../utils/pagination");
 					const { MessageEmbed } = require("discord.js");
 					const regex = /\[?\s*\{\n(.|\n){0,2000}\},?\n\]?/yg;
 					const matches = resString.match(regex);

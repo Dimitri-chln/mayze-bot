@@ -13,7 +13,7 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options) => {
-		const pagination = require("../utils/pagination.js");
+		const pagination = require("../utils/pagination");
 		const { MessageEmbed } = require("discord.js");
 
 		const { "rows": top } = await message.client.pg.query("SELECT * FROM levels ORDER BY xp DESC").catch(console.error);

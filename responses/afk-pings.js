@@ -5,7 +5,7 @@ const autoresponse = {
      * @param {Message} message 
      */
     async execute(message) {
-        const timeToString = require("../utils/timeToString.js");
+        const timeToString = require("../utils/timeToString");
         if (message.author.bot) return;
         if (message.channel.type === "dm") return;
         const mentionned = message.mentions.users;

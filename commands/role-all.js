@@ -74,7 +74,7 @@ const command = {
 	* @param {Object[]} options
 	*/
 	execute: async (message, args, options) => {
-		const userValidation = require("../utils/userValidation.js");
+		const userValidation = require("../utils/userValidation");
 		const subCommand = args
 			? args[0].toLowerCase()
 			: options[0].name;

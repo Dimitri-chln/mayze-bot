@@ -95,7 +95,7 @@ const command = {
 				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
 				if (message.client.russianRoulette.length < 2) return message.reply("il faut au minimum 2 joueurs pour lancer la partie").catch(console.error);
 				if (message.client.russianRoulette[0].id !== message.author.id && !message.member.hasPermission("KICK_MEMBERS")) return message.reply("seuls les modérateurs ainsi que la personne qui a créé la partie peuvent lancer la partie").catch(console.error);
-				const shuffle = require("../utils/shuffle.js");
+				const shuffle = require("../utils/shuffle");
 				const players = shuffle(message.client.russianRoulette);
 				const { MessageEmbed } = require("discord.js");
 				const embed = new MessageEmbed()
@@ -121,7 +121,7 @@ const command = {
 							msg.edit(embed.setDescription(`🔫 ${deadPlayer.username} est mort !`)).catch(console.error);
 							if (params.includes("-kick")) deadPlayer.kick("Roulette Russe").catch(console.error);
 							else if (params.includes("-mute")) {
-								const mute = require("../commands/mute.js");
+								const mute = require("../commands/mute");
 								const muteMsg = await message.channel.send(`*mute ${deadPlayer} 5m`).catch(console.error);
 								mute.execute(muteMsg, ["5m"]);
 							}

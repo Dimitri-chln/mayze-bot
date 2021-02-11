@@ -9,7 +9,7 @@ const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEM
 const client = new Discord.Client({ presence: { activity: { name: "le meilleur clan", type: "WATCHING "} }, fetchAllMembers: true, partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
 
 if (process.env.HOST !== "HEROKU") {
-	const shellExec = require("./utils/shellExec.js");
+	const shellExec = require("./utils/shellExec");
 	const output = shellExec("heroku pg:credentials:url --app mayze-bot");
 	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
 	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
@@ -117,7 +117,7 @@ client.on("message", async message => {
 	const mayze = client.users.cache.get("703161067982946334");
 	if (client.beta && mayze.presence.status !== "offline") return;
 
-	const chatXP = require("./utils/chatXP.js");
+	const chatXP = require("./utils/chatXP");
 	if (message.channel.type !== "dm" && !message.author.bot && !message.channel.name.includes("spam")) {
 		const bots = message.guild.members.cache.filter(m => m.user.bot);
 		const prefixes = bots.map(b => ((b.nickname || b.user.username).match(/\[.+\]/) || ["[!]"])[0].replace(/[\[\]]/g, ""));
@@ -319,7 +319,7 @@ client.login(process.env.TOKEN);
 
 
 // MUSIC CODE
-const { Player } = require("./utils/MusicPlayer.js");
+const { Player } = require("./utils/MusicPlayer");
 const player = new Player(client, {
 	leaveOnEnd: true,
 	leaveOnStop: true,
