@@ -10,7 +10,7 @@ const client = new Discord.Client({ presence: { activity: { name: "le meilleur c
 
 if (process.env.HOST !== "HEROKU") {
 	const shellExec = require("./utils/shellExec.js");
-	const output = shellExec("heroku pg:credentials:url --app mayze");
+	const output = shellExec("heroku pg:credentials:url --app mayze-bot");
 	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
 	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
 	process.env.DATABASE_URL = connectionURL;
