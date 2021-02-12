@@ -120,7 +120,7 @@ client.on("message", async message => {
 	const chatXP = require("./utils/chatXP");
 	if (message.channel.type !== "dm" && !message.author.bot && !message.channel.name.includes("spam")) {
 		const bots = message.guild.members.cache.filter(m => m.user.bot);
-		const prefixes = bots.map(b => ((b.nickname || b.user.username).match(/\[.+\]/) || ["[!]"])[0].replace(/[\[\]]/g, ""));
+		const prefixes = bots.map(b => (b.displayName.match(/\[.+\]/) || ["[!]"])[0].replace(/[\[\]]/g, ""));
 		if (!prefixes.some(p => message.content.toLowerCase().startsWith(p))) {
 			if (!client.xpMessages) client.xpMessages = {};
 			if (!client.xpMessages[message.author.id]) {
@@ -344,7 +344,7 @@ client.catchRates = catchRates;
  * @param {Discord.Guild} guild The guild where to find the member
  * @param {string} string The ID, nickname or username of the member
  */
-client.findMember = (guild, string) => guild.members.cache.find(member => member.id === string || (member.nickname || "").toLowerCase() === string.toLowerCase() || (member.nickname || "").toLowerCase().includes(string.toLowerCase()) || member.user.username.toLowerCase() === string.toLowerCase() || member.user.username.toLowerCase().includes(string.toLowerCase())) || null;
+client.findMember = (guild, string) => guild.members.cache.find(member => member.id === string || (member.displayName || "").toLowerCase() === string.toLowerCase() || (member.displayName || "").toLowerCase().includes(string.toLowerCase())) || null;
 
 /**
  * @returns {pg.Client} Un client postgreSQL connecté à la base de données de mayze

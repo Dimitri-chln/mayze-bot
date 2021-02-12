@@ -25,7 +25,7 @@ const command = {
 		const webhook = await message.client.fetchWebhook(WEBHOOK_ID).catch(console.error);
 		if (!webhook) return message.channel.send("Quelque chose s'est mal passé en récupérant le webhook :/").catch(console.error);
 		if (webhook.channelID !== message.channel.id) await webhook.edit({ channel: message.channel }).catch(console.error);
-		webhook.send(msg, { avatarURL: user.avatarURL(), username: message.guild.member(user).nickname || user.username }).catch(console.error);
+		webhook.send(msg, { avatarURL: user.avatarURL(), username: message.guild.member(user).displayName }).catch(console.error);
 		message.delete().catch(console.error);
 	}
 };

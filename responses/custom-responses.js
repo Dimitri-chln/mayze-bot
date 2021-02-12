@@ -49,7 +49,8 @@ const command = {
 				},
 				member: {
 					id: message.member.id,
-					nickname: message.member.nickname
+					nickname: message.member.nickname,
+					displayName: message.member.displayName
 				},
 				channel: {
 					id: message.channel.id,
@@ -69,7 +70,7 @@ const command = {
 					},
 					members: {
 						...message.mentions.members.map(m => {
-							return { id: m.id, nickname: m.nickname };
+							return { id: m.id, nickname: m.nickname, displayName: m.displayName };
 						})
 					},
 					channels: {

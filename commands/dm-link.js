@@ -73,7 +73,7 @@ const command = {
 					}
 				}).catch(console.error);
 			} else {
-				webhook.send(msg.content, { avatarURL: user.avatarURL(), username: message.guild.member(user).nickname || user.username}).catch(console.error);
+				webhook.send(msg.content, { avatarURL: user.avatarURL(), username: message.guild.member(user).displayName }).catch(console.error);
 			}
 		});
 	}
