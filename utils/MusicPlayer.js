@@ -1133,11 +1133,11 @@ class Player {
 			let stream = await ytdl(song.url, { filter: 'audioonly', quality: Quality, highWaterMark: 1 << 25, begin: queue.seek, requestOptions: { headers: { cookie: "HSID=AyMxzyzDLN3XbAESN; SSID=A7gqY6Y7bxd2jrAJn; SID=6AeInQcZOwc-QYIoi93PIlbOs_gn-UZ-lMfAeeal0SCuCyLIFkTCNfKST96zDFoh3gZH4w.;"} } }).catch(console.error);
 			if (!stream) return this._playSong(guildID, false);
 
-			let dispatcher = queue.connection.play(stream, { type: "opus", bitrate: 96000, higWaterMark: 50, volume: false });
+			let dispatcher = queue.connection.play(stream, { type: "opus", bitrate: 96000, higWaterMark: 50 });
 			queue.dispatcher = dispatcher;
 			queue.seek = 0;
 			// Set volume
-			// dispatcher.setVolumeLogarithmic(queue.volume / 200);
+			dispatcher.setVolumeLogarithmic(queue.volume / 200);
 
 			// When the song ends
 			dispatcher.on('finish', () => {
