@@ -125,12 +125,14 @@ const command = {
 						title: prize,
 						description: `Il reste ${timeToString((endTimestamp.valueOf() - Date.now()) / 1000)}`,
 						footer: {
-							text: `${winners} gagnant${winners === 1 ? "" : "s"} | ID: ${parseInt(message.id.slice(12)).toString(36)} | Fin du giveaway`
+							text: `${winners} gagnant${winners === 1 ? "" : "s"} | ID: En attente... | Fin du giveaway`
 						},
 						timestamp: new Date(Date.now() + duration)
 					}
 				}).catch(console.error);
 				if (!msg) return message.channel.send("Quelque chose s'est mal passé en envoyant le message :/").catch(console.error);
+
+				msg.edit(msg.embeds[0].setFooter(`${winners} gagnant${winners === 1 ? "" : "s"} | ID: ${parseInt(msg.id.slice(12)).toString(36)} | Fin du giveaway`))
 
 				msg.react("🎉").catch(console.error);
 				const timer = setInterval(() => updateGwaMsg(msg), 10000);
@@ -151,7 +153,7 @@ const command = {
 
 				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
 				if (!messages) return message.channel.send("Quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
-
+				console.log(messages);
 				const msg = ID
 					? messages.find(m => parseInt(m.id.slice(12)).toString(36) === ID)
 					: messages.filter(m => m.author.id === message.client.id && m.embeds.length && m.author.name.startsWith("Giveaway de")).first();
