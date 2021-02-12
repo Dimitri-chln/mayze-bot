@@ -153,10 +153,11 @@ const command = {
 
 				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
 				if (!messages) return message.channel.send("Quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
-				console.log(messages.first());
+				const giveaways = messages.filter(msg => msg.author.id === message.client.user.id && msg.embeds.length && msg.embeds[0].author.name.startsWith("Giveaway de") && msg.embeds[0].description !== "Giveaway terminé !");
+
 				const msg = ID
-					? messages.find(m => parseInt(m.id.slice(12)).toString(36) === ID)
-					: messages.filter(m => m.author.id === message.client.id && m.embeds.length && m.author.name.startsWith("Giveaway de")).first();
+					? giveaways.find(m => parseInt(m.id.slice(12)).toString(36) === ID)
+					: giveaways.first();
 				if (!msg) return message.reply("l'ID est incorrect").catch(console.error);
 
 				msg.edit(msg.embeds[0].setTimestamp(Date.now())).catch(console.error);
@@ -176,10 +177,11 @@ const command = {
 
 				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
 				if (!messages) return message.channel.send("Quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
+				const giveaways = messages.filter(msg => msg.author.id === message.client.user.id && msg.embeds.length && msg.embeds[0].author.name.startsWith("Giveaway de") && msg.embeds[0].description !== "Giveaway terminé !");
 
 				const msg = ID
-					? messages.find(m => parseInt(m.id.slice(12)).toString(36) === ID)
-					: messages.filter(m => m.author.id === message.client.id && m.embeds.length && m.author.name.startsWith("Giveaway de")).first();
+					? giveaways.find(m => parseInt(m.id.slice(12)).toString(36) === ID)
+					: giveaways.first();
 				if (!msg) return message.reply("l'ID est incorrect").catch(console.error);
 
 				msg.delete().catch(console.error);
@@ -201,10 +203,11 @@ const command = {
 
 				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
 				if (!messages) return message.channel.send("Quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
+				const giveaways = messages.filter(msg => msg.author.id === message.client.user.id && msg.embeds.length && msg.embeds[0].author.name.startsWith("Giveaway de") && msg.embeds[0].description !== "Giveaway terminé !");
 
 				const msg = ID
-					? messages.find(m => parseInt(m.id.slice(12)).toString(36) === ID)
-					: messages.filter(m => m.author.id === message.client.id && m.embeds.length && m.author.name.startsWith("Giveaway de")).first();
+					? giveaways.find(m => parseInt(m.id.slice(12)).toString(36) === ID)
+					: giveaways.first();
 				if (!msg) return message.reply("l'ID est incorrect").catch(console.error);
 
 				updateGwaMsg(msg);
