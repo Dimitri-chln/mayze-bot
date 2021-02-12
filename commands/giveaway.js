@@ -4,7 +4,7 @@ const command = {
 	name: "giveaway",
 	description: "Crée et gère des giveaway",
 	aliases: ["gwa", "ga"],
-	args: 2,
+	args: 1,
 	usage: "create \"<prix>\" <durée> [nombre gagnants] [-mention <rôle>] | end [ID] | delete [ID] | reroll [ID]",
 	perms: ["MANAGE_ROLES", "MANAGE_CHANNELS", "MANAGE_MESSAGES"],
 	slashOptions: [
