@@ -149,7 +149,7 @@ const command = {
 			case "end": {
 				const ID = args
 					? (args[1] || "").toLowerCase()
-					: (options[0].options[0].value || "").toLowerCase();
+					: (options[0].options ? options[0].options[0].value : "").toLowerCase();
 
 				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
 				if (!messages) return message.channel.send("Quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
@@ -173,7 +173,7 @@ const command = {
 			case "delete": {
 				const ID = args
 					? (args[1] || "").toLowerCase()
-					: (options[0].options[0].value || "").toLowerCase();
+					: (options[0].options ? options[0].options[0].value : "").toLowerCase();
 
 				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
 				if (!messages) return message.channel.send("Quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
@@ -199,7 +199,7 @@ const command = {
 			case "reroll": {
 				const ID = args
 					? (args[1] || "").toLowerCase()
-					: (options[0].options[0].value || "").toLowerCase();
+					: (options[0].options ? options[0].options[0].value : "").toLowerCase();
 
 				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
 				if (!messages) return message.channel.send("Quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
