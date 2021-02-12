@@ -14,11 +14,12 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options) => {
-		// https://discord.com/api/webhooks/800791146456023111/RBX84XUa7V5ni-JSMkrHGYZKimO4VsRn5XGl2HGMXUoM65xo7_gGKNMyi6N5xUtNvbjQ
-		const webhooks = await message.guild.fetchWebhooks();
-		const webhook = webhooks.get("800791146456023111");
-		await webhook.edit({ channel: message.channel.id });
-		webhook.send("cc", { avatarURL: message.author.avatarURL(), username: message.member.nickname || message.author.username}).catch(console.error);
+		const number = parseInt(args[0].slice(12));
+		const base = parseInt(args[1] || 36);
+		const encoded = number.toString(base);
+		const decoded = parseInt(encoded, base);
+
+		message.channel.send(`Input: \`${args[0]}\`\nParsed: \`${number}\`\nEncoded (base ${base}): \`${encoded}\`\nDecoded: \`${decoded}\``);
 	}
 };
 

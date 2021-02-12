@@ -5,7 +5,7 @@ const command = {
 	description: "Créer un sondage dans le salon actuel",
 	aliases: ["ask", "question"],
 	args: 1,
-	usage: "<question> [proposition]/[proposition]/...",
+	usage: "\"<question>\" \"[proposition]\" \"[proposition]\"...",
 	slashOptions: [
 		{
 			name: "question",
@@ -26,15 +26,17 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options) => {
-		const [ question ] = args
-			? args.join(" ").match(/^["«][^"»]*["»]/) || []
-			: [ options[0].value ];
+		const question = args
+			? args[0]
+			: options[0].value;
 		if (!question) return message.reply("écris ta question entre guillemets").catch(console.error);
 		const answers = args
-			? args.join(" ").replace(question, "").trim().split("/").length < 2 ? [ "Oui", "Non" ] : args.join(" ").replace(question, "").trim().split("/").map(answer => answer.replace(/^./, a => a.toUpperCase()))
-			: (options[1] || { value: "" }).value.trim().split("/").length < 2 ? [ "Oui", "Non" ] : (options[1] || { value: "" }).value.trim().split("/").map(answer => answer.replace(/^./, a => a.toUpperCase()));
+			? args.length > 1 ? args.slice(1) : [ "Oui", "Non" ]
+			: (options[1] || { value: "" }).value.trim().split("/").length > 1 ? (options[1] || { value: "" }).value.trim().split("/").map(answer => answer.replace(/^./, a => a.toUpperCase())) : [ "Oui", "Non"];
+		
 		const emojis = answers === ["Oui", "Non"] ? ["✅", "❌"] : ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].slice(0, answers.length);
 		emojis.push("🛑");
+		
 		if (message.deletable) message.delete().catch(console.error);
 		sendPoll();
 

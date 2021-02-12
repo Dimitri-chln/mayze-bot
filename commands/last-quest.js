@@ -6,7 +6,7 @@ const command = {
 	aliases: ["lastQuest", "lq"],
 	cooldown: 5,
 	args: 1,
-	usage: "[-image (+image)] [-everyone/-members] [-single/-multiple]",
+	usage: "[-image (+image)] [-everyone|-members] [-single|-multiple]",
 	onlyInGuilds: ["689164798264606784"],
 	disableSlash: true,
 	/**

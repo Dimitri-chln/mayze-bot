@@ -88,14 +88,15 @@ const command = {
 		
 		switch (subCommand) {
 			case "add": {
-				const [ trigger, response ] = args
-					? args.join(" ").match(/"[^"]+"/g) || []
-					: [ options[0].options[0].value, options[0].options[1].value ];
-				console.log(trigger);
-				console.log(response);
-				if (!trigger || !response) return message.reply("écris le déclencheur et la réponse entre guillemets").catch(console.error);
+				const trigger = args
+					? args[1]
+					: options[0].options[0].value;
+				const response = args
+					? args[2]
+					: options[0].options[1].value;
+				if (args.length < 3) return message.reply("écris le déclencheur et la réponse entre guillemets").catch(console.error);
 				const triggerType = args
-					? parseInt(args.pop()) || 0
+					? parseInt(args[3]) || 0
 					: options[0].options[2] ? options[0].options[2].value : 0;
 
 				const res = await message.client.pg.query(`INSERT INTO responses (trigger, response, trigger_type) VALUES ('${trigger.replace(/"/g, "")}', '${response.replace(/"/g, "")}', ${triggerType})`).catch(console.error);

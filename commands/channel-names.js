@@ -5,7 +5,7 @@ const command = {
 	description: "Modifier le nom de tous les salons en une seule commande",
 	aliases: ["channelNames", "cn"],
 	args: 2,
-	usage: "<regex> <remplacement> [type]",
+	usage: "\"<regex>\" \"<remplacement>\" [type]",
 	perms: ["ADMINISTRATOR"],
 	slashOptions: [
 		{

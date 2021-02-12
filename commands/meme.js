@@ -43,9 +43,12 @@ const command = {
 
 		if (image) {
 			if (!memes.includes(image)) return message.reply(`cette image n'existe pas, tu peux voir la liste de toutes les images avec la commande \`${message.client.prefix}meme\``);
-			const [ top, bottom ] = args
-				? args.join(" ").match(/"([^"])*"/g) || []
-				: [ (options.find(o => o.name === "texte-haut") || {}).value, (options.find(o => o.name === "texte-bas") || {}).value ];
+			const top = args
+				? args[1]
+				: (options.find(o => o.name === "texte-haut") || {}).value;
+			const bottom = args
+				? args[2]
+				: (options.find(o => o.name === "texte-bas") || {}).value;
 
 			const url = `https://api.memegen.link/images/${image}/${replacement(top || " ")}/${replacement(bottom || " ")}.png`;
 
