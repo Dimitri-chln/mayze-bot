@@ -23,7 +23,7 @@ const command = {
 	execute: async (message, args, options) => {
 		const gifts = require("../assets/gifts.json");
 		const user = args
-			? message.mentions.users.first() || (message.guild.members.cache.find(member => member.user.username.toLowerCase() === args.join(" ").toLowerCase() || member.user.username.toLowerCase().includes(args.join(" ").toLowerCase())) || {}).user
+			? message.mentions.users.first() || (message.client.findMember(args.join(" ")) || {}).user
 			: message.guild.members.cache.get(options[0].value).user;
 		if (!user) return message.reply("mentionne la personne à qui offrir un cadeau").catch(console.error);
 		message.channel.send(`> 🎁 ${user}, tu as reçu __**${getGift(gifts)}**__ de la part de **${message.author.username}**`).catch(console.error);
