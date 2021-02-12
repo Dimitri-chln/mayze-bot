@@ -198,12 +198,12 @@ const command = {
 			}
 			case "reroll": {
 				const ID = args
-					? args[1].toLowerCase()
+					? (args[1] || "").toLowerCase()
 					: options[0].options[0].value.toLowerCase();
 
 				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
 				if (!messages) return message.channel.send("Quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
-				const giveaways = messages.filter(msg => msg.author.id === message.client.user.id && msg.embeds.length && msg.embeds[0].author.name.startsWith("Giveaway de") && msg.embeds[0].description !== "Giveaway terminé !");
+				const giveaways = messages.filter(msg => msg.author.id === message.client.user.id && msg.embeds.length && msg.embeds[0].author.name.startsWith("Giveaway de") && msg.embeds[0].description === "Giveaway terminé !");
 
 				const msg = ID
 					? giveaways.find(m => parseInt(m.id.slice(12)).toString(36) === ID)
