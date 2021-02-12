@@ -146,7 +146,7 @@ const command = {
 			}
 			case "end": {
 				const ID = args
-					? args[1].toLowerCase()
+					? (args[1] || "").toLowerCase()
 					: options[0].options[0].value.toLowerCase();
 
 				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
@@ -169,7 +169,7 @@ const command = {
 			}
 			case "delete": {
 				const ID = args
-					? args[1].toLowerCase()
+					? (args[1] || "").toLowerCase()
 					: options[0].options[0].value.toLowerCase();
 
 				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
