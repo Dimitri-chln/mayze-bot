@@ -153,7 +153,7 @@ const command = {
 
 				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
 				if (!messages) return message.channel.send("Quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
-				console.log(messages);
+				console.log(messages.first());
 				const msg = ID
 					? messages.find(m => parseInt(m.id.slice(12)).toString(36) === ID)
 					: messages.filter(m => m.author.id === message.client.id && m.embeds.length && m.author.name.startsWith("Giveaway de")).first();
