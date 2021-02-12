@@ -5,7 +5,7 @@ const command = {
 	description: "Crée et gère des giveaway",
 	aliases: ["gwa", "ga"],
 	args: 2,
-	usage: "create \"<prix>\" <durée> [nombre gagnants] [-mention <rôle>] | end <ID> | delete <ID>",
+	usage: "create \"<prix>\" <durée> [nombre gagnants] [-mention <rôle>] | end [ID] | delete [ID] | reroll [ID]",
 	perms: ["MANAGE_ROLES", "MANAGE_CHANNELS", "MANAGE_MESSAGES"],
 	slashOptions: [
 		{
@@ -48,7 +48,7 @@ const command = {
 					name: "id",
 					description: "L'ID de 4 lettres du giveaway",
 					type: 3,
-					required: true
+					required: false
 				}
 			]
 		},
@@ -61,7 +61,20 @@ const command = {
 					name: "id",
 					description: "L'ID de 4 lettres du giveaway",
 					type: 3,
-					required: true
+					required: false
+				}
+			]
+		},
+		{
+			name: "reroll",
+			description: "Désigner un nouveau gagnant",
+			type: 1,
+			options: [
+				{
+					name: "id",
+					description: "L'ID de 4 lettres du giveaway",
+					type: 3,
+					required: false
 				}
 			]
 		}
@@ -112,7 +125,7 @@ const command = {
 						title: prize,
 						description: `Il reste ${timeToString((endTimestamp.valueOf() - Date.now()) / 1000)}`,
 						footer: {
-							text: `${winners} gagnant${winners === 1 ? "" : "s"} | Fin du giveaway`
+							text: `${winners} gagnant${winners === 1 ? "" : "s"} | ID: ${parseInt(message.id.slice(12)).toString(36)} | Fin du giveaway`
 						},
 						timestamp: new Date(Date.now() + duration)
 					}
@@ -120,7 +133,7 @@ const command = {
 				if (!msg) return message.channel.send("Quelque chose s'est mal passé en envoyant le message :/").catch(console.error);
 
 				msg.react("🎉").catch(console.error);
-				const timer = setInterval(() => updateGwaMsg(msg), 6000);
+				const timer = setInterval(() => updateGwaMsg(msg), 10000);
 				message.client.giveawayTimers.set(msg.id, timer);
 
 				if (message.deletable) {
@@ -132,12 +145,17 @@ const command = {
 				break;
 			}
 			case "end": {
-				const messageID = args
-					? args[1]
-					: options[0].options[0].value;
+				const ID = args
+					? args[1].toLowerCase()
+					: options[0].options[0].value.toLowerCase();
 
-				const msg = await channel.messages.fetch(messageID).catch(console.error);
-				if (!msg || !msg.embeds.length || !msg.embeds[0].author.name.startsWith("Giveaway de")) return message.reply("l'ID du message est invalide");
+				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
+				if (!messages) return message.channel.send("Quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
+
+				const msg = ID
+					? messages.find(m => parseInt(m.id.slice(12)).toString(36) === ID)
+					: messages.filter(m => m.author.id === message.client.id && m.embeds.length && m.author.name.startsWith("Giveaway de")).first();
+				if (!msg) return message.reply("l'ID est incorrect").catch(console.error);
 
 				msg.edit(msg.embeds[0].setTimestamp(Date.now())).catch(console.error);
 
@@ -150,12 +168,17 @@ const command = {
 				break;
 			}
 			case "delete": {
-				const messageID = args
-					? args[1]
-					: options[0].options[0].value;
+				const ID = args
+					? args[1].toLowerCase()
+					: options[0].options[0].value.toLowerCase();
 
-				const msg = await channel.messages.fetch(messageID).catch(console.error);
-				if (!msg || !msg.embeds.length || !msg.embeds[0].author.name.startsWith("Giveaway de")) return message.reply("l'ID du message est invalide");
+				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
+				if (!messages) return message.channel.send("Quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
+
+				const msg = ID
+					? messages.find(m => parseInt(m.id.slice(12)).toString(36) === ID)
+					: messages.filter(m => m.author.id === message.client.id && m.embeds.length && m.author.name.startsWith("Giveaway de")).first();
+				if (!msg) return message.reply("l'ID est incorrect").catch(console.error);
 
 				msg.delete().catch(console.error);
 				clearInterval(message.client.giveawayTimers.get(msg.id));
@@ -166,6 +189,29 @@ const command = {
 					else message.react("✅").catch(console.error);
 				} else {
 					if (message.channel.id !== GIVEAWAY_CHANNEL_ID) message.channel.send("Giveaway supprimé").catch(console.error);
+				}
+				break;
+			}
+			case "reroll": {
+				const ID = args
+					? args[1].toLowerCase()
+					: options[0].options[0].value.toLowerCase();
+
+				const messages = await channel.messages.fetch({ limit: 100 }).catch(console.error);
+				if (!messages) return message.channel.send("Quelque chose s'est mal passé en récupérant les messages :/").catch(console.error);
+
+				const msg = ID
+					? messages.find(m => parseInt(m.id.slice(12)).toString(36) === ID)
+					: messages.filter(m => m.author.id === message.client.id && m.embeds.length && m.author.name.startsWith("Giveaway de")).first();
+				if (!msg) return message.reply("l'ID est incorrect").catch(console.error);
+
+				updateGwaMsg(msg);
+
+				if (message.deletable) {
+					if (message.channel.id === GIVEAWAY_CHANNEL_ID) message.delete().catch(console.error);
+					else message.react("✅").catch(console.error);
+				} else {
+					if (message.channel.id !== GIVEAWAY_CHANNEL_ID) message.channel.send("Nouveau gagnant désigné").catch(console.error);
 				}
 				break;
 			}

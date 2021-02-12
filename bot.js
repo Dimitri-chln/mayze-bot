@@ -112,7 +112,7 @@ client.on("ready", async () => {
 
 		for (const [ id, message ] of messages) {
 			if (message.partial) await message.fetch();
-			const timer = setInterval(() => updateGwaMsg(message), 6000);
+			const timer = setInterval(() => updateGwaMsg(message), 10000);
 			client.giveawayTimers.set(id, timer);
 		}
 	});
