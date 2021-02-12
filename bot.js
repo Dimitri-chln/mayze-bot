@@ -101,6 +101,21 @@ client.on("ready", async () => {
 	const mayze = client.users.cache.get("703161067982946334");
 	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.PREFIX : config.PREFIX_BETA ) : config.PREFIX;
 	client.prefix = prefix;
+
+	// GIVEAWAYS
+	client.giveawayTimers = new Discord.Collection();
+	const giveawayChannel = client.channels.cache.get(config.GIVEAWAY_CHANNEL_ID);
+	const updateGwaMsg = require("./utils/updateGwaMsg");
+
+	giveawayChannel.messages.fetch({ limit: 100 }).then(async messages => {
+		messages = messages.filter(msg => msg.author.id === client.user.id && msg.embeds.length && msg.embeds[0].author.name.startsWith("Giveaway de") && msg.embeds[0].description !== "Giveaway terminé !");
+
+		for (const [ id, message ] of messages) {
+			if (message.partial) await message.fetch();
+			const timer = setInterval(() => updateGwaMsg(message), 6000);
+			client.giveawayTimers.set(id, timer);
+		}
+	});
 });
 
 client.on("message", async message => {
@@ -334,6 +349,7 @@ client.player.npTimers = {};
 
 
 
+// POKEDEX CATCH RATES
 const pokedex = require("oakdex-pokedex");
 const values = pokedex.allPokemon().sort((a, b) => a.national_id - b.national_id).map(p => p.catch_rate);
 const catchRates = values.map((_v, i, a) => a.slice(0, i).reduce((partialSum, a) => partialSum + a, 0));

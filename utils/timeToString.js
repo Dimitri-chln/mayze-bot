@@ -1,5 +1,5 @@
 /**
- * @param {number} time The time in milliseconds
+ * @param {number} time The time in seconds
  */
 function timeToString(date) {
 	const years = Math.floor(date / 31536000);
