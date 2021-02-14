@@ -125,7 +125,7 @@ client.on("message", async message => {
 		const input = message.content.slice(client.prefix.length).trim().split(/ +/g);
 		const commandName = input.shift().toLowerCase();
 		const args = parseArgs(input.join(" "));
-		console.log(args);
+		
 		const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 		if (command) processCommand(command, message, args);
 	}
