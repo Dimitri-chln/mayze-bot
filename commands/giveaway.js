@@ -132,7 +132,7 @@ const command = {
 				}).catch(console.error);
 				if (!msg) return message.channel.send("Quelque chose s'est mal passé en envoyant le message :/").catch(console.error);
 
-				msg.edit(msg.embeds[0].setFooter(`${winners} gagnant${winners === 1 ? "" : "s"} | ID: ${parseInt(msg.id.slice(12)).toString(36)} | Fin du giveaway`))
+				msg.edit(msg.embeds[0].setFooter(`${winners} gagnant${winners === 1 ? "" : "s"} | ID: ${parseInt(msg.id.slice(12)).toString(36).toUpperCase()} | Fin du giveaway`))
 
 				msg.react("🎉").catch(console.error);
 				const timer = setInterval(() => updateGwaMsg(msg), 10000);

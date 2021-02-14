@@ -46,7 +46,8 @@ const command = {
 		} else {
 
 			const command = commands.get(commandName) || commands.find(c => c.aliases && c.aliases.includes(commandName));
-			if (!command) message.reply("cette commande n'existe pas").catch(console.error);
+			if (!command) return message.reply("cette commande n'existe pas").catch(console.error);
+
 			let data = `**Nom:** \`${command.name}\``;
 			if (command.aliases.length) data += `\n**Aliases:** \`${command.aliases.join("`, `")}\``;
 			if (command.description) data += `\n**Description:** ${command.description}`;
@@ -54,6 +55,7 @@ const command = {
 			if (command.perms) data += `\n**Permissions:** \`${command.perms.join("`, `")}\``;
 			if (command.ownerOnly || command.allowedUsers) data += `\n**Utilisable par:** ${command.ownerOnly ? (command.allowedUsers || []).concat(OWNER_ID).map(u => `<@${u}>`).join(", ") : command.allowedUsers.map(u => `<@${u}>`).join(", ")}`;
 			data += `\n**Cooldown:** ${command.cooldown || 2} seconde(s)`;
+			
 			message.channel.send({
 				embed: {
 					title: "__Message d'aide automatisé__",
