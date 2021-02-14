@@ -8,13 +8,13 @@ const Discord = require("discord.js");
 const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEMBERS", "GUILD_PRESENCES" ]);
 const client = new Discord.Client({ presence: { activity: { name: "le meilleur clan", type: "WATCHING "} }, fetchAllMembers: true, partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
 
-if (process.env.HOST !== "HEROKU") {
-	const shellExec = require("./utils/shellExec");
-	const output = shellExec("heroku pg:credentials:url --app mayze-bot");
-	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
-	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
-	process.env.DATABASE_URL = connectionURL;
-}
+// if (process.env.HOST !== "HEROKU") {
+// 	const shellExec = require("./utils/shellExec");
+// 	const output = shellExec("heroku pg:credentials:url --app mayze-bot");
+// 	const connectionURLregex = /postgres:\/\/(\w+):(\w+)@(.*):(\d+)\/(\w+)/;
+// 	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
+// 	process.env.DATABASE_URL = connectionURL;
+// }
 const pg = require("pg");
 client.pg = newPgClient();
 client.pg.connect().then(() => console.log("Connected to the database")).catch(console.error);
@@ -124,9 +124,8 @@ client.on("message", async message => {
 	if (message.channel.type !== "dm" && message.content.toLowerCase().startsWith(client.prefix) && !message.author.bot) {
 		const input = message.content.slice(client.prefix.length).trim().split(/ +/g);
 		const commandName = input.shift().toLowerCase();
-		const argsRegex = /(?:"([^"]*)")|([^"]?[^\s]*[^"]?)/g;
-		const args = input.join(" ").match(argsRegex).map(a => a.replace(/(^")|("$)/g, "").trim());
-		args.pop();
+		const args = parseArgs(input.join(" "));
+		console.log(args);
 		const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 		if (command) processCommand(command, message, args);
 	}
@@ -332,6 +331,25 @@ client.on("presenceUpdate", async (_oldMember, newMember) => {
 });
 
 client.login(process.env.TOKEN);
+
+
+
+/**
+ * @param {string} input 
+ */
+function parseArgs(input) {
+	const argsRegex = /("[^"]*")|([^"\s]*)/g;
+	let args = input.match(argsRegex);
+
+	args.forEach((a, i) => {
+		if (!/^".*"$/.test(a)) args.splice(i, 1, ...a.split(/ +/g));
+	});
+
+	args = args.filter(a => a);
+	args = args.map(a => a.replace(/"/g, ""));
+
+	return args;
+}
 
 
 
