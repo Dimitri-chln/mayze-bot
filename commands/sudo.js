@@ -12,7 +12,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const { WEBHOOK_ID } = require("../config.json");
 		const user = args
 			? message.mentions.users.first() || (message.client.findMember(message.guild, args[0]) || {}).user

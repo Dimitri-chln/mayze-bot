@@ -10,7 +10,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const command = args
 			? args.join(" ")
 			: options[0].value;

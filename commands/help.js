@@ -19,8 +19,8 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options) => {
-		const { commands } = message.client;
+	execute: async (message, args, options, languages, language) => {
+		const commands = message.client.commands.filter(cmd => !cmd.onlyInGuilds || cmd.onlyInGuilds.includes(message.guild.id));
 		const { OWNER_ID } = require("../config.json");
 		const commandName = args
 			? (args[0] || "").toLowerCase()

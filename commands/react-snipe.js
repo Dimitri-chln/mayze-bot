@@ -1,7 +1,7 @@
 const command = {
-	name: "reactsnipe",
+	name: "react-snipe",
 	description: "Montre sur le salon la réaction que quelqu'un vient de supprimer",
-	aliases: [],
+	aliases: ["reactsnipe"],
 	args: 0,
 	usage: "",
 	slashOptions: null,
@@ -10,7 +10,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const snipedReaction = message.client.removedReactions ? message.client.removedReactions[message.channel.id] : null;
 		if (!snipedReaction) return message.reply("il n'y a aucune réaction à snipe dans ce salon").catch(console.error);
 		

@@ -12,7 +12,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const Fs = require("fs");
 
 		const snipedMsg = message.client.deletedMessages ? message.client.deletedMessages[message.channel.id] : null;

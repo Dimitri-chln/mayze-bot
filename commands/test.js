@@ -13,7 +13,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const number = parseInt(args[0].slice(12));
 		const base = parseInt(args[1] || 36);
 		const encoded = number.toString(base);

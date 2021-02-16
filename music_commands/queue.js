@@ -12,7 +12,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const pagination = require("../utils/pagination");
 		const { MessageEmbed } = require("discord.js");
 		const isPlaying = message.client.player.isPlaying(message.guild.id);

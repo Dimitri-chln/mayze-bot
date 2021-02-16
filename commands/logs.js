@@ -12,7 +12,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		if (process.env.HOST === "HEROKU") return message.reply("cette commande ne fonctionne pas sur Heroku").catch(console.error);
 		const shellExec = require("../utils/shellExec");
 		const output = shellExec("heroku logs --app mayze");

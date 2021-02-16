@@ -25,7 +25,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const series = args
 			? (args.join(" ").match(/"[^"]*"/)|| [""])[0].toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase())
 			: options[0].value.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());

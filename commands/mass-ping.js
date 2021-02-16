@@ -26,7 +26,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const { Collection } = require("discord.js");
 		const messages = new Collection();
 		const user = args

@@ -19,7 +19,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		let color = args
 			? hexToRGB(args[0])
 			: hexToRGB(options[0].value);

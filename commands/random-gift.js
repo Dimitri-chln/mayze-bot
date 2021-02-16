@@ -20,7 +20,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const gifts = require("../assets/gifts.json");
 		const user = args
 			? message.mentions.users.first() || (message.client.findMember(args.join(" ")) || {}).user

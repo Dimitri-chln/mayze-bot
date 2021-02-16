@@ -12,7 +12,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
 		const queue = message.client.player.getQueue(message.guild.id);

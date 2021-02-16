@@ -42,7 +42,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const timeToString = require("../utils/timeToString");
 
 		const subCommand = args
@@ -56,31 +56,31 @@ const command = {
 					? args[1].toUpperCase()
 					: options[0].options[0].value.toUpperCase();
 				const description = args
-					? args.slice(2).join(" ") || "Partie classique"
-					: options[0].options[1].value || "Partie classique";
-				if (!code || !/\w{6}/.test(code)) return message.reply("entre un code valide").catch(console.error);
+					? args.slice(2).join(" ") || languages.data.among_us.default_desc[language]
+					: options[0].options[1].value || languages.data.among_us.default_desc[language];
+				if (!code || !/\w{6}/.test(code)) return message.reply(languages.data.among_us.invalid_code[language]).catch(console.error);
 				games[message.author.id] = {
 					code: code,
 					description: description,
 					time: Date.now()
 				};
 				message.client.amongUsGames = games;
-				message.reply("partie ajoutée !").catch(console.error);
+				message.reply(languages.data.among_us.game_added[language]).catch(console.error);
 				break;
 			case "delete":
-				if (!games[message.author.id]) return message.reply("tu n'as pas de partie en cours").catch(console.error);
+				if (!games[message.author.id]) return message.reply(languages.data.among_us.user_no_ongoing[language]).catch(console.error);
 				delete games[message.author.id];
-				message.reply("partie supprimée !").catch(console.error);
+				message.reply(languages.data.among_us.game_deleted[language]).catch(console.error);
 				break;
 			default:
 				message.channel.send({
 					embed: {
 						author: {
-							name: "Parties Among Us en cours",
+							name: languages.data.among_us.ongoing_games[language],
 							icon_url: message.client.user.avatarURL()
 						},
 						color: "#010101",
-						description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(il y a ${timeToString((Date.now() - e[1].time)/1000)})`).join("\n——————————\n") || "*Aucune partie en cours!*",
+						description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(${languages.get(languages.data.among_us.time_ago[language], timeToString((Date.now() - e[1].time) / 1000, language))})`).join("\n——————————\n") || languages.data.among_us.no_ongoing[language],
 						footer: {
 							text: "✨ Mayze ✨"
 						}

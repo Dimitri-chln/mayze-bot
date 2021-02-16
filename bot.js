@@ -3,6 +3,7 @@ const Axios = require("axios").default;
 const Path = require("path");
 const config = require("./config.json");
 require('dotenv').config();
+const languages = require("./utils/languages");
 
 const Discord = require("discord.js");
 const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEMBERS", "GUILD_PRESENCES" ]);
@@ -173,14 +174,16 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
 });
 
 async function processCommand(command, message, args, options) {
-	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return message.reply("cette commande ne fonctionne pas sur ce serveur").catch(console.error);
-	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm))) return message.reply(`tu n'as pas les permissions nécessaires \n→ \`${command.perms.join("`, `")}\``).catch(console.error);
+	const language = "fr";
+
+	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return message.reply(languages.data.unauthorized_guild[language]).catch(console.error);
+	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm))) return message.reply(languages.get(languages.data.unauthorized_perms[language], command.perms.join("`, `"))).catch(console.error);
 	if (command.ownerOnly) {
 		if (command.allowedUsers) {
 			if (!command.allowedUsers.includes(message.author.id) && message.author.id !== config.OWNER_ID) return;
 		} else if (message.author.id !== config.OWNER_ID) return;
 	} else if (command.allowedUsers && !command.allowedUsers.includes(message.author.id)) return;
-	if (args && args.length < command.args) return message.channel.send(`Utilisation : \`${client.prefix}${command.name} ${command.usage}\``).catch(console.error);
+	if (args && args.length < command.args) return message.channel.send(languages.get(languages.data.wrong_usage[language], `${client.prefix + command.name} ${command.usage}`)).catch(console.error);
 
 	if (!client.cooldowns.has(command.name)) client.cooldowns.set(command.name, new Discord.Collection());
 	const now = Date.now();
@@ -194,18 +197,18 @@ async function processCommand(command, message, args, options) {
 				.toUTCString()
 				.replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
 				.replace(/00h |00m /g, "");
-			return message.reply(`attends encore **${timeLeftHumanized}** avant d'utiliser la commande \`${client.prefix}${command.name}\``).catch(console.error);
+			return message.reply(languages.get(languages.data.cooldown[language], timeLeftHumanized, client.prefix + command.name)).catch(console.error);
 		}
 	}
 
-	command.execute(message, args, options)
+	command.execute(message, args, options, languages, language)
 	.then(() => {
 		timestamps.set(message.author.id, now);
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 	})
 	.catch(err => {
 		console.error(err);
-		message.channel.send("Quelque chose s'est mal passé en exécutant la commande :/").catch(console.error);
+		message.channel.send(languages.data.error[language]).catch(console.error);
 	});
 }
 
@@ -245,8 +248,11 @@ client.on("messageReactionRemove", async (reaction, user) => {
 });
 
 client.on("guildMemberAdd", async member => {
+	if (member.guild.id !== "689164798264606784") return;
+
 	const roles = ["735811339888361472", "735809874205737020", "735810286719598634", "735810462872109156"];
 	member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r))).catch(console.error);
+
 	member.user.send({
 		embed: {
 			author: {

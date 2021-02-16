@@ -7,13 +7,14 @@ const command = {
 	cooldown: 600,
 	args: 0,
 	usage: "",
+	onlyInGuilds: ["689164798264606784"],
 	slashOptions: null,
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const nudes = require("../assets/nudes.json");
 		if (message.deletable) message.react("😏").catch(console.error);
 		message.author.send({

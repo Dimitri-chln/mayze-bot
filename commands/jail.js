@@ -22,7 +22,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const { OWNER_ID } = require("../config.json");
 
 		const user = args

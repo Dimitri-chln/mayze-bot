@@ -32,7 +32,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		const { data } = message.client.memes || await Axios.get("https://api.memegen.link/templates").catch(console.error);
 		message.client.memes = { data: data };
 		const memes = data.map(meme => meme.key);

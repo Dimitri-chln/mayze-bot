@@ -9,7 +9,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options) => {
+	execute: async (message, args, options, languages, language) => {
 		var animes;
 		try {
 			const { rows } = await message.client.pg.query(`SELECT * FROM animes WHERE user_id='${message.author.id}'`);
