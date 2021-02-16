@@ -2,14 +2,17 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "afk",
-	description: "Se mettre AFK",
+	description: {
+		fr: "Ajouter un statut AFK",
+		en: "Set AFK status"
+	},
 	aliases: [],
 	args: 0,
 	usage: "[message]",
 	slashOptions: [
 		{
 			name: "message",
-			description: "Le message à afficher lorsqu'on te mentionne",
+			description: "The message to send when you are mentionned",
 			type: 3,
 			required: false
 		}

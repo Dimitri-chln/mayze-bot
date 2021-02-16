@@ -86,7 +86,7 @@ client.on("ready", async () => {
 	client.slashCommands = new Discord.Collection();
 	client.commands.forEach(async command => {
 		if (command.slashOptions && !command.disableSlash && !command.ownerOnly) {
-			const slashOptions = { name: command.name, description: command.description };
+			const slashOptions = { name: command.name, description: command.description.en || command.description };
 			if (command.slashOptions) slashOptions.options = command.slashOptions;
 			const slashCommand = await client.api.applications(client.user.id).guilds("689164798264606784").commands.post({ data: slashOptions }).catch(err => {
 				if (!client.beta) console.error(err);

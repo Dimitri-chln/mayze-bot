@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "catch",
-	description: "Attrape un pokémon !",
+	description: {
+		fr: "Attrape un pokémon !",
+		en: "Catch a pokémon !"
+	},
 	aliases: ["c"],
 	cooldown: 1200,
 	args: 0,

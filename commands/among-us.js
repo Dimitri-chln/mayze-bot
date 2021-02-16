@@ -2,25 +2,28 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "among-us",
-	description: "Obtenir ou modifier les codes de partie d'Among Us",
-	aliases: ["amongUs", "au"],
+	description: {
+		fr: "Obtiens et gère les parties d'Among Us",
+		en: "Get and manage Among Us games"
+	},
+	aliases: ["au"],
 	args: 0,
-	usage: "games | add <code> [description] | delete",
+	usage: "add <code> [description] | delete",
 	slashOptions: [
 		{
 			name: "add",
-			description: "Ajouter une partie Among Us",
+			description: "Add an Among Us game",
 			type: 1,
 			options: [
 				{
 					name: "code",
-					description: "Le code de la partie",
+					description: "The game's code",
 					type: 3,
 					required: true
 				},
 				{
 					name: "description",
-					description: "Une description de la partie",
+					description: "A short description of the game",
 					type: 3,
 					required: false
 				}
@@ -28,12 +31,12 @@ const command = {
 		},
 		{
 			name: "delete",
-			description: "Supprimer la partie que tu as créée",
+			description: "Delete your game code",
 			type: 1
 		},
 		{
 			name: "games",
-			description: "Obtenir la liste de toutes les parties",
+			description: "Get the list of all ongoing games",
 			type: 1
 		}
 	],
