@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: ["cn"],
 	args: 2,
-	usage: "\"<regex>\" \"<replacement>\" [type]",
+	usage: "\"<regex>\" \"<replacement>\" [text | voice | category]",
 	perms: ["ADMINISTRATOR"],
 	slashOptions: [
 		{
