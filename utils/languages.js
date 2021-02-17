@@ -21,13 +21,13 @@ module.exports = {
 			fr: "Quelque chose s'est mal passé en exécutant la commande :/",
 			en: "Something went wrong when running the command :/"
 		},
-		afk: {
+		"afk": {
 			afk_message: {
 				fr: "{1} est maintenant AFK 💤{2}",
 				en: "{1} is now AFK 💤{2}"
 			}
 		},
-		among_us: {
+		"among-us": {
 			default_desc: {
 				fr: "Partie classique",
 				en: "Normal game"
@@ -61,7 +61,7 @@ module.exports = {
 				en: "*No ongoing game*"
 			}
 		},
-		catch: {
+		"catch": {
 			caught: {
 				fr: "Pokémon capturé !",
 				en: "Pokemon caught!"
@@ -75,7 +75,7 @@ module.exports = {
 				en: "{1} caught a {2}!"
 			}
 		},
-		channel_names: {
+		"channel-names": {
 			verification_title: {
 				fr: "Vérification avant changement",
 				en: "Verification before editing"
@@ -101,7 +101,7 @@ module.exports = {
 				en: "{2} channels have been edited! ({2} error(s))"
 			}
 		},
-		clear: {
+		"clear": {
 			invalid_number: {
 				fr: "entre un nombre compris entre 1 et 100",
 				en: "enter a number between 1 and 100"
@@ -119,7 +119,7 @@ module.exports = {
 				en: "{1} message(s) deleted"
 			}
 		},
-		language: {
+		"language": {
 			invalid_language: {
 				fr: "Langues disponibles : {1}",
 				en: "Available languages: {1}"
