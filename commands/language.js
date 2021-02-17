@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "language",
-	description: "Change the server's bot language",
+	description: {
+		fr: "Modifier la langue du bot sur le serverur",
+		en: "Change the server's bot language"
+	},
 	aliases: ["lang"],
 	args: 1,
 	usage: "fr | en",
