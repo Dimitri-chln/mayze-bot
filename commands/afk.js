@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: [],
 	args: 0,
-	usage: "[message]",
+	usage: "[<message>]",
 	slashOptions: [
 		{
 			name: "message",

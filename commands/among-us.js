@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: ["au"],
 	args: 0,
-	usage: "add <code> [description] | delete",
+	usage: "add <code> [<description>] | delete",
 	slashOptions: [
 		{
 			name: "add",

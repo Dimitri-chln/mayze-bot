@@ -3,7 +3,7 @@ const { Message } = require("discord.js");
 const command = {
 	name: "channel-names",
 	description: "Modifier le nom de tous les salons en une seule commande",
-	aliases: ["channelNames", "cn"],
+	aliases: ["cn"],
 	args: 2,
 	usage: "\"<regex>\" \"<remplacement>\" [type]",
 	perms: ["ADMINISTRATOR"],

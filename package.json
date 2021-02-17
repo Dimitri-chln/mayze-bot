@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@discordjs/opus": "0.3.2",
+    "algebra": "^1.0.1",
     "algebra.js": "^0.2.6",
     "axios": "^0.21.1",
     "cron": "^1.8.2",
