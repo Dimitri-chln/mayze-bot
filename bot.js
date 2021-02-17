@@ -174,7 +174,9 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
 });
 
 async function processCommand(command, message, args, options) {
-	const language = "fr";
+	let language = "fr";
+	const res = await message.client.pg.query(`SELECT * FROM languages WHERE guild_id = '${message.guild.id}'`).catch(console.error);
+	if (res && res.rows.length) language = res.rows[0].language_code;
 
 	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return message.reply(languages.data.unauthorized_guild[language]).catch(console.error);
 	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm))) return message.reply(languages.get(languages.data.unauthorized_perms[language], command.perms.join("`, `"))).catch(console.error);
@@ -203,7 +205,7 @@ async function processCommand(command, message, args, options) {
 
 	const commandLanguages = { get: languages.get, ...languages.data[command.name] };
 
-	command.execute(message, args, options, languages, language)
+	command.execute(message, args, options, languages, commandLanguages)
 	.then(() => {
 		timestamps.set(message.author.id, now);
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
