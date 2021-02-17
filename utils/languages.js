@@ -70,7 +70,7 @@ module.exports = {
 				fr: "Nouveau pokémon ! 🎗️",
 				en: "New pokémon! 🎗️"
 			},
-			cauhgt_title: {
+			caught_title: {
 				fr: "{1} a attrapé un {2} !",
 				en: "{1} caught a {2}!"
 			}
