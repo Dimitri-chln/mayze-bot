@@ -83,7 +83,7 @@ const command = {
 							icon_url: message.client.user.avatarURL()
 						},
 						color: "#010101",
-						description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(${languages.get(languages.time_ago[language], timeToString((Date.now() - e[1].time) / 1000, language))}`) || languages.no_ongoing[language],
+						description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(${languages.get(languages.time_ago[language], timeToString((Date.now() - e[1].time) / 1000, language))}`).join("\n\n") || languages.no_ongoing[language],
 						footer: {
 							text: "✨ Mayze ✨"
 						}
