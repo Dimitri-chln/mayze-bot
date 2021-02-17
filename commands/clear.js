@@ -61,6 +61,7 @@ const command = {
 		if (regex) messages = messages.filter(msg => regex.test(msg));
 
 		messages = messages.first(number);
+		
 		try {
 			await message.channel.bulkDelete(messages);
 		} catch (err) {
@@ -68,7 +69,7 @@ const command = {
 			return message.channel.send(languages.error_deleting_msg[language]).catch(console.error);
 		}
 
-		const msg = await message.channel.send(languages.get(languages.deleted[language], messages.size)).catch(console.error);
+		const msg = await message.channel.send(languages.get(languages.deleted[language], messages.length)).catch(console.error);
 		msg.delete({ timeout: 4000 }).catch(console.error);
 	}
 };

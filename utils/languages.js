@@ -77,12 +77,12 @@ module.exports = {
 		},
 		"channel-names": {
 			verification_title: {
-				fr: "Vérification avant changement",
-				en: "Verification before editing"
+				fr: "Avant changement...",
+				en: "Before editing..."
 			},
 			verification_desc: {
-				fr: "• Voici à quoi ressembleront les salons après modification. Veux-tu continuer ?",
-				en: "• Here's how the channels will look like after editing. Continue?"
+				fr: "Voici à quoi ressembleront les salons après modification. Veux-tu continuer ?",
+				en: "Here's how the channels will look like after editing. Continue?"
 			},
 			error_msg_too_long: {
 				fr: "Le message est trop long pour que je puisse l'envoyer :/",
