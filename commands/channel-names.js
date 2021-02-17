@@ -2,27 +2,30 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "channel-names",
-	description: "Modifier le nom de tous les salons en une seule commande",
+	description: {
+		fr: "Modifier le nom de tous les salons en une seule commande",
+		en: "Edit all channels names in one command"
+	},
 	aliases: ["cn"],
 	args: 2,
-	usage: "\"<regex>\" \"<remplacement>\" [type]",
+	usage: "\"<regex>\" \"<replacement>\" [type]",
 	perms: ["ADMINISTRATOR"],
 	slashOptions: [
 		{
 			name: "regex",
-			description: "Le regex à appliquer à tous les salons",
+			description: "The regex to match in the channels names",
 			type: 3,
 			required: true
 		},
 		{
-			name: "remplacement",
-			description: "Ce par quoi remplacer le texte correspondant au regex donné",
+			name: "replacement",
+			description: "What to replace the matched text with",
 			type: 3,
 			required: true
 		},
 		{
 			name: "type",
-			description: "le type de salon à modifier → text, voice, category",
+			description: "the type of the channels to edit (text, voice, category)",
 			type: 3,
 			required: false
 		}
@@ -54,13 +57,13 @@ const command = {
 		const msg = await message.channel.send({
 			embed: {
 				author: {
-					name: "Vérification avant changement",
+					name: languages.data.channel_names.verification_title[language],
 					icon_url: message.author.avatarURL({ dynamic: true })
 				},
 				thumbnail: {
 					url: message.client.user.avatarURL()
 				},
-				title: "• Voici à quoi ressembleront les salons après modification. Veux-tu continuer?",
+				title: languages.data.channel_names.verification_desc[language],
 				color: "#010101",
 				description: newChannels.join("\n"),
 				footer: {
@@ -68,19 +71,20 @@ const command = {
 				}
 			}
 		}).catch(console.error);
-		if (!msg) return message.channel.send("Le message est trop long pour que je puisse l'envoyer :/").catch(console.error);
+		if (!msg) return message.channel.send(languages.data.channel_names.error_msg_too_long[language]).catch(console.error);
 
 		const validation = await userValidation(message.author, msg);
-		if (!validation) return message.channel.send("Procédure annulée").catch(console.error);
-		const loadingMsg = await message.channel.send(`Modification de ${channels.size} salons...`).catch(console.error);
+		if (!validation) return message.channel.send(languages.data.channel_names.cancelled[language]).catch(console.error);
+		const loadingMsg = await message.channel.send(languages.get(languages.data.channel_names.editing[language], channels.size)).catch(console.error);
+		
 		let errors = 0;
-		await channels.forEach(async c => {
+		channels.forEach(async c => {
 			c.setName(c.name.replace(regex, replace)).catch(err => {
 				++errors;
 				console.error(err);
 			});
 		});
-		loadingMsg.edit(`${channels.size - errors} salons ont été modifiés ! (${errors} erreur(s))`);
+		loadingMsg.edit(languages.get(languages.data.channel_names.done_editing[language], channels.size - errors, errors));
 	}
 };
 

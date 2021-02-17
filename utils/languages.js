@@ -74,6 +74,50 @@ module.exports = {
 				fr: "{1} a attrapé un {2} !",
 				en: "{1} caught a {2}!"
 			}
+		},
+		channel_names: {
+			verification_title: {
+				fr: "Vérification avant changement",
+				en: "Verification before editing"
+			},
+			verification_desc: {
+				fr: "• Voici à quoi ressembleront les salons après modification. Veux-tu continuer ?",
+				en: "• Here's how the channels will look like after editing. Continue?"
+			},
+			error_msg_too_long: {
+				fr: "Le message est trop long pour que je puisse l'envoyer :/",
+				en: "The message is too long for me to send it :/"
+			},
+			cancelled: {
+				fr: "Procédure annulée",
+				en: "Operation cancelled"
+			},
+			editing: {
+				fr: "Modification de {1} salons...",
+				en: "Editing {1} channels..."
+			},
+			done_editing: {
+				fr: "{1} salons ont été modifiés ! ({2} erreur(s))",
+				en: "{2} channels have been edited! ({2} error(s))"
+			}
+		},
+		clear: {
+			invalid_number: {
+				fr: "entre un nombre compris entre 1 et 100",
+				en: "enter a number between 1 and 100"
+			},
+		},
+		error_fetching_msg: {
+			fr: "Quelque chose s'est mal passé en récupérant les messages :/",
+			en: "Something went wrong when fetching the messages :/"
+		},
+		error_deleting_msg: {
+			fr: "Quelque chose s'est mal passé en supprimant les messages :/",
+			en: "Something went wrong when deleting the messages :/"
+		},
+		deleted: {
+			fr: "{1} message(s) supprimés",
+			en: "{1} message(s) deleted"
 		}
 	}
 };
