@@ -59,31 +59,31 @@ const command = {
 					? args[1].toUpperCase()
 					: options[0].options[0].value.toUpperCase();
 				const description = args
-					? args.slice(2).join(" ") || languages.data.among_us.default_desc[language]
-					: options[0].options[1].value || languages.data.among_us.default_desc[language];
-				if (!code || !/\w{6}/.test(code)) return message.reply(languages.data.among_us.invalid_code[language]).catch(console.error);
+					? args.slice(2).join(" ") || languages.default_desc[language]
+					: options[0].options[1].value || languages.default_desc[language];
+				if (!code || !/\w{6}/.test(code)) return message.reply(languages.invalid_code[language]).catch(console.error);
 				games[message.author.id] = {
 					code: code,
 					description: description,
 					time: Date.now()
 				};
 				message.client.amongUsGames = games;
-				message.reply(languages.data.among_us.game_added[language]).catch(console.error);
+				message.reply(languages.game_added[language]).catch(console.error);
 				break;
 			case "delete":
-				if (!games[message.author.id]) return message.reply(languages.data.among_us.user_no_ongoing[language]).catch(console.error);
+				if (!games[message.author.id]) return message.reply(languages.user_no_ongoing[language]).catch(console.error);
 				delete games[message.author.id];
-				message.reply(languages.data.among_us.game_deleted[language]).catch(console.error);
+				message.reply(languages.game_deleted[language]).catch(console.error);
 				break;
 			default:
 				message.channel.send({
 					embed: {
 						author: {
-							name: languages.data.among_us.ongoing_games[language],
+							name: languages.ongoing_games[language],
 							icon_url: message.client.user.avatarURL()
 						},
 						color: "#010101",
-						description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(${languages.get(languages.data.among_us.time_ago[language], timeToString((Date.now() - e[1].time) / 1000, language))})`).join("\n——————————\n") || languages.data.among_us.no_ongoing[language],
+						description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(${languages.get(languages.no_ongoing[language],
 						footer: {
 							text: "✨ Mayze ✨"
 						}

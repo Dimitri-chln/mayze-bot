@@ -31,7 +31,7 @@ const command = {
 		if (AKFmessage) message.client.pg.query(`INSERT INTO afk (user_id, message) VALUES ('${message.author.id}', '${AKFmessage}')`).catch(console.error);
 		else message.client.pg.query(`INSERT INTO afk (user_id) VALUES ('${message.author.id}')`).catch(console.error);
 
-		message.channel.send(languages.get(languages.data.afk.afk_message[language], message.author.toString(), AKFmessage ? `\n**→ ${AKFmessage}**` : "")).catch(console.error);
+		message.channel.send(languages.get(languages.afk_message[language], message.author.toString(), AKFmessage ? `\n**→ ${AKFmessage}**` : "")).catch(console.error);
 	}
 };
 

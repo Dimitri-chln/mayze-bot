@@ -1,0 +1,54 @@
+const { Message } = require("discord.js");
+
+const command = {
+	name: "language",
+	description: "Change the server's bot language",
+	aliases: ["lang"],
+	args: 1,
+	usage: "fr | en",
+	perms: ["ADMINISTRATOR"],
+	slashOptions: [
+		{
+			name: "language",
+			description: "The new language",
+			type: 3,
+			required: true,
+			choices: [
+				{
+					name: "Français",
+					value: "fr",
+				},
+				{
+					name: "English",
+					value: "en"
+				}
+			]
+		}
+	],
+	/**
+	* @param {Message} message 
+	* @param {string[]} args 
+	* @param {Object[]} options
+	*/
+	execute: async (message, args, options, languages, language) => {
+		const availableLanguages = ["fr", "en"];
+
+		const currentLanguage = (await message.client.pg.query(`SELECT * FROM languages WHERE guild_id = '${message.guild.id}'`)).rows[0];
+
+		const newLanguage = args
+			? args[0].toLowerCase()
+			: options[0].value;
+		if (!availableLanguages.includes(language)) return message.reply(languages.get(languages.invalid_language[language], availableLanguages.join(", "))).catch(console.error);
+
+		if (currentLanguage) var res = await message.client.pg.query(`UPDATE languages SET language_code = '${newLanguage}' WHERE guild_id = '${message.guild.id}'`).catch(console.error);
+		else var res = await message.client.pg.query(`INSERT INTO languages VALUES ('${message.guild.id}', '${newLanguage}')`).catch(console.error);
+		if (!res) return message.channel.send(languages.error_database[language]).catch(console.error);
+
+		language = newLanguage;
+		
+		if (message.deletable) message.react("✅").catch(console.error);
+		else message.reply(languages.language_updated[language]).catch(console.error);
+	}
+};
+
+module.exports = command;

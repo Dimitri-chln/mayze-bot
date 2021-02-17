@@ -201,6 +201,8 @@ async function processCommand(command, message, args, options) {
 		}
 	}
 
+	const commandLanguages = { get: languages.get, ...languages.data[command.name] };
+
 	command.execute(message, args, options, languages, language)
 	.then(() => {
 		timestamps.set(message.author.id, now);

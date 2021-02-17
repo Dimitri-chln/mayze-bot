@@ -106,18 +106,32 @@ module.exports = {
 				fr: "entre un nombre compris entre 1 et 100",
 				en: "enter a number between 1 and 100"
 			},
+			error_fetching_msg: {
+				fr: "Quelque chose s'est mal passé en récupérant les messages :/",
+				en: "Something went wrong when fetching the messages :/"
+			},
+			error_deleting_msg: {
+				fr: "Quelque chose s'est mal passé en supprimant les messages :/",
+				en: "Something went wrong when deleting the messages :/"
+			},
+			deleted: {
+				fr: "{1} message(s) supprimés",
+				en: "{1} message(s) deleted"
+			}
 		},
-		error_fetching_msg: {
-			fr: "Quelque chose s'est mal passé en récupérant les messages :/",
-			en: "Something went wrong when fetching the messages :/"
-		},
-		error_deleting_msg: {
-			fr: "Quelque chose s'est mal passé en supprimant les messages :/",
-			en: "Something went wrong when deleting the messages :/"
-		},
-		deleted: {
-			fr: "{1} message(s) supprimés",
-			en: "{1} message(s) deleted"
+		language: {
+			invalid_language: {
+				fr: "Langues disponibles : {1}",
+				en: "Available languages: {1}"
+			},
+			error_database: {
+				fr: "Quelque chose s'est mal passé en accédant à la base de données :/",
+				en: "Something went wrong when accessing the database :/"
+			},
+			language_updated: {
+				fr: "Langue modifiée",
+				en: "Language updated"
+			}
 		}
 	}
 };

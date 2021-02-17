@@ -57,13 +57,13 @@ const command = {
 		const msg = await message.channel.send({
 			embed: {
 				author: {
-					name: languages.data.channel_names.verification_title[language],
+					name: languages.verification_title[language],
 					icon_url: message.author.avatarURL({ dynamic: true })
 				},
 				thumbnail: {
 					url: message.client.user.avatarURL()
 				},
-				title: languages.data.channel_names.verification_desc[language],
+				title: languages.verification_desc[language],
 				color: "#010101",
 				description: newChannels.join("\n"),
 				footer: {
@@ -71,11 +71,11 @@ const command = {
 				}
 			}
 		}).catch(console.error);
-		if (!msg) return message.channel.send(languages.data.channel_names.error_msg_too_long[language]).catch(console.error);
+		if (!msg) return message.channel.send(languages.error_msg_too_long[language]).catch(console.error);
 
 		const validation = await userValidation(message.author, msg);
-		if (!validation) return message.channel.send(languages.data.channel_names.cancelled[language]).catch(console.error);
-		const loadingMsg = await message.channel.send(languages.get(languages.data.channel_names.editing[language], channels.size)).catch(console.error);
+		if (!validation) return message.channel.send(languages.cancelled[language]).catch(console.error);
+		const loadingMsg = await message.channel.send(languages.get(languages.editing[language], channels.size)).catch(console.error);
 		
 		let errors = 0;
 		channels.forEach(async c => {
@@ -84,7 +84,7 @@ const command = {
 				console.error(err);
 			});
 		});
-		loadingMsg.edit(languages.get(languages.data.channel_names.done_editing[language], channels.size - errors, errors));
+		loadingMsg.edit(languages.get(languages.done_editing[language], channels.size - errors, errors));
 	}
 };
 
