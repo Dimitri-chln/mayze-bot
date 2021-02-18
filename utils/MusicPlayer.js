@@ -607,7 +607,6 @@ class Player {
 			queue.songs.push(song);
 			// Add the queue to the list
 			this.queues.push(queue);
-			console.log(this.queues);
 			// Plays the song
 			this._playSong(queue.guildID, true);
 
@@ -1153,7 +1152,9 @@ class Player {
 			}
 		} else {
 			// Get the song that ended
-			let endedSong = queue.songs[0].loop ? queue.songs[0] : queue.songs.shift();
+			let endedSong = firstPlay
+				? queue.songs[0]
+				: queue.songs[0].loop ? queue.songs[0] : queue.songs.shift();
 			// Add the song back in the queue
 			if (queue.repeatMode) queue.songs.push(endedSong);
 			// Emit songChanged event
