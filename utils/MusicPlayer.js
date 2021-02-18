@@ -1157,7 +1157,7 @@ class Player {
 				? queue.songs[0]
 				: queue.songs[0].loop ? queue.songs[0] : queue.songs.shift();
 			// Add the song back in the queue
-			if (queue.repeatMode) queue.songs.push(endedSong);
+			if (queue.repeatMode && !endedSong.loop) queue.songs.push(endedSong);
 			// Emit songChanged event
 			if (!firstPlay) queue.emit('songChanged', endedSong, queue.songs[0], queue.skipped, queue.repeatMode, endedSong.loop);
 			queue.skipped = false;
