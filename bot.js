@@ -417,7 +417,7 @@ function reconnectPgClient() {
 	client.pg.connect().then(() => console.log("Connected to the database")).catch(console.error);
 }
 
-function pickLanguage(data, language) {
+function pickLanguage(data = {}, language = "fr") {
 	return Object.keys(data)
 		.reduce((acc, key) => {
 			acc[key] = data[key][language];
