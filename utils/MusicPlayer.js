@@ -604,6 +604,7 @@ class Player {
 			let queue = new Queue(voiceChannel.guild.id);
 			queue.connection = connection;
 			let song = new Song(video, queue, requestedBy);
+			console.log(song);
 			queue.songs.push(song);
 			// Add the queue to the list
 			this.queues.push(queue);
