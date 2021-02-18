@@ -995,7 +995,7 @@ class Player {
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return new MusicPlayerError('QueueIsNull');
 		// Get current song
-		let song = queue[0];
+		let song = queue.songs[0];
 		// Enable/Disable koop
 		song.loop = !song.loop;
 		// Resolve
