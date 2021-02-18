@@ -170,6 +170,10 @@ module.exports = {
 			embed_title: {
 				fr: "Réponses personnalisées",
 				en: "Custom responses"
+			},
+			invalid_args: {
+				fr: "arguments incorrects",
+				en: "invalid arguments"
 			}
 		}
 	}
