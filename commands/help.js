@@ -56,7 +56,7 @@ const command = {
 			if (command.usage) data += `\n**Utilisation:** \`${message.client.prefix}${command.name} ${command.usage}\``;
 			if (command.perms) data += `\n**Permissions:** \`${command.perms.join("`, `")}\``;
 			if (command.ownerOnly || command.allowedUsers) data += `\n**Utilisable par:** ${command.ownerOnly ? (command.allowedUsers || []).concat(OWNER_ID).map(u => `<@${u}>`).join(", ") : command.allowedUsers.map(u => `<@${u}>`).join(", ")}`;
-			data += `\n**Cooldown:** ${timeToString(command.cooldown || 2, language, languageCodeCode)})`;
+			data += `\n**Cooldown:** ${timeToString(command.cooldown || 2, language, languageCode)})`;
 			
 			message.channel.send({
 				embed: {
