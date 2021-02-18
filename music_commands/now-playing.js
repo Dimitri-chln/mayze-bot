@@ -42,10 +42,12 @@ const command = {
 		const timer = setInterval(updateMsg, 10000);
 		message.client.player.npTimers[message.channel.id] = timer;
 
-		queue.on("songChanged", () => setTimeout(updateMsg, 1000));
 		queue.on("end", () => clearInterval(timer));
 		queue.on("stop", () => clearInterval(timer));
 		queue.on("channelEmpty", () => clearInterval(timer));
+		queue.on("songChanged", () => {
+			if (timer === message.client.player.npTimers[message.channel.id]) setTimeout(updateMsg, 1000);
+		});
 
 		async function updateMsg() {
 			const newSong = await message.client.player.nowPlaying(message.guild.id);
