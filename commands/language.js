@@ -41,7 +41,7 @@ const command = {
 		const newLanguage = args
 			? args[0].toLowerCase()
 			: options[0].value;
-		if (!availableLanguages.includes(language)) return message.reply(language.get(language.invalid_language, availableLanguages.join(", "))).catch(console.error);
+		if (!availableLanguages.includes(newLanguage)) return message.reply(language.get(language.invalid_language, availableLanguages.join("`, `"))).catch(console.error);
 
 		if (currentLanguage) var res = await message.client.pg.query(`UPDATE languages SET language_code = '${newLanguage}' WHERE guild_id = '${message.guild.id}'`).catch(console.error);
 		else var res = await message.client.pg.query(`INSERT INTO languages VALUES ('${message.guild.id}', '${newLanguage}')`).catch(console.error);

@@ -119,20 +119,6 @@ module.exports = {
 				en: "{1} message(s) deleted"
 			}
 		},
-		"language": {
-			invalid_language: {
-				fr: "Langues disponibles : {1}",
-				en: "Available languages: {1}"
-			},
-			error_database: {
-				fr: "Quelque chose s'est mal passé en accédant à la base de données :/",
-				en: "Something went wrong when accessing the database :/"
-			},
-			language_updated: {
-				fr: "Langue modifiée",
-				en: "Language updated"
-			}
-		},
 		"color": {
 			selector: {
 				fr: "Sélecteur de couleur",
@@ -174,6 +160,20 @@ module.exports = {
 			invalid_args: {
 				fr: "arguments incorrects",
 				en: "invalid arguments"
+			}
+		},
+		"language": {
+			invalid_language: {
+				fr: "langues disponibles : `{1}`",
+				en: "available languages: `{1}`"
+			},
+			error_database: {
+				fr: "Quelque chose s'est mal passé en accédant à la base de données :/",
+				en: "Something went wrong when accessing the database :/"
+			},
+			language_updated: {
+				fr: "Langue modifiée",
+				en: "Language updated"
 			}
 		}
 	}
