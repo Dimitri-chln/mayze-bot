@@ -63,7 +63,7 @@ const command = {
 					color: "#010101",
 					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${song.loop ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatMode ? queue.songs[0].name : "Rien"))}**\n\`Durée:\` **${Util.MillisecondsToTime(queue.duration - queue.dispatcher.streamTime)}**`,
 					footer: {
-						text: "✨ Mayze ✨"
+						text: "✨ Mayze ✨" + (song.loop ? " | Répétition de la musique activée" : "") + (queue.repeatMode ? " | Répétition de la queue activée" : "")
 					}
 				}
 			}).catch(err => {
