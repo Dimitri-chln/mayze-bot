@@ -5,7 +5,7 @@ const command = {
 	description: "Relier un salon à tes DM pour pouvoir parler à travers le bot",
 	aliases: ["link"],
 	args: 1,
-	usage: "<salon> [utilisateur]",
+	usage: "<salon> [<utilisateur>]",
 	ownerOnly: true,
 	allowedUsers: ["394633964138135563"],
 	/**

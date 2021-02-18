@@ -162,6 +162,12 @@ module.exports = {
 				en: "invalid arguments"
 			}
 		},
+		"edit-snipe": {
+			no_message: {
+				fr: "il n'y a pas de message à snipe dans ce salon",
+				en: "there is nothing to snipe in this channel"
+			}
+		},
 		"language": {
 			invalid_language: {
 				fr: "langues disponibles : `{1}`",

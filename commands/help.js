@@ -5,7 +5,7 @@ const command = {
 	description: "Obtenir la liste des commandes ou des informations sur une commande spécifique",
 	aliases: ["h"],
 	args: 0,
-	usage: "[commande]",
+	usage: "[<commande>]",
 	slashOptions: [
 		{
 			name: "commande",

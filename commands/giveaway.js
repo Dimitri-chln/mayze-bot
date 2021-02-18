@@ -5,8 +5,9 @@ const command = {
 	description: "Crée et gère des giveaway",
 	aliases: ["gwa", "ga"],
 	args: 1,
-	usage: "create \"<prix>\" <durée> [nombre gagnants] [-mention <rôle>] | end [ID] | delete [ID] | reroll [ID]",
+	usage: "create \"<prix>\" <durée> [<nombre gagnants>] [-mention <rôle>] | end [<ID>] | delete [<ID>] | reroll [<ID>]",
 	perms: ["MANAGE_ROLES", "MANAGE_CHANNELS", "MANAGE_MESSAGES"],
+	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
 		{
 			name: "create",
