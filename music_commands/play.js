@@ -14,6 +14,8 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options, languages, language) => {
+		const { Util } = require("../utils/MusicPlayer");
+
 		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 
@@ -31,9 +33,11 @@ const command = {
 		
 			// If there's already a song playing
 			if (isPlaying) {
+				const queue = message.client.player.getQueue(message.guild.id);
+				const duration = Util.MillisecondsToTime(queue.duration);
 				// Add the song to the queue
 				const { song } = await message.client.player.addToQueue(message.guild.id, search, null, message.author);
-				message.channel.send(`<a:blackCheck:803603780666523699> | **Ajouté à la queue**\n> ${song.name}`).catch(console.error);
+				message.channel.send(`<a:blackCheck:803603780666523699> | **Ajouté à la queue** • Joué dans ${duration}\n> ${song.name}`).catch(console.error);
 			} else {
 				// Else, play the song
 				const { song } = await message.client.player.play(message.member.voice.channel, search, null, message.author);

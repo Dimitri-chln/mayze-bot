@@ -92,6 +92,11 @@ class Song {
 		 * @type {User}
 		 */
 		this.requestedBy = requestedBy;
+		/**
+		 * If the song is looped.
+		 * @type {boolean}
+		 */
+		this.loop = false;
 	}
 };
 
@@ -130,6 +135,11 @@ class Queue extends EventEmitter {
 		 * @type {Song[]}
 		 */
 		this.songs = [];
+		/**
+		 * The total duration of the queue.
+		 * @type {Number}
+		 */
+		this.duration = this.songs.reduce((sum, song) => sum + song.duration, 0);
 		/**
 		 * Whether the stream is currently stopped.
 		 * @type {Boolean}
@@ -974,11 +984,28 @@ class Player {
 	}
 
 	/**
-	 * Toggle the repeat mode
+	 * Toggle the loop
 	 * @param {string} guildID
 	 * @returns {boolean} Returns the current set state
 	 */
 	toggleLoop(guildID) {
+		// Gets guild queue
+		let queue = this.queues.find((g) => g.guildID === guildID);
+		if (!queue) return new MusicPlayerError('QueueIsNull');
+		// Get current song
+		let song = queue[0];
+		// Enable/Disable koop
+		song.loop = !song.loop;
+		// Resolve
+		return song.loop;
+	}
+
+	/**
+	 * Toggle the repeat mode
+	 * @param {string} guildID
+	 * @returns {boolean} Returns the current set state
+	 */
+	toggleLoopQueue(guildID) {
 		// Gets guild queue
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return new MusicPlayerError('QueueIsNull');
@@ -1122,8 +1149,12 @@ class Player {
 				return;
 			}
 		} else {
+			// Get the song that ended
+			let endedSong = queue.songs[0].loop ? queue.songs[0] : queue.songs.shift();
+			// Add the song back in the queue
+			if (queue.repeatMode) queue.songs.push(endedSong);
 			// Emit songChanged event
-			if (!firstPlay) queue.emit('songChanged', (!queue.repeatMode ? queue.songs.shift() : queue.songs[0]), queue.songs[0], queue.skipped, queue.repeatMode);
+			if (!firstPlay) queue.emit('songChanged', endedSong, queue.songs[0], queue.skipped, queue.repeatMode, endedSong.loop);
 			queue.skipped = false;
 			let song = queue.songs[0];
 			// Download the song

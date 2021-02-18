@@ -132,6 +132,15 @@ module.exports = {
 				fr: "Langue modifiée",
 				en: "Language updated"
 			}
+		},
+		"color": {
+			selector: {
+				fr: "Sélecteur de couleur",
+				en: "Color selector"
+			},
+			desc: {
+				fr: "**Hexadécimal :** \`{1}\`\n**RGB :** 🟥 \`{2}\` 🟩 \`{3}\` 🟦 \`{4}\`\n**Décimal :** \`{5}\`"
+			}
 		}
 	}
 };

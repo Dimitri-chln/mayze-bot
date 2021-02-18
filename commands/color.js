@@ -2,14 +2,17 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "color",
-	description: "Tester et visualiser des codes couleurs RGB",
+	description: {
+		fr: "Tester et visualiser des codes couleurs hexadécimaux",
+		en: "Test and visualize hexadecimal color codes"
+	},
 	aliases: [],
 	args: 0,
-	usage: "<couleur>",
+	usage: "<color>",
 	slashOptions: [
 		{
-			name: "couleur",
-			description: "Le code hexadécimal de la couleur à visualiser",
+			name: "color",
+			description: "The hexadecimal code of the color",
 			type: 3,
 			required: true
 		}
@@ -27,11 +30,11 @@ const command = {
 		const msg = await message.channel.send({
 			embed: {
 				author: {
-					name: "Sélecteur de couleur",
+					name: languages.selector[language],
 					icon_url: message.client.user.avatarURL()
 				},
 				color: "#010101",
-				description: `**Hexadécimal :** \`${ RGBToHex(color) }\`\n**RGB :** 🟥 \`${ color[0] }\` 🟩 \`${ color[1] }\` 🟦 \`${ color[2] }\`\n**Décimal :** \`${ RGBToDec(color) }\``,
+				description: languages.get(languages.desc[language], RGBToHex(color), color[0], color[1], color[2], RGBToDec(color)),
 				thumbnail: {
 					url: `https://dummyimage.com/100/${ RGBToHex(color).replace("#", "") }/00.png?text=+`
 				},
@@ -151,7 +154,7 @@ const command = {
 		}
 
 		/**
-		 * @param {number[]} RGBColor 
+		 * @param {number[]} RGBColor An array of red, green and blue color values
 		 */
 		function RGBToDec(RGBColor) {
 			if (RGBColor.length !== 3) return 0;
@@ -162,11 +165,11 @@ const command = {
 			msg.edit({
 				embed: {
 					author: {
-						name: "Sélecteur de couleur",
+						name: languages.selector[language],
 						icon_url: message.client.user.avatarURL()
 					},
 					color: "#010101",
-					description: `**Hexadécimal :** \`${ RGBToHex(color) }\`\n**RGB :** 🟥 \`${ color[0] }\` 🟩 \`${ color[1] }\` 🟦 \`${ color[2] }\`\n**Décimal :** \`${ RGBToDec(color) }\``,
+					description: languages.get(languages.desc[language], RGBToHex(color), color[0], color[1], color[2], RGBToDec(color)),
 					thumbnail: {
 						url: `https://dummyimage.com/100/${ RGBToHex(color).replace("#", "") }/00.png?text=+`
 					},

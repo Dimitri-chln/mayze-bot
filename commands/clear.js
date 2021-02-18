@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "clear",
-	description: "Delete messages from the current channel",
+	description: {
+		fr: "Supprimer des messages du salon actuel",
+		en: "Delete messages from the current channel"
+	},
 	aliases: ["clean", "cl"],
 	cooldown: 5,
 	args: 1,

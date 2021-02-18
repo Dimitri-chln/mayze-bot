@@ -13,11 +13,13 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options, languages, language) => {
+		const { Util } = require("../utils/MusicPlayer");
+
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
 		const queue = message.client.player.getQueue(message.guild.id);
 		
-		const song = await message.client.player.nowPlaying(message.guild.id);
+		const song = message.client.player.nowPlaying(message.guild.id);
 		const msg = await message.channel.send({
 			embed: {
 				author: {
@@ -28,7 +30,7 @@ const command = {
 					url: song.thumbnail
 				},
 				color: "#010101",
-				description: `[${song.name}](${song.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${song.requestedBy.tag}**\n\`Suivant:\` **${song.queue.songs[1] ? song.queue.songs[1].name : "Rien"}**`,
+				description: `[${song.name}](${song.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${song.requestedBy.tag}**\n\`Suivant:\` **${song.queue.songs[1] ? song.queue.songs[1].name : "Rien"}**\n\`Durée:\` **${Util.MillisecondsToTime(queue.duration - queue.dispatcher.streamTime)}**`,
 				footer: {
 					text: "✨ Mayze ✨"
 				}
