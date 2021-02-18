@@ -36,7 +36,7 @@ for (const file of commandFiles) {
 const musicCommandFiles = Fs.readdirSync("./music_commands").filter(file => file.endsWith(".js"));
 for (const file of musicCommandFiles) {
 	const command = require(`./music_commands/${file}`);
-	client.commands.set(command.name, { ...command, category: "musique" });
+	client.commands.set(command.name, { ...command, category: "music" });
 }
 
 client.responses = [];

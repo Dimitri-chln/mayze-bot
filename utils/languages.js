@@ -168,6 +168,48 @@ module.exports = {
 				en: "there is nothing to snipe in this channel"
 			}
 		},
+		"help": {
+			commands_list: {
+				fr: "Liste des commandes",
+				en: "List of commands"
+			},
+			invalid_command: {
+				fr: "cette commande n'existe pas",
+				en: "this command doesn't exist"
+			},
+			name: {
+				fr: "**Nom :** `{1}`",
+				en: "**Name:** `{1}`"
+			},
+			aliases: {
+				fr: "\n**Aliases :** `{1}`",
+				en: "\n**Aliases:** `{1}`"
+			},
+			description: {
+				fr: "\n**Description :** {1}",
+				en: "\n**Description:** {1}"
+			},
+			usage: {
+				fr: "\n**Utilisation :** `{1} {2}`",
+				en: "\n**Usage:** `{1} {2}`"
+			},
+			perms: {
+				fr: "\n**Permissions :** `{1}`",
+				en: "\n**Permissions:** `{1}`"
+			},
+			allowed: {
+				fr: "\n**Utilisable par :** {1}",
+				en: "\n**Authorized users:** {1}"
+			},
+			cooldown: {
+				fr: "\n**Cooldown :** {1}",
+				en: "\n**Cooldown:** {1}"
+			},
+			title: {
+				fr: "Informations sur la commande **{1}**",
+				en: "Help for **{1}**"
+			}
+		},
 		"language": {
 			invalid_language: {
 				fr: "langues disponibles : `{1}`",

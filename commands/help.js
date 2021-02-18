@@ -32,7 +32,7 @@ const command = {
 			message.channel.send({
 				embed: {
 					author: {
-						name: "Liste des commandes",
+						name: language.commands_list,
 						icon_url: message.client.user.avatarURL()
 					},
 					color: "#010101",
@@ -48,19 +48,19 @@ const command = {
 		} else {
 
 			const command = commands.get(commandName) || commands.find(c => c.aliases && c.aliases.includes(commandName));
-			if (!command) return message.reply("cette commande n'existe pas").catch(console.error);
+			if (!command) return message.reply(language.invalid_command).catch(console.error);
 
-			let data = `**Nom:** \`${command.name}\``;
-			if (command.aliases.length) data += `\n**Aliases:** \`${command.aliases.join("`, `")}\``;
-			if (command.description) data += `\n**Description:** ${command.description[languageCode] || command.description}`;
-			if (command.usage) data += `\n**Utilisation:** \`${message.client.prefix}${command.name} ${command.usage}\``;
-			if (command.perms) data += `\n**Permissions:** \`${command.perms.join("`, `")}\``;
-			if (command.ownerOnly || command.allowedUsers) data += `\n**Utilisable par:** ${command.ownerOnly ? (command.allowedUsers || []).concat(OWNER_ID).map(u => `<@${u}>`).join(", ") : command.allowedUsers.map(u => `<@${u}>`).join(", ")}`;
-			data += `\n**Cooldown:** ${timeToString(command.cooldown || 2, language, languageCode)}`;
+			let data = language.get(language.name, command.name);
+			if (command.aliases.length) data += language.get(language.aliases, command.aliases.join("`, `"));
+			if (command.description) data += language.get(language.description, command.description[languageCode] || command.description);
+			if (command.usage) data += language.get(language.usage, message.client.prefix + command.name, command.usage);
+			if (command.perms) data += language.get(language.perms, command.perms.join("`, `"));
+			if (command.ownerOnly || command.allowedUsers) data += language.get(language.allowed, command.ownerOnly ? (command.allowedUsers || []).concat(OWNER_ID).map(u => `<@${u}>`).join(", ") : command.allowedUsers.map(u => `<@${u}>`).join(", "));
+			data += language.get(language.cooldown, timeToString(command.cooldown || 2, language, languageCode));
 			
 			message.channel.send({
 				embed: {
-					title: "__Message d'aide automatisé__",
+					title: language.get(language.title, message.client.prefix + command.name),
 					color: "#010101",
 					description: data,
 					footer: {
