@@ -23,11 +23,11 @@ const command = {
 			: options[0].value;
 		if (playlistRegex.test(search)) return message.reply("les playlists ne sont pas supportées pour cette commande").catch(console.error);
 		
-		const { song } = await message.client.player.playtop(message.guild.id, message.member.voice.channel, search, null, message.author);
-		
+		const res = await message.client.player.playtop(message.guild.id, message.member.voice.channel, search, null, message.author);
+		if (res.error && res.error.message === "SearchIsNull") return message.reply(`je n'ai pas trouvé de musique avec ce titre`).catch(console.error);
 		// If there's already a song playing
-		if (isPlaying) message.channel.send(`<a:blackCheck:803603780666523699> | **Ajouté en début de queue**\n> ${song.name}`).catch(console.error);
-		else message.channel.send(`<a:blackCheck:803603780666523699> | **En train de jouer...**\n> ${song.name}`).catch(console.error);
+		if (isPlaying) message.channel.send(`<a:blackCheck:803603780666523699> | **Ajouté en début de queue**\n> ${res.song.name}`).catch(console.error);
+		else message.channel.send(`<a:blackCheck:803603780666523699> | **En train de jouer...**\n> ${res.song.name}`).catch(console.error);
 	}
 };
 

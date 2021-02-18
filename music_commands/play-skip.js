@@ -22,9 +22,9 @@ const command = {
 			: options[0].value;
 		if (playlistRegex.test(search)) return message.reply("les playlists ne sont pas supportées pour cette commande").catch(console.error);
 		
-		const { song } = await message.client.player.playskip(message.guild.id, message.member.voice.channel, search, null, message.author);
-		
-		message.channel.send(`<a:blackCheck:803603780666523699> | **En train de jouer...**\n> ${song.name}`).catch(console.error);
+		const res = await message.client.player.playskip(message.guild.id, message.member.voice.channel, search, null, message.author);
+		if (res.error && res.error.message === "SearchIsNull") return message.reply(`je n'ai pas trouvé de musique avec ce titre`).catch(console.error);
+		message.channel.send(`<a:blackCheck:803603780666523699> | **En train de jouer...**\n> ${res.song.name}`).catch(console.error);
 	}
 };
 

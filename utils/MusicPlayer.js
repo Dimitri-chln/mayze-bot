@@ -171,7 +171,7 @@ class Queue extends EventEmitter {
 	 * @returns {Number} The total duration of the queue
 	 */
 	get duration() {
-		return this.songs.reduce((sum, song) => sum + song.duration, 0);
+		return this.songs.reduce((sum, song) => sum + Util.TimeToMilliseconds(song.duration), 0);
 	}
 
 };
@@ -712,6 +712,7 @@ class Player {
 			}
 		}
 		catch (err) {
+			console.error(err);
 			return new MusicPlayerError('SearchIsNull', 'song');
 		}
 	}
@@ -924,7 +925,8 @@ class Player {
 		let currentSong = queue.songs[0];
 		queue.skipped = true;
 		// Ends the dispatcher
-		queue.dispatcher.end();
+		if (queue.dispatcher) queue.dispatcher.end();
+		else this._playSong(guildID, true);
 		// Resolves the current song
 		return currentSong;
 	}
