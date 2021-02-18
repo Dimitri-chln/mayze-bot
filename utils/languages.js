@@ -210,6 +210,12 @@ module.exports = {
 				en: "Help for **{1}**"
 			}
 		},
+		"hug": {
+			title: {
+				fr: "{1} fait un câlin à {2} 🤗`",
+				en: "{1} hugs {2} 🤗"
+			}
+		},
 		"language": {
 			invalid_language: {
 				fr: "langues disponibles : `{1}`",

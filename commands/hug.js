@@ -2,14 +2,17 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "hug",
-	description: "Faire un câlin à quelqu'un !",
+	description: {
+		fr: "Faire un câlin à quelqu'un !",
+		en: "Hug someone!"
+	},
 	aliases: [],
 	args: 1,
-	usage: "<mention>",
+	usage: "<user>",
 	slashOptions: [
 		{
-			name: "utilisateur",
-			description: "La personne à qui faire un calîn",
+			name: "user",
+			description: "The user to hug",
 			type: 6,
 			required: true
 		}
@@ -28,7 +31,7 @@ const command = {
 		message.channel.send({
 			embed: {
 				author: {
-					name: `${message.author.username} fait un câlin à ${user.username} 🤗`,
+					name: language.get(language.title, message.author.username, user.username),
 					icon_url: message.author.avatarURL({ dynamic: true })
 				},
 				color: "#010101",
