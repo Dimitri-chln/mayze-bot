@@ -33,7 +33,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const availableLanguages = ["fr", "en"];
 
 		const currentLanguage = (await message.client.pg.query(`SELECT * FROM languages WHERE guild_id = '${message.guild.id}'`)).rows[0];

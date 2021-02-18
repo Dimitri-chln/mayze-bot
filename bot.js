@@ -203,9 +203,9 @@ async function processCommand(command, message, args, options) {
 		}
 	}
 
-	const commandLanguage = { get: languages.get, ...pickLanguage(languages.data[command.name], language) };
+	const languageData = { get: languages.get, ...pickLanguage(languages.data[command.name], language) };
 
-	command.execute(message, args, options, commandLanguage)
+	command.execute(message, args, options, languageData, language)
 	.then(() => {
 		timestamps.set(message.author.id, now);
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);

@@ -12,7 +12,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		if (process.env.HOST === "HEROKU") return message.reply("cette commande ne fonctionne pas sur Heroku").catch(console.error);
 		const Fs = require("fs");
 		const { MessageAttachment } = require("discord.js");

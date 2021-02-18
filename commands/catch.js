@@ -16,7 +16,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const pokedex = require("oakdex-pokedex");
 		const { pokeball } = require("../assets/misc.json");
 

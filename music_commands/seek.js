@@ -12,7 +12,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		return message.channel.send("<:soonTM:803898252167872522>").catch(console.error);
 		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
 		

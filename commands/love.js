@@ -25,7 +25,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const love1 = args
 			? message.mentions.users.first() || args[0]
 			: message.client.users.cache.get(options[0].value);

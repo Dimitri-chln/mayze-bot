@@ -19,7 +19,9 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
+		const timeToString = require("../utils/timeToString");
+
 		const commands = message.client.commands.filter(cmd => !cmd.onlyInGuilds || cmd.onlyInGuilds.includes(message.guild.id));
 		const { OWNER_ID } = require("../config.json");
 		const commandName = args
@@ -54,7 +56,7 @@ const command = {
 			if (command.usage) data += `\n**Utilisation:** \`${message.client.prefix}${command.name} ${command.usage}\``;
 			if (command.perms) data += `\n**Permissions:** \`${command.perms.join("`, `")}\``;
 			if (command.ownerOnly || command.allowedUsers) data += `\n**Utilisable par:** ${command.ownerOnly ? (command.allowedUsers || []).concat(OWNER_ID).map(u => `<@${u}>`).join(", ") : command.allowedUsers.map(u => `<@${u}>`).join(", ")}`;
-			data += `\n**Cooldown:** ${command.cooldown || 2} seconde(s)`;
+			data += `\n**Cooldown:** ${timeToString(command.cooldown || 2, language, languageCodeCode)})`;
 			
 			message.channel.send({
 				embed: {

@@ -44,7 +44,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const subCommand = args
 			? (args[0] || "").toLowerCase() || "get"
 			: options[0].name;

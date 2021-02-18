@@ -19,7 +19,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const Axios = require("axios").default;
 		const apiURL = "https://api.dicolink.com/v1/mot";
 

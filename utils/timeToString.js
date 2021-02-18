@@ -1,7 +1,7 @@
 /**
  * @param {number} time The time in seconds
  */
-function timeToString(date, language) {
+function timeToString(date, language = "fr") {
 	const years = Math.floor(date / 31536000);
 	const days = Math.floor((date % 31536000) / 86400);
 	const hours = Math.floor((date % 86400) / 3600);

@@ -20,7 +20,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const rankIdOrName = args
 			? (args.join(" ") || "").toLowerCase()
 			: (options ? options[0] : {}).value.toLowerCase();

@@ -12,7 +12,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const { "rows": toDo } = await message.client.pg.query("SELECT * FROM to_do").catch(console.error);
 		if (!toDo) return message.channel.send("Quelque chose s'est mal passé en joignant la base de données :/").catch(console.error);
 		const subCommand = args

@@ -35,7 +35,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const userValidation = require("../utils/userValidation");
 		const type = args
 			? args[2]

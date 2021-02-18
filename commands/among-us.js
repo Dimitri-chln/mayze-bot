@@ -45,7 +45,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const timeToString = require("../utils/timeToString");
 
 		const subCommand = args
@@ -83,7 +83,7 @@ const command = {
 							icon_url: message.client.user.avatarURL()
 						},
 						color: "#010101",
-						description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(${language.get(language.time_ago, timeToString((Date.now() - e[1].time) / 1000, language))}`).join("\n\n") || language.no_ongoing,
+						description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(${language.get(language.time_ago, timeToString((Date.now() - e[1].time) / 1000, language, languageCodeCode))}`).join("\n\n") || language.no_ongoing,
 						footer: {
 							text: "✨ Mayze ✨"
 						}

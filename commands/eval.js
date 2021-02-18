@@ -13,7 +13,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-   execute: async (message, args, options, language) => {
+   execute: async (message, args, options, language, languageCode) => {
 		const expression = args
 			? args.join(" ").replace("##", "message.channel.send")
 			: options[0].value.replace("##", "message.channel.send");

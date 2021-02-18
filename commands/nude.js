@@ -14,7 +14,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const nudes = require("../assets/nudes.json");
 		if (message.deletable) message.react("😏").catch(console.error);
 		message.author.send({

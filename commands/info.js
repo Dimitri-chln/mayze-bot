@@ -11,7 +11,7 @@ const command  = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const config = require("../config.json");
 		const { version } = require("../package.json");
 		message.channel.send({

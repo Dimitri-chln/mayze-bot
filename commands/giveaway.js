@@ -85,7 +85,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {object[]} options 
 	 */
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const dhms = require("dhms");
 		const timeToString = require("../utils/timeToString");
 		const updateGwaMsg = require("../utils/updateGwaMsg");

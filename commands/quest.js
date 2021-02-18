@@ -14,7 +14,7 @@ const command = {
 	 * @param {string[]} args
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 	if (!message.member.roles.cache.some(r => ["696751614177837056", "696751852267765872"].includes(r.id))) return;
 	if (message.channel.id !== "689212233439641649") {
 		return message.react("❌").catch(console.error);

@@ -24,7 +24,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const item = args
 			? shop.find(i => i.name.toLowerCase() === args.join(" ").toLowerCase() || i.name.toLowerCase().includes(args.join(" ").toLowerCase()))
 			: shop.find(i => i.name.toLowerCase() === options[0].value);

@@ -15,7 +15,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options, language) => {
+	execute: async (message, args, options, language, languageCode) => {
 		const snipedMsg = message.client.editedMessages ? message.client.editedMessages[message.channel.id] : null;
 		if (!snipedMsg) return message.reply(language.no_message).catch(console.error);
 		
