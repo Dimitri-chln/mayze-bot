@@ -420,7 +420,7 @@ function reconnectPgClient() {
 function pickLanguage(data, language) {
 	return Object.keys(data)
 		.reduce((acc, key) => {
-			acc[key] = obj[key][language];
+			acc[key] = data[key][language];
 			return acc;
 		}, {});
 }
