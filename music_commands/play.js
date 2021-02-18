@@ -38,7 +38,7 @@ const command = {
 				// Add the song to the queue
 				const res = await message.client.player.addToQueue(message.guild.id, search, null, message.author);
 				if (res.error) return message.reply(`je n'ai pas trouvé de musique avec ce titre`).catch(console.error);
-				message.channel.send(`<a:blackCheck:803603780666523699> | **Ajouté à la queue • Joué dans ${duration}**\n> ${res.song.name}`).catch(console.error);
+				message.channel.send(`<a:blackCheck:803603780666523699> | **Ajouté à la queue • Joué dans ${duration - queue.dispatcher.streamTime}**\n> ${res.song.name}`).catch(console.error);
 			} else {
 				// Else, play the song
 				const res = await message.client.player.play(message.member.voice.channel, search, null, message.author);

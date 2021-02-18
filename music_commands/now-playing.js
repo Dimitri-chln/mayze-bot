@@ -61,7 +61,7 @@ const command = {
 						width: 1280
 					},
 					color: "#010101",
-					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${newSong.queue.songs[1] ? newSong.queue.songs[1].name : "Rien"}**`,
+					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${newSong.queue.songs[1] ? newSong.queue.songs[1].name : "Rien"}**\n\`Durée:\` **${Util.MillisecondsToTime(queue.duration - queue.dispatcher.streamTime)}**`,
 					footer: {
 						text: "✨ Mayze ✨"
 					}
