@@ -25,7 +25,7 @@ const command = {
 		let pages = [];
 		let embed = new MessageEmbed()
 			.setAuthor(`Queue de ${message.guild.name}`, message.client.user.avatarURL())
-			.setTitle(`Durée : **${Util.MillisecondsToTime(queue.duration)}**`)
+			.setTitle(`Durée : **${Util.MillisecondsToTime(queue.duration - (queue.dispatcher ? queue.dispatcher.streamTime : 0))}**`)
 			.setColor("#010101")
 			.setDescription("*Aucune musique*");
 		if (!queue.songs.length) pages.push(embed);
@@ -33,7 +33,7 @@ const command = {
 		for (i = 0; i < queue.songs.length; i += songsPerPage) {
 			embed = new MessageEmbed()
 			.setAuthor(`Queue de ${message.guild.name}`, message.client.user.avatarURL())
-			.setTitle(`Durée : **${Util.MillisecondsToTime(queue.duration)}**`)
+			.setTitle(`Durée : **${Util.MillisecondsToTime(queue.duration - (queue.dispatcher ? queue.dispatcher.streamTime : 0))}**`)
 			.setColor("#010101")
 			.setDescription(queue.songs.slice(i, i + songsPerPage).map((song, j) => `${i + j === 0 ? "**En cours -**" : `\`${i + j}.\``} ${song.name}${i + j === 0 ? "\n" : ""}`).join("\n"));
 			pages.push(embed);
