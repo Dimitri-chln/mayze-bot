@@ -94,7 +94,7 @@ class Song {
 		this.requestedBy = requestedBy;
 		/**
 		 * If the song is looped.
-		 * @type {boolean}
+		 * @type {Boolean}
 		 */
 		this.loop = false;
 	}
@@ -136,11 +136,6 @@ class Queue extends EventEmitter {
 		 */
 		this.songs = [];
 		/**
-		 * The total duration of the queue.
-		 * @type {Number}
-		 */
-		this.duration = this.songs.reduce((sum, song) => sum + song.duration, 0);
-		/**
 		 * Whether the stream is currently stopped.
 		 * @type {Boolean}
 		 */
@@ -170,7 +165,13 @@ class Queue extends EventEmitter {
 		 * @type {Boolean}
 		 */
 		this.repeatMode = false;
+	}
 
+	/**
+	 * @returns {Number} The total duration of the queue
+	 */
+	get duration() {
+		return this.songs.reduce((sum, song) => sum + song.duration, 0);
 	}
 
 };
