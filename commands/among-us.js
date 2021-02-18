@@ -45,7 +45,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const timeToString = require("../utils/timeToString");
 
 		const subCommand = args
@@ -59,31 +59,31 @@ const command = {
 					? args[1].toUpperCase()
 					: options[0].options[0].value.toUpperCase();
 				const description = args
-					? args.slice(2).join(" ") || languages.default_desc[language]
-					: options[0].options[1].value || languages.default_desc[language];
-				if (!code || !/\w{6}/.test(code)) return message.reply(languages.invalid_code[language]).catch(console.error);
+					? args.slice(2).join(" ") || language.default_desc
+					: options[0].options[1].value || language.default_desc;
+				if (!code || !/\w{6}/.test(code)) return message.reply(language.invalid_code).catch(console.error);
 				games[message.author.id] = {
 					code: code,
 					description: description,
 					time: Date.now()
 				};
 				message.client.amongUsGames = games;
-				message.reply(languages.game_added[language]).catch(console.error);
+				message.reply(language.game_added).catch(console.error);
 				break;
 			case "delete":
-				if (!games[message.author.id]) return message.reply(languages.user_no_ongoing[language]).catch(console.error);
+				if (!games[message.author.id]) return message.reply(language.user_no_ongoing).catch(console.error);
 				delete games[message.author.id];
-				message.reply(languages.game_deleted[language]).catch(console.error);
+				message.reply(language.game_deleted).catch(console.error);
 				break;
 			default:
 				message.channel.send({
 					embed: {
 						author: {
-							name: languages.ongoing_games[language],
+							name: language.ongoing_games,
 							icon_url: message.client.user.avatarURL()
 						},
 						color: "#010101",
-						description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(${languages.get(languages.time_ago[language], timeToString((Date.now() - e[1].time) / 1000, language))}`).join("\n\n") || languages.no_ongoing[language],
+						description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(${language.get(language.time_ago, timeToString((Date.now() - e[1].time) / 1000, language))}`).join("\n\n") || language.no_ongoing,
 						footer: {
 							text: "✨ Mayze ✨"
 						}

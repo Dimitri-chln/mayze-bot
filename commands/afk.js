@@ -22,7 +22,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const AKFmessage = args
 			? args.join(" ").replace(/^./, a => a.toUpperCase())
 			: (options ? options[0].value : "").replace(/^./, a => a.toUpperCase());
@@ -31,7 +31,7 @@ const command = {
 		if (AKFmessage) message.client.pg.query(`INSERT INTO afk (user_id, message) VALUES ('${message.author.id}', '${AKFmessage}')`).catch(console.error);
 		else message.client.pg.query(`INSERT INTO afk (user_id) VALUES ('${message.author.id}')`).catch(console.error);
 
-		message.channel.send(languages.get(languages.afk_message[language], message.author.toString(), AKFmessage ? `\n**→ ${AKFmessage}**` : "")).catch(console.error);
+		message.channel.send(language.get(language.afk_message, message.author.toString(), AKFmessage ? `\n**→ ${AKFmessage}**` : "")).catch(console.error);
 	}
 };
 

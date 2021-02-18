@@ -2,41 +2,44 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "custom-response",
-	description: "Gérer les réponses personnalisées",
+	description: {
+		fr: "Gérer les réponses personnalisées",
+		en: "Manage custom responses"
+	},
 	aliases: ["response", "cr"],
 	args: 0,
-	usage: "add \"<déclencheur>\" \"<réponse>\" [type] | remove <n° réponse>",
+	usage: "add \"<trigger>\" \"<response>\" [<type>] | remove <#response>",
 	perms: ["MANAGE_MESSAGES"],
 	slashOptions: [
 		{
 			name: "add",
-			description: "Ajouter une réponse personnalisée",
+			description: "Add a custom response",
 			type: 1,
 			options: [
 				{
-					name: "déclencheur",
-					description: "Le texte qui déclenche la réponse",
+					name: "trigger",
+					description: "The text that triggers the response",
 					type: 3,
 					required: true
 				},
 				{
-					name: "réponse",
-					description: "La réponse à envoyer",
+					name: "response",
+					description: "The custom response to be sent",
 					type: 3,
 					required: true
 				},
 				{
 					name: "type",
-					description: "Le type de déclencheur",
+					description: "The type of the the trigger",
 					type: 4,
 					required: false,
 					choices: [
 						{
-							name: "Correspondance simple",
+							name: "Contains",
 							value: 0
 						},
 						{
-							name: "Correspondance exacte",
+							name: "Equal to",
 							value: 1
 						},
 						{
@@ -44,11 +47,11 @@ const command = {
 							value: 2
 						},
 						{
-							name: "Commence par",
+							name: "Starts with",
 							value: 3
 						},
 						{
-							name: "Finit par",
+							name: "Ends with",
 							value: 4
 						}
 					]
@@ -57,12 +60,12 @@ const command = {
 		},
 		{
 			name: "remove",
-			description: "Retirer une réponse personnalisée",
+			description: "Remove a custom response",
 			type: 1,
 			options: [
 				{
-					name: "réponse",
-					description: "Le numéro de la réponse à retirer",
+					name: "response",
+					description: "The number of the response",
 					type: 4,
 					required: true
 				}
@@ -70,7 +73,7 @@ const command = {
 		},
 		{
 			name: "get",
-			description: "Obtenir la liste des réponses personnalisées",
+			description: "Get the list of all custom responses",
 			type: 1
 		}
 	],
@@ -79,7 +82,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const subCommand = args
 			? (args[0] || "").toLowerCase() || "get"
 			: options[0].name;
@@ -88,53 +91,47 @@ const command = {
 		
 		switch (subCommand) {
 			case "add": {
+				if (args.length < 3) return message.reply(language.not_enough_args).catch(console.error);
+
 				const trigger = args
 					? args[1]
 					: options[0].options[0].value;
 				const response = args
 					? args[2]
 					: options[0].options[1].value;
-				if (args.length < 3) return message.reply("écris le déclencheur et la réponse entre guillemets").catch(console.error);
+				
 				const triggerType = args
 					? parseInt(args[3]) || 0
 					: options[0].options[2] ? options[0].options[2].value : 0;
 
 				const res = await message.client.pg.query(`INSERT INTO responses (trigger, response, trigger_type) VALUES ('${trigger.replace(/"/g, "")}', '${response.replace(/"/g, "")}', ${triggerType})`).catch(console.error);
-				if (!res) return message.reply("Quelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
+				if (!res) return message.reply(language.error_database).catch(console.error);
 				if (message.deletable) message.react("✅").catch(console.error);
-				else message.reply("réponse ajoutée").catch(console.error);
+				else message.reply(language.response_added).catch(console.error);
 				break;
 			}
 			case "remove": {
 				const n = args
 					? parseInt(args[1])
 					: options[0].options[0].value;
-				if (!n || n < 1 || n > responses.length) return message.reply(`le numéro doit être compris entre 1 et ${responses.length}`).catch(console.error);
+				if (!n || n < 1 || n > responses.length) return message.reply(language.get(language.invalid_number, responses.length)).catch(console.error);
 
 				const response = responses[n - 1];
 				const res = await message.client.pg.query(`DELETE FROM responses WHERE trigger='${response.trigger}' AND response='${response.response}'`).catch(console.error);
-				if (!res) return message.reply("Quelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
+				if (!res) return message.reply(language.error_database).catch(console.error);
 				if (message.deletable) message.react("✅").catch(console.error);
-				else message.reply("réponse retirée").catch(console.error);
+				else message.reply(language.response_removed).catch(console.error);
 				break;
 			}
 			case "get":
-				const triggerTypes = {
-					0: "Contient",
-					1: "Égal à",
-					2: "Correspond à",
-					3: "Commence par",
-					4: "Finit par"
-				};
-
 				message.channel.send({
 					embed: {
 						author: {
-							name: "Réponses personnalisées",
+							name: language.embed_title,
 							icon_url: message.client.user.avatarURL()
 						},
 						color: "#010101",
-						description: responses.map((response, i) => `\`${i + 1}.\` ${triggerTypes[response.trigger_type]} \`${response.trigger}\`\n\t→ \`${response.response}\``).join("\n"),
+						description: responses.map((response, i) => `\`${i + 1}.\` ${language.trigger_types[response.trigger_type]} \`${response.trigger}\`\n\t→ \`${response.response}\``).join("\n"),
 						footer: {
 							text: "✨ Mayze ✨"
 						}

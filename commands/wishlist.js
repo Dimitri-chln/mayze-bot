@@ -19,7 +19,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const user = args
 			? message.mentions.users.first() || message.client.users.cache.find(u =>u.id === args[0] || u.username === args[0] || u.username.includes(args[0])) || message.author
 			: message.client.users.cache.get((options ? options[0] : {}).value) || message.author;

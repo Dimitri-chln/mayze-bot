@@ -16,7 +16,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const pokedex = require("oakdex-pokedex");
 		const { pokeball } = require("../assets/misc.json");
 
@@ -47,14 +47,14 @@ const command = {
 		message.channel.send({
 			embed: {
 				author: {
-					name: rows.length ? languages.caught[language] :  languages.caught_new[language],
+					name: rows.length ? language.caught :  language.caught_new,
 					icon_url: pokeball
 				},
 				image: {
 					url: img
 				},
 				color: shiny ? "#ddbb20" : (legendary ? "#ce2f20" : "#010101"),
-				description: languages.get(languages.caught_title[language], message.author.toString(), (legendary ? "🎖️ " : "") + (shiny ? "⭐ " : "") + (pokemon.names[language] || pokemon.names.en)),
+				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (shiny ? "⭐ " : "") + (pokemon.names[language] || pokemon.names.en)),
 				footer: {
 					text: "✨Mayze✨",
 					icon_url: message.author.avatarURL({ dynamic: true })

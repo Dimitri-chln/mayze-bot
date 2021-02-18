@@ -22,7 +22,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		let color = args
 			? hexToRGB(args[0])
 			: hexToRGB(options[0].value);
@@ -30,11 +30,11 @@ const command = {
 		const msg = await message.channel.send({
 			embed: {
 				author: {
-					name: languages.selector[language],
+					name: language.selector,
 					icon_url: message.client.user.avatarURL()
 				},
 				color: "#010101",
-				description: languages.get(languages.desc[language], RGBToHex(color), color[0], color[1], color[2], RGBToDec(color)),
+				description: language.get(language.desc, RGBToHex(color), color[0], color[1], color[2], RGBToDec(color)),
 				thumbnail: {
 					url: `https://dummyimage.com/100/${ RGBToHex(color).replace("#", "") }/00.png?text=+`
 				},
@@ -165,11 +165,11 @@ const command = {
 			msg.edit({
 				embed: {
 					author: {
-						name: languages.selector[language],
+						name: language.selector,
 						icon_url: message.client.user.avatarURL()
 					},
 					color: "#010101",
-					description: languages.get(languages.desc[language], RGBToHex(color), color[0], color[1], color[2], RGBToDec(color)),
+					description: language.get(language.desc, RGBToHex(color), color[0], color[1], color[2], RGBToDec(color)),
 					thumbnail: {
 						url: `https://dummyimage.com/100/${ RGBToHex(color).replace("#", "") }/00.png?text=+`
 					},

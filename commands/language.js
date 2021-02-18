@@ -33,7 +33,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const availableLanguages = ["fr", "en"];
 
 		const currentLanguage = (await message.client.pg.query(`SELECT * FROM languages WHERE guild_id = '${message.guild.id}'`)).rows[0];
@@ -41,16 +41,16 @@ const command = {
 		const newLanguage = args
 			? args[0].toLowerCase()
 			: options[0].value;
-		if (!availableLanguages.includes(language)) return message.reply(languages.get(languages.invalid_language[language], availableLanguages.join(", "))).catch(console.error);
+		if (!availableLanguages.includes(language)) return message.reply(language.get(language.invalid_language, availableLanguages.join(", "))).catch(console.error);
 
 		if (currentLanguage) var res = await message.client.pg.query(`UPDATE languages SET language_code = '${newLanguage}' WHERE guild_id = '${message.guild.id}'`).catch(console.error);
 		else var res = await message.client.pg.query(`INSERT INTO languages VALUES ('${message.guild.id}', '${newLanguage}')`).catch(console.error);
-		if (!res) return message.channel.send(languages.error_database[language]).catch(console.error);
+		if (!res) return message.channel.send(language.error_database).catch(console.error);
 
 		language = newLanguage;
 		
 		if (message.deletable) message.react("✅").catch(console.error);
-		else message.reply(languages.language_updated[language]).catch(console.error);
+		else message.reply(language.language_updated).catch(console.error);
 	}
 };
 

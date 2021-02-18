@@ -19,7 +19,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const role = args
 			? message.guild.roles.cache.get(args.join(" ").toLowerCase()) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args.join(" ").toLowerCase()) || message.guild.roles.cache.find(r =>r.name.toLowerCase().includes(args.join(" ").toLowerCase()))
 			: message.guild.roles.cache.get(options[0].value);

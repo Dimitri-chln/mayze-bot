@@ -53,7 +53,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const { shop } = this;
 		message.channel.send({
 			embed: {

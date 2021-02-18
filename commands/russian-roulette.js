@@ -52,7 +52,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const subCommand = args
 			? args[0].toLowerCase()
 			: options[0].name.toLowerCase();

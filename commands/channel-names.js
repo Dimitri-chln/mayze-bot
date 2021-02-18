@@ -35,7 +35,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const userValidation = require("../utils/userValidation");
 		const type = args
 			? args[2]
@@ -57,13 +57,13 @@ const command = {
 		const msg = await message.channel.send({
 			embed: {
 				author: {
-					name: languages.verification_title[language],
+					name: language.verification_title,
 					icon_url: message.author.avatarURL({ dynamic: true })
 				},
 				thumbnail: {
 					url: message.client.user.avatarURL()
 				},
-				title: languages.verification_desc[language],
+				title: language.verification_desc,
 				color: "#010101",
 				description: newChannels.join("\n"),
 				footer: {
@@ -71,11 +71,11 @@ const command = {
 				}
 			}
 		}).catch(console.error);
-		if (!msg) return message.channel.send(languages.error_msg_too_long[language]).catch(console.error);
+		if (!msg) return message.channel.send(language.error_msg_too_long).catch(console.error);
 
 		const validation = await userValidation(message.author, msg);
-		if (!validation) return message.channel.send(languages.cancelled[language]).catch(console.error);
-		const loadingMsg = await message.channel.send(languages.get(languages.editing[language], channels.size)).catch(console.error);
+		if (!validation) return message.channel.send(language.cancelled).catch(console.error);
+		const loadingMsg = await message.channel.send(language.get(language.editing, channels.size)).catch(console.error);
 		
 		let errors = 0;
 		channels.forEach(async c => {
@@ -84,7 +84,7 @@ const command = {
 				console.error(err);
 			});
 		});
-		loadingMsg.edit(languages.get(languages.done_editing[language], channels.size - errors, errors));
+		loadingMsg.edit(language.get(language.done_editing, channels.size - errors, errors));
 	}
 };
 

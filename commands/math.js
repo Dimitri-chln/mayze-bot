@@ -64,7 +64,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const math = require("mathjs");
 		const { parse } = require("algebra");
 		const subCommand = args

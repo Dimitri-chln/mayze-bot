@@ -71,7 +71,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const { ROLES_CHANNEL_ID } = require("../config.json");
 		const rolesChannel = message.guild.channels.cache.get(ROLES_CHANNEL_ID);
 		const subCommand = args

@@ -103,8 +103,8 @@ module.exports = {
 		},
 		"clear": {
 			invalid_number: {
-				fr: "entre un nombre compris entre 1 et 100",
-				en: "enter a number between 1 and 100"
+				fr: "le nombre doit être compris entre 1 et 100",
+				en: "the number must be between 1 and 100"
 			},
 			error_fetching_msg: {
 				fr: "Quelque chose s'est mal passé en récupérant les messages :/",
@@ -140,6 +140,36 @@ module.exports = {
 			},
 			desc: {
 				fr: "**Hexadécimal :** \`{1}\`\n**RGB :** 🟥 \`{2}\` 🟩 \`{3}\` 🟦 \`{4}\`\n**Décimal :** \`{5}\`"
+			}
+		},
+		"custom-response": {
+			not_enough_args: {
+				fr: "pas assez d'arguments",
+				en: "not enough arguments"
+			},
+			error_database: {
+				fr: "Quelque chose s'est mal passé en accédant à la base de données :/",
+				en: "Something went wrong when accessing the database :/"
+			},
+			response_added: {
+				fr: "Réponse ajoutée",
+				en: "Response added"
+			},
+			invalid_number: {
+				fr: "le numéro doit être compris entre 1 et {1}",
+				ed: "the number must be between 1 and {1}"
+			},
+			response_removed: {
+				fr: "Réponse retirée",
+				en: "Response removed"
+			},
+			trigger_types: {
+				fr: ["Contient", "Égal à", "Correspond à", "Commence par", "Finit par"],
+				en: ["Contains", "Equal to", "Matches", "Starts with", "Ends with"]
+			},
+			embed_title: {
+				fr: "Réponses personnalisées",
+				en: "Custom responses"
 			}
 		}
 	}

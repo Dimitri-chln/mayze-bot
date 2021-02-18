@@ -19,7 +19,7 @@ const command = {
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const kisses = require("../assets/kisses.json");
 		const user = args
 			? message.mentions.users.first() || message.client.user

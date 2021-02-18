@@ -12,7 +12,7 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const { CronJob } = require("cron");
 		const date = args
 			? new Date((args.join(" ").match(/\d{1,2}\/|-\d{1,2}\/|-\d{4}( \d{1,2}(:\d{1,2}(:\d{1,2})?)?)?( GMT(\+|-)\d{1,2})?/) || [])[0])

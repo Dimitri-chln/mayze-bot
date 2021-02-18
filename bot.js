@@ -203,9 +203,9 @@ async function processCommand(command, message, args, options) {
 		}
 	}
 
-	const commandLanguages = { get: languages.get, ...languages.data[command.name] };
+	const commandLanguage = { get: languages.get, ...pickLanguage(languages.data[command.name], language) };
 
-	command.execute(message, args, options, commandLanguages, language)
+	command.execute(message, args, options, commandLanguage)
 	.then(() => {
 		timestamps.set(message.author.id, now);
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
@@ -415,4 +415,12 @@ function reconnectPgClient() {
 	client.pg.end().catch(console.error);
 	client.pg = newPgClient();
 	client.pg.connect().then(() => console.log("Connected to the database")).catch(console.error);
+}
+
+function pickLanguage(data, language) {
+	return Object.keys(data)
+		.reduce((acc, key) => {
+			acc[key] = obj[key][language];
+			return acc;
+		}, {});
 }

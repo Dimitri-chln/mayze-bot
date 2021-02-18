@@ -36,12 +36,12 @@ const command = {
 	 * @param {string[]} args 
 	 * @param {Object[]} options
 	 */
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		let number = args
 			? parseInt(args[0])
 			: options[0].value;
 		if (isNaN(number) || number <= 0 || number > 100)
-			return message.reply(languages.invalid_number[language]).catch(console.error);
+			return message.reply(language.invalid_number).catch(console.error);
 
 		if (message.deletable) await message.delete().catch(err => {
 			++number;
@@ -49,7 +49,7 @@ const command = {
 		});
 
 		let messages = await message.channel.messages.fetch({ limit: 100 }).catch(console.error);
-		if (!messages) return message.channel.send(languages.error_fetching_msg[language]).catch(console.error);
+		if (!messages) return message.channel.send(language.error_fetching_msg).catch(console.error);
 		
 		if (args && args.includes("-bot")) messages = messages.filter(msg => msg.author.bot);
 
@@ -69,10 +69,10 @@ const command = {
 			await message.channel.bulkDelete(messages);
 		} catch (err) {
 			console.error(err);
-			return message.channel.send(languages.error_deleting_msg[language]).catch(console.error);
+			return message.channel.send(language.error_deleting_msg).catch(console.error);
 		}
 
-		const msg = await message.channel.send(languages.get(languages.deleted[language], messages.length)).catch(console.error);
+		const msg = await message.channel.send(language.get(language.deleted, messages.length)).catch(console.error);
 		msg.delete({ timeout: 4000 }).catch(console.error);
 	}
 };

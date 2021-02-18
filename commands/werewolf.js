@@ -38,7 +38,7 @@ const command = {
 	 * @param {Message} message 
 	 * @param {string[]} args
 	 */
-	execute: async (message, args, options, languages, language) => {
+	execute: async (message, args, options, language) => {
 		const { OWNER_ID } = require("../config.json");
 		const subCommand = args
 			? (args[0] || "").toLowerCase() || "players"
