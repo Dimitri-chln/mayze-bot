@@ -2,14 +2,17 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "help",
-	description: "Obtenir la liste des commandes ou des informations sur une commande spécifique",
+	description: {
+		fr: "Obtenir la liste des commandes ou des informations sur une commande spécifique",
+		en: "Get all commands or help on one specific command"
+	},
 	aliases: ["h"],
 	args: 0,
-	usage: "[<commande>]",
+	usage: "[<command>]",
 	slashOptions: [
 		{
-			name: "commande",
-			description: "La commande pour laquelle obtenir des informations",
+			name: "command",
+			description: "A command to get help with",
 			type: 3,
 			required: false
 		}
