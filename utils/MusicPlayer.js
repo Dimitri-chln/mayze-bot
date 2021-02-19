@@ -638,19 +638,7 @@ class Player {
 			let video = await Util.getVideoBySearch(songName, ytsr, options);
 
 			if (!queue) {
-				// Joins the voice channel
-				let connection = await voiceChannel.join();
-				// Creates a new guild with data
-				queue = new Queue(voiceChannel.guild.id);
-				queue.connection = connection;
-				let song = new Song(video, queue, requestedBy);
-				queue.songs.push(song);
-				// Add the queue to the list
-				this.queues.push(queue);
-				// Plays the song
-				this._playSong(queue.guildID, true);
-
-				return { error: null, song: song };
+				return await this.play(voiceChannel, songName, options, requestedBy);
 
 			} else {
 				let song = new Song(video, queue, requestedBy);
@@ -686,19 +674,7 @@ class Player {
 			let video = await Util.getVideoBySearch(songName, ytsr, options);
 
 			if (!queue) {
-				// Joins the voice channel
-				let connection = await voiceChannel.join();
-				// Creates a new guild with data
-				queue = new Queue(voiceChannel.guild.id);
-				queue.connection = connection;
-				let song = new Song(video, queue, requestedBy);
-				queue.songs.push(song);
-				// Add the queue to the list
-				this.queues.push(queue);
-				// Plays the song
-				this._playSong(queue.guildID, true);
-
-				return { error: null, song: song };
+				return await this.play(voiceChannel, songName, options, requestedBy);
 
 			} else {
 				let song = new Song(video, queue, requestedBy);
