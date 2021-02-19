@@ -1,11 +1,11 @@
 const { Message } = require("discord.js");
 
 const command = {
-	name: "seek",
-	description: "Chercher une partie de la musique",
-	aliases: ["goto"],
+	name: "volume",
+	description: "Ajuster le volume de la musique",
+	aliases: ["vol"],
 	args: 1,
-	usage: "<temps>",
+	usage: "<volume>",
 	disableSlash: true,
 	/**
 	 * @param {Message} message 
@@ -15,22 +15,16 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
 		
-		const time = args
-			? args[0]
+		const volume = args
+			? parseInt(args[0])
 			: options[0].value;
-		const timeRegex = /(?:(\d+):)?([0-5]?\d):([0-5]\d)/;
-		if (!timeRegex.test(time)) return message.reply("le format est incorrect (hh:mm:ss)").catch(console.error);
+		if (isNaN(volume) || volume < 0 || volume > 100) return message.reply("le volume doit être compris entre 0 et 100").catch(console.error);
 
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
-		
-		const Util = require("../utils/music/Util");
-		const timeInMs = Util.TimeToMilliseconds(time);
 
-		message.channel.startTyping(1);
-		const res = await message.client.player.seek(message.guild.id, timeInMs);
-		message.channel.send(`<a:blackCheck:803603780666523699> | **Temps modifié (${time})**\n> ${res.song.name}`).catch(console.error);
-		message.channel.stopTyping();
+		const volume = message.client.player.setVolume(message.guild.id, volume);
+		message.channel.send(`<a:blackCheck:803603780666523699> | **Volume modifié**\n> ${volume}%`).catch(console.error);
 	}
 };
 
