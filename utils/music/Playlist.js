@@ -12,12 +12,12 @@ class Playlist {
          * Playlist name.
          * @type {String}
          */
-        this.name = playlist.title;
+        this.name = playlist.title || null;
         /**
          * Author channel of the playlist.
          * @type {String}
          */
-        this.author = playlist.channel.name;
+        this.author = playlist.channel ? playlist.channel.name : null;
         /**
          * Youtube playlist URL.
          * @type {String}
