@@ -206,7 +206,7 @@ class Util {
             if (SpotifyPlaylistRegex.test(search)) {
                 let tracks = await getTracks(search);
 
-                await Promise.all(playlist.videos = tracks.map((track, index) => {
+                await Promise.all(playlist.videos = tracks.map(async (track, index) => {
 
                     if (max !== -1 && index >= max) return null;
                     let trackUrl = await this.songFromSpotify(track.external_urls.spotify);
