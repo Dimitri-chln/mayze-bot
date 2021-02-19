@@ -18,7 +18,7 @@ const command = {
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
 		
-		const loop = message.client.player.toggleLoopQueue(message.guild.id);
+		const loop = message.client.player.toggleQueueLoop(message.guild.id);
 		message.channel.send(`<a:blackCheck:803603780666523699> | **Répétition de la queue ${loop ? "activée" : "désactivée"}**`).catch(console.error);
 	}
 };

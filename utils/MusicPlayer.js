@@ -1008,7 +1008,7 @@ class Player {
 	 * @param {string} guildID
 	 * @returns {boolean} Returns the current set state
 	 */
-	toggleLoopQueue(guildID) {
+	toggleQueueLoop(guildID) {
 		// Gets guild queue
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return new MusicPlayerError('QueueIsNull');

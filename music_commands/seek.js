@@ -13,7 +13,7 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		return message.channel.send("<:soonTM:803898252167872522>").catch(console.error);
+		// return message.channel.send("<:soonTM:803898252167872522>").catch(console.error);
 		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
 		
 		const time = args
@@ -25,7 +25,7 @@ const command = {
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
 		
-		const { Util } = require("../util/MusicPlayer");
+		const { Util } = require("../utils/MusicPlayer");
 		const timeInMs = Util.TimeToMilliseconds(time);
 		const song = message.client.player.seek(message.guild.id, timeInMs);
 		message.channel.send(`<a:blackCheck:803603780666523699> | **Temps modifié (${time})**\n> ${song.name}`).catch(console.error);

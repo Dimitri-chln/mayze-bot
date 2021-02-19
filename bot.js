@@ -364,7 +364,7 @@ function parseArgs(input) {
 
 
 // MUSIC CODE
-const { Player } = require("./utils/MusicPlayer");
+const { Player } = require("discord-music-player");
 const player = new Player(client, {
 	leaveOnEnd: true,
 	leaveOnStop: true,
