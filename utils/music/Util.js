@@ -2,7 +2,7 @@ const scrapeYT = require('scrape-yt');
 const Playlist = require('./Playlist');
 const Song = require('./Song');
 const ytsr = require('ytsr');
-const { getPreview } = require("spotify-url-info");
+const { getPreview, getTracks } = require("spotify-url-info");
 
 //RegEx Definitions
 let VideoRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))((?!channel)(?!user)\/(?:[\w\-]+\?v=|embed\/|v\/)?)((?!channel)(?!user)[\w\-]+)(\S+)?$/;
@@ -10,6 +10,10 @@ let VideoRegexID = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?
 let PlaylistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#\&\?]*).*/;
 let PlaylistRegexID = /[&?]list=([^&]+)/;
 let SpotifyRegex = /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:track\/|\?uri=spotify:track:)((\w|-){22})(?:(?=\?)(?:[?&]foo=(\d*)(?=[&#]|$)|(?![?&]foo=)[^#])+)?(?=#|$)/;
+
+// https://open.spotify.com/playlist/2pAcP8Euby5nS5eYC7UuuP?si=eeFtpSkdS8C4qiqXaMCuSQ&utm_source=copy-link
+let SpotifyPlaylistRegex = /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
+
 
 /**
  * Get ID from YouTube link.
@@ -197,23 +201,40 @@ class Util {
     static getVideoFromPlaylist(search, max, queue, requestedBy) {
         return new Promise(async (resolve, reject) => {
 
-            let isPlaylistLink = PlaylistRegex.test(search);
-            if (!isPlaylistLink) return reject('InvalidPlaylist');
+            let playlist = {};
 
-            let PlaylistID = playlist_parser(search);
-            if (!PlaylistID) return reject('InvalidPlaylist');
+            if (SpotifyPlaylistRegex.test(search)) {
+                let tracks = await getTracks(search);
 
-            let playlist = await scrapeYT.getPlaylist(PlaylistID);
-            if (Object.keys(playlist).length === 0) return reject('InvalidPlaylist');
+                await Promise.all(playlist.videos = tracks.map((track, index) => {
 
-            await Promise.all(playlist.videos = playlist.videos.map((video, index) => {
+                    if (max !== -1 && index >= max) return null;
+                    let trackUrl = await this.songFromSpotify(track.external_urls.spotify);
+                    let song = await this.getVideoBySearch(trackUrl, null, queue, requestedBy);
 
-                if (max !== -1 && index >= max) return null;
-                video.duration = getVideoDuration(video.duration);
-                video.url = `http://youtube.com/watch?v=${video.id}`;
+                    return song;
+                }));
 
-                return new Song(video, queue, requestedBy);
-            }));
+            } else {
+                let isPlaylistLink = PlaylistRegex.test(search);
+                if (!isPlaylistLink) return reject('InvalidPlaylist');
+
+                let PlaylistID = playlist_parser(search);
+                if (!PlaylistID) return reject('InvalidPlaylist');
+
+                playlist = await scrapeYT.getPlaylist(PlaylistID);
+                if (Object.keys(playlist).length === 0) return reject('InvalidPlaylist');
+
+                await Promise.all(playlist.videos = playlist.videos.map((video, index) => {
+
+                    if (max !== -1 && index >= max) return null;
+                    video.duration = getVideoDuration(video.duration);
+                    video.url = `http://youtube.com/watch?v=${video.id}`;
+
+                    return new Song(video, queue, requestedBy);
+                }));
+            }
+
             playlist.videos = playlist.videos.filter(function (obj) { return obj });
             playlist.url = search;
             playlist.videoCount = max === -1 ? playlist.videoCount : playlist.videoCount > max ? max : playlist.videoCount;
