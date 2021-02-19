@@ -27,10 +27,8 @@ const command = {
 		const Util = require("../utils/music/Util");
 		const timeInMs = Util.TimeToMilliseconds(time);
 
-		message.channel.startTyping(1);
 		const res = await message.client.player.seek(message.guild.id, timeInMs);
 		message.channel.send(`<a:blackCheck:803603780666523699> | **Temps modifié (${time})**\n> ${res.song.name}`).catch(console.error);
-		message.channel.stopTyping();
 	}
 };
 
