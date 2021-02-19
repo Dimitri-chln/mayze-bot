@@ -23,7 +23,7 @@ const command = {
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
 
-		const volume = message.client.player.setVolume(message.guild.id, volume);
+		message.client.player.setVolume(message.guild.id, volume);
 		message.channel.send(`<a:blackCheck:803603780666523699> | **Volume modifié**\n> ${volume}%`).catch(console.error);
 	}
 };

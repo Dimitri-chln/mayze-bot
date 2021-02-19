@@ -363,8 +363,6 @@ class Player {
         // Updates volume
         queue.volume = percent;
         queue.dispatcher.setVolumeLogarithmic(percent / 200);
-
-        return queue.volume;
     }
 
     /**
