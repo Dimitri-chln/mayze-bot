@@ -431,7 +431,7 @@ class Util {
 
 	/**
 	 * Convers Milliseconds to Time (HH:MM:SS)
-	 * @param {String} ms Miliseconds
+	 * @param {String} ms Milliseconds
 	 * @returns {String}
 	 */
 	static MillisecondsToTime(ms) {

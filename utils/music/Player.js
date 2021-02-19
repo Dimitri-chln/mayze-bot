@@ -234,7 +234,7 @@ class Player {
             try {
                 // Searches the song
                 let video = await Util.getVideoBySearch(songName, ytsr, options);
-                
+
 				let song = new Song(video, queue, requestedBy);
 				// Inserts the song in the 2nd position
 				queue.songs.splice(1, 0, song);
@@ -244,11 +244,11 @@ class Player {
 
 				return { error: null, song: song };
 
-        } catch (err) {
-            return new MusicPlayerError('SearchIsNull', 'song');
-        }
-    }		
-}
+           } catch (err) {
+                return new MusicPlayerError('SearchIsNull', 'song');
+            }
+        }		
+    }
 
 
     /**
@@ -600,7 +600,7 @@ class Player {
 		let queue = this.queues.find((g) => g.guildID === guildID);
 		if (!queue) return new MusicPlayerError('QueueIsNull');
 
-		let timePassed = queue.dispatcher.streamTime;
+		let timePassed = queue.dispatcher.streamTime + queue.songs[0].seekTime;
 		let timeEnd = Util.TimeToMilliseconds(queue.songs[0].duration);
 
 		return `${Util.buildBar(timePassed, timeEnd, barSize, loadedIcon, arrowIcon)}`;
@@ -613,7 +613,7 @@ class Player {
      * @param {Boolean} firstPlay Whether the function was called from the play() one
      * @param {Number || null} seek Seek the song.
      */
-    async _playSong(guildID, firstPlay, seek= null) {
+    async _playSong(guildID, firstPlay, seek = null) {
         // Gets guild queue
         let queue = this.getQueue(guildID);
         // If there isn't any music in the queue

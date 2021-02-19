@@ -255,7 +255,7 @@ class Util {
         minutes = (`0${minutes}`).slice(-2);
         hours = (`0${hours}`).slice(-2);
 
-        return `${hours === 0 ? '' : `${hours}:`}${minutes}:${seconds}`;
+        return `${hours == 0 ? '' : `${hours}:`}${minutes}:${seconds}`;
     }
 
     /**

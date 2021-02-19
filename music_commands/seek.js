@@ -25,10 +25,13 @@ const command = {
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
 		
-		const { Util } = require("../utils/MusicPlayer");
+		const Util = require("../utils/music/Util");
 		const timeInMs = Util.TimeToMilliseconds(time);
-		const res = message.client.player.seek(message.guild.id, timeInMs);
+
+		message.channel.startTyping(1);
+		const res = await message.client.player.seek(message.guild.id, timeInMs);
 		message.channel.send(`<a:blackCheck:803603780666523699> | **Temps modifié (${time})**\n> ${res.song.name}`).catch(console.error);
+		message.channel.stopTyping();
 	}
 };
 
