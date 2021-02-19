@@ -20,11 +20,13 @@ const command = {
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 
 		const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#\&\?]*).*/;
+		const SpotifyPlaylistRegex = /https?:\/\/(?:open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
+
 		const search = args
 			? args.join(" ")
 			: options[0].value;
 		
-		if (playlistRegex.test(search)) {
+		if (playlistRegex.test(search) || SpotifyPlaylistRegex.test(search)) {
 			const playlist = await message.client.player.playlist(message.guild.id, search, message.member.voice.channel, -1, message.author);
 			message.channel.send(`<a:blackCheck:803603780666523699> | **Playlist ajoutée**\n> ${playlist.playlist.videoCount} musiques ont été ajoutées à la queue`).catch(console.error);
 			if (!isPlaying) message.channel.send(`<a:blackCheck:803603780666523699> | **En train de jouer...**\n> ${playlist.song.name}`).catch(console.error);
