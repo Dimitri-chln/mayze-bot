@@ -12,7 +12,7 @@ let PlaylistRegexID = /[&?]list=([^&]+)/;
 let SpotifyRegex = /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:track\/|\?uri=spotify:track:)((\w|-){22})(?:(?=\?)(?:[?&]foo=(\d*)(?=[&#]|$)|(?![?&]foo=)[^#])+)?(?=#|$)/;
 
 // https://open.spotify.com/playlist/2pAcP8Euby5nS5eYC7UuuP?si=eeFtpSkdS8C4qiqXaMCuSQ&utm_source=copy-link
-let SpotifyPlaylistRegex = /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
+let SpotifyPlaylistRegex = /https?:\/\/(?:open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
 
 
 /**
