@@ -18,7 +18,7 @@ const command = {
 		const volume = args
 			? parseInt(args[0])
 			: options[0].value;
-		if (isNaN(volume) || volume < 0 || volume > 100) return message.reply("le volume doit être compris entre 0 et 100").catch(console.error);
+		if (isNaN(volume) || volume < 0 || volume > 100) return message.reply("le volume doit être compris entre 0 et 200").catch(console.error);
 
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);

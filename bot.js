@@ -370,7 +370,8 @@ const player = new Player(client, {
 	leaveOnStop: true,
     leaveOnEmpty: true,
     timeout: 900000, // 15min
-    quality: "high"
+    quality: "high",
+	volume: 10
 });
 client.player = player;
 client.player.npTimers = {};
