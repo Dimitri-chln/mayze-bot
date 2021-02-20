@@ -28,7 +28,7 @@ const command = {
 		message.channel.send({
 			embed: {
 				author: {
-					name: `${message.author.username} fait un bisous à ${user.username} 😘`,
+					name: language.get(language.title, message.author.username, user.username),
 					icon_url: message.author.avatarURL({ dynamic: true })
 				},
 				color: "#010101",

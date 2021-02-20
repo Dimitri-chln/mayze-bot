@@ -2,11 +2,14 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "jail",
-	description: "Mettre un membre en prison ou le libérer",
+	description: {
+		fr: "Mettre un membre en prison ou le libérer",
+		en: "Jail or unjail a member"
+	},
 	aliases: [],
 	cooldown: 5,
 	args: 1,
-	usage: "<mention>",
+	usage: "<utilisateur>",
 	perms: ["MANAGE_ROLES"],
 	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [

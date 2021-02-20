@@ -216,6 +216,40 @@ module.exports = {
 				en: "{1} gives {2} a hug 🤗"
 			}
 		},
+		"info": {
+			title: {
+				fr: "• Informations sur le bot",
+				en: "• Information about the bot"
+			},
+			description: {
+				fr: "**Préfixe :** `{1}`\n**Propriétaire :** `{2}`\n**Version :** `{3}`",
+				en: "**Prefix:** `{1}`\n**Owner:** `{2}`\n**Version:** `{3}`"
+			},
+			unknown: {
+				fr: "**Inconnu**",
+				en: "**Unknown**"
+			}
+		},
+		"kick-myself": {
+			reason: {
+				fr: "s'est kick lui/elle-même",
+				en: "kicked themselves"
+			},
+			kick_msg: {
+				fr: "**{1}** a fui ses responsabilités",
+				en: "**{1}** evaded his responsabilities"
+			},
+			error_kicking: {
+				fr: "Quelque chose s'est mal passé en t'expulsant du serveur :/",
+				en: "Something went wrong when trying to kick you from the server :/"
+			}
+		},
+		"kiss": {
+			title: {
+				fr: "{1} fait un bisous à {2} 😘",
+				en: "{1} kissed {2} 😘"
+			}
+		},
 		"language": {
 			invalid_language: {
 				fr: "langues disponibles : `{1}`",
