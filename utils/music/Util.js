@@ -206,7 +206,7 @@ class Util {
             if (SpotifyPlaylistRegex.test(search)) {
                 let tracks = await getTracks(search);
 
-                await Promise.all(playlist.videos = tracks.map(async (track, index) => {
+                playlist.videos = await Promise.all(tracks.map(async (track, index) => {
 
                     if (max !== -1 && index >= max) return null;
                     let trackUrl = await this.songFromSpotify(track.external_urls.spotify);
@@ -225,7 +225,7 @@ class Util {
                 playlist = await scrapeYT.getPlaylist(PlaylistID);
                 if (Object.keys(playlist).length === 0) return reject('InvalidPlaylist');
 
-                await Promise.all(playlist.videos = playlist.videos.map((video, index) => {
+                playlist.videos = await Promise.all(playlist.videos.map((video, index) => {
 
                     if (max !== -1 && index >= max) return null;
                     video.duration = getVideoDuration(video.duration);
