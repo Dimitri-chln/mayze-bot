@@ -271,13 +271,13 @@ class Player {
                 // Creates a new guild with data if needed
                 queue = new Queue(voiceChannel.guild.id, this.options);
                 queue.connection = connection;
+                // Updates the queue
+                this.queues.push(queue);
             }
             // Searches the playlist
             let playlist = await Util.getVideoFromPlaylist(playlistLink, maxSongs, queue, requestedBy);
             // Add all songs to the GuildQueue
             queue.songs = queue.songs.concat(playlist.videos);
-            // Updates the queue
-            this.queues.push(queue);
             // Plays the song
 
             if (!isFirstPlay)

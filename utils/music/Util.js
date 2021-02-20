@@ -210,7 +210,9 @@ class Util {
 
                     if (max !== -1 && index >= max) return null;
                     let trackUrl = await this.songFromSpotify(track.external_urls.spotify);
-                    let song = await this.getVideoBySearch(trackUrl, null, queue, requestedBy);
+                    let song = await this.getVideoBySearch(trackUrl, null, queue, requestedBy).catch(error => {
+                        return console.error(error);
+                    });
 
                     return song;
                 }));
@@ -239,7 +241,6 @@ class Util {
             playlist.url = search;
             playlist.videoCount = max === -1 ? playlist.videoCount : playlist.videoCount > max ? max : playlist.videoCount;
 
-            console.log(playlist);
             resolve(new Playlist(playlist, queue, requestedBy));
         });
     }
