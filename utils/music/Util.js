@@ -216,6 +216,7 @@ class Util {
 
                     return song;
                 }));
+                playlist.videoCount = tracks.length;
 
             } else {
                 let isPlaylistLink = PlaylistRegex.test(search);
