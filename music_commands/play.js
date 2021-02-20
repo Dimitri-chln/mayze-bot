@@ -27,9 +27,11 @@ const command = {
 			: options[0].value;
 		
 		if (playlistRegex.test(search) || SpotifyPlaylistRegex.test(search)) {
+			message.channel.startTyping(1);
 			const playlist = await message.client.player.playlist(message.guild.id, search, message.member.voice.channel, -1, message.author);
 			message.channel.send(`<a:blackCheck:803603780666523699> | **Playlist ajoutée**\n> ${playlist.playlist.videoCount} musiques ont été ajoutées à la queue`).catch(console.error);
 			if (!isPlaying) message.channel.send(`<a:blackCheck:803603780666523699> | **En train de jouer...**\n> ${playlist.song.name}`).catch(console.error);
+			message.channel.stopTyping();
 
 		} else {
 		

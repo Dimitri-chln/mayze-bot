@@ -197,9 +197,7 @@ class Player {
         } else {
             try {
                 // Searches the song
-                let video = await Util.getVideoBySearch(songName, ytsr, options);
-			
-                let song = new Song(video, queue, requestedBy);
+                let song = await Util.getVideoBySearch(songName, options, queue, requestedBy);
 			    // Inserts the song in the 2nd position
 			    queue.songs.splice(1, 0, song);
 
@@ -233,9 +231,7 @@ class Player {
 		} else {
             try {
                 // Searches the song
-                let video = await Util.getVideoBySearch(songName, ytsr, options);
-
-				let song = new Song(video, queue, requestedBy);
+                let song = await Util.getVideoBySearch(songName, options, queue, requestedBy);
 				// Inserts the song in the 2nd position
 				queue.songs.splice(1, 0, song);
 				// Skip the current song

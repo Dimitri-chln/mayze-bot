@@ -253,7 +253,7 @@ class Util {
         return new Promise(async (resolve, reject) => {
             try {
                 let SpotifyResult = await getPreview(query);
-                resolve(`${SpotifyResult['artist']} - ${SpotifyResult['title']}`);
+                resolve(`${SpotifyResult.artist} - ${SpotifyResult.title} VEVO`);
             }
             catch(err) {
                 reject('InvalidSpotify');
