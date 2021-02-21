@@ -309,7 +309,7 @@ class Util {
 	 * @return {String} - Music Bar
 	 */
 	static buildBar(value, maxValue, size, loadedIcon, arrowIcon) {
-		const percentage = value / maxValue;
+		const percentage = value / maxValue || 0;
 		const progress = Math.round(size * percentage);
 		const emptyProgress = Math.round(size * (1 - percentage));
 
