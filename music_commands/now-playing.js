@@ -30,7 +30,7 @@ const command = {
 					url: song.thumbnail
 				},
 				color: "#010101",
-				description: `[${song.name}](${song.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${song.requestedBy.tag}**\n\`Suivant:\` **${song.loop ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatMode ? queue.songs[0].name : "Rien"))}**\n\`Durée:\` **${Util.MillisecondsToTime(queue.duration - queue.dispatcher.streamTime)}**`,
+				description: `[${song.name}](${song.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${song.requestedBy.tag}**\n\`Suivant:\` **${song.loop ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatMode ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration - queue.dispatcher.streamTime)}**`,
 				footer: {
 					text: "✨ Mayze ✨" + (queue.repeatMode? " | Répétition de la musique activée" : "") + (queue.repeatQueue ? " | Répétition de la queue activée" : "")
 				}
@@ -63,7 +63,7 @@ const command = {
 						width: 1280
 					},
 					color: "#010101",
-					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${song.loop ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatMode ? queue.songs[0].name : "Rien"))}**\n\`Durée:\` **${Util.MillisecondsToTime(queue.duration - queue.dispatcher.streamTime)}**`,
+					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${song.loop ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatMode ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration - queue.dispatcher.streamTime)}**`,
 					footer: {
 						text: "✨ Mayze ✨" + (queue.repeatMode ? " | Répétition de la musique activée" : "") + (queue.repeatQueue ? " | Répétition de la queue activée" : "")
 					}
