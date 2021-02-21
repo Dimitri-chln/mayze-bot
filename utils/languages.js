@@ -212,7 +212,7 @@ module.exports = {
 		},
 		"hug": {
 			title: {
-				fr: "{1} fait un câlin à {2} 🤗`",
+				fr: "{1} fait un câlin à {2} 🤗",
 				en: "{1} gives {2} a hug 🤗"
 			}
 		},
