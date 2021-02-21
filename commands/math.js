@@ -2,19 +2,22 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "math",
-	description: "Effectuer des opérations mathématiques",
+	description: {
+		fr: "Effectuer des opérations mathématiques",
+		en: "Perform mathematical operations"
+	},
 	aliases: [],
 	args: 2,
-	usage: "eval <expression> | solve <équation> [, variable] | derivative <fonction> [, variable]",
+	usage: "eval <expression> | solve <equation> [, <variable>] | derivative <function> [, <variable>]",
 	slashOptions: [
 		{
 			name: "eval",
-			description: "Évaluer une expression",
+			description: "Evaluate an expression",
 			type: 1,
 			options: [
 				{
 					name: "expression",
-					description: "L'expression à évaluer",
+					description: "The expression to evaluate",
 					type: 3,
 					required: true
 				}
@@ -22,18 +25,18 @@ const command = {
 		},
 		{
 			name: "solve",
-			description: "Résoudre une équation algébrique",
+			description: "Solve an alegric equation",
 			type: 1,
 			options: [
 				{
-					name: "équation",
-					description: "L'équation à résoudre",
+					name: "equation",
+					description: "The equation to solve",
 					type: 3,
 					required: true
 				},
 				{
 					name: "variable",
-					description: "La variable pour laquelle résoudre l'équation",
+					description: "The variable for which to solve the equation",
 					type: 3,
 					required: false
 				}
@@ -41,18 +44,18 @@ const command = {
 		},
 		{
 			name: "derivative",
-			description: "Dériver une fonction",
+			description: "Find the derivative of a function",
 			type: 1,
 			options: [
 				{
-					name: "fonction",
-					description: "La fonction à dériver",
+					name: "function",
+					description: "The function",
 					type: 3,
 					required: true
 				},
 				{
 					name: "variable",
-					description: "La variable selon laquelle dériver la fonction",
+					description: "The variable for which to find the derivative",
 					type: 3,
 					required: false
 				}
@@ -82,7 +85,7 @@ const command = {
 					const result = math.evaluate(expression);
 					message.channel.send(`\`\`\`\n${parsedExp.toString()}\n= ${result}\n\`\`\``).catch(console.error);
 				} catch (err) {
-					if (err.name === "SyntaxError") message.reply("syntaxe incorrecte").catch(console.error);
+					if (err.name === "SyntaxError") message.reply(language.error_syntax).catch(console.error);
 					else message.channel.send(err.message).catch(console.error);
 				}
 				break;
@@ -100,7 +103,7 @@ const command = {
 					const result = equation.solveFor(variable);
 					message.channel.send(`\`\`\`\n${equation.toString()}\n${variable} = ${(result || "No Solution").toString()}\n\`\`\``).catch(console.error);
 				} catch (err) {
-					if (err.name === "SyntaxError") message.reply("syntaxe incorrecte").catch(console.error);
+					if (err.name === "SyntaxError") message.reply(language.error_syntax).catch(console.error);
 					else message.channel.send(err.message).catch(console.error);
 				}
 				break;
@@ -118,7 +121,7 @@ const command = {
 					const derivative = math.derivative(expression, variable, { simplify: true });
 					message.channel.send(`\`\`\`\nf(${variable}) = ${parsedExp.toString()}\nf'(${variable}) = ${derivative.toString()}\n\`\`\``).catch(console.error);
 				} catch (err) {
-					if (err.name === "SyntaxError") message.reply("syntaxe incorrecte").catch(console.error);
+					if (err.name === "SyntaxError") message.reply(language.error_syntax).catch(console.error);
 					else message.channel.send(err.message).catch(console.error);
 				}
 				break;

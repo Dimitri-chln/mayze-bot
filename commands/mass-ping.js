@@ -2,21 +2,24 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "mass-ping",
-	description: "Mentionner une personne en boucle",
+	description: {
+		fr: "Mentionner une personne en boucle",
+		en: "Mention a user multiple times"
+	},
 	aliases: ["massping"],
 	args: 1,
-	usage: "<mention> [nombre]",
+	usage: "<user> [number]",
 	perms: ["MANAGE_MESSAGES"],
 	slashOptions: [
 		{
-			name: "utilisateur",
-			description: "La personne à ping",
+			name: "user",
+			description: "The user to mention",
 			type: 6,
 			required: true
 		},
 		{
-			name: "nombre",
-			description: "Le nombre de messages à envoyer",
+			name: "nmber",
+			description: "The number of mentions to send - By default: 10",
 			type: 4,
 			required: false
 		}
@@ -29,14 +32,15 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		const { Collection } = require("discord.js");
 		const messages = new Collection();
+
 		const user = args
 			? message.mentions.users.first()
 			: message.client.users.cache.get(options[0].value);
-		if (!user) return message.reply("mentionne une personnne").catch(console.error);
+		if (!user) return message.reply(language.no_mention).catch(console.error);
 		const n = args
 			? parseInt(args[1]) || 10
 			: parseInt((options[1] || {}).value) || 10;
-		if (isNaN(n) || n < 1 || n > 100) return message.reply("le nombre doit être compris entre 1 et 100").catch(console.error);
+		if (isNaN(n) || n < 1 || n > 100) return message.reply(language.invalid_number).catch(console.error);
 
 		if (message.deletable) message.delete().catch(console.error);
 		

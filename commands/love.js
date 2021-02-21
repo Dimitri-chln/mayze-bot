@@ -2,20 +2,23 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "love",
-	description: "Calculer le pourcentage d'amour entre 2 personnes",
+	description: {
+		fr: "Calculer le pourcentage d'amour entre 2 personnes",
+		en: "Calculate the love percentage between 2 people"
+	},
 	aliases: [],
 	args: 1,
-	usage: "<mention/texte> [mention/texte]",
+	usage: "<user/text> [<user/text>]",
 	slashOptions: [
 		{
-			name: "utilisateur",
-			description: "La personne avec qui faire le test",
+			name: "user",
+			description: "The first person to do the test with",
 			type: 6,
 			required: true
 		},
 		{
-			name: "autre-utilisateur",
-			description: "Une deuxième personne avec qui faire le test",
+			name: "other-user",
+			description: "Another person",
 			type: 6,
 			required: false
 		}
@@ -32,6 +35,7 @@ const command = {
 		const love2 = args
 			? message.mentions.users.first(2)[1] || args[1] || message.author
 			: message.client.users.cache.get((options[1] || {}).value);
+
 		message.channel.send({
 			embed: {
 				title: "💕 Love Calculator 💕",

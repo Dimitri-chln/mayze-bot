@@ -2,14 +2,17 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "level",
-	description: "Obtenir ton niveau sur Mayze",
+	description: {
+		fr: "Obtenir ton niveau sur Mayze",
+		en: "Get your chat level with Mayze"
+	},
 	aliases: ["lvl"],
 	args: 0,
-	usage: "[mention/id]",
+	usage: "[<user>]",
 	slashOptions: [
 		{
-			name: "utilisateur",
-			description: "L'utilisateur dont tu veux connaître le niveau",
+			name: "user",
+			description: "The user you want to get the level from",
 			type: 6,
 			required: false
 		}
@@ -40,7 +43,7 @@ const command = {
 					icon_url: user.avatarURL({ dynamic: true})
 				},
 				color: "#010101",
-				description: `• **Niveau : \`${level}\`**\n• **Rang : \`#${rank}\`**\n\n**XP** ${xpBar[0].repeat(Math.round(xpLeft / xpForNextLevel * barSize)) + xpBar[1].repeat(barSize - Math.round(xpLeft / xpForNextLevel * barSize))} ${xpLeft}/${xpForNextLevel}`,
+				description: language.get(language.description, level, rank, xpBar[0].repeat(Math.round(xpLeft / xpForNextLevel * barSize)) + xpBar[1].repeat(barSize - Math.round(xpLeft / xpForNextLevel * barSize)), xpLeft, xpForNextLevel),
 				footer: {
 					text: "✨Mayze✨"
 				}

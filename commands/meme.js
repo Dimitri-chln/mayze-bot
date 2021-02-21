@@ -3,26 +3,29 @@ const Axios = require("axios").default;
 
 const command = {
 	name: "meme",
-	description: "Générer un meme depuis Discord",
+	description: {
+		fr: "Générer un meme depuis Discord",
+		en: "Meme generation from Discord"
+	},
 	aliases: [],
 	args: 0,
-	usage: "[image] \"[texte haut]\" \"[texte bas]\"",
+	usage: "[<image>] \"[<upper text>]\" \"[<lower text>]\"",
 	slashOptions: [
 		{
 			name: "image",
-			description: "Le nom de l'image de fond",
+			description: "The name of the background image - See *meme",
 			type: 3,
 			required: false
 		},
 		{
-			name: "texte-haut",
-			description: "Le texte à afficher en haut de l'image",
+			name: "upper-text",
+			description: "The text to display at the top of the image",
 			type: 3,
 			required: false
 		},
 		{
-			name: "texte-bas",
-			description: "Le texte à afficher en bas de l'image",
+			name: "lower-text",
+			description: "The text to display at the bottom of the image",
 			type: 3,
 			required: false
 		}
@@ -35,20 +38,21 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		const { data } = message.client.memes || await Axios.get("https://api.memegen.link/templates").catch(console.error);
 		message.client.memes = { data: data };
-		const memes = data.map(meme => meme.key);
+		const memes = data.map(meme => meme.id);
 
 		const image = args
 			? (args[0] || "").toLowerCase()
 			: (options ? options.find(o => o.name === "image") : { value: "" } ).value.toLowerCase();
 
 		if (image) {
-			if (!memes.includes(image)) return message.reply(`cette image n'existe pas, tu peux voir la liste de toutes les images avec la commande \`${message.client.prefix}meme\``);
+			if (!memes.includes(image)) return message.reply(language.get(language.invalid_image, message.client.prefix));
+
 			const top = args
 				? args[1]
-				: (options.find(o => o.name === "texte-haut") || {}).value;
+				: (options.find(o => o.name === "upper-text") || {}).value;
 			const bottom = args
 				? args[2]
-				: (options.find(o => o.name === "texte-bas") || {}).value;
+				: (options.find(o => o.name === "lower-text") || {}).value;
 
 			const url = `https://api.memegen.link/images/${image}/${replacement(top || " ")}/${replacement(bottom || " ")}.png`;
 
@@ -58,7 +62,7 @@ const command = {
 						name: message.author.tag,
 						icon_url: message.author.avatarURL({ dynamic: true })
 					},
-					description: `• Copier le [lien](${url})`,
+					description: language.get(language.copy_link, url),
 					color: "#010101",
 					image: {
 						url: url
@@ -69,10 +73,12 @@ const command = {
 					timestamp: Date.now()
 				}
 			}).catch(console.error);
+
 		} else {
+
 			message.channel.send({
 				embed: {
-					title: "Liste de tous les memes disponibles :",
+					title: language.image_list,
 					color: "#010101",
 					description: memes.join(", "),
 					footer: {
@@ -96,7 +102,7 @@ const command = {
 				"\\": "~b",
 				"\"": "''"
 			};
-			return text.replace(/(^")|("$)/g, "").replace(/[_-\s\n\?&%#\/\\"]/g, a => characters[a]);
+			return text.replace(/[_-\s\n\?&%#\/\\"]/g, a => characters[a]);
 		}
 	}
 };

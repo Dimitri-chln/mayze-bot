@@ -263,6 +263,42 @@ module.exports = {
 				fr: "Langue modifiée",
 				en: "Language updated"
 			}
+		},
+		"level": {
+			description: {
+				fr: "• **Niveau : `{1}`**\n• **Rang : `#{2}`**\n\n**XP** {3} {4}/{5}",
+				en: "• **Level: `{1}`**\n• **Rank: `{2}`**\n\n**XP** {3} {4}/{5}"
+			}
+		},
+		"mass-ping": {
+			no_mention: {
+				fr: "mentionne un utilisateur",
+				en: "mention a user"
+			},
+			invalid_number: {
+				fr: "le nombre doit être compris entre 1 et 100",
+				en: "the number must be between 1 and 100"
+			}
+		},
+		"math": {
+			error_syntax: {
+				fr: "erreur de syntaxe",
+				en: "syntax error"
+			}
+		},
+		"meme": {
+			invalid_image: {
+				fr: "cette image n'existe pas, tu peux voir la liste de toutes les images avec la commande `{1}meme`",
+				en: "this image doesn't exist, see the list of available images with `{1}meme`"
+			},
+			copy_link: {
+				fr: "• Copier le [lien]({1})",
+				en: "• Copy [link]({1})"
+			},
+			image_list: {
+				fr: "Liste de tous les memes disponibles :",
+				en: "List of all available memes:"
+			}
 		}
 	}
 };
