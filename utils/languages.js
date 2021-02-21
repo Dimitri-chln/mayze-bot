@@ -299,6 +299,20 @@ module.exports = {
 				fr: "Liste de tous les memes disponibles :",
 				en: "List of all available memes:"
 			}
+		},
+		"message": {
+			invalid_channel: {
+				fr: "indique le salon dans lequel je dois envoyer le message",
+				en: "please specify the channel where I need to send the message"
+			},
+			msg_sent: {
+				fr: "message envoyé !",
+				en: "message sent!"
+			},
+			error_sending: {
+				fr: "Quelque chose s'est mal passé en envoyant le message :/",
+				en: "Something went wrong when sending the message :/"
+			}
 		}
 	}
 };
