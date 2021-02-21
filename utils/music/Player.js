@@ -254,9 +254,10 @@ class Player {
      * @param {VoiceChannel} voiceChannel The voice channel in which the song will be played.
      * @param {Number} maxSongs Max songs to add to the queue.
      * @param {String} requestedBy The user who requested the song.
+     * @param {Boolean} shuffle If the playlist needs to be shuffled before being played.
      * @returns {Promise<{song: (null|Song), playlist: Playlist} || MusicPlayerError>}
      */
-    async playlist(guildID, playlistLink, voiceChannel, maxSongs, requestedBy) {
+    async playlist(guildID, playlistLink, voiceChannel, maxSongs, requestedBy, shuffle) {
         let queue = this.getQueue(guildID);
         if (!queue) if (voiceChannel ? voiceChannel.type !== 'voice' : true) return new MusicPlayerError('VoiceChannelTypeInvalid', 'song', 'playlist');
         if (typeof playlistLink !== 'string' || playlistLink.length === 0) return new MusicPlayerError('PlaylistTypeInvalid', 'song', 'playlist');
@@ -275,7 +276,7 @@ class Player {
                 this.queues.push(queue);
             }
             // Searches the playlist
-            let playlist = await Util.getVideoFromPlaylist(playlistLink, maxSongs, queue, requestedBy);
+            let playlist = await Util.getVideoFromPlaylist(playlistLink, maxSongs, queue, requestedBy, shuffle);
             // Add all songs to the GuildQueue
             queue.songs = queue.songs.concat(playlist.videos);
             // Plays the song

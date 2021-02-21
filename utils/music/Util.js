@@ -196,9 +196,10 @@ class Util {
      * @param {Number} max Max playlist songs.
      * @param {Queue} queue Queue.
      * @param {String} requestedBy User that requested the song.
+     * @param {Boolean} shuffle If the playlist needs to be shuffled before being played.
      * @returns {Promise<Playlist>}
      */
-    static getVideoFromPlaylist(search, max, queue, requestedBy) {
+    static getVideoFromPlaylist(search, max, queue, requestedBy, shuffle) {
         return new Promise(async (resolve, reject) => {
 
             let playlist = {};
@@ -241,6 +242,8 @@ class Util {
             playlist.videos = playlist.videos.filter(function (obj) { return obj });
             playlist.url = search;
             playlist.videoCount = max === -1 ? playlist.videoCount : playlist.videoCount > max ? max : playlist.videoCount;
+
+            if (shuffle) playlist.videos.sort((a, b) => Math.random() - 0.5);
 
             resolve(new Playlist(playlist, queue, requestedBy));
         });

@@ -5,7 +5,7 @@ const command = {
 	description: "Jouer une musique",
 	aliases: ["p"],
 	args: 1,
-	usage: "<musique>",
+	usage: "<musique> [-shuffle]",
 	cooldown: 5,
 	disableSlash: true,
 	/**
@@ -25,15 +25,19 @@ const command = {
 		const search = args
 			? args.join(" ")
 			: options[0].value;
+		const shuffle = args
+			? args.includes("-shuffle")
+			: options[1].value.includes("-shuffle");
 		
 		if (playlistRegex.test(search) || SpotifyPlaylistRegex.test(search)) {
 			message.channel.startTyping(1);
-			const res = await message.client.player.playlist(message.guild.id, search, message.member.voice.channel, -1, message.author);
+			const res = await message.client.player.playlist(message.guild.id, search, message.member.voice.channel, -1, message.author, shuffle);
 			if (!res.playlist) {
 				console.error(res.error);
 				return message.channel.send("Quelque chose s'est mal passé en récupérant la playlist :/").catch(console.error);
 			}
-			message.channel.send(`<a:blackCheck:803603780666523699> | **Playlist ajoutée**\n> ${res.playlist.videoCount} musiques ont été ajoutées à la queue`).catch(console.error);
+
+			message.channel.send(`<a:blackCheck:803603780666523699> | **Playlist ajoutée${shuffle ? " et mélangée" : ""}**\n> ${res.playlist.videoCount} musiques ont été ajoutées à la queue`).catch(console.error);
 			if (!isPlaying) message.channel.send(`<a:blackCheck:803603780666523699> | **En train de jouer...**\n> ${res.song.name}`).catch(console.error);
 			message.channel.stopTyping();
 
