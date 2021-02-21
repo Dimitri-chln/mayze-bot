@@ -30,7 +30,7 @@ const command = {
 					url: song.thumbnail
 				},
 				color: "#010101",
-				description: `[${song.name}](${song.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${song.requestedBy.tag}**\n\`Suivant:\` **${song.loop ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatMode ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration - queue.dispatcher.streamTime)}**`,
+				description: `[${song.name}](${song.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${song.requestedBy.tag}**\n\`Suivant:\` **${queue.repeatMode ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration - queue.dispatcher.streamTime)}**`,
 				footer: {
 					text: "✨ Mayze ✨" + (queue.repeatMode? " | Répétition de la musique activée" : "") + (queue.repeatQueue ? " | Répétition de la queue activée" : "")
 				}
@@ -42,7 +42,27 @@ const command = {
 		const timer = setInterval(updateMsg, 10000);
 		message.client.player.npTimers[message.channel.id] = timer;
 
-		queue.on("end", () => clearInterval(timer));
+		queue.on("end", lastSong => {
+			clearInterval(timer);
+			msg.edit({
+				embed: {
+					author: {
+						name: "Musique en cours",
+						icon_url: message.client.user.avatarURL()
+					},
+					thumbnail: {
+						url: lastSong.thumbnail,
+						height: 720,
+						width: 1280
+					},
+					color: "#010101",
+					description: `[${lastSong.name}](${lastSong.url})\n\n**${Util.buildBar(1, 1, 20, "━", "🔘")}**\n\n\`Ajouté par:\` **${lastSong.requestedBy.tag}**\n\`Suivant:\` **Rien**\n\`Durée de la queue:\` **0:00**`,
+					footer: {
+						text: "✨ Mayze ✨"
+					}
+				}
+			})
+		});
 		queue.on("stop", () => clearInterval(timer));
 		queue.on("channelEmpty", () => clearInterval(timer));
 		queue.on("songChanged", () => {
@@ -63,7 +83,7 @@ const command = {
 						width: 1280
 					},
 					color: "#010101",
-					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${song.loop ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatMode ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration - queue.dispatcher.streamTime)}**`,
+					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${queue.repeatMode ? newSong.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration - queue.dispatcher.streamTime)}**`,
 					footer: {
 						text: "✨ Mayze ✨" + (queue.repeatMode ? " | Répétition de la musique activée" : "") + (queue.repeatQueue ? " | Répétition de la queue activée" : "")
 					}

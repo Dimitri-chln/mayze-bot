@@ -616,7 +616,7 @@ class Player {
         if (queue.songs.length < 2 && !firstPlay && !queue.repeatMode && !queue.repeatQueue) {
             // Emits stop event
             if (queue.stopped) {
-                // Remoces the guild from the guilds list
+                // Removes the guild from the guilds list
                 this.queues = this.queues.filter((g) => g.guildID !== guildID);
 
                 if (this.options.leaveOnStop)
@@ -627,8 +627,8 @@ class Player {
             // Emits end event
             if (this.options.leaveOnEnd) {
                 // Emits the end event
-                queue.emit('end');
-                // Remoces the guild from the guilds list
+                queue.emit('end', queue.songs[0]);
+                // Removes the guild from the guilds list
                 this.queues = this.queues.filter((g) => g.guildID !== guildID);
                 // Timeout
                 let connectionChannel = queue.connection.channel;
