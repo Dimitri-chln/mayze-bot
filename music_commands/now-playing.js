@@ -56,9 +56,9 @@ const command = {
 						width: 1280
 					},
 					color: "#010101",
-					description: `[${lastSong.name}](${lastSong.url})\n\n**${Util.buildBar(1, 1, 20, "━", "🔘")}**\n\n\`Ajouté par:\` **${lastSong.requestedBy.tag}**\n\`Suivant:\` **Rien**\n\`Durée de la queue:\` **0:00**`,
+					description: `[${lastSong.name}](${lastSong.url})\n\n**${Util.buildBar(Util.TimeToMilliseconds(lastSong.duration), Util.TimeToMilliseconds(lastSong.duration), 20, "━", "🔘")}**\n\n\`Ajouté par:\` **${lastSong.requestedBy.tag}**\n\`Suivant:\` **Rien**\n\`Durée de la queue:\` **0:00**`,
 					footer: {
-						text: "✨ Mayze ✨"
+						text: "✨ Mayze ✨ | Queue terminée"
 					}
 				}
 			})
