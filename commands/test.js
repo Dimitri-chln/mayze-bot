@@ -14,12 +14,11 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		const number = parseInt(args[0].slice(12));
-		const base = parseInt(args[1] || 36);
-		const encoded = number.toString(base);
-		const decoded = parseInt(encoded, base);
+		const Axios = require("axios").default;
 
-		message.channel.send(`Input: \`${args[0]}\`\nParsed: \`${number}\`\nEncoded (base ${base}): \`${encoded}\`\nDecoded: \`${decoded}\``);
+		Axios.get("https://assets.pokemon.com/assets/cms2/img/pokedex/full/752.png")
+			.then(res => console.log(res))
+			.catch(console.error);
 	}
 };
 

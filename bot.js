@@ -1,6 +1,7 @@
 const Fs = require("fs");
 const Axios = require("axios").default;
 const Path = require("path");
+const Cron = require("cron");
 const config = require("./config.json");
 require('dotenv').config();
 const languages = require("./utils/languages");
@@ -117,6 +118,9 @@ client.on("ready", async () => {
 			client.giveawayTimers.set(id, timer);
 		}
 	}).catch(console.error);
+
+	// REMINDERS
+	ACNHReminders();
 });
 
 client.on("message", async message => {
@@ -424,4 +428,18 @@ function pickLanguage(data = {}, language = "fr") {
 			acc[key] = data[key][language];
 			return acc;
 		}, {});
+}
+
+function ACNHReminders() {
+	const turnipMorning = new Cron.CronJob("0 0 8 * * *", () => {
+		const owner = client.guilds.cache.get("689164798264606784").members.cache.get(config.OWNER_ID).user;
+		owner.send("**Rappel :** `Navets Animal Crossing New Horizons`");
+	}, null, true, "Europe/Paris");
+
+	const turnipAfternoon = new Cron.CronJob("0 0 14 * * *", () => {
+		const owner = client.guilds.cache.get("689164798264606784").members.cache.get(config.OWNER_ID).user;
+		owner.send("**Rappel :** `Navets Animal Crossing New Horizons`");
+	}, null, true, "Europe/Paris");
+
+	return { turnipMorning, turnipAfternoon };
 }
