@@ -23,7 +23,7 @@ const command = {
 		const SpotifyPlaylistRegex = /https?:\/\/(?:open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
 
 		const search = args
-			? args.join(" ")
+			? args.filter(a => a !== "-shuffle").join(" ")
 			: options[0].value;
 		const shuffle = args
 			? args.includes("-shuffle")
