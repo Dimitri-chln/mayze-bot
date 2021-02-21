@@ -431,12 +431,12 @@ function pickLanguage(data = {}, language = "fr") {
 }
 
 function ACNHReminders() {
-	const turnipMorning = new Cron.CronJob("0 0 8 * * *", () => {
+	const turnipMorning = new Cron.CronJob("0 0 8 * * 1-6", () => {
 		const owner = client.guilds.cache.get("689164798264606784").members.cache.get(config.OWNER_ID).user;
 		owner.send("**Rappel :** `Navets Animal Crossing New Horizons`");
 	}, null, true, "Europe/Paris");
 
-	const turnipAfternoon = new Cron.CronJob("0 0 14 * * *", () => {
+	const turnipAfternoon = new Cron.CronJob("0 0 14 * * 1-6", () => {
 		const owner = client.guilds.cache.get("689164798264606784").members.cache.get(config.OWNER_ID).user;
 		owner.send("**Rappel :** `Navets Animal Crossing New Horizons`");
 	}, null, true, "Europe/Paris");
