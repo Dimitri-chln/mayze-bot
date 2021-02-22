@@ -259,7 +259,7 @@ client.on("guildMemberAdd", async member => {
 	if (member.guild.id !== "689164798264606784") return;
 
 	const roles = ["735811339888361472", "735809874205737020", "735810286719598634", "735810462872109156"];
-	member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r))).catch(console.error);
+	member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r.id))).catch(console.error);
 
 	member.user.send({
 		embed: {
