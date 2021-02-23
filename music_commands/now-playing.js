@@ -30,7 +30,7 @@ const command = {
 					url: song.thumbnail
 				},
 				color: "#010101",
-				description: `[${song.name}](${song.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${song.requestedBy.tag}**\n\`Suivant:\` **${queue.repeatMode ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration - queue.dispatcher.streamTime - queue.songs[0].seekTime)}**`,
+				description: `[${song.name}](${song.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${song.requestedBy.tag}**\n\`Suivant:\` **${queue.repeatMode ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration)}**`,
 				footer: {
 					text: "✨ Mayze ✨" + (queue.repeatMode? " | Répétition de la musique activée" : "") + (queue.repeatQueue ? " | Répétition de la queue activée" : "")
 				}
@@ -84,7 +84,7 @@ const command = {
 						width: 1280
 					},
 					color: "#010101",
-					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${queue.repeatMode ? newSong.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration - queue.dispatcher.streamTime - queue.songs[0].seekTime)}**`,
+					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${queue.repeatMode ? newSong.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration)}**`,
 					footer: {
 						text: "✨ Mayze ✨" + (queue.repeatMode ? " | Répétition de la musique activée" : "") + (queue.repeatQueue ? " | Répétition de la queue activée" : "")
 					}

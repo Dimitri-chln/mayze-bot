@@ -46,7 +46,7 @@ const command = {
 			// If there's already a song playing
 			if (isPlaying) {
 				const queue = message.client.player.getQueue(message.guild.id);
-				const duration = Util.MillisecondsToTime(queue.duration - (queue.dispatcher ? queue.dispatcher.streamTime : 0));
+				const duration = Util.MillisecondsToTime(queue.duration);
 				// Add the song to the queue
 				const res = await message.client.player.addToQueue(message.guild.id, search, null, message.author);
 				if (!res.song) {
