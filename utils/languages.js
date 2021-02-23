@@ -125,7 +125,8 @@ module.exports = {
 				en: "Color selector"
 			},
 			desc: {
-				fr: "**Hexadécimal :** \`{1}\`\n**RGB :** 🟥 \`{2}\` 🟩 \`{3}\` 🟦 \`{4}\`\n**Décimal :** \`{5}\`"
+				fr: "**Hexadécimal :** `{1}`\n**RGB :** 🟥 `{2}` 🟩 `{3}` 🟦 `{4}`\n**Décimal :** `{5}`",
+				en: "**Hexadecimal:** `{1}`\n**RGB:** 🟥 `{2}` 🟩 `{3}` 🟦 `{4}`\n**Decimal:** `{5}`"
 			}
 		},
 		"custom-response": {
