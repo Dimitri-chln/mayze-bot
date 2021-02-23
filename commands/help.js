@@ -63,7 +63,10 @@ const command = {
 			
 			message.channel.send({
 				embed: {
-					title: language.get(language.title, message.client.prefix + command.name),
+					author: {
+						name: language.get(language.title, message.client.prefix + command.name),
+						icon_url: message.client.user.avatarURL()
+					},
 					color: "#010101",
 					description: data,
 					footer: {
