@@ -31,7 +31,8 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const { Collection } = require("discord.js");
-		const messages = new Collection();
+		const messages = [];
+		let collection = new Collection();
 
 		const user = args
 			? message.mentions.users.first()
@@ -40,16 +41,22 @@ const command = {
 		const n = args
 			? parseInt(args[1]) || 10
 			: parseInt((options[1] || {}).value) || 10;
-		if (isNaN(n) || n < 1 || n > 100) return message.reply(language.invalid_number).catch(console.error);
+		if (isNaN(n) || n < 1 || n > 1000) return message.reply(language.invalid_number).catch(console.error);
 
 		if (message.deletable) message.delete().catch(console.error);
 		
-		for (i = 0; i < n; i++) {
+		for (i = 1; i <= n; i++) {
 			const msg = await message.channel.send(`${user}`).catch(console.error);
-			messages.set(msg.id, msg);
+			collection.set(msg.id, msg);
+			
+			if (i % 100 === 0) {
+				messages.push(collection);
+				collection.clear();
+			}
 		}
+		messages.push(collection);
 
-		message.channel.bulkDelete(messages).catch(console.error);
+		messages.forEach(async collection => message.channel.bulkDelete(collection).catch(console.error));
 	}
 };
 
