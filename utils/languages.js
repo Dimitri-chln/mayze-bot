@@ -277,8 +277,8 @@ module.exports = {
 				en: "mention a user"
 			},
 			invalid_number: {
-				fr: "le nombre doit être compris entre 1 et 100",
-				en: "the number must be between 1 and 100"
+				fr: "le nombre doit être compris entre 1 et 1000",
+				en: "the number must be between 1 and 1000"
 			}
 		},
 		"math": {
