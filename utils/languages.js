@@ -207,8 +207,8 @@ module.exports = {
 				en: "\n**Cooldown:** {1}"
 			},
 			title: {
-				fr: "Informations sur la commande **{1}**",
-				en: "Help for **{1}**"
+				fr: "Informations sur la commande {1}",
+				en: "Help for {1}"
 			}
 		},
 		"hug": {
