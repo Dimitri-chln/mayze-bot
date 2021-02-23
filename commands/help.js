@@ -59,7 +59,7 @@ const command = {
 			if (command.usage) data += language.get(language.usage, message.client.prefix + command.name, command.usage);
 			if (command.perms) data += language.get(language.perms, command.perms.join("`, `"));
 			if (command.ownerOnly || command.allowedUsers) data += language.get(language.allowed, command.ownerOnly ? (command.allowedUsers || []).concat(OWNER_ID).map(u => `<@${u}>`).join(", ") : command.allowedUsers.map(u => `<@${u}>`).join(", "));
-			data += language.get(language.cooldown, timeToString(command.cooldown || 2, language, languageCode));
+			data += language.get(language.cooldown, timeToString(command.cooldown || 2, languageCode));
 			
 			message.channel.send({
 				embed: {
