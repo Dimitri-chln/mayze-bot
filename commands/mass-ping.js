@@ -31,6 +31,7 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const { Collection } = require("discord.js");
+		/** @type {Collection<string, Message>} */
 		let messages = new Collection();
 
 		const user = args
@@ -50,8 +51,9 @@ const command = {
 		}
 
 		while (messages.size) {
-			message.channel.bulkDelete(messages.first(100));
-			messages.sweep(m => messages.first(100).has(m.id));
+			let messagesToDelete = new Collection(messages.first(100).map(m => [m.id, m]));
+			message.channel.bulkDelete(messagesToDelete);
+			messages.sweep(msg => messagesToDelete.has(msg.id));
 		}
 	}
 };
