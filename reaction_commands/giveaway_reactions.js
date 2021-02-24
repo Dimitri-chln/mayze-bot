@@ -19,7 +19,7 @@ const command = {
         if (reaction.emoji.name !== "🎉")
             reaction.users.remove(user).catch(console.error);
 
-        const [ , requiredRole ] = message.embeds[0].description.match(/Uniquement pour:` <@&(\d{18})>/) || [];
+        const [ , requiredRole ] = reaction.message.embeds[0].description.match(/Uniquement pour:` <@&(\d{18})>/) || [];
         if (!requiredRole) return;
 
         if (!reaction.message.guild.member(user).roles.cache.has(requiredRole))
