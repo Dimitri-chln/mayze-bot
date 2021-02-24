@@ -115,7 +115,7 @@ const command = {
 				const endTimestamp = new Date(Date.now() + duration);
 				const winners = args
 					? args[3] ? (isNaN(parseInt(args[3].replace("w", "$1"))) ? 1 : parseInt(args[3].replace("w", "$1"))) : 1
-					: options[0].options[2] ? options[0].options[2].value : 1;
+					: options[0].options.find(o => o.name === "gagnants") ? options[0].options.find(o => o.name === "gagnants").value : 1;
 				if (winners < 1) return message.reply("le nombre de gagnants doit être supérieur à 1");
 				const mention = args
 					? args.includes("-mention") ? message.guild.roles.cache.find(role => role.id === args[args.indexOf("-mention") + 1] || role.name.toLowerCase() === args[args.indexOf("-mention") + 1].toLowerCase() || role.name.toLowerCase().includes(args[args.indexOf("-mention") + 1].toLowerCase())) : null
