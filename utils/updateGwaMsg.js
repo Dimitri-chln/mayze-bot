@@ -13,7 +13,11 @@ function updateGwaMsg(message) {
 		clearInterval(message.client.giveawayTimers.get(message.id));
 		message.client.giveawayTimers.delete(message.id);
 
+		const [ , requiredRole ] = message.embeds[0].description.match(/Uniquement pour:` <@&(\d{18})>/) || [];
+
 		const reactions = message.reactions.cache.get("🎉").users.cache.filter(user => user.id !== message.client.user.id);
+		if (requiredRole) reactions.sweep(user => !message.guild.member(user).roles.cache.has(requiredRole));
+		
 		const numberOfWinners = parseInt(message.embeds[0].footer.text.match(/^\d+/)[0]);
 		if (numberOfWinners > reactions.size) return message.channel.send(`Il n'y a pas assez d'utilisateurs qui ont participé au giveaway\n${message.url}`).catch(console.error);
 

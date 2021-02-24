@@ -5,7 +5,7 @@ const command = {
 	description: "Crée et gère des giveaway",
 	aliases: ["gwa", "ga"],
 	args: 1,
-	usage: "create \"<prix>\" <durée> [<nombre gagnants>] [-mention <rôle>] | end [<ID>] | delete [<ID>] | reroll [<ID>]",
+	usage: "create \"<prix>\" <durée> [<nombre gagnants>] [-mention <rôle>] [-role <rôle>] | end [<ID>] | delete [<ID>] | reroll [<ID>]",
 	perms: ["MANAGE_ROLES", "MANAGE_CHANNELS", "MANAGE_MESSAGES"],
 	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
@@ -35,6 +35,12 @@ const command = {
 				{
 					name: "mention",
 					description: "Un rôle à mentionner au lancement du giveaway",
+					type: 8,
+					required: false
+				},
+				{
+					name: "rôle",
+					description: "Un rôle nécessaire pour participer",
 					type: 8,
 					required: false
 				}
@@ -112,8 +118,11 @@ const command = {
 					: options[0].options[2] ? options[0].options[2].value : 1;
 				if (winners < 1) return message.reply("le nombre de gagnants doit être supérieur à 1");
 				const mention = args
-					? args.includes("-mention") ? message.mentions.roles.first() || message.guild.roles.cache.find(role => role.id === args[args.indexOf("-mention") + 1] || role.name.toLowerCase() === args[args.indexOf("-mention") + 1].toLowerCase() || role.name.toLowerCase().includes(args[args.indexOf("-mention") + 1].toLowerCase())) : null
-					: options[0].options[3] ? message.guild.roles.cache.get(options[0].options[3].value) : null;
+					? args.includes("-mention") ? message.guild.roles.cache.find(role => role.id === args[args.indexOf("-mention") + 1] || role.name.toLowerCase() === args[args.indexOf("-mention") + 1].toLowerCase() || role.name.toLowerCase().includes(args[args.indexOf("-mention") + 1].toLowerCase())) : null
+					: options[0].options.find(o => o.name === "mention") ? message.guild.roles.cache.get(options[0].options.find(o => o.name === "mention").value) : null;
+				const role = args
+					? args.includes("-role") ? message.guild.roles.cache.find(role => role.id === args[args.indexOf("-mention") + 1] || role.name.toLowerCase() === args[args.indexOf("-mention") + 1].toLowerCase() || role.name.toLowerCase().includes(args[args.indexOf("-mention") + 1].toLowerCase())) : null
+					: options[0].options.find(o => o.name === "rôle") ? message.guild.roles.cache.get(options[0].options.find(o => o.name === "rôle").value) : null;
 				
 				const msg = await channel.send({
 					content: mention ? `${mention}` : null,
@@ -124,7 +133,7 @@ const command = {
 						},
 						color: "#010101",
 						title: prize,
-						description: `Il reste ${timeToString((endTimestamp.valueOf() - Date.now()) / 1000)}`,
+						description: `\`Temps restant:\` ${timeToString((endTimestamp.valueOf() - Date.now()) / 1000)}` + (role ? `\n\`Uniquement pour:\` ${role}` : ""),
 						footer: {
 							text: `${winners} gagnant${winners === 1 ? "" : "s"} | ID: En attente... | Fin du giveaway`
 						},
