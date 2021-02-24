@@ -6,7 +6,7 @@ const { Message } = require("discord.js");
 function updateGwaMsg(message) {
 	const endTimestamp = message.embeds[0].timestamp;
 	const [ , requiredRole ] = message.embeds[0].description.match(/Uniquement pour:` <@&(\d{18})>/) || [];
-	
+
 	if (endTimestamp < Date.now()) {
 		message.edit({
 			content: message.content,
@@ -29,7 +29,7 @@ function updateGwaMsg(message) {
 		const timeToString = require("./timeToString");
 		message.edit({
 			content: message.content,
-			embed: message.embeds[0].setDescription(`\`Temps restant:\` ${timeToString((message.embeds[0].timestamp - Date.now()) / 1000)}` + (requiredRole ? `\n\`Uniquement pour:\` ${requiredRole}` : ""))
+			embed: message.embeds[0].setDescription(`\`Temps restant:\` ${timeToString((message.embeds[0].timestamp - Date.now()) / 1000)}` + (requiredRole ? `\n\`Uniquement pour:\` <@&${requiredRole}>` : ""))
 		}).catch(console.error);
 	}
 }
