@@ -560,11 +560,11 @@ class Player {
         let removedSongs = [];
 
         for (const song of songs) {
-            let [ isRange , songStart, songEnd ] = song.match(rangeRegex);
+            let [ isRange , songStart, songEnd ] = song.match(rangeRegex) || [];
             // If the song is a range of songs
             if (isRange) {
                 songStart = parseInt(songStart), songEnd = parseInt(songEnd);
-                
+
                 if (isNaN(songStart) || isNaN(songEnd)) {
                     queue.songs.forEach(s => s.removed = false);
                     return new MusicPlayerError('NotANumber');
