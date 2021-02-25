@@ -3,7 +3,7 @@ const { Message } = require("discord.js");
 const command = {
 	name: "stop",
 	description: "Supprimer la queue entière et passer la musique actuelle",
-	aliases: [],
+	aliases: ["leave"],
 	args: 0,
     usage: "",
     perms: ["KICK_MEMBERS"],

@@ -1,3 +1,5 @@
+const Queue = require("./Queue");
+
 /**
  * Represents a song.
  */
@@ -48,6 +50,11 @@ class Song {
          * @type {Number}
          */
         this.seekTime = 0;
+        /**
+         * If the song is going to be removed
+         * @type {Boolen}
+         */
+        this.removed = false;
     }
 }
 

@@ -1,4 +1,6 @@
+const { VoiceConnection, StreamDispatcher } = require('discord.js');
 const { EventEmitter } = require('events');
+const Song = require('./Song');
 const Util = require("./Util");
 
 /**

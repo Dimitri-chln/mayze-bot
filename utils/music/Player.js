@@ -1,7 +1,7 @@
 const ytdl = require('ytdl-core');
 const mergeOptions = require('merge-options');
 const ytsr = require('ytsr');
-const { VoiceChannel, version, User, Snowflake } = require("discord.js");
+const { VoiceChannel, version, User, Snowflake, Client } = require("discord.js");
 if (Number(version.split('.')[0]) < 12) throw new Error("Only the master branch of discord.js library is supported for now. Install it using 'npm install discordjs/discord.js'.");
 const Queue = require('./Queue');
 const Util = require('./Util');
@@ -548,23 +548,44 @@ class Player {
     /**
      * Removes a song from the queue
      * @param {string} guildID 
-     * @param {number} song The index of the song to remove or the song to remove object.
+     * @param {string[]} songs The list of the songs to remove.
      * @returns {Song|MusicPlayerError}
      */
-    remove(guildID, song) {
+    remove(guildID, songs) {
         // Gets guild queue
         let queue = this.getQueue(guildID);
         if (!queue) return new MusicPlayerError('QueueIsNull');
-        // Remove the song from the queue
-        let songFound = null;
-        if (typeof song === "number") {
-            songFound = queue.songs[song];
-            if (songFound) {
-                queue.songs = queue.songs.filter((s) => s !== songFound);
+
+        let rangeRegex = /(\d+)-(\d+)/;
+        let removedSongs = [];
+
+        for (const song of songs) {
+            let [ isRange , songStart, songEnd ] = song.match(rangeRegex);
+            // If the song is a range of songs
+            if (isRange) {
+                songStart = parseInt(songStart), songEnd = parseInt(songEnd);
+                if (isNaN(songStart) || isNaN(songEnd)) return new MusicPlayerError('NotANumber');
+                else {
+                    // Mark the songs as removed
+                    queue.songs.forEach((s, i) => {
+                        if (i >= songStart && i <= songEnd) s.removed = true;
+                    });
+                }
+
+            } else {
+                let songID = parseInt(song);
+                if (isNaN(songID)) return new MusicPlayerError('NotANumber');
+                // Mark the song as removed
+                queue.songs[songID].removed = true;
             }
-        } else return new MusicPlayerError('NotANumber');
+
+            // Get removed songs
+            removedSongs = queue.songs.filter(s => s.removed);
+            // Remove the songs from the queue
+            queue.songs = queue.songs.filter(s => !s.removed);
+        }
         // Resolve
-        return songFound;
+        return removedSongs;
     }
 
     /**
