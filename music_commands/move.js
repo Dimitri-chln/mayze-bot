@@ -6,7 +6,6 @@ const command = {
 	aliases: [],
 	args: 1,
     usage: "<n° musique> <position>",
-    perms: ["KICK_MEMBERS"],
 	disableSlash: true,
 	/**
 	 * @param {Message} message 
