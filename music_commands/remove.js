@@ -3,7 +3,7 @@ const { Message } = require("discord.js");
 const command = {
 	name: "remove",
 	description: "Retirer une musique de la queue",
-	aliases: [],
+	aliases: ["rm"],
 	args: 1,
     usage: "<n° musique> | <intervalle de musiques>",
     perms: ["KICK_MEMBERS"],
