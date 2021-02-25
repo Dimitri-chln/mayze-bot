@@ -52,7 +52,7 @@ class Song {
         this.seekTime = 0;
         /**
          * If the song is going to be removed
-         * @type {Boolen}
+         * @type {Boolean}
          */
         this.removed = false;
     }

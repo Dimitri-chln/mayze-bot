@@ -575,9 +575,9 @@ class Player {
                         songEnd = songStart, songStart = temp;
                     }
                     // Mark the songs as removed
-                    queue.songs.forEach((s, i) => {
-                        if (i >= songStart && i <= songEnd) s.removed = true;
-                    });
+                    for (let i = songStart; i <= songEnd; i++) {
+                        queue.songs[i] = true;
+                    }
                 }
 
             } else {
@@ -588,15 +588,14 @@ class Player {
                     return new MusicPlayerError('NotANumber');
                 } else {
                     // Mark the song as removed
-                    queue.songs[songID - 1].removed = true;
+                    queue.songs[songID].removed = true;
                 }
             }
-
-            // Get removed songs
-            removedSongs = queue.songs.filter(s => s.removed);
-            // Remove the songs from the queue
-            queue.songs = queue.songs.filter(s => !s.removed);
         }
+        // Get removed songs
+        removedSongs = queue.songs.filter(s => s.removed);
+        // Remove the songs from the queue
+        queue.songs = queue.songs.filter(s => !s.removed);
         // Resolve
         return removedSongs;
     }
