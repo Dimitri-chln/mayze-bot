@@ -30,7 +30,7 @@ const command = {
 
 		const songs = message.client.player.remove(message.guild.id, songs);
         if (!song) return message.reply("je n'ai pas trouvé cette musique dans la queue").catch(console.error);
-		message.channel.send(`<a:blackCheck:803603780666523699> | **Musique supprimée**\n> ${song.name}`).catch(console.error);
+		message.channel.send(`<a:blackCheck:803603780666523699> | **${songs.length} musique${songs.length > 1 ? "s" : ""} supprimée${songs.length > 1 ? "s" : ""}**${songs.length === 1 ? "\n> " + songs[0].name : ""}`).catch(console.error);
 	}
 };
 
