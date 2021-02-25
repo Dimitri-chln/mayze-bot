@@ -28,9 +28,9 @@ const command = {
 		const queue = message.client.player.getQueue(message.guild.id);
 		if (songs.join(" ").match(/\d+/g).some(s => s === 0 || s > queue.songs.length)) return message.reply("un des nombres est invalide (0 ou trop grand)");
 
-		const songs = message.client.player.remove(message.guild.id, songs);
-        if (!songs) return message.reply("je n'ai pas trouvé l'une de ces musiques dans la queue").catch(console.error);
-		message.channel.send(`<a:blackCheck:803603780666523699> | **${songs.length} musique${songs.length > 1 ? "s" : ""} supprimée${songs.length > 1 ? "s" : ""}**${songs.length === 1 ? "\n> " + songs[0].name : ""}`).catch(console.error);
+		const removedSongs = message.client.player.remove(message.guild.id, songs);
+        if (!removedSongs) return message.reply("je n'ai pas trouvé l'une de ces musiques dans la queue").catch(console.error);
+		message.channel.send(`<a:blackCheck:803603780666523699> | **${removedSongs.length} musique${removedSongs.length > 1 ? "s" : ""} supprimée${removedSongs.length > 1 ? "s" : ""}**${removedSongs.length === 1 ? "\n> " + removedSongs[0].name : ""}`).catch(console.error);
 	}
 };
 
