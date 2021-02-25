@@ -8,10 +8,6 @@ function updateGwaMsg(message) {
 	const [ , requiredRole ] = message.embeds[0].description.match(/Uniquement pour:` <@&(\d{18})>/) || [];
 
 	if (endTimestamp < Date.now()) {
-		message.edit({
-			content: message.content,
-			embed: message.embeds[0].setDescription("Giveaway terminé !")
-		}).catch(console.error);
 		clearInterval(message.client.giveawayTimers.get(message.id));
 		message.client.giveawayTimers.delete(message.id);
 
@@ -25,6 +21,11 @@ function updateGwaMsg(message) {
 		const winners = reactions.random(numberOfWinners);
 		const winnersString = winners.map(u => u.toString()).join(", ").replace(/>, <@(\d{18})>$/, "> et <@$1>");
 		message.channel.send(`${winnersString} ${winners.length === 1 ? "a" : "ont"} gagné **\`${message.embeds[0].title}\`**\n${message.url}`).catch(console.error);
+
+		message.edit({
+			content: message.content,
+			embed: message.embeds[0].setDescription(`Giveaway terminé ! Gagnants :\n${winnersString}`)
+		}).catch(console.error);
 
 	} else {
 		const timeToString = require("./timeToString");
