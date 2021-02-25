@@ -3,7 +3,7 @@ const { Message } = require("discord.js");
 /**
  * @param {Message} message 
  */
-function updateGwaMsg(message) {
+async function updateGwaMsg(message) {
 	const endTimestamp = message.embeds[0].timestamp;
 	const [ , requiredRole ] = message.embeds[0].description.match(/Uniquement pour:` <@&(\d{18})>/) || [];
 
