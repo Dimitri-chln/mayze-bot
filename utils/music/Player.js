@@ -569,6 +569,11 @@ class Player {
                     queue.songs.forEach(s => s.removed = false);
                     return new MusicPlayerError('NotANumber');
                 } else {
+                    // Change order if necessary
+                    if (songEnd > songStart) {
+                        let temp = songEnd;
+                        songEnd = songStart, songStart = temp;
+                    }
                     // Mark the songs as removed
                     queue.songs.forEach((s, i) => {
                         if (i >= songStart && i <= songEnd) s.removed = true;
@@ -583,7 +588,7 @@ class Player {
                     return new MusicPlayerError('NotANumber');
                 } else {
                     // Mark the song as removed
-                    queue.songs[songID].removed = true;
+                    queue.songs[songID - 1].removed = true;
                 }
             }
 
