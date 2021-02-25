@@ -15,6 +15,7 @@ function updateGwaMsg(message) {
 		clearInterval(message.client.giveawayTimers.get(message.id));
 		message.client.giveawayTimers.delete(message.id);
 
+		await message.reactions.cache.get("🎉").users.fetch().catch(console.error);
 		const reactions = message.reactions.cache.get("🎉").users.cache.filter(user => user.id !== message.client.user.id);
 		if (requiredRole) reactions.sweep(user => !message.guild.member(user).roles.cache.has(requiredRole));
 
