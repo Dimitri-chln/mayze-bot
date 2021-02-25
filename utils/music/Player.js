@@ -576,7 +576,7 @@ class Player {
                     }
                     // Mark the songs as removed
                     for (let i = songStart; i <= songEnd; i++) {
-                        queue.songs[i].remove = true;
+                        queue.songs[i].removed = true;
                     }
                 }
 
