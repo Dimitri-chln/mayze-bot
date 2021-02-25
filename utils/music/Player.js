@@ -570,7 +570,7 @@ class Player {
                     return new MusicPlayerError('NotANumber');
                 } else {
                     // Change order if necessary
-                    if (songEnd > songStart) {
+                    if (songEnd < songStart) {
                         let temp = songEnd;
                         songEnd = songStart, songStart = temp;
                     }
