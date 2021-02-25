@@ -564,8 +564,11 @@ class Player {
             // If the song is a range of songs
             if (isRange) {
                 songStart = parseInt(songStart), songEnd = parseInt(songEnd);
-                if (isNaN(songStart) || isNaN(songEnd)) return new MusicPlayerError('NotANumber');
-                else {
+                
+                if (isNaN(songStart) || isNaN(songEnd)) {
+                    queue.songs.forEach(s => s.removed = false);
+                    return new MusicPlayerError('NotANumber');
+                } else {
                     // Mark the songs as removed
                     queue.songs.forEach((s, i) => {
                         if (i >= songStart && i <= songEnd) s.removed = true;
@@ -574,9 +577,14 @@ class Player {
 
             } else {
                 let songID = parseInt(song);
-                if (isNaN(songID)) return new MusicPlayerError('NotANumber');
-                // Mark the song as removed
-                queue.songs[songID].removed = true;
+
+                if (isNaN(songID)) {
+                    queue.songs.forEach(s => s.removed = false);
+                    return new MusicPlayerError('NotANumber');
+                } else {
+                    // Mark the song as removed
+                    queue.songs[songID].removed = true;
+                }
             }
 
             // Get removed songs
