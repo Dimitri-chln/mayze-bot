@@ -22,8 +22,8 @@ const command = {
 
 		const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#\&\?]*).*/;
 		const SpotifyPlaylistRegex = /https?:\/\/(?:open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
-		const DeezerPlaylistRegex = /https?:\/\/(?:www)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)$/;
-		const DeezerRegexScrap = /https?:\/\/deezer\.page\.link\/\w+$/;
+		const DeezerPlaylistRegex = /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)/;
+		const DeezerRegexScrap = /https?:\/\/deezer\.page\.link\/\w+/;
 
 		let search = args
 			? args.filter(a => a !== "-shuffle").join(" ")

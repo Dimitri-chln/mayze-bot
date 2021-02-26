@@ -14,9 +14,9 @@ let PlaylistRegexID = /[&?]list=([^&]+)/;
 let SpotifyRegex = /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:track\/|\?uri=spotify:track:)((\w|-){22})(?:(?=\?)(?:[?&]foo=(\d*)(?=[&#]|$)|(?![?&]foo=)[^#])+)?(?=#|$)/;
 
 let SpotifyPlaylistRegex = /https?:\/\/(?:open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
-let DeezerRegex = /https?:\/\/(?:www)?deezer\.com\/(?:\w{2}\/)?track\/(\d+)$/;
-let DeezerPlaylistRegex = /https?:\/\/(?:www)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)$/;
-let DeezerRegexScrap = /https?:\/\/deezer\.page\.link\/\w+$/;
+let DeezerRegex = /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?track\/(\d+)/;
+let DeezerPlaylistRegex = /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)/;
+let DeezerRegexScrap = /https?:\/\/deezer\.page\.link\/\w+/;
 
 
 /**
@@ -230,7 +230,7 @@ class Util {
                 playlist.videoCount = tracks.length;
 
             } else if (DeezerPlaylistRegex.test(search)) {
-                let [ playlistID ] = search.match(/\d+$/);
+                let [ , playlistID ] = search.match(DeezerPlaylistRegex);
                 let result = await deezer.playlist(playlistID);
                 let tracks = result.tracks.data;
 
@@ -301,7 +301,7 @@ class Util {
     static songFromDeezer(query) {
         return new Promise(async (resolve, reject) => {
             try {
-                let [ trackID ] = query.match(/\d+$/);
+                let [ , trackID ] = query.match(DeezerRegex);
                 let DeezerResult = await deezer.track(trackID);
                 resolve(`${DeezerResult.artist.name} - ${DeezerResult.title} VEVO`);
             }
