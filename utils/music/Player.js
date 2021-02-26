@@ -117,6 +117,7 @@ class Player {
             let song = await Util.getVideoBySearch(songName, options, queue, requestedBy);
             // Joins the voice channel
             queue.connection = await voiceChannel.join();
+            queue.connection.voice.setSelfDeaf(true);
             queue.songs.push(song);
             // Add the queue to the list
             this.queues.push(queue);
@@ -272,6 +273,7 @@ class Player {
                 // Creates a new guild with data if needed
                 queue = new Queue(voiceChannel.guild.id, this.options);
                 queue.connection = connection;
+                queue.connection.voice.setSelfDeaf(true);
                 // Updates the queue
                 this.queues.push(queue);
             }
