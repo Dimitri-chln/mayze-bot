@@ -58,6 +58,7 @@ const command = {
 				const res = await message.client.player.playlist(message.guild.id, playlist.url, message.member.voice.channel, -1, message.author, shuffle);
 				if (!res.playlist) {
 					console.error(res.error);
+					message.channel.stopTyping();
 					return message.channel.send("Quelque chose s'est mal passé en récupérant la playlist :/").catch(console.error);
 				}
 

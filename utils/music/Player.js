@@ -291,6 +291,7 @@ class Player {
             };
         }
         catch (err) {
+            console.error(err);
             return new MusicPlayerError('InvalidPlaylist', 'song', 'playlist');
         }
     }

@@ -210,8 +210,8 @@ class Util {
                 playlist.videos = await Promise.all(tracks.map(async (track, index) => {
 
                     if (max !== -1 && index >= max) return null;
-                    let trackUrl = await this.songFromSpotify(track.external_urls.spotify);
-                    let song = await this.getVideoBySearch(trackUrl, null, queue, requestedBy).catch(error => {
+                    let spotifySearch = `${track.artists[0].name} - ${track.name} VEVO`;
+                    let song = await this.getVideoBySearch(spotifySearch, null, queue, requestedBy).catch(error => {
                         return console.error(error);
                     });
 
@@ -243,7 +243,7 @@ class Util {
             playlist.url = search;
             playlist.videoCount = max === -1 ? playlist.videoCount : playlist.videoCount > max ? max : playlist.videoCount;
 
-            if (shuffle) playlist.videos.sort((a, b) => Math.random() - 0.5);
+            if (shuffle) playlist.videos.sort(() => Math.random() - 0.5);
 
             resolve(new Playlist(playlist, queue, requestedBy));
         });
