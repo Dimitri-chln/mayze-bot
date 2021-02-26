@@ -61,6 +61,12 @@ module.exports = {
 				en: "*No ongoing game*"
 			}
 		},
+		"avatar": {
+			title: {
+				fr: "Photo de profil de {1}",
+				en: "{1}'s profile picture"
+			}
+		},
 		"catch": {
 			caught: {
 				fr: "Pokémon capturé !",
