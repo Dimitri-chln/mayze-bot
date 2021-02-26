@@ -16,14 +16,17 @@ const command = {
 		if (!giveawayEmbed) return;
 		if (giveawayEmbed.title.startsWith("Giveaway de")) return;
 
+        if (giveawayEmbed.description.startsWith("Giveaway terminé !"))
+            return reaction.users.remove(user).catch(console.error);
+
         if (reaction.emoji.name !== "🎉")
-            reaction.users.remove(user).catch(console.error);
+            return reaction.users.remove(user).catch(console.error);
 
         const [ , requiredRole ] = reaction.message.embeds[0].description.match(/Uniquement pour:` <@&(\d{18})>/) || [];
         if (!requiredRole) return;
 
         if (!reaction.message.guild.member(user).roles.cache.has(requiredRole))
-            reaction.users.remove(user);
+            return reaction.users.remove(user);
 	}
 };
 

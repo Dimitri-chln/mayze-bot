@@ -2,10 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "playlist",
-	description: "Activer ou désactiver la répétition de la musique actuelle",
+	description: "Sauvegarder et jouer des playlists",
 	aliases: ["plist", "pl"],
 	args: 0,
-	usage: "get [-me] | play <nom> | add <nom> <url> [-private] | remove <nom>",
+	usage: "get [-me] | play <nom> [-shuffle] | add <nom> <url> [-private] | remove <nom>",
 	disableSlash: true,
 	/**
 	 * @param {Message} message 
@@ -35,7 +35,7 @@ const command = {
 							icon_url: me ? message.author.avatarURL({ dynamic: true }) : message.client.user.avatarURL()
 						},
 						color: "#010101",
-						description: playlists.map(playlist => `[${playlist.name}](${playlist.url}) - **${(message.guild.members.cache.get(playlist.user_id) || { user: { tag: "*Inconnu*" } }).user.tag}**${playlist.private ? " - 🚫" : ""}`).join("\n") || "*Pas de playlist*",
+						description: playlists.filter(p => me ? p.user_id === message.author.id : p).map(playlist => `[${playlist.name}](${playlist.url}) - **${(message.guild.members.cache.get(playlist.user_id) || { user: { tag: "*Inconnu*" } }).user.tag}**${playlist.private ? " - 🚫" : ""}`).join("\n") || "*Pas de playlist*",
 						footer: {
 							text: "✨Mayze✨" + (playlists.some(p => p.private) ? " | 🚫 signifie que la playlist est privée" : "")
 						}
@@ -46,13 +46,16 @@ const command = {
 			case "play": {
 				if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
 				const isPlaying = message.client.player.isPlaying(message.guild.id);
-				if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
 
+				const shuffle = args
+					? args.includes("-shuffle")
+					: options[0].options[1].value === "-shuffle";
+				
 				const playlist = playlists.find(p => p.name === playlistName);
 				if (!playlist) return message.reply("il n'y a pas de playlist avec ce nom ou elle est privée").catch(console.error);
 
 				message.channel.startTyping(1);
-				const res = await message.client.player.playlist(message.guild.id, search, message.member.voice.channel, -1, message.author, shuffle);
+				const res = await message.client.player.playlist(message.guild.id, playlistName, message.member.voice.channel, -1, message.author, shuffle);
 				if (!res.playlist) {
 					console.error(res.error);
 					return message.channel.send("Quelque chose s'est mal passé en récupérant la playlist :/").catch(console.error);
