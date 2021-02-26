@@ -28,7 +28,7 @@ const command = {
 		
 		} else {
 			const volume = message.client.player.getQueue(message.guild.id).dispatcher.volumeLogarithmic * 200;
-			message.channel.send(`<a:blackCheck:803603780666523699> | **Volume: ${volume}%**`).catch(console.error);
+			message.channel.send(`<a:blackCheck:803603780666523699> | **Volume ${volume}%**`).catch(console.error);
 		}
 	}
 };
