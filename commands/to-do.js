@@ -46,7 +46,7 @@ const command = {
 				message.channel.send({
 					embed: {
 						author: {
-							name: "To-do list de ✨Mayze✨",
+							name: "To-do list de ✨ Mayze ✨",
 							icon_url: message.author.avatarURL({ dynamic: true })
 						},
 						color: "#010101",
@@ -54,7 +54,7 @@ const command = {
 							return { name: `\`${t.id}.\` ${t.name.replace(/U\+0027/g, "'")}`, value: `*${t.created_at.toUTCString()}*`, inline: true }
 						}),
 						footer: {
-							text: "✨Mayze✨"
+							text: "✨ Mayze ✨"
 						}
 					}
 				}).catch(console.error);

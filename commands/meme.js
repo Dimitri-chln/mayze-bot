@@ -71,7 +71,7 @@ const command = {
 						url: url
 					},
 					footer: {
-						text: "✨Mayze✨"
+						text: "✨ Mayze ✨"
 					},
 					timestamp: Date.now()
 				}
@@ -85,7 +85,7 @@ const command = {
 					color: "#010101",
 					description: memes.join(", "),
 					footer: {
-						text: "✨Mayze✨"
+						text: "✨ Mayze ✨"
 					}
 				}
 			}).catch(console.error);

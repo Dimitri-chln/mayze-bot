@@ -25,7 +25,7 @@ const command = {
 					url: nudes[Math.floor(Math.random() * nudes.length)]
 				},
 				footer: {
-					text: "✨Mayze✨"
+					text: "✨ Mayze ✨"
 				}
 			}
 		}).catch(console.error);

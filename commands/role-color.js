@@ -50,7 +50,7 @@ const command = {
 				color: "#010101",
 				description: `La couleur du rôle ${role} a été changée en \`${color.toLowerCase()}\``,
 			footer: {
-					text: "✨Mayze✨"
+					text: "✨ Mayze ✨"
 				}
 			}
 		}).catch(console.error);

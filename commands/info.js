@@ -27,7 +27,7 @@ const command  = {
 				color: "#010101",
 				description: language.get(language.description, message.client.prefix, (message.client.users.cache.get(config.OWNER_ID) || { username: language.unknown }).tag, version),
 				footer: {
-					text: "✨Mayze✨"
+					text: "✨ Mayze ✨"
 				}
 			}
 		}).catch(console.error);

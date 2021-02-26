@@ -44,7 +44,7 @@ const command = {
 						return { name: category.name.replace(/^./, a => a.toUpperCase()), value: category.commands.map(cmd => cmd.name).join(", "), inline: true };
 					}),
 					footer: {
-						text: "✨Mayze✨"
+						text: "✨ Mayze ✨"
 					}
 				}
 			}).catch(console.error);
@@ -70,7 +70,7 @@ const command = {
 					color: "#010101",
 					description: data,
 					footer: {
-						text: "✨Mayze✨"
+						text: "✨ Mayze ✨"
 					}
 				}
 			}).catch(console.error);

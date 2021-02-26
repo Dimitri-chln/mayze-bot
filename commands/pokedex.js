@@ -37,7 +37,7 @@ const command = {
 					url: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}.png`
 				},
 				footer: {
-					text: "✨Mayze✨"
+					text: "✨ Mayze ✨"
 				},
 				fields: [
 					{

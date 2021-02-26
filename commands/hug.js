@@ -39,7 +39,7 @@ const command = {
 					url: hugs[Math.floor(Math.random() * hugs.length)]
 				},
 				footer: {
-					text: "✨Mayze✨"
+					text: "✨ Mayze ✨"
 				}
 			}
 		}).catch(console.error);

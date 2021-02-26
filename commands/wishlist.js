@@ -39,7 +39,7 @@ const command = {
 				color: "#010101",
 				description: desc,
 				footer: {
-					text: "✨Mayze✨"
+					text: "✨ Mayze ✨"
 				}
 			}
 		}).catch(console.error);

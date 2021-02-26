@@ -81,7 +81,7 @@ const command = {
 						color: "#010101",
 						description: notes.map((n, i) => `\`${i+1}.\` ${n.note}`).join("\n") || "*Aucune note*",
 						footer: {
-							text: "✨Mayze✨"
+							text: "✨ Mayze ✨"
 						}
 					}
 				}).catch(console.error);
@@ -119,7 +119,7 @@ const command = {
 							color: "#010101",
 							description: `\`\`\`\n${n.note.replace(/<a?(:.+:)\d{18}>/, "$1")}\n\`\`\``,
 							footer: {
-								text: "✨Mayze✨"
+								text: "✨ Mayze ✨"
 							}
 						}
 					}).catch(console.error);

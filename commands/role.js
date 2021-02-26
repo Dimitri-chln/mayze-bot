@@ -38,7 +38,7 @@ const command = {
 				color: "#010101",
 				description: `**ID:** \`${role.id}\`\n**Couleur** (dec)**:** \`${role.color}\`\n**Couleur** (hex)**:** \`#${hexColor}\`\n**Position:** \`${role.position}\`\n**Membres:** \`${roleMembers.length}\`\n\`\`\`\n${roleMembers.join(", ") || " "}\n\`\`\``,
 				footer: {
-					text: "✨Mayze✨"
+					text: "✨ Mayze ✨"
 				}
 			}
 		}).catch(console.error);

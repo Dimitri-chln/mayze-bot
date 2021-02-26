@@ -27,7 +27,7 @@ const command = {
 					color: "#010101",
 					description: `\`\`\`\n${output}\n\`\`\``,
 					footer: {
-						text: "✨Mayze✨"
+						text: "✨ Mayze ✨"
 					}
 				}
 			}).catch(console.error);

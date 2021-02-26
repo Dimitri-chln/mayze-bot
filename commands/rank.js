@@ -62,7 +62,7 @@ const command = {
 					color: "#010101",
 					description: ranks.map(rank => `• ${rank}${message.member.roles.cache.has(rank.id) ? ` | ✅` : ""}`).join("\n"),
 					footer: {
-					text: "✨Mayze✨"
+					text: "✨ Mayze ✨"
 					}
 				}
 			}).catch(console.error);

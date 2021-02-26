@@ -36,7 +36,7 @@ const command = {
 					url: kisses[Math.floor(Math.random() * kisses.length)]
 				},
 				footer: {
-					text: "✨Mayze✨"
+					text: "✨ Mayze ✨"
 				}
 			}
 		}).catch(console.error);

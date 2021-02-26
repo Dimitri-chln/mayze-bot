@@ -74,7 +74,7 @@ const command = {
 						description:
 							`Rejoins la partie avec la commande \`${message.client.prefix}russian-roulette join\``,
 						footer: {
-							text: "✨Mayze✨"
+							text: "✨ Mayze ✨"
 						}
 					}
 				}).catch(console.error);
@@ -102,7 +102,7 @@ const command = {
 					.setAuthor("La partie de roulette russe a commencé!", message.author.avatarURL({ dynamic: true }))
 					.setColor("#010101")
 					.setDescription("...")
-					.setFooter("✨Mayze✨")
+					.setFooter("✨ Mayze ✨")
 					.setTimestamp();
 				const msg = await message.channel.send(embed).catch(console.error);
 				if (!msg) return message.reply("Quelque chose s'est mal passé en lançant la partie :/");

@@ -36,7 +36,7 @@ const command = {
 							color: "#010101",
 							description: `**[${characterName}](${message.url})** a été roll dans <#${message.channel.id}> !\n→ ${characterSeries}\n**${kakeraValue}**<:kakeraMudae:796822222110720106>`,
 							footer: {
-								text: "✨Mayze✨"
+								text: "✨ Mayze ✨"
 							}
 						}
 					});

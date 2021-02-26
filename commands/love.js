@@ -42,7 +42,7 @@ const command = {
 				color: "#010101",
 				description: `${love1} + ${love2} = ${Math.round(Math.random() * 100)}%`,
 				footer: {
-					text: "✨Mayze✨"
+					text: "✨ Mayze ✨"
 				}
 			}
 		}).catch(console.error);

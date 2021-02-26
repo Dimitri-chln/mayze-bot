@@ -37,7 +37,7 @@ const command = {
 						color: "#010101",
 						description: playlists.filter(p => me ? p.user_id === message.author.id : p).map((playlist, i) => `\`${i + 1}.\` [${playlist.name}](${playlist.url}) - **${(message.guild.members.cache.get(playlist.user_id) || { user: { tag: "*Inconnu*" } }).user.tag}**${playlist.private ? " - 🚫" : ""}`).join("\n") || "*Pas de playlist*",
 						footer: {
-							text: "✨Mayze✨" + (playlists.some(p => p.private) ? " | 🚫 signifie que la playlist est privée" : "")
+							text: "✨ Mayze ✨" + (playlists.some(p => p.private) ? " | 🚫 signifie que la playlist est privée" : "")
 						}
 					}
 				}).catch(console.error);

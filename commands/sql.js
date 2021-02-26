@@ -30,7 +30,7 @@ const command = {
 							color: "#010101",
 							description: `\`\`\`json\n${resString}\n\`\`\``,
 							footer: {
-								text: "✨Mayze✨"
+								text: "✨ Mayze ✨"
 							}
 						}
 					}).catch(console.error);
