@@ -110,7 +110,7 @@ client.on("ready", async () => {
 	const updateGwaMsg = require("./utils/updateGwaMsg");
 
 	giveawayChannel.messages.fetch({ limit: 100 }).then(async messages => {
-		messages = messages.filter(msg => msg.author.id === client.user.id && msg.embeds.length && msg.embeds[0].author.name.startsWith("Giveaway de") && msg.embeds[0].description !== "Giveaway terminé !");
+		messages = messages.filter(msg => msg.author.id === client.user.id && msg.embeds.length && msg.embeds[0].author.name.startsWith("Giveaway de") && !msg.embeds[0].description.startsWith("Giveaway terminé !"));
 
 		for (const [ id, message ] of messages) {
 			if (message.partial) await message.fetch();
