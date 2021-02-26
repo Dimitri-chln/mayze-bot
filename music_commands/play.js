@@ -33,17 +33,14 @@ const command = {
 			: options[1].value.includes("-shuffle");
 
 		if (DeezerRegexScrap.test(search)) {
-			Axios.get(search)
-				.then(res => {
-					let [ , scrap ] = res.data.match(/property="og:url" content="(.*)"/) || [];
-					search = scrap;
-				})
-				.catch(err => {
-					console.error(err);
-					search = null;
-				});
+			const res = await Axios.get(search).catch(err => {
+				console.error(err);
+				search = null;
+			});
+			let [ , scrap ] = res.data.match(/property="og:url" content="(.*)"/) || [];
+			search = scrap;
 			
-				if (!search) return message.reply("Quelque s'est mal passé en récupérant le lien Deezer");
+			if (!search) return message.reply("Quelque s'est mal passé en récupérant le lien Deezer");
 		}
 		
 		if (playlistRegex.test(search) || SpotifyPlaylistRegex.test(search) || DeezerPlaylistRegex.test(search)) {
