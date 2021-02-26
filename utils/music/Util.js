@@ -3,6 +3,8 @@ const Playlist = require('./Playlist');
 const Song = require('./Song');
 const ytsr = require('ytsr');
 const { getPreview, getTracks } = require("spotify-url-info");
+const Deezer = require("deezer-public-api");
+const deezer = new Deezer();
 
 //RegEx Definitions
 let VideoRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))((?!channel)(?!user)\/(?:[\w\-]+\?v=|embed\/|v\/)?)((?!channel)(?!user)[\w\-]+)(\S+)?$/;
@@ -11,8 +13,10 @@ let PlaylistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu
 let PlaylistRegexID = /[&?]list=([^&]+)/;
 let SpotifyRegex = /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:track\/|\?uri=spotify:track:)((\w|-){22})(?:(?=\?)(?:[?&]foo=(\d*)(?=[&#]|$)|(?![?&]foo=)[^#])+)?(?=#|$)/;
 
-// https://open.spotify.com/playlist/2pAcP8Euby5nS5eYC7UuuP?si=eeFtpSkdS8C4qiqXaMCuSQ&utm_source=copy-link
 let SpotifyPlaylistRegex = /https?:\/\/(?:open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
+let DeezerRegex = /https?:\/\/(?:www)?deezer\.com\/(?:\w{2}\/)?track\/(\d+)$/;
+let DeezerPlaylistRegex = /https?:\/\/(?:www)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)$/;
+let DeezerRegexScrap = /https?:\/\/deezer\.page\.link\/\w+$/;
 
 
 /**
@@ -95,6 +99,12 @@ class Util {
 
             if(SpotifyRegex.test(search)) {
                 search = await this.songFromSpotify(search).catch(err => {
+                    return reject(err);
+                });
+            }
+
+            if (DeezerRegex.test(search)) {
+                search = await this.songFromDeezer(search).catch(err => {
                     return reject(err);
                 });
             }
@@ -219,6 +229,23 @@ class Util {
                 }));
                 playlist.videoCount = tracks.length;
 
+            } else if (DeezerPlaylistRegex.test(search)) {
+                let [ playlistID ] = search.match(/\d+$/);
+                let result = await deezer.playlist(playlistID);
+                let tracks = result.tracks.data;
+
+                playlist.videos = await Promise.all(tracks.map(async (track, index) => {
+
+                    if (max !== -1 && index >= max) return null;
+                    let deezerSearch = `${track.artist.name} - ${track.title} VEVO`;
+                    let song = await this.getVideoBySearch(deezerSearch, null, queue, requestedBy).catch(error => {
+                        return console.error(error);
+                    });
+
+                    return song;
+                }));
+                playlist.videoCount = tracks.length;
+
             } else {
                 let isPlaylistLink = PlaylistRegex.test(search);
                 if (!isPlaylistLink) return reject('InvalidPlaylist');
@@ -259,6 +286,24 @@ class Util {
             try {
                 let SpotifyResult = await getPreview(query);
                 resolve(`${SpotifyResult.artist} - ${SpotifyResult.title} VEVO`);
+            }
+            catch(err) {
+                reject('InvalidSpotify');
+            }
+        });
+    }
+
+    /**
+     * Converts a deezer track URL to a string containing the artist and song name.
+     * @param {String} query The deezer song URL.
+     * @returns {Promise<String>} The artist and song name (e.g. "Rick Astley - Never Gonna Give You Up")
+     */
+    static songFromDeezer(query) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let [ trackID ] = query.match(/\d+$/);
+                let DeezerResult = await deezer.track(trackID);
+                resolve(`${DeezerResult.artist.name} - ${DeezerResult.title} VEVO`);
             }
             catch(err) {
                 reject('InvalidSpotify');

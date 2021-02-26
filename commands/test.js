@@ -15,9 +15,10 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const Axios = require("axios").default;
+		const deezer = new (require("deezer-public-api"));
 
-		Axios.get("https://assets.pokemon.com/assets/cms2/img/pokedex/full/752.png")
-			.then(res => console.log(res))
+		Axios.get("https://deezer.page.link/AbSuoYsNz2LYo4Kq5")
+			.then(res => console.log(res.data))
 			.catch(console.error);
 	}
 };
