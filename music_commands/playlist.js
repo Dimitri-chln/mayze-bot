@@ -55,7 +55,7 @@ const command = {
 				if (!playlist) return message.reply("il n'y a pas de playlist avec ce nom ou elle est privée").catch(console.error);
 
 				message.channel.startTyping(1);
-				const res = await message.client.player.playlist(message.guild.id, playlistName, message.member.voice.channel, -1, message.author, shuffle);
+				const res = await message.client.player.playlist(message.guild.id, playlist.url, message.member.voice.channel, -1, message.author, shuffle);
 				if (!res.playlist) {
 					console.error(res.error);
 					return message.channel.send("Quelque chose s'est mal passé en récupérant la playlist :/").catch(console.error);
