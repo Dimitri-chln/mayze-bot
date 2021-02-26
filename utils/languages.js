@@ -62,6 +62,10 @@ module.exports = {
 			}
 		},
 		"avatar": {
+			invalid_user: {
+				fr: "cet utilisateur n'existe pas",
+				en: "this user doesn't exist"
+			},
 			title: {
 				fr: "Photo de profil de {1}",
 				en: "{1}'s profile picture"
