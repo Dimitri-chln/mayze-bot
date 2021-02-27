@@ -23,11 +23,12 @@ const command = {
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
 		const queue = message.client.player.getQueue(message.guild.id);
+		if (queue.songs.length === 1) return message.reply("il n'y a aucune musique à supprimer").catch(console.error);
 
 		const songs = args
             ? args.length ? args.join(" ").match(numberRegex) || [ "0" ] : [ (queue.songs.length - 1).toString() ]
             : options[0] ? options[0].value.match(numberRegex)|| [ "0" ] : [ (queue.songs.length - 1).toString() ];
-		if (songs.join(" ").match(/\d+/g).some(s => parseInt(s) === 0 || parseInt(s) > queue.songs.length)) return message.reply(`tous les nombres doivent être compris entre 1 et ${queue.songs.length - 1}`);
+		if (songs.join(" ").match(/\d+/g).some(s => parseInt(s) === 0 || parseInt(s) >= queue.songs.length)) return message.reply(`tous les nombres doivent être compris entre 1 et ${queue.songs.length - 1}`);
 
 		const removedSongs = message.client.player.remove(message.guild.id, songs);
         if (!removedSongs) return message.reply("je n'ai pas trouvé l'une de ces musiques dans la queue").catch(console.error);
