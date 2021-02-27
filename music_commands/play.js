@@ -20,7 +20,7 @@ const command = {
 		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 
-		const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#\&\?]*).*/;
+		const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#&\?]*).*/;
 		const SpotifyPlaylistRegex = /https?:\/\/(?:open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
 		const DeezerPlaylistRegex = /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)/;
 		const DeezerRegexScrap = /https?:\/\/deezer\.page\.link\/\w+/;
@@ -48,6 +48,7 @@ const command = {
 			const res = await message.client.player.playlist(message.guild.id, search, message.member.voice.channel, -1, message.author, shuffle);
 			if (!res.playlist) {
 				console.error(res.error);
+				message.channel.stopTyping();
 				return message.channel.send("Quelque chose s'est mal passé en récupérant la playlist :/").catch(console.error);
 			}
 
