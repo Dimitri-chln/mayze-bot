@@ -46,7 +46,7 @@ const command = {
 			: dhms((options[1] || {}).value);
 		if (duration) setTimeout(() => member.roles.remove(mutedRole).catch(console.error), duration);
 		member.roles.add(mutedRole)
-			.then(() => message.channel.send(`${member.user} a été mute ${duration ? `pendant ${timeToString(duration)}` : "indéfiniment"}`).catch(console.error))
+			.then(() => message.channel.send(`${member.user} a été mute ${duration ? `pendant ${timeToString(duration / 1000)}` : "indéfiniment"}`).catch(console.error))
 			.catch(err => {
 				console.error(err);
 				message.channel.send("Quelque chose s'est mal passé en mutant cette personne :/").catch(console.error);
