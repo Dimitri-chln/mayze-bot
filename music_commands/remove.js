@@ -25,8 +25,8 @@ const command = {
 		const queue = message.client.player.getQueue(message.guild.id);
 
 		const songs = args
-            ? args.length ? args.join(" ").match(numberRegex) : [ (queue.songs.length - 1).toString() ]
-            : options[0] ? options[0].value.match(numberRegex) : [ (queue.songs.length - 1).toString() ];
+            ? args.length ? args.join(" ").match(numberRegex) || [ "0" ] : [ (queue.songs.length - 1).toString() ]
+            : options[0] ? options[0].value.match(numberRegex)|| [ "0" ] : [ (queue.songs.length - 1).toString() ];
 		if (songs.join(" ").match(/\d+/g).some(s => parseInt(s) === 0 || parseInt(s) > queue.songs.length)) return message.reply(`tous les nombres doivent être compris entre 1 et ${queue.songs.length - 1}`);
 
 		const removedSongs = message.client.player.remove(message.guild.id, songs);
