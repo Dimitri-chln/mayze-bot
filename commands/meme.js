@@ -38,7 +38,6 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		message.channel.startTyping(1);
 		const { data } = message.client.memes || await Axios.get("https://api.memegen.link/templates").catch(console.error);
-		message.channel.stopTyping();
 		message.client.memes = { data: data };
 		
 		const memes = data.map(meme => meme.id);
@@ -90,6 +89,8 @@ const command = {
 				}
 			}).catch(console.error);
 		}
+
+		message.channel.stopTyping(true);
 
 		function replacement(text) {
 			const characters = {
