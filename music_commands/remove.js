@@ -27,7 +27,7 @@ const command = {
 		const songs = args
             ? args.length ? args.join(" ").match(numberRegex) : [ (queue.songs.length - 1).toString() ]
             : options[0] ? options[0].value.match(numberRegex) : [ (queue.songs.length - 1).toString() ];
-		if (songs.join(" ").match(/\d+/g).some(s => parseInt(s) === 0 || parseInt(s) > queue.songs.length)) return message.reply("un des nombres est invalide (0 ou trop grand)");
+		if (songs.join(" ").match(/\d+/g).some(s => parseInt(s) === 0 || parseInt(s) > queue.songs.length)) return message.reply(`tous les nombres doivent être compris entre 1 et ${queue.songs.length - 1}`);
 
 		const removedSongs = message.client.player.remove(message.guild.id, songs);
         if (!removedSongs) return message.reply("je n'ai pas trouvé l'une de ces musiques dans la queue").catch(console.error);
