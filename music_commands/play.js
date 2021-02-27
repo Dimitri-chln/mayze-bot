@@ -20,6 +20,7 @@ const command = {
 		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 
+		const videoRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))((?!channel)(?!user)\/(?:[\w\-]+\?v=|embed\/|v\/)?)((?!channel)(?!user)[\w\-]+)(\S+)?$/;
 		const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#&\?]*).*/;
 		const SpotifyPlaylistRegex = /https?:\/\/(?:open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
 		const DeezerPlaylistRegex = /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)/;
@@ -43,7 +44,7 @@ const command = {
 			if (!search) return message.reply("Quelque s'est mal passé en récupérant le lien Deezer");
 		}
 		
-		if (playlistRegex.test(search) || SpotifyPlaylistRegex.test(search) || DeezerPlaylistRegex.test(search)) {
+		if ((playlistRegex.test(search) || SpotifyPlaylistRegex.test(search) || DeezerPlaylistRegex.test(search)) && !videoRegex.test(search)) {
 			message.channel.startTyping(1);
 			const res = await message.client.player.playlist(message.guild.id, search, message.member.voice.channel, -1, message.author, shuffle);
 			if (!res.playlist) {
