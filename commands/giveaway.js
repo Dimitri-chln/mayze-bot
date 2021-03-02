@@ -116,7 +116,7 @@ const command = {
 				if (!duration) return message.reply("la durée est invalide (dhms)").catch(console.error);
 				const endTimestamp = new Date(Date.now() + duration);
 				const winners = args
-					? args[3] ? (isNaN(parseInt(args[3].replace("w", "$1"))) ? 1 : parseInt(args[3].replace("w", "$1"))) : 1
+					? args[3] ? (isNaN(parseInt(args[3].replace("w", ""))) ? 1 : parseInt(args[3].replace("w", ""))) : 1
 					: options[0].options.find(o => o.name === "gagnants") ? options[0].options.find(o => o.name === "gagnants").value : 1;
 				if (winners < 1) return message.reply("le nombre de gagnants doit être supérieur à 1");
 				const mention = args
