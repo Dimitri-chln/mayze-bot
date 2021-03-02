@@ -41,7 +41,7 @@ const command = {
 			let [ , scrap ] = res.data.match(/property="og:url" content="(.*)"/) || [];
 			search = scrap;
 			
-			if (!search) return message.reply("Quelque s'est mal passé en récupérant le lien Deezer");
+			if (!search) return message.reply("Quelque s'est mal passé en récupérant le lien Deezer").catch(console.error);
 		}
 		
 		if ((playlistRegex.test(search) || SpotifyPlaylistRegex.test(search) || DeezerPlaylistRegex.test(search)) && !videoRegex.test(search)) {

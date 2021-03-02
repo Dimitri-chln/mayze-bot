@@ -258,8 +258,7 @@ client.on("messageReactionRemove", async (reaction, user) => {
 client.on("guildMemberAdd", async member => {
 	if (member.guild.id !== "689164798264606784") return;
 
-	const roles = ["735811339888361472", "735809874205737020", "735810286719598634", "735810462872109156"];
-	member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r.id))).catch(console.error);
+	let roles = ["735811339888361472", "735809874205737020", "735810286719598634", "735810462872109156"];
 
 	member.user.send({
 		embed: {
@@ -280,11 +279,9 @@ client.on("guildMemberAdd", async member => {
 	}).catch(console.error);
 
 	const { rows } = await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error);
-	if (rows.length) {
-		rows[0].roles.forEach(async role => {
-			member.roles.add(role).catch(console.error);
-		});
-	}
+	if (rows.length) roles.concat(rows[0].roles);
+
+	member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r.id))).catch(console.error);
 });
 
 client.on("guildMemberRemove", async member => {

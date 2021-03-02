@@ -216,6 +216,7 @@ class Util {
 
             if (SpotifyPlaylistRegex.test(search)) {
                 let tracks = await getTracks(search);
+                if (shuffle) tracks = tracks.sort(() => Math.random() - 0.5);
 
                 playlist.videos = await Promise.all(tracks.map(async (track, index) => {
 
@@ -233,6 +234,7 @@ class Util {
                 let [ , playlistID ] = search.match(DeezerPlaylistRegex);
                 let result = await deezer.playlist(playlistID);
                 let tracks = result.tracks.data;
+                if (shuffle) tracks = tracks.sort(() => Math.random() - 0.5);
 
                 playlist.videos = await Promise.all(tracks.map(async (track, index) => {
 
@@ -256,6 +258,8 @@ class Util {
                 playlist = await scrapeYT.getPlaylist(PlaylistID);
                 if (Object.keys(playlist).length === 0) return reject('InvalidPlaylist');
 
+                if (shuffle) playlist.videos = playlist.videos.sort(() => Math.random() - 0.5);
+
                 playlist.videos = await Promise.all(playlist.videos.map((video, index) => {
 
                     if (max !== -1 && index >= max) return null;
@@ -269,8 +273,6 @@ class Util {
             playlist.videos = playlist.videos.filter(function (obj) { return obj });
             playlist.url = search;
             playlist.videoCount = max === -1 ? playlist.videoCount : playlist.videoCount > max ? max : playlist.videoCount;
-
-            if (shuffle) playlist.videos.sort(() => Math.random() - 0.5);
 
             resolve(new Playlist(playlist, queue, requestedBy));
         });

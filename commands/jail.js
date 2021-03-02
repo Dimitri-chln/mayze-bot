@@ -37,47 +37,23 @@ const command = {
 			return message.reply("tu ne peux pas mettre cette personne en prison").catch(console.error);
 
 		const jailedRole = "695943648235487263";
+		const roles = member.roles.cache.filter(role => message.guild.roles.cache.some(r => r.name === role.name + " (Jailed)"));
+			const jailedRoles = message.guild.roles.cache.filter(role => member.roles.cache.some(r => role.name === r.name + " (Jailed)"));
 
-		if (!member.roles.cache.has(jailedRole)) { // If not jailed
+		if (!member.roles.cache.has(jailedRole)) {
 			member.roles.add(jailedRole).catch(console.error);
 
-			if (member.roles.cache.has("689180158359371851")) { // Administrateur
-				member.roles.remove("689180158359371851").catch(console.error);
-				member.roles.add("753245162469064795").catch(console.error);
-			}
-			if (member.roles.cache.has("737646140362850364")) { // Modérateur
-				member.roles.remove("737646140362850364").catch(console.error);
-				member.roles.add("753250476891439185").catch(console.error);
-			}
-			if (member.roles.cache.has("696751614177837056")) { // Sous Chef
-				member.roles.remove("696751614177837056").catch(console.error);
-				member.roles.add("753251533768097933").catch(console.error);
-			}
-			if (member.roles.cache.has("689218691560505472")) { // 👑🐍•🐣✨•🌙🐒•⚡🦅•🦄❄️
-				member.roles.remove("689218691560505472").catch(console.error);
-				member.roles.add("753253307052589176").catch(console.error);
-			}
+			member.roles.add(jailedRoles).catch(console.error);
+			member.roles.remove(roles).catch(console.error);
+
 			if (message.deletable) message.react("🔗").catch(console.error);
 
-		} else { // If jailed
+		} else {
 			member.roles.remove(jailedRole).catch(console.error);
-		
-			if (member.roles.cache.has("753245162469064795")) { // Administrateur
-				member.roles.remove("753245162469064795").catch(console.error);
-				member.roles.add("689180158359371851").catch(console.error);
-			}
-			if (member.roles.cache.has("753250476891439185")) { // Modérateur
-				member.roles.remove("753250476891439185").catch(console.error);
-				member.roles.add("737646140362850364").catch(console.error);
-			}
-			if (member.roles.cache.has("753251533768097933")) { // Sous Chef
-				member.roles.remove("753251533768097933").catch(console.error);
-				member.roles.add("696751614177837056").catch(console.error);
-			}
-			if (member.roles.cache.has("753253307052589176")) { // 👑🐍•🐣✨•🌙🐒•⚡🦅•🦄❄️
-				member.roles.remove("753253307052589176").catch(console.error);
-				member.roles.add("689218691560505472").catch(console.error);
-			}
+
+			member.roles.add(roles).catch(console.error);
+			member.roles.remove(jailedRoles).catch(console.error);
+
 			if (message.deletable) message.react("👋").catch(console.error);
 		}
 	}

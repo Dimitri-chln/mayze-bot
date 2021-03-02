@@ -31,6 +31,10 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const { Collection } = require("discord.js");
+
+		if (["510493665693794315", "329576537323995138"].includes(message.author.id))
+			return message.reply("dommage").catch(console.error);
+
 		/** @type {Collection<string, Message>} */
 		let messages = new Collection();
 

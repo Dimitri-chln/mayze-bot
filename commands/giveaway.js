@@ -6,7 +6,6 @@ const command = {
 	aliases: ["gwa", "ga"],
 	args: 1,
 	usage: "create \"<prix>\" <durée> [<nombre gagnants>] [-mention <rôle>] [-role <rôle>] | end [<ID>] | delete [<ID>] | reroll [<ID>]",
-	perms: ["MANAGE_ROLES", "MANAGE_CHANNELS", "MANAGE_MESSAGES"],
 	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
 		{
@@ -98,6 +97,9 @@ const command = {
 		const { GIVEAWAY_CHANNEL_ID } = require("../config.json");
 		const channel = message.client.channels.cache.get(GIVEAWAY_CHANNEL_ID);
 
+		if (!message.member.hasPermission("MANAGE_MESSAGES") && !message.member.roles.has("815884135410958336"))
+			return message.reply("tu n'as pas la permission de créer des giveaways").catch(console.error);
+
 		const subCommand = args
 			? args[0].toLowerCase()
 			: options[0].name;
@@ -125,7 +127,7 @@ const command = {
 					: options[0].options.find(o => o.name === "rôle") ? message.guild.roles.cache.get(options[0].options.find(o => o.name === "rôle").value) : null;
 				
 				const msg = await channel.send({
-					content: mention ? `${mention}` : null,
+					content: mention ? `${mention}` : "<@&816233807215853568>",
 					embed: {
 						author: {
 							name: `Giveaway de ${message.author.tag}`,

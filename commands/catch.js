@@ -54,7 +54,7 @@ const command = {
 					url: img
 				},
 				color: shiny ? "#ddbb20" : (legendary ? "#ce2f20" : "#010101"),
-				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (shiny ? "⭐ " : "") + (pokemon.names[language] || pokemon.names.en)),
+				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (shiny ? "⭐ " : "") + (pokemon.names[languageCode] || pokemon.names.en)),
 				footer: {
 					text: "✨ Mayze ✨",
 					icon_url: message.author.avatarURL({ dynamic: true })
