@@ -37,22 +37,24 @@ const command = {
 			return message.reply("tu ne peux pas mettre cette personne en prison").catch(console.error);
 
 		const jailedRole = "695943648235487263";
-		const roles = member.roles.cache.filter(role => message.guild.roles.cache.some(r => r.name === role.name + " (Jailed)"));
-			const jailedRoles = message.guild.roles.cache.filter(role => member.roles.cache.some(r => role.name === r.name + " (Jailed)"));
 
 		if (!member.roles.cache.has(jailedRole)) {
-			member.roles.add(jailedRole).catch(console.error);
+			const unJailedRoles = member.roles.cache.filter(role => message.guild.roles.cache.some(r => r.name === role.name + " (Jailed)"));
+			const jailedRoles = message.guild.roles.cache.filter(role => member.roles.cache.some(r => role.name === r.name + " (Jailed)"));
 
+			member.roles.add(jailedRole).catch(console.error);
 			member.roles.add(jailedRoles).catch(console.error);
-			member.roles.remove(roles).catch(console.error);
+			member.roles.remove(unJailedRoles).catch(console.error);
 
 			if (message.deletable) message.react("🔗").catch(console.error);
 
 		} else {
+			const jailedRoles = member.roles.cache.filter(role => message.guild.roles.cache.some(r => role.name === r.name + " (Jailed)"));
+			const unJailedRoles = message.guild.roles.cache.filter(role => member.roles.cache.some(r => r.name === role.name + " (Jailed)"));
+			
 			member.roles.remove(jailedRole).catch(console.error);
-
-			member.roles.add(roles).catch(console.error);
 			member.roles.remove(jailedRoles).catch(console.error);
+			member.roles.add(unJailedRoles).catch(console.error);
 
 			if (message.deletable) message.react("👋").catch(console.error);
 		}
