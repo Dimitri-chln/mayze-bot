@@ -16,7 +16,7 @@ const command = {
 		const pagination = require("../utils/pagination");
 		const { MessageEmbed } = require("discord.js");
 
-		const { "rows": top } = await message.client.pg.query("SELECT * FROM levels ORDER BY xp DESC").catch(console.error);
+		const { "rows": top } = (await message.client.pg.query("SELECT * FROM levels ORDER BY xp DESC").catch(console.error)) || {};
 		const memberPerPage = 15;
 		const { BASE_XP, XP_INCREMENT } = require("../config.json");
 

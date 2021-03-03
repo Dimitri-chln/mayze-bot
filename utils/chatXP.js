@@ -7,7 +7,7 @@ const { Message } = require("discord.js");
 async function chatXP(message, xp) {
 	const newXp = xp;
 	const { BASE_XP, XP_INCREMENT } = require("../config.json");
-	const { rows } = await message.client.pg.query(`SELECT * FROM levels WHERE user_id='${message.author.id}'`).catch(console.error);
+	const { rows } = (await message.client.pg.query(`SELECT * FROM levels WHERE user_id='${message.author.id}'`).catch(console.error)) || {};
 
 	if (rows.length) {
 		xp += rows[0].xp;

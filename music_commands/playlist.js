@@ -20,7 +20,7 @@ const command = {
 			? args[1]
 			: options[0].options[0].value;
 		
-		const { "rows": playlists } = await message.client.pg.query(`SELECT * FROM playlists WHERE private = false OR user_id = '${message.author.id}'`).catch(console.error);
+		const { "rows": playlists } = (await message.client.pg.query(`SELECT * FROM playlists WHERE private = false OR user_id = '${message.author.id}'`).catch(console.error)) || {};
 		
 		switch (subCommand) {
 			case "get": {
@@ -68,7 +68,7 @@ const command = {
 				break;
 			}
 			case "add": {
-				const { rows } = await message.client.pg.query(`SELECT * FROM playlists WHERE name = '${playlistName}'`).catch(console.error);
+				const { rows } = (await message.client.pg.query(`SELECT * FROM playlists WHERE name = '${playlistName}'`).catch(console.error)) || {};
 				if (rows.length) return message.reply("une playlist avec ce nom existe déjà").catch(console.error);
 
 				const url = args

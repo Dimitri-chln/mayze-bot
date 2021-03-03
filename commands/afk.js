@@ -26,7 +26,7 @@ const command = {
 		const AKFmessage = args
 			? args.join(" ").replace(/^./, a => a.toUpperCase())
 			: (options ? options[0].value : "").replace(/^./, a => a.toUpperCase());
-		const { rows } = await message.client.pg.query(`SELECT * FROM afk WHERE user_id = '${message.author.id}'`).catch(console.error);
+		const { rows } = (await message.client.pg.query(`SELECT * FROM afk WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
 		if (rows.length) message.client.pg.query(`DELETE FROM afk WHERE user_id = '${message.author.id}'`).catch(console.error);
 		if (AKFmessage) message.client.pg.query(`INSERT INTO afk (user_id, message) VALUES ('${message.author.id}', '${AKFmessage}')`).catch(console.error);
 		else message.client.pg.query(`INSERT INTO afk (user_id) VALUES ('${message.author.id}')`).catch(console.error);

@@ -278,8 +278,8 @@ client.on("guildMemberAdd", async member => {
 		}
 	}).catch(console.error);
 
-	const { rows } = await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error);
-	if (rows.length) roles.concat(rows[0].roles);
+	const { rows } = (await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error)) || {};
+	if (rows && rows.length) roles = roles.concat(rows[0].roles);
 
 	member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r.id))).catch(console.error);
 });

@@ -88,7 +88,7 @@ const command = {
 			? (args[0] || "").toLowerCase() || "get"
 			: options[0].name;
 		
-		const { "rows": responses } = await message.client.pg.query("SELECT * FROM responses").catch(console.error);
+		const { "rows": responses } = (await message.client.pg.query("SELECT * FROM responses").catch(console.error)) || {};
 		
 		switch (subCommand) {
 			case "add": {

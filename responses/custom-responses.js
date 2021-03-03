@@ -13,7 +13,7 @@ const command = {
 			4: "ENDS_WITH"
 		};
 
-		const { "rows": responses } = await message.client.pg.query("SELECT * FROM responses").catch(console.error);
+		const { "rows": responses } = (await message.client.pg.query("SELECT * FROM responses").catch(console.error)) || {};
 		if (!responses) return;
 
 		responses.forEach(response => {

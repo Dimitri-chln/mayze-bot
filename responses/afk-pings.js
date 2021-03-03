@@ -9,7 +9,7 @@ const autoresponse = {
         if (message.author.bot) return;
         if (message.channel.type === "dm") return;
         const mentionned = message.mentions.users;
-        const { "rows": afkUsers } = await message.client.pg.query("SELECT * FROM afk").catch(console.error);
+        const { "rows": afkUsers } = (await message.client.pg.query("SELECT * FROM afk").catch(console.error)) || {};
         if (!afkUsers) return;
         afkUsers.forEach(u => {
             if (mentionned.has(u.user_id)) message.channel.send(`**${mentionned.get(u.user_id).username}** est AFK depuis ${timeToString(Math.floor((Date.now() - Date.parse(u.time)) / 1000))} 💤${u.message ? `\n**→ ${u.message}**` : ""}`).catch(console.error);

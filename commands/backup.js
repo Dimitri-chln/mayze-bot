@@ -26,7 +26,7 @@ const command = {
 					? args[1]
 					: options[0].options[0].value;
 				const msg = await message.channel.send("Récupération des données...").catch(console.error);
-				const { rows } = await message.client.pg.query(`SELECT * FROM ${table}`).catch(console.error);
+				const { rows } = (await message.client.pg.query(`SELECT * FROM ${table}`).catch(console.error)) || {};
 				if (!rows) return message.channel.send("Quelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
 				Fs.writeFile(`backups/database_${table}.json`, JSON.stringify(rows, null, 4), "utf8", () => {
 					console.log("Backup complete");

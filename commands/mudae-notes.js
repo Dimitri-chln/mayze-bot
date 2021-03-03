@@ -51,7 +51,7 @@ const command = {
 		const note = args
 			? args.slice(1).join(" ")
 			: options[0].options ? options[0].options[0].value : null;
-		const { "rows": notes } = await message.client.pg.query(`SELECT * FROM mudae_notes WHERE user_id = '${message.author.id}'`).catch(console.error);
+		const { "rows": notes } = (await message.client.pg.query(`SELECT * FROM mudae_notes WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
 		if (!notes) return message.channel.send("Quelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
 		
 		switch(subCommand) {

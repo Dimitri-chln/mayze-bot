@@ -12,7 +12,7 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		var animes;
 		try {
-			const { rows } = await message.client.pg.query(`SELECT * FROM animes WHERE user_id='${message.author.id}'`);
+			const { rows } = (await message.client.pg.query(`SELECT * FROM animes WHERE user_id='${message.author.id}'`)) || {};
 			animes = rows;
 		} catch (err) {
 			console.log(err);
