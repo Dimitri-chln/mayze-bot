@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { Message, MessageEmbed } = require("discord.js");
 
 const command = {
 	name: "poll",
@@ -42,17 +42,18 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
+		const anonymous = args
+			? args.includes("-anonymous")
+			: !!(options.find(o => o.name === "anonyme") || {}).value;
+		args = args.filter(a => a !== "-anonymous");
 		const question = args
 			? args[0]
 			: options[0].value;
 		if (!question) return message.reply("écris ta question entre guillemets").catch(console.error);
 		const answers = args
-			? args.filter(a => a !== "-anonymous").length > 2 ? args.filter(a => a !== "-anonymous").slice(1) : ["oui", "non"]
+			? args.length > 2 ? args.slice(1) : ["oui", "non"]
 			: (options[1] || { value: "" }).value.trim().split("//").length > 1 ? (options[1] || { value: "" }).value.trim().split("/").map(answer => answer.replace(/^./, a => a.toUpperCase())) : [ "Oui", "Non"];
 		if (answers.length > 10) return message.reply("le nombre de propositions ne peut pas dépasser 10").catch(console.error);
-		const anonymous = args
-			? args.includes("-anonymous")
-			: !!(options.find(o => o.name === "anonyme") || {}).value;
 
 		const emojis = (answers[0].toLowerCase() === "oui" && answers[1].toLowerCase() === "non" && answers.length === 2 ? ["✅", "❌"] : ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]).slice(0, answers.length);
 		emojis.push("🛑");
@@ -63,7 +64,25 @@ const command = {
 			if (!message.client.anonymousPolls) message.client.anonymousPolls = {};
 			if (message.client.anonymousPolls[message.channel.id]) return message.reply("un sondage a déjà lieu dans ce salon").catch(console.error);
 			message.client.anonymousPolls[message.channel.id] = {};
-			sendPollAnonymous();
+
+			const dmMessage = await message.author.send({
+				embed: {
+					author: {
+						name: message.author.tag,
+						icon_url: message.author.avatarURL({ dynamic: true })
+					},
+					title: `« ${question.replace(/["'«»]/g, "")} »`,
+					color: "#010101",
+					fields: answers.map((a, i) => {
+						return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: "Ø", inline: true };
+					}),
+					footer: {
+						text: "✨ Mayze ✨"
+					}
+				}
+			}).catch(console.error);
+
+			sendPollAnonymous(null, dmMessage);
 		} else sendPoll();
 
 		async function sendPoll(previousMsg) {
@@ -136,7 +155,7 @@ const command = {
 			return msg;
 		}
 
-		async function sendPollAnonymous(previousMsg) {
+		async function sendPollAnonymous(previousMsg, dmMessage) {
 			let msg = await message.channel.send({
 				embed: {
 					author: {
@@ -192,6 +211,16 @@ const command = {
 					}).catch(console.error);
 
 					message.client.anonymousPolls[message.channel.id][user.id] = emojis.indexOf(reaction.emoji.name);
+
+					let newDmMessage = dmMessage.embeds[0];
+					newDmMessage.fields = answers.map((a, i) => {
+						return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: Object.keys(message.client.anonymousPolls[message.channel.id]).filter(u => message.client.anonymousPolls[message.channel.id][u] === i).map(u => `• <@${u}>`).join("\n") || "Ø", inline: true };
+					});
+					dmMessage.edit(newDmMessage).catch(console.error);
+
+					message.author.send(`**${user.tag}** a voté \`${answers[emojis.indexOf(reaction.emoji.name)].replace(/^./, a => a.toUpperCase())}\``)
+						.then(m => m.delete().catch(console.error))
+						.catch(console.error);
 				}
 			});
 
@@ -201,7 +230,7 @@ const command = {
 				--counter;
 				if (counter ===  0) {
 					reactionCollector.stop();
-					sendPollAnonymous(msg);
+					sendPollAnonymous(msg, dmMessage);
 					msg.delete().catch(console.error);
 				}
 			});
