@@ -177,13 +177,20 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
 	if (command) processCommand(command, enhancedInteraction, null, options);
 });
 
+/**
+ * 
+ * @param {object} command 
+ * @param {Discord.Message} message 
+ * @param {string[]} args 
+ * @param {object[]} options 
+ */
 async function processCommand(command, message, args, options) {
 	let language = "fr";
 	const res = await message.client.pg.query(`SELECT * FROM languages WHERE guild_id = '${message.guild.id}'`).catch(console.error);
 	if (res && res.rows.length) language = res.rows[0].language_code;
 
 	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return message.reply(languages.data.unauthorized_guild[language]).catch(console.error);
-	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm)) && message.author.id !== config.OWNER_ID) return message.reply(languages.get(languages.data.unauthorized_perms[language], command.perms.join("`, `"))).catch(console.error);
+	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm) || message.channel.permissionsFor(message.member).has(perm)) && message.author.id !== config.OWNER_ID) return message.reply(languages.get(languages.data.unauthorized_perms[language], command.perms.join("`, `"))).catch(console.error);
 	if (command.ownerOnly) {
 		if (command.allowedUsers) {
 			if (!command.allowedUsers.includes(message.author.id) && message.author.id !== config.OWNER_ID) return;
