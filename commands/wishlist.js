@@ -6,6 +6,7 @@ const command = {
 	aliases: ["wl"],
 	args: 0,
 	usage: "[utilisateur] [-r]",
+	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
 		{
 			name: "utilisateur",

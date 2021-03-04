@@ -16,7 +16,9 @@ const command = {
 		const pagination = require("../utils/pagination");
 		const { MessageEmbed } = require("discord.js");
 
-		const { "rows": top } = (await message.client.pg.query("SELECT * FROM levels ORDER BY xp DESC").catch(console.error)) || {};
+		let { "rows": top } = (await message.client.pg.query("SELECT * FROM levels ORDER BY xp DESC").catch(console.error)) || {};
+		top = top.filter(u => message.guild.members.cache.has(u.user_id));
+
 		const memberPerPage = 15;
 		const { BASE_XP, XP_INCREMENT } = require("../config.json");
 

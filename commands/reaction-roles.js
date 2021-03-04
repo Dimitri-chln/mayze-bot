@@ -7,6 +7,7 @@ const command = {
 	args: 2,
 	usage: "create <titre> | add <ID message> <rôle> <emoji> | remove <ID message> <rôle>",
 	perms: ["MANAGE_ROLES"],
+	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
 		{
 			name: "create",

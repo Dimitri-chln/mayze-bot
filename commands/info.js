@@ -6,7 +6,7 @@ const command  = {
 		fr: "Obtenir quelques informations sur le bot",
 		en: "Get some information about the bot"
 	},
-	aliases: ["i"],
+	aliases: [],
 	args: 0,
 	usage: "",
 	/**

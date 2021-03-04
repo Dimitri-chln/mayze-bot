@@ -6,6 +6,7 @@ const command = {
 	aliases: [],
 	args: 1,
 	usage: "\"<série>\" [autres noms]",
+	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
 		{
 			name: "série",

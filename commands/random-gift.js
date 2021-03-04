@@ -7,6 +7,7 @@ const command = {
 	args: 1,
 	usage: "<mention/pseudo>",
 	cooldown: 60,
+	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
 		{
 			name: "utilisateur",

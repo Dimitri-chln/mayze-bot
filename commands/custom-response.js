@@ -10,7 +10,6 @@ const command = {
 	args: 0,
 	usage: "add \"<trigger>\" \"<response>\" [<type>] | remove <#response>",
 	perms: ["MANAGE_MESSAGES"],
-	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
 		{
 			name: "add",
