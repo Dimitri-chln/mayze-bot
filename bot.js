@@ -83,23 +83,30 @@ client.on("ready", async () => {
 		msg.edit(embed.setDescription(`• **Version:** \`${version}\`\n• **Ping:** \`${Math.abs(editedMsg.editedTimestamp - editedMsg.createdTimestamp)}ms\``));
 	} catch (err) { console.error(err); }
 
-	const { "rows": slashData } = await client.pg.query("SELECT * FROM slash_commands").catch(console.error) || { rows: [ ]};
+	// SLASH COMMANDS
+	const slashServers = [ "724530039781326869", "689164798264606784" ];
+	const { "rows": slashData } = (await client.pg.query("SELECT * FROM slash_commands").catch(console.error)) || {};
 	client.slashCommands = new Discord.Collection();
+
 	client.commands.forEach(async command => {
 		if (command.slashOptions && !command.disableSlash && !command.ownerOnly) {
 			const slashOptions = { name: command.name, description: command.description.en || command.description };
 			if (command.slashOptions) slashOptions.options = command.slashOptions;
-			const slashCommand = await client.api.applications(client.user.id).guilds("689164798264606784").commands.post({ data: slashOptions }).catch(err => {
-				if (!client.beta) console.error(err);
+
+			slashServers.forEach(async guildID => {
+				if (command.onlyInGuilds && !command.onlyInGuilds.includes(guildID)) return;
+				if (client.beta) return;
+				const slashCommand = await client.api.applications(client.user.id).guilds(guildID).commands.post({ data: slashOptions }).catch(console.error);
 			});
-			if (!slashCommand) return;
-			client.slashCommands.set(slashCommand.name, slashCommand);
-			if (slashData.some(slash => slash.name === slashCommand.name)) client.pg.query(`UPDATE slash_commands SET json_data = '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}' WHERE name = '${slashCommand.name}'`).catch(console.error);
-			else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.name}', '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}')`).catch(console.error);
+
+			// client.slashCommands.set(slashCommand.name, slashCommand);
+			// if (slashData.some(slash => slash.name === slashCommand.name)) client.pg.query(`UPDATE slash_commands SET json_data = '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}' WHERE name = '${slashCommand.name}'`).catch(console.error);
+			// else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.name}', '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}')`).catch(console.error);
 		}
 	});
 	console.log("Slash commands created");
 
+	// PREFIX
 	const mayze = client.users.cache.get("703161067982946334");
 	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.PREFIX : config.PREFIX_BETA ) : config.PREFIX;
 	client.prefix = prefix;
