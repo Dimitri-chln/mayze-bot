@@ -6,9 +6,9 @@ const command = {
 		fr: "Mentionner une personne en boucle",
 		en: "Mention a user multiple times"
 	},
-	aliases: ["massping"],
+	aliases: ["massping", "spam-ping", "spamping"],
 	args: 1,
-	usage: "<user> [number]",
+	usage: "<user> <number> [<message>]",
 	perms: ["MANAGE_MESSAGES"],
 	slashOptions: [
 		{
@@ -18,9 +18,15 @@ const command = {
 			required: true
 		},
 		{
-			name: "nmber",
+			name: "number",
 			description: "The number of mentions to send - By default: 10",
 			type: 4,
+			required: true
+		},
+		{
+			name: "message",
+			description: "The message to send along with the ping",
+			type: 3,
 			required: false
 		}
 	],
@@ -44,20 +50,25 @@ const command = {
 		if (!user) return message.reply(language.no_mention).catch(console.error);
 		const n = args
 			? parseInt(args[1]) || 10
-			: parseInt((options[1] || {}).value) || 10;
+			: parseInt(options[1].value) || 10;
 		if (isNaN(n) || n < 1 || n > 1000) return message.reply(language.invalid_number).catch(console.error);
+		const pingMsg = args
+			? args.splice(2).join(" ")
+			: (options[2] || {}).value;
+		if (!pingMsg && n > 100) return message.reply(language.invalid_number_msg).catch(console.error);
 
 		if (message.deletable) message.delete().catch(console.error);
 		
 		for (i = 1; i <= n; i++) {
-			const msg = await message.channel.send(`${user}`).catch(console.error);
+			const msg = await  message.channel.send(`${user} ${pingMsg}`).catch(console.error);
 			messages.set(msg.id, msg);
 		}
 
+		if (pingMsg) return;
 		while (messages.size) {
 			let messagesToDelete = new Collection(messages.first(100).map(m => [m.id, m]));
 			message.channel.bulkDelete(messagesToDelete);
-			messages.sweep(msg => messagesToDelete.has(msg.id));
+			messages.sweep(m => messagesToDelete.has(m.id));
 		}
 	}
 };
