@@ -83,33 +83,40 @@ client.on("ready", async () => {
 		msg.edit(embed.setDescription(`• **Version:** \`${version}\`\n• **Ping:** \`${Math.abs(editedMsg.editedTimestamp - editedMsg.createdTimestamp)}ms\``));
 	} catch (err) { console.error(err); }
 
-	// SLASH COMMANDS
-	const slashServers = [ "724530039781326869", "689164798264606784" ];
-	const { "rows": slashData } = (await client.pg.query("SELECT * FROM slash_commands").catch(console.error)) || {};
-	client.slashCommands = new Discord.Collection();
-
-	client.commands.forEach(async command => {
-		if (command.slashOptions && !command.disableSlash && !command.ownerOnly) {
-			const slashOptions = { name: command.name, description: command.description.en || command.description };
-			if (command.slashOptions) slashOptions.options = command.slashOptions;
-
-			slashServers.forEach(async guildID => {
-				if (command.onlyInGuilds && !command.onlyInGuilds.includes(guildID)) return;
-				if (client.beta) return;
-				const slashCommand = await client.api.applications(client.user.id).guilds(guildID).commands.post({ data: slashOptions }).catch(console.error);
-			});
-
-			// client.slashCommands.set(slashCommand.name, slashCommand);
-			// if (slashData.some(slash => slash.name === slashCommand.name)) client.pg.query(`UPDATE slash_commands SET json_data = '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}' WHERE name = '${slashCommand.name}'`).catch(console.error);
-			// else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.name}', '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}')`).catch(console.error);
-		}
-	});
-	console.log("Slash commands created");
-
 	// PREFIX
 	const mayze = client.users.cache.get("703161067982946334");
 	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.PREFIX : config.PREFIX_BETA ) : config.PREFIX;
 	client.prefix = prefix;
+
+	if (client.beta) return;
+
+	// SLASH COMMANDS
+	const slashGuilds = [ "724530039781326869", "689164798264606784" ];
+	client.slashCommands = {};
+	for (const guildID of slashGuilds) client.slashCommands[guildID] = new Discord.Collection();
+
+	slashGuilds.forEach(async guildID => {
+		const { "rows": slashData } = (await client.pg.query(`SELECT * FROM slash_commands WHERE guild_id = '${guildID}'`).catch(console.error)) || {};
+
+		client.commands.forEach(async command => {
+			if (!command.slashOptions || command.disableSlash || command.ownerOnly) return;
+			if (command.onlyInGuilds && !command.onlyInGuilds.includes(guildID)) return;
+
+			const slashOptions = { name: command.name, description: command.description.en || command.description };
+			if (command.slashOptions) slashOptions.options = command.slashOptions;
+
+			const oldSlashCommand = slashData.find(slash => slash.name === command.name);
+			if (oldSlashCommand && !slashChanged(oldSlashCommand, slashOptions)) return;
+
+			const slashCommand = await client.api.applications(client.user.id).guilds(guildID).commands.post({ data: slashOptions }).catch(console.error);
+
+			client.slashCommands[guildID].set(slashCommand.name, slashCommand);
+
+			if (slashData.some(slash => slash.name === command.name)) client.pg.query(`UPDATE slash_commands SET id = '${slashCommand.id}', data = '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}' WHERE name = '${slashCommand.name}' AND guild_id = '${guildID}'`).catch(console.error);
+			else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.id}', '${guildID}', '${slashCommand.name}', '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}')`).catch(console.error);
+		});
+	});
+	console.log("Slash commands created");
 
 	// GIVEAWAYS
 	client.giveawayTimers = new Discord.Collection();
@@ -440,6 +447,16 @@ function pickLanguage(data = {}, language = "fr") {
 			return acc;
 		}, {});
 }
+
+function slashChanged(oldSlash, newSlash) {
+	if (oldSlash.description !== newSlash.description) return true;
+	if (JSON.stringify(oldSlash.options) !== JSON.stringify(newSlash.options).replace(/'/g, "U+0027")) return true;
+	return false;
+}
+
+
+
+// REMINDERS
 
 function ACNHReminders() {
 	const turnipMorning = new Cron.CronJob("0 0 8 * * 1-6", () => {
