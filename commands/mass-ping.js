@@ -53,9 +53,9 @@ const command = {
 			: parseInt(options[1].value) || 10;
 		if (isNaN(n) || n < 1 || n > 1000) return message.reply(language.invalid_number).catch(console.error);
 		const pingMsg = args
-			? args.splice(2).join(" ")
+			? args.splice(2).length ? args.splice(2).join(" ") : null
 			: (options[2] || {}).value;
-		if (!pingMsg && n > 100) return message.reply(language.invalid_number_msg).catch(console.error);
+		if (pingMsg && n > 100) return message.reply(language.invalid_number_msg).catch(console.error);
 
 		if (message.deletable) message.delete().catch(console.error);
 		
