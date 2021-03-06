@@ -5,7 +5,7 @@ const command = {
 	description: "Créer un sondage dans le salon actuel",
 	aliases: ["ask", "question", "vote"],
 	args: 1,
-	usage: "\"<question>\" \"[proposition]\" \"[proposition]\"... [-anonymous]",
+	usage: "\"<question>\" \"[proposition]\" \"[proposition]\"... [-anonymous] [-single]",
 	slashOptions: [
 		{
 			name: "question",
@@ -46,6 +46,10 @@ const command = {
 			? args.includes("-anonymous")
 			: !!(options.find(o => o.name === "anonyme") || {}).value;
 		args = args.filter(a => a !== "-anonymous");
+		const single = args
+			? args.includes("-single")
+			: !!(options.find(o => o.name === "votes") || {}).value;
+		args = args.filter(a => a !== "-single");
 		const question = args
 			? args[0]
 			: options[0].value;
@@ -61,10 +65,6 @@ const command = {
 		if (message.deletable) message.delete().catch(console.error);
 		
 		if (anonymous) {
-			if (!message.client.anonymousPolls) message.client.anonymousPolls = {};
-			if (message.client.anonymousPolls[message.channel.id]) return message.reply("un sondage a déjà lieu dans ce salon").catch(console.error);
-			message.client.anonymousPolls[message.channel.id] = {};
-
 			const dmMessage = await message.author.send({
 				embed: {
 					author: {
@@ -77,13 +77,15 @@ const command = {
 						return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: "Ø", inline: true };
 					}),
 					footer: {
-						text: "✨ Mayze ✨"
+						text: "✨ Mayze ✨" + (single ? " | Un seul vote" : "")
 					}
 				}
 			}).catch(console.error);
 
 			sendPollAnonymous(null, dmMessage);
-		} else sendPoll();
+		} else {
+			sendPoll();
+		}
 
 		async function sendPoll(previousMsg) {
 			let msg = await message.channel.send({
@@ -95,14 +97,10 @@ const command = {
 					title: `« ${question.replace(/["'«»]/g, "")} »`,
 					color: "#010101",
 					fields: answers.map((a, i) => {
-						try {
-							return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: previousMsg.embeds[0].fields[i].value, inline: true };
-						} catch(err) {
-							return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: "Ø", inline: true };
-						}
+						return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: previousMsg ? previousMsg.embeds[0].fields[i].value : "Ø", inline: true };
 					}),
 					footer: {
-						text: "✨ Mayze ✨"
+						text: "✨ Mayze ✨" + (single ? " | Un seul vote" : "")
 					}
 				}
 			}).catch(err => {
@@ -127,13 +125,23 @@ const command = {
 							color: "#010101",
 							fields: answers.map((a, i) => {
 								let field = reaction.message.embeds[0].fields[i].value;
-								field = field.replace(new RegExp(`(\n?• <@${user.id}>)|Ø`), "");
-								if (reaction.emoji.name === emojis[i]) field += `\n• <@${user.id}>`;
+
+								if (single) {
+									field = field.replace(new RegExp(`(\n?• <@${user.id}>)|Ø`), "");
+									if (reaction.emoji.name === emojis[i]) field += `\n• ${user}`;
+								} else {
+									if (reaction.emoji.name === emojis[i]) {
+										const regex = new RegExp(`\n?• <@${user.id}>`);
+										if (regex.test(field)) field = field.replace(regex, "");
+										else field = field.replace("Ø", "") + `\n• ${user}`;
+									}
+								}
+
 								if (!field) field = "Ø";
 								return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: field, inline: true };
 							}),
 							footer: {
-								text: "✨ Mayze ✨"
+								text: reaction.message.embeds[0].footer.text
 							}
 						}
 					}).catch(console.error);
@@ -165,14 +173,10 @@ const command = {
 					title: `« ${question.replace(/["'«»]/g, "")} »`,
 					color: "#010101",
 					fields: answers.map((a, i) => {
-						try {
-							return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: previousMsg.embeds[0].fields[i].value, inline: true };
-						} catch(err) {
-							return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: "→ **0** vote(s)", inline: true };
-						}
+						return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: previousMsg ? previousMsg.embeds[0].fields[i].value : "→ **0** vote", inline: true };
 					}),
 					footer: {
-						text: "✨ Mayze ✨"
+						text: "✨ Mayze ✨" + (single ? " | Un seul vote" : "")
 					}
 				}
 			}).catch(err => {
@@ -187,9 +191,41 @@ const command = {
 					reaction.message.reactions.removeAll().catch(console.error);
 					reactionCollector.stop();
 					messageCollector.stop();
-					delete message.client.anonymousPolls[message.channel.id];
 				} else {
 					reaction.users.remove(user).catch(console.error);
+
+					dmMessage = await dmMessage.edit({
+						embed: {
+							author: reaction.message.embeds[0].author,
+							title: reaction.message.embeds[0].title,
+							color: "#010101",
+							fields: answers.map((a, i) => {
+								let field = dmMessage.embeds[0].fields[i].value;
+
+								if (single) {
+									field = field.replace(new RegExp(`(\n?• <@${user.id}>)|Ø`), "");
+									if (reaction.emoji.name === emojis[i]) field += `\n• ${user}`;
+								} else {
+									if (reaction.emoji.name === emojis[i]) {
+										const regex = new RegExp(`\n?• <@${user.id}>`);
+										if (regex.test(field)) field = field.replace(regex, "");
+										else field = field.replace("Ø", "") + `\n• ${user}`;
+									}
+								}
+
+								if (!field) field = "Ø";
+								return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: field, inline: true };
+							}),
+							footer: {
+								text: dmMessage.embeds[0].footer.text
+							}
+						}
+					}).catch(console.error);
+
+					message.author.send(`**${user.tag}** a voté \`${answers[emojis.indexOf(reaction.emoji.name)].replace(/^./, a => a.toUpperCase())}\``)
+						.then(m => m.delete().catch(console.error))
+						.catch(console.error);
+
 
 					msg = await reaction.message.edit({
 						embed: {
@@ -197,30 +233,14 @@ const command = {
 							title: reaction.message.embeds[0].title,
 							color: "#010101",
 							fields: answers.map((a, i) => {
-								let field = reaction.message.embeds[0].fields[i].value;
-								field = field.replace(/\d+/, votes => message.client.anonymousPolls[message.channel.id][user.id] === i ? parseInt(votes) - 1 : votes);
-								if (reaction.emoji.name === emojis[i]) {
-									field = field.replace(/\d+/, votes => parseInt(votes) + 1);
-								}
-								return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: field, inline: true };
+								const votes = dmMessage.embeds[0].fields[i].value === "Ø" ? 0 : dmMessage.embeds[0].fields[i].value.split("\n").length;
+								return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: `→ **${votes}** vote${votes > 1 ? "s" : ""}`, inline: true };
 							}),
 							footer: {
-								text: "✨ Mayze ✨"
+								text: reaction.message.embeds[0].footer.text
 							}
 						}
 					}).catch(console.error);
-
-					message.client.anonymousPolls[message.channel.id][user.id] = emojis.indexOf(reaction.emoji.name);
-
-					let newDmMessage = dmMessage.embeds[0];
-					newDmMessage.fields = answers.map((a, i) => {
-						return { name: `${emojis[i]} ${a.replace(/^./, a => a.toUpperCase())}`, value: Object.keys(message.client.anonymousPolls[message.channel.id]).filter(u => message.client.anonymousPolls[message.channel.id][u] === i).map(u => `• <@${u}>`).join("\n") || "Ø", inline: true };
-					});
-					dmMessage.edit(newDmMessage).catch(console.error);
-
-					message.author.send(`**${user.tag}** a voté \`${answers[emojis.indexOf(reaction.emoji.name)].replace(/^./, a => a.toUpperCase())}\``)
-						.then(m => m.delete().catch(console.error))
-						.catch(console.error);
 				}
 			});
 
