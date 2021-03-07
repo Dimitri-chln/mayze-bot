@@ -2,10 +2,13 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "nick",
-	description: "Modifie ou réinitialise ton pseudo sur le serveur",
+	description: {
+		fr: "Modifie ou réinitialise ton pseudo sur le serveur",
+		en: "Change or reset your nickname on the server"
+	},
 	aliases: ["name", "rename"],
 	args: 0,
-	usage: "[pseudo]",
+	usage: "[<pseudo>]",
 	perms: ["CHANGE_NICKNAME"],
 	disableSlash: true,
 	/**
@@ -18,9 +21,10 @@ const command = {
 		const nickname = args
 			? args.join(" ")
 			: options[0].value;
+		
 		message.member.setNickname(nickname).catch(async err => {
 			if (err.message === "Missing Permissions") {
-				const msg = await message.reply("je n'ai pas la permission de changer ton pseudo").catch(console.error);
+				const msg = await message.reply(language.errors.no_perms).catch(console.error);
 				msg.delete({ timeout: 4000 }).catch(console.error);
 				return;
 			}

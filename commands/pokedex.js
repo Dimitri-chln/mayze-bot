@@ -2,14 +2,17 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "pokedex",
-	description: "Obtenir des informations sur un pokémon",
+	description: {
+		fr: "Obtenir des informations sur un pokémon",
+		en: "Get information about a pokémon"
+	},
 	aliases: ["dex", "pd"],
 	args: 1,
 	usage: "<pokémon/pokédex ID>",
 	slashOptions: [
 		{
 			name: "pokémon",
-			description: "Le nom ou l'ID du pokémon",
+			description: "The name or the ID of the pokémon",
 			type: 3,
 			required: true
 		}
@@ -27,11 +30,17 @@ const command = {
 			: options[0].value.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
 		const pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => pkm.names.fr === input);
 
-		if (!pokemon) return message.reply("ce pokémon n'existe pas").catch(console.error);
+		if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
+
+		let names = {
+			fr: "🇫🇷 " + pokemon.names.fr,
+			en: "🇬🇧 " + pokemon.names.en,
+			de: "🇩🇪 " + pokemon.names.de
+		};
 
 		message.channel.send({
 			embed: {
-				title: `${pokemon.names.fr} #${(`00${pokemon.national_id}`).substr(-3)}`,
+				title: `${pokemon.names[languageCode]} #${(`00${pokemon.national_id}`).substr(-3)}`,
 				color: "#010101",
 				image: {
 					url: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}.png`
@@ -41,32 +50,32 @@ const command = {
 				},
 				fields: [
 					{
-						name: "Autres noms :",
-						value: `🇬🇧 ${pokemon.names.en}\n🇩🇪 ${pokemon.names.de}`,
+						name: language.fields[0],
+						value: Object.keys(names).filter(n => n !== languageCode).map(n => names[n]).join("\n"),
 						inline: true
 					},
 					{
-						name: "Taille :",
+						name: language.fields[1],
 						value: pokemon.height_eu,
 						inline: true
 					},
 					{
-						name: "Poids :",
+						name: language.fields[2],
 						value: pokemon.weight_eu,
 						inline: true
 					},
 					{
-						name: "Stats de base :",
-						value: `**PV:** ${pokemon.base_stats.hp}\n**Attaque:** ${pokemon.base_stats.atk}\n**Défense:** ${pokemon.base_stats.def}\n**Attaque Spé:** ${pokemon.base_stats.sp_atk}\n**Défense Spé:** ${pokemon.base_stats.sp_def}\n**Vitesse:** ${pokemon.base_stats.speed}`,
+						name: language.fields[3],
+						value: language.get(language.stats, pokemon.base_stats.hp, pokemon.base_stats.atk, pokemon.base_stats.def, pokemon.base_stats.sp_atk, pokemon.base_stats.sp_def, pokemon.base_stats.speed),
 						inline: true
 					},
 					{
-						name: "Formes :",
+						name: language.fields[4],
 						value: "?",
 						inline: true
 					},
 					{
-						name: "Type(s) :",
+						name: language.fields[5],
 						value: pokemon.types.map(type => `• ${type}`).join("\n"),
 						inline: true
 					}

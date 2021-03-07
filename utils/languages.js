@@ -49,6 +49,10 @@ module.exports = {
 			sending: {
 				fr: "Quelque chose s'est mal passé en envoyant le message :/",
 				en: "Something went wrong when sending the message :/"
+			},
+			no_perms: {
+				fr: "Je n'ai pas les permissions nécessaires pour faire cela :/",
+				en: "I don't have the required permissions to do this :/"
 			}
 		},
 		"afk": {
@@ -301,9 +305,6 @@ module.exports = {
 				en: "the number must be between 1 and 100"
 			}
 		},
-		"math": {
-			// Nothing
-		},
 		"meme": {
 			invalid_image: {
 				fr: "cette image n'existe pas, tu peux voir la liste de toutes les images avec la commande `{1}meme`",
@@ -352,6 +353,20 @@ module.exports = {
 			invalid_args: {
 				fr: "arguments invalides",
 				en: "invalid arguments"
+			}
+		},
+		"pokedex": {
+			invalid_pokemon: {
+				fr: "ce pokémon n'existe pas",
+				en: "this pokémon doesn't exist"
+			},
+			fields: {
+				fr: [ "Autres noms :", "Taille :", "Poids :", "Stats de base :", "Formes :", "Types :" ],
+				en: [ "Alternative names:", "Height:", "Weight:", "Base stats:", "Forms:", "Types:" ]
+			},
+			stats: {
+				fr: "**PV:** {1}\n**Attaque:** {2}\n**Défense:** {3}\n**Attaque Spé:** {4}\n**Défense Spé:** {5}\n**Vitesse:** {6}",
+				en: "**HP:** {1}\n**Attack:** {2}\n**Defense:** {3}\n**Sp. Attack:** {4}\n**Sp. Defense:** {5}\n**Speed:** {6}"
 			}
 		}
 	}
