@@ -45,7 +45,7 @@ const command = {
 
 		if (currentLanguage) var res = await message.client.pg.query(`UPDATE languages SET language_code = '${newLanguage}' WHERE guild_id = '${message.guild.id}'`).catch(console.error);
 		else var res = await message.client.pg.query(`INSERT INTO languages VALUES ('${message.guild.id}', '${newLanguage}')`).catch(console.error);
-		if (!res) return message.channel.send(language.error_database).catch(console.error);
+		if (!res) return message.channel.send(language.errors.database).catch(console.error);
 
 		language = newLanguage;
 		

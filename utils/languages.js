@@ -21,6 +21,36 @@ module.exports = {
 			fr: "Quelque chose s'est mal passé en exécutant la commande :/",
 			en: "Something went wrong when running the command :/"
 		},
+		errors: {
+			database: {
+				fr: "Quelque chose s'est mal passé en accédant à la base de données :/",
+				en: "Something went wrong when accessing the database :/"
+			},
+			msg_too_long: {
+				fr: "Le message est trop long pour que je puisse l'envoyer :/",
+				en: "The message is too long for me to send it :/"
+			},
+			fetching_msg: {
+				fr: "Quelque chose s'est mal passé en récupérant les messages :/",
+				en: "Something went wrong when fetching the messages :/"
+			},
+			deleting_msg: {
+				fr: "Quelque chose s'est mal passé en supprimant les messages :/",
+				en: "Something went wrong when deleting the messages :/"
+			},
+			kicking: {
+				fr: "Quelque chose s'est mal passé en t'expulsant du serveur :/",
+				en: "Something went wrong when trying to kick you from the server :/"
+			},
+			syntax: {
+				fr: "erreur de syntaxe",
+				en: "syntax error"
+			},
+			sending: {
+				fr: "Quelque chose s'est mal passé en envoyant le message :/",
+				en: "Something went wrong when sending the message :/"
+			}
+		},
 		"afk": {
 			afk_message: {
 				fr: "{1} est maintenant AFK 💤{2}",
@@ -94,10 +124,6 @@ module.exports = {
 				fr: "Voici à quoi ressembleront les salons après modification. Veux-tu continuer ?",
 				en: "Here's how the channels will look like after editing. Continue?"
 			},
-			error_msg_too_long: {
-				fr: "Le message est trop long pour que je puisse l'envoyer :/",
-				en: "The message is too long for me to send it :/"
-			},
 			cancelled: {
 				fr: "Procédure annulée",
 				en: "Operation cancelled"
@@ -115,14 +141,6 @@ module.exports = {
 			invalid_number: {
 				fr: "le nombre doit être compris entre 1 et 100",
 				en: "the number must be between 1 and 100"
-			},
-			error_fetching_msg: {
-				fr: "Quelque chose s'est mal passé en récupérant les messages :/",
-				en: "Something went wrong when fetching the messages :/"
-			},
-			error_deleting_msg: {
-				fr: "Quelque chose s'est mal passé en supprimant les messages :/",
-				en: "Something went wrong when deleting the messages :/"
 			},
 			deleted: {
 				fr: "{1} message(s) supprimés",
@@ -143,10 +161,6 @@ module.exports = {
 			not_enough_args: {
 				fr: "pas assez d'arguments",
 				en: "not enough arguments"
-			},
-			error_database: {
-				fr: "Quelque chose s'est mal passé en accédant à la base de données :/",
-				en: "Something went wrong when accessing the database :/"
 			},
 			response_added: {
 				fr: "Réponse ajoutée",
@@ -250,10 +264,6 @@ module.exports = {
 				fr: "**{1}** a fui ses responsabilités",
 				en: "**{1}** evaded his responsabilities"
 			},
-			error_kicking: {
-				fr: "Quelque chose s'est mal passé en t'expulsant du serveur :/",
-				en: "Something went wrong when trying to kick you from the server :/"
-			}
 		},
 		"kiss": {
 			title: {
@@ -265,10 +275,6 @@ module.exports = {
 			invalid_language: {
 				fr: "langues disponibles : `{1}`",
 				en: "available languages: `{1}`"
-			},
-			error_database: {
-				fr: "Quelque chose s'est mal passé en accédant à la base de données :/",
-				en: "Something went wrong when accessing the database :/"
 			},
 			language_updated: {
 				fr: "Langue modifiée",
@@ -296,10 +302,7 @@ module.exports = {
 			}
 		},
 		"math": {
-			error_syntax: {
-				fr: "erreur de syntaxe",
-				en: "syntax error"
-			}
+			// Nothing
 		},
 		"meme": {
 			invalid_image: {
@@ -323,10 +326,32 @@ module.exports = {
 			msg_sent: {
 				fr: "message envoyé !",
 				en: "message sent!"
+			}
+		},
+		"mudae-notes": {
+			note_added: {
+				fr: "note ajoutée",
+				en: "note added"
 			},
-			error_sending: {
-				fr: "Quelque chose s'est mal passé en envoyant le message :/",
-				en: "Something went wrong when sending the message :/"
+			invalid_note: {
+				fr: "cette note n'existe pas",
+				en: "this note doesn't exist"
+			},
+			note_removed: {
+				fr: "note retirée",
+				en: "note removed"
+			},
+			title: {
+				fr: "Notes de {1}",
+				en: "{1}'s notes"
+			},
+			no_note: {
+				fr: "*Aucune note*",
+				en: "*No note*"
+			},
+			invalid_args: {
+				fr: "arguments invalides",
+				en: "invalid arguments"
 			}
 		}
 	}

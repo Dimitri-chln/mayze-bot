@@ -228,7 +228,7 @@ async function processCommand(command, message, args, options) {
 		}
 	}
 
-	const languageData = { get: languages.get, ...pickLanguage(languages.data[command.name], language) };
+	const languageData = { get: languages.get, errors: pickLanguage(languages.errors, language), ...pickLanguage(languages.data[command.name], language) };
 
 	command.execute(message, args, options, languageData, language)
 	.then(() => {

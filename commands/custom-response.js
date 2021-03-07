@@ -105,7 +105,7 @@ const command = {
 					: options[0].options[2] ? options[0].options[2].value : 0;
 
 				const res = await message.client.pg.query(`INSERT INTO responses (trigger, response, trigger_type) VALUES ('${trigger.replace(/"/g, "")}', '${response.replace(/"/g, "")}', ${triggerType})`).catch(console.error);
-				if (!res) return message.reply(language.error_database).catch(console.error);
+				if (!res) return message.reply(language.errors.database).catch(console.error);
 				if (message.deletable) message.react("✅").catch(console.error);
 				else message.reply(language.response_added).catch(console.error);
 				break;
@@ -118,7 +118,7 @@ const command = {
 
 				const response = responses[n - 1];
 				const res = await message.client.pg.query(`DELETE FROM responses WHERE trigger='${response.trigger}' AND response='${response.response}'`).catch(console.error);
-				if (!res) return message.reply(language.error_database).catch(console.error);
+				if (!res) return message.reply(language.errors.database).catch(console.error);
 				if (message.deletable) message.react("✅").catch(console.error);
 				else message.reply(language.response_removed).catch(console.error);
 				break;

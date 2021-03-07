@@ -18,7 +18,7 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		const member = await message.member.kick(language.reason).catch(console.error);
 		if (member) message.channel.send(language.get(language.kick_msg, message.author.username)).catch(console.error);
-		else message.channel.send(language.error_kicking).catch(console.error);
+		else message.channel.send(language.errors.kicking).catch(console.error);
 	}
 };
 

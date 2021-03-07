@@ -2,24 +2,27 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "mudae-notes",
-	description: "Obtenir et gérer tes notes mudae",
+	description: {
+		fr: "Obtenir et gérer tes notes mudae",
+		en: "Get and manage your mudae notes"
+	},
 	aliases: ["notes"],
 	args: 0,
-	usage: "get | add <note> | remove <n° note>",
+	usage: "get | add <note> | remove <note>",
 	slashOptions: [
 		{
 			name: "get",
-			description: "Obtenir la liste de tes notes mudae",
+			description: "Get the list of your mudae notes",
 			type: 1
 		},
 		{
 			name: "add",
-			description: "Ajouter une nouvelle note mudae",
+			description: "Add a new mudae note",
 			type: 1,
 			options: [
 				{
 					name: "note",
-					description: "La nouvelle note",
+					description: "The note to add",
 					type: 3,
 					required: true
 				}
@@ -27,12 +30,12 @@ const command = {
 		},
 		{
 			name: "remove",
-			description: "Retirer une note mudae",
+			description: "Remove an existing mudae note",
 			type: 1,
 			options: [
 				{
 					name: "note",
-					description: "Le numéro de la note à retirer",
+					description: "The number of the note to remove",
 					type: 4,
 					required: true
 				}
@@ -52,34 +55,34 @@ const command = {
 			? args.slice(1).join(" ")
 			: options[0].options ? options[0].options[0].value : null;
 		const { "rows": notes } = (await message.client.pg.query(`SELECT * FROM mudae_notes WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
-		if (!notes) return message.channel.send("Quelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
+		if (!notes) return message.channel.send(language.errors.database).catch(console.error);
 		
 		switch(subCommand) {
 			case "add": {
 				const res = await message.client.pg.query(`INSERT INTO mudae_notes (user_id, note) VALUES ('${message.author.id}', '${note}')`).catch(console.error);
-				if (!res) return message.channel.send("Quelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
+				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 				if (message.deletable) message.react("✅").catch(console.error);
-				else message.reply("note ajoutée").catch(console.error);
+				else message.reply(language.note_added).catch(console.error);
 				break;
 			}
 			case "remove": {
 				const noteToRemove = notes[parseInt(note) - 1];
-				if (!noteToRemove) return message.reply("cette note n'existe pas").catch(console.error);
+				if (!noteToRemove) return message.reply(language.invalid_note).catch(console.error);
 				const res = await message.client.pg.query(`DELETE FROM mudae_notes WHERE user_id = '${message.author.id}' AND note = '${noteToRemove.note}'`).catch(console.error);
-				if (!res) return message.channel.send("Quelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
+				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 				if (message.deletable) message.react("✅").catch(console.error);
-				else message.reply("note retirée").catch(console.error);
+				else message.reply(language.note_removed).catch(console.error);
 				break;
 			}
 			case "get":
 				const msg = await message.channel.send({
 					embed: {
 						author: {
-							name: `Notes de ${message.author.tag}`,
+							name: language.get(language.title, message.author.tag),
 							icon_url: message.author.avatarURL({ dynamic: true })
 						},
 						color: "#010101",
-						description: notes.map((n, i) => `\`${i+1}.\` ${n.note}`).join("\n") || "*Aucune note*",
+						description: notes.map((n, i) => `\`${i+1}.\` ${n.note}`).join("\n") || language.no_note,
 						footer: {
 							text: "✨ Mayze ✨"
 						}
@@ -92,7 +95,7 @@ const command = {
 
 				const notesToSend = notes;
 				let [ currentMsg, currentNote ] = await sendMsg();
-				const msgFilter = m => m.author.id === message.author.id && (m.content === currentNote.note || m.content === `${message.client.prefix}stop`);
+				const msgFilter = m => m.author.id === message.author.id && (m.content === currentNote.note || m.content === `${message.client.prefix}cancel`);
 				const messageCollector = message.channel.createMessageCollector(msgFilter, { time: 120000 });
 				messageCollector.on("collect", async m => {
 					if (m.content === `${message.client.prefix}cancel`) {
@@ -127,7 +130,7 @@ const command = {
 				}
 				break;
 			default:
-				message.reply("arguments incorrects").catch(console.error);
+				message.reply(language.invalid_args).catch(console.error);
 		}
 	}
 };

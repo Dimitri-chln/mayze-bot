@@ -49,7 +49,7 @@ const command = {
 		});
 
 		let messages = await message.channel.messages.fetch({ limit: 100 }).catch(console.error);
-		if (!messages) return message.channel.send(language.error_fetching_msg).catch(console.error);
+		if (!messages) return message.channel.send(language.errors.fetching_msg).catch(console.error);
 		
 		if (args && args.includes("-bot")) messages = messages.filter(msg => msg.author.bot);
 
@@ -69,7 +69,7 @@ const command = {
 			await message.channel.bulkDelete(messages);
 		} catch (err) {
 			console.error(err);
-			return message.channel.send(language.error_deleting_msg).catch(console.error);
+			return message.channel.send(language.errors.deleting_msg).catch(console.error);
 		}
 
 		const msg = await message.channel.send(language.get(language.deleted, messages.length)).catch(console.error);

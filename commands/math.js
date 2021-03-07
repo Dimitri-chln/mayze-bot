@@ -85,7 +85,7 @@ const command = {
 					const result = math.evaluate(expression);
 					message.channel.send(`\`\`\`\n${parsedExp.toString()}\n= ${result}\n\`\`\``).catch(console.error);
 				} catch (err) {
-					if (err.name === "SyntaxError") message.reply(language.error_syntax).catch(console.error);
+					if (err.name === "SyntaxError") message.reply(language.errors.syntax).catch(console.error);
 					else message.channel.send(err.message).catch(console.error);
 				}
 				break;
@@ -103,7 +103,7 @@ const command = {
 					const result = equation.solveFor(variable);
 					message.channel.send(`\`\`\`\n${equation.toString()}\n${variable} = ${(result || "No Solution").toString()}\n\`\`\``).catch(console.error);
 				} catch (err) {
-					if (err.name === "SyntaxError") message.reply(language.error_syntax).catch(console.error);
+					if (err.name === "SyntaxError") message.reply(language.errors.syntax).catch(console.error);
 					else message.channel.send(err.message).catch(console.error);
 				}
 				break;
@@ -121,7 +121,7 @@ const command = {
 					const derivative = math.derivative(expression, variable, { simplify: true });
 					message.channel.send(`\`\`\`\nf(${variable}) = ${parsedExp.toString()}\nf'(${variable}) = ${derivative.toString()}\n\`\`\``).catch(console.error);
 				} catch (err) {
-					if (err.name === "SyntaxError") message.reply(language.error_syntax).catch(console.error);
+					if (err.name === "SyntaxError") message.reply(language.errors.syntax).catch(console.error);
 					else message.channel.send(err.message).catch(console.error);
 				}
 				break;

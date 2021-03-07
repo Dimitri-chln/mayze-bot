@@ -71,7 +71,7 @@ const command = {
 				}
 			}
 		}).catch(console.error);
-		if (!msg) return message.channel.send(language.error_msg_too_long).catch(console.error);
+		if (!msg) return message.channel.send(language.errors.msg_too_long).catch(console.error);
 
 		const validation = await userValidation(message.author, msg);
 		if (!validation) return message.channel.send(language.cancelled).catch(console.error);
