@@ -53,6 +53,10 @@ module.exports = {
 			no_perms: {
 				fr: "Je n'ai pas les permissions nécessaires pour faire cela :/",
 				en: "I don't have the required permissions to do this :/"
+			},
+			paginator: {
+				fr: "Quelque chose s'est mal passé avec le paginateur :/",
+				en: "Something went wrong with the paginator :/"
 			}
 		},
 		"afk": {
@@ -367,6 +371,20 @@ module.exports = {
 			stats: {
 				fr: "**PV:** {1}\n**Attaque:** {2}\n**Défense:** {3}\n**Attaque Spé:** {4}\n**Défense Spé:** {5}\n**Vitesse:** {6}",
 				en: "**HP:** {1}\n**Attack:** {2}\n**Defense:** {3}\n**Sp. Attack:** {4}\n**Sp. Defense:** {5}\n**Speed:** {6}"
+			}
+		},
+		"pokemon": {
+			title: {
+				fr: "Pokémons de {1}",
+				en: "{1}'s pokémons"
+			},
+			no_pokemon: {
+				fr: "*Aucun pokémon ne correspond à la recherche*",
+				en: "*No pokémon matches the search*"
+			},
+			description: {
+				fr: "**{1}{2}{3}**{4} - {5} attrapé{6}",
+				en: "**{1}{2}{3}**{4} - {5} caught"
 			}
 		}
 	}
