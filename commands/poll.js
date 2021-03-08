@@ -45,11 +45,11 @@ const command = {
 		const anonymous = args
 			? args.includes("-anonymous")
 			: !!(options.find(o => o.name === "anonyme") || {}).value;
-		args = args.filter(a => a !== "-anonymous");
+		if (args) args = args.filter(a => a !== "-anonymous");
 		const single = args
 			? args.includes("-single")
 			: !!(options.find(o => o.name === "votes") || {}).value;
-		args = args.filter(a => a !== "-single");
+		if (args) args = args.filter(a => a !== "-single");
 		const question = args
 			? args[0]
 			: options[0].value;
