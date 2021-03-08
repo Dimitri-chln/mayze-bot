@@ -1,4 +1,4 @@
-const { Message, MessageEmbed } = require("discord.js");
+const { Message } = require("discord.js");
 
 const command = {
 	name: "poll",
