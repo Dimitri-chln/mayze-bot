@@ -34,6 +34,22 @@ const command = {
 					value: 0
 				}
 			]
+		},
+		{
+			name: "votes",
+			description: "S'il est possible de voter pour plusieurs propositions",
+			type: 4,
+			required: false,
+			choices: [
+				{
+					name: "Un seul vote",
+					value: 1
+				},
+				{
+					name: "Plusieurs votes",
+					value: 0
+				}
+			]
 		}
 	],
 	/**
