@@ -276,7 +276,7 @@ module.exports = {
 		"kiss": {
 			title: {
 				fr: "{1} fait un bisous à {2} 😘",
-				en: "{1} kissed {2} 😘"
+				en: "{1} kisses {2} 😘"
 			}
 		},
 		"language": {
