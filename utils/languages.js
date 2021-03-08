@@ -386,6 +386,33 @@ module.exports = {
 				fr: "**{1}{2}{3}**{4} - {5} attrapé{6}",
 				en: "**{1}{2}{3}**{4} - {5} caught"
 			}
+		},
+		"poll": {
+			yes_no: {
+				fr: [ "oui", "non" ],
+				en: [ "yes", "no" ]
+			},
+			too_many_answers: {
+				fr: "le nombre de propositions ne peut pas dépasser 10",
+				en: "the number of answers can't exceed 10"
+			},
+			single: {
+				fr: " | Un seul vote",
+				en: " | Only one vote"
+			},
+			voted: {
+				fr: "**{1}** a voté `{2}`",
+				en: "**{1}** voted `{2}`"
+			}
+		},
+		"react-snipe": {
+			no_reaction: {
+				fr: "il n'y a aucune réaction à snipe dans ce salon",
+				en: "there is no reaction to snipe in this channel"
+			},
+			description: {
+				fr: "**{1}** [a réagi avec]({2}) {3}"
+			}
 		}
 	}
 };

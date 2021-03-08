@@ -1,6 +1,9 @@
 const command = {
 	name: "react-snipe",
-	description: "Montre sur le salon la réaction que quelqu'un vient de supprimer",
+	description: {
+		fr: "Afficher la réaction que quelqu'un vient de retirer",
+		en: "Show the reaction someone just removed"
+	},
 	aliases: ["reactsnipe"],
 	args: 0,
 	usage: "",
@@ -12,7 +15,7 @@ const command = {
 	*/
 	execute: async (message, args, options, language, languageCode) => {
 		const snipedReaction = message.client.removedReactions ? message.client.removedReactions[message.channel.id] : null;
-		if (!snipedReaction) return message.reply("il n'y a aucune réaction à snipe dans ce salon").catch(console.error);
+		if (!snipedReaction) return message.reply(language.no_reaction).catch(console.error);
 		
 		message.channel.send({
 			embed: {
@@ -26,7 +29,7 @@ const command = {
 				color: "#010101",
                 description: snipedReaction.message.content,
                 fields: [
-                    { name: "\u200b", value: `**${snipedReaction.user.tag}** [a réagi avec](${snipedReaction.message.url}) ${snipedReaction.emoji}` }
+                    { name: "\u200b", value: language.get(language.description, snipedReaction.user.tag, snipedReaction.message.url, snipedReaction.emoji) }
                 ],
 				footer: {
 					text: "✨ Mayze ✨",

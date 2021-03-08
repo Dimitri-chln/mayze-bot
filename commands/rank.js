@@ -5,7 +5,7 @@ const command = {
 	description: "Rejoindre ou quitter un rank",
 	aliases: [],
 	args: 0,
-	usage: "[rank]",
+	usage: "[<rank>]",
 	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
 		{

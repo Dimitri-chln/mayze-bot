@@ -3,9 +3,9 @@ const { Message } = require("discord.js");
 const command = {
 	name: "random-gift",
 	description: "Donner un cadeau aléatoire à quelqu'un",
-	aliases: ["randomGift", "gift"],
+	aliases: ["gift"],
 	args: 1,
-	usage: "<mention/pseudo>",
+	usage: "<utilisateur>",
 	cooldown: 60,
 	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
