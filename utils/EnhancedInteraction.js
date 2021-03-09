@@ -6,6 +6,8 @@ class EnhancedInteraction {
 	#base;
 	/**@type {Client} */
 	#client;
+	/**@type {string} */
+	#applicationID;
 	/**@type {Guild} */
 	#guild;
 	/**@type {Channel} */
@@ -22,6 +24,7 @@ class EnhancedInteraction {
 	constructor(interaction, client) {
 		this.#base = interaction;
 		this.#client = client;
+		this.#applicationID = this.#client.user.id;
 		if (interaction.guild_id) this.#guild = this.#client.guilds.cache.get(interaction.guild_id);
 		if (interaction.channel_id) this.#channel = this.#client.channels.cache.get(interaction.channel_id);
 		if (interaction.member) this.#member = this.#guild.members.cache.get(interaction.member.user.id);
@@ -31,6 +34,7 @@ class EnhancedInteraction {
 	get isInteraction() { return true; }
 	get base() { return this.#base; }
 	get client() { return this.#client; }
+	get applicationID() { return this.#applicationID; }
 	get guild() { return this.#guild; }
 	get channel() { return this.#channel; }
 	get author() { return this.#author; }
@@ -62,7 +66,7 @@ class EnhancedInteraction {
 	 * @param {string} content
 	 */
 	async respond(content) {
-		const url = `https://discord.com/api/v8/webhooks/${this.client.user.id}/${this.base.id}/${this.base.token}/messages/@original`;
+		const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.base.id}/${this.base.token}/messages/@original`;
 
 		const res = await Axios.patch(url, {
 			content,
@@ -72,7 +76,7 @@ class EnhancedInteraction {
 	}
 
 	async delete() {
-		const url = `https://discord.com/api/v8/webhooks/${this.client.user.id}/${this.base.id}/${this.base.token}/messages/@original`;
+		const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.base.id}/${this.base.token}/messages/@original`;
 
 		const res = await Axios.delete(url).catch(console.error);
 
