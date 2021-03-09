@@ -42,7 +42,7 @@ const command = {
 		message.channel.startTyping(1);
 		Axios.get(`${apiURL}/${searchLanguage}/${encodeURIComponent(word)}`)
 			.then(async res => {
-				if (res.data.title && res.data.title === "No Definition Found") return message.reply(language.invalid_word).catch(console.error);
+				if (res.data.title && res.data.title === "No Definitions Found") return message.reply(language.invalid_word).catch(console.error);
 				message.channel.send(`__**${res.data[0].word.replace(/^./, a => a.toUpperCase())}**__: ${res.data[0].phonetics[0].text ? `(${res.data[0].phonetics[0].text})` : ""}\n${res.data[0].meanings.map(meaning => `> __${meaning.partOfSpeech.replace(/^./, a => a.toUpperCase())}:__ ${meaning.definitions[0].definition}\n*${language.synonyms}: ${meaning.definitions[0].synonyms.length ? meaning.definitions[0].synonyms.join(", ") : "Ø"}*`).join("\n\n")}`).catch(console.error);
 			})
 			.catch(async err => {
