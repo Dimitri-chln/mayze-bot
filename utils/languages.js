@@ -30,6 +30,10 @@ module.exports = {
 				fr: "Quelque chose s'est mal passé en accédant à l'API {1} :/",
 				en: "Something went wrong when accessing the {1} API :/"
 			},
+			api_limit: {
+				fr: "La limite de requêtes à l'API {1} a été atteinte, réessaie plus tard :/",
+				en: "The request limit has been hit for the {1} API, try again later :/"
+			},
 			msg_too_long: {
 				fr: "Le message est trop long pour que je puisse l'envoyer :/",
 				en: "The message is too long for me to send it :/"
