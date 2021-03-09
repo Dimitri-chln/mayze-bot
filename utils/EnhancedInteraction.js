@@ -45,7 +45,7 @@ class EnhancedInteraction {
 	}
 
 	async acknowledge() {
-		const url = `https://discord.com/api/v8/interactions/${this.#base.id}/${this.#base.token}/callback`;
+		const url = `https://discord.com/api/v8/interactions/${this.base.id}/${this.base.token}/callback`;
 
 		const res = await Axios.post(url, {
 			type: 4,
@@ -62,7 +62,7 @@ class EnhancedInteraction {
 	 * @param {string} content
 	 */
 	async respond(content) {
-		const url = `https://discord.com/api/v8/webhooks/${this.#client.user.id}/${this.#base.id}/${this.#base.token}/messages/@original`;
+		const url = `https://discord.com/api/v8/webhooks/${this.client.user.id}/${this.base.id}/${this.base.token}/messages/@original`;
 
 		const res = await Axios.patch(url, {
 			content,
@@ -72,7 +72,7 @@ class EnhancedInteraction {
 	}
 
 	async delete() {
-		const url = `https://discord.com/api/v8/webhooks/${this.#client.user.id}/${this.#base.id}/${this.#base.token}/messages/@original`;
+		const url = `https://discord.com/api/v8/webhooks/${this.client.user.id}/${this.base.id}/${this.base.token}/messages/@original`;
 
 		const res = await Axios.delete(url).catch(console.error);
 
