@@ -1,5 +1,6 @@
 const { Message } = require("discord.js");
-const { shop } = require("./unbelievaboat-shop");
+const { i } = require("mathjs");
+const shop = require("../assets/unb-shop");
 
 const command = {
 	name: "unbelievaboat-buy",
