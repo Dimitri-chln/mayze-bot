@@ -2,6 +2,10 @@ const { Client, Guild, Channel, User, GuildMember } = require("discord.js");
 const Axios = require("axios").default;
 
 class EnhancedInteraction {
+	/**@type {string} */
+	#id;
+	/**@type {string} */
+	#token;
 	/**@type {Object} */
 	#base;
 	/**@type {Client} */
