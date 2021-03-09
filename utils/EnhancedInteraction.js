@@ -48,7 +48,11 @@ class EnhancedInteraction {
 		const url = `https://discord.com/api/v8/interactions/${this.#base.id}/${this.#base.token}/callback`;
 
 		const res = await Axios.post(url, {
-			type: 1
+			type: 4,
+			data: {
+				content: "Command received",
+				flags: 64
+			}
 		}).catch(console.error);
 
 		return res;
@@ -56,9 +60,8 @@ class EnhancedInteraction {
 
 	/**
 	 * @param {string} content
-	 * @param {boolean} ephemeral 
 	 */
-	async respond(content, ephemeral) {
+	async respond(content) {
 		const url = `https://discord.com/api/v8/webhooks/${this.#client.user.id}/${this.#base.id}/${this.#base.token}/messages/@original`;
 
 		const res = await Axios.patch(url, {

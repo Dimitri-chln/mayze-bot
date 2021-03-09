@@ -188,10 +188,11 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
 	const EnhancedInteraction = require("./utils/EnhancedInteraction");
 	const enhancedInteraction = new EnhancedInteraction(interaction, client);
 
-	enhancedInteraction.acknowledge();
 	console.log(`${enhancedInteraction.author.tag} used /${enhancedInteraction.base.data.name} in #${enhancedInteraction.channel.name}\n${JSON.stringify(enhancedInteraction.base.data, null, 4)}`);
+	await enhancedInteraction.acknowledge();
 	
-	if (command) processCommand(command, enhancedInteraction, null, options);
+	if (command) await processCommand(command, enhancedInteraction, null, options);
+	setTimeout(enhancedInteraction.delete, 5000);
 });
 
 /**
@@ -233,7 +234,7 @@ async function processCommand(command, message, args, options) {
 
 	const languageData = { get: languages.get, errors: pickLanguage(languages.data.errors, language), ...pickLanguage(languages.data[command.name], language) };
 
-	command.execute(message, args, options, languageData, language)
+	await command.execute(message, args, options, languageData, language)
 	.then(() => {
 		timestamps.set(message.author.id, now);
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
