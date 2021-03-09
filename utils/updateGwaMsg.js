@@ -24,7 +24,7 @@ async function updateGwaMsg(message) {
 
 		message.edit({
 			content: message.content,
-			embed: message.embeds[0].setDescription(`Giveaway terminé !\n__**Gagnant${winners.length > 1 ? "s" : ""} :__** ${winnersString}`)
+			embed: message.embeds[0].setDescription(`Giveaway terminé !\n__**Gagnant${winners.length > 1 ? "s" : ""} :**__ ${winnersString}`)
 		}).catch(console.error);
 
 	} else {
