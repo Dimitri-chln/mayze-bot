@@ -243,6 +243,7 @@ async function processCommand(command, message, args, options) {
 		console.error(err);
 		message.channel.send(languages.data.error[language]).catch(console.error);
 	});
+	return;
 }
 
 client.on("messageReactionAdd", async (reaction, user) => {
