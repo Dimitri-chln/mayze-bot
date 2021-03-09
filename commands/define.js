@@ -42,11 +42,12 @@ const command = {
 		message.channel.startTyping(1);
 		Axios.get(`${apiURL}/${searchLanguage}/${encodeURIComponent(word)}`)
 			.then(async res => {
-				if (res.data.title && res.data.title === "No Definitions Found") return message.reply(language.invalid_word).catch(console.error);
-				if (res.data.title && res.data.title === "API Rate Limit Exceeded") return message.reply(language.get(language.errors.api_limit, "Disctionary")).catch(console.error);
 				message.channel.send(`__**${res.data[0].word.replace(/^./, a => a.toUpperCase())}**__: ${res.data[0].phonetics[0].text ? `(${res.data[0].phonetics[0].text})` : ""}\n${res.data[0].meanings.map(meaning => `> __${meaning.partOfSpeech.replace(/^./, a => a.toUpperCase())}:__ ${meaning.definitions[0].definition}${meaning.definitions[0].synonyms && meaning.definitions[0].synonyms.length ? `\n*${language.synonyms}: ${meaning.definitions[0].synonyms.join(", ")}*` : ""}`).join("\n\n")}`).catch(console.error);
 			})
 			.catch(async err => {
+				if (err.data.title && res.data.title === "No Definitions Found") return message.reply(language.invalid_word).catch(console.error);
+				if (err.data.title && res.data.title === "API Rate Limit Exceeded") return message.reply(language.get(language.errors.api_limit, "Disctionary")).catch(console.error);
+
 				console.error(err);
 				message.channel.send(language.get(language.errors.api, "Dictionary")).catch(console.error);
 				message.channel.stopTyping();
