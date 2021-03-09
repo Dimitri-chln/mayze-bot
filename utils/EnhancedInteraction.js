@@ -1,4 +1,5 @@
 const { Client, Guild, Channel, User, GuildMember } = require("discord.js");
+const Axios = require("axios").default;
 
 class EnhancedInteraction {
 	/**@type {Object} */
@@ -27,6 +28,7 @@ class EnhancedInteraction {
 		this.#author = this.#member.user;
 	}
 
+	get isInteraction() { return true; }
 	get base() { return this.#base; }
 	get client() { return this.#client; }
 	get guild() { return this.#guild; }
@@ -40,6 +42,34 @@ class EnhancedInteraction {
 	async reply(content) {
 		const message = await this.channel.send(`${this.author}, ${content}`);
 		return message;
+	}
+
+	async acknowledge() {
+		const url = `https://discord.com/api/v8/interactions/${this.#base.id}/${this.#base.token}/callback`;
+
+		const res = await Axios.post(url, {
+			type: 1
+		}).catch(console.error);
+
+		return res;
+	}
+
+	/**
+	 * @param {string} content
+	 * @param {boolean} ephemeral 
+	 */
+	async respond(content, ephemeral) {
+		const url = `https://discord.com/api/v8/interactions/${this.#base.id}/${this.#base.token}/callback`;
+
+		const res = await Axios.post(url, {
+			type: 4,
+			data: {
+				content,
+				flags: ephemeral ? 64 : 0
+			}
+		}).catch(console.error);
+
+		return res;
 	}
 }
 
