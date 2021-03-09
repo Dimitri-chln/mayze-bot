@@ -59,15 +59,19 @@ class EnhancedInteraction {
 	 * @param {boolean} ephemeral 
 	 */
 	async respond(content, ephemeral) {
-		const url = `https://discord.com/api/v8/interactions/${this.#base.id}/${this.#base.token}/callback`;
+		const url = `https://discord.com/api/v8/webhooks/${this.#client.user.id}/${this.#base.id}/${this.#base.token}/messages/@original`;
 
-		const res = await Axios.post(url, {
-			type: 4,
-			data: {
-				content,
-				flags: ephemeral ? 64 : 0
-			}
+		const res = await Axios.patch(url, {
+			content,
 		}).catch(console.error);
+
+		return res;
+	}
+
+	async delete() {
+		const url = `https://discord.com/api/v8/webhooks/${this.#client.user.id}/${this.#base.id}/${this.#base.token}/messages/@original`;
+
+		const res = await Axios.delete(url).catch(console.error);
 
 		return res;
 	}

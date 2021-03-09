@@ -32,6 +32,7 @@ const command = {
 		else message.client.pg.query(`INSERT INTO afk (user_id) VALUES ('${message.author.id}')`).catch(console.error);
 
 		message.channel.send(language.get(language.afk_message, message.author.toString(), AKFmessage ? `\n**→ ${AKFmessage}**` : "")).catch(console.error);
+		if (message.isInteraction) message.delete().catch(console.error);
 	}
 };
 
