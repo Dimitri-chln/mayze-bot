@@ -26,6 +26,10 @@ module.exports = {
 				fr: "Quelque chose s'est mal passé en accédant à la base de données :/",
 				en: "Something went wrong when accessing the database :/"
 			},
+			api: {
+				fr: "Quelque chose s'est mal passé en accédant à l'API {1} :/",
+				en: "Something went wrong when accessing the {1} API :/"
+			},
 			msg_too_long: {
 				fr: "Le message est trop long pour que je puisse l'envoyer :/",
 				en: "The message is too long for me to send it :/"
@@ -57,6 +61,10 @@ module.exports = {
 			paginator: {
 				fr: "Quelque chose s'est mal passé avec le paginateur :/",
 				en: "Something went wrong with the paginator :/"
+			},
+			invalid_args: {
+				fr: "arguments incorrects",
+				en: "invalid arguments"
 			}
 		},
 		"afk": {
@@ -107,6 +115,20 @@ module.exports = {
 			title: {
 				fr: "Photo de profil de {1}",
 				en: "{1}'s profile picture"
+			}
+		},
+		"backup": {
+			fetching_data: {
+				fr: "Récupération des données...",
+				en: "Fetching the data..."
+			},
+			complete: {
+				fr: "Backup terminée !",
+				en: "Backup complete!"
+			},
+			invalid_table: {
+				fr: "il n'y a pas de backup correspondant à cette table",
+				en: "there is no backup corresponding to this table"
 			}
 		},
 		"catch": {
@@ -165,6 +187,20 @@ module.exports = {
 				en: "**Hexadecimal:** `{1}`\n**RGB:** 🟥 `{2}` 🟩 `{3}` 🟦 `{4}`\n**Decimal:** `{5}`"
 			}
 		},
+		"cron": {
+			invalid_date: {
+				fr: "entre une date valide (mm-dd-yyyy hh:mm:ss)",
+				en: "enter a valid date (mm-dd-yy hh:mm:ss)"
+			},
+			date_passed: {
+				fr: "la date ne doit pas être déjà dépassée",
+				en: "the date mustn't be passed already"
+			},
+			saved: {
+				fr: "Tâche enregistrée",
+				en: "Task saved"
+			}
+		},
 		"custom-response": {
 			not_enough_args: {
 				fr: "pas assez d'arguments",
@@ -189,10 +225,16 @@ module.exports = {
 			embed_title: {
 				fr: "Réponses personnalisées",
 				en: "Custom responses"
+			}
+		},
+		"define": {
+			invalid_word: {
+				fr: "ce mot n'existe pas ou il est mal orthographié",
+				en: "this word doesn't exist"
 			},
-			invalid_args: {
-				fr: "arguments incorrects",
-				en: "invalid arguments"
+			synonyms: {
+				fr: "Synonymes",
+				en: "Synonyms"
 			}
 		},
 		"edit-snipe": {
@@ -353,10 +395,6 @@ module.exports = {
 			no_note: {
 				fr: "*Aucune note*",
 				en: "*No note*"
-			},
-			invalid_args: {
-				fr: "arguments invalides",
-				en: "invalid arguments"
 			}
 		},
 		"pokedex": {

@@ -139,7 +139,7 @@ const command = {
 				}).catch(console.error);
 				break;
 			default:
-				message.reply(language.invalid_args).catch(console.error);
+				message.reply(language.errors.invalid_args).catch(console.error);
 		}
 	}
 };

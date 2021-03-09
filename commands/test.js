@@ -17,7 +17,7 @@ const command = {
 		const Axios = require("axios").default;
 		const deezer = new (require("deezer-public-api"));
 
-		Axios.get("https://deezer.page.link/AbSuoYsNz2LYo4Kq5")
+		Axios.get("https://api.dictionaryapi.dev/api/v2/entries/en/open")
 			.then(res => console.log(res.data))
 			.catch(console.error);
 	}

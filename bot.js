@@ -228,7 +228,7 @@ async function processCommand(command, message, args, options) {
 		}
 	}
 
-	const languageData = { get: languages.get, errors: pickLanguage(languages.errors, language), ...pickLanguage(languages.data[command.name], language) };
+	const languageData = { get: languages.get, errors: pickLanguage(languages.data.errors, language), ...pickLanguage(languages.data[command.name], language) };
 
 	command.execute(message, args, options, languageData, language)
 	.then(() => {
@@ -440,7 +440,7 @@ function reconnectPgClient() {
 	client.pg.connect().then(() => console.log("Connected to the database")).catch(console.error);
 }
 
-function pickLanguage(data = {}, language = "fr") {
+function pickLanguage(data = {}, language = "en") {
 	return Object.keys(data)
 		.reduce((acc, key) => {
 			acc[key] = data[key][language];

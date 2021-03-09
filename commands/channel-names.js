@@ -78,12 +78,12 @@ const command = {
 		const loadingMsg = await message.channel.send(language.get(language.editing, channels.size)).catch(console.error);
 		
 		let errors = 0;
-		channels.forEach(async c => {
+		await Promise.all(channels.map(async c => {
 			c.setName(c.name.replace(regex, replace)).catch(err => {
 				++errors;
 				console.error(err);
 			});
-		});
+		}));
 		loadingMsg.edit(language.get(language.done_editing, channels.size - errors, errors));
 	}
 };

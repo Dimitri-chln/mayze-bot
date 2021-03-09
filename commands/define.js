@@ -2,16 +2,25 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "define",
-	description: "Obtenir la définition d'un terme",
+	description: {
+		fr: "Obtenir la définition d'un mot",
+		en: "Get the definition of a word"
+	},
 	aliases: ["def", "google"],
 	args: 1,
-	usage: "<mot>",
+	usage: "<word> [-language <code>]",
 	slashOptions: [
 		{
-			name: "mot",
-			description: "Le mot à chercher",
+			name: "word",
+			description: "The word to search",
 			type: 3,
 			required: true
+		},
+		{
+			name: "language",
+			description: "The language to search the word in",
+			type: 3,
+			required: false
 		}
 	],
 	/**
@@ -21,22 +30,27 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const Axios = require("axios").default;
-		const apiURL = "https://api.dicolink.com/v1/mot";
+		const apiURL = "https://api.dictionaryapi.dev/api/v2/entries";
 
 		const word = args
-			? args.join(" ").toLowerCase()
+			? args[0].toLowerCase()
 			: options[0].value.toLowerCase();
+		const searchLanguage = args
+			? args.includes("-language") ? args[args.indexOf("-language") + 1] || languageCode : languageCode
+			: options[1] ? options[1].value : languageCode;
 		
-		Axios.get(`${apiURL}/${word.replace(/\s/g, "+")}/definitions?limite=1&api_key=${process.env.DICOLINK_API_KEY}`)
+		message.channel.startTyping(1);
+		Axios.get(`${apiURL}/${searchLanguage}/${encodeURIComponent(word)}`)
 			.then(async res => {
-				if (!res.data.length) return message.reply("ce mot n'existe pas ou il est mal orthographié").catch(console.error);
-				message.channel.send(`__**${word.replace(/^./, a => a.toUpperCase())}**__, ${res.data[0].nature}:\n> ${res.data[0].definition}\n*(source: ${res.data[0].source.replace(/^./, a => a.toUpperCase())})*`).catch(console.error);
+				if (res.data.title && res.data.title === "No Definition Found") return message.reply(language.invalid_word).catch(console.error);
+				message.channel.send(`__**${res.data[0].word.replace(/^./, a => a.toUpperCase())}**__: ${res.data[0].phonetics[0].text ? `(${res.data[0].phonetics[0].text})` : ""}\n${res.data[0].meanings.map(meaning => `> __${meaning.partOfSpeech.replace(/^./, a => a.toUpperCase())}:__ ${meaning.definitions[0].definition}\n*${language.synonyms}: ${meaning.definitions[0].synonyms.length ? meaning.definitions[0].synonyms.join(", ") : "Ø"}*`).join("\n\n")}`).catch(console.error);
 			})
 			.catch(async err => {
-				if (err.message === "Request failed with status code 404") return message.reply("ce mot n'existe pas ou il est mal orthographié").catch(console.error);
-				message.channel.send("Quelque chose s'est mal passé en accédant à l'API dicolink :/").catch(console.error);
 				console.error(err);
+				message.channel.send(language.get(language.errors.api, "Dictionary")).catch(console.error);
+				message.channel.stopTyping();
 			});
+		message.channel.stopTyping();
 	}
 };
 
