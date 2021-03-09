@@ -22,6 +22,8 @@ class EnhancedInteraction {
 	 * @param {Client} client 
 	 */
 	constructor(interaction, client) {
+		this.#id = interaction.id;
+		this.#token = interaction.token;
 		this.#base = interaction;
 		this.#client = client;
 		this.#applicationID = this.#client.user.id;
@@ -32,6 +34,8 @@ class EnhancedInteraction {
 	}
 
 	get isInteraction() { return true; }
+	get id() { return this.#id; }
+	get token() { return this.#token; }
 	get base() { return this.#base; }
 	get client() { return this.#client; }
 	get applicationID() { return this.#applicationID; }
@@ -49,7 +53,7 @@ class EnhancedInteraction {
 	}
 
 	async acknowledge() {
-		const url = `https://discord.com/api/v8/interactions/${this.base.id}/${this.base.token}/callback`;
+		const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
 
 		const res = await Axios.post(url, {
 			type: 4,
@@ -66,7 +70,7 @@ class EnhancedInteraction {
 	 * @param {string} content
 	 */
 	async respond(content) {
-		const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.base.id}/${this.base.token}/messages/@original`;
+		const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.id}/${this.token}/messages/@original`;
 
 		const res = await Axios.patch(url, {
 			content,
@@ -76,7 +80,7 @@ class EnhancedInteraction {
 	}
 
 	async delete() {
-		const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.base.id}/${this.base.token}/messages/@original`;
+		const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.id}/${this.token}/messages/@original`;
 
 		const res = await Axios.delete(url).catch(console.error);
 
