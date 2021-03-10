@@ -10,7 +10,7 @@ const command = {
 	args: 1,
 	usage: "<channel> [<user>]",
 	ownerOnly: true,
-	allowedUsers: ["394633964138135563"],
+	allowedUsers: ["394633964138135563", "463358584583880704"],
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 
@@ -50,7 +50,7 @@ const command = {
 		if (message.deletable) message.react("✅").catch(console.error);
 
 		channelCollector.on("collect", async msg => {
-			if (msg.webhookID) return;
+			if (msg.webhookID === webhook.id) return;
 			message.author.send({
 				content: `**${msg.author.tag}**: ${msg.content}`,
 				embed: msg.embeds[0]
