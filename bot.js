@@ -187,7 +187,7 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
 	const options = interaction.data.options;
 	const EnhancedInteraction = require("./utils/EnhancedInteraction");
 	const enhancedInteraction = new EnhancedInteraction(interaction, client);
-	console.log(JSON.stringify(enhancedInteraction, null, 4));
+	console.log(enhancedInteraction);
 
 	console.log(`${enhancedInteraction.author.tag} used /${enhancedInteraction.base.data.name} in #${enhancedInteraction.channel.name}\n${JSON.stringify(enhancedInteraction.base.data, null, 4)}`);
 	await enhancedInteraction.acknowledge();
