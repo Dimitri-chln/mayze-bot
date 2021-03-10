@@ -110,21 +110,21 @@ const command = {
 		switch (subCommand) {
 			case "add":
 				members = members.filter(m => !m.roles.cache.has(role.id));
-				members.forEach(async member => {
+				await Promise.all(members.map(async member => {
 					member.roles.add(role).catch(err => {
 						++errors;
 						console.error(err);
 					});
-				});
+				}));
 				break;
 			case "remove":
 				members = members.filter(m => m.roles.cache.has(role.id));
-				members.forEach(async member => {
+				await Promise.all(members.map(async member => {
 					member.roles.remove(role).catch(err => {
 						++errors;
 						console.error(err);
 					});
-				});
+				}));
 				break;
 			default:
 				message.reply("arguments incorrects").catch(console.error);
