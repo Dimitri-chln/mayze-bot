@@ -48,15 +48,13 @@ class EnhancedInteraction {
 	async acknowledge() {
 		const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
 
-		const res = await Axios.post(url, {
+		Axios.post(url, {
 			type: 4,
 			data: {
 				content: "Command received",
 				flags: 64
 			}
 		}).catch(console.error);
-
-		return res;
 	}
 
 	/**
@@ -65,19 +63,15 @@ class EnhancedInteraction {
 	async respond(content) {
 		const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.id}/${this.token}/messages/@original`;
 
-		const res = await Axios.patch(url, {
+		Axios.patch(url, {
 			content,
 		}).catch(console.error);
-
-		return res;
 	}
 
 	async delete() {
 		const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.id}/${this.token}/messages/@original`;
 
-		const res = await Axios.delete(url).catch(console.error);
-
-		return res;
+		Axios.delete(url).catch(console.error);
 	}
 }
 
