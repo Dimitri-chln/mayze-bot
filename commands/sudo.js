@@ -13,7 +13,9 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		const { WEBHOOK_ID } = require("../config.json");
+		const { WEBHOOKS } = require("../config.json");
+		if (!WEBHOOKS[message.guild.id]) return;
+		
 		const user = args
 			? message.mentions.users.first() || (message.client.findMember(message.guild, args[0]) || {}).user
 			: message.client.users.cache.get(options[0].value);
@@ -21,8 +23,8 @@ const command = {
 		const msg = args
 			? args.slice(1).join(" ")
 			: options[1].value;
-
-		const webhook = await message.client.fetchWebhook(WEBHOOK_ID).catch(console.error);
+			
+		const webhook = await message.client.fetchWebhook(WEBHOOKS[message.guild.id]).catch(console.error);
 		if (!webhook) return message.channel.send("Quelque chose s'est mal passé en récupérant le webhook :/").catch(console.error);
 		if (webhook.channelID !== message.channel.id) await webhook.edit({ channel: message.channel }).catch(console.error);
 		webhook.send(msg, { avatarURL: user.avatarURL(), username: message.guild.member(user).displayName }).catch(console.error);

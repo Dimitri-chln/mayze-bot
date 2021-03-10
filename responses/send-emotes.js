@@ -5,8 +5,9 @@ const command = {
 	 * @param {Message} message 
 	 */
 	execute: async (message) => {
-		const { WEBHOOK_ID } = require("../config.json");
+		const { WEBHOOKS } = require("../config.json");
 		if (message.channel.type === "dm" || message.author.bot || message.guild.id !== "689164798264606784") return;
+		if (!WEBHOOKS[message.guild.id]) return;
 
 		const regex = /(?:^|\s):[\w-_]+:(?:\s|$)/g;
 		if (!regex.test(message.content)) return;
@@ -15,7 +16,7 @@ const command = {
 
 		const newMsg = message.content.replace(regex, a => ` ${message.client.emojis.cache.find(e => e.name === a.match(/[\w-_]+/)[0])} `).trim();
 
-		const webhook = await message.client.fetchWebhook(WEBHOOK_ID).catch(console.error);
+		const webhook = await message.client.fetchWebhook(WEBHOOKS[message.guild.id]).catch(console.error);
 		if (!webhook) return;
 		await webhook.edit({ channel: message.channel.id });
 

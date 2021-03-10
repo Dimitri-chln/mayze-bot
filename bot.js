@@ -135,6 +135,7 @@ client.on("ready", async () => {
 
 	// REMINDERS
 	ACNHReminders();
+	testReminders();
 });
 
 client.on("message", async message => {
@@ -475,4 +476,23 @@ function ACNHReminders() {
 	}, null, true, "Europe/Paris");
 
 	return { turnipMorning, turnipAfternoon };
+}
+
+function testReminders() {
+	const users = [ "408671348005797898" ];
+	const channel = client.channels.cache.get("817090538209673287");
+
+	const wednesday = new Cron.CronJob("0 45 15 * * 3", () => {
+		channel.send(users.map(u => `<@${u}>`).join(", ") + " Test in 15 minutes!").catch(console.error);
+		setTimeout(() => channel.send(users.map(u => `<@${u}>`).join(", ") + " Test in 5 minutes!"), 600000);
+		setTimeout(() => channel.send(users.map(u => `<@${u}>`).join(", ") + " Test in 1 minutes!"), 840000);
+	}, null, true, null, null, false, 0);
+
+	const sunday = new Cron.CronJob("0 45 14 * * 0", () => {
+		channel.send(users.map(u => `<@${u}>`).join(", ") + " Test in 15 minutes!").catch(console.error);
+		setTimeout(() => channel.send(users.map(u => `<@${u}>`).join(", ") + " Test in 5 minutes!"), 600000);
+		setTimeout(() => channel.send(users.map(u => `<@${u}>`).join(", ") + " Test in 1 minutes!"), 840000);
+	}, null, true, null, null, false, 0);
+
+	return { wednesday, sunday };
 }

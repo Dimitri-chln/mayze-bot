@@ -2,10 +2,13 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "dm-link",
-	description: "Relier un salon à tes DM pour pouvoir parler à travers le bot",
+	description: {
+		fr: "Relier un salon à tes DM pour pouvoir parler à travers le bot",
+		en: "Link a channel to your DMs so you can talk through the bot"
+	},
 	aliases: ["link"],
 	args: 1,
-	usage: "<salon> [<utilisateur>]",
+	usage: "<channel> [<user>]",
 	ownerOnly: true,
 	allowedUsers: ["394633964138135563"],
 	/**
