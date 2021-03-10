@@ -189,7 +189,8 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
 	const enhancedInteraction = new EnhancedInteraction(interaction, client);
 
 	console.log(`${enhancedInteraction.author.tag} used /${enhancedInteraction.base.data.name} in #${enhancedInteraction.channel.name}\n${JSON.stringify(enhancedInteraction.base.data, null, 4)}`);
-	enhancedInteraction.acknowledge();
+	await enhancedInteraction.acknowledge();
+	enhancedInteraction.respond("This is a test");
 	
 	if (command) await processCommand(command, enhancedInteraction, null, options);
 	setTimeout(enhancedInteraction.delete, 5000);
