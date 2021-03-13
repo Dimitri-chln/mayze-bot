@@ -518,6 +518,8 @@ module.exports = {
 				fr: "<a:blackCheck:803603780666523699> | **Répétition [1?activée:désactivée]**",
 				en: "<a:blackCheck:803603780666523699> | **Loop [1,enabled:disabled]**"
 			},
+		},
+		"lyrics": {
 			no_song: {
 				fr: "indique le nom d'une chanson",
 				en: "give a song name"
