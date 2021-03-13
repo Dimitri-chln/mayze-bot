@@ -17,7 +17,7 @@ const command = {
 		const { MessageEmbed } = require("discord.js");
 		const Util = require("../utils/music/Util");
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
-		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
+		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
 		const queue = message.client.player.getQueue(message.guild.id);
 

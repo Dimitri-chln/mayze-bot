@@ -13,7 +13,7 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
+		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
 		
 		const time = args
 			? args[0]
@@ -22,7 +22,7 @@ const command = {
 		if (!timeRegex.test(time)) return message.reply("le format est incorrect (hh:mm:ss)").catch(console.error);
 
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
-		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
+		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
 		const Util = require("../utils/music/Util");
 		const timeInMs = Util.TimeToMilliseconds(time);

@@ -624,16 +624,17 @@ class Player {
     /**
 	* Creates a progress bar per current playing song.
 	* @param {String} guildID Guild ID
+    * @param {Boolean} empty An empty progress bar
 	* @param {String} barSize Bar Size
 	* @param {String} arrowIcon Arrow Icon
 	* @param {String} loadedIcon Loaded Icon
 	* @returns {String}
 	*/
-	createProgressBar(guildID, barSize = 20, arrowIcon = '🔘', loadedIcon = '━') {
-		let queue = this.queues.find((g) => g.guildID === guildID);
+	createProgressBar(guildID, empty, barSize = 20, arrowIcon = '🔘', loadedIcon = '━') {
+		let queue = this.getQueue(guildID);
 		if (!queue) return new MusicPlayerError('QueueIsNull');
 
-		let timePassed = queue.dispatcher.streamTime + queue.songs[0].seekTime;
+		let timePassed = empty ? 0 : queue.dispatcher.streamTime + queue.songs[0].seekTime;
 		let timeEnd = Util.TimeToMilliseconds(queue.songs[0].duration);
 
 		return `${Util.buildBar(timePassed, timeEnd, barSize, loadedIcon, arrowIcon)}`;
@@ -644,7 +645,7 @@ class Player {
      * @ignore
      * @param {string} guildID
      * @param {Boolean} firstPlay Whether the function was called from the play() one
-     * @param {Number || null} seek Seek the song.
+     * @param {Number | null} seek Seek the song.
      */
     async _playSong(guildID, firstPlay, seek = null) {
         // Gets guild queue

@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "eval",
-	description: "Évaluer une expression",
+	description: {
+		fr: "Évaluer une expression",
+		en: "Evaluate an expression"
+	},
 	aliases: [],
 	cooldown: 1,
 	args: 1,
@@ -20,8 +23,8 @@ const command = {
 		try {
 			eval(expression);
 		} catch (err) {
-			console.log(err);
-			message.channel.send(`__Erreur:__\`\`\`\n${err}\n\`\`\``).catch(console.error);
+			console.error(err);
+			message.channel.send(`__**Error:**__\`\`\`\n${err}\n\`\`\``).catch(console.error);
 		};
 	}
 };

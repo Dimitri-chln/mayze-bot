@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "logs",
-	description: "Obtenir les logs récent du bot",
+	description: {
+		fr: "Obtenir les logs récent du bot",
+		en: "Get recent logs from the bot"
+	},
 	aliases: [],
 	args: 0,
 	usage: "",
@@ -13,7 +16,8 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		if (process.env.HOST === "HEROKU") return message.reply("cette commande ne fonctionne pas sur Heroku").catch(console.error);
+		if (process.env.HOST === "HEROKU") return message.reply(language.errors.heroku).catch(console.error);
+
 		const shellExec = require("../utils/shellExec");
 		const output = shellExec("heroku logs --app mayze");
 		const charactersPerPage = 2000;
@@ -21,7 +25,7 @@ const command = {
 			message.channel.send({
 				embed: {
 					author: {
-						name: "Logs Heroku",
+						name: "Heroku Logs",
 						icon_url: message.author.avatarURL({ dynamic: true })
 					},
 					color: "#010101",
@@ -40,7 +44,7 @@ const command = {
 			for (i = 0; i < matches.length; i++) {;
 				let embed = new MessageEmbed()
 					.setColor("#010101")
-					.setAuthor("Logs Heroku", message.author.avatarURL({ dynamic: true }))
+					.setAuthor("Heroku Logs", message.author.avatarURL({ dynamic: true }))
 					.setDescription(`\`\`\`\n${matches[i]}\n\`\`\``);
 				pages.push(embed);
 			}

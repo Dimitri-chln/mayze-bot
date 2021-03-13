@@ -123,7 +123,7 @@ const command = {
 				}
 			}).catch(err => {
 				console.error(err);
-				message.channel.send(language.errors.sending).catch(console.error);
+				message.channel.send(language.errors.message_send).catch(console.error);
 			});
 
 			const reactionFilter = (reaction, user) => emojis.includes(reaction.emoji.name) && !user.bot;
@@ -199,7 +199,7 @@ const command = {
 				}
 			}).catch(err => {
 				console.error(err);
-				message.channel.send(language.errors.sending).catch(console.error);
+				message.channel.send(language.errors.message_send).catch(console.error);
 			});
 
 			const reactionFilter = (reaction, user) => emojis.includes(reaction.emoji.name) && !user.bot;

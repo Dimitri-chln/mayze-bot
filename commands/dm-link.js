@@ -20,37 +20,38 @@ const command = {
 		const channel = args
 			? message.mentions.channels.first()
 			: message.client.channels.cache.get(options[0].value);
-		if (!channel) return message.reply("entre un salon textuel valide").catch(console.error);
-		if (channel.type !== "text") return message.reply("entre un salon textuel valide").catch(console.error);
+		if (!channel || channel.type !== "text") return message.reply(language.invalid_channel).catch(console.error);
 		const user = args
 			? message.mentions.users.first() || args[1] ? (message.client.findMember(message.guild, args[1]) || {}).user : null || message.author
 			: message.client.users.cache.get(options[1] ? options[1].value : null) || message.author;
 
-		const loadingMsg = await message.channel.send("Création d'un webhook...").catch(console.error);
-		const webhook = await channel.createWebhook(`DM-link de ${message.author.tag}`, { avatar: message.client.user.avatarURL({ size: 4096 }) }).catch(console.error);
-		if (!webhook) return loadingMsg.edit("Quelque chose s'est mal passé en créant le webhook :/").catch(console.error);
+		const loadingMsg = await message.channel.send(language.creating_webhook).catch(console.error);
+		const webhook = await channel.createWebhook(`${message.author.tag}'s *dm-link`, { avatar: message.client.user.avatarURL({ size: 4096 }) }).catch(console.error);
+		if (webhook) loadingMsg.delete().catch(console.error);
+		else return loadingMsg.edit(language.errors.webhook_create).catch(console.error);
 
-		const { "channel": dmChannel } = await message.author.send({
+		const { "channel": dmChannel } = (await message.author.send({
 			embed: {
 				author: {
 					name: message.author.tag,
 					icon_url: message.author.avatarURL({ dynamic: true })
 				},
-				title: `Début de la conversation avec #${channel.name}`,
+				title: language.get(language.title, channel.name),
 				color: "#010101",
-				description: `Tu vas recevoir tous les messages du salon ici. Envoie un message pour qu'il soit envoyé dans ${channel}\n\n> Tu peux arrêter à tout moment en envoyant ${message.client.prefix}stop`,
+				description: language.get(language.description, channel, message.client.prefix),
 				footer: {
 					text: "✨ Mayze ✨"
 				}
 			}
-		}).catch(console.error);
+		}).catch(console.error));
 
-		const channelCollector = channel.createMessageCollector(m => m.author.id !== message.client.user.id);
+		if (!dmChannel) return message.reply(language.errors.dm_disabled).catch(console.error);
+
+		const channelCollector = channel.createMessageCollector(m => m.webhookID !== webhook.id);
 		const dmCollector = dmChannel.createMessageCollector(m => !m.author.bot);
 		if (message.deletable) message.react("✅").catch(console.error);
 
 		channelCollector.on("collect", async msg => {
-			if (msg.webhookID === webhook.id) return;
 			message.author.send({
 				content: `**${msg.author.tag}**: ${msg.content}`,
 				embed: msg.embeds[0]
@@ -68,7 +69,7 @@ const command = {
 							name: message.author.tag,
 							icon_url: message.author.avatarURL({ dynamic: true })
 						},
-						title: `Fin de la conversation avec #${channel.name}`,
+						title: language.get(language.end, channel.name),
 						color: "#010101",
 						footer: {
 							text: "✨ Mayze ✨"

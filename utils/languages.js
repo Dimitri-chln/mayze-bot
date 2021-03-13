@@ -1,5 +1,11 @@
 module.exports = {
-	get: (text, ...args) => text.replace(/\{\d+\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1]),
+	get: (text, ...args) => text
+		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
+		.replace(/\[\d+?\?.*?:.*?\]/g, a => {
+			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/);
+			if (args[parseInt(m[1]) - 1]) return m[2];
+			else return m[3];
+		}),
 	data: {
 		unauthorized_guild: {
 			fr: "cette commande ne fonctionne pas sur ce serveur",
@@ -54,9 +60,9 @@ module.exports = {
 				fr: "erreur de syntaxe",
 				en: "syntax error"
 			},
-			sending: {
+			message_send: {
 				fr: "Quelque chose s'est mal passé en envoyant le message :/",
-				en: "Something went wrong when sending the message :/"
+				en: "Something went wrong when message_send the message :/"
 			},
 			no_perms: {
 				fr: "Je n'ai pas les permissions nécessaires pour faire cela :/",
@@ -69,6 +75,26 @@ module.exports = {
 			invalid_args: {
 				fr: "arguments incorrects",
 				en: "invalid arguments"
+			},
+			webhook_create: {
+				fr: "Quelque chose s'est mal passé en créant un webhook :/",
+				en: "Something went wrong when creating a webhook :/"
+			},
+			dm_disabled: {
+				fr: "Quelque chose s'est mal passé en t'envoyant un message. As-tu désactivé les DM ?",
+				en: "Something went wrong when sending you a message. Have you disabled DMs?"
+			},
+			heroku: {
+				fr: "cette commande ne fonctionne pas sur Heroku",
+				en: "this command doesn't work on Heroku"
+			},
+			not_in_vc: {
+				fr: language.errors.not_in_vc,
+				en: "you aren't in the same voice channel as me"
+			},
+			no_music: {
+				fr: "Il n'y a aucune musique en cours sur ce serveur",
+				en: "There is no music being played in this server"
 			}
 		},
 		"afk": {
@@ -239,6 +265,28 @@ module.exports = {
 			synonyms: {
 				fr: "Synonymes",
 				en: "Synonyms"
+			}
+		},
+		"dm-link": {
+			invalid_channel: {
+				fr: "entre un salon textuel valide",
+				en: "enter a valid text channel"
+			},
+			creating_webhook: {
+				fr: "Création d'un webhook...",
+				en: "Creating a webhook..."
+			},
+			title: {
+				fr: "Début de la conversation avec #{1}",
+				en: "Start of the conversation with #{1}"
+			},
+			description: {
+				fr: "Tu vas recevoir tous les messages du salon ici. Envoie un message pour qu'il soit envoyé dans {1}\n\n> Tu peux arrêter à tout moment en envoyant {2}stop",
+				en: "You will receive all messages from the channel here. Send a message for it to be sent in {1}\n\n> You can stop at any time by sending {2}stop"
+			},
+			end: {
+				fr: "Fin de la conversation avec #{1}",
+				en: "End of the conversation with #{1}"
 			}
 		},
 		"edit-snipe": {
@@ -454,6 +502,51 @@ module.exports = {
 			},
 			description: {
 				fr: "**{1}** [a réagi avec]({2}) {3}"
+			}
+		},
+
+		// MUSIC COMMANDS
+
+		"clear-queue": {
+			deleted: {
+				fr: "<a:blackCheck:803603780666523699> | **Queue supprimée**",
+				en: "<a:blackCheck:803603780666523699> | **Queue deleted**"
+			}
+		},
+		"loop": {
+			looped: {
+				fr: "<a:blackCheck:803603780666523699> | **Répétition [1?activée:désactivée]**",
+				en: "<a:blackCheck:803603780666523699> | **Loop [1,enabled:disabled]**"
+			},
+			no_song: {
+				fr: "indique le nom d'une chanson",
+				en: "give a song name"
+			},
+			no_lyrics: {
+				fr: "je n'ai pas trouvé de paroles pour cette chanson",
+				en: "I couldn't find any lyrics for this song"
+			},
+			title: {
+				fr: "Paroles de \"{1}\"",
+				en: "Lyrics of \"{1}\""
+			},
+			empty_lyrics: {
+				fr: "*Aucune parole*",
+				en: "*No lyrics*"
+			}
+		},
+		"move": {
+			invalid_song: {
+				fr: "le numéro de la chanson est invalide",
+				en: "the song number is invalid"
+			},
+			invalid_pos: {
+				fr: "la position est invalide",
+				en: "the position is invalid"
+			},
+			song_moved: {
+				fr: "<a:blackCheck:803603780666523699> | **Musique déplacée**\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | **Song moved**\n> {1}"
 			}
 		}
 	}

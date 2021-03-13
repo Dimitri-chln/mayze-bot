@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "clear-queue",
-	description: "Supprimer la queue entière",
+	description: {
+		fr: "Supprimer la queue entière",
+		en: "Delete the whole queue"
+	},
 	aliases: ["cq"],
 	args: 0,
     usage: "",
@@ -14,13 +17,13 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
+		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
 
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
-		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
+		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
 		message.client.player.clearQueue(message.guild.id);
-		message.channel.send(`<a:blackCheck:803603780666523699> | **Queue supprimée**`).catch(console.error);
+		message.channel.send(language.deleted).catch(console.error);
 	}
 };
 

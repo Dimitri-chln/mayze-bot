@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: ["name", "rename"],
 	args: 0,
-	usage: "[<pseudo>]",
+	usage: "[<nickname>]",
 	perms: ["CHANGE_NICKNAME"],
 	disableSlash: true,
 	/**

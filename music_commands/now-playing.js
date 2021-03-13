@@ -16,7 +16,7 @@ const command = {
 		const Util = require("../utils/music/Util");
 
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
-		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
+		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		const queue = message.client.player.getQueue(message.guild.id);
 		
 		const song = message.client.player.nowPlaying(message.guild.id);
@@ -66,12 +66,13 @@ const command = {
 		});
 		queue.on("stop", () => clearInterval(timer));
 		queue.on("channelEmpty", () => clearInterval(timer));
-		queue.on("songChanged", () => {
-			if (timer === message.client.player.npTimers[message.channel.id]) setTimeout(updateMsg, 1000);
+		queue.on("songChanged", (oldSong, newSong) => {
+			if (timer === message.client.player.npTimers[message.channel.id]) updateMsg(newSong);
 		});
 
-		async function updateMsg() {
-			const newSong = await message.client.player.nowPlaying(message.guild.id);
+		async function updateMsg(song) {
+			const newSong = song || (await message.client.player.nowPlaying(message.guild.id));
+
 			msg.edit({
 				embed: {
 					author: {
@@ -84,7 +85,7 @@ const command = {
 						width: 1280
 					},
 					color: "#010101",
-					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${queue.repeatMode ? newSong.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration)}**`,
+					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id, !!song)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${queue.repeatMode ? newSong.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration)}**`,
 					footer: {
 						text: "✨ Mayze ✨" + (queue.repeatMode ? " | Répétition de la musique activée" : "") + (queue.repeatQueue ? " | Répétition de la queue activée" : "")
 					}

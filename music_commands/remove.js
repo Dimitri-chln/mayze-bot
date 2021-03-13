@@ -13,7 +13,7 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply("tu n'es pas dans le même salon vocal que moi").catch(console.error);
+		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
 
 		const numberRegex = /\d+(?:-\d+)?/g;
 		const checkRegex = /^(?:\d+(?:-\d+)?(?:\s|$))*/;
@@ -21,7 +21,7 @@ const command = {
 		if (!checkRegex.test(args ? args.join(" ") : options[0].value)) return message.reply("entre uniquement des nombres ou intervalles").catch(console.error);
         
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
-		if (!isPlaying) return message.channel.send("Il n'y a aucune musique en cours sur ce serveur").catch(console.error);
+		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		const queue = message.client.player.getQueue(message.guild.id);
 		if (queue.songs.length === 1) return message.reply("il n'y a aucune musique à supprimer").catch(console.error);
 

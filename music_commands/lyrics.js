@@ -2,10 +2,13 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "lyrics",
-	description: "Obtenir les paroles de la musique actuelle",
+	description: {
+		fr: "Obtenir les paroles de la musique actuelle",
+		en: "Get the lyrics of the current song"
+	},
 	aliases: ["ly", "l"],
 	args: 0,
-	usage: "[musique]",
+	usage: "[<song>]",
 	disableSlash: true,
 	/**
 	 * @param {Message} message 
@@ -21,23 +24,25 @@ const command = {
 		const songName = args
 			? args.length ? args.join(" ") : (isPlaying ? (await message.client.player.nowPlaying(message.guild.id)).name : null)
 			: options[0] ? options[0].value : (isPlaying ? (await message.client.player.nowPlaying(message.guild.id)).name : null);
-		if (!songName) return message.reply("indique le nom de la chanson").catch(console.error);
+		if (!songName) return message.reply(language.no_song).catch(console.error);
 
+		message.channel.startTyping(1);
 		const lyrics = await lyricsFinder(songName);
-		if (!lyrics) return message.reply("je n'ai pas trouvé de paroles correspondantes").catch(console.error);
+		message.channel.stopTyping();
+		if (!lyrics) return message.reply(language.no_lyrics).catch(console.error);
 
 		const linesPerPage = 20;
 		const parsedLyrics = lyrics.match(new RegExp(`(.*\n){${linesPerPage}}`, "yg"));
 		let pages = [];
 		let embed = new MessageEmbed()
-			.setAuthor(`Paroles de "${songName.replace(/^./, a => a.toUpperCase())}"`, message.client.user.avatarURL())
+			.setAuthor(language.get(language.title, songName.replace(/^./, a => a.toUpperCase())), message.client.user.avatarURL())
 			.setColor("#010101")
-			.setDescription("*Aucune parole*");
+			.setDescription(language.empty_lyrics);
 		if (!parsedLyrics.length) pages.push(embed);
 
 		for (i = 0; i < parsedLyrics.length; i++) {
 			embed = new MessageEmbed()
-			.setAuthor(`Paroles de "${songName.replace(/^./, a => a.toUpperCase())}"`, message.client.user.avatarURL())
+			.setAuthor(language.get(language.title, songName.replace(/^./, a => a.toUpperCase())), message.client.user.avatarURL())
 			.setColor("#010101")
 			.setDescription(parsedLyrics[i]);
 			pages.push(embed);
@@ -47,7 +52,7 @@ const command = {
 			pagination(message, pages, ["⏪", "⏩"], 300000);
 		} catch (err) {
 			console.error(err);
-			message.channel.send("Quelque chose s'est mal passé en créant le paginateur :/").catch(console.error);
+			message.channel.send(language.errors.paginator).catch(console.error);
 		}
 	}
 };

@@ -42,7 +42,7 @@ const command = {
 		if (m) {
 			if (message.deletable) message.react("✅").catch(console.error);
 			else message.reply(language.msg_sent).catch(console.error);
-		} else message.channel.send(language.errors.sending).catch(console.error);
+		} else message.channel.send(language.errors.message_send).catch(console.error);
 	}
 };
 
