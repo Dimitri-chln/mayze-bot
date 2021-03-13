@@ -89,7 +89,7 @@ module.exports = {
 				en: "this command doesn't work on Heroku"
 			},
 			not_in_vc: {
-				fr: language.errors.not_in_vc,
+				fr: "tu n'es pas dans le même salon vocal que moi",
 				en: "you aren't in the same voice channel as me"
 			},
 			no_music: {
