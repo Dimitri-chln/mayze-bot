@@ -8,10 +8,11 @@ const command = {
 		if (message.author.id !== "432610292342587392") return;
 		if (message.channel.type === "dm") return;
 		if (message.guild.id !== "689164798264606784") return;
+
 		const pinChannel = message.client.channels.cache.get("788428208298000435");
-		const legRegex = /Félicitations, vous venez de gagner un\.\.\. Un\.\.\. <:.+:(\d{18})> \*\*(\w+)\*\*\?!/;
-		const ubRegex =/un <:.+:(\d{18})> \*\*(\w+)\*\*\. Euh, QUOI \?/;
-		const shinyRegex = /<:.+:(\d{18})> \*\*(\w+) <:shinySparkles:653808283244560402>\*\*/;
+		const legRegex = /Félicitations, vous venez de gagner un\.\.\. Un\.\.\. <:.+?:(\d{18})> \*\*(\w+?)\*\*\?!/m;
+		const ubRegex =/un <:.+?:(\d{18})> \*\*(\w+?)\*\*\. Euh, QUOI \?/m;
+		const shinyRegex = /<:.+?:(\d{18})> \*\*(\w+?) <:shinySparkles:653808283244560402>\*\*/m;
 		// https://cdn.discordapp.com/emojis/653808283244560402.png?v=1
 
 		const [ , legEmoji, legPokemon ] = message.content.match(legRegex) || [];
@@ -27,7 +28,6 @@ const command = {
 			if (!user) return;
 		}
 		
-		const shiny = shinyPokemon ? "⭐ " : "";
 		pinChannel.send({
 			embed: {
 				author: {
@@ -38,7 +38,7 @@ const command = {
 				thumbnail: {
 					url: `https://cdn.discordapp.com/emojis/${legEmoji || ubEmoji || shinyEmoji}.png?v=1`
 				},
-				description: `a attrapé un ${shiny}**[${legPokemon || ubPokemon || shinyPokemon}](${message.url})** dans ${message.channel} !`,
+				description: `a attrapé un ${shinyPokemon ? "⭐ " : ""}**[${legPokemon || ubPokemon || shinyPokemon}](${message.url})** dans ${message.channel} !`,
 				footer: {
 					text: "✨ Mayze ✨"
 				},
