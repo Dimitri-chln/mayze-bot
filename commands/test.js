@@ -14,12 +14,7 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		const Axios = require("axios").default;
-		const deezer = new (require("deezer-public-api"));
-
-		Axios.get("https://api.dictionaryapi.dev/api/v2/entries/en/open")
-			.then(res => console.log(res.data))
-			.catch(console.error);
+		message.awaitReactions(() => true, { time: 10000 }).then(console.log);
 	}
 };
 

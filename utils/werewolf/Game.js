@@ -1,7 +1,7 @@
 const { Guild, GuildChannel, Role } = require("discord.js");
-const Player = require("./classPlayer");
-const selectPlayer = require("../werewolfModules/selectPlayer");
-const shuffle = require("../utils/shuffle");
+const Player = require("./Player");
+const selectPlayer = require("./selectPlayer");
+const shuffle = require("../shuffle");
 
 class Game {
 	/** @type {Guild} */

@@ -3,13 +3,16 @@
 		{
 			"werewolves": 0,
 			"villagers": 0
-		},{
+		},
+		{
 			"werewolves": 0,
 			"villagers": 1
-		},{
+		},
+		{
 			"werewolves": 0,
 			"villagers": 2
-		},{
+		},
+		{
 			"werewolves": 0,
 			"villagers": 3
 		},
@@ -66,15 +69,26 @@
 			"villagers": 12
 		}
 	],
-	"villagerRoles": [
-		"Villageois simple",
-		"Sorcière",
-		"Chasseur",
-		"Petite fille",
-		"Chaman",
-		"Ange",
-		"Cupidon"
-	],
+	"villagerRoles": {
+		"fr": [
+			"Villageois simple",
+			"Sorcière",
+			"Chasseur",
+			"Petite fille",
+			"Chaman",
+			"Ange",
+			"Cupidon"
+		],
+		"en": [
+			"Villager",
+			"Witch",
+			"Avenger",
+			"Little Girl",
+			"Shaman",
+			"Angel",
+			"Cupid"
+		]
+	},
 	"werewolfRoles": [
 		"Loup-garou"
 	]

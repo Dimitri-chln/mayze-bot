@@ -1,5 +1,5 @@
 const { Channel, User } = require("discord.js");
-const Player = require("./classPlayer");
+const Player = require("./Player");
 
 /**
  * @param {Channel|User} channel The channel or user to recieve the message

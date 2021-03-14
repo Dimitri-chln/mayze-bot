@@ -504,6 +504,76 @@ module.exports = {
 				fr: "**{1}** [a réagi avec]({2}) {3}"
 			}
 		},
+		"werewolf": {
+			unauthorized_guild: {
+				fr: "cette commande ne fonctionne pas sur ce serveur",
+				en: "this command isn't available on this server"
+			},
+			ongoing: {
+				fr: "une partie est déjà en cours, reviens plus tard !",
+				en: "there is already an ongoing game, come back later!"
+			},
+			max_players: {
+				fr: "il y a déjà 16 joueurs dans la partie :/",
+				en: "there are already 16 players in the game :/"
+			},
+			joined: {
+				fr: "{1} a rejoint la partie de Loups-garous",
+				en: "{1} joined next the Werewolf game"
+			},
+			already_started: {
+				fr: "la partie a déjà commencé !",
+				en: "the game already started!"
+			},
+			left: {
+				fr: "{1} a quitté la partie de Loups-garous",
+				en: "{1} left the next Werewolf game"
+			},
+			unauthorized: {
+				fr: "tu n'as pas les permissions nécessaires",
+				en: "you don't have enough permissions"
+			},
+			start_msg_title: {
+				fr: "La partie va commencer...",
+				en: "The game is going to start..."
+			},
+			start_msg_description: {
+				fr: "Réagis avec ✅ pour pouvoir jouer",
+				en: "React with ✅ to play"
+			},
+			not_enough_players: {
+				fr: "Il faut au minimum 4 joueurs pour pouvoir lancer la partie",
+				en: "There needs to be at least 4 players to start the game"
+			},
+			roles: {
+				fr: { seer: "Voyante", witch: "Sorcière", shaman: "Chaman" },
+				en: { seer: "Seer", witch: "Witch", shaman: "Shaman" }
+			},
+			welcome: {
+				fr: "Bienvenue dans cette partie de Loups-garous ! Ton rôle est **{1}** 🐺",
+				en: "Welcome in this Werewolf game! Your role is **{1}** 🐺"
+			},
+			started_content: {
+				fr: "{1} la partie vient de commencer !",
+				en: "{1} the game just started!"
+			},
+			started_title: {
+				fr: "Rôles de cette partie :",
+				en: "This game's roles:"
+			},
+			player_list: {
+				fr: "Liste des joueurs :",
+				en: "Player list:"
+			},
+			fields: {
+				fr: [ "Joueurs :", "Rôles :" ],
+				en: [ "Players:", "Roles:" ]
+			},
+			no_player: {
+				fr: "*Aucun joueur*",
+				en: "*No player*"
+			}
+		},
 
 		// MUSIC COMMANDS
 

@@ -6,12 +6,13 @@ const command = {
 	 */
 	execute: async (message) => {
 		const koya = message.guild.members.cache.get("276060004262477825");
-		if (koya && koya.user.presence.status !== 'offline') return;
+		if (koya && koya.user.presence.status !== "offline") return;
 		if (!/^(?:(?:k|K)oya\s?)|(?:\^\^)afk/.test(message.content)) return;
 
 		const afk = message.client.commands.get("afk");
+		
 		try {
-			afk.execute(message, message.content.split(/ +/g).slice(1));
+			afk.execute(message, message.content.replace(/^(?:(?:k|K)oya\s?)|(?:\^\^)afk/).split(/ +/g));
 		} catch (err) {
 			console.error(err);
 		}
