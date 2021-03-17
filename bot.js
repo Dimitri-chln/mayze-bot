@@ -487,7 +487,7 @@ function ACNHReminders() {
 function testReminders() {
 	const users = [ "408671348005797898" ];
 
-	const wednesday = new Cron.CronJob("0 45 14 * * 3", () => {
+	const wednesday = new Cron.CronJob("0 45 15 * * 3", () => {
 		users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 15 minutes!").catch(console.error)));
 		setTimeout(() => users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 5 minutes!").catch(console.error))), 600000);
 		setTimeout(() => users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 1 minute!").catch(console.error))), 840000);
