@@ -314,7 +314,13 @@ client.on("guildMemberAdd", async member => {
 	const regex = /[\w\d&é"#'\{\(\[-\|è_\\ç^à@\)\]=\+\}\$\*%!:\/;\.,\?<>€]/;
 	if (member.guild.id !== "689164798264606784") return;
 	if (!regex.test(member.displayName)) member.setNickname(`Je clc | ${member.displayName}`).catch(console.error);
+});
 
+client.on("guildMemberUpdate", async (oldMember, newMember) => {
+	// UNPINGABLE NICKNAMES
+	const regex = /[\w\d&é"#'\{\(\[-\|è_\\ç^à@\)\]=\+\}\$\*%!:\/;\.,\?<>€]/;
+	if (member.guild.id !== "689164798264606784") return;
+	if (!regex.test(member.displayName)) member.setNickname(`Je clc | ${member.displayName}`).catch(console.error);
 });
 
 client.on("guildMemberRemove", async member => {
