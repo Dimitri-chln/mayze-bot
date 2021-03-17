@@ -9,6 +9,7 @@ const command = {
 	aliases: ["ww", "lg"],
 	args: 0,
 	usage: "join | leave | start | end",
+	onlyInGuilds: ["689164798264606784", "724530039781326869"],
 	slashOptions: [
 		{
 			name: "join",

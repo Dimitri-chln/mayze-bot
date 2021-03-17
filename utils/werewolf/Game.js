@@ -517,7 +517,8 @@ class Game {
 			player.member.roles.remove(this.roleIngame).catch(console.error);
 			player.member.roles.remove(this.roleVillage).catch(console.error);
 			player.member.roles.remove(this.roleWerwolves).catch(console.error);
-			player.member.roles.remove(this.guild.roles.cache.find(role => role.name === player.role)).catch(console.error);
+			const deadRole = this.guild.roles.cache.find(role => role.name === player.role);
+			if (deadRole) player.member.roles.remove(deadRole).catch(console.error);
 			if (player.role === roles.shaman[this.languageCode] && player.isAlive) {
 				this.deadChannel.permissionOverwrites.get(player.member.id).delete().catch(console.error);
 			}
