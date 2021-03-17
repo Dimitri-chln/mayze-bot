@@ -68,34 +68,16 @@ const command = {
 				if (message.client.werewolfGames && message.client.werewolfGames.get(message.guild.id) && !message.client.werewolfGames.get(message.guild.id).ended) return message.reply(language.ongoing).catch(console.error);
 				if (message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame.id)).size === 16) return message.reply(language.max_players).catch(console.error);
 				
-				if (message.guild.id === "689164798264606784") message.member.roles.add("759694957132513300").catch(console.error);
 				message.member.roles.add(roleIngame).catch(console.error);
-				// if (message.member.roles.cache.has("689180158359371851")) { // Administrateur
-				// 	message.member.roles.add("753245162469064795").catch(console.error);
-				// 	message.member.roles.remove("689180158359371851").catch(console.error);
-				// }
-				// if (message.member.roles.cache.has("737646140362850364")) { // Modérateur
-				// 	message.member.roles.add("753250476891439185").catch(console.error);
-				// 	message.member.roles.remove("737646140362850364").catch(console.error);
-				// }
-				
+								
 				message.channel.send(language.get(language.joined, message.author)).catch(console.error);
 				if (message.channel.id !== villageChannel.id) villageChannel.send(language.get(language.joined, message.author)).catch(console.error);
 				break;
 			case "leave":
 				if (message.client.werewolfGames && message.client.werewolfGames.get(message.guild.id) && !message.client.werewolfGames.get(message.guild.id).ended) return message.reply(language.already_started).catch(console.error);
 				
-				if (message.guild.id === "689164798264606784") message.member.roles.remove("759694957132513300").catch(console.error);
 				message.member.roles.remove(roleIngame).catch(console.error);
-				// if (message.member.roles.cache.has("753245162469064795")) { // Administrateur
-				// 	message.member.roles.add("689180158359371851").catch(console.error);
-				// 	message.member.roles.remove("753245162469064795").catch(console.error);
-				// }
-				// if (message.member.roles.cache.has("753250476891439185")) { // Modérateur
-				// 	message.member.roles.add("737646140362850364").catch(console.error);
-				// 	message.member.roles.remove("753250476891439185").catch(console.error);
-				// }
-
+				
 				message.channel.send(language.get(language.left, message.author)).catch(console.error);
 				if (message.channel.id !== villageChannel.id) villageChannel.send(language.get(language.left, message.author)).catch(console.error);
 				break;
