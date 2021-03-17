@@ -29,9 +29,9 @@ async function selectPlayer(channel, players, embedTitle, timeout = 30000, langu
 		embed: {
 			title: embedTitle,
 			color: "#010101",
-			description: players.map((player, i) => `\`${ (i + 1).toString(16).toUpperCase() }.\` ${ player.member.user.username }`).join("\n"),
+			description: players.map((player, i) => `\`${ (i + 1).toString(16).toUpperCase() }.\` ${player.member.user.username}`).join("\n"),
 			footer: {
-				text: language.get(language.footer, Math.round(timeout / 1000))
+				text: language.get(language.footer[languageCode], Math.round(timeout / 1000))
 			}
 		}
 	}).catch(console.error);

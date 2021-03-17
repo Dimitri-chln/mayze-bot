@@ -215,7 +215,7 @@ class Player {
 					this.member.send(language.get(language.avengerAnswer[this.game.languageCode], player.member.user.username)).catch(console.error);
 				}
 				break;
-			case roleslittle_girl[this.game.languageCode]:
+			case roles.little_girl[this.game.languageCode]:
 				this.member.send({
 					embed: {
 						title: language.littleGirlTitle[this.game.languageCode],

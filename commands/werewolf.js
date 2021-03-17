@@ -191,7 +191,7 @@ const command = {
 					game.end();
 				}
 
-				message.client.werewolfGame.delete(message.guild.id);
+				message.client.werewolfGames.delete(message.guild.id);
 				break;
 			case "players":
 				if (message.client.werewolfGames && message.client.werewolfGames.has(message.guild.id) && message.channel.id === villageChannel.id) {
