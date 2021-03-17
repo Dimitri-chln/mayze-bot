@@ -118,17 +118,16 @@ const command = {
 				}).catch(console.error);
 				startMsg.react("✅").catch(console.error);
 
-				const possiblePlayers = message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame));
+				const possiblePlayers = message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame.id));
 
 				const filter = (reaction, user) => reaction.emoji.name === "✅" && !user.bot && possiblePlayers.has(user.id);
 				const collected = await startMsg.awaitReactions(filter, { time: 30000 }).catch(console.error);;
 				const [ players, toRemove ] = possiblePlayers.partition(m => collected.first().users.cache.has(m.id));
 
-				toRemove.forEach(m => m.roles.remove(roleIngame).catch(console.error));
+				if (players.size < 4) return villageChannel.send(language.not_enough_players).catch(console.error);
 
+				toRemove.forEach(m => m.roles.remove(roleIngame).catch(console.error));
 				players.sort(() => Math.random() - 0.5);
-				if (players.size < 4)
-					return villageChannel.send(language.not_enough_players).catch(console.error);
 
 				const game = new Game(message.guild, roleIngame, roleVillage, roleWerewolves, villageChannel, werewolvesChannel, deadChannel);
 				const composition = werewolfInfo.composition[players.length];
