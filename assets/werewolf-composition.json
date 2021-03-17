@@ -83,13 +83,53 @@
 			"Villager",
 			"Witch",
 			"Avenger",
-			"Little Girl",
+			"Little girl",
 			"Shaman",
 			"Angel",
 			"Cupid"
 		]
 	},
-	"werewolfRoles": [
+	"werewolfRoles": {
+		"fr": [
 		"Loup-garou"
-	]
+		]
+	},
+	"roles": {
+		"villager": {
+			"fr": "Villageois simple",
+			"en": "Villager"
+		},
+		"seer": {
+			"fr": "Voyante",
+			"en": "Seer"
+		},
+		"witch": {
+			"fr": "Sorcière",
+			"en": "Witch"
+		},
+		"avenger": {
+			"fr": "Chasseur",
+			"en": "Avenger"
+		},
+		"little_girl": {
+			"fr": "Petite fille",
+			"en": "Little girl"
+		},
+		"shaman": {
+			"fr": "Chaman",
+			"en": "Shaman"
+		},
+		"angel": {
+			"fr": "Ange",
+			"en": "Angel"
+		},
+		"cupid": {
+			"fr": "Cupidon",
+			"en": "Cupid"
+		},
+		"werewolf": {
+			"fr": "Loup-garou",
+			"en": "Werewolf"
+		}
+	}
 }

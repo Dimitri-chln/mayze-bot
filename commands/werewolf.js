@@ -141,7 +141,7 @@ const command = {
 						role = werewolves[i] || werewolfInfo.werewolfRoles[languageCode][0];
 						playerMember.roles.add(roleWerewolves).catch(console.error);
 					} else if (i === composition.werewolves) {
-						role = language.roles.seer;
+						role = werewolfInfo.roles.seer[languageCode];
 						playerMember.roles.add(roleVillage).catch(console.error);
 					} else {
 						role = villagers[i] || werewolfInfo.villagerRoles[languageCode][0];
@@ -149,8 +149,8 @@ const command = {
 					};
 
 					let options = {};
-					if (role === language.roles.witch) options.canSave = true;
-					if (role === language.roles.shaman) {
+					if (role === werewolfInfo.roles.witch[languageCode]) options.canSave = true;
+					if (role === werewolfInfo.roles.shaman[languageCode]) {
 						deadChannel.updateOverwrite(player, { "VIEW_CHANNEL": true, "SEND_MESSAGES": false }).catch(console.error);
 					};
 					

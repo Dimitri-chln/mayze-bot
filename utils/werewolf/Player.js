@@ -1,11 +1,90 @@
 const { GuildMember } = require("discord.js");
 const selectPlayer = require("./selectPlayer");
+const { roles } = require("../../assets/werewolf-composition.json");
+const Game = require("./Game");
+
+const language = {
+	get: (text, ...args) => text
+		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
+		.replace(/\[\d+?\?.*?:.*?\]/g, a => {
+			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/);
+			if (args[parseInt(m[1]) - 1]) return m[2];
+			else return m[3];
+		}),
+
+	werewolfTitle: {
+		fr: "C'est l'heure de tuer quelqu'un !",
+		en: "It's time to kill someone!"
+	},
+	werewolfDescription: {
+		fr: "Vas voir {1} pour discuter avec les autres loups-garous",
+		en: "Check {1} to chat with your fellow werewolves"
+	},
+	tooLate: {
+		fr: "Tu n'as pas répondu à temps",
+		en: "You didn't answer in time"
+	},
+	seerTitle: {
+		fr: "De quel joueur souhaites-tu connaître le rôle ?",
+		en: "Which player do you want to know the role of?"
+	},
+	seerAnswer: {
+		fr: "**{1}** est **{2}** !",
+		en: "**{1}** is **{2}**!"
+	},
+	witchMessage: {
+		fr: "Le joueur que les loups-garous ont décidé d'attaquer s'affichera lorsqu'ils auront fait leur choix",
+		en: "The player that the werewolves want to attack will be shown once they decided"
+	},
+	cupidFirst: {
+		fr: "Quel joueur souhaites-tu mettre en couple ? (1er joueur)",
+		en: "Which player do you want to couple? (1st player)"
+	},
+	cupidSecond: {
+		fr: "Quel joueur souhaites-tu mettre en couple ? (2ème joueur)",
+		en: "Which player do you want to couple? (2nd player)"
+	},
+	cupidAnswer: {
+		fr: "**{1}** et **{2}** sont maintenant en couple !",
+		en: "**{1}** and **{2}** are now coupled!"
+	},
+	cupidLovers: {
+		fr: "Tu es désormais en couple avec **{1}** ! Son rôle est **{2}**",
+		en: "You are now coupled with **{1}**! Their role is **{2}**"
+	},
+	avengerTitle: {
+		fr: "Quel joueur souhaites-tu tuer lors de ta mort ?",
+		en: "Which player do you want to kill upon your own death?"
+	},
+	avengerAnswer: {
+		fr: "**{1}** mourra avec toi !",
+		en: "**{1}** will die with you!"
+	},
+	littleGirlTitle: {
+		fr: "Espionne les loups-garous !",
+		en: "Spy the werewolves!"
+	},
+	littleGirlDescription: {
+		fr: "Le chat des loups-garous s'affichera ici 👀",
+		en: "The werewolves' chat will be displayed here 👀"
+	},
+	uselessTitle: {
+		fr: "Rien à faire cette nuit...",
+		en: "Nothing to do on this night..."
+	},
+	uselessDescription: {
+		fr: "Fais de beaux rêves 😴",
+		en: "Sweet dreams 😴"
+	}
+};
 
 class Player {
 	/** @type {GuildMember} */
 	#member;
 	/** @type {string} */
 	#role;
+	/** @type {Game} */
+	#game;
 	/** @type {boolean} */
 	#isAlive;
 	/** @type {Player} */
@@ -15,11 +94,14 @@ class Player {
 
 	/**
 	 * @param {GuildMember} member The member linked to the player
+	 * @param {string} role The role of the player
+	 * @param {Game} game The player's game
 	 * @param {object} options Additional information about the player
 	 */
-	constructor(member, role, options = {}) {
+	constructor(member, role, game, options = {}) {
 		this.#member = member;
 		this.#role = role;
+		this.#game = game;
 		this.#isAlive = true,
 		this.#couple = null;
 		this.#options = options;
@@ -34,6 +116,11 @@ class Player {
 	 * @returns {string} The player's role
 	 */
 	get role() { return this.#role; }
+
+	/**
+	 * @returns {Game} The player's game
+	 */
+	get game() { return this.#game; }
 
 	/**
 	 * @returns {boolean} If the player is alive
@@ -85,55 +172,55 @@ class Player {
 	 */
 	async action(players, night) {
 		switch (this.role) {
-			case "Loup-garou":
+			case roles.werewolf[this.game.languageCode]:
 				this.member.send({
 					embed: {
-						title: "C'est l'heure de tuer quelqu'un !",
+						title: language.werewolfTitle[this.game.languageCode],
 						color: "#010101",
-						description: "Vas voir <#759702367800786964> pour discuter avec les autres loups-garous",
+						description: language.get(language.werewolfDescription, this.game.werewolvesChannel.toString()),
 						footer: {
 							text: "🐺 Mayze 🐺"
 						}
 					}
 				}).catch(console.error);
 				break;
-			case "Voyante":
+			case roles.seer[this.game.languageCode]:
 				{
-					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "De quel joueur souhaites-tu connaître le rôle ?").catch(console.error);
-					if (!player) return this.member.send("Tu n'as pas répondu à temps");
-					this.member.send(`**${ player.member.user.username }** est **${ player.role }** !`).catch(console.error);
+					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), language.seerTitle[this.game.languageCode]).catch(console.error);
+					if (!player) return this.member.send(language.tooLate[this.game.languageCode]);
+					this.member.send(language.get(language.seerAnswer[this.game.languageCode], player.member.user.username, player.role)).catch(console.error);
 				}
 				break;
-			case "Sorcière":
-				this.member.send("Le joueur que les loups-garous ont décidé d'attaquer s'affichera lorsqu'ils auront fait le choix").catch(console.error);
+			case roles.witch[this.game.languageCode]:
+				this.member.send(language.witchMessage[this.game.languageCode]).catch(console.error);
 				break;
-			case "Cupidon":
+			case roles.cupid[this.game.languageCode]:
 				if (night !== 1) return;
 				if (players.some(player => player.couple)) return;
-				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "Quel joueur souhaites-tu mettre en couple ? (1er joueur)", 15000).catch(console.error);
-				if (!player_1) return this.member.send("Tu n'as pas répondu à temps");
-				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), "Quel joueur souhaites-tu mettre en couple ? (2ème joueur)", 15000).catch(console.error);
-				if (!player_2) return this.member.send("Tu n'as pas répondu à temps");
+				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), language.cupidFirst, 15000).catch(console.error);
+				if (!player_1) return this.member.send(language.tooLate[this.game.languageCode]);
+				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), language.cupidSecond, 15000).catch(console.error);
+				if (!player_2) return this.member.send(language.tooLate[this.game.languageCode]);
 				player_1.setCouple(player_2);
 				player_2.setCouple(player_1);
-				this.member.send(`**${player_1.member.user.username}** et **${player_2.member.user.username}** sont maintenant en couple !`).catch(console.error);
-				player_1.member.send(`Tu es désormais en couple avec **${player_2.member.user.username}** ! Son rôle est **${player_2.role}**`).catch(console.error);
-				player_2.member.send(`Tu es désormais en couple avec **${player_1.member.user.username}** ! Son rôle est **${player_1.role}**`).catch(console.error);
+				this.member.send(language.get(language.cupidAnswer[this.game.languageCode], player_1.member.user.username, player_2.member.user.username)).catch(console.error);
+				player_1.member.send(language.get(language.cupidLovers[this.game.languageCode], player_2.member.user.username, player_2.role)).catch(console.error);
+				player_2.member.send(language.get(language.cupidLovers[this.game.languageCode], player_1.member.user.username, player_1.role)).catch(console.error);
 				break;
-			case "Chasseur":
+			case roles.avenger[this.game.languageCode]:
 				{
-					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), "Quel joueur souhaites-tu tuer lors de ta mort ?").catch(console.error);
-					if (!player) return this.member.send("Tu n'as pas répondu à temps");
+					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), language.avengerTitle).catch(console.error);
+					if (!player) return this.member.send(language.tooLate[this.game.languageCode]);
 					this.setOption("avenge", player);
-					this.member.send(`**${ player.member.user.username }** mourra avec toi !`).catch(console.error);
+					this.member.send(language.get(language.avengerAnswer[this.game.languageCode], player.member.user.username)).catch(console.error);
 				}
 				break;
-			case "Petite fille":
+			case roleslittle_girl[this.game.languageCode]:
 				this.member.send({
 					embed: {
-						title: "Espionne les loups-garous !",
+						title: language.littleGirlTitle[this.game.languageCode],
 						color: "#010101",
-						description: "Le chat des loups-garous s'affichera ici 👀",
+						description: language.littleGirlDescription[this.game.languageCode],
 						footer: {
 							text: "🐺 Mayze 🐺"
 						}
@@ -143,9 +230,9 @@ class Player {
 			default:
 				this.member.send({
 					embed: {
-						title: "Rien à faire cette nuit...",
+						title: language.uselessTitle[this.game.languageCode],
 						color: "#010101",
-						description: "Fais de beaux rêves 😴",
+						description: language.uselessDescription[this.game.languageCode],
 						footer: {
 							text: "🐺 Mayze 🐺"
 						}

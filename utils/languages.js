@@ -386,7 +386,7 @@ module.exports = {
 		"level": {
 			description: {
 				fr: "• **Niveau : `{1}`**\n• **Rang : `#{2}`**\n\n**XP** {3} {4}/{5}",
-				en: "• **Level: `{1}`**\n• **Rank: `{2}`**\n\n**XP** {3} {4}/{5}"
+				en: "• **Level: `{1}`**\n• **Rank: `#{2}`**\n\n**XP** {3} {4}/{5}"
 			}
 		},
 		"mass-ping": {
@@ -544,10 +544,6 @@ module.exports = {
 			not_enough_players: {
 				fr: "Il faut au minimum 4 joueurs pour pouvoir lancer la partie",
 				en: "There needs to be at least 4 players to start the game"
-			},
-			roles: {
-				fr: { seer: "Voyante", witch: "Sorcière", shaman: "Chaman" },
-				en: { seer: "Seer", witch: "Witch", shaman: "Shaman" }
 			},
 			welcome: {
 				fr: "Bienvenue dans cette partie de Loups-garous ! Ton rôle est **{1}** 🐺",
