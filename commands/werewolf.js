@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: ["ww", "lg"],
 	args: 0,
-	usage: "join | leave | start | end",
+	usage: "join | leave | start | end | config",
 	onlyInGuilds: ["689164798264606784", "724530039781326869"],
 	slashOptions: [
 		{
@@ -29,6 +29,11 @@ const command = {
 		{
 			name: "end",
 			description: "End a game of Werewolf",
+			type: 1
+		},
+		{
+			name: "config",
+			description: "Get the channel and role config for Werewolf games",
 			type: 1
 		},
 		{
@@ -174,6 +179,18 @@ const command = {
 				}
 
 				message.client.werewolfGames.delete(message.guild.id);
+				break;
+			case "config":
+				message.channel.send({
+					embed: {
+						title: language.config,
+						color: "#010101",
+						description: language.get(language.config_description, roleIngame.toString(), roleVillage.toString(), roleWerewolves.toString(), villageChannel.toString(), werewolvesChannel.toString(), deadChannel.toString()),
+						footer: {
+							text: "🐺 Mayze 🐺"
+						}
+					}
+				}).catch(console.error);
 				break;
 			case "players":
 				if (message.client.werewolfGames && message.client.werewolfGames.has(message.guild.id) && message.channel.id === villageChannel.id) {
