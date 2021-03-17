@@ -118,7 +118,7 @@ const command = {
 				}).catch(console.error);
 				startMsg.react("✅").catch(console.error);
 
-				const possiblePlayers = message.guild.members.cache.filter(m => m.roles.has(roleIngame));
+				const possiblePlayers = message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame));
 
 				const filter = (reaction, user) => reaction.emoji.name === "✅" && !user.bot && possiblePlayers.has(user.id);
 				const collected = await startMsg.awaitReactions(filter, { time: 30000 }).catch(console.error);;
