@@ -297,8 +297,8 @@ class Game {
 	async setNight() {
 		if (this.night === 0) this.shufflePlayers();
 		this.#night ++;
-		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": false });
-		this.werewolvesChannel.updateOverwrite(this.roleWerewolves, { "SEND_MESSAGES": null });
+		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": false }).catch(console.error);
+		this.werewolvesChannel.updateOverwrite(this.roleWerewolves, { "SEND_MESSAGES": null }).catch(console.error);
 		this.villageChannel.send({
 			embed: {
 				title: language.get(language.nightStart[this.languageCode], this.night),
@@ -307,7 +307,7 @@ class Game {
 					text: "🐺 Mayze 🐺"
 				}
 			}
-		});
+		}).catch(console.error);
 		const filter = message => !message.author.bot;
 		const messageCollector = this.werewolvesChannel.createMessageCollector(filter, { time: 90000 });
 		const littleGirl = this.players.find(player => player.role === roles.little_girl[this.languageCode]);
