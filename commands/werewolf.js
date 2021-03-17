@@ -106,7 +106,7 @@ const command = {
 					content: roleIngame.toString(),
 					embed: {
 						author: {
-							name: language.start_msg.title,
+							name: language.start_msg_title,
 							icon_url: message.client.user.avatarURL()
 						},
 						color: "#010101",
@@ -121,7 +121,7 @@ const command = {
 				const possiblePlayers = message.guild.members.cache.filter(m => m.roles.has(roleIngame));
 
 				const filter = (reaction, user) => reaction.emoji.name === "✅" && !user.bot && possiblePlayers.has(user.id);
-				const collected = await startMsg.awaitReactions(filter, { time: 15000 }).catch(console.error);;
+				const collected = await startMsg.awaitReactions(filter, { time: 30000 }).catch(console.error);;
 				const [ players, toRemove ] = possiblePlayers.partition(m => collected.first().users.cache.has(m.id));
 
 				toRemove.forEach(m => m.roles.remove(roleIngame).catch(console.error));
