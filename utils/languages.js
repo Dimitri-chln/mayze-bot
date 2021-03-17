@@ -519,7 +519,7 @@ module.exports = {
 			},
 			joined: {
 				fr: "{1} a rejoint la partie de Loups-garous",
-				en: "{1} joined next the Werewolf game"
+				en: "{1} joined the next Werewolf game"
 			},
 			already_started: {
 				fr: "la partie a déjà commencé !",

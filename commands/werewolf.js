@@ -224,7 +224,7 @@ const command = {
 					}).catch(console.error);
 
 				} else {
-					const joined = message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame)).array();
+					const joined = message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame.id)).array();
 
 					message.channel.send({
 						embed: {
@@ -233,7 +233,7 @@ const command = {
 								icon_url: message.client.user.avatarURL()
 							},
 							color: "#010101",
-							description: joined.map((m, i) => `\`${i+1}.\` ${m.user.username}`).join("\n") || language.no_player,
+							description: joined.map((m, i) => `\`${i + 1}.\` ${m.user.username}`).join("\n") || language.no_player,
 							footer: {
 								text: "🐺 Mayze 🐺"
 							}
