@@ -129,7 +129,7 @@ const command = {
 				toRemove.forEach(m => m.roles.remove(roleIngame).catch(console.error));
 				players.sort(() => Math.random() - 0.5);
 
-				const game = new Game(message.guild, roleIngame, roleVillage, roleWerewolves, villageChannel, werewolvesChannel, deadChannel);
+				const game = new Game(message.guild, roleIngame, roleVillage, roleWerewolves, villageChannel, werewolvesChannel, deadChannel, [], languageCode);
 				const composition = werewolfInfo.composition[players.length];
 				const werewolves = shuffle(werewolfInfo.werewolfRoles[languageCode]);
 				const villagers = shuffle(werewolfInfo.villagerRoles[languageCode]);

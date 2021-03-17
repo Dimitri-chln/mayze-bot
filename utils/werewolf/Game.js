@@ -115,7 +115,7 @@ class Game {
 	/** @type {Role} */
 	#roleVillage;
 	/** @type {Role} */
-	#roleWerwolves;
+	#roleWerewolves;
 	/** @type {Channel} */
 	#villageChannel;
 	/** @type {Channel} */
@@ -139,7 +139,7 @@ class Game {
 	 * @param {Guild} guild The guild where the game is created
 	 * @param {Role} roleIngame The role the players have when they are ingame
 	 * @param {Role} roleVillage The role all villagers have
-	 * @param {Role} roleWerwolves The role all werewolves have
+	 * @param {Role} roleWerewolves The role all werewolves have
 	 * @param {GuildChannel} villageChannel The channel where all the village can chat
 	 * @param {GuildChannel} werewolvesChannel The channel where the werewolves can chat
 	 * @param {GuildChannel} deadChannel The channel where the dead players can chat
@@ -147,11 +147,11 @@ class Game {
 	 * @param {string} languageCode The language of the game
 	 * @param {object} option Additional information about the game
 	 */
-	constructor(guild, roleIngame, roleVillage, roleWerwolves, villageChannel, werewolvesChannel, deadChannel, players = [], languageCode = "en", options = {}) {
+	constructor(guild, roleIngame, roleVillage, roleWerewolves, villageChannel, werewolvesChannel, deadChannel, players = [], languageCode = "en", options = {}) {
 		this.#guild = guild;
 		this.#roleIngame = roleIngame;
 		this.#roleVillage = roleVillage;
-		this.#roleWerwolves = roleWerwolves;
+		this.#roleWerewolves = roleWerewolves;
 		this.#villageChannel = villageChannel;
 		this.#werewolvesChannel = werewolvesChannel;
 		this.#deadChannel = deadChannel;
@@ -181,7 +181,7 @@ class Game {
 	/**
 	 * @returns {Role} The role all werewolves have
 	 */
-	get roleWerwolves() { return this.#roleWerwolves; }
+	get roleWerewolves() { return this.#roleWerewolves; }
 
 	/**
 	 * @returns {GuildChannel} The channel where all the village can chat
@@ -281,7 +281,7 @@ class Game {
 		const deadRole = this.guild.roles.cache.find(role => role.name === player.role);
 		player.member.roles.add(deadRole).catch(console.error);
 		player.member.roles.remove(this.roleVillage).catch(console.error);
-		player.member.roles.remove(this.roleWerwolves).catch(console.error);
+		player.member.roles.remove(this.roleWerewolves).catch(console.error);
 
 		const dead = [ player ];
 		if (player.couple && player.couple.isAlive)
@@ -298,7 +298,7 @@ class Game {
 		if (this.night === 0) this.shufflePlayers();
 		this.#night ++;
 		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": false });
-		this.werewolvesChannel.updateOverwrite(this.roleWerwolves, { "SEND_MESSAGES": null });
+		this.werewolvesChannel.updateOverwrite(this.roleWerewolves, { "SEND_MESSAGES": null });
 		this.villageChannel.send({
 			embed: {
 				title: language.get(language.nightStart[this.languageCode], this.night),
@@ -390,7 +390,7 @@ class Game {
 	async setDay() {
 		this.#day ++;
 		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": null });
-		this.werewolvesChannel.updateOverwrite(this.roleWerwolves, { "SEND_MESSAGES": false });
+		this.werewolvesChannel.updateOverwrite(this.roleWerewolves, { "SEND_MESSAGES": false });
 		const attackedPlayer = this.alivePlayers.find(player => player.options.isAttacked);
 		const dead = this.kill(attackedPlayer) || [];
 		this.villageChannel.send({
@@ -512,11 +512,11 @@ class Game {
 	async end() {
 		this.#ended = true;
 		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": null }).catch(console.error);
-		this.werewolvesChannel.updateOverwrite(this.roleWerwolves, { "SEND_MESSAGES": false }).catch(console.error);
+		this.werewolvesChannel.updateOverwrite(this.roleWerewolves, { "SEND_MESSAGES": false }).catch(console.error);
 		this.players.forEach(async player => {
 			player.member.roles.remove(this.roleIngame).catch(console.error);
 			player.member.roles.remove(this.roleVillage).catch(console.error);
-			player.member.roles.remove(this.roleWerwolves).catch(console.error);
+			player.member.roles.remove(this.roleWerewolves).catch(console.error);
 			const deadRole = this.guild.roles.cache.find(role => role.name === player.role);
 			if (deadRole) player.member.roles.remove(deadRole).catch(console.error);
 			if (player.role === roles.shaman[this.languageCode] && player.isAlive) {
