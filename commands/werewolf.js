@@ -55,12 +55,12 @@ const command = {
 		if (!config.WEREWOLF[message.guild.id]) return message.reply(language.unauthorized_guild).catch(console.error);
 
 		const { OWNER_ID } = config;
-		const { ROLE_INGAME_ID, ROLE_VILLAGE_ID, ROLE_WEREWOLVES_ID, VILLAGE_CHANNEL_ID, WEREWOLEVS_CHANNEL_ID, DEAD_CHANNEL_ID } = config.WEREWOLF[message.guild.id];
+		const { ROLE_INGAME_ID, ROLE_VILLAGE_ID, ROLE_WEREWOLVES_ID, VILLAGE_CHANNEL_ID, WEREWOLVES_CHANNEL_ID, DEAD_CHANNEL_ID } = config.WEREWOLF[message.guild.id];
 		const roleIngame = message.guild.roles.cache.get(ROLE_INGAME_ID);
 		const roleVillage = message.guild.roles.cache.get(ROLE_VILLAGE_ID);
 		const roleWerewolves = message.guild.roles.cache.get(ROLE_WEREWOLVES_ID);
 		const villageChannel = message.guild.channels.cache.get(VILLAGE_CHANNEL_ID);
-		const werewolvesChannel = message.guild.channels.cache.get(WEREWOLEVS_CHANNEL_ID);
+		const werewolvesChannel = message.guild.channels.cache.get(WEREWOLVES_CHANNEL_ID);
 		const deadChannel = message.guild.channels.cache.get(DEAD_CHANNEL_ID);
 
 		switch (subCommand) {
