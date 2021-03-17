@@ -562,8 +562,8 @@ module.exports = {
 				en: "Werewolf config"
 			},
 			config_description: {
-				fr: "Rôle joueur : {1}\nRôle villagois : {2}\nRôle loup-garou : {3}\nSalon du village : {4}\nSalon des loups-garous : {5}\nSalon des morts : {6}",
-				en: "Player role: {1}\nVillager role: {2}\nWerewolf role: {3}\nVillage channel: {4}\nWerewolves channel: {5}\nDead channel: {6}"
+				fr: "• Rôle joueur : {1}\n• Rôle villagois : {2}\n• Rôle loup-garou : {3}\n• Salon du village : {4}\n• Salon des loups-garous : {5}\n• Salon des morts : {6}",
+				en: "• Player role: {1}\n• Villager role: {2}\n• Werewolf role: {3}\n• Village channel: {4}\n• Werewolves channel: {5}\n• Dead channel: {6}"
 			},
 			player_list: {
 				fr: "Liste des joueurs :",
