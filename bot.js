@@ -490,13 +490,13 @@ function testReminders() {
 	const wednesday = new Cron.CronJob("0 45 15 * * 3", () => {
 		users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 15 minutes!").catch(console.error)));
 		setTimeout(() => users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 5 minutes!").catch(console.error))), 600000);
-		setTimeout(() => users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 2 minute!").catch(console.error))), 780000);
+		setTimeout(() => users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 2 minutes!").catch(console.error))), 780000);
 	}, null, true, null, null, false, 0);
 
 	const sunday = new Cron.CronJob("0 45 13 * * 0", () => {
 		users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 15 minutes!").catch(console.error)));
 		setTimeout(() => users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 5 minutes!").catch(console.error))), 600000);
-		setTimeout(() => users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 2 minute!").catch(console.error))), 780000);
+		setTimeout(() => users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 2 minutes!").catch(console.error))), 780000);
 	}, null, true, null, null, false, 0);
 
 	return { wednesday, sunday };
