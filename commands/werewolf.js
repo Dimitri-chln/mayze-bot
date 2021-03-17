@@ -80,6 +80,7 @@ const command = {
 				// }
 				
 				message.channel.send(language.get(language.joined, message.author)).catch(console.error);
+				villageChannel.send(language.get(language.joined, message.author)).catch(console.error);
 				break;
 			case "leave":
 				if (message.client.werewolfGames && message.client.werewolfGames.get(message.guild.id) && !message.client.werewolfGames.get(message.guild.id).ended) return message.reply(language.already_started).catch(console.error);
@@ -96,6 +97,7 @@ const command = {
 				// }
 
 				message.channel.send(language.get(language.left, message.author)).catch(console.error);
+				villageChannel.send(language.get(language.left, message.author)).catch(console.error);
 				break;
 			case "start":
 				if (message.channel.id !== villageChannel.id) return;
@@ -139,13 +141,13 @@ const command = {
 
 					if (i < composition.werewolves) {
 						role = werewolves[i] || werewolfInfo.werewolfRoles[languageCode][0];
-						playerMember.roles.add(roleWerewolves).catch(console.error);
+						player.roles.add(roleWerewolves).catch(console.error);
 					} else if (i === composition.werewolves) {
 						role = werewolfInfo.roles.seer[languageCode];
-						playerMember.roles.add(roleVillage).catch(console.error);
+						player.roles.add(roleVillage).catch(console.error);
 					} else {
 						role = villagers[i] || werewolfInfo.villagerRoles[languageCode][0];
-						playerMember.roles.add(roleVillage).catch(console.error);
+						player.roles.add(roleVillage).catch(console.error);
 					};
 
 					let options = {};
