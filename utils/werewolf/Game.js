@@ -327,7 +327,7 @@ class Game {
 			else immediateDay = true;
 		}, 30000);
 
-		const attackedPlayer = await selectPlayer(this.werewolvesChannel, this.alivePlayers.filter(player => player.role !== roles.werewolf[this.languageCode]), language.werewolvesTitle[this.languageCode], 60000).catch(console.error);
+		const attackedPlayer = await selectPlayer(this.werewolvesChannel, this.alivePlayers.filter(player => player.role !== roles.werewolf[this.languageCode]), language.werewolvesTitle[this.languageCode], 60000, this.languageCode).catch(console.error);
 		const witch = this.players.find(player => player.role === roles.witch[this.languageCode]);
 		
 		if (attackedPlayer) {

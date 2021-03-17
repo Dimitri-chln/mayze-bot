@@ -80,7 +80,7 @@ const command = {
 				// }
 				
 				message.channel.send(language.get(language.joined, message.author)).catch(console.error);
-				villageChannel.send(language.get(language.joined, message.author)).catch(console.error);
+				if (message.channel.id !== villageChannel.id) villageChannel.send(language.get(language.joined, message.author)).catch(console.error);
 				break;
 			case "leave":
 				if (message.client.werewolfGames && message.client.werewolfGames.get(message.guild.id) && !message.client.werewolfGames.get(message.guild.id).ended) return message.reply(language.already_started).catch(console.error);
@@ -97,7 +97,7 @@ const command = {
 				// }
 
 				message.channel.send(language.get(language.left, message.author)).catch(console.error);
-				villageChannel.send(language.get(language.left, message.author)).catch(console.error);
+				if (message.channel.id !== villageChannel.id) villageChannel.send(language.get(language.left, message.author)).catch(console.error);
 				break;
 			case "start":
 				if (message.channel.id !== villageChannel.id) return;

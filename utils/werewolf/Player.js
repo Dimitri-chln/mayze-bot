@@ -177,7 +177,7 @@ class Player {
 					embed: {
 						title: language.werewolfTitle[this.game.languageCode],
 						color: "#010101",
-						description: language.get(language.werewolfDescription, this.game.werewolvesChannel.toString()),
+						description: language.get(language.werewolfDescription[this.game.languageCode], this.game.werewolvesChannel.toString()),
 						footer: {
 							text: "🐺 Mayze 🐺"
 						}
@@ -186,7 +186,7 @@ class Player {
 				break;
 			case roles.seer[this.game.languageCode]:
 				{
-					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), language.seerTitle[this.game.languageCode]).catch(console.error);
+					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), language.seerTitle[this.game.languageCode], 30000, this.game.languageCode).catch(console.error);
 					if (!player) return this.member.send(language.tooLate[this.game.languageCode]);
 					this.member.send(language.get(language.seerAnswer[this.game.languageCode], player.member.user.username, player.role)).catch(console.error);
 				}
@@ -197,9 +197,9 @@ class Player {
 			case roles.cupid[this.game.languageCode]:
 				if (night !== 1) return;
 				if (players.some(player => player.couple)) return;
-				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), language.cupidFirst, 15000).catch(console.error);
+				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), language.cupidFirst, 15000, this.game.languageCode).catch(console.error);
 				if (!player_1) return this.member.send(language.tooLate[this.game.languageCode]);
-				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), language.cupidSecond, 15000).catch(console.error);
+				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), language.cupidSecond, 15000, this.game.languageCode).catch(console.error);
 				if (!player_2) return this.member.send(language.tooLate[this.game.languageCode]);
 				player_1.setCouple(player_2);
 				player_2.setCouple(player_1);
@@ -209,7 +209,7 @@ class Player {
 				break;
 			case roles.avenger[this.game.languageCode]:
 				{
-					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), language.avengerTitle).catch(console.error);
+					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), language.avengerTitle, 30000, this.game.languageCode).catch(console.error);
 					if (!player) return this.member.send(language.tooLate[this.game.languageCode]);
 					this.setOption("avenge", player);
 					this.member.send(language.get(language.avengerAnswer[this.game.languageCode], player.member.user.username)).catch(console.error);

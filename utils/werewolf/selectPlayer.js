@@ -24,14 +24,14 @@ const language = {
  * @param {string} languageCode The language of the game
  * @returns {Promise<Player>} The chosen player
  */
-async function selectPlayer(channel, players, embedTitle, timeout = 30000, languageCode) {
+async function selectPlayer(channel, players, embedTitle, timeout = 30000, languageCode = "en") {
 	const msg = await channel.send({
 		embed: {
 			title: embedTitle,
 			color: "#010101",
 			description: players.map((player, i) => `\`${ (i + 1).toString(16).toUpperCase() }.\` ${player.member.user.username}`).join("\n"),
 			footer: {
-				text: language.get(language.footer[languageCode], Math.round(timeout / 1000))
+				text: language.get(language.footer[languageCode], Math.round(timeout / 1000).toString())
 			}
 		}
 	}).catch(console.error);
