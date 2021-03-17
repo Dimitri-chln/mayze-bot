@@ -514,7 +514,7 @@ class Game {
 		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": null }).catch(console.error);
 		this.werewolvesChannel.updateOverwrite(this.roleWerewolves, { "SEND_MESSAGES": false }).catch(console.error);
 		this.players.forEach(async player => {
-			player.member.roles.remove(this.roleIngame).catch(console.error);
+			// player.member.roles.remove(this.roleIngame).catch(console.error);
 			player.member.roles.remove(this.roleVillage).catch(console.error);
 			player.member.roles.remove(this.roleWerewolves).catch(console.error);
 			const deadRole = this.guild.roles.cache.find(role => role.name === player.role);
