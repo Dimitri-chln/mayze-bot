@@ -316,7 +316,7 @@ client.on("guildMemberAdd", async member => {
 	if (!regex.test(member.displayName)) member.setNickname(`Je clc | ${member.displayName}`).catch(console.error);
 });
 
-client.on("guildMemberUpdate", async (oldMember, newMember) => {
+client.on("guildMemberUpdate", async (oldMember, member) => {
 	// UNPINGABLE NICKNAMES
 	const regex = /[\w\d&é"#'\{\(\[-\|è_\\ç^à@\)\]=\+\}\$\*%!:\/;\.,\?<>€]/;
 	if (member.guild.id !== "689164798264606784") return;
