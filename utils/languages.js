@@ -538,8 +538,8 @@ module.exports = {
 				en: "The game is going to start..."
 			},
 			start_msg_description: {
-				fr: "Réagis avec ✅ pour pouvoir jouer",
-				en: "React with ✅ to play"
+				fr: "Réagis avec 🐺 pour pouvoir jouer",
+				en: "React with 🐺 to play"
 			},
 			not_enough_players: {
 				fr: "Il faut au minimum 4 joueurs pour pouvoir lancer la partie",

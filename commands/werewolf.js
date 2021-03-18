@@ -105,67 +105,78 @@ const command = {
 						}
 					}
 				}).catch(console.error);
-				startMsg.react("✅").catch(console.error);
+				await startMsg.react("🐺").catch(console.error);
+				await startMsg.react("✅").catch(console.error);
 
 				const possiblePlayers = message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame.id));
 
-				const filter = (reaction, user) => reaction.emoji.name === "✅" && !user.bot && possiblePlayers.has(user.id);
-				const collected = await startMsg.awaitReactions(filter, { time: 30000 }).catch(console.error);;
-				const [ players, toRemove ] = possiblePlayers.partition(m => collected.first().users.cache.has(m.id));
+				const playFilter = (reaction, user) => reaction.emoji.name === "🐺" && !user.bot && possiblePlayers.has(user.id);
+				const collector = startMsg.createReactionCollector(playFilter);
 
-				if (players.size < 4) return villageChannel.send(language.not_enough_players).catch(console.error);
-
-				toRemove.forEach(m => m.roles.remove(roleIngame).catch(console.error));
-				players.sort(() => Math.random() - 0.5);
-
-				const game = new Game(message.guild, roleIngame, roleVillage, roleWerewolves, villageChannel, werewolvesChannel, deadChannel, [], languageCode);
-				const composition = werewolfInfo.composition[players.size];
-				const werewolves = shuffle(werewolfInfo.werewolfRoles[languageCode]);
-				const villagers = shuffle(werewolfInfo.villagerRoles[languageCode]);
-
-				await Promise.all(Array.from(players).map(async ([ , player ], i) => {
-					let role = null;
-
-					if (i < composition.werewolves) {
-						role = werewolves[i] || werewolfInfo.werewolfRoles[languageCode][0];
-						player.roles.add(roleWerewolves).catch(console.error);
-					} else if (i === composition.werewolves) {
-						role = werewolfInfo.roles.seer[languageCode];
-						player.roles.add(roleVillage).catch(console.error);
-					} else {
-						role = villagers[i] || werewolfInfo.villagerRoles[languageCode][0];
-						player.roles.add(roleVillage).catch(console.error);
-					};
-
-					let options = {};
-					if (role === werewolfInfo.roles.witch[languageCode]) options.canSave = true;
-					if (role === werewolfInfo.roles.shaman[languageCode]) {
-						deadChannel.updateOverwrite(player, { "VIEW_CHANNEL": true, "SEND_MESSAGES": false }).catch(console.error);
-					};
+				collector.on("end", async collected => {
+					if (!collected.size) return villageChannel.send(language.not_enough_players).catch(console.error);
 					
-					game.addPlayer(player, role, options);
-					player.user.send(language.get(language.welcome, role)).catch(console.error);
-				})).catch(console.error);
+					const [ players, toRemove ] = possiblePlayers.partition(m => collected.first().users.cache.has(m.id));
 
-				if (!message.client.werewolfGames) message.client.werewolfGames = new Collection();
-				message.client.werewolfGames.set(message.guild.id, game);
-				
-				villageChannel.send({
-					content: language.get(language.started_content, roleIngame),
-					embed: {
-						author: {
-							name: language.started_title,
-							icon_url: message.client.user.avatarURL()
-						},
-						description: game.players.map((player, i) =>  `\`${i + 1}.\` ${player.role}`).join("\n"),
-						color: message.guild.me.displayHexColor,
-						footer: {
-							text: "🐺 Mayze 🐺"
+					if (players.size < 4) return villageChannel.send(language.not_enough_players).catch(console.error);
+
+					toRemove.forEach(m => m.roles.remove(roleIngame).catch(console.error));
+					players.sort(() => Math.random() - 0.5);
+
+					const game = new Game(message.guild, roleIngame, roleVillage, roleWerewolves, villageChannel, werewolvesChannel, deadChannel, [], languageCode);
+					const composition = werewolfInfo.composition[players.size];
+					const werewolves = shuffle(werewolfInfo.werewolfRoles[languageCode]);
+					const villagers = shuffle(werewolfInfo.villagerRoles[languageCode]);
+
+					await Promise.all(Array.from(players).map(async ([ , player ], i) => {
+						let role = null;
+
+						if (i < composition.werewolves) {
+							role = werewolves[i] || werewolfInfo.werewolfRoles[languageCode][0];
+							player.roles.add(roleWerewolves).catch(console.error);
+						} else if (i === composition.werewolves) {
+							role = werewolfInfo.roles.seer[languageCode];
+							player.roles.add(roleVillage).catch(console.error);
+						} else {
+							role = villagers[i] || werewolfInfo.villagerRoles[languageCode][0];
+							player.roles.add(roleVillage).catch(console.error);
+						};
+
+						let options = {};
+						if (role === werewolfInfo.roles.witch[languageCode]) options.canSave = true;
+						if (role === werewolfInfo.roles.shaman[languageCode]) {
+							deadChannel.updateOverwrite(player, { "VIEW_CHANNEL": true, "SEND_MESSAGES": false }).catch(console.error);
+						};
+						
+						game.addPlayer(player, role, options);
+						player.user.send(language.get(language.welcome, role)).catch(console.error);
+					})).catch(console.error);
+
+					if (!message.client.werewolfGames) message.client.werewolfGames = new Collection();
+					message.client.werewolfGames.set(message.guild.id, game);
+					
+					villageChannel.send({
+						content: language.get(language.started_content, roleIngame),
+						embed: {
+							author: {
+								name: language.started_title,
+								icon_url: message.client.user.avatarURL()
+							},
+							description: game.players.map((player, i) =>  `\`${i + 1}.\` ${player.role}`).join("\n"),
+							color: message.guild.me.displayHexColor,
+							footer: {
+								text: "🐺 Mayze 🐺"
+							}
 						}
-					}
-				}).catch(console.error);
+					}).catch(console.error);
 
-				game.setNight();
+					game.setNight();
+				});
+
+				const startFilter = (reaction, user) => reaction.emoji.name === "✅" && user.id === message.author.id;
+				await startMsg.awaitReactions(startFilter, { max: 1 }).catch(console.error);
+				collector.stop();
+				startMsg.reactions.removeAll().catch(console.error);
 				break;
 			case "end":
 				if (message.channel.id !== villageChannel.id) return;
