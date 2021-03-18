@@ -557,6 +557,10 @@ module.exports = {
 				fr: "Rôles de cette partie :",
 				en: "This game's roles:"
 			},
+			no_game: {
+				fr: "il n'y a pas de partie en cours !",
+				en: "there is no ongoing game!"
+			},
 			config: {
 				fr: "Config Loups-garous",
 				en: "Werewolf config"

@@ -115,7 +115,7 @@ const command = {
 
 				collector.on("end", async collected => {
 					if (!collected.size) return villageChannel.send(language.not_enough_players).catch(console.error);
-					
+
 					const [ players, toRemove ] = possiblePlayers.partition(m => collected.first().users.cache.has(m.id));
 
 					if (players.size < 4) return villageChannel.send(language.not_enough_players).catch(console.error);
@@ -184,7 +184,7 @@ const command = {
 				
 				{
 					const game = message.client.werewolfGames ? message.client.werewolfGames.get(message.guild.id) : null;
-					if (!game) return message.reply("il n'y a pas de partie en cours !").catch(console.error);
+					if (!game) return message.reply(language.no_game).catch(console.error);
 					if (game.options.timeout) clearTimeout(game.options.timeout);
 					game.end();
 				}
