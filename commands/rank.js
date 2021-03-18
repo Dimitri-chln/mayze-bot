@@ -59,7 +59,7 @@ const command = {
 					name: "Ranks du serveur 🎗️",
 					icon_url: message.client.user.avatarURL()
 					},
-					color: "#010101",
+					color: message.guild.me.displayHexColor,
 					description: ranks.map(rank => `• ${rank}${message.member.roles.cache.has(rank.id) ? ` | ✅` : ""}`).join("\n"),
 					footer: {
 					text: "✨ Mayze ✨"

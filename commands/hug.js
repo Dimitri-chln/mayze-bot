@@ -34,7 +34,7 @@ const command = {
 					name: language.get(language.title, message.author.username, user.username),
 					icon_url: message.author.avatarURL({ dynamic: true })
 				},
-				color: "#010101",
+				color: message.guild.me.displayHexColor,
 				image: {
 					url: hugs[Math.floor(Math.random() * hugs.length)]
 				},

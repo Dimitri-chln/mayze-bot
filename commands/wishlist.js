@@ -37,7 +37,7 @@ const command = {
 					name: `Wishlist de ${user.tag}`,
 					icon_url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
 				},
-				color: "#010101",
+				color: message.guild.me.displayHexColor,
 				description: desc,
 				footer: {
 					text: "✨ Mayze ✨"

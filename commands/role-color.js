@@ -47,7 +47,7 @@ const command = {
 				thumbnail: {
 					url: `https://dummyimage.com/50/${color.replace("#", "")}/${color.replace("#", "")}.png?text=+`
 				},
-				color: "#010101",
+				color: message.guild.me.displayHexColor,
 				description: `La couleur du rôle ${role} a été changée en \`${color.toLowerCase()}\``,
 			footer: {
 					text: "✨ Mayze ✨"

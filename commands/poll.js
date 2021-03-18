@@ -90,7 +90,7 @@ const command = {
 						icon_url: message.author.avatarURL({ dynamic: true })
 					},
 					title: `« ${question.replace(/["'«»]/g, "")} »`,
-					color: "#010101",
+					color: message.guild.me.displayHexColor,
 					fields: answers.map((a, i) => {
 						return { name: `${emojis[i]} ${a}`, value: "Ø", inline: true };
 					}),
@@ -113,7 +113,7 @@ const command = {
 						icon_url: message.author.avatarURL({ dynamic: true })
 					},
 					title: `« ${question.replace(/["'«»]/g, "")} »`,
-					color: "#010101",
+					color: message.guild.me.displayHexColor,
 					fields: answers.map((a, i) => {
 						return { name: `${emojis[i]} ${a}`, value: previousMsg ? previousMsg.embeds[0].fields[i].value : "Ø", inline: true };
 					}),
@@ -140,7 +140,7 @@ const command = {
 						embed: {
 							author: reaction.message.embeds[0].author,
 							title: reaction.message.embeds[0].title,
-							color: "#010101",
+							color: message.guild.me.displayHexColor,
 							fields: answers.map((a, i) => {
 								let field = reaction.message.embeds[0].fields[i].value;
 
@@ -189,7 +189,7 @@ const command = {
 						icon_url: message.author.avatarURL({ dynamic: true })
 					},
 					title: `« ${question.replace(/["'«»]/g, "")} »`,
-					color: "#010101",
+					color: message.guild.me.displayHexColor,
 					fields: answers.map((a, i) => {
 						return { name: `${emojis[i]} ${a}`, value: previousMsg ? previousMsg.embeds[0].fields[i].value : "→ **0** vote", inline: true };
 					}),
@@ -216,7 +216,7 @@ const command = {
 						embed: {
 							author: reaction.message.embeds[0].author,
 							title: reaction.message.embeds[0].title,
-							color: "#010101",
+							color: message.guild.me.displayHexColor,
 							fields: answers.map((a, i) => {
 								let field = dmMessage.embeds[0].fields[i].value;
 
@@ -249,7 +249,7 @@ const command = {
 						embed: {
 							author: reaction.message.embeds[0].author,
 							title: reaction.message.embeds[0].title,
-							color: "#010101",
+							color: message.guild.me.displayHexColor,
 							fields: answers.map((a, i) => {
 								const votes = dmMessage.embeds[0].fields[i].value === "Ø" ? 0 : dmMessage.embeds[0].fields[i].value.split("\n").length;
 								return { name: `${emojis[i]} ${a}`, value: `→ **${votes}** vote${votes > 1 ? "s" : ""}`, inline: true };

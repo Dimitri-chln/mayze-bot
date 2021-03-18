@@ -23,7 +23,7 @@ const command = {
 					icon_url: msg.author.avatarURL({ dynamic: true })
 				},
 				title: `#${channel.name}`,
-				color: "#010101",
+				color: message.guild.me.displayHexColor,
 				description: msg.content,
 				fields: [
 					{ name: "\u200b", value: `Aller au [message](${msg.url})` }

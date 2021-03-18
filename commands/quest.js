@@ -35,7 +35,7 @@ const command = {
 			content: messageContent,
 			embed: {
 				title: "Nouvelles quêtes disponibles!",
-				color: "#010101",
+				color: message.guild.me.displayHexColor,
 				image: {
 					url: imageURL
 				},

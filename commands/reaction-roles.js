@@ -91,7 +91,7 @@ const command = {
 								name: title,
 								icon_url: message.client.user.avatarURL()
 							},
-							color: "#010101",
+							color: message.guild.me.displayHexColor,
 							description: "*Aucun rôle pour le moment*",
 							footer: {
 								text: "✨ Mayze ✨"

@@ -176,7 +176,7 @@ class Player {
 				this.member.send({
 					embed: {
 						title: language.werewolfTitle[this.game.languageCode],
-						color: "#010101",
+						color: this.game.guild.me.displayHexColor,
 						description: language.get(language.werewolfDescription[this.game.languageCode], this.game.werewolvesChannel.toString()),
 						footer: {
 							text: "🐺 Mayze 🐺"
@@ -219,7 +219,7 @@ class Player {
 				this.member.send({
 					embed: {
 						title: language.littleGirlTitle[this.game.languageCode],
-						color: "#010101",
+						color: this.game.guild.me.displayHexColor,
 						description: language.littleGirlDescription[this.game.languageCode],
 						footer: {
 							text: "🐺 Mayze 🐺"
@@ -231,7 +231,7 @@ class Player {
 				this.member.send({
 					embed: {
 						title: language.uselessTitle[this.game.languageCode],
-						color: "#010101",
+						color: this.game.guild.me.displayHexColor,
 						description: language.uselessDescription[this.game.languageCode],
 						footer: {
 							text: "🐺 Mayze 🐺"

@@ -26,7 +26,7 @@ const command = {
 					name: `Balance Unbelievaboat de ${message.author.tag}`,
 					icon_url: message.author.avatarURL({ dynamic: true })
 				},
-				color: "#010101",
+				color: message.guild.me.displayHexColor,
 				description: `• Rang: **#${user.rank.toLocaleString()}**\n• Cash: **✨${user.cash.toLocaleString()}**\n• Bank: **✨${user.bank.toLocaleString()}**\n• Total: **✨${user.total.toLocaleString()}**`,
 				footer: {
 					text: "✨ Mayze ✨"

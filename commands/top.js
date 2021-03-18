@@ -25,14 +25,14 @@ const command = {
 		let pages = [];
 		let embed = new MessageEmbed()
 			.setAuthor(`Classement de ${message.guild.name}`, message.client.user.avatarURL())
-			.setColor("#010101")
+			.setColor(message.guild.me.displayHexColor)
 			.setDescription("*Aucun membre n'est encore classé*");
 		if (!top.length) pages.push(embed);
 
 		for (i = 0; i < top.length; i += memberPerPage) {
 			embed = new MessageEmbed()
 				.setAuthor(`Classement de ${message.guild.name}`, message.client.user.avatarURL())
-				.setColor("#010101")
+				.setColor(message.guild.me.displayHexColor)
 				.setDescription(top.slice(i, i + memberPerPage).map((user, i) => {
 					const username = message.guild.members.cache.has(user.user_id)
 						? message.guild.members.cache.get(user.user_id).user.username

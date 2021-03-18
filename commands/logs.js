@@ -28,7 +28,7 @@ const command = {
 						name: "Heroku Logs",
 						icon_url: message.author.avatarURL({ dynamic: true })
 					},
-					color: "#010101",
+					color: message.guild.me.displayHexColor,
 					description: `\`\`\`\n${output}\n\`\`\``,
 					footer: {
 						text: "✨ Mayze ✨"
@@ -43,7 +43,7 @@ const command = {
 			let pages = [];
 			for (i = 0; i < matches.length; i++) {;
 				let embed = new MessageEmbed()
-					.setColor("#010101")
+					.setColor(message.guild.me.displayHexColor)
 					.setAuthor("Heroku Logs", message.author.avatarURL({ dynamic: true }))
 					.setDescription(`\`\`\`\n${matches[i]}\n\`\`\``);
 				pages.push(embed);

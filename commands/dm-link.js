@@ -37,7 +37,7 @@ const command = {
 					icon_url: message.author.avatarURL({ dynamic: true })
 				},
 				title: language.get(language.title, channel.name),
-				color: "#010101",
+				color: message.guild.me.displayHexColor,
 				description: language.get(language.description, channel, message.client.prefix),
 				footer: {
 					text: "✨ Mayze ✨"
@@ -70,7 +70,7 @@ const command = {
 							icon_url: message.author.avatarURL({ dynamic: true })
 						},
 						title: language.get(language.end, channel.name),
-						color: "#010101",
+						color: message.guild.me.displayHexColor,
 						footer: {
 							text: "✨ Mayze ✨"
 						}

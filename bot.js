@@ -297,7 +297,7 @@ client.on("guildMemberAdd", async member => {
 				url: member.user.avatarURL({ dynamic: true })
 			},
 			title: "Bienvenue sur Mayze !",
-			color: "#010101",
+			color: member.guild.me.displayHexColor,
 			description: "Amuse-toi bien sur le serveur 😉",
 			footer: {
 				text: "✨ Mayze ✨"

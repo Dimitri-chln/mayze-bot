@@ -41,7 +41,7 @@ const command = {
 		message.channel.send({
 			embed: {
 				title: `${pokemon.names[languageCode]} #${(`00${pokemon.national_id}`).substr(-3)}`,
-				color: "#010101",
+				color: message.guild.me.displayHexColor,
 				image: {
 					url: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}.png`
 				},

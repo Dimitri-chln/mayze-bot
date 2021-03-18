@@ -35,7 +35,7 @@ const command = {
 					name: role.name,
 					icon_url: `https://dummyimage.com/50/${hexColor}/${hexColor}.png?text=+`
 				},
-				color: "#010101",
+				color: message.guild.me.displayHexColor,
 				description: `**ID:** \`${role.id}\`\n**Couleur** (dec)**:** \`${role.color}\`\n**Couleur** (hex)**:** \`#${hexColor}\`\n**Position:** \`${role.position}\`\n**Membres:** \`${roleMembers.length}\`\n\`\`\`\n${roleMembers.join(", ") || " "}\n\`\`\``,
 				footer: {
 					text: "✨ Mayze ✨"

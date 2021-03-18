@@ -36,14 +36,14 @@ const command = {
 		let pages = [];
 		let embed = new MessageEmbed()
 			.setAuthor(language.get(language.title, songName.replace(/^./, a => a.toUpperCase())), message.client.user.avatarURL())
-			.setColor("#010101")
+			.setColor(message.guild.me.displayHexColor)
 			.setDescription(language.empty_lyrics);
 		if (!parsedLyrics.length) pages.push(embed);
 
 		for (i = 0; i < parsedLyrics.length; i++) {
 			embed = new MessageEmbed()
 			.setAuthor(language.get(language.title, songName.replace(/^./, a => a.toUpperCase())), message.client.user.avatarURL())
-			.setColor("#010101")
+			.setColor(message.guild.me.displayHexColor)
 			.setDescription(parsedLyrics[i]);
 			pages.push(embed);
 		};

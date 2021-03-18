@@ -33,7 +33,7 @@ const command = {
 		var embed;
 		for (i = 0; i < pins.length; i++) {
 			embed = new Discord.MessageEmbed()
-				.setColor("#010101")
+				.setColor(message.guild.me.displayHexColor)
 				.setAuthor(`Mudapins: ${pins[i].match(/(?:logo)?pin\d+/)[0]}`, reactUser.avatarURL({ dynamic: true }))
 				.setThumbnail(`https://cdn.discordapp.com/emojis/${pins[i].match(/\d{18}/)}.png`);
 			pages.push(embed);

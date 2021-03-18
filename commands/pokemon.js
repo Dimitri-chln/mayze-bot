@@ -43,14 +43,14 @@ const command = {
 		let pages = [];
 		let embed = new MessageEmbed()
 			.setAuthor(language.get(language.title, message.author.tag), message.author.avatarURL({ dynamic: true }))
-			.setColor("#010101")
+			.setColor(message.guild.me.displayHexColor)
 			.setDescription(language.no_pokemon);
 		if (!pokemons.length) pages.push(embed);
 
 		for (i = 0; i < pokemons.length; i += pkmPerPage) {
 			embed = new MessageEmbed()
 				.setAuthor(language.get(language.title, message.author.tag), message.author.avatarURL({ dynamic: true }))
-				.setColor("#010101")
+				.setColor(message.guild.me.displayHexColor)
 				.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => language.get(language.description, p.legendary ? "🎖️ " : "", p.shiny ? "⭐ " : "", pokedex.findPokemon(p.pokedex_id).names[languageCode], params.includes("-id") ? `#${p.pokedex_id}` : "", p.caught, p.caught > 1 ? "s" : "")).join("\n"));
 			pages.push(embed);
 		};

@@ -20,7 +20,7 @@ const command = {
 					name: "Shop Unbelievaboat",
 					icon_url: message.client.user.avatarURL()
 				},
-				color: "#010101",
+				color: message.guild.me.displayHexColor,
 				fields: shop.map(item => {
 					return { name: `• ${item.name} - ✨${item.price}`, value: `*${item.description}*`, inline: true }
 				}),

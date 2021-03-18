@@ -27,7 +27,7 @@ const command = {
 								name: command,
 								icon_url: message.author.avatarURL({ dynamic: true })
 							},
-							color: "#010101",
+							color: message.guild.me.displayHexColor,
 							description: `\`\`\`json\n${resString}\n\`\`\``,
 							footer: {
 								text: "✨ Mayze ✨"
@@ -42,7 +42,7 @@ const command = {
 					let pages = [];
 					for (i = 0; i < matches.length; i++) {;
 						let embed = new MessageEmbed()
-							.setColor("#010101")
+							.setColor(message.guild.me.displayHexColor)
 							.setTitle(`Le résultat contient ${res.rowCount} lignes`)
 							.setAuthor(command, message.author.avatarURL({ dynamic: true }))
 							.setDescription(`\`\`\`json\n${matches[i]}\n\`\`\``);

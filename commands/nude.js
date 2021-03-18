@@ -20,7 +20,7 @@ const command = {
 		message.author.send({
 			embed: {
 				title: "Miam 😏",
-				color: "#010101",
+				color: message.guild.me.displayHexColor,
 				image: {
 					url: nudes[Math.floor(Math.random() * nudes.length)]
 				},

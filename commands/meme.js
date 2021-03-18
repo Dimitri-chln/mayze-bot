@@ -66,7 +66,7 @@ const command = {
 						icon_url: message.author.avatarURL({ dynamic: true })
 					},
 					description: language.get(language.copy_link, url),
-					color: "#010101",
+					color: message.guild.me.displayHexColor,
 					image: {
 						url: url
 					},
@@ -82,7 +82,7 @@ const command = {
 			message.channel.send({
 				embed: {
 					title: language.image_list,
-					color: "#010101",
+					color: message.guild.me.displayHexColor,
 					description: memes.join(", "),
 					footer: {
 						text: "✨ Mayze ✨"

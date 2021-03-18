@@ -28,7 +28,7 @@ async function selectPlayer(channel, players, embedTitle, timeout = 30000, langu
 	const msg = await channel.send({
 		embed: {
 			title: embedTitle,
-			color: "#010101",
+			color: channel instanceof Channel ? channel.guild.me.displayHexColor : "#7289da",
 			description: players.map((player, i) => `\`${ (i + 1).toString(16).toUpperCase() }.\` ${player.member.user.username}`).join("\n"),
 			footer: {
 				text: language.get(language.footer[languageCode], Math.round(timeout / 1000).toString())

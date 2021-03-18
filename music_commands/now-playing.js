@@ -29,7 +29,7 @@ const command = {
 				thumbnail: {
 					url: song.thumbnail
 				},
-				color: "#010101",
+				color: message.guild.me.displayHexColor,
 				description: `[${song.name}](${song.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${song.requestedBy.tag}**\n\`Suivant:\` **${queue.repeatMode ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration)}**`,
 				footer: {
 					text: "✨ Mayze ✨" + (queue.repeatMode? " | Répétition de la musique activée" : "") + (queue.repeatQueue ? " | Répétition de la queue activée" : "")
@@ -56,7 +56,7 @@ const command = {
 						height: 720,
 						width: 1280
 					},
-					color: "#010101",
+					color: message.guild.me.displayHexColor,
 					description: `[${lastSong.name}](${lastSong.url})\n\n**${Util.buildBar(Util.TimeToMilliseconds(lastSong.duration), Util.TimeToMilliseconds(lastSong.duration), 20, "━", "🔘")}**\n\n\`Ajouté par:\` **${lastSong.requestedBy.tag}**\n\`Suivant:\` **Rien**\n\`Durée de la queue:\` **0:00**`,
 					footer: {
 						text: "✨ Mayze ✨ | Queue terminée"
@@ -84,7 +84,7 @@ const command = {
 						height: 720,
 						width: 1280
 					},
-					color: "#010101",
+					color: message.guild.me.displayHexColor,
 					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id, !!song)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${queue.repeatMode ? newSong.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration)}**`,
 					footer: {
 						text: "✨ Mayze ✨" + (queue.repeatMode ? " | Répétition de la musique activée" : "") + (queue.repeatQueue ? " | Répétition de la queue activée" : "")

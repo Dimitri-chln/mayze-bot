@@ -130,7 +130,7 @@ const command = {
 							name: language.embed_title,
 							icon_url: message.client.user.avatarURL()
 						},
-						color: "#010101",
+						color: message.guild.me.displayHexColor,
 						description: responses.map((response, i) => `\`${i + 1}.\` ${language.trigger_types[response.trigger_type]} \`${response.trigger}\`\n\t→ \`${response.response}\``).join("\n"),
 						footer: {
 							text: "✨ Mayze ✨"

@@ -34,7 +34,7 @@ const command = {
 					name: user.tag,
 					icon_url: user.avatarURL({ dynamic: true })
 				},
-				color: "#010101",
+				color: message.guild.me.displayHexColor,
 				thumbnail: {
 					url: `https://cdn.discordapp.com/emojis/${legEmoji || ubEmoji || shinyEmoji}.png?v=1`
 				},

@@ -34,7 +34,7 @@ const command = {
 							name: `Playlists de ${me ? message.author.tag : message.guild.name}`,
 							icon_url: me ? message.author.avatarURL({ dynamic: true }) : message.client.user.avatarURL()
 						},
-						color: "#010101",
+						color: message.guild.me.displayHexColor,
 						description: playlists.filter(p => me ? p.user_id === message.author.id : p).map((playlist, i) => `\`${i + 1}.\` [${playlist.name}](${playlist.url}) - **${(message.guild.members.cache.get(playlist.user_id) || { user: { tag: "*Inconnu*" } }).user.tag}**${playlist.private ? " - 🚫" : ""}`).join("\n") || "*Pas de playlist*",
 						footer: {
 							text: "✨ Mayze ✨" + (playlists.some(p => p.private) ? " | 🚫 signifie que la playlist est privée" : "")
