@@ -83,6 +83,8 @@ client.on("ready", async () => {
 		msg.edit(embed.setDescription(`• **Version:** \`${version}\`\n• **Ping:** \`${Math.abs(editedMsg.editedTimestamp - editedMsg.createdTimestamp)}ms\``));
 	} catch (err) { console.error(err); }
 
+	client.users.fetch(config.OWNER_ID).then(owner => client.owner = owner).catch(console.error);
+
 	// PREFIX
 	const mayze = client.users.cache.get("703161067982946334");
 	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.PREFIX : config.PREFIX_BETA ) : config.PREFIX;
