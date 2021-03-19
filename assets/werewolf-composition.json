@@ -91,7 +91,10 @@
 	},
 	"werewolfRoles": {
 		"fr": [
-		"Loup-garou"
+			"Loup-garou"
+		],
+		"en": [
+			"Werewolf"
 		]
 	},
 	"roles": {
