@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "now-playing",
-	description: "Obtenir la musique actuelle",
+	description: {
+		fr: "Obtenir la musique actuelle",
+		en: "Get the current song"
+	},
 	aliases: ["np"],
 	args: 0,
 	usage: "",
@@ -23,16 +26,16 @@ const command = {
 		const msg = await message.channel.send({
 			embed: {
 				author: {
-					name: "Musique en cours",
+					name: language.now_playing,
 					icon_url: message.client.user.avatarURL()
 				},
 				thumbnail: {
 					url: song.thumbnail
 				},
 				color: message.guild.me.displayHexColor,
-				description: `[${song.name}](${song.url})\n\n**${message.client.player.createProgressBar(message.guild.id)}**\n\n\`Ajouté par:\` **${song.requestedBy.tag}**\n\`Suivant:\` **${queue.repeatMode ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration)}**`,
+				description: language.get(language.description, song.name, song.url, message.client.player.createProgressBar(message.guild.id), song.requestedBy.tag, queue.repeatMode ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Ø")), Util.MillisecondsToTime(queue.duration)),
 				footer: {
-					text: "✨ Mayze ✨" + (queue.repeatMode? " | Répétition de la musique activée" : "") + (queue.repeatQueue ? " | Répétition de la queue activée" : "")
+					text: language.get(language.footer, queue.repeatMode, queue.repeatQueue)
 				}
 			}
 		}).catch(console.error);
@@ -48,7 +51,7 @@ const command = {
 			msg.edit({
 				embed: {
 					author: {
-						name: "Musique en cours",
+						name: language.now_playing,
 						icon_url: message.client.user.avatarURL()
 					},
 					thumbnail: {
@@ -57,9 +60,9 @@ const command = {
 						width: 1280
 					},
 					color: message.guild.me.displayHexColor,
-					description: `[${lastSong.name}](${lastSong.url})\n\n**${Util.buildBar(Util.TimeToMilliseconds(lastSong.duration), Util.TimeToMilliseconds(lastSong.duration), 20, "━", "🔘")}**\n\n\`Ajouté par:\` **${lastSong.requestedBy.tag}**\n\`Suivant:\` **Rien**\n\`Durée de la queue:\` **0:00**`,
+					description: language.get(language.description, lastSong.name, lastSong.url, Util.buildBar(Util.TimeToMilliseconds(lastSong.duration), Util.TimeToMilliseconds(lastSong.duration), 20, "━", "🔘"), lastSong.requestedBy.tag, "Ø", "**0:00**"),
 					footer: {
-						text: "✨ Mayze ✨ | Queue terminée"
+						text: language.footer_end
 					}
 				}
 			})
@@ -76,7 +79,7 @@ const command = {
 			msg.edit({
 				embed: {
 					author: {
-						name: "Musique en cours",
+						name: language.now_playing,
 						icon_url: message.client.user.avatarURL()
 					},
 					thumbnail: {
@@ -85,9 +88,9 @@ const command = {
 						width: 1280
 					},
 					color: message.guild.me.displayHexColor,
-					description: `[${newSong.name}](${newSong.url})\n\n**${message.client.player.createProgressBar(message.guild.id, !!song)}**\n\n\`Ajouté par:\` **${newSong.requestedBy.tag}**\n\`Suivant:\` **${queue.repeatMode ? newSong.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Rien"))}**\n\`Durée de la queue:\` **${Util.MillisecondsToTime(queue.duration)}**`,
+					description: language.get(language.description, newSong.name, newSong.url, message.client.player.createProgressBar(message.guild.id, !!song), newSong.requestedBy.tag, queue.repeatMode ? newSong.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Ø")), Util.MillisecondsToTime(queue.duration)),
 					footer: {
-						text: "✨ Mayze ✨" + (queue.repeatMode ? " | Répétition de la musique activée" : "") + (queue.repeatQueue ? " | Répétition de la queue activée" : "")
+						text: language.get(language.footer, queue.repeatMode, queue.repeatQueue)
 					}
 				}
 			}).catch(err => {

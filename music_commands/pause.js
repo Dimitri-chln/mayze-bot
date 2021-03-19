@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "pause",
-	description: "Mettre en pause la musique actuelle",
+	description: {
+		fr: "Mettre en pause la musique actuelle",
+		en: "Pause the current song"
+	},
 	aliases: [],
 	args: 0,
 	usage: "",
@@ -19,7 +22,7 @@ const command = {
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
 		const song = message.client.player.pause(message.guild.id);
-		message.channel.send(`<a:blackCheck:803603780666523699> | **Mis en pause**\n> ${song.name}`).catch(console.error);
+		message.channel.send(language.get(language.paused, song.name)).catch(console.error);
 	}
 };
 

@@ -2,10 +2,13 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "play-top",
-	description: "Ajouter une musique en début de queue",
+	description: {
+		fr: "Ajouter une musique en début de queue",
+		en: "Add a song at the beginning of the queue"
+	},
 	aliases: ["pt"],
 	args: 1,
-	usage: "<musique>",
+	usage: "<song>",
 	cooldown: 5,
 	disableSlash: true,
 	/**
@@ -21,13 +24,14 @@ const command = {
 		const search = args
 			? args.join(" ")
 			: options[0].value;
-		if (playlistRegex.test(search)) return message.reply("les playlists ne sont pas supportées pour cette commande").catch(console.error);
+		if (playlistRegex.test(search)) return message.reply(language.playlist_unsupported).catch(console.error);
 		
 		const res = await message.client.player.playtop(message.guild.id, message.member.voice.channel, search, null, message.author);
-		if (!res.song) return message.reply(`je n'ai pas trouvé de musique avec ce titre`).catch(console.error);
+		if (!res.song) return message.reply(language.no_song).catch(console.error);
+		
 		// If there's already a song playing
-		if (isPlaying) message.channel.send(`<a:blackCheck:803603780666523699> | **Ajouté en début de queue**\n> ${res.song.name}`).catch(console.error);
-		else message.channel.send(`<a:blackCheck:803603780666523699> | **En train de jouer...**\n> ${res.song.name}`).catch(console.error);
+		if (isPlaying) message.channel.send(language.get(language.added, res.song.name)).catch(console.error);
+		else message.channel.send(language.get(language.playing, res.song.name)).catch(console.error);
 	}
 };
 

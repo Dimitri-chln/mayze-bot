@@ -594,7 +594,7 @@ module.exports = {
 		"loop": {
 			looped: {
 				fr: "<a:blackCheck:803603780666523699> | **Répétition [1?activée:désactivée]**",
-				en: "<a:blackCheck:803603780666523699> | **Loop [1,enabled:disabled]**"
+				en: "<a:blackCheck:803603780666523699> | **Loop [1?enabled:disabled]**"
 			},
 		},
 		"lyrics": {
@@ -627,6 +627,62 @@ module.exports = {
 			song_moved: {
 				fr: "<a:blackCheck:803603780666523699> | **Musique déplacée**\n> {1}",
 				en: "<a:blackCheck:803603780666523699> | **Song moved**\n> {1}"
+			}
+		},
+		"now-playing": {
+			now_playing: {
+				fr: "Musique en cours",
+				en: "Now playing"
+			},
+			description: {
+				fr: "[{1}]({2})\n\n**{3}**\n\n`Ajouté par :` **{4}**\n`Suivant :` **{5}**\n`Durée de la queue :` **{6}**",
+				en: "[{1}]({2})\n\n**{3}**\n\n`Requested by:` **{4}**\n`Next:` **{5}**\n`Queue duration:` **{6}**"
+			},
+			footer: {
+				fr: "✨ Mayze ✨[1? | Répétition de la musique activée:][2? | Répétition de la queue activée:]",
+				en: "✨ Mayze ✨[1? | Song loop enabled:][2? | Queue loop enabled:]"
+			},
+			footer_end: {
+				fr: "✨ Mayze ✨ | Queue terminée",
+				en: "✨ Mayze ✨ | End of the queue"
+			}		
+		},
+		"pause": {
+			paused: {
+				fr: "<a:blackCheck:803603780666523699> | **Mis en pause**\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | **Paused**\n> {1}"
+			}
+		},
+		"play-skip": {
+			playlists_unsupported: {
+				fr: "les playlists ne sont pas supportées pour cette commande",
+				en: "playlists aren't supported for this command"
+			},
+			no_song: {
+				fr: "je n'ai pas trouvé de musique avec ce titre",
+				en: "I couldn't find a song with this title"
+			},
+			playing: {
+				fr: "<a:blackCheck:803603780666523699> | En train de jouer...\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | Now playing...\n> {1}"
+			}
+		},
+		"play-top": {
+			playlists_unsupported: {
+				fr: "les playlists ne sont pas supportées pour cette commande",
+				en: "playlists aren't supported for this command"
+			},
+			no_song: {
+				fr: "je n'ai pas trouvé de musique avec ce titre",
+				en: "I couldn't find a song with this title"
+			},
+			added: {
+				fr: "<a:blackCheck:803603780666523699> | Ajouté en début de queue\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | Added at the beginning of the queue\n> {1}"
+			},
+			playing: {
+				fr: "<a:blackCheck:803603780666523699> | En train de jouer...\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | Now playing...\n> {1}"
 			}
 		}
 	}

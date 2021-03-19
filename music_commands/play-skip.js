@@ -2,10 +2,13 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "play-skip",
-	description: "Jouer immédiatement une musique",
+	description: {
+		fr: "Jouer immédiatement une musique",
+		en: "Play a song immediately"
+	},
 	aliases: ["ps"],
 	args: 1,
-	usage: "<musique>",
+	usage: "<song>",
 	cooldown: 5,
 	disableSlash: true,
 	/**
@@ -20,11 +23,11 @@ const command = {
 		const search = args
 			? args.join(" ")
 			: options[0].value;
-		if (playlistRegex.test(search)) return message.reply("les playlists ne sont pas supportées pour cette commande").catch(console.error);
+		if (playlistRegex.test(search)) return message.reply(language.playlists_unsupported).catch(console.error);
 		
 		const res = await message.client.player.playskip(message.guild.id, message.member.voice.channel, search, null, message.author);
-		if (!res.song) return message.reply(`je n'ai pas trouvé de musique avec ce titre`).catch(console.error);
-		message.channel.send(`<a:blackCheck:803603780666523699> | **En train de jouer...**\n> ${res.song.name}`).catch(console.error);
+		if (!res.song) return message.reply(language.no_song).catch(console.error);
+		message.channel.send(language.get(language.playing, res.song.name)).catch(console.error);
 	}
 };
 
