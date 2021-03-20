@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "queue-loop",
-	description: "Activer ou désactiver la répétition de la queue",
+	description: {
+		fr: "Activer ou désactiver la répétition de la queue",
+		en: "Toggle the repetition of the queue"
+	},
 	aliases: ["ql"],
 	args: 0,
 	usage: "",
@@ -19,7 +22,7 @@ const command = {
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
 		const loop = message.client.player.toggleQueueLoop(message.guild.id);
-		message.channel.send(`<a:blackCheck:803603780666523699> | **Répétition de la queue ${loop ? "activée" : "désactivée"}**`).catch(console.error);
+		message.channel.send(language.get(language.looped, loop)).catch(console.error);
 	}
 };
 

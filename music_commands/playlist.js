@@ -2,10 +2,13 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "playlist",
-	description: "Sauvegarder et jouer des playlists",
+	description: {
+		fr: "Sauvegarder et jouer des playlists",
+		en: "Save and play playlists"
+	},
 	aliases: ["plist", "pl"],
 	args: 0,
-	usage: "get [-me] | play <nom> [-shuffle] | add <nom> <url> [-private] | remove <nom>",
+	usage: "get [-me] | play <name> [-shuffle] | add <name> <url> [-private] | remove <name>",
 	disableSlash: true,
 	/**
 	 * @param {Message} message 
@@ -31,13 +34,13 @@ const command = {
 				message.channel.send({
 					embed: {
 						author: {
-							name: `Playlists de ${me ? message.author.tag : message.guild.name}`,
+							name: language.get(language.title, me ? message.author.tag : message.guild.name),
 							icon_url: me ? message.author.avatarURL({ dynamic: true }) : message.client.user.avatarURL()
 						},
 						color: message.guild.me.displayHexColor,
-						description: playlists.filter(p => me ? p.user_id === message.author.id : p).map((playlist, i) => `\`${i + 1}.\` [${playlist.name}](${playlist.url}) - **${(message.guild.members.cache.get(playlist.user_id) || { user: { tag: "*Inconnu*" } }).user.tag}**${playlist.private ? " - 🚫" : ""}`).join("\n") || "*Pas de playlist*",
+						description: playlists.filter(p => me ? p.user_id === message.author.id : p).map((playlist, i) => `\`${i + 1}.\` [${playlist.name}](${playlist.url}) - **${(message.guild.members.cache.get(playlist.user_id) || { user: { tag: language.unknown } }).user.tag}**${playlist.private ? " - 🚫" : ""}`).join("\n") || language.no_playlist,
 						footer: {
-							text: "✨ Mayze ✨" + (playlists.some(p => p.private) ? " | 🚫 signifie que la playlist est privée" : "")
+							text: "✨ Mayze ✨" + (playlists.some(p => p.private) ? language.footer_private : "")
 						}
 					}
 				}).catch(console.error);
@@ -52,56 +55,56 @@ const command = {
 					: options[0].options[1].value === "-shuffle";
 				
 				const playlist = playlists.find(p => p.name === playlistName);
-				if (!playlist) return message.reply("il n'y a pas de playlist avec ce nom ou elle est privée").catch(console.error);
+				if (!playlist) return message.reply(language.invalid_playlist).catch(console.error);
 
 				message.channel.startTyping(1);
 				const res = await message.client.player.playlist(message.guild.id, playlist.url, message.member.voice.channel, -1, message.author, shuffle);
 				if (!res.playlist) {
 					console.error(res.error);
 					message.channel.stopTyping();
-					return message.channel.send("Quelque chose s'est mal passé en récupérant la playlist :/").catch(console.error);
+					return message.channel.send(language.error_playlist).catch(console.error);
 				}
 
-				message.channel.send(`<a:blackCheck:803603780666523699> | **Playlist ajoutée${shuffle ? " et mélangée" : ""}**\n> ${res.playlist.videoCount} musiques ont été ajoutées à la queue`).catch(console.error);
-				if (!isPlaying) message.channel.send(`<a:blackCheck:803603780666523699> | **En train de jouer...**\n> ${res.song.name}`).catch(console.error);
+				message.channel.send(language.get(language.playlist_added, shuffle, res.playlist.videoCount)).catch(console.error);
+				if (!isPlaying) message.channel.send(language.get(language.playing, res.song.name)).catch(console.error);
 				message.channel.stopTyping();
 				break;
 			}
 			case "add": {
 				const { rows } = (await message.client.pg.query(`SELECT * FROM playlists WHERE name = '${playlistName}'`).catch(console.error)) || {};
-				if (rows.length) return message.reply("une playlist avec ce nom existe déjà").catch(console.error);
+				if (rows.length) return message.reply(language.playlist_already_exists).catch(console.error);
 
 				const url = args
 					? args[2]
 					: options[0].options[1].value;
-				if (!playlistName) return message.reply("ajoute un nom pour la playlist").catch(console.error);
-				if (!url) return message.reply("ajoute l'URL de la playlist").catch(console.error);
+				if (!playlistName) return message.reply(language.missing_name).catch(console.error);
+				if (!url) return message.reply(language.missing_url).catch(console.error);
 
 				const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#\&\?]*).*/;
 				const spotifyPlaylistRegex = /https?:\/\/(?:open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
-				if (!playlistRegex.test(url) && !spotifyPlaylistRegex.test(url)) return message.reply("l'URL est invalide").catch(console.error);
+				if (!playlistRegex.test(url) && !spotifyPlaylistRegex.test(url)) return message.reply(language.invalid_url).catch(console.error);
 
 				const private = args
 					? args.includes("-private")
 					: options[0].options[2].value === "-private";
 
 				const res = await message.client.pg.query(`INSERT INTO playlists VALUES ('${playlistName}', '${url}', '${message.author.id}', ${private})`).catch(console.error);
-				if (!res) return message.channel.send("Quelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
+				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 
-				message.channel.send(`<a:blackCheck:803603780666523699> | **Playlist créée**`).catch(console.error);
+				message.channel.send(language.playlist_created).catch(console.error);
 				break;
 			}
 			case "remove": {
-				if (!playlistName) return message.reply("ajoute le nom de la playlist").catch(console.error);
+				if (!playlistName) return message.reply(language.missing_name).catch(console.error);
 
 				const res = await message.client.pg.query(`DELETE FROM playlists WHERE user_id = '${message.author.id}' AND name = '${playlistName}'`).catch(console.error);
-				if (!res) return message.channel.send("Quelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
+				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 
-				message.channel.send(`<a:blackCheck:803603780666523699> | **Playlist supprimée**`).catch(console.error);
+				message.channel.send(language.playlist_deleted).catch(console.error);
 				break;
 			}
 			default:
-				message.reply("arguments incorrects").catch(console.error);
+				message.reply(language.errors.invalid_args).catch(console.error);
 		}
 	}
 };

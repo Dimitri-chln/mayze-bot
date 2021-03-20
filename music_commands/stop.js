@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "stop",
-	description: "Supprimer la queue entière et passer la musique actuelle",
+	description: {
+		fr: "Arrêter complètement la musique",
+		en: "Stop the music completely"
+	},
 	aliases: ["leave"],
 	args: 0,
     usage: "",
@@ -19,7 +22,7 @@ const command = {
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
 		message.client.player.stop(message.guild.id);
-		message.channel.send(`<a:blackCheck:803603780666523699> | **Musique arrêtée**`).catch(console.error);
+		message.channel.send(language.stopped).catch(console.error);
 	}
 };
 

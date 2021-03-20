@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "volume",
-	description: "Ajuster le volume de la musique",
+	description: {
+		fr: "Ajuster le volume de la musique",
+		en: "Adjust the volume of the music"
+	},
 	aliases: ["vol"],
 	args: 0,
 	usage: "[<volume>]",
@@ -21,14 +24,14 @@ const command = {
 			const volume = args
 				? parseInt(args[0])
 				: options[0].value;
-			if (isNaN(volume) || volume < 0 || volume > 200) return message.reply("le volume doit être compris entre 0 et 200").catch(console.error);
+			if (isNaN(volume) || volume < 0 || volume > 200) return message.reply(language.invalid_volume).catch(console.error);
 
 			message.client.player.setVolume(message.guild.id, volume);
-			message.channel.send(`<a:blackCheck:803603780666523699> | **Volume modifié**\n> ${volume}%`).catch(console.error);
+			message.channel.send(language.get(language.volume_changed, volume)).catch(console.error);
 		
 		} else {
 			const volume = message.client.player.getQueue(message.guild.id).dispatcher.volumeLogarithmic * 200;
-			message.channel.send(`<a:blackCheck:803603780666523699> | **Volume ${volume}%**`).catch(console.error);
+			message.channel.send(language.get(language.volume_info, volume)).catch(console.error);
 		}
 	}
 };

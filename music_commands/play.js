@@ -2,10 +2,13 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "play",
-	description: "Jouer une musique",
+	description: {
+		fr: "Jouer une musique",
+		en: "Play a song"
+	},
 	aliases: ["p"],
 	args: 1,
-	usage: "<musique> [-shuffle]",
+	usage: "<song> [-shuffle]",
 	cooldown: 5,
 	disableSlash: true,
 	/**
@@ -41,7 +44,7 @@ const command = {
 			let [ , scrap ] = res.data.match(/property="og:url" content="(.*)"/) || [];
 			search = scrap;
 			
-			if (!search) return message.reply("Quelque s'est mal passé en récupérant le lien Deezer").catch(console.error);
+			if (!search) return message.reply(language.error_deezer).catch(console.error);
 		}
 		
 		if ((playlistRegex.test(search) || SpotifyPlaylistRegex.test(search) || DeezerPlaylistRegex.test(search)) && !videoRegex.test(search)) {
@@ -50,34 +53,33 @@ const command = {
 			if (!res.playlist) {
 				console.error(res.error);
 				message.channel.stopTyping();
-				return message.channel.send("Quelque chose s'est mal passé en récupérant la playlist :/").catch(console.error);
+				return message.channel.send(language.error_playlist).catch(console.error);
 			}
 
-			message.channel.send(`<a:blackCheck:803603780666523699> | **Playlist ajoutée${shuffle ? " et mélangée" : ""}**\n> ${res.playlist.videoCount} musiques ont été ajoutées à la queue`).catch(console.error);
-			if (!isPlaying) message.channel.send(`<a:blackCheck:803603780666523699> | **En train de jouer...**\n> ${res.song.name}`).catch(console.error);
+			message.channel.send(language.get(language.playlist_added, shuffle, res.playlist.videoCount)).catch(console.error);
+			if (!isPlaying) message.channel.send(language.get(language.playing, res.song.name)).catch(console.error);
 			message.channel.stopTyping();
 
 		} else {
 			// If there's already a song playing
 			if (isPlaying) {
 				const queue = message.client.player.getQueue(message.guild.id);
-				const duration = Util.MillisecondsToTime(queue.duration);
 				// Add the song to the queue
 				const res = await message.client.player.addToQueue(message.guild.id, search, null, message.author);
 				if (!res.song) {
 					console.error(res.error);
-					return message.reply(`je n'ai pas trouvé de musique avec ce titre`).catch(console.error);
+					return message.reply(language.no_song).catch(console.error);
 				}
-				message.channel.send(`<a:blackCheck:803603780666523699> | **Ajouté à la queue • Joué dans ${duration}**\n> ${res.song.name}`).catch(console.error);
+				message.channel.send(language.get(language.added_to_queue, Util.MillisecondsToTime(queue.duration), res.song.name)).catch(console.error);
 
 			} else {
 				// Else, play the song
 				const res = await message.client.player.play(message.member.voice.channel, search, null, message.author);
 				if (!res.song) {
 					console.error(res.error);
-					return message.reply(`je n'ai pas trouvé de musique avec ce titre`).catch(console.error);
+					return message.reply(language.no_song).catch(console.error);
 				}
-				message.channel.send(`<a:blackCheck:803603780666523699> | **En train de jouer...**\n> ${res.song.name}`).catch(console.error);
+				message.channel.send(language.get(language.playing, res.song.name)).catch(console.error);
 			}
 		}
 	}

@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "queue",
-	description: "Obtenir la queue du serveur",
+	description: {
+		fr: "Obtenir la queue du serveur",
+		en: "Get the queue of the server"
+	},
 	aliases: ["q"],
 	args: 0,
 	usage: "",
@@ -24,18 +27,18 @@ const command = {
 		const songsPerPage = 15;
 		let pages = [];
 		let embed = new MessageEmbed()
-			.setAuthor(`Queue de ${message.guild.name}`, message.client.user.avatarURL())
-			.setTitle(`Durée : **${Util.MillisecondsToTime(queue.duration)}**`)
+			.setAuthor(language.get(language.author, message.guild.name), message.client.user.avatarURL())
+			.setTitle(language.get(language.title, Util.MillisecondsToTime(queue.duration)))
 			.setColor(message.guild.me.displayHexColor)
-			.setDescription("*Aucune musique*");
+			.setDescription(language.no_song);
 		if (!queue.songs.length) pages.push(embed);
 
 		for (i = 0; i < queue.songs.length; i += songsPerPage) {
 			embed = new MessageEmbed()
-			.setAuthor(`Queue de ${message.guild.name}`, message.client.user.avatarURL())
-			.setTitle(`Durée : **${Util.MillisecondsToTime(queue.duration)}**`)
+			.setAuthor(language.get(language.author, message.guild.name), message.client.user.avatarURL())
+			.setTitle(language.get(language.title, Util.MillisecondsToTime(queue.duration)))
 			.setColor(message.guild.me.displayHexColor)
-			.setDescription(queue.songs.slice(i, i + songsPerPage).map((song, j) => `${i + j === 0 ? "**En cours -**" : `\`${i + j}.\``} ${song.name}${i + j === 0 ? "\n" : ""}`).join("\n"));
+			.setDescription(queue.songs.slice(i, i + songsPerPage).map((song, j) => `${i + j === 0 ? language.now_playing : `\`${i + j}.\``} ${song.name}${i + j === 0 ? "\n" : ""}`).join("\n"));
 			pages.push(embed);
 		};
 		
@@ -43,7 +46,7 @@ const command = {
 			pagination(message, pages);
 		} catch (err) {
 			console.error(err);
-			message.channel.send("Quelque chose s'est mal passé en créant le paginateur :/").catch(console.error);
+			message.channel.send(language.errors.paginator).catch(console.error);
 		}
 	}
 };

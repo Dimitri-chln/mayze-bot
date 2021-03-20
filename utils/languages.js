@@ -593,8 +593,8 @@ module.exports = {
 		},
 		"loop": {
 			looped: {
-				fr: "<a:blackCheck:803603780666523699> | **Répétition [1?activée:désactivée]**",
-				en: "<a:blackCheck:803603780666523699> | **Loop [1?enabled:disabled]**"
+				fr: "<a:blackCheck:803603780666523699> | **Répétition de la musique [1?activée:désactivée]**",
+				en: "<a:blackCheck:803603780666523699> | **Song loop [1?enabled:disabled]**"
 			},
 		},
 		"lyrics": {
@@ -683,6 +683,189 @@ module.exports = {
 			playing: {
 				fr: "<a:blackCheck:803603780666523699> | En train de jouer...\n> {1}",
 				en: "<a:blackCheck:803603780666523699> | Now playing...\n> {1}"
+			}
+		},
+		"play": {
+			error_deezer: {
+				fr: "Quelque s'est mal passé en récupérant le lien Deezer :/",
+				en: "Something went wrong when retrieving the Deezer link :/"
+			},
+			error_playlist: {
+				fr: "Quelque chose s'est mal passé en récupérant la playlist :/",
+				en: "Something went wrong when retrieving the playlist :/"
+			},
+			playlist_added: {
+				fr: "<a:blackCheck:803603780666523699> | **Playlist ajoutée[1? et mélangée:]**\n> {2} musiques ont été ajoutées à la queue",
+				en: "<a:blackCheck:803603780666523699> | **Playlist added[1? and shuffled:]**\n> {2} song have been added to the queue"
+			},
+			playing: {
+				fr: "<a:blackCheck:803603780666523699> | En train de jouer...\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | Now playing...\n> {1}"
+			},
+			no_song: {
+				fr: "je n'ai pas trouvé de musique avec ce titre",
+				en: "I couldn't find a song with this title"
+			},
+			added_to_queue: {
+				fr: "<a:blackCheck:803603780666523699> | **Ajouté à la queue • Joué dans {1}**\n> {2}",
+				en: "<a:blackCheck:803603780666523699> | **Added to the queue • Played in {1}**\n> {2}"
+			}
+		},
+		"playlist": {
+			title: {
+				fr: "Playlists de {1}",
+				en: "{1}'s playlists"
+			},
+			unknown: {
+				fr: "*Inconnu*",
+				en: "*Unknown*"
+			},
+			no_playlist: {
+				fr: "*Pas de playlist*",
+				en: "*No playlist*"
+			},
+			footer_private: {
+				fr: " | 🚫 signifie que la playlist est privée",
+				en: " | 🚫 means that the playlist is private"
+			},
+			invalid_playlist: {
+				fr: "il n'y a pas de playlist avec ce nom ou elle est privée",
+				en: "there is no playlist with this name or it's private"
+			},
+			error_playlist: {
+				fr: "Quelque chose s'est mal passé en récupérant la playlist :/",
+				en: "Something went wrong when retrieving the playlist :/"
+			},
+			playlist_added: {
+				fr: "<a:blackCheck:803603780666523699> | **Playlist ajoutée[1? et mélangée:]**\n> {2} musiques ont été ajoutées à la queue",
+				en: "<a:blackCheck:803603780666523699> | **Playlist added[1? and shuffled:]**\n> {2} song have been added to the queue"
+			},
+			playing: {
+				fr: "<a:blackCheck:803603780666523699> | En train de jouer...\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | Now playing...\n> {1}"
+			},
+			playlist_already_exists: {
+				fr: "une playlist avec ce nom existe déjà",
+				en: "a playlist with this name already exists"
+			},
+			missing_name: {
+				fr: "ajoute un nom pour la playlist",
+				en: "add a name for the playlist"
+			},
+			missing_url: {
+				fr: "ajoute l'URL de la playlist",
+				en: "add the playlist URL"
+			},
+			invalid_url: {
+				fr: "l'URL est invalide",
+				en: "the URL is invalid"
+			},
+			playlist_created: {
+				fr: "<a:blackCheck:803603780666523699> | **Playlist créée**",
+				en: "<a:blackCheck:803603780666523699> | **Playlist created**"
+			},
+			playlist_deleted: {
+				fr: "<a:blackCheck:803603780666523699> | **Playlist supprimée**",
+				en: "<a:blackCheck:803603780666523699> | **Playlist deleted**"
+			}
+		},
+		"queue-looop": {
+			looped: {
+				fr: "<a:blackCheck:803603780666523699> | **Répétition de la queue [1?activée:désactivée]**",
+				en: "<a:blackCheck:803603780666523699> | **Queue loop [1?enabled:disabled]**"
+			}
+		},
+		"queue": {
+			author: {
+				fr: "Queue de {1}",
+				en: "{1}'s queue",
+			},
+			title: {
+				fr: "Durée : **{1}**",
+				en: "Duration: **{1}**"
+			},
+			no_song: {
+				fr: "*Aucune musique*",
+				en: "*No song*"
+			},
+			now_playing: {
+				fr: "**En cours :**",
+				en: "**Now playing:**"
+			}
+		},
+		"remove": {
+			invalid_input: {
+				fr: "entre uniquement des nombres ou intervalles",
+				en: "enter numbers or intervals only"
+			},
+			no_song: {
+				fr: "il n'y a aucune musique à supprimer",
+				en: "there is no song to remove"
+			},
+			invalid_numbers: {
+				fr: "tous les nombres doivent être compris entre 1 et {1}",
+				en: "all numbers must be between 1 and {1}"
+			},
+			removed: {
+				fr: "<a:blackCheck:803603780666523699> | **{1} musique[2?s:] supprimée[2?s:]**{3}"
+			}
+		},
+		"resume": {
+			resumed: {
+				fr: "<a:blackCheck:803603780666523699> | **Musique reprise**\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | **Song resumed**\n> {1}"
+			}
+		},
+		"seek": {
+			invalid_timestamp: {
+				fr: "le format est incorrect (hh:mm:ss)",
+				en: "the timestamp is invalid (hh:mm:ss)"
+			},
+			seeked: {
+				fr: "`<a:blackCheck:803603780666523699> | **Temps modifié ({1})**\n> {2}",
+				en: "`<a:blackCheck:803603780666523699> | **Timestamp seeked ({1})**\n> {2}"
+			}
+		},
+		"shuffle": {
+			shuffled: {
+				fr: "<a:blackCheck:803603780666523699> | **Queue mélangée**\n> {1} musique[2?s ont été mélangées: a été mélangée 🤔]",
+				en: "<a:blackCheck:803603780666523699> | **Queue shuffled**\n> {1} song[2?s:] have been shuffled[2? 🤔:]"
+			}
+		},
+		"skip-to": {
+			invalid_number: {
+				fr: "le numéro de la chanson doit être compris entre 1 et {1}",
+				en: "the song number must be between 1 and {1}"
+			},
+			skipped: {
+				fr: "<a:blackCheck:803603780666523699> | **{1} musique[2?s:] passée[2?s:]**\n> {3}",
+				en: "<a:blackCheck:803603780666523699> | **{1} song[2?s:] skipped**\n> {3}"
+			}
+		},
+		"skip": {
+			skipped: {
+				fr: "<a:blackCheck:803603780666523699> | **Musique passée**\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | **Song skipped**\n> {1}"
+			}
+		},
+		"stop": {
+			stopped: {
+				fr: "<a:blackCheck:803603780666523699> | **Musique arrêtée**",
+				en: "<a:blackCheck:803603780666523699> | **Music stopped**"
+			}
+		},
+		"volume": {
+			invalid_volume: {
+				fr: "le volume doit être compris entre 0 et 200",
+				en: "the volume must be between 0 and 200"
+			},
+			volume_changed: {
+				fr: "<a:blackCheck:803603780666523699> | **Volume modifié**\n> {1}%",
+				en: "<a:blackCheck:803603780666523699> | **Volume changed**\n> {1}%"
+			},
+			volume_info: {
+				fr: "<a:blackCheck:803603780666523699> | **Volume {1}%**",
+				en: "<a:blackCheck:803603780666523699> | **Volume {1}%**"
 			}
 		}
 	}

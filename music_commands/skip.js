@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "skip",
-	description: "Passer la musique actuelle",
+	description: {
+		fr: "Passer la musique actuelle",
+		en: "Skip the current song"
+	},
 	aliases: ["s"],
 	args: 0,
 	usage: "",
@@ -19,7 +22,7 @@ const command = {
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
 		const song = await message.client.player.skip(message.guild.id);
-		message.channel.send(`<a:blackCheck:803603780666523699> | **Musique passée**\n> ${song.name}`).catch(console.error);
+		message.channel.send(language.get(language.skipped, song.name)).catch(console.error);
 	}
 };
 

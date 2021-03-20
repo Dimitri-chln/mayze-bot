@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: [],
 	args: 1,
-    usage: "<# song> <position>",
+    usage: "<#song> <position>",
 	disableSlash: true,
 	/**
 	 * @param {Message} message 

@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "shuffle",
-	description: "Mélanger la queue entière",
+	description: {
+		fr: "Mélanger la queue entière",
+		en: "Shuffle the whole queue"
+	},
 	aliases: [],
 	args: 0,
     usage: "",
@@ -19,7 +22,7 @@ const command = {
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
 		const songs = message.client.player.shuffle(message.guild.id);
-		message.channel.send(`<a:blackCheck:803603780666523699> | **Queue mélangée**\n> ${songs.length - 1} musiques ont été mélangées`).catch(console.error);
+		message.channel.send(language.get(language.shuffled, songs.length - 1, songs.length === 2)).catch(console.error);
 	}
 };
 

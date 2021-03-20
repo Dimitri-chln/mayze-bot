@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "resume",
-	description: "Reprndre la musique actuelle",
+	description: {
+		fr: "Reprendre la musique actuelle",
+		en: "Resume the current song"
+	},
 	aliases: [],
 	args: 0,
 	usage: "",
@@ -19,7 +22,7 @@ const command = {
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
 		const song = message.client.player.resume(message.guild.id);
-		message.channel.send(`<a:blackCheck:803603780666523699> | **Musique reprise**\n> ${song.name}`).catch(console.error);
+		message.channel.send(language.get(language.resumed, song.name)).catch(console.error);
 	}
 };
 

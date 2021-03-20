@@ -2,10 +2,13 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "seek",
-	description: "Chercher une partie de la musique",
+	description: {
+		fr: "Chercher une partie de la musique",
+		en: "Seek to a part of the song"
+	},
 	aliases: ["goto"],
 	args: 1,
-	usage: "<temps>",
+	usage: "<timestamp>",
 	disableSlash: true,
 	/**
 	 * @param {Message} message 
@@ -19,7 +22,7 @@ const command = {
 			? args[0]
 			: options[0].value;
 		const timeRegex = /(?:(\d+):)?([0-5]?\d):([0-5]\d)/;
-		if (!timeRegex.test(time)) return message.reply("le format est incorrect (hh:mm:ss)").catch(console.error);
+		if (!timeRegex.test(time)) return message.reply(language.invalid_timestamp).catch(console.error);
 
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
@@ -28,7 +31,7 @@ const command = {
 		const timeInMs = Util.TimeToMilliseconds(time);
 
 		const res = await message.client.player.seek(message.guild.id, timeInMs);
-		message.channel.send(`<a:blackCheck:803603780666523699> | **Temps modifié (${time})**\n> ${res.song.name}`).catch(console.error);
+		message.channel.send(language.get(language.seeked, time, res.song.name)).catch(console.error);
 	}
 };
 
