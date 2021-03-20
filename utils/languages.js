@@ -769,7 +769,7 @@ module.exports = {
 				en: "<a:blackCheck:803603780666523699> | **Playlist deleted**"
 			}
 		},
-		"queue-looop": {
+		"queue-loop": {
 			looped: {
 				fr: "<a:blackCheck:803603780666523699> | **Répétition de la queue [1?activée:désactivée]**",
 				en: "<a:blackCheck:803603780666523699> | **Queue loop [1?enabled:disabled]**"
@@ -807,7 +807,8 @@ module.exports = {
 				en: "all numbers must be between 1 and {1}"
 			},
 			removed: {
-				fr: "<a:blackCheck:803603780666523699> | **{1} musique[2?s:] supprimée[2?s:]**{3}"
+				fr: "<a:blackCheck:803603780666523699> | **{1} musique[2?s:] supprimée[2?s:]**{3}",
+				en: "<a:blackCheck:803603780666523699> | **{1} song[2?s:] removed**{3}"
 			}
 		},
 		"resume": {
@@ -822,8 +823,8 @@ module.exports = {
 				en: "the timestamp is invalid (hh:mm:ss)"
 			},
 			seeked: {
-				fr: "`<a:blackCheck:803603780666523699> | **Temps modifié ({1})**\n> {2}",
-				en: "`<a:blackCheck:803603780666523699> | **Timestamp seeked ({1})**\n> {2}"
+				fr: "<a:blackCheck:803603780666523699> | **Temps modifié ({1})**\n> {2}",
+				en: "<a:blackCheck:803603780666523699> | **Timestamp seeked ({1})**\n> {2}"
 			}
 		},
 		"shuffle": {
