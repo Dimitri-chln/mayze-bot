@@ -663,8 +663,8 @@ module.exports = {
 				en: "I couldn't find a song with this title"
 			},
 			playing: {
-				fr: "<a:blackCheck:803603780666523699> | En train de jouer...\n> {1}",
-				en: "<a:blackCheck:803603780666523699> | Now playing...\n> {1}"
+				fr: "<a:blackCheck:803603780666523699> | **En train de jouer...**\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | **Now playing...**\n> {1}"
 			}
 		},
 		"play-top": {
@@ -677,12 +677,12 @@ module.exports = {
 				en: "I couldn't find a song with this title"
 			},
 			added: {
-				fr: "<a:blackCheck:803603780666523699> | Ajouté en début de queue\n> {1}",
-				en: "<a:blackCheck:803603780666523699> | Added at the beginning of the queue\n> {1}"
+				fr: "<a:blackCheck:803603780666523699> | **Ajouté en début de queue**\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | **Added at the beginning of the queue**\n> {1}"
 			},
 			playing: {
-				fr: "<a:blackCheck:803603780666523699> | En train de jouer...\n> {1}",
-				en: "<a:blackCheck:803603780666523699> | Now playing...\n> {1}"
+				fr: "<a:blackCheck:803603780666523699> | **En train de jouer...**\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | **Now playing...**\n> {1}"
 			}
 		},
 		"play": {
@@ -699,8 +699,8 @@ module.exports = {
 				en: "<a:blackCheck:803603780666523699> | **Playlist added[1? and shuffled:]**\n> {2} song have been added to the queue"
 			},
 			playing: {
-				fr: "<a:blackCheck:803603780666523699> | En train de jouer...\n> {1}",
-				en: "<a:blackCheck:803603780666523699> | Now playing...\n> {1}"
+				fr: "<a:blackCheck:803603780666523699> | **En train de jouer...**\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | **Now playing...**\n> {1}"
 			},
 			no_song: {
 				fr: "je n'ai pas trouvé de musique avec ce titre",
@@ -741,8 +741,8 @@ module.exports = {
 				en: "<a:blackCheck:803603780666523699> | **Playlist added[1? and shuffled:]**\n> {2} song have been added to the queue"
 			},
 			playing: {
-				fr: "<a:blackCheck:803603780666523699> | En train de jouer...\n> {1}",
-				en: "<a:blackCheck:803603780666523699> | Now playing...\n> {1}"
+				fr: "<a:blackCheck:803603780666523699> | **En train de jouer...**\n> {1}",
+				en: "<a:blackCheck:803603780666523699> | **Now playing...**\n> {1}"
 			},
 			playlist_already_exists: {
 				fr: "une playlist avec ce nom existe déjà",
