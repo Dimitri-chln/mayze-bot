@@ -15,3 +15,5 @@ const command = {
         message.react("❤️").catch(console.error);
     }
 };
+
+module.exports = command;
