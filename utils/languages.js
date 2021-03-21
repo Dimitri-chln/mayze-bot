@@ -164,7 +164,7 @@ module.exports = {
 		"catch": {
 			caught: {
 				fr: "Pokémon capturé !",
-				en: "Pokemon caught!"
+				en: "Pokémon caught!"
 			},
 			caught_new: {
 				fr: "Nouveau pokémon ! 🎗️",

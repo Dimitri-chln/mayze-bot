@@ -5,13 +5,9 @@ const command = {
 	 * @param {Message} message 
 	 */
 	execute: async (message) => {
-		try {
-			const koya = message.guild.members.cache.get("276060004262477825");
-			if (koya && koya.user.presence.status !== "offline") return;
-		} catch (err) {
-			console.log(message);
-			message.client.owner.send(JSON.stringify(err)).catch(console.error);
-		}
+		if (message.channel.type === "dm") return;
+		const koya = message.guild.members.cache.get("276060004262477825");
+		if (koya && koya.user.presence.status !== "offline") return;
 
 		const afkRegex = /^(?:(?:k|K)oya\s?)|(?:\^\^)afk/;
 		if (afkRegex.test(message.content)) {
