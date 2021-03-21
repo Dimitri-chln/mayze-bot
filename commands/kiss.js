@@ -2,16 +2,35 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "kiss",
-	description: "Faire un bisous à quelqu'un !",
+	description: {
+		fr: "Faire un bisous à quelqu'un !",
+		en: "Kiss someone!"
+	},
 	aliases: [],
 	args: 1,
-	usage: "<mention>",
+	usage: "<user> [cheek]",
 	slashOptions: [
 		{
-			name: "utilisateur",
-			description: "La personne à qui faire un bisou",
+			name: "user",
+			description: "The user to kiss",
 			type: 6,
 			required: true
+		},
+		{
+			name: "cheek",
+			description: "Whether you want to kiss the user on the cheek or not",
+			type: 4,
+			required: false,
+			choices: [
+				{
+					name: "Kiss on the cheek",
+					value: 1
+				},
+				{
+					name: "Don't kiss on the cheek",
+					value: 0
+				}
+			]
 		}
 	],
 	/**
@@ -24,6 +43,11 @@ const command = {
 		const user = args
 			? message.mentions.users.first() || message.client.user
 			: message.guild.members.cache.get(options[0].value).user;
+		const cheek = args
+			? args.includes("cheek")
+			: options[1] ? !!options[1].value : false;
+
+		const links = cheek ? kisses.cheek : kisses.cheek.concat(kisses.mouth);
 
 		message.channel.send({
 			embed: {
@@ -33,7 +57,7 @@ const command = {
 				},
 				color: message.guild.me.displayHexColor,
 				image: {
-					url: kisses[Math.floor(Math.random() * kisses.length)]
+					url: links[Math.floor(Math.random() * links.length)]
 				},
 				footer: {
 					text: "✨ Mayze ✨"

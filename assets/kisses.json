@@ -1,7 +1,12 @@
 
-[
-	"https://i.imgur.com/TuhSs5i.gif",
-	"https://i.imgur.com/2ygVhaI.gif",
-	"https://i.imgur.com/SfTKdcl.gif",
-	"https://i.imgur.com/QZq7eF1.gif"
-]
+{
+	"mouth": [
+		"https://i.imgur.com/TuhSs5i.gif",
+		"https://i.imgur.com/2ygVhaI.gif",
+		"https://i.imgur.com/SfTKdcl.gif",
+		"https://i.imgur.com/QZq7eF1.gif"
+	],
+	"cheek": [
+
+	]
+}

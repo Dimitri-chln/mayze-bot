@@ -313,14 +313,14 @@ client.on("guildMemberAdd", async member => {
 	member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r.id))).catch(console.error);
 
 	// UNPINGABLE NICKNAMES
-	const regex = /[\w\d&é"#'\{\(\[-\|è_\\ç^à@\)\]=\+\}\$\*%!:\/;\.,\?<>€]/;
+	const regex = /[\w\d&é"#'\{\(\[-\|è_\\ç^à@\)\]=\+\}\$\*%!:\/;\.,\?<>€]{3,}/;
 	if (member.guild.id !== "689164798264606784") return;
 	if (!regex.test(member.displayName)) member.setNickname(`Je clc | ${member.displayName}`).catch(console.error);
 });
 
 client.on("guildMemberUpdate", async (oldMember, member) => {
 	// UNPINGABLE NICKNAMES
-	const regex = /[\w\d&é"#'\{\(\[-\|è_\\ç^à@\)\]=\+\}\$\*%!:\/;\.,\?<>€]/;
+	const regex = /[\w\d&é"#'\{\(\[-\|è_\\ç^à@\)\]=\+\}\$\*%!:\/;\.,\?<>€]{3,}/;
 	if (member.guild.id !== "689164798264606784") return;
 	if (!regex.test(member.displayName)) member.setNickname(`Je clc | ${member.displayName}`).catch(console.error);
 });
