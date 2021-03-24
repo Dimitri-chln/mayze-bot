@@ -504,6 +504,50 @@ module.exports = {
 				fr: "**{1}** [a réagi avec]({2}) {3}"
 			}
 		},
+		"remind-me": {
+			invalid_duration: {
+				fr: "la durée est invalide (ex: 2d15h)",
+				en: "the duration is invalid (e.g. 2d15h)"
+			},
+			created: {
+				fr: "__Rappel dans {1} :__\n> {2}",
+				en: "__I will remind you in {1}:__\n> {2}"
+			},
+			invalid_number: {
+				fr: "le nombre doit être compris entre 1 et {1}",
+				en: "the number must be between 1 and {1}"
+			},
+			removed: {
+				fr: "rappel retiré",
+				en: "reminder removed"
+			},
+			title: {
+				fr: "Rappels de {1}",
+				en: "{1}'s reminders"
+			},
+			no_reminder: {
+				fr: "*Aucun rappel*",
+				en: "*No reminder*"
+			}
+		},
+		"role-all": {
+			invalid_role: {
+				fr: "ce rôle n'existe pas",
+				en: "this role doesn't exist"
+			},
+			response: {
+				fr: "Le rôle {1} sera [2?ajouté à:retiré de] tous les [3?bots:][4?utilisateurs:][5?membres:]. Veux-tu continuer ?",
+				en: "The role {1} will be [2?given to:removed from] all [3?bots:][4?human users:][5?members]. Do you want to continue?"
+			},
+			cancelled: {
+				fr: "Procédure annulée",
+				en: "Operation cancelled"
+			},
+			updating: {
+				fr: "Mise à jour de {1} membre[2?s:]...",
+				en: "Updating {1} member[2?s:]..."
+			}
+		},
 		"werewolf": {
 			unauthorized_guild: {
 				fr: "cette commande ne fonctionne pas sur ce serveur",

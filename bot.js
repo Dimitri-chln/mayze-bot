@@ -135,9 +135,23 @@ client.on("ready", async () => {
 		}
 	}).catch(console.error);
 
-	// REMINDERS
+	// PREDEFINED REMINDERS
 	ACNHReminders();
 	testReminders();
+
+	// REMINDERS
+	setInterval(async () => {
+		const { "rows": reminders } = (await client.pg.query("SELECT * FROM reminders").catch(console.error)) || {};
+		if (!reminders) return;
+
+		reminders.forEach(reminder => {
+			const timestamp = new Date(reminder.timestamp).valueOf();
+			if (timestamp < Date.now()) {
+				client.users.fetch(reminder.user_id).then(user => user.send(`> ${reminder.content}`).catch(console.error)).catch(console.error);
+				client.pg.query(`DELETE FROM reminders WHERE id = ${reminder.id}`).catch(console.error);
+			}
+		});
+	}, 60000);
 });
 
 client.on("message", async message => {
@@ -313,14 +327,14 @@ client.on("guildMemberAdd", async member => {
 	member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r.id))).catch(console.error);
 
 	// UNPINGABLE NICKNAMES -> ⁣
-	const regex = new RegExp(`[\w\d&é"#'\{\(\[-\|è_\\ç^à@\)\]=\+\}\$\*%!:\/;\.,\?<>€]{${member.displayName.length < 3 ? member.displayName.length : 3},}`, "i");
+	const regex = new RegExp(`[\\w\\d&é"#'\\{\\(\\[-\\|è_\\\\ç^à@\\)\\]=\\+\\}\\$\\*%!:\\/;\\.,\\?<>€]{${member.displayName.length < 3 ? member.displayName.length : 3},}`, "i");
 	if (member.guild.id !== "689164798264606784") return;
 	if (!regex.test(member.displayName)) member.setNickname(`⁣${member.displayName}`).catch(console.error);
 });
 
 client.on("guildMemberUpdate", async (oldMember, member) => {
 	// UNPINGABLE NICKNAMES -> ⁣
-	const regex = new RegExp(`[\w\d&é"#'\{\(\[-\|è_\\ç^à@\)\]=\+\}\$\*%!:\/;\.,\?<>€]{${member.displayName.length < 3 ? member.displayName.length : 3},}`, "i");
+	const regex = new RegExp(`[\\w\\d&é"#'\\{\\(\\[-\\|è_\\\\ç^à@\\)\\]=\\+\\}\\$\\*%!:\\/;\\.,\\?<>€]{${member.displayName.length < 3 ? member.displayName.length : 3},}`, "i");
 	if (member.guild.id !== "689164798264606784") return;
 	if (!regex.test(member.displayName)) member.setNickname(`⁣${member.displayName}`).catch(console.error);
 });

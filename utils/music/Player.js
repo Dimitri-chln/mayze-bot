@@ -645,7 +645,7 @@ class Player {
      * @ignore
      * @param {string} guildID
      * @param {Boolean} firstPlay Whether the function was called from the play() one
-     * @param {Number | null} seek Seek the song.
+     * @param {Number|null} seek Seek the song.
      */
     async _playSong(guildID, firstPlay, seek = null) {
         // Gets guild queue
