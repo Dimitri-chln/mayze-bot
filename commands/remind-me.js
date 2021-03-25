@@ -72,7 +72,7 @@ const command = {
 					: options[0].options[1].value.replace(/^./, a => a.toUpperCase());
 
 				const res = await message.client.pg.query(`INSERT INTO reminders (user_id, timestamp, content) VALUES ('${message.author.id}', '${timestamp}', '${content.replace(/'/g, "U+0027")}')`).catch(console.error);
-				if (!res) return message.reply(language.errors.database).catch(console.error);
+				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 
 				message.reply(language.get(language.created, timeToString(duration / 1000, languageCode), content)).catch(console.error);
 				break;

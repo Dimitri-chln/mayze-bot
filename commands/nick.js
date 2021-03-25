@@ -24,7 +24,7 @@ const command = {
 		
 		message.member.setNickname(nickname).catch(async err => {
 			if (err.message === "Missing Permissions") {
-				const msg = await message.reply(language.errors.no_perms).catch(console.error);
+				const msg = await message.channel.send(language.errors.no_perms).catch(console.error);
 				msg.delete({ timeout: 4000 }).catch(console.error);
 				return;
 			}

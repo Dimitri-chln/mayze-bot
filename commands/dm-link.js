@@ -45,7 +45,7 @@ const command = {
 			}
 		}).catch(console.error));
 
-		if (!dmChannel) return message.reply(language.errors.dm_disabled).catch(console.error);
+		if (!dmChannel) return message.channel.send(language.errors.dm_disabled).catch(console.error);
 
 		const channelCollector = channel.createMessageCollector(m => m.webhookID !== webhook.id);
 		const dmCollector = dmChannel.createMessageCollector(m => !m.author.bot);
