@@ -28,7 +28,7 @@ const command = {
 		let scoreLimit = args
 			? parseInt(args[args.indexOf("-score") + 1])
 			: options[0].value;
-		if (isNaN(scoreLimit) || scoreLimit < 0) scoreLimit = 50;
+		if (isNaN(scoreLimit) || scoreLimit < 0) scoreLimit = 75;
 
 		const startMsg = await message.channel.send({
 			embed: {
@@ -95,7 +95,7 @@ const command = {
 							: i === 2 ? 2
 								: 1;
 				let multiplier = answer.content.toLowerCase() === pokemon.names[bonusLanguage].toLowerCase()
-					? 3
+					? 2
 					: 1;
 		
 				scores[answer.author.id] += multiplier * score;
