@@ -28,7 +28,7 @@ const command = {
 		const scoreLimit = args
 			? parseInt(args[args.indexOf("-score") + 1])
 			: options[0].value;
-		if (isNan(scoreLimit) || scoreLimit < 0) scoreLimit = 50;
+		if (isNaN(scoreLimit) || scoreLimit < 0) scoreLimit = 50;
 
 		const startMsg = await message.channel.send({
 			embed: {
