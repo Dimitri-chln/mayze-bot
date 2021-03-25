@@ -100,7 +100,10 @@ const command = {
 						description: reminders.length ? null : language.no_reminder,
 						fields: reminders.map((reminder, i) => {
 							return { name: `\`${i + 1}.\` ${reminder.content.replace(/U\+0027/g, "'")}`, value: `*${reminder.timestamp}*`, inline: true };
-						})
+						}),
+						footer: {
+							text: "✨ Mayze ✨"
+						}
 					}
 				}).catch(console.error);
 				break;

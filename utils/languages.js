@@ -548,6 +548,44 @@ module.exports = {
 				en: "Updating {1} member[2?s:]..."
 			}
 		},
+		"trivia": {
+			start_msg_title: {
+				fr: "Une partie de trivia va commencer...",
+				en: "Trivia game starting..."
+			},
+			start_msg_description: {
+				fr: "Réagis avec ✅ pour jouer",
+				en: "React with ✅ to play"
+			},
+			no_player: {
+				fr: "il n'y a pas assez de joueurs (2 minimum)",
+				en: "there is not enough players (need at least 2)"
+			},
+			question: {
+				fr: "Question n°{1}",
+				en: "Question #{1}"
+			},
+			whats_this_pkm: {
+				fr: "Quel est ce pokémon ?",
+				en: "What's this pokémon?"
+			},
+			bonus_language: {
+				fr: " | Langue bonus : {1}",
+				en: " | Bonus language: {1}"
+			},
+			result: {
+				fr: "__**Résultat :**__",
+				en: "__**Result:**__"
+			},
+			winner_msg_title: {
+				fr: "Nous avons un gagnant !",
+				en: "We have a winner!"
+			},
+			no_correct_answer: {
+				fr: "__**Aucune bonne réponse**__\n{1}",
+				en: "__**No correct answer**__\n{1}"
+			}
+		},
 		"werewolf": {
 			unauthorized_guild: {
 				fr: "cette commande ne fonctionne pas sur ce serveur",
