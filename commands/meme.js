@@ -48,7 +48,7 @@ const command = {
 				? args.slice(1)
 				: (options.find(o => o.name === "text") || {}).value.split("//");
 
-			const url = `https://api.memegen.link/images/${image}/${lines.map(line => replacement(line).join("/"))}.png`;
+			const url = `https://api.memegen.link/images/${image}/${lines.map(line => replacement(line)).join("/")}.png`;
 
 			message.channel.send({
 				embed: {
