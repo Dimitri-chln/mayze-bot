@@ -28,7 +28,7 @@ const command = {
 		let scoreLimit = args
 			? parseInt(args[args.indexOf("-score") + 1])
 			: options[0].value;
-		if (isNaN(scoreLimit) || scoreLimit < 0) scoreLimit = 75;
+		if (isNaN(scoreLimit) || scoreLimit < 0) scoreLimit = 50;
 
 		const startMsg = await message.channel.send({
 			embed: {
@@ -99,7 +99,7 @@ const command = {
 					: 1;
 		
 				scores[answer.author.id] += multiplier * score;
-				result += `\n> **${answer.author.username}** - ${scores[answer.author.id]} \`(+${multiplier * score}${multiplier === 3 ? ` bonus ${flags[bonusLanguage]}` : ""})\``;
+				result += `\n> **${answer.author.username}** - ${scores[answer.author.id]} \`(+${multiplier * score}${multiplier !== 1 ? ` bonus ${flags[bonusLanguage]}` : ""})\``;
 			});
 		
 			message.channel.send(result).catch(console.error);
