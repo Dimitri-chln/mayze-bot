@@ -9,7 +9,15 @@ const command = {
 	},
 	aliases: ["quiz"],
 	args: 0,
-	usage: "",
+	usage: "[-score <score>]",
+	slashOptions: [
+		{
+			name: "score",
+			description: "The score to reach to win",
+			type: 4,
+			required: false
+		}
+	],
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 
@@ -17,6 +25,10 @@ const command = {
 	*/
 	execute: async (message, args, options, language, languageCode) => {
 		const pokedex = require("oakdex-pokedex");
+		const scoreLimit = args
+			? parseInt(args[args.indexOf("-score") + 1])
+			: options[0].value;
+		if (isNan(scoreLimit) || scoreLimit < 0) scoreLimit = 50;
 
 		const startMsg = await message.channel.send({
 			embed: {
@@ -24,6 +36,7 @@ const command = {
 					name: language.start_msg_title,
 					icon_url: message.client.user.avatarURL()
 				},
+				title: language.get(language.score_limit, scoreLimit),
 				color: message.guild.me.displayHexColor,
 				description: language.start_msg_description,
 				footer: {
@@ -91,7 +104,7 @@ const command = {
 		
 			message.channel.send(result).catch(console.error);
 			
-			if (Math.max(...Object.values(scores)) < 10) setTimeout(newQuestion, 10000);
+			if (Math.max(...Object.values(scores)) < scoreLimit) setTimeout(newQuestion, 10000);
 			else {
 				let results = Object.entries(scores).sort((a, b) => a.score - b.score);
 		

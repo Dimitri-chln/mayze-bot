@@ -553,6 +553,10 @@ module.exports = {
 				fr: "Une partie de trivia va commencer...",
 				en: "Trivia game starting..."
 			},
+			score_limit: {
+				fr: "Le premier à {1} points gagne",
+				en: "First to reach {1} points wins"
+			},
 			start_msg_description: {
 				fr: "Réagis avec ✅ pour jouer",
 				en: "React with ✅ to play"
