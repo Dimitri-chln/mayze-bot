@@ -9,7 +9,7 @@ const command = {
 	},
 	aliases: [],
 	args: 0,
-	usage: "[<image>] \"[<upper text>]\" \"[<lower text>]\"",
+	usage: "[<image>] \"[<line>]\" \"[<line>]\"...",
 	slashOptions: [
 		{
 			name: "image",
@@ -18,14 +18,8 @@ const command = {
 			required: false
 		},
 		{
-			name: "upper-text",
-			description: "The text to display at the top of the image",
-			type: 3,
-			required: false
-		},
-		{
-			name: "lower-text",
-			description: "The text to display at the bottom of the image",
+			name: "text",
+			description: "The text to display. Separate lines with //",
 			type: 3,
 			required: false
 		}
@@ -50,14 +44,11 @@ const command = {
 		if (image) {
 			if (!memes.includes(image)) return message.reply(language.get(language.invalid_image, message.client.prefix));
 
-			const top = args
-				? args[1]
-				: (options.find(o => o.name === "upper-text") || {}).value;
-			const bottom = args
-				? args[2]
-				: (options.find(o => o.name === "lower-text") || {}).value;
+			const lines = args
+				? args.slice(1)
+				: (options.find(o => o.name === "text") || {}).value.split("//");
 
-			const url = `https://api.memegen.link/images/${image}/${replacement(top || " ")}/${replacement(bottom || " ")}.png`;
+			const url = `https://api.memegen.link/images/${image}/${lines.map(line => replacement(line).join("/"))}.png`;
 
 			message.channel.send({
 				embed: {
