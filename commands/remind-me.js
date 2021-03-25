@@ -99,7 +99,7 @@ const command = {
 						color: message.guild.me.displayHexColor,
 						description: reminders.length ? null : language.no_reminder,
 						fields: reminders.map((reminder, i) => {
-							return { name: `\`${i + 1}.\` ${reminder.content}`, value: `*${reminder.timestamp}*`, inline: true };
+							return { name: `\`${i + 1}.\` ${reminder.content.replace(/U\+0027/g, "'")}`, value: `*${reminder.timestamp}*`, inline: true };
 						})
 					}
 				}).catch(console.error);
