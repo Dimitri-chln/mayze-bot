@@ -147,7 +147,7 @@ client.on("ready", async () => {
 		reminders.forEach(reminder => {
 			const timestamp = new Date(reminder.timestamp).valueOf();
 			if (timestamp < Date.now()) {
-				client.users.fetch(reminder.user_id).then(user => user.send(`> ${reminder.content}`).catch(console.error)).catch(console.error);
+				client.users.fetch(reminder.user_id).then(user => user.send(`⏰ | ${reminder.content}`).catch(console.error)).catch(console.error);
 				client.pg.query(`DELETE FROM reminders WHERE id = ${reminder.id}`).catch(console.error);
 			}
 		});
