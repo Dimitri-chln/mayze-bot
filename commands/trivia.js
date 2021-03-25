@@ -106,7 +106,7 @@ const command = {
 			
 			if (Math.max(...Object.values(scores)) < scoreLimit) setTimeout(newQuestion, 10000);
 			else {
-				let results = Object.entries(scores).sort((a, b) => a.score - b.score);
+				let results = Object.entries(scores).sort((a, b) => a[1]- b[1]);
 		
 				message.channel.send({
 					embed: {
@@ -115,9 +115,12 @@ const command = {
 							icon_url: message.client.user.avatarURL()
 						},
 						color: message.guild.me.displayHexColor,
+						thumbnail: {
+							url: players.find(p => p.id === results[0][0]).avatarURL({ dynamic: true })
+						},
 						description: results.map(([id, score], i) => {
-							if (i === 0) return `**👑 ${message.guild.members.cache.get(id).user.username} 👑** - ${score}\n`;
-							return `**${message.guild.members.cache.get(id).user.username}** - ${score}`;
+							if (i === 0) return `__**👑 ${players.find(p => p.id === id).username}** - ${score} 👑__\n`;
+							return `\`${i + 1}.\`**${players.find(p => p.id === id).username}** - ${score}`;
 						}).join("\n"),
 						footer: {
 							text: "✨ Mayze ✨"
