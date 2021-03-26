@@ -119,7 +119,7 @@ const command = {
 							url: players.find(p => p.id === results[0][0]).avatarURL({ dynamic: true })
 						},
 						description: results.map(([id, score], i) => {
-							if (i === 0) return `👑 __**${players.find(p => p.id === id).username}**__ - **${score}** 👑\n`;
+							if (i === 0) return `👑 **${players.find(p => p.id === id).username}** - **${score}** 👑\n`;
 							return `\`${i + 1}.\` **${players.find(p => p.id === id).username}** - ${score}`;
 						}).join("\n"),
 						footer: {

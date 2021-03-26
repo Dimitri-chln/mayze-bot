@@ -2,14 +2,17 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "say",
-	description: "Faire dire n'importe quoi au bot",
+	description: {
+		fr: "Faire dire n'importe quoi au bot",
+		en: "Make the bot say something"
+	},
 	aliases: [],
 	args: 0,
-	usage: "<texte>",
+	usage: "<text>",
 	slashOptions: [
 		{
-			name: "texte",
-			description: "Le texte à envoyer",
+			name: "text",
+			description: "The text that the bot will send",
 			type: 3,
 			required: true
 		}

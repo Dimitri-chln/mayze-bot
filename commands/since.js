@@ -2,14 +2,17 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "since",
-	description: "Obtenir le temps écoulé depuis une date",
+	description: {
+		fr: "Obtenir le temps écoulé depuis une date",
+		en: "See how much time passed since a date"
+	},
 	aliases: [],
 	args: 1,
 	usage: "<date>",
 	slashOptions: [
 		{
 			name: "date",
-			description: "Une date passée",
+			description: "A date that is already passed",
 			type: 3,
 			required: true
 		}
@@ -24,8 +27,8 @@ const command = {
 		
 		const now = Date.now();
 		const date = args
-			? Date.parse(`${args.join(" ")} GMT+0100`)
-			: Date.parse(`${options[0].value} GMT+0100`);
+			? Date.parse(args.join(" "))
+			: Date.parse(options[0].value);
 		if (isNaN(date)) return message.reply("le format de la date est incorrect (mm-dd-yyyy hh:mm:ss)").catch(console.error);
 
 		const timePassed = (now - date) / 1000;

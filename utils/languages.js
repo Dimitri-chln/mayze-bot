@@ -607,7 +607,7 @@ module.exports = {
 			},
 			whats_this_pkm: {
 				fr: "Quel est ce pokémon ?",
-				en: "What's this pokémon?"
+				en: "Who's this pokémon?"
 			},
 			bonus_language: {
 				fr: " | Langue bonus : {1}",
