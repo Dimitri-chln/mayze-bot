@@ -86,7 +86,7 @@ const command = {
 			let answers = await message.channel.awaitMessages(answerFilter, { time: 15000 });
 			answers.sweep(answer => answer.id !== answers.findKey(a => a.author.id === answer.author.id));
 		
-			let result = answers.size ? language.result : language.get(language.no_correct_answer, Object.keys(pokemon.names).map(l => `${flags[l]} ${pokemon.names[l]}`).join("\n"));
+			let result = answers.size ? language.get(language.answer, flags[bonusLanguage], pokemon.names[bonusLanguage]) : language.get(language.no_correct_answer, Object.keys(pokemon.names).map(l => `${flags[l]} ${pokemon.names[l]}`).join("\n"));
 		
 			answers.array().forEach((answer, i) => {
 				let score = 

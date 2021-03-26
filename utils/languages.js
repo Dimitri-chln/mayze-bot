@@ -613,9 +613,9 @@ module.exports = {
 				fr: " | Langue bonus : {1}",
 				en: " | Bonus language: {1}"
 			},
-			result: {
-				fr: "__**Résultat :**__",
-				en: "__**Result:**__"
+			answer: {
+				fr: "__**Réponse :**__ {1} **{2}**",
+				en: "__**Answer:**__ {1} **{2}**"
 			},
 			winner_msg_title: {
 				fr: "Nous avons un gagnant !",
