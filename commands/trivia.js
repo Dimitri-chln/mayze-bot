@@ -82,7 +82,7 @@ const command = {
 				}
 			}).catch(console.error);
 		
-			const answerFilter = msg => !msg.author.bot && Object.values(pokemon.names).some(name => new RegExp(name, "i").test(msg.content));
+			const answerFilter = msg => players.has(msg.author.id) && Object.values(pokemon.names).some(name => new RegExp(name, "i").test(msg.content));
 			let answers = await message.channel.awaitMessages(answerFilter, { time: 15000 });
 			answers.sweep(answer => answer.id !== answers.findKey(a => a.author.id === answer.author.id));
 		
@@ -119,7 +119,7 @@ const command = {
 							url: players.find(p => p.id === results[0][0]).avatarURL({ dynamic: true })
 						},
 						description: results.map(([id, score], i) => {
-							if (i === 0) return `__**👑 ${players.find(p => p.id === id).username}** - ${score} 👑__\n`;
+							if (i === 0) return `👑 __**${players.find(p => p.id === id).username}**__ - **${score}** 👑\n`;
 							return `\`${i + 1}.\` **${players.find(p => p.id === id).username}** - ${score}`;
 						}).join("\n"),
 						footer: {
