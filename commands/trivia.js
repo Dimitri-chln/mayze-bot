@@ -106,7 +106,7 @@ const command = {
 			
 			if (Math.max(...Object.values(scores)) < scoreLimit) setTimeout(newQuestion, 10000);
 			else {
-				let results = Object.entries(scores).sort((a, b) => a[1]- b[1]);
+				let results = Object.entries(scores).sort((a, b) => b[1]- a[1]);
 		
 				message.channel.send({
 					embed: {
@@ -120,7 +120,7 @@ const command = {
 						},
 						description: results.map(([id, score], i) => {
 							if (i === 0) return `__**👑 ${players.find(p => p.id === id).username}** - ${score} 👑__\n`;
-							return `\`${i + 1}.\`**${players.find(p => p.id === id).username}** - ${score}`;
+							return `\`${i + 1}.\` **${players.find(p => p.id === id).username}** - ${score}`;
 						}).join("\n"),
 						footer: {
 							text: "✨ Mayze ✨"
