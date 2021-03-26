@@ -124,7 +124,7 @@ const command = {
 				return message.reply(language.errors.invalid_args).catch(console.error);
 		}
 
-		msg.edit(members.size - errors === 0 ? `Aucun membre n'a été mis à jour (${errors} erreur${errors > 1 ? "s" : ""})` : members.size - errors === 1 ? `1 membre a été mis à jour (${errors} erreur${errors > 1 ? "s" : ""})` : `${members.size - errors} membres ont été mis à jour (${errors} erreur${errors > 1 ? "s" : ""})`).catch(console.error);
+		msg.edit(language.get(language.updated, members.size - errors === 0, members.size - errors === 1, members.size - errors, errors, errors > 1)).catch(console.error);
 	}
 };
 

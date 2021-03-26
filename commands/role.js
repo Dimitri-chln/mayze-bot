@@ -2,14 +2,17 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "role",
-	description: "Obtenir des informations sur un rôle",
+	description: {
+		fr: "Obtenir des informations sur un rôle",
+		en: "Get some information about a role"
+	},
 	aliases: [],
 	args: 1,
-	usage: "<rôle>",
+	usage: "<role>",
 	slashOptions: [
 		{
-			name: "rôle",
-			description: "Le rôle dont tu veux obtenir des informations",
+			name: "role",
+			description: "The role to get information from",
 			type: 8,
 			required: true
 		}
@@ -23,7 +26,7 @@ const command = {
 		const role = args
 			? message.guild.roles.cache.get(args.join(" ").toLowerCase()) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args.join(" ").toLowerCase()) || message.guild.roles.cache.find(r =>r.name.toLowerCase().includes(args.join(" ").toLowerCase()))
 			: message.guild.roles.cache.get(options[0].value);
-		if (!role) return message.reply("je n'ai pas réussi à trouver ce rôle").catch(console.error);
+		if (!role) return message.reply(language.invalid_role).catch(console.error);
 
 		const roleMembers = role.members.map(m => m.user.username);
 
@@ -36,7 +39,7 @@ const command = {
 					icon_url: `https://dummyimage.com/50/${hexColor}/${hexColor}.png?text=+`
 				},
 				color: message.guild.me.displayHexColor,
-				description: `**ID:** \`${role.id}\`\n**Couleur** (dec)**:** \`${role.color}\`\n**Couleur** (hex)**:** \`#${hexColor}\`\n**Position:** \`${role.position}\`\n**Membres:** \`${roleMembers.length}\`\n\`\`\`\n${roleMembers.join(", ") || " "}\n\`\`\``,
+				description: language.get(language.description, role.id, role.color, hexColor, role.position, roleMembers.length, roleMembers.join(", ") || " "),
 				footer: {
 					text: "✨ Mayze ✨"
 				}

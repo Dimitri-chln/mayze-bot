@@ -326,17 +326,11 @@ client.on("guildMemberAdd", async member => {
 
 	member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r.id))).catch(console.error);
 
-	// UNPINGABLE NICKNAMES -> ⁣
-	const regex = new RegExp(`[\\w\\d&é"#'\\{\\(\\[-\\|è_\\\\ç^à@\\)\\]=\\+\\}\\$\\*%!:\\/;\\.,\\?<>€]{${member.displayName.length < 3 ? member.displayName.length : 3},}`, "i");
-	if (member.guild.id !== "689164798264606784") return;
-	if (!regex.test(member.displayName)) member.setNickname(`⁣${member.displayName}`).catch(console.error);
+	checkUnpingable(member);
 });
 
 client.on("guildMemberUpdate", async (oldMember, member) => {
-	// UNPINGABLE NICKNAMES -> ⁣
-	const regex = new RegExp(`[\\w\\d&é"#'\\{\\(\\[-\\|è_\\\\ç^à@\\)\\]=\\+\\}\\$\\*%!:\\/;\\.,\\?<>€]{${member.displayName.length < 3 ? member.displayName.length : 3},}`, "i");
-	if (member.guild.id !== "689164798264606784") return;
-	if (!regex.test(member.displayName)) member.setNickname(`⁣${member.displayName}`).catch(console.error);
+	checkUnpingable(member);
 });
 
 client.on("guildMemberRemove", async member => {
@@ -486,6 +480,16 @@ function slashChanged(oldSlash, newSlash) {
 	if (oldSlash.description !== newSlash.description) return true;
 	if (JSON.stringify(oldSlash.options) !== JSON.stringify(newSlash.options).replace(/'/g, "U+0027")) return true;
 	return false;
+}
+
+/**
+ * @param {Discord.GuildMember} member The member to check
+ */
+function checkUnpingable(member) {
+	// Invisible character -> ⁣
+	const regex = new RegExp(`[\\w\\d&é"#'\\{\\(\\[-\\|è_\\\\ç\\^à@\\)\\]=\\+\\}\\$\\*%!:\\/;\\.,\\?<>€]{${member.displayName.length < 3 ? member.displayName.length : 3}}`, "i");
+	if (member.guild.id !== "689164798264606784") return;
+	if (!regex.test(member.displayName)) member.setNickname(`⁣${member.displayName}`, "Unpingable nickname or username").catch(console.error);
 }
 
 

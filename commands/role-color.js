@@ -2,21 +2,24 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "role-color",
-	description: "Changer la couleur d'un rôle",
-	aliases: ["roleColor", "rc"],
+	description: {
+		fr: "Changer la couleur d'un rôle",
+		en: "Change the color of a role"
+	},
+	aliases: ["rolecolor", "rc"],
 	args: 2,
-	usage: "<rôle/id> <couleur>",
+	usage: "<role> <color>",
 	perms: ["MANAGE_ROLES"],
 	slashOptions: [
 		{
-			name: "rôle",
-			description: "Le rôle dont tu veux modifier la couleur",
+			name: "role",
+			description: "The role you want to edit",
 			type: 8,
 			required: true
 		},
 		{
 			name: "color",
-			description: "La nouvelle couleur du rôle",
+			description: "The new color to apply to the role (#xxyyzz)",
 			type: 3,
 			required: true
 		}
@@ -30,25 +33,26 @@ const command = {
 		const role = args
 			? message.guild.roles.cache.get(args[0].toLowerCase()) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args[0].toLowerCase()) || message.guild.roles.cache.find(r => r.name.toLowerCase().includes(args[0].toLowerCase()))
 			: message.guild.roles.cache.get(options[0].value);
-		if (!role) return message.reply("ce rôle n'existe pas").catch(console.error);
+		if (!role) return message.reply(language.invalid_role).catch(console.error);
 		const color = args
 			? args[1]
 			: options[1].value;
+		if (!/#[\dabcdef]{6}/.test(color)) return message.reply(language.invalid_color).catch(console.error);
 
 		const r = await role.setColor(color).catch(console.error);
-		if (!r) return message.channel.send("Quelque chose s'est mal passé en changeant la couleur du rôle :/").catch(console.error);
+		if (!r) return message.channel.send(language.errors.role_color).catch(console.error);
 		
 		message.channel.send({
 			embed: {
 				author: {
-					name: "Couleur modifiée avec succès",
+					name: language.title,
 					icon_url: message.client.user.avatarURL()
 				},
 				thumbnail: {
 					url: `https://dummyimage.com/50/${color.replace("#", "")}/${color.replace("#", "")}.png?text=+`
 				},
 				color: message.guild.me.displayHexColor,
-				description: `La couleur du rôle ${role} a été changée en \`${color.toLowerCase()}\``,
+				description: language.get(language.changed, role, color.toLowerCase()),
 			footer: {
 					text: "✨ Mayze ✨"
 				}

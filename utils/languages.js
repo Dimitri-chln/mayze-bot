@@ -88,6 +88,10 @@ module.exports = {
 				fr: "cette commande ne fonctionne pas sur Heroku",
 				en: "this command doesn't work on Heroku"
 			},
+			role_color: {
+				fr: "Quelque chose s'est mal passé en changeant la couleur du rôle :/",
+				en: "Something went wrong when changing the role's color :/"
+			},
 			not_in_vc: {
 				fr: "tu n'es pas dans le même salon vocal que moi",
 				en: "you aren't in the same voice channel as me"
@@ -546,6 +550,38 @@ module.exports = {
 			updating: {
 				fr: "Mise à jour de {1} membre[2?s:]...",
 				en: "Updating {1} member[2?s:]..."
+			},
+			updated: {
+				fr: "[1?Aucun membre n'a:][2?1 membre a:{3} membres ont] été mis à jour ({4} erreur[5?s:])",
+				en: "[1?No member:][2?1 member:{3} members] have been updated ({4} error[5?s:])"
+			}
+		},
+		"role-color": {
+			invalid_role: {
+				fr: "ce rôle n'existe pas",
+				en: "this role doesn't exist"
+			},
+			invalid_color: {
+				fr: "la couleur est invalide (#xxyyzz)",
+				en: "the color is invalid (#xxyyzz)"
+			},
+			title: {
+				fr: "Couleur modifiée avec succès",
+				en: "Color changed successfully"
+			},
+			changed: {
+				fr: "La couleur du rôle {1} a été changée en `{2}`",
+				en: "The color of the {1} role has been changed to `{2}`"
+			}
+		},
+		"role": {
+			invalid_role: {
+				fr: "je n'ai pas réussi à trouver ce rôle",
+				en: "I couldn't find this role"
+			},
+			description: {
+				fr: "**ID :** `{1}`\n**Couleur** (dec) **:** `{2}`\n**Couleur** (hex) **:** `#{3}`\n**Position :** `{4}`\n**Membres :** `{5}`\n```\n{6}\n```",
+				en: "**ID:** `{1}`\n**Color** (dec)**:** `{2}`\n**Color** (hex)**:** `{3}`\n**Position:** `{4}`\n**Members:** `{5}`\n```\n{6}\n```"
 			}
 		},
 		"trivia": {
