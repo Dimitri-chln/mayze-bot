@@ -20,6 +20,8 @@ class EnhancedInteraction {
 	author;
 	/**@type {GuildMember} */
 	member;
+	/**@type {boolean} */
+	isInteraction = true;
 
 	/**
 	 * @param {Object} interaction 
@@ -35,49 +37,26 @@ class EnhancedInteraction {
 		if (interaction.channel_id) this.channel = this.client.channels.cache.get(interaction.channel_id);
 		if (interaction.member) this.member = this.guild.members.cache.get(interaction.member.user.id);
 		this.author = this.member.user;
+
+		this.channel.send = async (data) => {
+			const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
+
+			const res = await Axios.post(url, {
+				type: 4,
+				data
+			}).catch(console.error);
+		}
 	}
 
-	/**
-	 * @param {string} content The reply message
-	 */
-	async reply(content) {
-		const message = await this.channel.send(`${this.author}, ${content}`);
-		return message;
-	}
-
-	async acknowledge() {
+	async reply(data) {
 		const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
+
+		data.content = `${this.author.toString()}, ` + data.content;
 
 		const res = await Axios.post(url, {
 			type: 4,
-			data: {
-				content: "Command received",
-				flags: 64
-			}
+			data
 		}).catch(console.error);
-
-		return res;
-	}
-
-	/**
-	 * @param {string} content
-	 */
-	async respond(content) {
-		const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.id}/${this.token}/messages/@original`;
-
-		const res = await Axios.patch(url, {
-			content,
-		}).catch(console.error);
-
-		return res;
-	}
-
-	async delete() {
-		const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.id}/${this.token}/messages/@original`;
-
-		const res = await Axios.delete(url).catch(console.error);
-
-		return res;
 	}
 }
 

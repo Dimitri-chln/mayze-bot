@@ -101,7 +101,7 @@ client.on("ready", async () => {
 		const { "rows": slashData } = (await client.pg.query(`SELECT * FROM slash_commands WHERE guild_id = '${guildID}'`).catch(console.error)) || {};
 
 		client.commands.forEach(async command => {
-			if (!command.slashOptions || command.disableSlash || command.ownerOnly) return;
+			if (command.disableSlash || command.ownerOnly) return;
 			if (command.onlyInGuilds && !command.onlyInGuilds.includes(guildID)) return;
 
 			const slashOptions = { name: command.name, description: command.description.en || command.description };
