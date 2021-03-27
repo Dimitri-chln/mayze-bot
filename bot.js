@@ -486,7 +486,7 @@ function slashChanged(oldSlash, newSlash) {
  * @param {Discord.GuildMember} member The member to check
  */
 function checkUnpingable(member) {
-	const regex = new RegExp(`[\\w\\déèêëàâôîùûç"'\\(\\)\\[\\]\\{\\}&#-_\\^@°=\\+\\$\\*%!:\\/;\\.,\\?\\\\<>]`, "i");
+	const regex = /[\w\déèêëàâôîùûç"'\(\)\[\]\{\}&#-_\^@°=\+\$\*%!:\/;\.,\?\\<>]/i;
 	if (member.guild.id !== "689164798264606784") return;
 	if (!regex.test(member.displayName)) member.setNickname(`.${member.displayName}`, "Unpingable nickname or username").catch(console.error);
 }
