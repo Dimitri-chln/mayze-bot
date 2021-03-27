@@ -111,7 +111,8 @@ client.on("ready", async () => {
 			if (oldSlashCommand && !slashChanged(oldSlashCommand, slashOptions)) return;
 
 			const slashCommand = await client.api.applications(client.user.id).guilds(guildID).commands.post({ data: slashOptions }).catch(console.error);
-
+			if (!slashCommand) return;
+			
 			client.slashCommands[guildID].set(slashCommand.name, slashCommand);
 
 			if (slashData.some(slash => slash.name === command.name)) client.pg.query(`UPDATE slash_commands SET id = '${slashCommand.id}', data = '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}' WHERE name = '${slashCommand.name}' AND guild_id = '${guildID}'`).catch(console.error);
