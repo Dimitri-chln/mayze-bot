@@ -17,8 +17,62 @@ const command = {
 			required: true
 		},
 		{
-			name: "answers",
-			description: "A list of answers, separated by //",
+			name: "answer #1",
+			description: "The 1st possible answer",
+			type: 3,
+			required: false
+		},
+		{
+			name: "answer #2",
+			description: "The 2nd possible answer",
+			type: 3,
+			required: false
+		},
+		{
+			name: "answer #3",
+			description: "The 3rd possible answer",
+			type: 3,
+			required: false
+		},
+		{
+			name: "answer #4",
+			description: "The 4th possible answer",
+			type: 3,
+			required: false
+		},
+		{
+			name: "answer #5",
+			description: "The 5th possible answer",
+			type: 3,
+			required: false
+		},
+		{
+			name: "answer #6",
+			description: "The 6th possible answer",
+			type: 3,
+			required: false
+		},
+		{
+			name: "answer #7",
+			description: "The 7th possible answer",
+			type: 3,
+			required: false
+		},
+		{
+			name: "answer #8",
+			description: "The 8th possible answer",
+			type: 3,
+			required: false
+		},
+		{
+			name: "answer #9",
+			description: "The 9th possible answer",
+			type: 3,
+			required: false
+		},
+		{
+			name: "answer #10",
+			description: "The 10th possible answer",
 			type: 3,
 			required: false
 		},
@@ -74,7 +128,7 @@ const command = {
 			: options[0].value;
 		const answers = args
 			? args.length > 2 ? args.slice(1) : language.yes_no
-			: options[1] && options[1].value.trim().split("//").length > 1 ? options[1].value.trim().split("//").map(answer => answer.replace(/^./, a => a.toUpperCase())) : language.yes_no;
+			: options.filter(o => o.name.startsWith("answer")).length > 1 ? options.filter(o => o.name.startsWith("answer")).map(o => o.value) : language.yes_no;
 		if (answers.length > 10) return message.reply(language.too_many_answers).catch(console.error);
 
 		const emojis = answers[0].toLowerCase() === language.yes_no[0] && answers[1].toLowerCase() === language.yes_no[1] && answers.length === 2 ? ["✅", "❌"] : ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].slice(0, answers.length);
