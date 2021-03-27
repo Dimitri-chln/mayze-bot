@@ -42,6 +42,10 @@ class EnhancedInteraction {
 			const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
 
 			if (typeof data === "string") data = { content: data };
+			if (data.embed) {
+				data.embeds = [ data.embed ];
+				delete data.embed;
+			}
 
 			const res = await Axios.post(url, {
 				type: 4,
@@ -54,6 +58,10 @@ class EnhancedInteraction {
 		const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
 
 		if (typeof data === "string") data = { content: data };
+		if (data.embed) {
+			data.embeds = [ data.embed ];
+			delete data.embed;
+		}
 		data.content = `${this.author.toString()}, ` + data.content;
 
 		const res = await Axios.post(url, {
