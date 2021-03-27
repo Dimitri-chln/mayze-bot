@@ -33,25 +33,30 @@ class EnhancedInteraction {
 		this.base = interaction;
 		this.client = client;
 		this.applicationID = this.client.user.id;
-		if (interaction.guild_id) this.guild = this.client.guilds.cache.get(interaction.guild_id);
-		if (interaction.channel_id) this.channel = this.client.channels.cache.get(interaction.channel_id);
-		if (interaction.member) this.member = this.guild.members.cache.get(interaction.member.user.id);
+		this.guild = this.client.guilds.cache.get(interaction.guild_id);
+		this.member = this.guild.members.cache.get(interaction.member.user.id);
 		this.author = this.member.user;
 
-		this.channel.send = async (data) => {
-			const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
-
-			if (typeof data === "string") data = { content: data };
-			if (data.embed) {
-				data.embeds = [ data.embed ];
-				delete data.embed;
+		let channel = this.client.channels.cache.get(interaction.channel_id);
+		this.channel = {
+			id: channel.id,
+			name: channel.name,
+			type: channel.type,
+			send: async (data) => {
+				const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
+		
+				if (typeof data === "string") data = { content: data };
+				if (data.embed) {
+					data.embeds = [ data.embed ];
+					delete data.embed;
+				}
+		
+				const res = await Axios.post(url, {
+					type: 4,
+					data
+				}).catch(console.error);
 			}
-
-			const res = await Axios.post(url, {
-				type: 4,
-				data
-			}).catch(console.error);
-		}
+		};
 	}
 
 	async reply(data) {
