@@ -112,7 +112,7 @@ client.on("ready", async () => {
 
 			const slashCommand = await client.api.applications(client.user.id).guilds(guildID).commands.post({ data: slashOptions }).catch(console.error);
 			if (!slashCommand) return;
-			
+
 			client.slashCommands[guildID].set(slashCommand.name, slashCommand);
 
 			if (slashData.some(slash => slash.name === command.name)) client.pg.query(`UPDATE slash_commands SET id = '${slashCommand.id}', data = '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}' WHERE name = '${slashCommand.name}' AND guild_id = '${guildID}'`).catch(console.error);
@@ -486,10 +486,9 @@ function slashChanged(oldSlash, newSlash) {
  * @param {Discord.GuildMember} member The member to check
  */
 function checkUnpingable(member) {
-	// Invisible character -> ⁣
-	const regex = new RegExp(`[\\w\\d&é"#'\\{\\(\\[-\\|è_\\\\ç\\^à@\\)\\]=\\+\\}\\$\\*%!:\\/;\\.,\\?<>€]{${member.displayName.length < 3 ? member.displayName.length : 3}}`, "i");
+	const regex = new RegExp(`[\\w\\déèêëàâôîùûç]{${member.displayName.length < 3 ? member.displayName.length : 3}}`, "i");
 	if (member.guild.id !== "689164798264606784") return;
-	if (!regex.test(member.displayName)) member.setNickname(`⁣${member.displayName}`, "Unpingable nickname or username").catch(console.error);
+	if (!regex.test(member.displayName)) member.setNickname(member.displayName + "\u2063", "Unpingable nickname or username").catch(console.error);
 }
 
 
