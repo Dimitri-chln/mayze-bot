@@ -54,7 +54,7 @@ const command = {
 		const players = collected.first().users.cache.filter(u => !u.bot);
 
 		const scores = {};
-		for (const [id, _player] of players) scores[id] = 0;
+		for (const [id] of players) scores[id] = 0;
 		let question = 0;
 
 		newQuestion();
@@ -82,12 +82,17 @@ const command = {
 				}
 			}).catch(console.error);
 		
-			const answerFilter = msg => players.has(msg.author.id) && Object.values(pokemon.names).some(name => new RegExp(name, "i").test(msg.content));
+			const answerFilter = msg => players.has(msg.author.id) && Object.values(pokemon.names).some(name => simplify(name) === simplify(msg.content));
 			let answers = await message.channel.awaitMessages(answerFilter, { time: 15000 });
-			answers.sweep(answer => answer.id !== answers.findKey(a => a.author.id === answer.author.id));
-		
-			let result = answers.size ? language.get(language.answer, flags[bonusLanguage], pokemon.names[bonusLanguage]) : language.get(language.no_correct_answer, Object.keys(pokemon.names).map(l => `${flags[l]} ${pokemon.names[l]}`).join("\n"));
-		
+			answers.sweep(answer => answer.id !== answers.findKey(a => a.author.id === answer.author.id && simplify(a.content) === simplify(answer.content)));
+			
+			let newScores = {};
+			for (const [id] of players)
+				newScores[id] = Object.keys(pokemon.names).reduce((acc, key) => {
+					acc[key] = 0;
+					return acc;
+				}, {});
+
 			answers.array().forEach((answer, i) => {
 				let score = 
 					i === 0 ? 5
@@ -97,12 +102,13 @@ const command = {
 				let multiplier = answer.content.toLowerCase() === pokemon.names[bonusLanguage].toLowerCase()
 					? 2
 					: 1;
+				let lang = [bonusLanguage, ...Object.keys(pokemon.names).filter(l => l !== bonusLanguage)].find(l => simplify(pokemon.names[l]) === simplify(answer.content));
 		
 				scores[answer.author.id] += multiplier * score;
-				result += `\n> **${answer.author.username}** - ${scores[answer.author.id]} \`(+${multiplier * score}${multiplier !== 1 ? ` bonus ${flags[bonusLanguage]}` : ""})\``;
+				newScores[answer.author.id][lang] = multiplier * score;
 			});
 		
-			message.channel.send(result).catch(console.error);
+			message.channel.send(answers.size ? `${language.get(language.answer, [bonusLanguage, ...Object.keys(pokemon.names).filter(l => l !== bonusLanguage)].map(l => `${flags[l]} ${pokemon.names[l]}`).join(", "))}\n${players.map(p => `> **${p.username}** - **${scores[p.id]}** \`(${Object.keys(newScores[p.id]).filter(l => newScores[p.id][l] !== 0).sort((a, b) => newScores[p.id][b] - newScores[p.id][a]).map(l => `${flags[l]} +${newScores[p.id][l]}`).join(", ") || "+0"})\``).join("\n")}` : language.get(language.no_correct_answer, Object.keys(pokemon.names).map(l => `${flags[l]} ${pokemon.names[l]}`).join("\n"))).catch(console.error);
 			
 			if (Math.max(...Object.values(scores)) < scoreLimit) setTimeout(newQuestion, 10000);
 			else {
@@ -128,6 +134,19 @@ const command = {
 					}
 				}).catch(console.error);
 			}
+		}
+
+		function simplify(text) {
+			const replacement = {
+				"à": "a", "â": "a",
+				"é": "e", "è": "e", "ê": "e", "ë": "e",
+				"î": "i", "ï": "i",
+				"ô": "o",
+				"ù": "u", "û": "u",
+				"-": " "
+			};
+
+			return text.toLowerCase().replace(/\W/g, c => replacement[c] || c);
 		}
 	}
 };
