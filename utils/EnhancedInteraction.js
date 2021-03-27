@@ -41,6 +41,8 @@ class EnhancedInteraction {
 		this.channel.send = async (data) => {
 			const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
 
+			if (typeof data === "string") data = { content: data };
+
 			const res = await Axios.post(url, {
 				type: 4,
 				data
@@ -51,6 +53,7 @@ class EnhancedInteraction {
 	async reply(data) {
 		const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
 
+		if (typeof data === "string") data = { content: data };
 		data.content = `${this.author.toString()}, ` + data.content;
 
 		const res = await Axios.post(url, {
