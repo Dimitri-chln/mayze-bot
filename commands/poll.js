@@ -17,61 +17,61 @@ const command = {
 			required: true
 		},
 		{
-			name: "answer #1",
+			name: "answer-1",
 			description: "The 1st possible answer",
 			type: 3,
 			required: false
 		},
 		{
-			name: "answer #2",
+			name: "answer-2",
 			description: "The 2nd possible answer",
 			type: 3,
 			required: false
 		},
 		{
-			name: "answer #3",
+			name: "answer-3",
 			description: "The 3rd possible answer",
 			type: 3,
 			required: false
 		},
 		{
-			name: "answer #4",
+			name: "answer-4",
 			description: "The 4th possible answer",
 			type: 3,
 			required: false
 		},
 		{
-			name: "answer #5",
+			name: "answer-5",
 			description: "The 5th possible answer",
 			type: 3,
 			required: false
 		},
 		{
-			name: "answer #6",
+			name: "answer-6",
 			description: "The 6th possible answer",
 			type: 3,
 			required: false
 		},
 		{
-			name: "answer #7",
+			name: "answer-7",
 			description: "The 7th possible answer",
 			type: 3,
 			required: false
 		},
 		{
-			name: "answer #8",
+			name: "answer-8",
 			description: "The 8th possible answer",
 			type: 3,
 			required: false
 		},
 		{
-			name: "answer #9",
+			name: "answer-9",
 			description: "The 9th possible answer",
 			type: 3,
 			required: false
 		},
 		{
-			name: "answer #10",
+			name: "answer-10",
 			description: "The 10th possible answer",
 			type: 3,
 			required: false
