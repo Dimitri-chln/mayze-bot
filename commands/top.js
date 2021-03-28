@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "top",
-	description: "Obtenir le classement des membres selon leur xp",
+	description: {
+		fr: "Obtenir le classement d'xp des membres",
+		en: "Get the xp leaderboard of members "
+	},
 	aliases: ["leaderboard", "lb", "topxp"],
 	args: 0,
 	usage: "",
@@ -17,6 +20,8 @@ const command = {
 		const { MessageEmbed } = require("discord.js");
 
 		let { "rows": top } = (await message.client.pg.query("SELECT * FROM levels ORDER BY xp DESC").catch(console.error)) || {};
+		if (!top) return message.reply(language.errors.database).catch(console.error);
+
 		top = top.filter(u => message.guild.members.cache.has(u.user_id));
 
 		const memberPerPage = 15;
@@ -24,21 +29,16 @@ const command = {
 
 		let pages = [];
 		let embed = new MessageEmbed()
-			.setAuthor(`Classement de ${message.guild.name}`, message.client.user.avatarURL())
+			.setAuthor(language.get(language.title, message.guild.name), message.client.user.avatarURL())
 			.setColor(message.guild.me.displayHexColor)
-			.setDescription("*Aucun membre n'est encore classé*");
+			.setDescription(language.no_member);
 		if (!top.length) pages.push(embed);
 
 		for (i = 0; i < top.length; i += memberPerPage) {
 			embed = new MessageEmbed()
-				.setAuthor(`Classement de ${message.guild.name}`, message.client.user.avatarURL())
+				.setAuthor(language.get(language.title, message.guild.name), message.client.user.avatarURL())
 				.setColor(message.guild.me.displayHexColor)
-				.setDescription(top.slice(i, i + memberPerPage).map((user, i) => {
-					const username = message.guild.members.cache.has(user.user_id)
-						? message.guild.members.cache.get(user.user_id).user.username
-						: "Inconnu";
-					return `\`${i + 1}.\` **${username}** - **Niveau \`${getLevel(user.xp)}\`**`
-				}).join("\n"));
+				.setDescription(top.slice(i, i + memberPerPage).map((user, i) => language.get(language.description, i + 1, message.guild.members.cache.get(user.user_id).user.username, getLevel(user.xp))).join("\n"));
 			pages.push(embed);
 		};
 		

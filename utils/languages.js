@@ -591,7 +591,7 @@ module.exports = {
 			},
 			already_passed: {
 				fr: "la date doit déjà être dépassée",
-				en: "the date must not be passed"
+				en: "the date must be already passed"
 			},
 			months: {
 				fr: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
@@ -608,6 +608,30 @@ module.exports = {
 			response: {
 				fr: "Il s'est écoulé {1} depuis le {2}",
 				en: "{1} have passed since {2}"
+			}
+		},
+		"snipe": {
+			no_snipe: {
+				fr: "il n'y a aucun message à snipe dans ce salon",
+				en: "there is no message to snipe in this channel"
+			},
+			other_images: {
+				fr: "Autres images",
+				en: "Other images"
+			}
+		},
+		"top": {
+			title: {
+				fr: "Classement de {1}",
+				en: "{1}'s leaderboard"
+			},
+			no_member: {
+				fr: "*Aucun membre n'est encore classé*",
+				en: "*No member is ranked for now*"
+			},
+			description: {
+				fr: "`{1}.` **{2}** - **Niveau `{3}`**",
+				en: "`{1}.` **{2}** - **Level `{3}`**"
 			}
 		},
 		"trivia": {
@@ -650,6 +674,38 @@ module.exports = {
 			no_correct_answer: {
 				fr: "__**Aucune bonne réponse**__\n{1}",
 				en: "__**No correct answer**__\n{1}"
+			}
+		},
+		"until": {
+			invalid_date: {
+				fr: "le format de la date est incorrect (mm-dd-yyyy [hh:mm:ss])",
+				en: "the date format is invalid (mm-dd-yy [hh:mm:ss])"
+			},
+			not_passed: {
+				fr: "la date ne doit pas être dépassée",
+				en: "the date must not be passed"
+			},
+			months: {
+				fr: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
+				en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+			},
+			midnight: {
+				fr: "minuit",
+				en: "midnight"
+			},
+			date_string: {
+				fr: "{2} {1} {3} à {4}",
+				en: "{1}, {2}[5?st:][6?nd:][7?rd:][8?th:] {3} at {4}"
+			},
+			response: {
+				fr: "Il reste {1} avant le {2}",
+				en: "{1} remaining since {2}"
+			}
+		},
+		"uptime": {
+			response: {
+				fr: "Je suis en ligne depuis {1} !",
+				en: "I have been online for {1}!"
 			}
 		},
 		"werewolf": {

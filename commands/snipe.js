@@ -2,7 +2,10 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "snipe",
-	description: "Envoyer sur le salon le message que quelqu'un vient de supprimer",
+	description: {
+		fr: "Envoyer un message que quelqu'un vient de supprimer",
+		en: "Send a message that someone just deleted"
+	},
 	aliases: [],
 	args: 0,
 	usage: "",
@@ -16,7 +19,7 @@ const command = {
 		const Fs = require("fs");
 
 		const snipedMsg = message.client.deletedMessages ? message.client.deletedMessages[message.channel.id] : null;
-		if (!snipedMsg) return message.reply("il n'y a aucun message à snipe dans ce salon").catch(console.error);
+		if (!snipedMsg) return message.reply(language.no_snipe).catch(console.error);
 
 		let urls = [];
 		let buffers = [];
@@ -42,7 +45,7 @@ const command = {
 				description: snipedMsg.content,
 				fields: urls.length > 1
 					? [
-						{ name: "Autres images", value: urls.slice(1).join("\n"), inline: false },
+						{ name: language.other_images, value: urls.slice(1).join("\n"), inline: false },
 						{ name: "\u200b", value: "\u200b", inline: false }
 					]
 					: null,
