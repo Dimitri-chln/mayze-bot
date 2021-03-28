@@ -603,7 +603,7 @@ module.exports = {
 			},
 			date_string: {
 				fr: "{2} {1} {3} à {4}",
-				en: "{1} {2} {3} at {4}"
+				en: "{1}, {2}[5?st:][6?nd:][7?rd:][8?th:] {3} at {4}"
 			},
 			response: {
 				fr: "Il s'est écoulé {1} depuis le {2}",

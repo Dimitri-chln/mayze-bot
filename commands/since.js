@@ -33,7 +33,7 @@ const command = {
 
 		const timePassed = (now - date) / 1000;
 		if (timePassed < 0) return message.reply(language.already_passed).catch(console.error);
-		const timePassedString = timeToString(timePassed);
+		const timePassedString = timeToString(timePassed, languageCode);
 
 		const [ month, day, year] = args
 			? args[0].split(/\/|-/)
@@ -43,7 +43,7 @@ const command = {
 			? args[1]
 			: options[0].value.split(" ")[1];
 		const monthList = language.months;
-		const dateString = language.get(language.date_string, monthList[month - 1], day, year, dateTime || language.midnight);
+		const dateString = language.get(language.date_string, monthList[month - 1], day, year, dateTime || language.midnight, day.endsWith("1"), day.endsWith("2"), day.endsWith("3"), !day.endsWith("1") && !day.endsWith("2") && !day.endsWith("3"));
 
 		message.channel.send(language.get(language.response, timePassedString, dateString)).catch(console.error);
 	}
