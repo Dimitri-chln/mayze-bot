@@ -28,19 +28,15 @@ const command = {
 		const input = args
 			? args.join(" ").toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase())
 			: options[0].value.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
-		const pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => pkm.names.fr === input);
+		const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).includes(input));
 
 		if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 
-		let names = {
-			fr: "🇫🇷 " + pokemon.names.fr,
-			en: "🇬🇧 " + pokemon.names.en,
-			de: "🇩🇪 " + pokemon.names.de
-		};
+		const flags = { en: "🇬🇧", fr: "🇫🇷", de: "🇩🇪", cz: "🇨🇿", es: "🇪🇸", it: "🇮🇹", jp: "🇯🇵", tr: "🇹🇷", dk: "🇩🇰", gr: "🇬🇷", pl: "🇵🇱" };
 
 		message.channel.send({
 			embed: {
-				title: `${pokemon.names[languageCode]} #${(`00${pokemon.national_id}`).substr(-3)}`,
+				title: `${pokemon.names[languageCode] || pokemon.names.en} #${(`00${pokemon.national_id}`).substr(-3)}`,
 				color: message.guild.me.displayHexColor,
 				image: {
 					url: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}.png`
@@ -51,7 +47,7 @@ const command = {
 				fields: [
 					{
 						name: language.fields[0],
-						value: Object.keys(names).filter(n => n !== languageCode).map(n => names[n]).join("\n"),
+						value: Object.keys(pokemon.names).filter(l => l !== languageCode).map(l => `${flags[l]} ${pokemon.names[l]}`).join("\n"),
 						inline: true
 					},
 					{
