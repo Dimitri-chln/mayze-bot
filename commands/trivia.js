@@ -94,14 +94,8 @@ const command = {
 				}, {});
 
 			answers.array().forEach((answer, i) => {
-				let score = 
-					i === 0 ? 5
-						: i === 1 ? 3
-							: i === 2 ? 2
-								: 1;
-				let multiplier = answer.content.toLowerCase() === pokemon.names[bonusLanguage].toLowerCase()
-					? 2
-					: 1;
+				let score = [5, 3, 2][i] || 1;
+				let multiplier = answer.content.toLowerCase() === pokemon.names[bonusLanguage].toLowerCase() ? 2 : 1;
 				let lang = [bonusLanguage, ...Object.keys(pokemon.names).filter(l => l !== bonusLanguage)].find(l => simplify(pokemon.names[l]) === simplify(answer.content));
 		
 				scores[answer.author.id] += multiplier * score;
