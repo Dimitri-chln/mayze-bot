@@ -584,6 +584,32 @@ module.exports = {
 				en: "**ID:** `{1}`\n**Color** (dec)**:** `{2}`\n**Color** (hex)**:** `{3}`\n**Position:** `{4}`\n**Members:** `{5}`\n```\n{6}\n```"
 			}
 		},
+		"since": {
+			invalid_date: {
+				fr: "le format de la date est incorrect (mm-dd-yyyy [hh:mm:ss])",
+				en: "the date format is invalid (mm-dd-yy [hh:mm:ss])"
+			},
+			already_passed: {
+				fr: "la date doit déjà être dépassée",
+				en: "the date must not be passed"
+			},
+			months: {
+				fr: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
+				en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+			},
+			midnight: {
+				fr: "minuit",
+				en: "midnight"
+			},
+			date_string: {
+				fr: "{2} {1} {3} à {4}",
+				en: "{1} {2} {3} at {4}"
+			},
+			response: {
+				fr: "Il s'est écoulé {1} depuis le {2}",
+				en: "{1} have passed since {2}"
+			}
+		},
 		"trivia": {
 			start_msg_title: {
 				fr: "Une partie de trivia va commencer...",

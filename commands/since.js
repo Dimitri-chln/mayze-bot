@@ -12,7 +12,7 @@ const command = {
 	slashOptions: [
 		{
 			name: "date",
-			description: "A date that is already passed",
+			description: "A date which is already passed",
 			type: 3,
 			required: true
 		}
@@ -29,23 +29,23 @@ const command = {
 		const date = args
 			? Date.parse(args.join(" "))
 			: Date.parse(options[0].value);
-		if (isNaN(date)) return message.reply("le format de la date est incorrect (mm-dd-yyyy hh:mm:ss)").catch(console.error);
+		if (isNaN(date)) return message.reply(language.invalid_date).catch(console.error);
 
 		const timePassed = (now - date) / 1000;
-		if (timePassed < 0) return message.reply("la date doit déjà être dépassée").catch(console.error);
+		if (timePassed < 0) return message.reply(language.already_passed).catch(console.error);
 		const timePassedString = timeToString(timePassed);
 
 		const [ month, day, year] = args
 			? args[0].split(/\/|-/)
 			: options[0].value.split(" ")[0].split(/\/|-/);
-		if (!day || !month || !year) return message.reply("le format de la date est incorrect (mm-dd-yyyy hh:mm:ss)").catch(console.error);
+		if (!day || !month || !year) return message.reply(language.invalid_date).catch(console.error);
 		const dateTime = args
 			? args[1]
 			: options[0].value.split(" ")[1];
-		const monthList = [ "janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre" ];
-		const dateString = `${day} ${monthList[month - 1]} ${year} à ${dateTime || "minuit"}`;
+		const monthList = language.months;
+		const dateString = language.get(language.date_string, monthList[month - 1], day, year, dateTime || language.midnight);
 
-		message.channel.send(`Il s'est écoulé ${timePassedString} depuis le **${dateString}**`).catch(console.error);
+		message.channel.send(language.get(language.response, timePassedString, dateString)).catch(console.error);
 	}
 };
 
