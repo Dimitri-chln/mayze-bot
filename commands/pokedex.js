@@ -28,7 +28,7 @@ const command = {
 		const input = args
 			? args.join(" ").toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase())
 			: options[0].value.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
-		const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).includes(input));
+		const pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => Object.values(pkm.names).includes(input));
 
 		if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 
