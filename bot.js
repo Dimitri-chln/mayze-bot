@@ -157,7 +157,6 @@ client.on("ready", async () => {
 
 client.on("message", async message => {
 	if (message.partial) await message.fetch().catch(console.error);
-	if (message.author.id === client.user.id) return;
 	if (message.channel.type !== "dm" && message.content.toLowerCase().startsWith(client.prefix) && !message.author.bot) {
 		const input = message.content.slice(client.prefix.length).trim().split(/ +/g);
 		const commandName = input.shift().toLowerCase();
@@ -510,7 +509,7 @@ function ACNHReminders() {
 }
 
 function testReminders() {
-	const users = [ "408671348005797898" ];
+	const users = [ "408671348005797898", "463358584583880704" ];
 
 	const wednesday = new Cron.CronJob("0 45 15 * * 3", () => {
 		users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 15 minutes!").catch(console.error)));
