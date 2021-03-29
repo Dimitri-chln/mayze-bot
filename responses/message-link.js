@@ -9,8 +9,8 @@ const language = {
 			else return m[3];
 		}),
     message_link: {
-        fr: "Aller au [message]({1})",
-        en: "Go to [message]({1})"
+        fr: "[Aller au message]({1})",
+        en: "[Go to message]({1})"
     },
 	quoted_by: {
 		fr: "Cité par {1}",
