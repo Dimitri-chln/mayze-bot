@@ -219,7 +219,7 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
  * @param {object[]} options 
  */
 async function processCommand(command, message, args, options) {
-	let language = "fr";
+	let language = "en";
 	const res = await message.client.pg.query(`SELECT * FROM languages WHERE guild_id = '${message.guild.id}'`).catch(console.error);
 	if (res && res.rows.length) language = res.rows[0].language_code;
 

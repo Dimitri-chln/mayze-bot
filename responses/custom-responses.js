@@ -81,7 +81,7 @@ const command = {
 				}
 			}
 
-			message.channel.send(response.response.replace(/\{.*\}/g, a => parseObject(a.replace(/[\{\}]/g, ""), objects))).catch(console.error);
+			message.channel.send(response.response.replace(/\{.*?\}/g, a => parseObject(a.replace(/[\{\}]/g, ""), objects))).catch(console.error);
 		}
 
 		/**
