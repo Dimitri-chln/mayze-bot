@@ -23,8 +23,8 @@ const command = {
 	 * @param {Message} message 
 	 */
 	async execute(message) {
-		if (message.author.bot) return;
-		if (message.channel.type === "dm") return;
+		if (message.channel.type === "dm" || message.author.bot || !["689164798264606784"].includes(message.guild.id)) return;
+		
 		const regex = /https:\/\/(?:cdn\.)?discord(?:app)?\.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})/;
 		if (!regex.test(message.content)) return;
 		
