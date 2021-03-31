@@ -297,7 +297,7 @@ class Game {
 	async setNight() {
 		if (this.night === 0) this.shufflePlayers();
 		this.#night ++;
-		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": false }).catch(console.error);
+		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": true }).catch(console.error);
 		this.werewolvesChannel.updateOverwrite(this.roleWerewolves, { "SEND_MESSAGES": null }).catch(console.error);
 		this.villageChannel.send({
 			embed: {
@@ -389,7 +389,7 @@ class Game {
 	 */
 	async setDay() {
 		this.#day ++;
-		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": null });
+		this.villageChannel.updateOverwrite(this.roleIngame, { "SEND_MESSAGES": true });
 		this.werewolvesChannel.updateOverwrite(this.roleWerewolves, { "SEND_MESSAGES": false });
 		const attackedPlayer = this.alivePlayers.find(player => player.options.isAttacked);
 		const dead = this.kill(attackedPlayer) || [];
