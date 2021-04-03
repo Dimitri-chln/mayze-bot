@@ -35,7 +35,7 @@ const command = {
 		}
 
 		const legendaries = require("../assets/legendaries.json");
-		const legendary = legendaries.includes(pokemon.names.fr) ? true : false;
+		const legendary = legendaries.includes(pokemon.names.en);
 
 		const { rows } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}' AND pokedex_name = '${pokemon.names.en.replace(/'/, "U+0027")}' AND shiny = ${shiny}`).catch(console.error)) || {};
 		if (rows.length) {
