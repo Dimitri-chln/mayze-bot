@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: ["pokemons", "pkmn", "pkm", "poke"],
 	args: 0,
-	usage: "[-legendary] [-shiny] [-id [<nombre>]] [-name <nom>]",
+	usage: "[-legendary] [-shiny] [-id [<number>]] [-name <name>]",
 	slashOptions: [
 		{
 			name: "options",
