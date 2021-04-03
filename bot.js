@@ -299,31 +299,31 @@ client.on("messageReactionRemove", async (reaction, user) => {
 
 client.on("guildMemberAdd", async member => {
 	if (member.guild.id !== "689164798264606784") return;
-
 	let roles = ["735811339888361472", "735809874205737020", "735810286719598634", "735810462872109156"];
-
-	member.user.send({
-		embed: {
-			author: {
-				name: member.user.tag,
-				icon_url: client.user.avatarURL()
-			},
-			thumbnail: {
-				url: member.user.avatarURL({ dynamic: true })
-			},
-			title: "Bienvenue sur Mayze !",
-			color: member.guild.me.displayHexColor,
-			description: "Amuse-toi bien sur le serveur 😉",
-			footer: {
-				text: "✨ Mayze ✨"
-			}
-		}
-	}).catch(console.error);
 
 	const { rows } = (await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error)) || {};
 	if (rows && rows.length) roles = roles.concat(rows[0].roles);
-
 	member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r.id))).catch(console.error);
+
+	if (!rows || !rows.length) {
+		member.user.send({
+			embed: {
+				author: {
+					name: member.user.tag,
+					icon_url: client.user.avatarURL()
+				},
+				thumbnail: {
+					url: member.user.avatarURL({ dynamic: true })
+				},
+				title: "Bienvenue sur Mayze !",
+				color: member.guild.me.displayHexColor,
+				description: "Amuse-toi bien sur le serveur 😉",
+				footer: {
+					text: "✨ Mayze ✨"
+				}
+			}
+		}).catch(console.error);
+	}
 
 	checkUnpingable(member);
 });
@@ -336,7 +336,7 @@ client.on("guildMemberRemove", async member => {
 	if (member.guild.id !== "689164798264606784") return;
 	const roleIDs = member.roles.cache.filter(role => role.id !== member.guild.id).map(role => role.id);
 	const roleString = `'{"${roleIDs.join("\",\"")}"}'`;
-	const { rows } = await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error)
+	const { rows } = await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error);
 	if (rows.length) {
 		client.pg.query(`UPDATE member_roles SET roles = ${roleString} WHERE user_id = '${member.id}'`).catch(console.error);
 	} else {
