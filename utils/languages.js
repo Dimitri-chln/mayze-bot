@@ -634,6 +634,52 @@ module.exports = {
 				en: "`{1}.` **{2}** - **Level `{3}`**"
 			}
 		},
+		"trade": {
+			invalid_user: {
+				fr: "mentionne un utilisateur",
+				en: "mention a user"
+			},
+			same_user: {
+				fr: "mentionne un autre utilisateur que toi",
+				en: "mention another user than you"
+			},
+			empty_trade: {
+				fr: "l'échange ne doit pas être vide",
+				en: "the trade must not be empty"
+			},
+			invalid_pkm: {
+				fr: "**`{1}`** n'est pas un pokémon\n",
+				en: "**`{1}`** is not a pokémon\n"
+			},
+			title: {
+				fr: "Échange entre {1} et {2}",
+				en: "Trade between {1} and {2}"
+			},
+			offer: {
+				fr: "{1} offre :",
+				en: "{1} offers:"
+			},
+			demand: {
+				fr: "{1} offre :",
+				en: "{1} is asked for:"
+			},
+			footer: {
+				fr: " | Réagis avec ✅ ou ❌ pour accepter ou refuser l'échange",
+				en: " | React with ✅ or ❌ to accept or deny the trade"
+			},
+			not_enough_pkm: {
+				fr: "→ Il manque {2} à **{1}** pour cet échange\n",
+				en: "→ **{1}** is missing {2} for this trade\n"
+			},
+			cancelled: {
+				fr: "Échange annulé[1? par **{1}**:]",
+				en: "Trade cancelled[1? by **{1}**:]"
+			},
+			trade_complete: {
+				fr: "Échange validé",
+				en: "Trade completed"
+			}
+		},
 		"trivia": {
 			start_msg_title: {
 				fr: "Une partie de trivia va commencer...",
