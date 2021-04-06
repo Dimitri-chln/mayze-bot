@@ -224,12 +224,12 @@ const command = {
 					fields: [
 						{
 							name: "Offer:",
-							value: `\`\`\`\n${offer.map((pkm, i) => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""} - ${offerSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+							value: `\`\`\`\n${offer.map((pkm, i) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""} - ${offerSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
 							inline: true
 						},
 						{
 							name: "Demand:",
-							value: `\`\`\`\n${demand.map((pkm, i) => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""} - ${demandSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+							value: `\`\`\`\n${demand.map((pkm, j) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""} - ${demandSuccess[j].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
 							inline: true
 						}
 					],
