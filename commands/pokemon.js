@@ -31,6 +31,7 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		const { MessageEmbed } = require("discord.js");
 		const pokedex = require("oakdex-pokedex");
+		const starters = require("../assets/starters.json");
 		const pagination = require("../utils/pagination");
 
 		const user = args
@@ -44,6 +45,7 @@ const command = {
 			? args
 			: options.some(o => o.name === "options") ? options.find(o => o.name === "options").value.split(/ +/) : [];
 
+		if (params.includes("-starter")) pokemons = pokemons.filter(p => starters.includes(p.pokedex_name));
 		if (params.includes("-legendary")) pokemons = pokemons.filter(p => p.legendary);
 		if (params.includes("-shiny")) pokemons = pokemons.filter(p => p.shiny);
 		if (params.includes("-id")) pokemons = params[params.indexOf("-id") + 1] ? pokemons.filter(p => p.pokedex_id === parseInt(params[params.indexOf("-id") + 1])) : pokemons;
