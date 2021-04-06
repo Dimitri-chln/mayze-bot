@@ -11,16 +11,16 @@ const command = {
 	usage: "[<pokémons to offer>] <user> [<pokémons to ask for>]",
 	slashOptions: [
 		{
-			name: "pokemons-offer",
-			description: "The pokémons to offer",
-			type: 3,
-			required: false
-		},
-		{
 			name: "user",
 			description: "The user to trade with",
 			type: 6,
 			required: true
+		},
+		{
+			name: "pokemons-offer",
+			description: "The pokémons to offer",
+			type: 3,
+			required: false
 		},
 		{
 			name: "pokemons-demand",
@@ -42,7 +42,7 @@ const command = {
 
 		const user = args
 			? message.mentions.users.first()
-			: message.guild.members.cache.get(options.find(o => o.name === "user").value).user;
+			: message.guild.members.cache.get(options[0].value).user;
 		if (!user) return message.reply(language.invalid_user).catch(console.error);
 		if (user.id === message.author.id) return message.reply(language.same_user).catch(console.error);
 		let offer = args
@@ -137,74 +137,77 @@ const command = {
 			if (errorsNew) return message.channel.send(errorsNew).catch(console.error);
 			
 			// EXCHANGE POKEMONS
-			const { "rows": offerPokemons } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
-			const { "rows": demandPokemons } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}'`).catch(console.error)) || {};
+			const { "rows": offerPokemons1 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
+			const { "rows": demandPokemons1 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}'`).catch(console.error)) || {};
 
 			let offerSuccess = [];
 			for (const pkm of offer) {
 				let s = [];
 
-				let p = demandPokemons.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
+				let p = demandPokemons1.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
 				if (p) message.client.pg.query(`UPDATE pokemons SET caught = ${p.caught + pkm.number} WHERE id = ${p.id}`)
-					.then(_res => s.push(true))
+					.then(_res => s.push(1))
 					.catch(err => {
 						console.error(err);
-						s.push(false);
+						s.push(0);
 					});
 				else message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, caught, shiny, legendary) VALUES ('${user.id}', ${pkm.data.national_id}, '${pkm.data.names.en}', ${pkm.number}, ${pkm.shiny}, ${pkm.legendary})`)
-					.then(_res => s.push(true))
+					.then(_res => s.push(1))
 					.catch(err => {
 						console.error(err);
-						s.push(false);
+						s.push(0);
 					});
 				
-				let q = offerPokemons.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
+				let q = offerPokemons1.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
 				if (q.caught === pkm.number) message.client.pg.query(`DELETE FROM pokemons WHERE id = ${q.id}`)
-					.then(_res => s.push(true))
+					.then(_res => s.push(1))
 					.catch(err => {
 						console.error(err);
-						s.push(false);
+						s.push(0);
 					});
 				else message.client.pg.query(`UPDATE pokemons SET caught = ${q.caught - pkm.number} WHERE id = ${q.id}`)
-					.then(_res => s.push(true))
+					.then(_res => s.push(1))
 					.catch(err => {
 						console.error(err);
-						s.push(false);
+						s.push(0);
 					});
 
 				offerSuccess.push(s);
 			}
 
+			const { "rows": offerPokemons2 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
+			const { "rows": demandPokemons2 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}'`).catch(console.error)) || {};
+
 			let demandSuccess = [];
 			for (const pkm of demand) {
 				let s = [];
 
-				let p = offerPokemons.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
+				let p = offerPokemons2.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
 				if (p) message.client.pg.query(`UPDATE pokemons SET caught = ${p.caught + pkm.number} WHERE id = '${p.id}'`)
-					.then(_res => s.push(true))
+					.then(_res => s.push(1))
 					.catch(err => {
 						console.error(err);
-						s.push(false);
+						s.push(0);
 					});
 				else message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, caught, shiny, legendary) VALUES ('${message.author.id}', ${pkm.data.national_id}, '${pkm.data.names.en}', ${pkm.number}, ${pkm.shiny}, ${pkm.legendary})`)
-					.then(_res => s.push(true))
+					.then(_res => s.push(1))
 					.catch(err => {
 						console.error(err);
-						s.push(false);
+						s.push(0);
 					});
 				
-				let q = demandPokemons.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
+				let q = demandPokemons2.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
 				if (q.caught === pkm.number) message.client.pg.query(`DELETE FROM pokemons WHERE id = ${q.id}`)
-					.then(_res => s.push(true))
+					.then(_res => s.push(1))
 					.catch(err => {
 						console.error(err);
-						s.push(false);
+						s.push(0);
 					});
 				else message.client.pg.query(`UPDATE pokemons SET caught = ${q.caught - pkm.number} WHERE id = ${q.id}`)
-					.then(_res => s.push(true))
+					.then(_res => s.push(1))
 					.catch(err => {
 						console.error(err);
-						s.push(false);
+						s.push(0);
 					});
 				
 				demandSuccess.push(s);
@@ -221,17 +224,17 @@ const command = {
 					fields: [
 						{
 							name: "Offer:",
-							value: `\`\`\`\n${offer.map((pkm, i) => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""} - ${offerSuccess[i].map(s => ["❌", "✅"][!!s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+							value: `\`\`\`\n${offer.map((pkm, i) => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""} - ${offerSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
 							inline: true
 						},
 						{
 							name: "Demand:",
-							value: `\`\`\`\n${demand.map((pkm, i) => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""} - ${demandSuccess[i].map(s => ["❌", "✅"][!!s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+							value: `\`\`\`\n${demand.map((pkm, i) => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""} - ${demandSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
 							inline: true
 						}
 					],
 					footer: {
-						text: "✨ Mayze ✨ | 1st emote: pokémon addition, 2nd emote: pokémon removal"
+						text: "✨ Mayze ✨"
 					}
 				}
 			}).catch(console.error);
