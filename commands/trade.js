@@ -178,6 +178,7 @@ const command = {
 			let demandSuccess = [];
 			for (const pkm of demand) {
 				let s = [];
+
 				let p = offerPokemons.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
 				if (p) message.client.pg.query(`UPDATE pokemons SET caught = ${p.caught + pkm.number} WHERE id = '${p.id}'`)
 					.then(_res => s.push(true))
@@ -205,11 +206,35 @@ const command = {
 						console.error(err);
 						s.push(false);
 					});
-
+				
 				demandSuccess.push(s);
 			}
 
-			logChannel.send(`- ${message.channel.id} ${msg.id}\nOffer:\n\`\`\`\n${JSON.stringify(offerSuccess)}\n\`\`\`\nDemand:\n\`\`\`\n${JSON.stringify(demandSuccess)}\n\`\`\``).catch(console.error);
+			logChannel.send({
+				embed: {
+					author: {
+						name: `${message.author.tag} / ${user.tag}`,
+						url: msg.url,
+						icon_url: message.guild.iconURL({ dynamic: true })
+					},
+					color: "#010101",
+					fields: [
+						{
+							name: "Offer:",
+							value: `\`\`\`\n${offer.map((pkm, i) => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""} - ${offerSuccess[i].map(s => ["❌", "✅"][!!s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+							inline: true
+						},
+						{
+							name: "Demand:",
+							value: `\`\`\`\n${demand.map((pkm, i) => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""} - ${demandSuccess[i].map(s => ["❌", "✅"][!!s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+							inline: true
+						}
+					],
+					footer: {
+						text: "✨ Mayze ✨ | 1st emote: pokémon addition, 2nd emote: pokémon removal"
+					}
+				}
+			}).catch(console.error);
 
 			message.channel.send(language.trade_complete).catch(console.error);
 		});
