@@ -264,7 +264,7 @@ const command = {
 			errors1 = errors1.length ? language.get(language.not_enough_pkm, user1.username, errors1.join(", ")) : "";
 			errors2 = errors2.length ? language.get(language.not_enough_pkm, user2.username, errors2.join(", ")) : "";
 			errors1fav = errors1fav.length ? language.get(language.fav_pokemon, user1.username, errors1fav.join(", "), errors1fav.length > 1) : "";
-			errors1fav = errors2fav.length ? language.get(language.fav_pokemon, user2.username, errors2fav.join(", "), errors2fav.length > 1) : "";
+			errors2fav = errors2fav.length ? language.get(language.fav_pokemon, user2.username, errors2fav.join(", "), errors2fav.length > 1) : "";
 
 			return (errors1 + errors1fav + errors2 + errors2fav) || null;
 		}

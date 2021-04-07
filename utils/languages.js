@@ -691,7 +691,7 @@ module.exports = {
 			},
 			fav_pokemon: {
 				fr: "→ **{1}** ne peut pas donner {2} car ce[3?s:] pokémon[3?s:] [3?sont:est] en favori[3?s:]",
-				en: "→ **{1}** can't give {2} because [3?these:this] pokémon[3?s:] [3?are:is] in their favorites list"
+				en: "→ **{1}** can't give {2} because [3?these:this] pokémon[3?s:] [3?are:is] in their favorites"
 			},
 			cancelled: {
 				fr: "Échange annulé[1? par **{1}**:]",
