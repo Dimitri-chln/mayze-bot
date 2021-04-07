@@ -1,11 +1,13 @@
 module.exports = {
-	get: (text, ...args) => decodeURIComponent(text
+	get: (text, ...args) => text
 		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
 		.replace(/\[\d+?\?.*?:.*?\]/g, a => {
 			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/);
 			if (args[parseInt(m[1]) - 1]) return m[2];
 			else return m[3];
-		})),
+		})
+		.replace(/~d/g, ":")
+		.replace(/~q/g, "?"),
 	data: {
 		unauthorized_guild: {
 			fr: "cette commande ne fonctionne pas sur ce serveur",
@@ -493,8 +495,8 @@ module.exports = {
 				en: "{1}'s pokédex"
 			},
 			description: {
-				fr: "[1?<%3Apokeball%3A829026553395937291>:<%3Ablank%3A829352737946730576>] [4?🎖️ :][5?⭐ :]**{2}#{3}**",
-				en: "[1?<%3Apokeball%3A829026553395937291>:<%3Ablank%3A829352737946730576>] [4?🎖️ :][5?⭐ :]**{2}#{3}**"
+				fr: "[1?<~dpokeball~d829026553395937291>:<~dblank~d829352737946730576>] [4?🎖️ :][5?⭐ :]**{2}#{3}**",
+				en: "[1?<~dpokeball~d829026553395937291>:<~dblank~d829352737946730576>] [4?🎖️ :][5?⭐ :]**{2}#{3}**"
 			}
 		},
 		"pokemon": {
@@ -507,8 +509,8 @@ module.exports = {
 				en: "*No pokémon matches the search*"
 			},
 			description: {
-				fr: "**[1?🎖️ :][2?⭐ :][7?[{3}](https%3A//google.com):{3}]**{4} - {5} attrapé{6}",
-				en: "**[1?🎖️ :][2?⭐ :][7?[{3}](https%3A//google.com):{3}]**{4} - {5} caught"
+				fr: "**[1?🎖️ :][2?⭐ :][7?[{3}](https~d//google.com):{3}]**{4} - {5} attrapé{6}",
+				en: "**[1?🎖️ :][2?⭐ :][7?[{3}](https~d//google.com):{3}]**{4} - {5} caught"
 			}
 		},
 		"poll": {
