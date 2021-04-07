@@ -251,14 +251,14 @@ const command = {
 			for (const pokemon of pokemons1) {
 				let pkm = user1Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny) || { caught: 0 };
 				if (pokemon.number > pkm.caught) errors1.push(`**${pokemon.number - pkm.caught} ${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}**`);
-				if (pokemon.favorite) errors1fav.push(`**${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}**`);
+				if (pkm.favorite) errors1fav.push(`**${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}**`);
 			}
 
 			let errors2 = [], errors2fav = [];
 			for (const pokemon of pokemons2) {
 				let pkm = user2Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny) || { caught: 0 };
 				if (pokemon.number > pkm.caught) errors2.push(`**${pokemon.number - pkm.caught} ${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}**`);
-				if (pokemon.favorite) errors2fav.push(`**${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}**`);
+				if (pkm.favorite) errors2fav.push(`**${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}**`);
 			}
 
 			errors1 = errors1.length ? language.get(language.not_enough_pkm, user1.username, errors1.join(", ")) : "";
