@@ -56,7 +56,7 @@ const command = {
 					fields: [
 						{
 							name: language.fields[0],
-							value: Object.keys(pokemon.names).filter(l => l !== languageCode).map(l => `${flags[l]} ${pokemon.names[l]}${l === "it" ? " 🤌" : ""}`).join("\n"),
+							value: Object.keys(pokemon.names).filter(l => l !== languageCode).map(l => `${flags[l]} ${pokemon.names[l]}`).join("\n"),
 							inline: true
 						},
 						{
