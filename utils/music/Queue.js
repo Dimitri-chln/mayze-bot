@@ -56,6 +56,11 @@ class Queue extends EventEmitter {
          */
         this.playing = true;
         /**
+         * Whether the song have been paused automatically.
+         * @type {Boolean}
+         */
+        this.paused = false;
+        /**
          * Whether the repeat mode is enabled.
          * @type {Boolean}
          */

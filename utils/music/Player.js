@@ -71,9 +71,18 @@ class Player {
             let queue = this.getQueue(oldState.guild.id);
             if (queue) {
                 // If the channel is not empty
-                if (queue.connection.channel.members.size > 1) return;
-                // Start timeout
+                if (queue.connection.channel.members.size > 1) {
+                    if (queue.paused) {
+                        this.resume(queue.guildID);
+                        queue.paused = false;
+                    }
+                    return;
+                }
+                // Pause the song
+                this.pause(queue.guildID);
+                queue.paused = true;
 
+                // Start timeout
                 setTimeout(() => {
                     // If the channel is not empty
                     if (queue.connection.channel.members.size > 1) return;
