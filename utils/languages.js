@@ -299,6 +299,24 @@ module.exports = {
 				en: "there is nothing to snipe in this channel"
 			}
 		},
+		"favorite": {
+			invalid_pokemon: {
+				fr: "ce pokémon n'existe pas",
+				en: "this pokémon doesn't exist"
+			},
+			no_pokemon: {
+				fr: "tu n'as pas ce pokémon",
+				en: "you don't own this pokémon"
+			},
+			favorite_added: {
+				fr: "favori ajouté",
+				en: "favorite added"
+			},
+			favorite_removed: {
+				fr: "favori retiré",
+				en: "favorite removed"
+			}
+		},
 		"help": {
 			commands_list: {
 				fr: "Liste des commandes",
@@ -477,8 +495,8 @@ module.exports = {
 				en: "*No pokémon matches the search*"
 			},
 			description: {
-				fr: "**{1}{2}{3}**{4} - {5} attrapé{6}",
-				en: "**{1}{2}{3}**{4} - {5} caught"
+				fr: "**[1?🎖️ :][2?⭐ :][7?[{3}](https://google.com):{3}]**{4} - {5} attrapé{6}",
+				en: "**[1?🎖️ :][2?⭐ :][7?[{3}](https://google.com):{3}]**{4} - {5} caught"
 			}
 		},
 		"poll": {
@@ -670,6 +688,10 @@ module.exports = {
 			not_enough_pkm: {
 				fr: "→ Il manque {2} à **{1}** pour cet échange\n",
 				en: "→ **{1}** is missing {2} for this trade\n"
+			},
+			fav_pokemon: {
+				fr: "→ **{1}** ne peut pas donner {2} car ce[3?s:] pokémon[3?s:] [3?sont:est] en favori[3?s:]",
+				en: "→ **{1}** can't give {2} because [3?these:this] pokémon[3?s:] [3?are:is] in their favorites list"
 			},
 			cancelled: {
 				fr: "Échange annulé[1? par **{1}**:]",
