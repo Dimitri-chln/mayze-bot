@@ -38,7 +38,7 @@ const command = {
 			? message.mentions.users.first() || message.author
 			: options.some(o => o.name === "user") ? message.guild.members.cache.get(options.find(o => o.name === "user").value).user : message.author;
 
-		let { "rows": pokemons }  = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}' ORDER BY legendary DESC, shiny DESC, caught DESC, pokedex_id ASC`).catch(console.error)) || {};
+		let { "rows": pokemons }  = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}' ORDER BY legendary DESC, shiny DESC, favorite DESC, caught DESC, pokedex_id ASC`).catch(console.error)) || {};
 		if (!pokemons) return message.channel.send(language.errors.database).catch(console.error);
 
 		const params = args
