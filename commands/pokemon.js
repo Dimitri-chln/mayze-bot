@@ -35,7 +35,7 @@ const command = {
 		const pagination = require("../utils/pagination");
 
 		const user = args
-			? message.mentions.users.first() || (args.length ? message.client.findMember(message.guild, args[0]) : null) || message.author
+			? message.mentions.users.first() || (args.length ? (message.client.findMember(message.guild, args[0]) || {}).user : null) || message.author
 			: options.some(o => o.name === "user") ? message.guild.members.cache.get(options.find(o => o.name === "user").value).user : message.author;
 
 		let { "rows": pokemons }  = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}' ORDER BY legendary DESC, shiny DESC, caught DESC, pokedex_id ASC`).catch(console.error)) || {};
