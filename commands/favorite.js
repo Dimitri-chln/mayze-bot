@@ -72,7 +72,7 @@ const command = {
 			case "remove": {
 				const res = await message.client.pg.query(`UPDATE pokemons SET favorite = false WHERE id = ${pokemons[0].id}`).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
-				if (message.deletable) message.react("❌").catch(console.error);
+				if (message.deletable) message.react("✅").catch(console.error);
 				else message.reply(language.favorite_removed).catch(console.error);
 				break;
 			}
