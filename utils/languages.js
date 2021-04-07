@@ -1,11 +1,11 @@
 module.exports = {
-	get: (text, ...args) => text
+	get: (text, ...args) => decodeURIComponent(text
 		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
 		.replace(/\[\d+?\?.*?:.*?\]/g, a => {
 			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/);
 			if (args[parseInt(m[1]) - 1]) return m[2];
 			else return m[3];
-		}),
+		})),
 	data: {
 		unauthorized_guild: {
 			fr: "cette commande ne fonctionne pas sur ce serveur",
@@ -495,8 +495,8 @@ module.exports = {
 				en: "*No pokémon matches the search*"
 			},
 			description: {
-				fr: "**[1?🎖️ :][2?⭐ :][7?[{3}](https://google.com):{3}]**{4} - {5} attrapé{6}",
-				en: "**[1?🎖️ :][2?⭐ :][7?[{3}](https://google.com):{3}]**{4} - {5} caught"
+				fr: "**[1?🎖️ :][2?⭐ :][7?[{3}](https%3A//google.com):{3}]**{4} - {5} attrapé{6}",
+				en: "**[1?🎖️ :][2?⭐ :][7?[{3}](https%3A//google.com):{3}]**{4} - {5} caught"
 			}
 		},
 		"poll": {
