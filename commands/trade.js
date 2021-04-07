@@ -213,6 +213,8 @@ const command = {
 				demandSuccess.push(s);
 			}
 
+			console.log(offerSuccess);
+			console.log(demandSuccess);
 			logChannel.send({
 				embed: {
 					author: {

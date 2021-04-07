@@ -483,6 +483,18 @@ module.exports = {
 			stats: {
 				fr: "**PV:** {1}\n**Attaque:** {2}\n**Défense:** {3}\n**Attaque Spé:** {4}\n**Défense Spé:** {5}\n**Vitesse:** {6}",
 				en: "**HP:** {1}\n**Attack:** {2}\n**Defense:** {3}\n**Sp. Attack:** {4}\n**Sp. Defense:** {5}\n**Speed:** {6}"
+			},
+			no_pokemon: {
+				fr: "*Aucun pokémon ne correspond à la recherche*",
+				en: "*No pokémon matches the search*"
+			},
+			title: {
+				fr: "Pokédex de {1}",
+				en: "{1}'s pokédex"
+			},
+			description: {
+				fr: "[1?<%3Apokeball%3A829026553395937291>:<%3Ablank%3A829352737946730576>] [4?🎖️ :][5?⭐ :]**{2}#{3}**",
+				en: "[1?<%3Apokeball%3A829026553395937291>:<%3Ablank%3A829352737946730576>] [4?🎖️ :][5?⭐ :]**{2}#{3}**"
 			}
 		},
 		"pokemon": {
