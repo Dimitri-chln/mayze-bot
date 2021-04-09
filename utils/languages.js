@@ -1,8 +1,8 @@
 module.exports = {
 	get: (text, ...args) => text
 		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
-		.replace(/\[\d+?\?.*?:.*?\]/g, a => {
-			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/);
+		.replace(/\[\d+?\?.*?:.*?\]/gs, a => {
+			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/s);
 			if (args[parseInt(m[1]) - 1]) return m[2];
 			else return m[3];
 		})
@@ -64,7 +64,7 @@ module.exports = {
 			},
 			message_send: {
 				fr: "Quelque chose s'est mal passé en envoyant le message :/",
-				en: "Something went wrong when message_send the message :/"
+				en: "Something went wrong when sending the message :/"
 			},
 			no_perms: {
 				fr: "Je n'ai pas les permissions nécessaires pour faire cela :/",

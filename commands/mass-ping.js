@@ -10,6 +10,7 @@ const command = {
 	args: 1,
 	usage: "<user> <number> [<message>]",
 	perms: ["MANAGE_MESSAGES"],
+	onlyInGuilds: ["689164798264606784", "724530039781326869"],
 	slashOptions: [
 		{
 			name: "user",

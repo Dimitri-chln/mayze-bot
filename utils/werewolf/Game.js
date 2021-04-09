@@ -7,8 +7,8 @@ const { roles } = require("../../assets/werewolf-composition.json");
 const language = {
 	get: (text, ...args) => text
 		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
-		.replace(/\[\d+?\?.*?:.*?\]/g, a => {
-			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/);
+		.replace(/\[\d+?\?.*?:.*?\]/gs, a => {
+			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/s);
 			if (args[parseInt(m[1]) - 1]) return m[2];
 			else return m[3];
 		}),
