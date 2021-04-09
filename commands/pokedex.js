@@ -33,7 +33,7 @@ const command = {
 			: options[0].value.toLowerCase().replace(/shiny|-caught|-uncaught/g, "").trim();
 		
 		if (input) {
-			const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => input === name.toLowerCase()));
+			const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => input === name.toLowerCase().replace("♂️", "m").replace("♀️", "f")));
 			if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 
 			const shiny = args

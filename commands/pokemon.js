@@ -50,7 +50,7 @@ const command = {
 		if (params.includes("-legendary") || params.includes("-leg")) pokemons = pokemons.filter(p => p.legendary);
 		if (params.includes("-shiny")) pokemons = pokemons.filter(p => p.shiny);
 		if (params.includes("-id")) pokemons = params[params.indexOf("-id") + 1] ? pokemons.filter(p => p.pokedex_id === parseInt(params[params.indexOf("-id") + 1])) : pokemons;
-		if (params.includes("-name")) pokemons = pokemons.filter(p => new RegExp(params[params.indexOf("-name") + 1], "i").test(pokedex.findPokemon(p.pokedex_id).names[languageCode]));
+		if (params.includes("-name")) pokemons = pokemons.filter(p => new RegExp(params[params.indexOf("-name") + 1], "i").test(pokedex.findPokemon(p.pokedex_id).names[languageCode].replace("♂️", "m").replace("♀️", "f")));
 		
 		const pkmPerPage = 15;
 		let pages = [];
