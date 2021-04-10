@@ -29,11 +29,19 @@ const command = {
 		const { MessageEmbed } = require("discord.js");
 
 		const input = args
-			? args.join(" ").toLowerCase().replace(/shiny|-caught|-uncaught|-shiny|-leg(?:endary)?/g, "").trim()
-			: options[0].value.toLowerCase().replace(/shiny|-caught|-uncaught|-shiny|-leg(?:endary)?/g, "").trim();
+			? args.join(" ").toLowerCase().replace(/shiny|alolan|-caught|-uncaught|-shiny|-leg(?:endary)?|-alolan/g, "").trim()
+			: options[0].value.toLowerCase().replace(/shiny|alolan|-caught|-uncaught|-shiny|-leg(?:endary)?|-alolan/g, "").trim();
 		
 		if (input) {
-			const pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => input === name.toLowerCase().replace("♂", "m").replace("♀️", "f")));
+			let pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => input === name.toLowerCase().replace("♂", "m").replace("♀️", "f")));
+			if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
+			if (args.includes("alolan")) pokemon = {
+				base_stats: pokemon.base_stats,
+				national_id: pokemon.national_id,
+				height_eu: pokemon.height_eu,
+				weight_eu: pokemon.weight_eu,
+				...pokemon.variations.find(v => v.condition === "Alola")
+			};
 			if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 
 			const shiny = args
@@ -41,7 +49,7 @@ const command = {
 				: options[0].value.toLowerCase().includes("shiny");
 			const url = shiny
 				? `https://img.pokemondb.net/sprites/home/shiny/${pokemon.names.en.toLowerCase()}.png`
-				: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}.png`
+				: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}${pokemon.condition === "Alola" ? "_f2" : ""}.png`
 
 			const flags = { en: "🇬🇧", fr: "🇫🇷", de: "🇩🇪", cz: "🇨🇿", es: "🇪🇸", it: "🇮🇹", jp: "🇯🇵", tr: "🇹🇷", dk: "🇩🇰", gr: "🇬🇷", pl: "🇵🇱" };
 
@@ -94,14 +102,16 @@ const command = {
 				: options[0].value.split(" ");
 			const shiny = params.includes("-shiny");
 			const legendary = params.includes("-legendary") || params.includes("-leg");
+			const alolan = params.includes("-alolan");
 
-			const { "rows": pokemons } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}' AND shiny = ${shiny}`).catch(console.error)) || {};
+			const { "rows": pokemons } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error)) || {};
 			if (!pokemons) return message.reply(language.errors.database).catch(console.error);
 			
 			let dex = pokedex.allPokemon().sort((a, b) => a.national_id - b.national_id);
 			if (params.includes("-caught")) dex = dex.filter(pkm => pokemons.some(p => p.pokedex_id === pkm.national_id));
 			if (params.includes("-uncaught")) dex = dex.filter(pkm => !pokemons.some(p => p.pokedex_id === pkm.national_id));
 			if (legendary) dex = dex.filter(pkm => legendaries.includes(pkm.names.en));
+			if (alolan) dex = dex.filter(p => p.variations.some(v => v.condition === "Alola"));
 
 			const pkmPerPage = 15;
 			let pages = [];

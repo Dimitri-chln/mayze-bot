@@ -51,9 +51,6 @@ const command = {
 					pagination(message, pages).catch(console.error);
 				}
 				break;
-			case "INSERT":
-				message.channel.send(`Le tableau contient désormais ${res.rowCount} lignes`).catch(console.error);
-				break;
 			default:
 				message.channel.send("Requête effectuée").catch(console.error);
 		}
