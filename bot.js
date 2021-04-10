@@ -61,6 +61,8 @@ client.on("ready", async () => {
 	console.log("Connected to Discord");
 	if (client.user.id === "740848584882126939") client.beta = true;
 
+	client.user.setPresence({ activity: { name: "le meilleur clan", type: "WATCHING" } }).catch(console.error);
+
 	const { version } = require ("./package.json");
 	const logChannel = client.channels.cache.get(config.LOG_CHANNEL_ID);
 	try {
