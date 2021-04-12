@@ -9,7 +9,14 @@ const command = {
 	aliases: ["ly", "l"],
 	args: 0,
 	usage: "[<song>]",
-	disableSlash: true,
+	slashOptions: [
+		{
+			name: "song",
+			description: "The name of the song to search for",
+			type: 3,
+			required: false
+		}
+	],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
@@ -23,7 +30,7 @@ const command = {
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		const songName = args
 			? args.length ? args.join(" ") : (isPlaying ? (await message.client.player.nowPlaying(message.guild.id)).name : null)
-			: options[0] ? options[0].value : (isPlaying ? (await message.client.player.nowPlaying(message.guild.id)).name : null);
+			: options ? options[0].value : (isPlaying ? (await message.client.player.nowPlaying(message.guild.id)).name : null);
 		if (!songName) return message.reply(language.no_song).catch(console.error);
 
 		message.channel.startTyping(1);
