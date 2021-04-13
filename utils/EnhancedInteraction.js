@@ -53,7 +53,7 @@ class EnhancedInteraction {
 					delete data.embed;
 				}
 		
-				const res = await Axios.post(url, {
+				await Axios.patch(url, {
 					type: 4,
 					data
 				}).catch(console.error);

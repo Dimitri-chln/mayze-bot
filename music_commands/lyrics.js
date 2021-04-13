@@ -55,12 +55,7 @@ const command = {
 			pages.push(embed);
 		};
 		
-		try {
-			pagination(message, pages, ["⏪", "⏩"], 300000);
-		} catch (err) {
-			console.error(err);
-			message.channel.send(language.errors.paginator).catch(console.error);
-		}
+		pagination(message, pages, ["⏪", "⏩"], 300000);
 	}
 };
 

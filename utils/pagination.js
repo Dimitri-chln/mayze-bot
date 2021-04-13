@@ -15,10 +15,13 @@ const { Message, MessageEmbed } = require("discord.js");
     for (const emoji of emojiList) await currentPage.react(emoji).catch(console.error);
     
     const filter = (reaction, user) => emojiList.includes(reaction.emoji.name) && !user.bot;
-    const reactionCollector = currentPage.createReactionCollector(filter, { time: timeout });
+    const reactionCollector = currentPage.createReactionCollector(filter);
+
+	let timeout = setTimeout(() => reactionCollector.stop(), timeout);
     
 	reactionCollector.on("collect", (reaction, user) => {
 		reaction.users.remove(user);
+		timeout = setTimeout(() => reactionCollector.stop(), timeout);
 		switch (reaction.emoji.name) {
 			case emojiList[0]:
 				page = page > 0 ? --page : pages.length - 1;
@@ -34,7 +37,7 @@ const { Message, MessageEmbed } = require("discord.js");
     
 	reactionCollector.on("end", () => {
 		if (!currentPage.deleted) {
-			currentPage.reactions.removeAll()
+			currentPage.reactions.removeAll().catch(console.error);
 		}
 	});
 	return currentPage;
