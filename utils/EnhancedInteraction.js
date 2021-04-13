@@ -45,7 +45,7 @@ class EnhancedInteraction {
 			name: channel.name,
 			type: channel.type,
 			send: async (data) => {
-				const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
+				const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.token}/messages/@original`;
 		
 				if (typeof data === "string") data = { content: data };
 				if (data.embed) {
@@ -70,7 +70,7 @@ class EnhancedInteraction {
 	}
 
 	async reply(data) {
-		const url = `https://discord.com/api/v8/webhooks/${this.client.id}/${this.token}/messages/@original`;
+		const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.token}/messages/@original`;
 
 		if (typeof data === "string") data = { content: data };
 		if (data.embed) {
