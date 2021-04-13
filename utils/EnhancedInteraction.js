@@ -55,7 +55,9 @@ class EnhancedInteraction {
 					type: 4,
 					data
 				}).catch(console.error);
-			}
+			},
+			startTyping: channel.startTyping,
+			stopTyping: channel.stopTyping
 		};
 	}
 

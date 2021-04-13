@@ -253,14 +253,14 @@ async function processCommand(command, message, args, options) {
 	const languageData = { get: languages.get, errors: pickLanguage(languages.data.errors, language), ...pickLanguage(languages.data[command.name], language) };
 
 	await command.execute(message, args, options, languageData, language)
-	.then(() => {
-		timestamps.set(message.author.id, now);
-		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-	})
-	.catch(err => {
-		console.error(err);
-		message.channel.send(languages.data.error[language]).catch(console.error);
-	});
+		.then(() => {
+			timestamps.set(message.author.id, now);
+			setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+		})
+		.catch(err => {
+			console.error(err);
+			message.channel.send(languages.data.error[language]).catch(console.error);
+		});
 	return;
 }
 
