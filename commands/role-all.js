@@ -124,7 +124,7 @@ const command = {
 				return message.reply(language.errors.invalid_args).catch(console.error);
 		}
 
-		msg.edit(language.get(language.updated, members.size - errors === 0, members.size - errors === 1, members.size - errors, errors, errors > 1)).catch(console.error);
+		msg.edit(language.get(language.updated, members.size - errors === 0, members.size - errors === 1, member.size - errors > 1, members.size - errors, errors, errors > 1)).catch(console.error);
 	}
 };
 

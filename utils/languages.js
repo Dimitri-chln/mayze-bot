@@ -584,8 +584,8 @@ module.exports = {
 				en: "Updating {1} member[2?s:]..."
 			},
 			updated: {
-				fr: "[1?Aucun membre n'a:][2?1 membre a:{3} membres ont] été mis à jour ({4} erreur[5?s:])",
-				en: "[1?No member:][2?1 member:{3} members] have been updated ({4} error[5?s:])"
+				fr: "[1?Aucun membre n'a:][2?1 membre a:][3?{4} membres ont:] été mis à jour ({5} erreur[6?s:])",
+				en: "[1?No member:][2?1 member:][3?{4} members:] have been updated ({5} error[6?s:])"
 			}
 		},
 		"role-color": {
