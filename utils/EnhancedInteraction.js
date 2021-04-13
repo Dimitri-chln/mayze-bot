@@ -1,4 +1,4 @@
-const { Client, Guild, Channel, User, GuildMember } = require("discord.js");
+const { Client, Guild, Channel, User, GuildMember, TextChannel } = require("discord.js");
 const Axios = require("axios").default;
 
 class EnhancedInteraction {
@@ -37,8 +37,10 @@ class EnhancedInteraction {
 		this.member = this.guild.members.cache.get(interaction.member.user.id);
 		this.author = this.member.user;
 
+		/**@type {TextChannel} */
 		let channel = this.client.channels.cache.get(interaction.channel_id);
 		this.channel = {
+			client: this.client,
 			id: channel.id,
 			name: channel.name,
 			type: channel.type,
