@@ -9,7 +9,7 @@ const command = {
     aliases: ["ask"],
     args: 1,
     usage: "<question>",
-    slashoptions: [
+    slashOptions: [
         {
             name: "question",
             description: "The question to ask",
