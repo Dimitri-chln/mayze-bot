@@ -53,10 +53,7 @@ class EnhancedInteraction {
 					delete data.embed;
 				}
 		
-				await Axios.patch(url, {
-					type: 4,
-					data
-				}, { "Content-Type": "application/json" }).catch(console.error);
+				await Axios.patch(url, data, { "Content-Type": "application/json" }).catch(console.error);
 			}
 		};
 	}
@@ -79,10 +76,7 @@ class EnhancedInteraction {
 		}
 		data.content = data.content.replace(/^./, a => a.toUpperCase());
 
-		await Axios.patch(url, {
-			type: 4,
-			data
-		}, { "Content-Type": "application/json" }).catch(console.error);
+		await Axios.patch(url, data, { "Content-Type": "application/json" }).catch(console.error);
 	}
 }
 
