@@ -61,6 +61,14 @@ class EnhancedInteraction {
 		};
 	}
 
+	async acknowledge() {
+		const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
+
+		await Axios.post(url, {
+			type: 5,
+		}).catch(console.error);
+	}
+
 	async reply(data) {
 		const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
 
@@ -71,7 +79,7 @@ class EnhancedInteraction {
 		}
 		data.content = data.content.replace(/^./, a => a.toUpperCase());
 
-		const res = await Axios.post(url, {
+		await Axios.post(url, {
 			type: 4,
 			data
 		}).catch(console.error);
