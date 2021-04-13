@@ -56,7 +56,7 @@ class EnhancedInteraction {
 				const res = await Axios.patch(url, data, { "Content-Type": "application/json" })
 					.catch(err => {
 						console.error(err);
-						throw new DiscordAPIError(res.response.path, res.response.data, "patch", res.response.status);
+						throw new DiscordAPIError(err.response.path, err.response.data, "patch", err.response.status);
 					});
 				
 				return new Message(this.client, res.data, this.channel);
