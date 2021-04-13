@@ -99,7 +99,7 @@ const command = {
 		else if (params.includes("-human")) members = members.filter(m => !m.user.bot);
 
 		let errors = 0;
-		msg.edit(language.get(language.updating, members.size, member.size > 1)).catch(console.error);
+		msg.edit(language.get(language.updating, members.size, members.size > 1)).catch(console.error);
 
 		switch (subCommand) {
 			case "add":
