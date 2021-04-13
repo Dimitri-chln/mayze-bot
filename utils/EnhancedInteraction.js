@@ -69,7 +69,7 @@ class EnhancedInteraction {
 			data.embeds = [ data.embed ];
 			delete data.embed;
 		}
-		data.content = `${this.author.toString()}, ` + data.content;
+		data.content = data.content.replace(/^./, a => a.toUpperCase());
 
 		const res = await Axios.post(url, {
 			type: 4,
