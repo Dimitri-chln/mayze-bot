@@ -53,10 +53,13 @@ class EnhancedInteraction {
 					delete data.embed;
 				}
 		
-				const res = await Axios.patch(url, data, { "Content-Type": "application/json" }).catch(console.error);
+				const res = await Axios.patch(url, data, { "Content-Type": "application/json" })
+					.catch(err => {
+						console.error(err);
+						throw new DiscordAPIError(res.response.path, res.response.data, "patch", res.response.status);
+					});
 				
-				if (!res.isAxiosError) return new Message(this.client, res.data, this.channel);
-				else throw new DiscordAPIError(res.response.path, res.response.data, "patch", res.response.status);
+				return new Message(this.client, res.data, this.channel);
 			}
 		};
 	}
@@ -64,11 +67,11 @@ class EnhancedInteraction {
 	async acknowledge() {
 		const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
 
-		const res = await Axios.post(url, {
-			type: 5,
-		}).catch(console.error);
-
-		if (res.isAxiosError) throw new DiscordAPIError(res.response.path, res.response.data, "patch", res.response.status);
+		const res = await Axios.post(url, { type: 5 })
+			.catch(err => {
+				console.error(err);
+				throw new DiscordAPIError(res.response.path, res.response.data, "patch", res.response.status);
+			});
 	}
 
 	async reply(data) {
@@ -81,10 +84,13 @@ class EnhancedInteraction {
 		}
 		data.content = data.content.replace(/^./, a => a.toUpperCase());
 
-		const res = await Axios.patch(url, data, { "Content-Type": "application/json" }).catch(console.error);
+		const res = await Axios.patch(url, data, { "Content-Type": "application/json" })
+			.catch(err => {
+				console.error(err);
+				throw new DiscordAPIError(res.response.path, res.response.data, "patch", res.response.status);
+			});
 
-		if (!res.isAxiosError) return new Message(this.client, res.data, this.channel);
-		else throw new DiscordAPIError(res.response.path, res.response.data, "patch", res.response.status);
+		return new Message(this.client, res.data, this.channel);
 	}
 }
 
