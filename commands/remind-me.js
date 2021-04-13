@@ -96,7 +96,7 @@ const command = {
 							name: language.get(language.title, message.author.tag),
 							icon_url: message.author.avatarURL({ dynamic: true })
 						},
-						color: message.guild.me.displayHexColor,
+						color: message.guild.me.displayColor,
 						description: reminders.length ? null : language.no_reminder,
 						fields: reminders.map((reminder, i) => {
 							return { name: `\`${i + 1}.\` ${reminder.content.replace(/U\+0027/g, "'")}`, value: `*${reminder.timestamp}*`, inline: true };

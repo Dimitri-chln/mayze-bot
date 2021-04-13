@@ -38,7 +38,7 @@ const command = {
 					name: role.name,
 					icon_url: `https://dummyimage.com/50/${hexColor}/${hexColor}.png?text=+`
 				},
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				description: language.get(language.description, role.id, role.color, hexColor, role.position, roleMembers.length, roleMembers.join(", ") || " "),
 				footer: {
 					text: "✨ Mayze ✨"

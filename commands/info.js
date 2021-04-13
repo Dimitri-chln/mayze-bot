@@ -24,7 +24,7 @@ const command  = {
 					icon_url: message.client.user.avatarURL()
 				},
 				title: language.title,
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				description: language.get(language.description, message.client.prefix, (message.client.users.cache.get(config.OWNER_ID) || { username: language.unknown }).tag, version),
 				footer: {
 					text: "✨ Mayze ✨"

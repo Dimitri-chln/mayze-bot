@@ -33,7 +33,7 @@ const command = {
 								name: "Personnage souhaité",
 								icon_url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
 							},
-							color: message.guild.me.displayHexColor,
+							color: message.guild.me.displayColor,
 							description: `**[${characterName}](${message.url})** a été roll dans <#${message.channel.id}> !\n→ ${characterSeries}\n**${kakeraValue}**<:kakeraMudae:796822222110720106>`,
 							footer: {
 								text: "✨ Mayze ✨"

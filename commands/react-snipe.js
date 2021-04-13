@@ -26,7 +26,7 @@ const command = {
                 thumbnail: {
                     url: snipedReaction.emoji.url
                 },
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
                 description: snipedReaction.message.content,
                 fields: [
                     { name: "\u200b", value: language.get(language.description, snipedReaction.user.tag, snipedReaction.message.url, snipedReaction.emoji) }

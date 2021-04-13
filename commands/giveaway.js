@@ -133,7 +133,7 @@ const command = {
 							name: `Giveaway de ${message.author.tag}`,
 							icon_url: message.author.avatarURL({ dynamic: true })
 						},
-						color: message.guild.me.displayHexColor,
+						color: message.guild.me.displayColor,
 						title: prize,
 						description: `\`Temps restant:\` ${timeToString((endTimestamp.valueOf() - Date.now()) / 1000)}` + (role ? `\n\`Uniquement pour:\` ${role}` : ""),
 						footer: {

@@ -33,7 +33,7 @@ const command = {
 								name: anime.name,
 								icon_url: message.author.avatarURL({ dynamic: true })
 							},
-							color: message.guild.me.displayHexColor,
+							color: message.guild.me.displayColor,
 							description: `${anime.seasons.map((s, i) => `• **Saison ${i+1}**: ${s} épisodes`).join("\n")}\n\n__**Prochain épisode:**__ **${nextEpisode}**`,
 							footer: {
 								text: "✨ Mayze ✨"
@@ -51,7 +51,7 @@ const command = {
 								name: `Animés de ${message.author.tag}`,
 								icon_url: message.author.avatarURL({ dynamic: true })
 							},
-							color: message.guild.me.displayHexColor,
+							color: message.guild.me.displayColor,
 							description: animes.map(a => {
 								var string = `• **${a.name}** → `;
 								if (a.next_episode) {

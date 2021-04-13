@@ -37,7 +37,7 @@ const command = {
 					icon_url: message.client.user.avatarURL()
 				},
 				title: language.get(language.score_limit, scoreLimit),
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				description: language.start_msg_description,
 				footer: {
 					text: "✨ Mayze ✨"
@@ -71,7 +71,7 @@ const command = {
 						name: language.get(language.question, question),
 						icon_url: message.client.user.avatarURL()
 					},
-					color: message.guild.me.displayHexColor,
+					color: message.guild.me.displayColor,
 					description: language.whats_this_pkm,
 					image: {
 						url: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}.png`
@@ -114,7 +114,7 @@ const command = {
 							name: language.winner_msg_title,
 							icon_url: message.client.user.avatarURL()
 						},
-						color: message.guild.me.displayHexColor,
+						color: message.guild.me.displayColor,
 						thumbnail: {
 							url: players.find(p => p.id === results[0][0]).avatarURL({ dynamic: true })
 						},

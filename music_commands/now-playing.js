@@ -32,7 +32,7 @@ const command = {
 				thumbnail: {
 					url: song.thumbnail
 				},
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				description: language.get(language.description, song.name, song.url, message.client.player.createProgressBar(message.guild.id), song.requestedBy.tag, queue.repeatMode ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Ø")), Util.MillisecondsToTime(queue.duration)),
 				footer: {
 					text: language.get(language.footer, queue.repeatMode, queue.repeatQueue)
@@ -59,7 +59,7 @@ const command = {
 						height: 720,
 						width: 1280
 					},
-					color: message.guild.me.displayHexColor,
+					color: message.guild.me.displayColor,
 					description: language.get(language.description, lastSong.name, lastSong.url, Util.buildBar(Util.TimeToMilliseconds(lastSong.duration), Util.TimeToMilliseconds(lastSong.duration), 20, "━", "🔘"), lastSong.requestedBy.tag, "Ø", "**0:00**"),
 					footer: {
 						text: language.footer_end
@@ -87,7 +87,7 @@ const command = {
 						height: 720,
 						width: 1280
 					},
-					color: message.guild.me.displayHexColor,
+					color: message.guild.me.displayColor,
 					description: language.get(language.description, newSong.name, newSong.url, message.client.player.createProgressBar(message.guild.id, !!song), newSong.requestedBy.tag, queue.repeatMode ? newSong.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Ø")), Util.MillisecondsToTime(queue.duration)),
 					footer: {
 						text: language.get(language.footer, queue.repeatMode, queue.repeatQueue)

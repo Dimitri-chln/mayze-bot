@@ -38,7 +38,7 @@ const command = {
 						name: language.commands_list,
 						icon_url: message.client.user.avatarURL()
 					},
-					color: message.guild.me.displayHexColor,
+					color: message.guild.me.displayColor,
 					description: commands.filter(cmd => !cmd.ownerOnly && !cmd.category).map(cmd => cmd.name).join(", "),
 					fields: splitCategories(Array.from(commands.filter(cmd => !cmd.ownerOnly && cmd.category)).map(e => e[1])).map(category => {
 						return { name: category.name.replace(/^./, a => a.toUpperCase()), value: category.commands.map(cmd => cmd.name).join(", "), inline: true };
@@ -67,7 +67,7 @@ const command = {
 						name: language.get(language.title, message.client.prefix + command.name),
 						icon_url: message.client.user.avatarURL()
 					},
-					color: message.guild.me.displayHexColor,
+					color: message.guild.me.displayColor,
 					description: data,
 					footer: {
 						text: "✨ Mayze ✨"

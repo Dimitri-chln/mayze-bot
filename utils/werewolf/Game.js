@@ -302,7 +302,7 @@ class Game {
 		this.villageChannel.send({
 			embed: {
 				title: language.get(language.nightStart[this.languageCode], this.night),
-				color: this.guild.me.displayHexColor,
+				color: this.guild.me.displayColor,
 				footer: {
 					text: "🐺 Mayze 🐺"
 				}
@@ -339,7 +339,7 @@ class Game {
 					const msg = await witch.member.user.send({
 						embed: {
 							title: language.get(language.witchTitle[this.languageCode], attackedPlayer.member.user.username),
-							color: this.guild.me.displayHexColor,
+							color: this.guild.me.displayColor,
 							description: language.witchDescription[this.languageCode],
 							footer: {
 								text: "🐺 Mayze 🐺"
@@ -364,7 +364,7 @@ class Game {
 					witch.member.send({
 						embed: {
 							title: language.get(language.witchTitle[this.languageCode], attackedPlayer.member.user.username),
-							color: this.guild.me.displayHexColor,
+							color: this.guild.me.displayColor,
 							description: language.witchCantSave[this.languageCode],
 							footer: {
 								text: "🐺 Mayze 🐺"
@@ -397,7 +397,7 @@ class Game {
 			content: `${this.roleIngame}`,
 			embed: {
 				title: language.get(language.dayStart[this.languageCode], this.day),
-				color: this.guild.me.displayHexColor,
+				color: this.guild.me.displayColor,
 				description: language.get(language.deadPlayers[this.languageCode], dead.map(player => language.get(language.deadPlayerLine[this.languageCode], player.member.user.username, player.role)).join("\n") || language.noDead[this.languageCode]),
 				footer: {
 					text: "🐺 Mayze 🐺"
@@ -417,7 +417,7 @@ class Game {
 			content: this.roleIngame.toString(),
 			embed: {
 				title: language.voteStart[this.languageCode],
-				color: this.guild.me.displayHexColor,
+				color: this.guild.me.displayColor,
 				description: this.alivePlayers.map((player, i) => `\`${ (i + 1).toString(16).toUpperCase() }.\` **${ player.member.user.username }**`).join("\n"),
 				footer: {
 					text: "🐺 Mayze 🐺"
@@ -441,7 +441,7 @@ class Game {
 			this.villageChannel.send({
 				embed: {
 					title: language.voteResult[this.languageCode],
-					color: this.guild.me.displayHexColor,
+					color: this.guild.me.displayColor,
 					description: this.alivePlayers.map((player, i) => `\`${ (i + 1).toString(16).toUpperCase() }.\` **${player.member.user.username}** - \`${player.options.votes}\` vote${player.options.votes > 1 ? "s" : ""}`).join("\n"),
 					footer: {
 						text: "🐺 Mayze 🐺"
@@ -458,7 +458,7 @@ class Game {
 					this.villageChannel.send({
 						embed: {
 							title: language.deadVote[this.languageCode],
-							color: this.guild.me.displayHexColor,
+							color: this.guild.me.displayColor,
 							description: dead.map(player => language.get(language.deadPlayerLine[this.languageCode], player.member.user.username, player.role)).join("\n"),
 							footer: {
 								text: "🐺 Mayze 🐺"
@@ -526,7 +526,7 @@ class Game {
 		this.villageChannel.send({
 			embed: {
 				title: language.gameEnd[this.languageCode],
-				color: this.guild.me.displayHexColor,
+				color: this.guild.me.displayColor,
 				description: this.players.map(player => player.isAlive ? `${player.member.user.username} - ${player.role}` : `~~${player.member.user.username} - ${player.role}~~`).join("\n"),
 				footer: {
 					text: "🐺 Mayze 🐺"

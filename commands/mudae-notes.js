@@ -81,7 +81,7 @@ const command = {
 							name: language.get(language.title, message.author.tag),
 							icon_url: message.author.avatarURL({ dynamic: true })
 						},
-						color: message.guild.me.displayHexColor,
+						color: message.guild.me.displayColor,
 						description: notes.map((n, i) => `\`${i+1}.\` ${n.note}`).join("\n") || language.no_note,
 						footer: {
 							text: "✨ Mayze ✨"
@@ -119,7 +119,7 @@ const command = {
 								name: message.author.tag,
 								icon_url: message.author.avatarURL({ dynamic: true })
 							},
-							color: message.guild.me.displayHexColor,
+							color: message.guild.me.displayColor,
 							description: `\`\`\`\n${n.note.replace(/<a?(:.+:)\d{18}>/, "$1")}\n\`\`\``,
 							footer: {
 								text: "✨ Mayze ✨"

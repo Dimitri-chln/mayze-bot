@@ -55,7 +55,7 @@ const command = {
 					name: language.get(language.title, message.author.username, user.username),
 					icon_url: message.author.avatarURL({ dynamic: true })
 				},
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				image: {
 					url: links[Math.floor(Math.random() * links.length)]
 				},

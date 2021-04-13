@@ -37,7 +37,7 @@ const command = {
 							name: language.get(language.title, me ? message.author.tag : message.guild.name),
 							icon_url: me ? message.author.avatarURL({ dynamic: true }) : message.client.user.avatarURL()
 						},
-						color: message.guild.me.displayHexColor,
+						color: message.guild.me.displayColor,
 						description: playlists.filter(p => me ? p.user_id === message.author.id : p).map((playlist, i) => `\`${i + 1}.\` [${playlist.name}](${playlist.url}) - **${(message.guild.members.cache.get(playlist.user_id) || { user: { tag: language.unknown } }).user.tag}**${playlist.private ? " - 🚫" : ""}`).join("\n") || language.no_playlist,
 						footer: {
 							text: "✨ Mayze ✨" + (playlists.some(p => p.private) ? language.footer_private : "")

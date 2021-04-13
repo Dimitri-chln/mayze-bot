@@ -72,7 +72,7 @@ client.on("ready", async () => {
 					name: "Démarrage du bot...",
 					icon_url: client.user.avatarURL()
 				},
-				color: "#010101",
+				color: 65793,
 				description: `• **Version:** \`${version}\`\n• **Ping:** Calcul...`,
 				footer: {
 					text: "✨ Mayze ✨"
@@ -319,7 +319,7 @@ client.on("guildMemberAdd", async member => {
 					url: member.user.avatarURL({ dynamic: true })
 				},
 				title: "Bienvenue sur Mayze !",
-				color: member.guild.me.displayHexColor,
+				color: member.guild.me.displayColor,
 				description: "Amuse-toi bien sur le serveur 😉",
 				footer: {
 					text: "✨ Mayze ✨"

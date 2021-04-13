@@ -34,7 +34,7 @@ const command = {
 					name: language.get(language.title, user.tag),
 					icon_url: message.client.user.avatarURL()
 				},
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				image: {
 					url: user.avatarURL({ size: 4096, dynamic: true })
 				},

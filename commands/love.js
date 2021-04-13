@@ -39,7 +39,7 @@ const command = {
 		message.channel.send({
 			embed: {
 				title: "💕 Love Calculator 💕",
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				description: `${love1} + ${love2} = ${Math.round(Math.random() * 100)}%`,
 				footer: {
 					text: "✨ Mayze ✨"

@@ -45,7 +45,7 @@ const command = {
 					icon_url: msg.author.avatarURL({ dynamic: true })
 				},
 				title: `#${channel.name}`,
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				description: msg.content,
 				fields: [
 					{ name: "\u200b", value: language.get(language.message_link[lang], msg.url) }

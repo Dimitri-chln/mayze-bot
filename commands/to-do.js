@@ -49,7 +49,7 @@ const command = {
 							name: "To-do list de ✨ Mayze ✨",
 							icon_url: message.author.avatarURL({ dynamic: true })
 						},
-						color: message.guild.me.displayHexColor,
+						color: message.guild.me.displayColor,
 						fields: toDo.map(t => {
 							return { name: `\`${t.id}.\` ${t.name.replace(/U\+0027/g, "'")}`, value: `*${t.created_at.toUTCString()}*`, inline: true }
 						}),

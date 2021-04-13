@@ -56,7 +56,7 @@ class EnhancedInteraction {
 				const res = await Axios.patch(url, data, { "Content-Type": "application/json" })
 					.catch(err => {
 						console.error(err);
-						throw new DiscordAPIError(err.response.path, err.response.data, "patch", err.response.status);
+						throw new DiscordAPIError(err.response.request.path, err.response.data, "patch", err.response.status);
 					});
 				
 				return new Message(this.client, res.data, this.channel);
@@ -70,7 +70,7 @@ class EnhancedInteraction {
 		await Axios.post(url, { type: 5 })
 			.catch(err => {
 				console.error(err);
-				throw new DiscordAPIError(err.response.path, err.response.data, "patch", err.response.status);
+				throw new DiscordAPIError(err.response.request.path, err.response.data, "patch", err.response.status);
 			});
 	}
 
@@ -87,7 +87,7 @@ class EnhancedInteraction {
 		const res = await Axios.patch(url, data, { "Content-Type": "application/json" })
 			.catch(err => {
 				console.error(err);
-				throw new DiscordAPIError(err.response.path, err.response.data, "patch", err.response.status);
+				throw new DiscordAPIError(err.response.request.path, err.response.data, "patch", err.response.status);
 			});
 
 		return new Message(this.client, res.data, this.channel);

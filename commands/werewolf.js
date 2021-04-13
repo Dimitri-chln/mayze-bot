@@ -98,7 +98,7 @@ const command = {
 							name: language.start_msg_title,
 							icon_url: message.client.user.avatarURL()
 						},
-						color: message.guild.me.displayHexColor,
+						color: message.guild.me.displayColor,
 						description: language.start_msg_description,
 						footer: {
 							text: "🐺 Mayze 🐺"
@@ -163,7 +163,7 @@ const command = {
 								icon_url: message.client.user.avatarURL()
 							},
 							description: game.players.map((player, i) =>  `\`${i + 1}.\` ${player.role}`).join("\n"),
-							color: message.guild.me.displayHexColor,
+							color: message.guild.me.displayColor,
 							footer: {
 								text: "🐺 Mayze 🐺"
 							}
@@ -195,7 +195,7 @@ const command = {
 				message.channel.send({
 					embed: {
 						title: language.config,
-						color: message.guild.me.displayHexColor,
+						color: message.guild.me.displayColor,
 						description: language.get(language.config_description, roleIngame.toString(), roleVillage.toString(), roleWerewolves.toString(), villageChannel.toString(), werewolvesChannel.toString(), deadChannel.toString()),
 						footer: {
 							text: "🐺 Mayze 🐺"
@@ -213,7 +213,7 @@ const command = {
 								name: language.player_list,
 								icon_url: message.client.user.avatarURL()
 							},
-							color: message.guild.me.displayHexColor,
+							color: message.guild.me.displayColor,
 							fields: [
 								{
 									name: language.fields[0],
@@ -243,7 +243,7 @@ const command = {
 								name: language.player_list,
 								icon_url: message.client.user.avatarURL()
 							},
-							color: message.guild.me.displayHexColor,
+							color: message.guild.me.displayColor,
 							description: joined.map((m, i) => `\`${i + 1}.\` ${m.user.username}`).join("\n") || language.no_player,
 							footer: {
 								text: "🐺 Mayze 🐺"

@@ -51,7 +51,7 @@ const command = {
 				thumbnail: {
 					url: `https://dummyimage.com/50/${color.replace("#", "")}/${color.replace("#", "")}.png?text=+`
 				},
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				description: language.get(language.changed, role, color.toLowerCase()),
 			footer: {
 					text: "✨ Mayze ✨"

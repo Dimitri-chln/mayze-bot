@@ -30,14 +30,14 @@ const command = {
 		let pages = [];
 		let embed = new MessageEmbed()
 			.setAuthor(language.get(language.title, message.guild.name), message.client.user.avatarURL())
-			.setColor(message.guild.me.displayHexColor)
+			.setColor(message.guild.me.displayColor)
 			.setDescription(language.no_member);
 		if (!top.length) pages.push(embed);
 
 		for (i = 0; i < top.length; i += memberPerPage) {
 			embed = new MessageEmbed()
 				.setAuthor(language.get(language.title, message.guild.name), message.client.user.avatarURL())
-				.setColor(message.guild.me.displayHexColor)
+				.setColor(message.guild.me.displayColor)
 				.setDescription(top.slice(i, i + memberPerPage).map((user, i) => language.get(language.description, i + 1, message.guild.members.cache.get(user.user_id).user.username, getLevel(user.xp))).join("\n"));
 			pages.push(embed);
 		};

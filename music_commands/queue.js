@@ -29,7 +29,7 @@ const command = {
 		let embed = new MessageEmbed()
 			.setAuthor(language.get(language.author, message.guild.name), message.client.user.avatarURL())
 			.setTitle(language.get(language.title, Util.MillisecondsToTime(queue.duration)))
-			.setColor(message.guild.me.displayHexColor)
+			.setColor(message.guild.me.displayColor)
 			.setDescription(language.no_song);
 		if (!queue.songs.length) pages.push(embed);
 
@@ -37,7 +37,7 @@ const command = {
 			embed = new MessageEmbed()
 			.setAuthor(language.get(language.author, message.guild.name), message.client.user.avatarURL())
 			.setTitle(language.get(language.title, Util.MillisecondsToTime(queue.duration)))
-			.setColor(message.guild.me.displayHexColor)
+			.setColor(message.guild.me.displayColor)
 			.setDescription(queue.songs.slice(i, i + songsPerPage).map((song, j) => `${i + j === 0 ? language.now_playing : `\`${i + j}.\``} ${song.name}${i + j === 0 ? "\n" : ""}`).join("\n"));
 			pages.push(embed);
 		};

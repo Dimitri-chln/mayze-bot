@@ -56,7 +56,7 @@ const command = {
 			message.channel.send({
 				embed: {
 					title: `${pokemon.names[languageCode] || pokemon.names.en} #${(`00${pokemon.national_id}`).substr(-3)}`,
-					color: message.guild.me.displayHexColor,
+					color: message.guild.me.displayColor,
 					image: { url },
 					footer: {
 						text: "✨ Mayze ✨"
@@ -117,14 +117,14 @@ const command = {
 			let pages = [];
 			let embed = new MessageEmbed()
 				.setAuthor(language.get(language.title, message.author.tag), message.author.avatarURL({ dynamic: true }))
-				.setColor(message.guild.me.displayHexColor)
+				.setColor(message.guild.me.displayColor)
 				.setDescription(language.no_pokemon);
 			if (!dex.length) pages.push(embed);
 
 			for (i = 0; i < dex.length; i += pkmPerPage) {
 				let embed = new MessageEmbed()
 					.setAuthor(language.get(language.title, message.author.tag), message.author.avatarURL({ dynamic: true }))
-					.setColor(message.guild.me.displayHexColor)
+					.setColor(message.guild.me.displayColor)
 					.setDescription(dex.slice(i, i + pkmPerPage).map(p => language.get(language.description, pokemons.some(pkm => pkm.pokedex_id === p.national_id), p.names[languageCode], ("00" + p.national_id).substr(-3), legendary, shiny)).join("\n"));
 				pages.push(embed);
 			};

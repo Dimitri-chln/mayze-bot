@@ -41,7 +41,7 @@ const command = {
 					name: snipedMsg.author.tag,
 					icon_url: snipedMsg.author.avatar
 				},
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				description: snipedMsg.content,
 				fields: urls.length > 1
 					? [

@@ -70,7 +70,7 @@ const command = {
 							name: "Une partie de roulette russe a été lancée!",
 							icon_url: message.author.avatarURL({ dynamic: true })
 						},
-						color: message.guild.me.displayHexColor,
+						color: message.guild.me.displayColor,
 						description:
 							`Rejoins la partie avec la commande \`${message.client.prefix}russian-roulette join\``,
 						footer: {
@@ -100,7 +100,7 @@ const command = {
 				const { MessageEmbed } = require("discord.js");
 				const embed = new MessageEmbed()
 					.setAuthor("La partie de roulette russe a commencé!", message.author.avatarURL({ dynamic: true }))
-					.setColor(message.guild.me.displayHexColor)
+					.setColor(message.guild.me.displayColor)
 					.setDescription("...")
 					.setFooter("✨ Mayze ✨")
 					.setTimestamp();

@@ -88,7 +88,7 @@ const command = {
 					name: language.get(language.title, message.author.tag, user.tag),
 					icon_url: message.author.avatarURL({ dynamic: true })
 				},
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				fields: [
 					{
 						name: language.get(language.offer, message.author.username),
@@ -223,7 +223,7 @@ const command = {
 						url: msg.url,
 						icon_url: message.guild.iconURL({ dynamic: true })
 					},
-					color: "#010101",
+					color: 65793,
 					fields: [
 						{
 							name: "Offer:",

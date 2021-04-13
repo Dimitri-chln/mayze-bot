@@ -58,7 +58,7 @@ const command = {
 					name: message.author.tag,
 					icon_url: message.author.avatarURL({ dynamic: true })
 				},
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				description: `${message.author} a acheté "${item.name}" pour ✨${item.price}`,
 				footer: {
 					text: "✨ Mayze ✨"

@@ -64,7 +64,7 @@ const command = {
 					url: message.client.user.avatarURL()
 				},
 				title: language.verification_desc,
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				description: newChannels.join("\n"),
 				footer: {
 					text: "✨ Mayze ✨"

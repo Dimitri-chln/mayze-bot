@@ -33,7 +33,7 @@ const command = {
 					name: language.selector,
 					icon_url: message.client.user.avatarURL()
 				},
-				color: message.guild.me.displayHexColor,
+				color: message.guild.me.displayColor,
 				description: language.get(language.desc, RGBToHex(color), color[0], color[1], color[2], RGBToDec(color)),
 				thumbnail: {
 					url: `https://dummyimage.com/100/${ RGBToHex(color).replace("#", "") }/00.png?text=+`
@@ -168,7 +168,7 @@ const command = {
 						name: language.selector,
 						icon_url: message.client.user.avatarURL()
 					},
-					color: message.guild.me.displayHexColor,
+					color: message.guild.me.displayColor,
 					description: language.get(language.desc, RGBToHex(color), color[0], color[1], color[2], RGBToDec(color)),
 					thumbnail: {
 						url: `https://dummyimage.com/100/${ RGBToHex(color).replace("#", "") }/00.png?text=+`
