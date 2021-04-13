@@ -104,7 +104,9 @@ const command = {
 					.setDescription("...")
 					.setFooter("✨ Mayze ✨")
 					.setTimestamp();
-				const msg = await message.channel.send(embed).catch(console.error);
+				const msg = await message.channel.send({
+					embed: embed.toJSON()
+				}).catch(console.error);
 				if (!msg) return message.reply("Quelque chose s'est mal passé en lançant la partie :/");
 				await roulette();
 				delete message.client.russianRoulette;
