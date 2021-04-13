@@ -43,7 +43,7 @@ const command = {
 
 		const params = args
 			? args
-			: options.some(o => o.name === "options") ? options.find(o => o.name === "options").value.split(/ +/) : [];
+			: options && options.some(o => o.name === "options") ? options.find(o => o.name === "options").value.split(/ +/) : [];
 
 		if (params.includes("-favorite") || params.includes("-fav")) pokemons = pokemons.filter(p => p.favorite);
 		if (params.includes("-starter")) pokemons = pokemons.filter(p => starters.includes(p.pokedex_name));
