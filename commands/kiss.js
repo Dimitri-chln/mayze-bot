@@ -20,17 +20,7 @@ const command = {
 			name: "cheek",
 			description: "Whether you want to kiss the user on the cheek or not",
 			type: 5,
-			required: false,
-			choices: [
-				{
-					name: "Kiss on the cheek",
-					value: true
-				},
-				{
-					name: "Don't kiss on the cheek",
-					value: false
-				}
-			]
+			required: false
 		}
 	],
 	/**

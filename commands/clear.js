@@ -26,19 +26,9 @@ const command = {
 		},
 		{
 			name: "bot",
-			description: "Delete onlymessages from bots",
+			description: "Delete only messages from bots",
 			type: 5,
-			required: false,
-			choices: [
-				{
-					name: "Only bots",
-					value: true
-				},
-				{
-					name: "All users",
-					value: false
-				}
-			]
+			required: false
 		},
 		{
 			name: "regex",

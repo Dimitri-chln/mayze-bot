@@ -27,7 +27,7 @@ const command = {
             ? args.join(" ")
             : options[0].value;
         
-        message.reply(language.anwsers[Math.floor(Math.random() * language.anwsers.length)]).catch(console.error);
+        message.reply(language.answers[Math.floor(Math.random() * language.answers.length)]).catch(console.error);
     }
 };
 

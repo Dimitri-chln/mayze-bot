@@ -80,33 +80,13 @@ const command = {
 			name: "anonymous",
 			description: "Whether the poll needs to be anonymous or not",
 			type: 5,
-			required: false,
-			choices: [
-				{
-					name: "Anonymous poll",
-					value: true
-				},
-				{
-					name: "Not anonymous poll",
-					value: false
-				}
-			]
+			required: false
 		},
 		{
 			name: "votes",
 			description: "Whether to allow one or multiple votes",
 			type: 5,
-			required: false,
-			choices: [
-				{
-					name: "Only one vote",
-					value: true
-				},
-				{
-					name: "Multiple votes",
-					value: false
-				}
-			]
+			required: false
 		}
 	],
 	/**

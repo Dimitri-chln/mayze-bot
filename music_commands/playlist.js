@@ -19,17 +19,7 @@ const command = {
 					name: "me",
 					description: "Whether to get all or only your playlists",
 					type: 5,
-					required: false,
-					choices: [
-						{
-							name: "Only your playlists",
-							value: true
-						},
-						{
-							name: "All playlists",
-							value: false
-						}
-					]
+					required: false
 				}
 			]
 		},
@@ -48,17 +38,7 @@ const command = {
 					name: "shuffle",
 					description: "Whether to shuffle the playlist before playing it",
 					type: 5,
-					required: false,
-					choices: [
-						{
-							name: "Shuffle the playlist",
-							value: true
-						},
-						{
-							name: "Don't shuffle the playlist",
-							value: false
-						}
-					]
+					required: false
 				}
 			]
 		},
@@ -83,16 +63,7 @@ const command = {
 					name: "private",
 					description: "Whether to save this playlist as private or not",
 					type: 5,
-					choices: [
-						{
-							name: "Save as private",
-							value: true
-						},
-						{
-							name: "Save as public",
-							value: false
-						}
-					]
+					required: false
 				}
 			]
 		},
