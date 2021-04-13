@@ -17,11 +17,12 @@ const { Message, MessageEmbed } = require("discord.js");
     const filter = (reaction, user) => emojiList.includes(reaction.emoji.name) && !user.bot;
     const reactionCollector = currentPage.createReactionCollector(filter);
 
-	let timeout = setTimeout(() => reactionCollector.stop(), timeout);
+	let timer = setTimeout(() => reactionCollector.stop(), timeout);
     
 	reactionCollector.on("collect", (reaction, user) => {
 		reaction.users.remove(user);
-		timeout = setTimeout(() => reactionCollector.stop(), timeout);
+		clearTimeout(timer);
+		timer = setTimeout(() => reactionCollector.stop(), timeout);
 		switch (reaction.emoji.name) {
 			case emojiList[0]:
 				page = page > 0 ? --page : pages.length - 1;
