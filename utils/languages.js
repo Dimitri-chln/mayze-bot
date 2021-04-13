@@ -103,6 +103,12 @@ module.exports = {
 				en: "There is no music being played in this server"
 			}
 		},
+		"8ball": {
+			answers: {
+				fr: [ "oui", "non", "certainement", "évidemment", "bien-sûr", "toujours", "sans hésiter", "probablement", "pas du tout", "peut-être", "jamais", "possible", "je ne crois pas", "probablement pas", "bien-sûr que non", "je ne sais pas", "je préfère ne pas savoir", "pas sûr" ],
+				en: [ "yes", "no", "certainly", "obviously", "for sure", "always", "without a doubt", "probably", "not at all", "perhaps", "never", "possible", "I don't think so", "probably not", "obviously not", "I don't know", "I'd rather not know", "not sure" ]
+			}
+		},
 		"afk": {
 			afk_message: {
 				fr: "{1} est maintenant AFK 💤{2}",

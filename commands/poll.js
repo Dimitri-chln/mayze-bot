@@ -6,7 +6,7 @@ const command = {
 		fr: "Créer un sondage dans le salon actuel",
 		en: "Create a poll in the current channel"
 	},
-	aliases: ["ask", "question", "vote"],
+	aliases: ["question", "vote"],
 	args: 1,
 	usage: "\"<question>\" \"[<answer>]\" \"[<answer>]\"... [-anonymous] [-single]",
 	slashOptions: [
@@ -127,8 +127,8 @@ const command = {
 			? args[0]
 			: options[0].value;
 		const answers = args
-			? args.length > 2 ? args.slice(1) : language.yes_no
-			: options.filter(o => o.name.startsWith("answer")).length > 1 ? options.filter(o => o.name.startsWith("answer")).map(o => o.value) : language.yes_no;
+			? (args.length > 2 ? args.slice(1) : language.yes_no).map(a => a.replace(/^./, c => c.toUpperCase()))
+			: (options.filter(o => o.name.startsWith("answer")).length > 1 ? options.filter(o => o.name.startsWith("answer")).map(o => o.value) : language.yes_no).map(a => a.replace(/^./, c => c.toUpperCase()));
 		if (answers.length > 10) return message.reply(language.too_many_answers).catch(console.error);
 
 		const emojis = answers[0].toLowerCase() === language.yes_no[0] && answers[1].toLowerCase() === language.yes_no[1] && answers.length === 2 ? ["✅", "❌"] : ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].slice(0, answers.length);
