@@ -117,14 +117,14 @@ const command = {
 				const endTimestamp = new Date(Date.now() + duration);
 				const winners = args
 					? args[3] ? (isNaN(parseInt(args[3].replace("w", ""))) ? 1 : parseInt(args[3].replace("w", ""))) : 1
-					: options[0].options.find(o => o.name === "gagnants") ? options[0].options.find(o => o.name === "gagnants").value : 1;
+					: options[0].options.some(o => o.name === "gagnants") ? options[0].options.find(o => o.name === "gagnants").value : 1;
 				if (winners < 1) return message.reply("le nombre de gagnants doit être supérieur à 1");
 				const mention = args
 					? args.includes("-mention") ? message.guild.roles.cache.find(role => role.id === args[args.indexOf("-mention") + 1] || role.name.toLowerCase() === args[args.indexOf("-mention") + 1].toLowerCase() || role.name.toLowerCase().includes(args[args.indexOf("-mention") + 1].toLowerCase())) : null
-					: options[0].options.find(o => o.name === "mention") ? message.guild.roles.cache.get(options[0].options.find(o => o.name === "mention").value) : null;
+					: options[0].options.some(o => o.name === "mention") ? message.guild.roles.cache.get(options[0].options.find(o => o.name === "mention").value) : null;
 				const role = args
 					? args.includes("-role") ? message.guild.roles.cache.find(role => role.id === args[args.indexOf("-mention") + 1] || role.name.toLowerCase() === args[args.indexOf("-mention") + 1].toLowerCase() || role.name.toLowerCase().includes(args[args.indexOf("-mention") + 1].toLowerCase())) : null
-					: options[0].options.find(o => o.name === "rôle") ? message.guild.roles.cache.get(options[0].options.find(o => o.name === "rôle").value) : null;
+					: options[0].options.some(o => o.name === "rôle") ? message.guild.roles.cache.get(options[0].options.find(o => o.name === "rôle").value) : null;
 				
 				const msg = await channel.send({
 					content: mention ? `${mention}` : "<@&816233807215853568>",
@@ -150,7 +150,7 @@ const command = {
 				const timer = setInterval(() => updateGwaMsg(msg), 10000);
 				message.client.giveawayTimers.set(msg.id, timer);
 
-				if (message.deletable) {
+				if (!message.isInteraction) {
 					if (message.channel.id === GIVEAWAY_CHANNEL_ID) message.delete().catch(console.error);
 					else message.react("✅").catch(console.error);
 				} else {
@@ -174,7 +174,7 @@ const command = {
 
 				msg.edit(msg.embeds[0].setTimestamp(Date.now())).catch(console.error);
 
-				if (message.deletable) {
+				if (!message.isInteraction) {
 					if (message.channel.id === GIVEAWAY_CHANNEL_ID) message.delete().catch(console.error);
 					else message.react("✅").catch(console.error);
 				} else {
@@ -200,7 +200,7 @@ const command = {
 				clearInterval(message.client.giveawayTimers.get(msg.id));
 				message.client.giveawayTimers.delete(msg.id);
 
-				if (message.deletable) {
+				if (!message.isInteraction) {
 					if (message.channel.id === GIVEAWAY_CHANNEL_ID) message.delete().catch(console.error);
 					else message.react("✅").catch(console.error);
 				} else {
@@ -224,7 +224,7 @@ const command = {
 
 				updateGwaMsg(msg);
 
-				if (message.deletable) {
+				if (!message.isInteraction) {
 					if (message.channel.id === GIVEAWAY_CHANNEL_ID) message.delete().catch(console.error);
 					else message.react("✅").catch(console.error);
 				} else {

@@ -4,16 +4,16 @@ const command = {
 	name: "channel-names",
 	description: {
 		fr: "Modifier le nom de tous les salons en une seule commande",
-		en: "Edit all channels names in one command"
+		en: "Edit all channels' names in one command"
 	},
-	aliases: ["cn"],
+	aliases: ["channelnames", "cn"],
 	args: 2,
 	usage: "\"<regex>\" \"<replacement>\" [text | voice | category]",
 	perms: ["ADMINISTRATOR"],
 	slashOptions: [
 		{
 			name: "regex",
-			description: "The regex to match in the channels names",
+			description: "The text to match in the channels names",
 			type: 3,
 			required: true
 		},
@@ -37,6 +37,13 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const userValidation = require("../utils/userValidation");
+		
+		const regex = args
+			? new RegExp(args[0], "g")
+			: new RegExp(options[0].value, "g");
+		const replace = args
+			? args[1]
+			: options[1].value;
 		const type = args
 			? args[2]
 			: (options[2] || {}).value;
@@ -47,13 +54,9 @@ const command = {
 				if (a.type === "voice" && b.type === "text") return 1;
 				return a.rawPosition - b.rawPosition;
 			});
-		const regex = args
-			? new RegExp(args[0], "g")
-			: new RegExp(options[0].value, "g");
-		const replace = args
-			? args[1]
-			: options[1].value;
+		
 		const newChannels = channels.map(c => c.name.replace(regex, replace));
+
 		const msg = await message.channel.send({
 			embed: {
 				author: {

@@ -7,7 +7,7 @@ const command = {
 		en: "Test and visualize hexadecimal color codes"
 	},
 	aliases: [],
-	args: 0,
+	args: 1,
 	usage: "<color>",
 	slashOptions: [
 		{

@@ -9,7 +9,14 @@ const command = {
 	aliases: ["goto"],
 	args: 1,
 	usage: "<timestamp>",
-	disableSlash: true,
+	slashOptions: [
+		{
+			name: "timestamp",
+			description: "The timestamp to seek in the song (e.g. 2:15)",
+			type: 3,
+			required: true
+		}
+	],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 

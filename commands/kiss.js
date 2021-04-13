@@ -19,16 +19,16 @@ const command = {
 		{
 			name: "cheek",
 			description: "Whether you want to kiss the user on the cheek or not",
-			type: 4,
+			type: 5,
 			required: false,
 			choices: [
 				{
 					name: "Kiss on the cheek",
-					value: 1
+					value: true
 				},
 				{
 					name: "Don't kiss on the cheek",
-					value: 0
+					value: false
 				}
 			]
 		}
@@ -45,7 +45,7 @@ const command = {
 			: message.guild.members.cache.get(options[0].value).user;
 		const cheek = args
 			? args.includes("cheek")
-			: options[1] ? !!options[1].value : false;
+			: options[1] ? options[1].value : false;
 
 		const links = cheek ? kisses.cheek : kisses.cheek.concat(kisses.mouth);
 

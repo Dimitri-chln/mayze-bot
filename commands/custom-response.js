@@ -6,7 +6,7 @@ const command = {
 		fr: "Gérer les réponses personnalisées",
 		en: "Manage custom responses"
 	},
-	aliases: ["response", "cr"],
+	aliases: ["customresponse", "response", "cr"],
 	args: 0,
 	usage: "add \"<trigger>\" \"<response>\" [<type>] | remove <#response>",
 	perms: ["MANAGE_MESSAGES"],
@@ -24,7 +24,7 @@ const command = {
 				},
 				{
 					name: "response",
-					description: "The custom response to be sent",
+					description: "The custom response to send",
 					type: 3,
 					required: true
 				},

@@ -45,12 +45,12 @@ const command = {
 				message.channel.send(`__**${res.data[0].word.replace(/^./, a => a.toUpperCase())}**__: ${res.data[0].phonetics[0].text ? `(${res.data[0].phonetics[0].text})` : ""}\n${res.data[0].meanings.map(meaning => `> __${meaning.partOfSpeech.replace(/^./, a => a.toUpperCase())}:__ ${meaning.definitions[0].definition}${meaning.definitions[0].synonyms && meaning.definitions[0].synonyms.length ? `\n*${language.synonyms}: ${meaning.definitions[0].synonyms.join(", ")}*` : ""}`).join("\n\n")}`).catch(console.error);
 			})
 			.catch(async err => {
+				if (!message.isInteraction) message.channel.stopTyping();
 				if (err.response.data.title && err.response.data.title === "No Definitions Found") return message.reply(language.invalid_word).catch(console.error);
-				if (err.response.data.title && err.response.data.title === "API Rate Limit Exceeded") return message.reply(language.get(language.errors.api_limit, "Disctionary")).catch(console.error);
+				if (err.response.data.title && err.response.data.title === "API Rate Limit Exceeded") return message.reply(language.get(language.errors.api_limit, "Dictionary")).catch(console.error);
 
 				console.error(err);
 				message.channel.send(language.get(language.errors.api, "Dictionary")).catch(console.error);
-				if (!message.isInteraction) message.channel.stopTyping();
 			});
 		if (!message.isInteraction) message.channel.stopTyping();
 	}

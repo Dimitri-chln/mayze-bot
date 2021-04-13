@@ -9,7 +9,20 @@ const command = {
 	aliases: [],
 	args: 1,
     usage: "<#song> <position>",
-	disableSlash: true,
+	slashOptions: [
+		{
+			name: "song",
+			description: "The number of the song to move",
+			type: 4,
+			required: true
+		},
+		{
+			name: "position",
+			description: "The position to move the song to",
+			type: 4,
+			required: true
+		}
+	],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
@@ -20,11 +33,12 @@ const command = {
 		
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
+		const queue = message.client.player.getQueue(message.guild.id);
 
         const songID = args
             ? parseInt(args[0])
             : options[0].value;
-        if (isNaN(songID) || songID < 0) return message.reply(language.invalid_song).catch(console.error);
+        if (isNaN(songID) || songID < 0 || songID > queue.songs.length) return message.reply(language.invalid_song).catch(console.error);
         const position = args
             ? parseInt(args[1])
             : options[1].value;

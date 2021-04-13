@@ -3,7 +3,7 @@ const { Message } = require("discord.js");
 const command = {
 	name: "last-quest",
 	description: "Modifier le dernier message de vote pour les quêtes WWO",
-	aliases: ["lastQuest", "lq"],
+	aliases: ["lastquest", "lq"],
 	cooldown: 5,
 	args: 1,
 	usage: "[-image (+image)] [-everyone|-members] [-single|-multiple]",

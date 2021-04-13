@@ -9,7 +9,6 @@ const command = {
 	aliases: ["editsnipe"],
 	args: 0,
 	usage: "",
-	slashOptions: null,
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 

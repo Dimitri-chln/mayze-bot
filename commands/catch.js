@@ -4,13 +4,12 @@ const command = {
 	name: "catch",
 	description: {
 		fr: "Attrape un pokémon !",
-		en: "Catch a pokémon !"
+		en: "Catch a pokémon!"
 	},
 	aliases: ["c"],
 	cooldown: 1200,
 	args: 0,
 	usage: "",
-	slashOptions: null,
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 

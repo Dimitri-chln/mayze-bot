@@ -9,7 +9,14 @@ const command = {
 	aliases: ["st"],
 	args: 0,
 	usage: "<#song>",
-	disableSlash: true,
+	slashOptions: [
+		{
+			name: "song",
+			description: "The number of the song to skip to",
+			type: 4,
+			required: true
+		}
+	],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 

@@ -12,7 +12,7 @@ const command = {
 	slashOptions: [
 		{
 			name: "add",
-			description: "Add apokémon to your favorites",
+			description: "Add a pokémon to your favorites",
 			type: 1,
 			options: [
 				{
@@ -65,14 +65,14 @@ const command = {
 			case "add": {
 				const res = await message.client.pg.query(`UPDATE pokemons SET favorite = true WHERE id = ${pokemons[0].id}`).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
-				if (message.deletable) message.react("✅").catch(console.error);
+				if (!message.isInteraction) message.react("✅").catch(console.error);
 				else message.reply(language.favorite_added).catch(console.error);
 				break;
 			}
 			case "remove": {
 				const res = await message.client.pg.query(`UPDATE pokemons SET favorite = false WHERE id = ${pokemons[0].id}`).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
-				if (message.deletable) message.react("✅").catch(console.error);
+				if (!message.isInteraction) message.react("✅").catch(console.error);
 				else message.reply(language.favorite_removed).catch(console.error);
 				break;
 			}

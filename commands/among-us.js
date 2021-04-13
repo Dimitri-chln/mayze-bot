@@ -6,7 +6,7 @@ const command = {
 		fr: "Obtiens et gère les parties d'Among Us",
 		en: "Get and manage Among Us games"
 	},
-	aliases: ["au"],
+	aliases: ["amongus", "au"],
 	args: 0,
 	usage: "add <code> [<description>] | delete",
 	slashOptions: [

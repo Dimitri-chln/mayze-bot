@@ -10,7 +10,14 @@ const command = {
 	args: 1,
 	usage: "<song> [-shuffle]",
 	cooldown: 5,
-	disableSlash: true,
+	slashOptions: [
+		{
+			name: "song",
+			description: "The song to play",
+			type: 3,
+			required: true
+		}
+	],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 

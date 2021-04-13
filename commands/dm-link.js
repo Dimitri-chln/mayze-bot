@@ -6,11 +6,11 @@ const command = {
 		fr: "Relier un salon à tes DM pour pouvoir parler à travers le bot",
 		en: "Link a channel to your DMs so you can talk through the bot"
 	},
-	aliases: ["link"],
+	aliases: ["dmlink", "link"],
 	args: 1,
 	usage: "<channel> [<user>]",
 	ownerOnly: true,
-	allowedUsers: ["394633964138135563", "463358584583880704"],
+	allowedUsers: ["394633964138135563"],
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 
@@ -23,7 +23,7 @@ const command = {
 		if (!channel || channel.type !== "text") return message.reply(language.invalid_channel).catch(console.error);
 		const user = args
 			? message.mentions.users.first() || args[1] ? (message.client.findMember(message.guild, args[1]) || {}).user : null || message.author
-			: message.client.users.cache.get(options[1] ? options[1].value : null) || message.author;
+			: options[1] ? message.client.users.cache.get(options[1].value) : message.author;
 
 		const loadingMsg = await message.channel.send(language.creating_webhook).catch(console.error);
 		const webhook = await channel.createWebhook(`${message.author.tag}'s *dm-link`, { avatar: message.client.user.avatarURL({ size: 4096 }) }).catch(console.error);

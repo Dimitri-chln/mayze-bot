@@ -79,32 +79,32 @@ const command = {
 		{
 			name: "anonymous",
 			description: "Whether the poll needs to be anonymous or not",
-			type: 4,
+			type: 5,
 			required: false,
 			choices: [
 				{
 					name: "Anonymous poll",
-					value: 1
+					value: true
 				},
 				{
 					name: "Not anonymous poll",
-					value: 0
+					value: false
 				}
 			]
 		},
 		{
 			name: "votes",
-			description: "Whether a single vote is permitted or not",
-			type: 4,
+			description: "Whether to allow one or multiple votes",
+			type: 5,
 			required: false,
 			choices: [
 				{
 					name: "Only one vote",
-					value: 1
+					value: true
 				},
 				{
 					name: "Multiple votes",
-					value: 0
+					value: false
 				}
 			]
 		}
@@ -117,11 +117,11 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		const anonymous = args
 			? args.includes("-anonymous")
-			: !!(options.find(o => o.name === "anonymous") || {}).value;
+			: options.some(o => o.name === "anonymous") ? options.find(o => o.name === "anonymous").value : false;
 		if (args) args = args.filter(a => a !== "-anonymous");
 		const single = args
 			? args.includes("-single")
-			: !!(options.find(o => o.name === "votes") || {}).value;
+			: options.some(o => o.name === "single") ? options.find(o => o.name === "single").value : false;
 		if (args) args = args.filter(a => a !== "-single");
 		const question = args
 			? args[0]

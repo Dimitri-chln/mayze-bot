@@ -25,6 +25,22 @@ const command = {
 			required: false
 		},
 		{
+			name: "bot",
+			description: "Delete onlymessages from bots",
+			type: 5,
+			required: false,
+			choices: [
+				{
+					name: "Only bots",
+					value: true
+				},
+				{
+					name: "All users",
+					value: false
+				}
+			]
+		},
+		{
 			name: "regex",
 			description: "Delete only messages matching this regex",
 			type: 3,
@@ -50,17 +66,20 @@ const command = {
 
 		let messages = await message.channel.messages.fetch({ limit: 100 }).catch(console.error);
 		if (!messages) return message.channel.send(language.errors.fetching_msg).catch(console.error);
-		
-		if (args && args.includes("-bot")) messages = messages.filter(msg => msg.author.bot);
 
 		const user = args
 			? message.mentions.users.first()
 			: (message.guild.members.cache.get((options.find(o => o.name === "user") || {}).value) || {}).user;
 		if (user) messages = messages.filter(msg => msg.author.id === user.id);
 
+		const bot = args
+			? args.includes("-bot")
+			: options.some(o => o.name === "bot") ? options.find(o => o.name === "bot").value : false;
+		if (bot) messages = messages.filter(msg => msg.author.bot);
+
 		const regex = args
 			? args.includes("-r") ? new RegExp(args[args.lastIndexOf("-r") + 1]) : null
-			: new RegExp((options.find(o => o.name === "regex") || {}).value);
+			: options.some(o => o.name === "regex") ? new RegExp(options.find(o => o.name === "regex").value, "i") : null;
 		if (regex) messages = messages.filter(msg => regex.test(msg));
 
 		messages = messages.first(number);

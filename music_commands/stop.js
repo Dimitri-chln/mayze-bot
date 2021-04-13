@@ -9,7 +9,6 @@ const command = {
 	aliases: ["leave"],
 	args: 0,
     usage: "",
-	disableSlash: true,
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 

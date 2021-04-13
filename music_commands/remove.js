@@ -8,8 +8,15 @@ const command = {
 	},
 	aliases: ["rm"],
 	args: 0,
-    usage: "[<#song>] | [<#songs interval>]...",
-	disableSlash: true,
+    usage: "[<#song>] | <#songs interval>]...",
+	slashOptions: [
+		{
+			name: "songs",
+			description: "The songs numbers or song intervals (e.g. 6-13)",
+			type: 3,
+			required: false
+		}
+	],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 

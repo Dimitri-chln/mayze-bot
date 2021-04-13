@@ -9,7 +9,6 @@ const command = {
 	aliases: ["s"],
 	args: 0,
 	usage: "",
-	disableSlash: true,
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
