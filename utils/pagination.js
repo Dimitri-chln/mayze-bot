@@ -11,7 +11,9 @@ const { Message, MessageEmbed } = require("discord.js");
     if (emojiList.length !== 2) throw new Error("Need two emojis.");
     
 	let page = 0;
-    const currentPage = await message.channel.send(pages[page].setFooter(`Page ${page + 1} / ${pages.length}`));
+    const currentPage = await message.channel.send(pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)).catch(console.error);
+	if (!currentPage) throw new Error("Failed to send paginator");
+
     for (const emoji of emojiList) await currentPage.react(emoji).catch(console.error);
     
     const filter = (reaction, user) => emojiList.includes(reaction.emoji.name) && !user.bot;

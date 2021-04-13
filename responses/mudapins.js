@@ -25,7 +25,7 @@ const command = {
 			try { 
 				const newMsg = await message.fetch();
 				msg = newMsg.content;
-			} catch (err) { console.log(err); }
+			} catch (err) { console.error(err); }
 		};
 
 		var pins = msg.match(/<:(logo)?pin\d{0,3}:\d{18}>/g);
@@ -39,7 +39,10 @@ const command = {
 			pages.push(embed);
 		};
 		
-		pagination(message, pages, ["⏪", "⏩"], 180000);
+		pagination(message, pages, ["⏪", "⏩"], 180000).catch(err => {
+			console.error(err);
+			message.channel.send(language.errors.paginator).catch(console.error);
+		});
 	}
 };
 

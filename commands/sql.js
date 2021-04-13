@@ -48,7 +48,10 @@ const command = {
 							.setDescription(`\`\`\`json\n${matches[i]}\n\`\`\``);
 						pages.push(embed);
 					}
-					pagination(message, pages).catch(console.error);
+					pagination(message, pages).catch(err => {
+						console.error(err);
+						message.channel.send(language.errors.paginator).catch(console.error);
+					});
 				}
 				break;
 			default:

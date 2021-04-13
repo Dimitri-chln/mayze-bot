@@ -42,7 +42,10 @@ const command = {
 			pages.push(embed);
 		};
 		
-		pagination(message, pages).catch(console.error);
+		pagination(message, pages).catch(err => {
+			console.error(err);
+			message.channel.send(language.errors.paginator).catch(console.error);
+		});
 
 		function getLevel(xp, lvl = 0) {
 			const xpPerLevel = BASE_XP + lvl * XP_INCREMENT;

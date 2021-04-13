@@ -1,4 +1,4 @@
-const { Client, Guild, Channel, User, GuildMember, TextChannel } = require("discord.js");
+const { Client, Guild, Channel, User, GuildMember, TextChannel, Message, DiscordAPIError } = require("discord.js");
 const Axios = require("axios").default;
 
 class EnhancedInteraction {
@@ -53,7 +53,10 @@ class EnhancedInteraction {
 					delete data.embed;
 				}
 		
-				await Axios.patch(url, data, { "Content-Type": "application/json" }).catch(console.error);
+				const res = await Axios.patch(url, data, { "Content-Type": "application/json" }).catch(console.error);
+				
+				if (!res.isAxiosError) return new Message(this.client, res.data, this.channel);
+				else throw new DiscordAPIError(res.response.path, res.response.data, "patch", res.response.status);
 			}
 		};
 	}
@@ -61,9 +64,11 @@ class EnhancedInteraction {
 	async acknowledge() {
 		const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
 
-		await Axios.post(url, {
+		const res = await Axios.post(url, {
 			type: 5,
 		}).catch(console.error);
+
+		if (res.isAxiosError) throw new DiscordAPIError(res.response.path, res.response.data, "patch", res.response.status);
 	}
 
 	async reply(data) {
@@ -76,7 +81,10 @@ class EnhancedInteraction {
 		}
 		data.content = data.content.replace(/^./, a => a.toUpperCase());
 
-		await Axios.patch(url, data, { "Content-Type": "application/json" }).catch(console.error);
+		const res = await Axios.patch(url, data, { "Content-Type": "application/json" }).catch(console.error);
+
+		if (!res.isAxiosError) return new Message(this.client, res.data, this.channel);
+		else throw new DiscordAPIError(res.response.path, res.response.data, "patch", res.response.status);
 	}
 }
 

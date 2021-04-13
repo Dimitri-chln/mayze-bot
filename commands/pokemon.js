@@ -70,7 +70,10 @@ const command = {
 			pages.push(embed);
 		};
 		
-		pagination(message, pages);
+		pagination(message, pages).catch(err => {
+			console.error(err);
+			message.channel.send(language.errors.paginator).catch(console.error);
+		});
 	}
 }
 
