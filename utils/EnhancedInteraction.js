@@ -70,7 +70,7 @@ class EnhancedInteraction {
 	}
 
 	async reply(data) {
-		const url = `https://discord.com/api/v8/interactions/${this.id}/${this.token}/callback`;
+		const url = `https://discord.com/api/v8/webhooks/${this.client.id}/${this.token}/messages/@original`;
 
 		if (typeof data === "string") data = { content: data };
 		if (data.embed) {
@@ -79,7 +79,7 @@ class EnhancedInteraction {
 		}
 		data.content = data.content.replace(/^./, a => a.toUpperCase());
 
-		await Axios.post(url, {
+		await Axios.patch(url, {
 			type: 4,
 			data
 		}).catch(console.error);
