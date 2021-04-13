@@ -44,6 +44,7 @@ class EnhancedInteraction {
 			id: channel.id,
 			name: channel.name,
 			type: channel.type,
+			topic: channel.topic,
 			send: async (data) => {
 				const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.token}/messages/@original`;
 		
@@ -60,7 +61,10 @@ class EnhancedInteraction {
 					});
 				
 				return new Message(this.client, res.data, this.channel);
-			}
+			},
+			createMessageCollector: channel.createMessageCollector,
+			awaitMessages: channel.awaitMessages,
+			bulkDelete: channel.bulkDelete
 		};
 	}
 
