@@ -56,7 +56,7 @@ class EnhancedInteraction {
 				await Axios.patch(url, {
 					type: 4,
 					data
-				}).catch(console.error);
+				}, { "Content-Type": "application/json" }).catch(console.error);
 			}
 		};
 	}
@@ -82,7 +82,7 @@ class EnhancedInteraction {
 		await Axios.patch(url, {
 			type: 4,
 			data
-		}).catch(console.error);
+		}, { "Content-Type": "application/json" }).catch(console.error);
 	}
 }
 
