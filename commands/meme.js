@@ -30,10 +30,10 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		message.channel.startTyping(1);
+		if (!message.isInteraction) message.channel.startTyping(1);
 		const { data } = message.client.memes || await Axios.get("https://api.memegen.link/templates").catch(console.error);
 		message.client.memes = { data: data };
-		message.channel.stopTyping();
+		if (!message.isInteraction) message.channel.stopTyping();
 		
 		const memes = data.map(meme => meme.id);
 

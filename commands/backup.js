@@ -41,7 +41,7 @@ const command = {
 					? args[1]
 					: options[0].options[0].value;
 				
-				message.channel.startTyping(1);
+				if (!message.isInteraction) message.channel.startTyping(1);
 				Fs.readFile(`backups/database_${table}.json`, async (err, buffer) => {
 					if (err) {
 						if (err.code === "ENOENT") message.channel.send(language.invalid_table).catch(console.error);
@@ -51,7 +51,7 @@ const command = {
 					const file = new MessageAttachment(buffer, `${table}.json`);
 					message.channel.send({ files: [ file ] }).catch(console.error);
 				});
-				message.channel.stopTyping();
+				if (!message.isInteraction) message.channel.stopTyping();
 				break;
 			}
 			default:

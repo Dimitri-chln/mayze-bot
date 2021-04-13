@@ -48,17 +48,17 @@ const command = {
 		}
 		
 		if ((playlistRegex.test(search) || SpotifyPlaylistRegex.test(search) || DeezerPlaylistRegex.test(search)) && !videoRegex.test(search)) {
-			message.channel.startTyping(1);
+			if (!message.isInteraction) message.channel.startTyping(1);
 			const res = await message.client.player.playlist(message.guild.id, search, message.member.voice.channel, -1, message.author, shuffle);
 			if (!res.playlist) {
 				console.error(res.error);
-				message.channel.stopTyping();
+				if (!message.isInteraction) message.channel.stopTyping();
 				return message.channel.send(language.error_playlist).catch(console.error);
 			}
 
 			message.channel.send(language.get(language.playlist_added, shuffle, res.playlist.videoCount)).catch(console.error);
 			if (!isPlaying) message.channel.send(language.get(language.playing, res.song.name)).catch(console.error);
-			message.channel.stopTyping();
+			if (!message.isInteraction) message.channel.stopTyping();
 
 		} else {
 			// If there's already a song playing

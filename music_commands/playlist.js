@@ -57,17 +57,17 @@ const command = {
 				const playlist = playlists.find(p => p.name === playlistName);
 				if (!playlist) return message.reply(language.invalid_playlist).catch(console.error);
 
-				message.channel.startTyping(1);
+				if (!message.isInteraction) message.channel.startTyping(1);
 				const res = await message.client.player.playlist(message.guild.id, playlist.url, message.member.voice.channel, -1, message.author, shuffle);
 				if (!res.playlist) {
 					console.error(res.error);
-					message.channel.stopTyping();
+					if (!message.isInteraction) message.channel.stopTyping();
 					return message.channel.send(language.error_playlist).catch(console.error);
 				}
 
 				message.channel.send(language.get(language.playlist_added, shuffle, res.playlist.videoCount)).catch(console.error);
 				if (!isPlaying) message.channel.send(language.get(language.playing, res.song.name)).catch(console.error);
-				message.channel.stopTyping();
+				if (!message.isInteraction) message.channel.stopTyping();
 				break;
 			}
 			case "add": {

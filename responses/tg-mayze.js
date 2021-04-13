@@ -9,7 +9,7 @@ const command = {
         if (message.guild.id !== "689164798264606784") return;
         
         if (message.mentions.users.has("703161067982946334") && message.content.toLowerCase().startsWith("tg"))
-            message.channel.stopTyping(true);
+            if (!message.isInteraction) message.channel.stopTyping(true);
     }
 };
 

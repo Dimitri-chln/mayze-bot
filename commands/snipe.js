@@ -25,7 +25,7 @@ const command = {
 		let buffers = [];
 		const imageSnipeChannel = message.client.channels.cache.get("808389540552245278");
 		if (snipedMsg.attachments.length) {
-			message.channel.startTyping(1);
+			if (!message.isInteraction) message.channel.startTyping(1);
 			snipedMsg.attachments.forEach(attachment => {
 				const buffer = Fs.readFileSync(`discord-images/${attachment}`);
 				buffers.push(buffer);
@@ -57,7 +57,7 @@ const command = {
 				}
 			}
 		}).catch(console.error);
-		message.channel.stopTyping();
+		if (!message.isInteraction) message.channel.stopTyping();
 	}
 };
 

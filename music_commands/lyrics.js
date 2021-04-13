@@ -33,9 +33,9 @@ const command = {
 			: options ? options[0].value : (isPlaying ? (await message.client.player.nowPlaying(message.guild.id)).name : null);
 		if (!songName) return message.reply(language.no_song).catch(console.error);
 
-		message.channel.startTyping(1);
+		if (!message.isInteraction) message.channel.startTyping(1);
 		const lyrics = await lyricsFinder(songName);
-		message.channel.stopTyping();
+		if (!message.isInteraction) message.channel.stopTyping();
 		if (!lyrics) return message.reply(language.no_lyrics).catch(console.error);
 
 		const linesPerPage = 20;
