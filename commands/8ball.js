@@ -6,7 +6,7 @@ const command = {
         fr: "Demander quelque chose à Mayze",
         en: "Ask Mayze something"
     },
-    aliases: ["ask"],
+    aliases: [],
     args: 1,
     usage: "<question>",
     slashOptions: [

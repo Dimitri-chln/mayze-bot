@@ -19,7 +19,7 @@ const command = {
 		if (process.env.HOST === "HEROKU") return message.reply(language.errors.heroku).catch(console.error);
 
 		const shellExec = require("../utils/shellExec");
-		const output = shellExec("heroku logs --app mayze");
+		const output = shellExec("heroku logs --app mayze-bot");
 		const charactersPerPage = 2000;
 		if (output.length < charactersPerPage) {
 			message.channel.send({

@@ -11,6 +11,7 @@ const command = {
 	usage: "<user> <number> [<message>]",
 	perms: ["MANAGE_MESSAGES"],
 	onlyInGuilds: ["689164798264606784", "724530039781326869"],
+	disableSlash: true,
 	slashOptions: [
 		{
 			name: "user",
@@ -61,13 +62,14 @@ const command = {
 		if (message.deletable) message.delete().catch(console.error);
 		
 		for (i = 1; i <= n; i++) {
-			const msg = await  message.channel.send(`${user} ${pingMsg}`).catch(console.error);
+			const msg = await message.channel.send(`${user} ${pingMsg}`).catch(console.error);
 			messages.set(msg.id, msg);
 		}
 
 		if (pingMsg) return;
+
 		while (messages.size) {
-			let messagesToDelete = new Collection(messages.first(100).map(m => [m.id, m]));
+			let messagesToDelete = new Collection(messages.first(100).map(m => [ m.id, m ]));
 			message.channel.bulkDelete(messagesToDelete);
 			messages.sweep(m => messagesToDelete.has(m.id));
 		}

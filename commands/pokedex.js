@@ -35,7 +35,7 @@ const command = {
 		if (input) {
 			let pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => input === name.toLowerCase().replace("♂", "m").replace("♀️", "f")));
 			if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
-			if (args.includes("alolan")) pokemon = {
+			if ((args || options[0].value).includes("alolan")) pokemon = {
 				base_stats: pokemon.base_stats,
 				national_id: pokemon.national_id,
 				height_eu: pokemon.height_eu,

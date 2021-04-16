@@ -429,9 +429,11 @@ client.player.npTimers = {};
 
 // POKEDEX CATCH RATES
 const pokedex = require("oakdex-pokedex");
-const values = pokedex.allPokemon().sort((a, b) => a.national_id - b.national_id).map(p => p.catch_rate);
-const catchRates = values.map((_v, i, a) => a.slice(0, i).reduce((partialSum, a) => partialSum + a, 0));
-client.catchRates = catchRates;
+const legendaries = require("./assets/legendaries.json");
+const values = pokedex.allPokemon()
+	.sort((a, b) => a.national_id - b.national_id)
+	.map((_pkm, i, dex) => dex.slice(0, i).reduce((sum, p) => sum + (legendaries.includes(p.names.en) ? 3 : p.catch_rate), 0));
+client.catchRates = values;
 
 
 

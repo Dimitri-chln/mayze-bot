@@ -42,7 +42,7 @@ const command = {
 			embed: {
 				author: {
 					name: user.tag,
-					icon_url: user.avatarURL({ dynamic: true})
+					icon_url: user.avatarURL({ dynamic: true })
 				},
 				color: message.guild.me.displayColor,
 				description: language.get(language.description, level, rank, xpBar[0].repeat(Math.round(xpLeft / xpForNextLevel * barSize)) + xpBar[1].repeat(barSize - Math.round(xpLeft / xpForNextLevel * barSize)), xpLeft, xpForNextLevel),

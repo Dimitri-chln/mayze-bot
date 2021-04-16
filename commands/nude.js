@@ -8,7 +8,6 @@ const command = {
 	args: 0,
 	usage: "",
 	onlyInGuilds: ["689164798264606784"],
-	slashOptions: null,
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 

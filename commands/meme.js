@@ -39,14 +39,14 @@ const command = {
 
 		const image = args
 			? (args[0] || "").toLowerCase()
-			: (options ? options.find(o => o.name === "image") : { value: "" } ).value.toLowerCase();
+			: (options ? options.find(o => o.name === "image") : { value: "" }).value.toLowerCase();
 
 		if (image) {
 			if (!memes.includes(image)) return message.reply(language.get(language.invalid_image, message.client.prefix));
 
 			const lines = args
 				? args.slice(1)
-				: (options.find(o => o.name === "text") || {}).value.split("//");
+				: (options.find(o => o.name === "text") || { value: "" }).value.split(/ *\/\/ */);
 
 			const url = `https://api.memegen.link/images/${image}/${lines.map(line => replacement(line)).join("/")}.png`;
 

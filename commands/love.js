@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: [],
 	args: 1,
-	usage: "<user/text> [<user/text>]",
+	usage: "<user> [<user>]",
 	slashOptions: [
 		{
 			name: "user",
@@ -34,7 +34,7 @@ const command = {
 			: message.client.users.cache.get(options[0].value);
 		const love2 = args
 			? message.mentions.users.first(2)[1] || args[1] || message.author
-			: message.client.users.cache.get((options[1] || {}).value);
+			: options[1] ? message.client.users.cache.get(options[1].value) : message.author;
 
 		message.channel.send({
 			embed: {

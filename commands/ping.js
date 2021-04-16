@@ -9,7 +9,6 @@ const command = {
 	aliases: ["pong"],
 	args: 0,
 	usage: "",
-	slashOptions: null,
 	/**
 	 * @param {Message} message  
 	 * @param {string[]} args 

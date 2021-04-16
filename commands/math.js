@@ -25,7 +25,7 @@ const command = {
 		},
 		{
 			name: "solve",
-			description: "Solve an alegric equation",
+			description: "Solve an algebric equation",
 			type: 1,
 			options: [
 				{
@@ -127,7 +127,7 @@ const command = {
 				break;
 			}
 			default:
-				message.reply("arguments incorrects").catch(console.error);
+				message.reply(language.errors.invalid_args).catch(console.error);
 		}
 	}
 };
