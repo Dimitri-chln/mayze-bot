@@ -47,7 +47,7 @@ const command = {
 			const shiny = args
 				? args.includes("shiny")
 				: options[0].value.toLowerCase().includes("shiny");
-			const url = shiny && !pokemon.condition === "Alola"
+			const url = shiny && pokemon.condition !== "Alola"
 				? `https://img.pokemondb.net/sprites/home/shiny/${pokemon.names.en.toLowerCase()}.png`
 				: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}${pokemon.condition === "Alola" ? "_f2" : ""}.png`
 
