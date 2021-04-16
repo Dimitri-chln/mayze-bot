@@ -41,12 +41,14 @@ const command = {
 
 		const legendaries = require("../assets/legendaries.json");
 		const legendary = legendaries.includes(pokemon.names.en);
+		const beasts = require("../assets/ultra-beasts.json");
+		const beast = beasts.includes(pokemon.names.en);
 
 		const { rows } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}' AND pokedex_name = '${pokemon.names.en.replace(/'/, "U+0027")}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error)) || {};
 		if (rows.length) {
 			message.client.pg.query(`UPDATE pokemons SET caught = ${rows[0].caught + 1} WHERE user_id = '${message.author.id}' AND pokedex_name = '${pokemon.names.en.replace(/'/, "U+0027")}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error);
 		} else {
-			message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, shiny, legendary, alolan) VALUES ('${message.author.id}', ${pokemon.national_id}, '${pokemon.names.en.replace(/'/, "U+0027")}', ${shiny}, ${legendary}, ${alolan})`).catch(console.error);
+			message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, shiny, legendary, alolan, ultra_beast) VALUES ('${message.author.id}', ${pokemon.national_id}, '${pokemon.names.en.replace(/'/, "U+0027")}', ${shiny}, ${legendary}, ${alolan}, ${beast})`).catch(console.error);
 		}
 
 		message.channel.send({
@@ -58,8 +60,8 @@ const command = {
 				image: {
 					url: img
 				},
-				color: shiny ? 14531360 : (legendary ? 13512480 : message.guild.me.displayColor),
-				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (shiny ? "⭐ " : "") + (pokemon.names[languageCode] || pokemon.names.en)),
+				color: shiny ? 14531360 : (legendary || beast ? 13512480 : message.guild.me.displayColor),
+				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (pokemon.names[languageCode] || pokemon.names.en)),
 				footer: {
 					text: "✨ Mayze ✨",
 					icon_url: message.author.avatarURL({ dynamic: true })

@@ -179,8 +179,8 @@ module.exports = {
 				en: "Pokémon caught!"
 			},
 			caught_new: {
-				fr: "Nouveau pokémon ! 🎗️",
-				en: "New pokémon! 🎗️"
+				fr: "🔸 Nouveau pokémon !",
+				en: "🔸 New pokémon!"
 			},
 			caught_title: {
 				fr: "{1} a attrapé un {2} !",
@@ -501,8 +501,8 @@ module.exports = {
 				en: "{1}'s pokédex"
 			},
 			description: {
-				fr: "[1?<~dpokeball~d829026553395937291>:<~dblank~d829352737946730576>] [4?🎖️ :][5?⭐ :]**{2}#{3}**",
-				en: "[1?<~dpokeball~d829026553395937291>:<~dblank~d829352737946730576>] [4?🎖️ :][5?⭐ :]**{2}#{3}**"
+				fr: "[1?<~dpokeball~d829026553395937291>:<~dblank~d829352737946730576>] [4?🎖️ :][6?🎗️ :][5?⭐ :]**{2}#{3}**",
+				en: "[1?<~dpokeball~d829026553395937291>:<~dblank~d829352737946730576>] [4?🎖️ :][6?🎗️ :][5?⭐ :]**{2}#{3}**"
 			}
 		},
 		"pokemon": {
@@ -515,8 +515,8 @@ module.exports = {
 				en: "*No pokémon matches the search*"
 			},
 			description: {
-				fr: "[1?🎖️ :][2?⭐ :][7?[**{3}**{4}](https~d//google.com):**{3}**{4}] - {5} attrapé{6}",
-				en: "[1?🎖️ :][2?⭐ :][7?[**{3}**{4}](https~d//google.com):**{3}**{4}] - {5} caught"
+				fr: "[1?🎖️ :][8?🎗️ :][2?⭐ :][7?[**{3}**{4}](https~d//google.com):**{3}**{4}] - {5} attrapé{6}",
+				en: "[1?🎖️ :][8?🎗️ :][2?⭐ :][7?[**{3}**{4}](https~d//google.com):**{3}**{4}] - {5} caught"
 			}
 		},
 		"poll": {

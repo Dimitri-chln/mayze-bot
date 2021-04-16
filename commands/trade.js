@@ -92,12 +92,12 @@ const command = {
 				fields: [
 					{
 						name: language.get(language.offer, message.author.username),
-						value: `\`\`\`\n${offer.map(pkm => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}`).join("\n") || "Ø"}\n\`\`\``,
+						value: `\`\`\`\n${offer.map(pkm => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️ " : ""}${pkm.shiny ? "⭐": ""}`).join("\n") || "Ø"}\n\`\`\``,
 						inline: true
 					},
 					{
 						name: language.get(language.demand, user.username),
-						value: `\`\`\`\n${demand.map(pkm => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}`).join("\n") || "Ø"}\n\`\`\``,
+						value: `\`\`\`\n${demand.map(pkm => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️ " : ""}${pkm.shiny ? "⭐": ""}`).join("\n") || "Ø"}\n\`\`\``,
 						inline: true
 					}
 				],

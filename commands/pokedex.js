@@ -25,12 +25,13 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		const pokedex = require("oakdex-pokedex");
 		const legendaries = require("../assets/legendaries.json");
+		const beasts = require("../assets/ultra-beasts.json");
 		const pagination = require("../utils/pagination");
 		const { MessageEmbed } = require("discord.js");
 
 		const input = args
-			? args.join(" ").toLowerCase().replace(/shiny|alolan|-caught|-uncaught|-shiny|-leg(?:endary)?|-alolan/g, "").trim()
-			: options ? options[0].value.toLowerCase().replace(/shiny|alolan|-caught|-uncaught|-shiny|-leg(?:endary)?|-alolan/g, "").trim() : "";
+			? args.join(" ").toLowerCase().replace(/shiny|alolan|-caught|-uncaught|-shiny|-leg(?:endary)?|-u?b(?:east)?|-alolan/g, "").trim()
+			: options ? options[0].value.toLowerCase().replace(/shiny|alolan|-caught|-uncaught|-shiny|-leg(?:endary)?|-u?b(?:east)?|-alolan/g, "").trim() : "";
 		
 		if (input) {
 			let pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => input === name.toLowerCase().replace("♂", "m").replace("♀️", "f")));
@@ -55,7 +56,7 @@ const command = {
 
 			message.channel.send({
 				embed: {
-					title: `${pokemon.names[languageCode] || pokemon.names.en} #${(`00${pokemon.national_id}`).substr(-3)}`,
+					title: `${legendaries.includes(pokemon.names.en) ? "🎖️ " : ""}${beasts.includes(pokemon.names.en) ? "🎗️ " : ""}${shiny ? "⭐ " : ""}${pokemon.names[languageCode] || pokemon.names.en} #${(`00${pokemon.national_id}`).substr(-3)}`,
 					color: message.guild.me.displayColor,
 					image: { url },
 					footer: {
@@ -102,6 +103,7 @@ const command = {
 				: options[0].value.split(" ");
 			const shiny = params.includes("-shiny");
 			const legendary = params.includes("-legendary") || params.includes("-leg");
+			const beast = params.includes("-beast") || params.includes("-ub");
 			const alolan = params.includes("-alolan");
 
 			const { "rows": pokemons } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error)) || {};
@@ -111,6 +113,7 @@ const command = {
 			if (params.includes("-caught")) dex = dex.filter(pkm => pokemons.some(p => p.pokedex_id === pkm.national_id));
 			if (params.includes("-uncaught")) dex = dex.filter(pkm => !pokemons.some(p => p.pokedex_id === pkm.national_id));
 			if (legendary) dex = dex.filter(pkm => legendaries.includes(pkm.names.en));
+			if (beast) dex = dex.filter(pkm => beasts.includes(pkm.names.en));
 			if (alolan) dex = dex.filter(p => p.variations.some(v => v.condition === "Alola"));
 
 			const pkmPerPage = 15;
@@ -125,7 +128,7 @@ const command = {
 				let embed = new MessageEmbed()
 					.setAuthor(language.get(language.title, message.author.tag), message.author.avatarURL({ dynamic: true }))
 					.setColor(message.guild.me.displayColor)
-					.setDescription(dex.slice(i, i + pkmPerPage).map(p => language.get(language.description, pokemons.some(pkm => pkm.pokedex_id === p.national_id), p.names[languageCode], ("00" + p.national_id).substr(-3), legendary, shiny)).join("\n"));
+					.setDescription(dex.slice(i, i + pkmPerPage).map(p => language.get(language.description, pokemons.some(pkm => pkm.pokedex_id === p.national_id), p.names[languageCode], ("00" + p.national_id).substr(-3), legendaries.includes(p.names.en), shiny, beasts.includes(p.names.en))).join("\n"));
 				pages.push(embed);
 			};
 			

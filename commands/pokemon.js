@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: ["pokemons", "pkmn", "pkm", "poke"],
 	args: 0,
-	usage: "[<user>] [-favorite] [-legendary] [-shiny] [-alolan] [-id [<number>]] [-name <name>]",
+	usage: "[<user>] [-favorite] [-legendary] [-beast] [-shiny] [-alolan] [-id [<number>]] [-name <name>]",
 	slashOptions: [
 		{
 			name: "user",
@@ -38,7 +38,7 @@ const command = {
 			? message.mentions.users.first() || (args.length ? (message.client.findMember(message.guild, args[0]) || {}).user : null) || message.author
 			: options && options.some(o => o.name === "user") ? message.guild.members.cache.get(options.find(o => o.name === "user").value).user : message.author;
 
-		let { "rows": pokemons }  = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}' ORDER BY legendary DESC, shiny DESC, caught DESC, pokedex_id ASC`).catch(console.error)) || {};
+		let { "rows": pokemons }  = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}' ORDER BY legendary DESC, ultra_beast DESC, shiny DESC, caught DESC, pokedex_id ASC`).catch(console.error)) || {};
 		if (!pokemons) return message.channel.send(language.errors.database).catch(console.error);
 
 		const params = args
@@ -48,6 +48,7 @@ const command = {
 		if (params.includes("-favorite") || params.includes("-fav")) pokemons = pokemons.filter(p => p.favorite);
 		if (params.includes("-starter")) pokemons = pokemons.filter(p => starters.includes(p.pokedex_name));
 		if (params.includes("-legendary") || params.includes("-leg")) pokemons = pokemons.filter(p => p.legendary);
+		if (params.includes("-beast") || params.includes("-ub")) pokemons = pokeons.filter(p => p.ultra_beast);
 		if (params.includes("-shiny")) pokemons = pokemons.filter(p => p.shiny);
 		if (params.includes("-alolan")) pokemons = pokemons.filter(p => p.alolan);
 		if (params.includes("-id")) pokemons = params[params.indexOf("-id") + 1] ? pokemons.filter(p => p.pokedex_id === parseInt(params[params.indexOf("-id") + 1])) : pokemons;
@@ -65,7 +66,7 @@ const command = {
 			embed = new MessageEmbed()
 				.setAuthor(language.get(language.title, user.tag), user.avatarURL({ dynamic: true }))
 				.setColor(message.guild.me.displayColor)
-				.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => language.get(language.description, p.legendary, p.shiny, pokedex.findPokemon(p.pokedex_id).names[languageCode], params.includes("-id") ? `#${p.pokedex_id}` : "", p.caught, p.caught > 1 ? "s" : "", p.favorite)).join("\n"));
+				.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => language.get(language.description, p.legendary, p.shiny, pokedex.findPokemon(p.pokedex_id).names[languageCode], params.includes("-id") ? `#${p.pokedex_id}` : "", p.caught, p.caught > 1 ? "s" : "", p.favorite, p.ultra_beast)).join("\n"));
 				if (pokemons.length === 1) embed.setThumbnail(pokemons[0].shiny && !pokemons[0].alolan ? `https://img.pokemondb.net/sprites/home/shiny/${pokemons[0].pokedex_name.toLowerCase()}.png` : `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemons[0].pokedex_id}`).substr(-3)}${pokemons[0].alolan ? "_f2" : ""}.png`);
 			pages.push(embed);
 		};
