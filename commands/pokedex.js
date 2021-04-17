@@ -34,7 +34,7 @@ const command = {
 			: options ? options[0].value.toLowerCase().replace(/shiny|alolan|-caught|-uncaught|-shiny|-leg(?:endary)?|-u?b(?:east)?|-alolan/g, "").trim() : "";
 		
 		if (input) {
-			let pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => input === name.toLowerCase().replace("♂", "m").replace("♀️", "f")));
+			let pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === input));
 			if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 			if ((args || options[0].value).includes("alolan")) pokemon = {
 				base_stats: pokemon.base_stats,

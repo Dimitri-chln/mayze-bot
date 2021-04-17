@@ -60,7 +60,7 @@ const command = {
 			const name = input.replace(/⭐?(?:#\d+)?$/, "");
 			const number = parseInt((input.match(/#(\d+)$/) || [])[1]) || 1;
 			const shiny = /⭐(?:#\d+)?$/.test(input);
-			const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace("♂️", "m").replace("♀️", "f") === name.toLowerCase()));
+			const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
 
 			if (pokemon) return { data: pokemon, number, shiny, legendary: legendaries.includes(pokemon.names.en) };
 			else error += language.get(language.invalid_pkm, name);
@@ -70,7 +70,7 @@ const command = {
 			const name = input.replace(/⭐?(?:#\d+)?$/, "");
 			const number = parseInt((input.match(/#(\d+)$/) || [])[1]) || 1;
 			const shiny = /⭐(?:#\d+)?$/.test(input);
-			const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace("♂️", "m").replace("♀️", "f") === name.toLowerCase()));
+			const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
 
 			if (pokemon) return { data: pokemon, number, shiny, legendary: legendaries.includes(pokemon.names.en) };
 			else error += language.get(language.invalid_pkm, name);
