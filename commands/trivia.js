@@ -10,6 +10,7 @@ const command = {
 	aliases: ["quiz"],
 	args: 0,
 	usage: "[-score <score>]",
+	disableSlash: true,
 	slashOptions: [
 		{
 			name: "score",
