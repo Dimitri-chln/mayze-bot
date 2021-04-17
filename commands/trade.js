@@ -142,7 +142,7 @@ const command = {
 
 			let offerSuccess = [];
 			for (const pkm of offer) {
-				let s = [];
+				let s = []
 
 				let p = demandPokemons1.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
 				if (p) message.client.pg.query(`UPDATE pokemons SET caught = ${p.caught + pkm.number} WHERE id = ${p.id}`)
@@ -212,6 +212,9 @@ const command = {
 				
 				demandSuccess.push(s);
 			}
+
+			// Dummy request to await for all other ones
+			await message.client.pg.query(`SELECT id FROM pokemons where id = 0`).catch(console.error);
 
 			console.log(offerSuccess);
 			console.log(demandSuccess);
