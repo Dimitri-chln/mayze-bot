@@ -737,7 +737,7 @@ module.exports = {
 			},
 			no_player: {
 				fr: "il n'y a pas assez de joueurs (2 minimum)",
-				en: "there is not enough players (need at least 2)"
+				en: "there aren't enough players (need at least 2)"
 			},
 			question: {
 				fr: "Question n°{1}",
