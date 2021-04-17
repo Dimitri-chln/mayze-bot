@@ -30,7 +30,7 @@ const command = {
 		let randomShiny = Math.random(), shiny = false;
 		if (randomShiny < shinyFrequency) {
 			shiny = true;
-			img = `https://img.pokemondb.net/sprites/home/shiny/${pokemon.names.en.toLowerCase()}.png`;
+			img = `https://img.pokemondb.net/sprites/home/shiny/${pokemon.names.en.toLowerCase().replace(/\u2642/, "-m").replace(/\u2640/, "-f")}.png`;
 		}
 		let randomAlolan = Math.random(), alolan = false;
 		if (randomAlolan < alolanFrequency && pokemon.variations.some(v => v.condition === "Alolan")) {

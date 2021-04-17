@@ -49,7 +49,7 @@ const command = {
 				? args.includes("shiny")
 				: options[0].value.toLowerCase().includes("shiny");
 			const url = shiny && pokemon.condition !== "Alola"
-				? `https://img.pokemondb.net/sprites/home/shiny/${pokemon.names.en.toLowerCase()}.png`
+				? `https://img.pokemondb.net/sprites/home/shiny/${pokemon.names.en.toLowerCase().replace(/\u2642/, "-m").replace(/\u2640/, "-f")}.png`
 				: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}${pokemon.condition === "Alola" ? "_f2" : ""}.png`
 
 			const flags = { en: "🇬🇧", fr: "🇫🇷", de: "🇩🇪", cz: "🇨🇿", es: "🇪🇸", it: "🇮🇹", jp: "🇯🇵", tr: "🇹🇷", dk: "🇩🇰", gr: "🇬🇷", pl: "🇵🇱" };
