@@ -215,9 +215,6 @@ const command = {
 
 			// Dummy request to await for all other ones
 			await message.client.pg.query(`SELECT id FROM pokemons where id = 0`).catch(console.error);
-
-			console.log(offerSuccess);
-			console.log(demandSuccess);
 			
 			logChannel.send({
 				embed: {
