@@ -7,7 +7,7 @@ const command = {
 		en: "Manage your reminders"
 	},
 	aliases: ["remindme", "rmd", "reminder"],
-	args: 2,
+	args: 0,
 	usage: "<duration> <reminder> | remove <#reminder>",
 	slashOptions: [
 		{
