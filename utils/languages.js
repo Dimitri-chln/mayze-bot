@@ -489,7 +489,7 @@ module.exports = {
 				en: [ "Alternative names:", "Height:", "Weight:", "Base stats:", "Forms:", "Types:" ]
 			},
 			stats: {
-				fr: "**PV:** {1}\n**Attaque:** {2}\n**Défense:** {3}\n**Attaque Spé:** {4}\n**Défense Spé:** {5}\n**Vitesse:** {6}",
+				fr: "**PV :** {1}\n**Attaque :** {2}\n**Défense :** {3}\n**Attaque Spé. :** {4}\n**Défense Spé. :** {5}\n**Vitesse :** {6}",
 				en: "**HP:** {1}\n**Attack:** {2}\n**Defense:** {3}\n**Sp. Attack:** {4}\n**Sp. Defense:** {5}\n**Speed:** {6}"
 			},
 			no_pokemon: {
