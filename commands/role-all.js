@@ -43,7 +43,7 @@ const command = {
 		},
 		{
 			name: "remove",
-			description: "Remove a role to all members",
+			description: "Remove a role from all members",
 			type: 1,
 			options: [
 				{
