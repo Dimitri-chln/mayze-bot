@@ -27,6 +27,8 @@ const command = {
 		
 		const regex = /https:\/\/(?:cdn\.)?discord(?:app)?\.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})/;
 		if (!regex.test(message.content)) return;
+
+		if (/^* ?rose(?:-lobby)?/.test(message.content)) return;
 		
 		const [ , guildID, channelID, messageID ] = message.content.match(regex);
 		if (message.guild.id !== guildID) return;

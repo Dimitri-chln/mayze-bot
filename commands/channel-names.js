@@ -82,7 +82,7 @@ const command = {
 		
 		let errors = 0;
 		await Promise.all(channels.map(async c => {
-			c.setName(c.name.replace(regex, replace)).catch(err => {
+			await c.setName(c.name.replace(regex, replace)).catch(err => {
 				++errors;
 				console.error(err);
 			});

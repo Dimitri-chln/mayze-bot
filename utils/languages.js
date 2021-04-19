@@ -7,7 +7,7 @@ module.exports = {
 			else return m[3];
 		})
 		.replace(/~d/g, ":")
-		.replace(/~q/g, "?"),
+		.replace(/~q/g, "?"),	// Please don't touch at all of the above
 	data: {
 		unauthorized_guild: {
 			fr: "cette commande ne fonctionne pas sur ce serveur",
@@ -215,7 +215,7 @@ module.exports = {
 				en: "the number must be between 1 and 100"
 			},
 			deleted: {
-				fr: "{1} message(s) supprimés",
+				fr: "{1} message(s) supprimé(s)",
 				en: "{1} message(s) deleted"
 			}
 		},

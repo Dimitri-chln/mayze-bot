@@ -105,7 +105,7 @@ const command = {
 			case "add":
 				members = members.filter(m => !m.roles.cache.has(role.id));
 				await Promise.all(members.map(async member => {
-					member.roles.add(role).catch(err => {
+					await member.roles.add(role).catch(err => {
 						++errors;
 						console.error(err);
 					});
@@ -114,7 +114,7 @@ const command = {
 			case "remove":
 				members = members.filter(m => m.roles.cache.has(role.id));
 				await Promise.all(members.map(async member => {
-					member.roles.remove(role).catch(err => {
+					await member.roles.remove(role).catch(err => {
 						++errors;
 						console.error(err);
 					});
