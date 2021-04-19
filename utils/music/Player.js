@@ -354,9 +354,20 @@ class Player {
         // Stops the dispatcher
         queue.stopped = true;
         queue.songs = [];
-        queue.dispatcher.end();
-        // Resolves
-        return;
+        if (queue.dispatcher) {
+            queue.dispatcher.end();
+            // Resolves
+            return;
+            
+        } else {
+            // Removes the guild from the guilds list
+            this.queues = this.queues.filter((g) => g.guildID !== guildID);
+
+            if (this.options.leaveOnStop)
+                queue.connection.channel.leave();
+            // Emits the stop event
+            return queue.emit('stop');
+        }
     }
 
     /**
