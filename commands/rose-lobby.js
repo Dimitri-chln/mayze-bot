@@ -26,7 +26,9 @@ const command = {
 				const msg = args[1]
 					? (await channel.messages.fetch(args[1]).catch(console.error))
 					: (await channel.messages.fetch({ limit: 1 })).first();
-				if (!msg) return message.channel.send("Quelque chose s'est mal passé en récupérant le message :/").catch(console.error);
+				if (!msg) return message.reply("ID invalide")
+					.then(m => m.delete({ timeout: 4000 }).catch(console.error))
+					.catch(console.error);
 				
 				msg.react("833620353133707264").catch(console.error);
 				break;
