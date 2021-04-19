@@ -5,7 +5,7 @@ const command = {
 	description: "Ajouter une réaction au message d'annonce de la game de roses",
 	aliases: ["rose"],
 	args: 1,
-	usage: "react [<lien>] | end",
+	usage: "react [<ID message>] | end",
 	onlyInGuilds: ["689164798264606784"],
 	disableSlash: true,
 	/**
@@ -16,6 +16,7 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		/**@type {TextChannel} */
 		const channel = message.guild.channels.cache.get("817365433509740554");
+		if (message.channel.id !== channel.id) return;
 
 		const subCommand = args[0].toLowerCase();
 
@@ -23,8 +24,9 @@ const command = {
 			case "react":
 				await message.delete();
 				const msg = args[1]
-					? (await channel.messages.fetch(args[1].split("/")[6]))
+					? (await channel.messages.fetch(args[1]).catch(console.error))
 					: (await channel.messages.fetch({ limit: 1 })).first();
+				if (!msg) return message.channel.send("Quelque chose s'est mal passé en récupérant le message :/").catch(console.error);
 				
 				msg.react("833620353133707264").catch(console.error);
 				break;
@@ -34,7 +36,7 @@ const command = {
 				if (msgs) await Promise.all(msgs.filter(m => m.reactions.cache.has("833620353133707264"))
 					.map(async m => await m.reactions.cache.get("833620353133707264").remove().catch(console.error))
 				);
-				
+
 				await Promise.all(message.guild.members.cache.filter(m => m.roles.cache.has("833620668066693140"))
 					.map(async member => await member.roles.remove("833620668066693140").catch(console.error))
 				);
