@@ -30,7 +30,7 @@ const command = {
 
 		const timeLeft = (date - now) / 1000;
 		if (timeLeft < 0) return message.reply(language.not_passed).catch(console.error);
-		const timeLeftString = timeToString(timeLeft);
+		const timeLeftString = timeToString(timeLeft, languageCode);
 
 		const [ month, day, year] = args
 			? args[0].split(/\/|-/)
