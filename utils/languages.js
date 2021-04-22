@@ -510,6 +510,10 @@ module.exports = {
 				fr: "Pokémons de {1}",
 				en: "{1}'s pokémons"
 			},
+			total: {
+				fr: "{1} pokémons correspondent à la recherche",
+				en: "{1} pokémons match the search"
+			},
 			no_pokemon: {
 				fr: "*Aucun pokémon ne correspond à la recherche*",
 				en: "*No pokémon matches the search*"
