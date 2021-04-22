@@ -658,6 +658,52 @@ module.exports = {
 				en: "Other images"
 			}
 		},
+		"stats": {
+			invalid_pokemon: {
+				fr: "ce pokémon n'existe pas",
+				en: "this pokémon doesn't exist"
+			},
+			normal: {
+				fr: "**Normaux :** `{1}`\n",
+				en: "**Normal:** `{1}`\n"
+			},
+			shiny: {
+				fr: "**Shinies :** `{1}`\n",
+				en: "**Shinies:** `{1}`\n"
+			},
+			alolan: {
+				fr: "**Alolan :** `{1}`\n",
+				en: "**Alolan:** `{1}`\n"
+			},
+			alolan_shiny: {
+				fr: "**Alolan shinies :** `{1}`\n",
+				en: "**Shiny alolan:** `{1}`\n"
+			},
+			legendary: {
+				fr: "**Légeandaires :** `{1}`\n",
+				en: "**Legendaries:** `{1}`\n"
+			},
+			legendary_shiny: {
+				fr: "**Légendaires shiny :** `{1}`\n",
+				en: "**Shiny legendaries:** `{1}`\n"
+			},
+			beast: {
+				fr: "**Chimères :** `{1}`\n",
+				en: "**Ultra beasts:** `{1}`\n"
+			},
+			beast_shiny: {
+				fr: "**Chimères shiny :** `{1}`\n",
+				en: "**Shiny ultra beasts:** `{1}`\n"
+			},
+			total: {
+				fr: "> __**Total :**__ `{1}`",
+				en: "> __**Total:**__ `{1}`"
+			},
+			title: {
+				fr: "Statistiques de Mayze",
+				en: "Mayze's statistics"
+			}
+		},
 		"top": {
 			title: {
 				fr: "Classement de {1}",
