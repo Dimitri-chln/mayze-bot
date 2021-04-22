@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 1,
 	usage: "[<pokémons to offer>] <user> [<pokémons to ask for>]",
+	cooldown: 15,
 	slashOptions: [
 		{
 			name: "user",
