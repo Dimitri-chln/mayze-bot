@@ -7,7 +7,7 @@ const command = {
 	execute: async message => {
 		const dim = await message.client.users.fetch("307815349699608577").catch(console.error);
 
-		const regex = /\bdim+(?:itr(?:i|ax))?\b/i;
+		const regex = /\b(?:dim+(?:itr(?:i|ax))?)+\b/i;
 		
 		if (regex.test(message.content)) {
 			dim.send({
