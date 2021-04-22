@@ -43,9 +43,9 @@ const command = {
 			const unJailedRoles = member.roles.cache.filter(role => message.guild.roles.cache.some(r => r.name === role.name + " (Jailed)"));
 			const jailedRoles = message.guild.roles.cache.filter(role => member.roles.cache.some(r => role.name === r.name + " (Jailed)"));
 
+			await member.roles.remove(unJailedRoles).catch(console.error);
 			await member.roles.add(jailedRole).catch(console.error);
 			await member.roles.add(jailedRoles).catch(console.error);
-			await member.roles.remove(unJailedRoles).catch(console.error);
 
 			if (message.deletable) message.react("🔗").catch(console.error);
 			return;
