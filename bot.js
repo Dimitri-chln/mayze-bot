@@ -139,7 +139,7 @@ client.on("ready", async () => {
 	}).catch(console.error);
 
 	// PREDEFINED REMINDERS
-	ACNHReminders();
+	// ACNHReminders();
 	testReminders();
 
 	// REMINDERS
