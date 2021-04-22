@@ -37,6 +37,7 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		const pokedex = require("oakdex-pokedex");
 		const legendaries = require("../assets/legendaries.json");
+		const beasts = require("../assets/ultra-beasts.json");
 		const { TRADE_LOG_CHANNEL_ID } = require("../config.json");
 		const logChannel = message.client.channels.cache.get(TRADE_LOG_CHANNEL_ID);
 
@@ -62,7 +63,7 @@ const command = {
 			const shiny = /⭐(?:#\d+)?$/.test(input);
 			const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
 
-			if (pokemon) return { data: pokemon, number, shiny, legendary: legendaries.includes(pokemon.names.en) };
+			if (pokemon) return { data: pokemon, number, shiny, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
 			else error += language.get(language.invalid_pkm, name);
 		}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id) === i);
 
@@ -72,7 +73,7 @@ const command = {
 			const shiny = /⭐(?:#\d+)?$/.test(input);
 			const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
 
-			if (pokemon) return { data: pokemon, number, shiny, legendary: legendaries.includes(pokemon.names.en) };
+			if (pokemon) return { data: pokemon, number, shiny, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
 			else error += language.get(language.invalid_pkm, name);
 		}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id) === i);
 		
@@ -151,7 +152,7 @@ const command = {
 						console.error(err);
 						s.push(0);
 					});
-				else message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, caught, shiny, legendary) VALUES ('${user.id}', ${pkm.data.national_id}, '${pkm.data.names.en}', ${pkm.number}, ${pkm.shiny}, ${pkm.legendary})`)
+				else message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, caught, shiny, legendary, ultra_beast) VALUES ('${user.id}', ${pkm.data.national_id}, '${pkm.data.names.en}', ${pkm.number}, ${pkm.shiny}, ${pkm.legendary}, ${pkm.ultra_beast})`)
 					.then(_res => s.push(1))
 					.catch(err => {
 						console.error(err);
@@ -189,7 +190,7 @@ const command = {
 						console.error(err);
 						s.push(0);
 					});
-				else message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, caught, shiny, legendary) VALUES ('${message.author.id}', ${pkm.data.national_id}, '${pkm.data.names.en}', ${pkm.number}, ${pkm.shiny}, ${pkm.legendary})`)
+				else message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, caught, shiny, legendary, ultra_beast) VALUES ('${message.author.id}', ${pkm.data.national_id}, '${pkm.data.names.en}', ${pkm.number}, ${pkm.shiny}, ${pkm.legendary}, ${pkm.ultra_beast})`)
 					.then(_res => s.push(1))
 					.catch(err => {
 						console.error(err);
@@ -227,12 +228,12 @@ const command = {
 					fields: [
 						{
 							name: "Offer:",
-							value: `\`\`\`\n${offer.map((pkm, i) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""} - ${offerSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+							value: `\`\`\`\n${offer.map((pkm, i) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""} - ${offerSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
 							inline: true
 						},
 						{
 							name: "Demand:",
-							value: `\`\`\`\n${demand.map((pkm, j) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""} - ${demandSuccess[j].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+							value: `\`\`\`\n${demand.map((pkm, j) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""} - ${demandSuccess[j].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
 							inline: true
 						}
 					],
@@ -253,15 +254,15 @@ const command = {
 			let errors1 = [], errors1fav = [];
 			for (const pokemon of pokemons1) {
 				let pkm = user1Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny) || { caught: 0 };
-				if (pokemon.number > pkm.caught) errors1.push(`**${pokemon.number - pkm.caught} ${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}**`);
-				if (pkm.favorite) errors1fav.push(`**${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}**`);
+				if (pokemon.number > pkm.caught) errors1.push(`**${pokemon.number - pkm.caught} ${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
+				if (pkm.favorite) errors1fav.push(`**${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
 			}
 
 			let errors2 = [], errors2fav = [];
 			for (const pokemon of pokemons2) {
 				let pkm = user2Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny) || { caught: 0 };
-				if (pokemon.number > pkm.caught) errors2.push(`**${pokemon.number - pkm.caught} ${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}**`);
-				if (pkm.favorite) errors2fav.push(`**${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}**`);
+				if (pokemon.number > pkm.caught) errors2.push(`**${pokemon.number - pkm.caught} ${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
+				if (pkm.favorite) errors2fav.push(`**${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
 			}
 
 			errors1 = errors1.length ? language.get(language.not_enough_pkm, user1.username, errors1.join(", ")) : "";
