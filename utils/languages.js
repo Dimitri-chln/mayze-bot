@@ -511,8 +511,8 @@ module.exports = {
 				en: "{1}'s pokémons"
 			},
 			total: {
-				fr: "{1} pokémons correspondent à la recherche",
-				en: "{1} pokémons match the search"
+				fr: "{1} pokémon[2?s:] correspond[2?ent:] à la recherche",
+				en: "{1} pokémon[2?s:] match[2?:es] the search"
 			},
 			no_pokemon: {
 				fr: "*Aucun pokémon ne correspond à la recherche*",

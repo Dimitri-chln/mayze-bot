@@ -229,12 +229,12 @@ const command = {
 					fields: [
 						{
 							name: "Offer:",
-							value: `\`\`\`\n${offer.map((pkm, i) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""} - ${offerSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+							value: `\`\`\`\n${offer.map((pkm, i) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️" : ""} - ${offerSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
 							inline: true
 						},
 						{
 							name: "Demand:",
-							value: `\`\`\`\n${demand.map((pkm, j) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""} - ${demandSuccess[j].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+							value: `\`\`\`\n${demand.map((pkm, j) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️" : ""} - ${demandSuccess[j].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
 							inline: true
 						}
 					],
