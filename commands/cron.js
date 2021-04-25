@@ -18,11 +18,11 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		const { CronJob } = require("cron");
 		const date = args
-			? new Date((args.join(" ").match(/\d{1,2}\/|-\d{1,2}\/|-\d{4}( \d{1,2}(:\d{1,2}(:\d{1,2})?)?)?( GMT(\+|-)\d{1,2})?/) || [])[0])
+			? new Date(args[0])
 			: new Date(options[0].value);
 		if (!date) return message.reply(language.invalid_date).catch(console.error);
 		const taskString = args
-			? args.join(" ").replace(/\d{1,2}(\/|-)\d{1,2}(\/|-)\d{4}( \d{1,2}(:\d{1,2}(:\d{1,2})?)?)? /, "")
+			? args.slice(1).join(" ")
 			: options[1].value;
 		const task = eval(`async () => { ${taskString} }`);
 		const job = new CronJob(date, task);
