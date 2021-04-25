@@ -18,8 +18,8 @@ const command = {
 	*/
    execute: async (message, args, options, language, languageCode) => {
 		const expression = args
-			? args.join(" ").replace("##", "message.channel.send")
-			: options[0].value.replace("##", "message.channel.send");
+			? args.join(" ").replace(/##/g, "message.channel.send")
+			: options[0].value.replace(/##/g, "message.channel.send");
 		try {
 			eval(expression);
 		} catch (err) {
