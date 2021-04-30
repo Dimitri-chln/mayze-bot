@@ -123,7 +123,7 @@ const command = {
 							msg.edit(embed.setDescription(`🔫 ${deadPlayer.username} est mort !`)).catch(console.error);
 							if (params.includes("-kick")) deadPlayer.kick("Roulette Russe").catch(console.error);
 							else if (params.includes("-mute")) {
-								const mute = require("../commands/mute");
+								const mute = message.client.commands.get("mute");
 								const muteMsg = await message.channel.send(`*mute ${deadPlayer} 5m`).catch(console.error);
 								mute.execute(muteMsg, ["5m"]);
 							}

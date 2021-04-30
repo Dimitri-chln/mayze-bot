@@ -28,11 +28,10 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		const { OWNER_ID } = require("../config.json");
 
-		const user = args
-			? message.mentions.users.first()
-			: message.guild.members.cache.get(options[0].value).user;
-		if (!user) return message.reply("mentionne la personne à mettre en prison ou à libérer").catch(console.error);
-		const member = message.guild.members.cache.get(user.id);
+		const member = args
+			? message.mentions.members.first() || message.guild.members.cache.get(args[0])
+			: message.guild.members.cache.get(options[0].value);
+		if (!member) return message.reply("mentionne la personne à mettre en prison ou à libérer").catch(console.error);
 		
 		if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== OWNER_ID) 
 			return message.reply("tu ne peux pas mettre cette personne en prison").catch(console.error);

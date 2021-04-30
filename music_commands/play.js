@@ -29,6 +29,7 @@ const command = {
 
 		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
+		const queue = message.client.player.getQueue(message.guild.id);
 
 		const videoRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))((?!channel)(?!user)\/(?:[\w\-]+\?v=|embed\/|v\/)?)((?!channel)(?!user)[\w\-]+)(\S+)?$/;
 		const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#&\?]*).*/;
@@ -70,7 +71,6 @@ const command = {
 		} else {
 			// If there's already a song playing
 			if (isPlaying) {
-				const queue = message.client.player.getQueue(message.guild.id);
 				// Add the song to the queue
 				const res = await message.client.player.addToQueue(message.guild.id, search, null, message.author);
 				if (!res.song) {
