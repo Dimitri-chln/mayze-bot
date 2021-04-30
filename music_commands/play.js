@@ -77,7 +77,7 @@ const command = {
 					console.error(res.error);
 					return message.reply(language.no_song).catch(console.error);
 				}
-				message.channel.send(language.get(language.added_to_queue, Util.MillisecondsToTime(queue.duration) - Util.MillisecondsToTime(res.song.duration), res.song.name)).catch(console.error);
+				message.channel.send(language.get(language.added_to_queue, Util.MillisecondsToTime(queue.duration - Util.TimeToMilliseconds(res.song.duration)), res.song.name)).catch(console.error);
 
 			} else {
 				// Else, play the song
