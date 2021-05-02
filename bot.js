@@ -513,18 +513,23 @@ function ACNHReminders() {
 
 function testReminders() {
 	const users = [ "408671348005797898", "463358584583880704" ];
+	const nubs = [ "408671348005797898" ];
 
 	const wednesday = new Cron.CronJob("0 45 15 * * 3", () => {
-		users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 15 minutes! <#463399799807410176>").catch(console.error)));
-		setTimeout(() => users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 5 minutes! <#463399799807410176>").catch(console.error))), 600000);
-		setTimeout(() => users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 2 minutes! <#463399799807410176>").catch(console.error))), 780000);
+		users.forEach(u => client.users.fetch(u).then(u => u.send(getMessage(15, nubs.includes(u.id))).catch(console.error)));
+		setTimeout(() => users.forEach(u => client.users.cache.get(u).send(getMessage(5, nubs.includes(u.id))).catch(console.error)), 600000);
+		setTimeout(() => users.forEach(u => client.users.cache.get(u).send(getMessage(2, nubs.includes(u.id))).catch(console.error)), 780000);
 	}, null, true, null, null, false, 0);
 
 	const sunday = new Cron.CronJob("0 45 13 * * 0", () => {
-		users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 15 minutes! <#463399799807410176>").catch(console.error)));
-		setTimeout(() => users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 5 minutes! <#463399799807410176>").catch(console.error))), 600000);
-		setTimeout(() => users.forEach(u => client.users.fetch(u).then(u => u.send("Test in 2 minutes! <#463399799807410176>").catch(console.error))), 780000);
+		users.forEach(u => client.users.fetch(u).then(u => u.send(getMessage(15, nubs.includes(u.id))).catch(console.error)));
+		setTimeout(() => users.forEach(u => client.users.cache.get(u).send(getMessage(5, nubs.includes(u.id))).catch(console.error)), 600000);
+		setTimeout(() => users.forEach(u => client.users.cache.get(u).send(getMessage(2, nubs.includes(u.id))).catch(console.error)), 780000);
 	}, null, true, null, null, false, 0);
 
 	return { wednesday, sunday };
+
+	function getMessage(minutes, nub) {
+		return `Test in ${minutes} minute${minutes > 1 ? "s" : ""}! <#463399799807410176>\n**Sunday 4pm CEST, Wednesday 6pm CEST**${nub ? "\nAnd because you are a nub that keeps forgetting it\n- It's __,t Name__" : ""}`;
+	}
 }
