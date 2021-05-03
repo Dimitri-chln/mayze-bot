@@ -25,7 +25,7 @@ const command = {
 		const language = { get: languages.get, errors: pickLanguage(languages.data.errors, lang), ...pickLanguage(languages.data["afk"], lang) };
 		
 
-		const afkRegex = /^(?:(?:k|K)oya\s?)|(?:\^\^)afk/;
+		const afkRegex = /^(?:(?:k|K)oya\s?|\^\^)afk/;
 		if (afkRegex.test(message.content)) {
 			const afk = message.client.commands.get("afk");
 			try {
