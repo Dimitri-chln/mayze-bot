@@ -748,7 +748,7 @@ module.exports = {
 				en: "{1} offers:"
 			},
 			demand: {
-				fr: "{1} offre :",
+				fr: "Est demandé à {1} :",
 				en: "{1} is asked for:"
 			},
 			footer: {
