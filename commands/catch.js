@@ -51,13 +51,33 @@ const command = {
 			message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, shiny, legendary, alolan, ultra_beast) VALUES ('${message.author.id}', ${pokemon.national_id}, '${pokemon.names.en.replace(/'/, "U+0027")}', ${shiny}, ${legendary}, ${alolan}, ${beast})`).catch(console.error);
 		}
 
-		message.channel.send({
+		const msg = await message.channel.send({
 			embed: {
 				author: {
-					name: rows.length ? language.caught :  language.caught_new,
+					name: rows.length ? language.caught : language.caught_new,
 					icon_url: pokeball
 				},
 				image: {
+					url: img
+				},
+				color: shiny ? 14531360 : (legendary || beast ? 13512480 : message.guild.me.displayColor),
+				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (pokemon.names[languageCode] || pokemon.names.en)),
+				footer: {
+					text: "✨ Mayze ✨",
+					icon_url: message.author.avatarURL({ dynamic: true })
+				}
+			}
+		}).catch(console.error);
+
+		const logChannel = message.client.channels.cache.get('839538540206882836');
+		logChannel.send({
+			embed: {
+				author: {
+					name: `#${message.channel.name}`,
+					url: msg.url,
+					icon_url: message.guild.iconURL()
+				},
+				thumbnail: {
 					url: img
 				},
 				color: shiny ? 14531360 : (legendary || beast ? 13512480 : message.guild.me.displayColor),
