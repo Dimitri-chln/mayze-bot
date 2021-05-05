@@ -80,7 +80,7 @@ const command = {
 				thumbnail: {
 					url: img
 				},
-				color: shiny ? 14531360 : (legendary || beast ? 13512480 : message.guild.me.displayColor),
+				color: shiny ? 14531360 : (legendary || beast ? 13512480 : "#010101"),
 				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (pokemon.names[languageCode] || pokemon.names.en)),
 				footer: {
 					text: "✨ Mayze ✨",
