@@ -2,15 +2,17 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "wish-remove",
-	description: "Retirer le wish d'une série pour Mudae",
-	aliases: ["wr"],
+	description: {
+		fr: "Retirer le wish d'une série pour Mudae",
+		en: "Remove a series from your Mudae wishes"
+	},
+	aliases: ["wishremove", "wr"],
 	args: 1,
-	usage: "<série>",
-	onlyInGuilds: ["689164798264606784"],
+	usage: "<series>",
 	slashOptions: [
 		{
-			name: "série",
-			description: "La série à retirer de tes wish",
+			name: "series",
+			description: "The series to remove",
 			type: 3,
 			required: true
 		}
@@ -24,10 +26,13 @@ const command = {
 		const series = args
 			? args.join(" ").toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase())
 			: options[0].value.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
+
+		if (!message.guild.members.cache.has("432610292342587392")) return language.errors.mudae;
+
 		const res = await message.client.pg.query(`DELETE FROM wishes WHERE user_id='${message.author.id}' AND series='${series}'`).catch(console.error);
-		if (!res) return message.reply("responsesQuelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
+		if (!res) return message.reply(language.erros.database).catch(console.error);
 		if (message.deletable) message.react("✅").catch(console.error);
-		else message.reply("wish retiré").catch(console.error);
+		else message.reply(language.removed).catch(console.error);
 	}
 };
 

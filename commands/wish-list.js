@@ -2,15 +2,17 @@ const { Message } = require("discord.js");
 
 const command = {
 	name: "wishlist",
-	description: "Liste des wish pour Mudae",
-	aliases: ["wl"],
+	description: {
+		fr: "Obtenir la liste de tes wish pour Mudae",
+		en: "Get the liste of your Mudae wishes"
+	},
+	aliases: ["wishlist", "wl"],
 	args: 0,
-	usage: "[utilisateur] [-r]",
-	onlyInGuilds: ["689164798264606784"],
+	usage: "[<user>] [-r]",
 	slashOptions: [
 		{
-			name: "utilisateur",
-			description: "L'utilisateur dont tu veux connaître la wishlist",
+			name: "user",
+			description: "The user to check the wishlist from",
 			type: 6,
 			required: false
 		}
@@ -25,20 +27,22 @@ const command = {
 			? message.mentions.users.first() || message.client.users.cache.find(u =>u.id === args[0] || u.username === args[0] || u.username.includes(args[0])) || message.author
 			: message.client.users.cache.get((options ? options[0] : {}).value) || message.author;
 
-		const { "rows": wishlist } = (await message.client.pg.query(`SELECT * FROM wishes WHERE user_id='${user.id}'`).catch(console.error)) || {};
-		if (!wishlist) return message.channel.send("Quelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
+		if (!message.guild.members.cache.has("432610292342587392")) return language.errors.mudae;
 
-		let desc = wishlist.map((w, i) => `\`${i + 1}.\` ${w.series}`).join("\n") || "*Aucun souhait trouvé*";
-		if (args && args.includes("-r")) desc = wishlist.map((w, i) => `\`${i + 1}.\` ${w.series} -  *${w.regex || w.series.toLowerCase()}*`).join("\n") || "*Aucun souhait trouvé*";
+		const { "rows": wishlist } = (await message.client.pg.query(`SELECT * FROM wishes WHERE user_id='${user.id}'`).catch(console.error)) || {};
+		if (!wishlist) return message.channel.send(language.errors.database).catch(console.error);
+
+		let desc = wishlist.map((w, i) => `\`${i + 1}.\` ${w.series.replace(/U\+0027/g, "'")}`).join("\n");
+		if (args && args.includes("-r")) desc = wishlist.map((w, i) => `\`${i + 1}.\` ${w.series.replace(/U\+0027/g, "'")} -  *${w.regex.replace(/U\+0027/g, "'") || w.series.replace(/U\+0027/g, "'").toLowerCase()}*`).join("\n");
 
 		message.channel.send({
 			embed: {
 				author: {
-					name: `Wishlist de ${user.tag}`,
+					name: language.get(language.title, user.tag),
 					icon_url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
 				},
 				color: message.guild.me.displayColor,
-				description: desc,
+				description: desc || language.no_wish,
 				footer: {
 					text: "✨ Mayze ✨"
 				}

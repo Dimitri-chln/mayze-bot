@@ -101,6 +101,10 @@ module.exports = {
 			no_music: {
 				fr: "Il n'y a aucune musique en cours sur ce serveur",
 				en: "There is no music being played in this server"
+			},
+			mudae: {
+				fr: "Mudae n'est pas dans ce serveur",
+				en: "Mudae isn't on this server"
 			}
 		},
 		"8ball": {
@@ -844,6 +848,28 @@ module.exports = {
 			response: {
 				fr: "Je suis en ligne depuis {1} !",
 				en: "I have been online for {1}!"
+			}
+		},
+		"wish": {
+			added: {
+				fr: "wish ajouté",
+				en: "wish added"
+			}
+		},
+		"wish-list": {
+			no_wish: {
+				fr: "*Aucun souhait trouvé*",
+				en: "*No wish*"
+			},
+			title: {
+				fr: "Wishlist de {1}",
+				en: "{1}'s wishlist"
+			}
+		},
+		"wish-remove": {
+			removed: {
+				fr: "wish retiré",
+				en: "wish removed"
 			}
 		},
 		"werewolf": {

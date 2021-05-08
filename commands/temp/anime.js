@@ -1,9 +1,12 @@
 const command = {
 	name: "anime",
-	description: "Voir et modifier ta liste d'épisodes d'animés",
+	description: {
+		fr: "Voir et modifier ta liste d'épisodes d'animés",
+		en: "See and manage your animes list"
+	},
 	aliases: ["a"],
 	args: 0,
-	usage: "?",
+	usage: "add <name> <",
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 
