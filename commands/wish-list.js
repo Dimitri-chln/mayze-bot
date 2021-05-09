@@ -33,7 +33,7 @@ const command = {
 		if (!wishlist) return message.channel.send(language.errors.database).catch(console.error);
 
 		let desc = wishlist.map((w, i) => `\`${i + 1}.\` ${w.series.replace(/U\+0027/g, "'")}`).join("\n");
-		if (args && args.includes("-r")) desc = wishlist.map((w, i) => `\`${i + 1}.\` ${w.series.replace(/U\+0027/g, "'")} -  *${w.regex.replace(/U\+0027/g, "'") || w.series.replace(/U\+0027/g, "'").toLowerCase()}*`).join("\n");
+		if (args && args.includes("-r")) desc = wishlist.map((w, i) => `\`${i + 1}.\` ${w.series.replace(/U\+0027/g, "'")} -  *${w.regex ? w.regex.replace(/U\+0027/g, "'") : w.series.replace(/U\+0027/g, "'").toLowerCase()}*`).join("\n");
 
 		message.channel.send({
 			embed: {
