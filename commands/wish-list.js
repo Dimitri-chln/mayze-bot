@@ -1,7 +1,7 @@
 const { Message } = require("discord.js");
 
 const command = {
-	name: "wishlist",
+	name: "wish-list",
 	description: {
 		fr: "Obtenir la liste de tes wish pour Mudae",
 		en: "Get the liste of your Mudae wishes"
@@ -39,7 +39,7 @@ const command = {
 			embed: {
 				author: {
 					name: language.get(language.title, user.tag),
-					icon_url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+					icon_url: user.avatarURL()
 				},
 				color: message.guild.me.displayColor,
 				description: desc || language.no_wish,

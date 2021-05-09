@@ -62,7 +62,7 @@ const command = {
 								icon_url: user.avatarURL()
 							},
 							color: message.guild.me.displayColor,
-							description: language.get(language.desc, characterName, message.url, message.channel, characterSeries, kakeraValue),
+							description: language.get(language.desc[lang], characterName, message.url, message.channel, characterSeries, kakeraValue),
 							footer: {
 								text: "✨ Mayze ✨"
 							}
