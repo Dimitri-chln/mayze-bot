@@ -30,7 +30,7 @@ const command = {
 		if (!message.guild.members.cache.has("432610292342587392")) return language.errors.mudae;
 
 		const res = await message.client.pg.query(`DELETE FROM wishes WHERE user_id='${message.author.id}' AND series='${series}'`).catch(console.error);
-		if (!res) return message.reply(language.erros.database).catch(console.error);
+		if (!res) return message.reply(language.errors.database).catch(console.error);
 		if (message.deletable) message.react("✅").catch(console.error);
 		else message.reply(language.removed).catch(console.error);
 	}
