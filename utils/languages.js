@@ -688,7 +688,7 @@ module.exports = {
 				en: "**Shiny alolan:** `{1}`\n"
 			},
 			legendary: {
-				fr: "**Légeandaires :** `{1}`\n",
+				fr: "**Légendaires :** `{1}`\n",
 				en: "**Legendaries:** `{1}`\n"
 			},
 			legendary_shiny: {

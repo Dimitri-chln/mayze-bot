@@ -9,8 +9,8 @@ const command = {
         if (!message.embeds.length) return;
 		const mudaeEmbed = message.embeds[0];
 		if (mudaeEmbed.color !== 16751916) return;
-		const claimedRegex = /roulette/i;
-		if (claimedRegex.test(mudaeEmbed.description)) return;
+		const imRegex = /[♂️♀️]/i;
+		if (imRegex.test(mudaeEmbed.description)) return;
 
         message.react("❤️").catch(console.error);
     }
