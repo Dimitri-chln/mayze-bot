@@ -9,8 +9,8 @@ const command = {
         if (!message.embeds.length) return;
 		const mudaeEmbed = message.embeds[0];
 		if (mudaeEmbed.color !== 16751916) return;
-		const imRegex = /[♂️♀️]/i;
-		if (imRegex.test(mudaeEmbed.description)) return;
+		const imRegex = /\d+ \/ \d+/;
+		if (imRegex.test(mudaeEmbed.footer.text)) return;
 
         message.react("❤️").catch(console.error);
     }
