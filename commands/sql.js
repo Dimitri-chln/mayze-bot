@@ -37,10 +37,11 @@ const command = {
 				} else {
 					const pagination = require("../utils/pagination");
 					const { MessageEmbed } = require("discord.js");
-					const regex = /\[?\s*\{\n(.|\n){0,2000}\},?\n\]?/yg;
-					const matches = resString.match(regex);
+					const regex = /\[?\s*\{\n.{0,2000}\},?\n\]?/ygs;
+					const fallbackRegex = /.{0,2000}/ygs;
+					const matches = resString.match(regex) || resString.match(fallbackRegex);
 					let pages = [];
-					for (i = 0; i < matches.length; i++) {;
+					for (i = 0; i < matches.length; i++) {
 						let embed = new MessageEmbed()
 							.setColor(message.guild.me.displayColor)
 							.setTitle(`Le résultat contient ${res.rowCount} lignes`)
