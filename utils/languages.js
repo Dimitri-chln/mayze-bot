@@ -483,6 +483,20 @@ module.exports = {
 				en: "*No note*"
 			}
 		},
+		"place": {
+			invalid_coordinates: {
+				fr: "les coordonnées sont invalides",
+				en: "the coordinates are invalid"
+			},
+			invalid_color: {
+				fr: "cette couleur n'existe pas. Tu peux voir la liste de toutes les couleurs grâce à la commande `*palette`",
+				en: "this color doesn't exist. See the list of all colors with the `*palette` command"
+			},
+			pixel_placed: {
+				fr: "Pixel placé avec succès",
+				en: "Pixel successfully placed"
+			}
+		},
 		"pokedex": {
 			invalid_pokemon: {
 				fr: "ce pokémon n'existe pas",
@@ -848,6 +862,30 @@ module.exports = {
 			response: {
 				fr: "Je suis en ligne depuis {1} !",
 				en: "I have been online for {1}!"
+			}
+		},
+		"view": {
+			invalid_coordinates: {
+				fr: "les coordonnées sont invalides",
+				en: "the coordinates are invalid"
+			},
+			invalid_zoom: {
+				fr: "le zoom est trop grand",
+				en: "the zoom is too big"
+			},
+			title: {
+				fr: "{1} ({2}x{2}) | {3}s pour charger l'image",
+				en: "{1} ({2}x{2}) | Image took {3}s to load"
+			}
+		},
+		"view-nav": {
+			invalid_coordinates: {
+				fr: "les coordonnées sont invalides",
+				en: "the coordinates are invalid"
+			},
+			nav: {
+				fr: "Navigation dans le canevas {1}",
+				en: "Navigation in the {1} canvas"
 			}
 		},
 		"wish": {

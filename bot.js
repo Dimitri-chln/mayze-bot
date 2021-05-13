@@ -438,6 +438,34 @@ client.catchRates = values;
 
 
 
+// CANVAS
+const Canvas = require("./utils/canvas/Canvas");
+const Palette = require("./utils/canvas/Palette");
+
+const palette = new Palette();
+palette.add("Blank", "blnk", [57, 69, 111]);	// Basically the background color
+palette.add("Brilliance Red", "brll", [244, 123, 103]);
+palette.add("Hypesquad Yellow", "hpsq", [248, 165, 50]);
+palette.add("Bug Hunter Green", "bhnt", [72, 183, 132]);
+palette.add("Balance Cyan", "blnc", [69, 221, 192]);
+palette.add("Greyple", "grpl", [153, 170, 181]);
+palette.add("Not Quite Black", "nqbl", [35, 39, 42]);
+palette.add("Nitro Grey", "ntgr", [183, 194, 206]);
+palette.add("Partner Blue", "ptnr", [65, 135, 237]);
+palette.add("Dark Mode Grey", "dgry", [54, 57, 63]);
+palette.add("Developer Blue", "devl", [62, 112, 221]);
+palette.add("Nitro Blue", "ntbl", [79, 93, 127]);
+palette.add("Blurple", "blpl", [114, 137, 218]);
+palette.add("Dark Blurple", "dbpl", [78, 93, 148]);
+palette.add("Bravery Purple", "brvy", [156, 132, 239]);
+palette.add("Boost Pink", "bstp", [244, 127, 255]);
+palette.add("Full White", "whte", [255, 255, 255]);
+
+const canvas = new Canvas("main", client.pg, palette, 250);
+client.canvas = canvas;
+
+
+
 /**
  * Returns the first member of the guild corresponding to the string
  * @param {Discord.Guild} guild The guild where to find the member
