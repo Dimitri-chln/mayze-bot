@@ -1,10 +1,10 @@
-const { Client } = require("pg");
+const { Client } = require("discord.js");
 const Jimp = require("jimp");
 const Palette = require("./Palette");
 
 class Canvas {
 	#name;
-	#database;
+	#client;
 	/**@type number */
 	#size;
 	#palette;
@@ -12,15 +12,15 @@ class Canvas {
 	/**
 	 * A canvas
 	 * @param {string} name The name of the canvas
-	 * @param {Client} database A Postgres client of the database
+	 * @param {Client} database The Discord client
 	 * @param {Palette} palette The color Palette of the Canvas
 	 * @param {number} size If creating a new Canvas, the size of the Canvas
 	 */
-	constructor(name, database, palette, size) {
+	constructor(name, client, palette, size) {
 		this.#name = name;
-		this.#database = database;
+		this.#client = client;
 		this.#palette = palette;
-		database.query(`SELECT * FROM canvas WHERE name = '${name}'`)
+		client.pg.query(`SELECT * FROM canvas WHERE name = '${name}'`)
 			.then(res => {
 				if (res.rows.length) {
 					this.#size = res.rows[0].size;
@@ -34,7 +34,7 @@ class Canvas {
 						data.push(row);
 					}
 					
-					this.#database.query(`INSERT INTO canvas VALUES ('${this.#name}', ${size}, '${JSON.stringify(data)}')`);
+					client.pg.query(`INSERT INTO canvas VALUES ('${this.#name}', ${size}, '${JSON.stringify(data)}')`);
 				}
 			});
 	}
@@ -47,7 +47,7 @@ class Canvas {
 	 */
 	get data() {
 		return new Promise((resolve, reject) => {
-			this.#database.query(`SELECT * FROM canvas WHERE name = '${this.#name}'`)
+			this.#client.pg.query(`SELECT * FROM canvas WHERE name = '${this.#name}'`)
 				.then(res => {
 					resolve(res.rows[0].data);
 				})
@@ -70,7 +70,7 @@ class Canvas {
 
 		let data = await this.data;
 		data[y][x] = color;
-		await this.#database.query(`UPDATE canvas SET data = '${JSON.stringify(data)}' WHERE name = '${this.#name}'`);
+		await this.#client.pg.query(`UPDATE canvas SET data = '${JSON.stringify(data)}' WHERE name = '${this.#name}'`);
 	}
 
 	/**
