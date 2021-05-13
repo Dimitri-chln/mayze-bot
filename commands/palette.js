@@ -19,6 +19,7 @@ const command = {
 		/**@type Map<string, Color> */
 		const colors = message.client.canvas.palette.all();
 		const emojis = message.client.guilds.cache.get("744291144946417755").emojis.cache;
+		const noTexture = emojis.find(e => e.name === "no_texture");
 
 		message.channel.send({
 			embed: {
@@ -27,7 +28,7 @@ const command = {
 					icon_url: message.client.user.avatarURL()
 				},
 				color: message.guild.me.displayColor,
-				description: Array.from(colors).map(([alias, color]) => `${emojis.find(e => e.name === `pl_${alias}`)} \`${alias}\` - **${color.name}** \`${color.hexadecimal}\``).join("\n"),
+				description: Array.from(colors).map(([alias, color]) => `${emojis.find(e => e.name === `pl_${alias}`) || noTexture} \`${alias}\` - **${color.name}** \`${color.hexadecimal}\``).join("\n"),
 				footer: {
 					text: "✨ Mayze ✨"
 				}

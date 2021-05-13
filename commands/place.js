@@ -55,12 +55,13 @@ const command = {
 		
 		const grid = await message.client.canvas.viewNav(x, y);
 		const emojis = message.client.guilds.cache.get("744291144946417755").emojis.cache;
-		let blank = emojis.find(e => e.name === "blank");
+		const blank = emojis.find(e => e.name === "blank");
+		const noTexture = emojis.find(e => e.name === "no_texture");
 
 		let content = `**${message.client.canvas.name.replace(/^./, a => a.toUpperCase())} - (${x}, ${y})**\n`;
 		for (let i = 0; i < 7; i ++) {
 			content += grid[i].map(c => c
-				? emojis.find(e => e.name === `pl_${c}`) || emojis.find(e => e.name === "no_texture")
+				? emojis.find(e => e.name === `pl_${c}`) || noTexture
 				: blank
 			).join("");
 			if (i === 2) content += " ⬆️";
