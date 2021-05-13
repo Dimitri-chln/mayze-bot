@@ -99,7 +99,8 @@ class Canvas {
 	 * @param {number=} zoom The number of pixels to show on the image
 	 */
 	async view(x, y, zoom) {
-		if (zoom && (zoom < 1 || zoom > this.#size / 2)) throw new Error("ZoomTooBig");
+		if (zoom && zoom !== "default" && (zoom < 1 || zoom > this.#size / 2)) throw new Error("ZoomTooBig");
+		if (zoom === "default") zoom = Math.round(this.#size / 10);
 
 		let data = await this.data;
 

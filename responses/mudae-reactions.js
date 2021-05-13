@@ -10,7 +10,7 @@ const command = {
 		const mudaeEmbed = message.embeds[0];
 		if (mudaeEmbed.color !== 16751916) return;
 		const imRegex = /\d+ \/ \d+/;
-		if (mudaeEmbed.footer.text && imRegex.test(mudaeEmbed.footer.text)) return;
+		if (mudaeEmbed.footer && imRegex.test(mudaeEmbed.footer.text)) return;
 
         message.react("❤️").catch(console.error);
     }

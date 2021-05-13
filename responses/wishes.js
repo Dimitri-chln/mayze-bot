@@ -31,7 +31,7 @@ const command = {
 		const mudaeEmbed = message.embeds[0];
 		if (mudaeEmbed.color !== 16751916) return;
 		const imRegex = /\d+ \/ \d+/;
-		if (imRegex.test(mudaeEmbed.footer.text)) return;
+		if (mudaeEmbed.footer && imRegex.test(mudaeEmbed.footer.text)) return;
 
 		const characterName = mudaeEmbed.author.name;
 		const characterSeries = mudaeEmbed.description.includes("Claims:")

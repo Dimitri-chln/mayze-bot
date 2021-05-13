@@ -39,19 +39,19 @@ const command = {
 
 		const x = args
 			? args[0] ? parseInt(args[0]) : "default"
-			: options.some(o => o.name === "x") ? options.find(o => o.name === "x").value : null;
+			: options.some(o => o.name === "x") ? options.find(o => o.name === "x").value : "default";
 		const y = args
 			? args[1] ? parseInt(args[1]) : "default"
-			: options.some(o => o.name === "y") ? options.find(o => o.name === "y").value : null;
+			: options.some(o => o.name === "y") ? options.find(o => o.name === "y").value : "default";
 		if (
 			(x !== "default" && (isNaN(x) || x < 0 || x >= message.client.canvas.size )) ||
 			(y !== "default" && (isNaN(y) || y < 0 || y >= message.client.canvas.size ))
 		) return message.reply(language.invalid_coordinates).catch(console.error);
 		
 		const zoom = args
-			? parseInt(args[2])
-			: options.some(o => o.name === "zoom") ? options.find(o => o.name === "zoom").value : null;
-		if (zoom && (zoom < 1 || zoom > message.client.canvas.size / 2)) return message.reply(language.invalid_zoom).catch(console.error);
+			? args[2] ? parseInt(args[2]) : "default"
+			: options.some(o => o.name === "zoom") ? options.find(o => o.name === "zoom").value : "default";
+		if (zoom && zoom !== "default" && (zoom < 1 || zoom > message.client.canvas.size / 2)) return message.reply(language.invalid_zoom).catch(console.error);
 
 		const startLoad = Date.now();
 		message.channel.startTyping(1);
