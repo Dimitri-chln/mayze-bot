@@ -43,7 +43,7 @@ class Color {
 	}
 
 	get hexadecimal() {
-		return `#${this.red.toString(16) + this.green.toString(16) + this.blue.toString(16)}`;
+		return `#${this.red.toString(16).replace(/^(.)$/, "0$1") + this.green.toString(16).replace(/^(.)$/, "0$1") + this.blue.toString(16).replace(/^(.)$/, "0$1")}`;
 	}
 
 	get rgb() {
