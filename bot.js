@@ -477,7 +477,7 @@ client.canvas = canvas;
  * @param {Discord.Guild} guild The guild where to find the member
  * @param {string} string The ID, nickname or username of the member
  */
-client.findMember = (guild, string) => guild.members.cache.find(member => member.id === string || member.user.username.toLowerCase() === string.toLowerCase() || member.user.username.toLowerCase().includes(string.toLowerCase()) || member.user.username.toLowerCase().startsWith(string.toLowerCase()) || member.displayName.toLowerCase() === string.toLowerCase() || member.displayName.toLowerCase().includes(string.toLowerCase()) || member.displayName.toLowerCase().startsWith(string.toLowerCase())) || null;
+client.findMember = (guild, string) => guild.members.cache.find(member => member.id === string || member.user.username.toLowerCase() === string.toLowerCase() || member.user.username.toLowerCase().startsWith(string.toLowerCase()) || member.user.username.includes().startsWith(string.toLowerCase()) || member.displayName.toLowerCase() === string.toLowerCase() || member.displayName.toLowerCase().startsWith(string.toLowerCase()) || member.displayName.toLowerCase().includes(string.toLowerCase())) || null;
 
 /**
  * @returns {pg.Client} Un client postgreSQL connecté à la base de données de mayze
