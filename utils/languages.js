@@ -483,6 +483,12 @@ module.exports = {
 				en: "*No note*"
 			}
 		},
+		"palette": {
+			title: {
+				fr: "Palette de couleurs pour le canevas",
+				en: "Color palette for the canvas"
+			}
+		},
 		"place": {
 			invalid_coordinates: {
 				fr: "les coordonnées sont invalides",

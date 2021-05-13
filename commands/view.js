@@ -69,7 +69,7 @@ const command = {
 					url: msg.attachments.first().url
 				},
 				footer: {
-					icon_url: message.author.avatarURL(),
+					icon_url: message.author.avatarURL({ dynamic: true }),
 					text: "✨ Mayze ✨"
 				}
 			}

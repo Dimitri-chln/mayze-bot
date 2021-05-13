@@ -60,7 +60,7 @@ const command = {
 			embed: {
 				author: {
 					name: message.author.tag,
-					icon_url: message.author.avatarURL()
+					icon_url: message.author.avatarURL({ dynamic: true })
 				},
 				color: message.guild.me.displayColor,
 				description: language.get(language.nav, message.client.canvas.name),
@@ -120,7 +120,7 @@ const command = {
 				embed: {
 					author: {
 						name: message.author.tag,
-						icon_url: message.author.avatarURL()
+						icon_url: message.author.avatarURL({ dynamic: true })
 					},
 					color: message.guild.me.displayColor,
 					description: language.get(language.nav, message.client.canvas.name),
