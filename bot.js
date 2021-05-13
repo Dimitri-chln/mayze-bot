@@ -467,7 +467,7 @@ palette.add("Swampy Green", "swmp", [0, 153, 102]);
 palette.add("Facility Manager's Red", "scps", [183, 0, 63]);
 palette.add("Marvel Red", "mrvl", [234, 35, 40]);
 
-const canvas = new Canvas("main", client.pg, palette, 250);
+const canvas = new Canvas("main", client, palette, 250);
 client.canvas = canvas;
 
 

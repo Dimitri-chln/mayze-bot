@@ -12,7 +12,7 @@ class Canvas {
 	/**
 	 * A canvas
 	 * @param {string} name The name of the canvas
-	 * @param {Client} database The Discord client
+	 * @param {Client} client The Discord client
 	 * @param {Palette} palette The color Palette of the Canvas
 	 * @param {number} size If creating a new Canvas, the size of the Canvas
 	 */
