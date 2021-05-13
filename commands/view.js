@@ -38,13 +38,15 @@ const command = {
 		const { MessageAttachment } = require("discord.js");
 
 		const x = args
-			? parseInt(args[0])
+			? args[0] ? parseInt(args[0]) : "default"
 			: options.some(o => o.name === "x") ? options.find(o => o.name === "x").value : null;
 		const y = args
-			? parseInt(args[1])
+			? args[1] ? parseInt(args[1]) : "default"
 			: options.some(o => o.name === "y") ? options.find(o => o.name === "y").value : null;
-		if (isNaN(x) || isNaN(y) || x < 0 || y < 0 || x >= message.client.canvas.size || y >= message.client.canvas.size)
-			return message.reply(language.invalid_coordinates).catch(console.error);
+		if (
+			(x !== "default" && (isNaN(x) || x < 0 || x >= message.client.canvas.size )) ||
+			(y !== "default" && (isNaN(y) || y < 0 || y >= message.client.canvas.size ))
+		) return message.reply(language.invalid_coordinates).catch(console.error);
 		
 		const zoom = args
 			? parseInt(args[2])
