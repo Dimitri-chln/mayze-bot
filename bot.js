@@ -155,6 +155,40 @@ client.on("ready", async () => {
 			}
 		});
 	}, 60000);
+
+	// CANVAS
+	const Canvas = require("./utils/canvas/Canvas");
+	const Palette = require("./utils/canvas/Palette");
+	const { emojis } = client.guilds.cache.get("842836119757914173");
+
+	client.pg.query("SELECT * FROM colors").then(async res => {
+		/**@type Discord.Collection<string, Palette> */
+		const palettes = new Discord.Collection();
+		for (let color of res.rows) {
+			let emote = emojis.cache.find(e => e.name === `pl_${color.alias}`);
+			if (!emote) {
+				let red = Math.floor(color.code / (256 * 256));
+				let green = Math.floor((color.code % (256 * 256)) / 256);
+				let blue = color.code % 256;
+				let hex = red.toString(16).replace(/^(.)$/, "0$1") + green.toString(16).replace(/^(.)$/, "0$1") + blue.toString(16).replace(/^(.)$/, "0$1");
+				emote = await emojis.create(`https://dummyimage.com/100/${hex}?text=+`, `pl_${color.alias}`).catch(console.error);
+			}
+
+			if (palettes.has(color.palette)) {
+				palettes.get(color.palette).add(color.name, color.alias, color.code, emote);
+			} else {
+				let palette = new Palette(color.palette);
+				palette.add(color.name, color.alias, color.code, emote);
+				palettes.set(color.palette, palette);
+			}
+
+			emojis.cache.forEach(e => {
+				if (!res.rows.some(c => e.name === `pl_${c.alias}`)) e.delete().catch(console.error);
+			});
+		}
+		const canvas = new Canvas("main", client, palettes, 250);
+		client.canvas = canvas;
+	});
 });
 
 client.on("message", async message => {
@@ -435,28 +469,6 @@ const values = pokedex.allPokemon()
 	.sort((a, b) => a.national_id - b.national_id)
 	.map((_pkm, i, dex) => dex.slice(0, i).reduce((sum, p) => sum + (legendaries.includes(p.names.en) || beasts.includes(p.names.en) ? 3 : p.catch_rate), 0));
 client.catchRates = values;
-
-
-
-// CANVAS
-const Canvas = require("./utils/canvas/Canvas");
-const Palette = require("./utils/canvas/Palette");
-
-client.pg.query("SELECT * FROM colors").then(res => {
-	/**@type Discord.Collection<string, Palette> */
-	const palettes = new Discord.Collection();
-	for (let color of res.rows) {
-		if (palettes.has(color.palette)) {
-			palettes.get(color.palette).add(color.name, color.alias, color.code);
-		} else {
-			let palette = new Palette(color.palette);
-			palette.add(color.name, color.alias, color.code);
-			palettes.set(color.palette, palette);
-		}
-	}
-	const canvas = new Canvas("main", client, palettes, 250);
-	client.canvas = canvas;
-});
 
 
 

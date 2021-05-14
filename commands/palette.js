@@ -20,8 +20,6 @@ const command = {
 		const { MessageEmbed } = require("discord.js");
 		/**@type Collection<string, Palette> */
 		const palettes = message.client.canvas.palettes;
-		const emojis = message.client.guilds.cache.get("744291144946417755").emojis.cache;
-		const noTexture = emojis.find(e => e.name === "no_texture");
 
 		let pages = [];
 		for (let [ name, palette ] of palettes) {
@@ -29,7 +27,7 @@ const command = {
 				.setAuthor(language.title, message.client.user.avatarURL())
 				.setTitle(language.get(language.palette, name))
 				.setColor(message.guild.me.displayColor)
-				.setDescription(Array.from(palette.all()).map(([alias, color]) => `${emojis.find(e => e.name === `pl_${alias}`) || noTexture} \`${alias}\` - **${color.name.replace(/U\+0027/g, "'")}** \`${color.hexadecimal}\``).join("\n"))
+				.setDescription(Array.from(palette.all()).map(([alias, color]) => `${color.emote} \`${alias}\` - **${color.name.replace(/U\+0027/g, "'")}** \`${color.hexadecimal}\``).join("\n"))
 				.setFooter("✨ Mayze ✨")
 			pages.push(embed);
 		}

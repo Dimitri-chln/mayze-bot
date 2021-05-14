@@ -1,6 +1,9 @@
+const { GuildEmoji } = require("discord.js");
+
 class Color {
 	name;
 	alias;
+	emote;
 	/**@type number */
 	red;
 	/**@type number */
@@ -13,13 +16,15 @@ class Color {
 	 * @param {string} name The full name of the color
 	 * @param {string} alias A 4-letter alias
 	 * @param {string|number|number[]} code The hexadecimal, decimal or RGB color code
+	 * @param {GuildEmoji} emote The emoji representing the Color
 	 */
-	constructor(name, alias, code) {
+	constructor(name, alias, code, emote) {
 		if (typeof name !== "string") throw new Error("InvalidColorName");
 		this.name = name;
-
 		if (typeof alias !== "string" || alias.length !== 4) throw new Error("InvalidColorAlias");
 		this.alias = alias;
+		if (!(emote instanceof GuildEmoji)) throw new Error("InvalidEmote");
+		this.emote = emote;
 
 		if (typeof code === "string" && /#[\dabcdef]{6}/i.test(code)) {
 			this.red = parseInt(code.substr(1, 2), 16);

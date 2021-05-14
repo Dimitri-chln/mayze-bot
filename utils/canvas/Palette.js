@@ -1,4 +1,5 @@
 const Color = require("./Color");
+const { GuildEmoji } = require("discord.js");
 
 class Palette {
 	/**@type Map<string, Color> */
@@ -32,9 +33,10 @@ class Palette {
 	 * @param {string} name The name of the Color
 	 * @param {string} alias A 4-letter alias
 	 * @param {string|number|number[]} code The hexadecimal, decimal or RGB color code
+	 * @param {GuildEmoji} emote The emoji representing the Color
 	 */
-	add(name, alias, code) {
-		let color = new Color(name, alias, code);
+	add(name, alias, code, emote) {
+		let color = new Color(name, alias, code, emote);
 		this.#colors.set(alias, color);
 		return color;
 	}

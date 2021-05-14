@@ -85,7 +85,7 @@ class Canvas {
 		let grid = [];
 		for (let yShift = -3; yShift <= 3; yShift ++) {
 			let row = [];
-			for (let xShift = -3; xShift <= 3; xShift ++) row.push(data[y + yShift] ? data[y + yShift][x + xShift] : undefined);
+			for (let xShift = -3; xShift <= 3; xShift ++) row.push(data[y + yShift] ? this.#palettes.find(palette => palette.has(data[y + yShift][x + xShift])).get(data[y + yShift][x + xShift]).emote : undefined);
 			grid.push(row);
 		}
 
