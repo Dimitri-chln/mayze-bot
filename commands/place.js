@@ -69,7 +69,7 @@ const command = {
 			if (i === 4) content += " ⬇️";
 			content += "\n";
 		}
-		content += `${blank}${blank}⬅️ **${x}** (x) ➡️`;
+		content += `${blank}⬅️ **${x}** (x) ➡️`;
 
 		message.channel.send({
 			content,

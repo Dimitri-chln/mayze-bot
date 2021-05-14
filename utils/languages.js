@@ -788,8 +788,8 @@ module.exports = {
 				en: "→ **{1}** can't give {2} because [3?these:this] pokémon[3?s:] [3?are:is] in their favorites\n"
 			},
 			cancelled: {
-				fr: "Échange annulé[1? par **{1}**:]",
-				en: "Trade cancelled[1? by **{1}**:]"
+				fr: "Échange [1?annulé par **{1}**:expiré]",
+				en: "Trade [1?cancelled by **{1}**:expired]"
 			},
 			trade_complete: {
 				fr: "Échange validé",
