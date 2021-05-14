@@ -1,4 +1,4 @@
-const { Client } = require("discord.js");
+const { Client, Collection } = require("discord.js");
 const Jimp = require("jimp");
 const Palette = require("./Palette");
 
@@ -7,19 +7,19 @@ class Canvas {
 	#client;
 	/**@type number */
 	#size;
-	#palette;
+	#palettes;
 
 	/**
 	 * A canvas
 	 * @param {string} name The name of the canvas
 	 * @param {Client} client The Discord client
-	 * @param {Palette} palette The color Palette of the Canvas
+	 * @param {Collection<string, Palette>} palettes The color Palette of the Canvas
 	 * @param {number} size If creating a new Canvas, the size of the Canvas
 	 */
-	constructor(name, client, palette, size) {
+	constructor(name, client, palettes, size) {
 		this.#name = name;
 		this.#client = client;
-		this.#palette = palette;
+		this.#palettes = palettes;
 		client.pg.query(`SELECT * FROM canvas WHERE name = '${name}'`)
 			.then(res => {
 				if (res.rows.length) {
@@ -41,7 +41,7 @@ class Canvas {
 
 	get name() { return this.#name; }
 	get size() { return this.#size; }
-	get palette() { return this.#palette; }
+	get palettes() { return this.#palettes; }
 	/**
 	 * @returns {Promise<string[][]>}
 	 */
@@ -65,7 +65,7 @@ class Canvas {
 	 * @param {string} color The Color's alias
 	 */
 	async setPixel(x, y, color) {
-		if (!this.#palette.has(color)) throw new Error("InvalidColor");
+		if (this.#palettes.every(palette => !palette.has(color))) throw new Error("InvalidColor");
 		if (x < 0 || x >= this.#size || y < 0 || y >= this.#size) throw new Error("InvalidCoordinates");
 
 		let data = await this.data;
@@ -146,7 +146,7 @@ class Canvas {
 		for (let yPixel = 0; yPixel < data.length; yPixel ++) {
 			for (let xPixel = 0; xPixel < data.length; xPixel ++) {
 				let color = data[yPixel] && data[yPixel][xPixel]
-					? this.#palette.get(data[yPixel][xPixel])
+					? this.#palettes.find(palette => palette.has(data[yPixel][xPixel])).get(data[yPixel][xPixel])
 					: 0x000000;
 				if (color) color = Jimp.rgbaToInt(color.red, color.green, color.blue, 255);
 

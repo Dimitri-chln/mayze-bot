@@ -485,8 +485,12 @@ module.exports = {
 		},
 		"palette": {
 			title: {
-				fr: "Palette de couleurs pour le canevas",
-				en: "Color palette for the canvas"
+				fr: "Palettes de couleurs pour le canevas",
+				en: "Color palettes for the canvas"
+			},
+			palette: {
+				fr: "Palette : **{1}**",
+				en: "Palette: **{1}**"
 			}
 		},
 		"place": {

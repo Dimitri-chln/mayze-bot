@@ -48,9 +48,8 @@ const command = {
 			? args[2]
 			: options[2].value;
 
-		const color = message.client.canvas.palette.get(colorName);
-		if (!color) return message.reply(language.invalid_color).catch(console.error);
-
+		if (message.client.canvas.palettes.every(palette => !palette.has(colorName))) return message.reply(language.invalid_color).catch(console.error);
+		
 		await message.client.canvas.setPixel(x, y, colorName);
 		
 		const grid = await message.client.canvas.viewNav(x, y);

@@ -442,33 +442,21 @@ client.catchRates = values;
 const Canvas = require("./utils/canvas/Canvas");
 const Palette = require("./utils/canvas/Palette");
 
-const palette = new Palette();
-palette.add("Blank", "blnk", [57, 69, 111]);	// Basically the background color
-palette.add("Brilliance Red", "brll", [244, 123, 103]);
-palette.add("Hypesquad Yellow", "hpsq", [248, 165, 50]);
-palette.add("Bug Hunter Green", "bhnt", [72, 183, 132]);
-palette.add("Balance Cyan", "blnc", [69, 221, 192]);
-palette.add("Greyple", "grpl", [153, 170, 181]);
-palette.add("Not Quite Black", "nqbl", [35, 39, 42]);
-palette.add("Nitro Grey", "ntgr", [183, 194, 206]);
-palette.add("Partner Blue", "ptnr", [65, 135, 237]);
-palette.add("Dark Mode Grey", "dgry", [54, 57, 63]);
-palette.add("Developer Blue", "devl", [62, 112, 221]);
-palette.add("Nitro Blue", "ntbl", [79, 93, 127]);
-palette.add("Blurple", "blpl", [114, 137, 218]);
-palette.add("Dark Blurple", "dbpl", [78, 93, 148]);
-palette.add("Bravery Purple", "brvy", [156, 132, 239]);
-palette.add("Boost Pink", "bstp", [244, 127, 255]);
-palette.add("Full White", "whte", [255, 255, 255]);
-
-palette.add("Blob Yellow", "blob", [252, 194, 27]);
-palette.add("Pine Tree Green", "farm", [20, 51, 6]);
-palette.add("Swampy Green", "swmp", [0, 153, 102]);
-palette.add("Facility Manager's Red", "scps", [183, 0, 63]);
-palette.add("Marvel Red", "mrvl", [234, 35, 40]);
-
-const canvas = new Canvas("main", client, palette, 250);
-client.canvas = canvas;
+client.pg.query("SELECT * FROM colors").then(res => {
+	/**@type Discord.Collection<string, Palette> */
+	const palettes = new Discord.Collection();
+	for (let color of res.rows) {
+		if (palettes.has(color.palette)) {
+			palettes.get(color.palette).add(color.name, color.alias, color.code);
+		} else {
+			let palette = new Palette(color.palette);
+			palette.add(color.name, color.alias, color.code);
+			palettes.set(color.palette, palette);
+		}
+	}
+	const canvas = new Canvas("main", client, palettes, 250);
+	client.canvas = canvas;
+});
 
 
 

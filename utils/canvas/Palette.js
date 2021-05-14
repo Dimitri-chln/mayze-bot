@@ -3,16 +3,21 @@ const Color = require("./Color");
 class Palette {
 	/**@type Map<string, Color> */
 	#colors;
+	#name;
 
 	/**
 	 * A Palette of Colors
+	 * @param {string} name The name of the Palette
 	 * @param {Color[]=} colors A list of Colors
 	 */
-	constructor(colors) {
+	constructor(name, colors) {
+		this.#name = name;
 		this.#colors = colors
 			? new Map(colors.map(c => [ c.alias, c ]))
 			: new Map();
 	}
+
+	get name() { return this.#name; }
 
 	/**
 	 * Get a Color from the Palette
