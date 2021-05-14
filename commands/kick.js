@@ -46,7 +46,7 @@ const command = {
         if (member.premiumSince) return message.reply("ce membre boost le serveur").catch(console.error);
 
         member.kick(`Expulsé par ${message.author.tag}${reason ? `. Raison : ${reason}` : ""}`)
-            .then(m => message.channel.send(`${member.tag} a été éxpulsé`).catch(console.error))
+            .then(m => message.channel.send(`${m.user.tag} a été éxpulsé`).catch(console.error))
             .catch(err => {
                 console.error(err);
                 message.channel.send("Quelque chose s'est mal passé en expulsant ce membre :/").catch(console.error);
