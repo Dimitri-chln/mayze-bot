@@ -143,6 +143,22 @@ const command = {
 			description += language.get(language.beast_shiny, parseInt(beastShiny[0].sum) || 0);
 			total += parseInt(beastShiny[0].sum) || 0;
 
+			const { "rows": alolan } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE shiny = false AND alolan`).catch(console.error)) || {};
+			if (!alolan) return message.channel.send(language.errors.database).catch(err => {
+				message.channel.stopTyping();
+				console.error(err);
+			});
+			description += language.get(language.alolan, parseInt(alolan[0].sum) || 0);
+			total += parseInt(alolan[0].sum) || 0;
+
+			const { "rows": alolanShiny } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE shiny AND alolan`).catch(console.error)) || {};
+			if (!alolanShiny) return message.channel.send(language.errors.database).catch(err => {
+				message.channel.stopTyping();
+				console.error(err);
+			});
+			description += language.get(language.alolan_shiny, parseInt(alolanShiny[0].sum) || 0);
+			total += parseInt(alolanShiny[0].sum) || 0;
+
 			description += language.get(language.total, total);
 
 			message.channel.send({

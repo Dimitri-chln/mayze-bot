@@ -704,7 +704,7 @@ module.exports = {
 				en: "**Alolan:** `{1}`\n"
 			},
 			alolan_shiny: {
-				fr: "**Alolan shinies :** `{1}`\n",
+				fr: "**Alolan shiny :** `{1}`\n",
 				en: "**Shiny alolan:** `{1}`\n"
 			},
 			legendary: {
