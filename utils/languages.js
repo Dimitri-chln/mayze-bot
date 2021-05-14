@@ -651,7 +651,7 @@ module.exports = {
 			},
 			description: {
 				fr: "**ID :** `{1}`\n**Couleur** (dec) **:** `{2}`\n**Couleur** (hex) **:** `#{3}`\n**Position :** `{4}`\n**Membres :** `{5}`\n```\n{6}\n```",
-				en: "**ID:** `{1}`\n**Color** (dec)**:** `{2}`\n**Color** (hex)**:** `{3}`\n**Position:** `{4}`\n**Members:** `{5}`\n```\n{6}\n```"
+				en: "**ID:** `{1}`\n**Color** (dec)**:** `{2}`\n**Color** (hex)**:** `#{3}`\n**Position:** `{4}`\n**Members:** `{5}`\n```\n{6}\n```"
 			}
 		},
 		"since": {
