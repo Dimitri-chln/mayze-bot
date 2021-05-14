@@ -43,10 +43,7 @@ const command = {
 
 		let content = `**${message.client.canvas.name.replace(/^./, a => a.toUpperCase())} - (${x}, ${y})**\n`;
 		for (let i = 0; i < 7; i ++) {
-			content += grid[i].map(c => c
-				? c.emote
-				: blank
-			).join("");
+			content += grid[i].map(c => c ? c.emote : blank).join("");
 			if (i === 2) content += " ⬆️";
 			if (i === 3) content += ` **${y}** (y)`;
 			if (i === 4) content += " ⬇️";
@@ -103,10 +100,7 @@ const command = {
 
 			content = `**${message.client.canvas.name.replace(/^./, a => a.toUpperCase())} - (${x}, ${y})**\n`;
 			for (let i = 0; i < 7; i ++) {
-				content += grid[i].map(c => c
-					? c.emote
-					: blank
-				).join("");
+				content += grid[i].map(c => c ? c.emote : blank).join("");
 				if (i === 2) content += " ⬆️";
 				if (i === 3) content += ` **${y}** (y)`;
 				if (i === 4) content += " ⬇️";
