@@ -480,10 +480,10 @@ client.canvas = canvas;
 client.findMember = (guild, string) => guild.members.cache.find(member =>
 		member.id === string ||
 		member.user.username.toLowerCase() === string.toLowerCase() ||
-		member.displayName.toLowerCase() === string.toLowerCase() ||
 		member.user.username.toLowerCase().startsWith(string.toLowerCase()) ||
-		member.displayName.toLowerCase().startsWith(string.toLowerCase()) ||
 		member.user.username.includes(string.toLowerCase()) ||
+		member.displayName.toLowerCase() === string.toLowerCase() ||
+		member.displayName.toLowerCase().startsWith(string.toLowerCase()) ||
 		member.displayName.toLowerCase().includes(string.toLowerCase())
 	) || null;
 

@@ -188,7 +188,7 @@ module.exports = {
 			},
 			caught_title: {
 				fr: "{1} a attrapé un {2} !",
-				en: "{1} caught a {2}!"
+				en: "{1} caught a[3?n:] {2}!"
 			}
 		},
 		"channel-names": {
