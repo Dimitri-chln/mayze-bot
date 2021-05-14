@@ -34,7 +34,7 @@ const command = {
 		const member = args
             ? message.mentions.members.first() || message.guild.members.cache.get(args[0])
             : message.guild.members.cache.get(options[0].value);
-        if (!member) message.reply("mentionne un membre du serveur").catch(console.error);
+        if (!member) return message.reply("mentionne un membre du serveur").catch(console.error);
         const reason = args
             ? args.slice(1).join(" ") || null
             : options[1] ? options[1].value : null;
