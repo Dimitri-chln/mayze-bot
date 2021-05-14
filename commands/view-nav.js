@@ -39,7 +39,7 @@ const command = {
 			return message.reply(language.invalid_coordinates).catch(console.error);
 
 		let grid = await message.client.canvas.viewNav(x, y);
-		const blank = emojis.find(e => e.name === "blank");
+		const blank = message.client.guilds.cache.get("744291144946417755").emojis.cache.find(e => e.name === "blank");
 
 		let content = `**${message.client.canvas.name.replace(/^./, a => a.toUpperCase())} - (${x}, ${y})**\n`;
 		for (let i = 0; i < 7; i ++) {
