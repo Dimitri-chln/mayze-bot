@@ -68,8 +68,8 @@ const command = {
 				if (!duration) return message.reply(language.invalid_duration).catch(console.error);
 				const timestamp = new Date(Date.now() + duration).toISOString();
 				const content = args
-					? args.slice(1).join(" ").replace(/^./, a => a.toUpperCase())
-					: options[0].options[1].value.replace(/^./, a => a.toUpperCase());
+					? args.slice(1).join(" ").replace(/^./, a => a.toUpperCase()) || "👀"
+					: options[0].options[1].value.replace(/^./, a => a.toUpperCase()) || "👀";
 
 				const res = await message.client.pg.query(`INSERT INTO reminders (user_id, timestamp, content) VALUES ('${message.author.id}', '${timestamp}', '${content.replace(/'/g, "U+0027")}')`).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
