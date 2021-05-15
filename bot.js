@@ -193,7 +193,7 @@ client.on("ready", async () => {
 
 client.on("message", async message => {
 	if (message.partial) await message.fetch().catch(console.error);
-	if (message.channel.type !== "dm" && message.content.toLowerCase().startsWith(client.prefix) && !message.author.bot) {
+	if (message.channel.type !== "dm" && message.content.toLowerCase().startsWith(client.prefix) && !message.author.bot && message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) {
 		const input = message.content.slice(client.prefix.length).trim().split(/ +/g);
 		const commandName = input.shift().toLowerCase();
 		const args = parseArgs(input.join(" "));

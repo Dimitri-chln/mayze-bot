@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { Message, TextChannel } = require("discord.js");
 
 const command = {
 	name: "dm-link",
@@ -17,6 +17,7 @@ const command = {
 	* @param {Object[]} options
 	*/
 	execute: async (message, args, options, language, languageCode) => {
+		/**@type TextChannel */
 		const channel = args
 			? message.mentions.channels.first()
 			: message.client.channels.cache.get(options[0].value);
@@ -70,14 +71,14 @@ const command = {
 							icon_url: message.author.avatarURL({ dynamic: true })
 						},
 						title: language.get(language.end, channel.name),
-						color: message.guild.me.displayColor,
+						color: channel.guild.me.displayColor,
 						footer: {
 							text: "✨ Mayze ✨"
 						}
 					}
 				}).catch(console.error);
 			} else {
-				webhook.send(msg.content, { avatarURL: user.avatarURL(), username: message.guild.member(user).displayName }).catch(console.error);
+				webhook.send(msg.content, { avatarURL: user.avatarURL(), username: channel.guild.member(user).displayName }).catch(console.error);
 			}
 		});
 	}
