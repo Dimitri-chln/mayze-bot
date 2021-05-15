@@ -64,9 +64,7 @@ class EnhancedInteraction {
 			},
 			createMessageCollector: channel.createMessageCollector,
 			awaitMessages: channel.awaitMessages,
-			bulkDelete: channel.bulkDelete,
-			startTyping: channel.startTyping,
-			stopTyping: channel.stopTyping
+			bulkDelete: channel.bulkDelete
 		};
 	}
 

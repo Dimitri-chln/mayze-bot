@@ -54,9 +54,9 @@ const command = {
 		if (zoom && zoom !== "default" && (zoom < 1 || zoom > message.client.canvas.size / 2)) return message.reply(language.invalid_zoom).catch(console.error);
 
 		const startLoad = Date.now();
-		message.channel.startTyping(1);
+		if (!message.isInteraction) message.channel.startTyping(1);
 		const image = await message.client.canvas.view(x, y, zoom);
-		message.channel.stopTyping();
+		if (!message.isInteraction) message.channel.stopTyping();
 		const endLoad = Date.now();
 
 		const channel = message.client.channels.cache.get("842099108473995355");
