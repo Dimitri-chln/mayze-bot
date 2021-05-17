@@ -35,27 +35,32 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		let x = args
+		const { rows } = (await message.client.pg.query(`SELECT * FROM boards WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
+		if (!rows) return message.channel.send(language.errors.database).catch(console.error);
+		if (!rows.length) return message.reply(language.not_in_board).catch(console.error);
+		const { board } = rows[0];
+
+		const x = args
 			? parseInt(args[0])
 			: options[0].value;
-		let y = args
+		const y = args
 			? parseInt(args[1])
 			: options[1].value;
-		if (isNaN(x) || isNaN(y) || x < 0 || y < 0 || x >= message.client.canvas.size || y >= message.client.canvas.size)
+		if (isNaN(x) || isNaN(y) || x < 0 || y < 0 || x >= message.client.boards.get(board).size || y >= message.client.boards.get(board).size)
 			return message.reply(language.invalid_coordinates).catch(console.error);
 
 		const colorName = args
 			? args[2]
 			: options[2].value;
 
-		if (message.client.canvas.palettes.every(palette => !palette.has(colorName))) return message.reply(language.invalid_color).catch(console.error);
+		if (message.client.palettes.every(palette => !palette.has(colorName))) return message.reply(language.invalid_color).catch(console.error);
 		
-		await message.client.canvas.setPixel(x, y, colorName);
+		await message.client.boards.get(board).setPixel(x, y, colorName);
 		
-		const grid = await message.client.canvas.viewNav(x, y);
+		const grid = await message.client.boards.get(board).viewNav(x, y);
 		const blank = message.client.guilds.cache.get("744291144946417755").emojis.cache.find(e => e.name === "blank");
 
-		let content = `**${message.client.canvas.name.replace(/^./, a => a.toUpperCase())} - (${x}, ${y})**\n`;
+		let content = `**${message.client.boards.get(board).name.replace(/^./, a => a.toUpperCase())} - (${x}, ${y})**\n`;
 		for (let i = 0; i < 7; i ++) {
 			content += grid[i].map(c => c ? c.emote : blank).join("");
 			if (i === 2) content += " ⬆️";
@@ -63,7 +68,7 @@ const command = {
 			if (i === 4) content += " ⬇️";
 			content += "\n";
 		}
-		content += `${blank}⬅️ **${x}** (x) ➡️`;
+		content += `${blank} ⬅️ **${x}** (x) ➡️`;
 
 		message.channel.send({
 			content,

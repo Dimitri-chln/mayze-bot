@@ -177,6 +177,20 @@ module.exports = {
 				en: "there is no backup corresponding to this table"
 			}
 		},
+		"board": {
+			title: {
+				fr: "Liste des canevas",
+				en: "Canvas list"
+			},
+			invalid_board: {
+				fr: "canevas invalide",
+				en: "invalid canvas"
+			},
+			joined: {
+				fr: "Canevas `{1}` rejoint",
+				en: "Joined canvas `{1}`"
+			}
+		},
 		"catch": {
 			caught: {
 				fr: "Pokémon capturé !",
@@ -309,6 +323,12 @@ module.exports = {
 			no_message: {
 				fr: "il n'y a pas de message à snipe dans ce salon",
 				en: "there is nothing to snipe in this channel"
+			}
+		},
+		"event": {
+			joined: {
+				fr: "tu as rejoint l'event !",
+				en: "you joined the event!"
 			}
 		},
 		"favorite": {
@@ -494,6 +514,10 @@ module.exports = {
 			}
 		},
 		"place": {
+			not_in_board: {
+				fr: "tu n'es dans aucun canevas. Rejoins-en un avec la commande `*board join`",
+				en: "you aren't in any canvas. Join one with `*board join`"	
+			},
 			invalid_coordinates: {
 				fr: "les coordonnées sont invalides",
 				en: "the coordinates are invalid"
@@ -875,6 +899,10 @@ module.exports = {
 			}
 		},
 		"view": {
+			not_in_board: {
+				fr: "tu n'es dans aucun canevas. Rejoins-en un avec la commande `*board join`",
+				en: "you aren't in any canvas. Join one with `*board join`"	
+			},
 			invalid_coordinates: {
 				fr: "les coordonnées sont invalides",
 				en: "the coordinates are invalid"
@@ -889,6 +917,10 @@ module.exports = {
 			}
 		},
 		"view-nav": {
+			not_in_board: {
+				fr: "tu n'es dans aucun canevas. Rejoins-en un avec la commande `*board join`",
+				en: "you aren't in any canvas. Join one with `*board join`"	
+			},
 			invalid_coordinates: {
 				fr: "les coordonnées sont invalides",
 				en: "the coordinates are invalid"

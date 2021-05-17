@@ -92,6 +92,49 @@ client.on("ready", async () => {
 	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.PREFIX : config.PREFIX_BETA ) : config.PREFIX;
 	client.prefix = prefix;
 
+	// CANVAS
+	const Canvas = require("./utils/canvas/Canvas");
+	const Palette = require("./utils/canvas/Palette");
+	const { emojis } = client.guilds.cache.get("842836119757914173");
+
+	client.pg.query("SELECT * FROM colors").then(async res => {
+		/**@type Discord.Collection<string, Palette> */
+		const palettes = new Discord.Collection();
+
+		for (let color of res.rows) {
+			let emote = emojis.cache.find(e => e.name === `pl_${color.alias}`);
+			if (!emote) {
+				let red = Math.floor(color.code / (256 * 256));
+				let green = Math.floor((color.code % (256 * 256)) / 256);
+				let blue = color.code % 256;
+				let hex = red.toString(16).replace(/^(.)$/, "0$1") + green.toString(16).replace(/^(.)$/, "0$1") + blue.toString(16).replace(/^(.)$/, "0$1");
+				emote = await emojis.create(`https://dummyimage.com/100/${hex}?text=+`, `pl_${color.alias}`).catch(console.error);
+			}
+
+			if (palettes.has(color.palette)) {
+				palettes.get(color.palette).add(color.name, color.alias, color.code, emote);
+			} else {
+				let palette = new Palette(color.palette);
+				palette.add(color.name, color.alias, color.code, emote);
+				palettes.set(color.palette, palette);
+			}
+		}
+
+		emojis.cache.forEach(e => {
+			if (!res.rows.some(c => e.name === `pl_${c.alias}`)) e.delete().catch(console.error);
+		});
+
+		client.palettes = palettes;
+		client.boards = new Discord.Collection();
+
+		client.pg.query("SELECT * FROM canvas").then(res => {
+			for (let board of res.rows) {
+				const canvas = new Canvas(board.name, client, palettes);
+				client.boards.set(board.name, canvas);
+			}
+		});
+	});
+
 	if (client.beta) return;
 
 	// SLASH COMMANDS
@@ -155,40 +198,6 @@ client.on("ready", async () => {
 			}
 		});
 	}, 60000);
-
-	// CANVAS
-	const Canvas = require("./utils/canvas/Canvas");
-	const Palette = require("./utils/canvas/Palette");
-	const { emojis } = client.guilds.cache.get("842836119757914173");
-
-	client.pg.query("SELECT * FROM colors").then(async res => {
-		/**@type Discord.Collection<string, Palette> */
-		const palettes = new Discord.Collection();
-		for (let color of res.rows) {
-			let emote = emojis.cache.find(e => e.name === `pl_${color.alias}`);
-			if (!emote) {
-				let red = Math.floor(color.code / (256 * 256));
-				let green = Math.floor((color.code % (256 * 256)) / 256);
-				let blue = color.code % 256;
-				let hex = red.toString(16).replace(/^(.)$/, "0$1") + green.toString(16).replace(/^(.)$/, "0$1") + blue.toString(16).replace(/^(.)$/, "0$1");
-				emote = await emojis.create(`https://dummyimage.com/100/${hex}?text=+`, `pl_${color.alias}`).catch(console.error);
-			}
-
-			if (palettes.has(color.palette)) {
-				palettes.get(color.palette).add(color.name, color.alias, color.code, emote);
-			} else {
-				let palette = new Palette(color.palette);
-				palette.add(color.name, color.alias, color.code, emote);
-				palettes.set(color.palette, palette);
-			}
-
-			emojis.cache.forEach(e => {
-				if (!res.rows.some(c => e.name === `pl_${c.alias}`)) e.delete().catch(console.error);
-			});
-		}
-		const canvas = new Canvas("main", client, palettes, 250);
-		client.canvas = canvas;
-	});
 });
 
 client.on("message", async message => {

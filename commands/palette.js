@@ -19,7 +19,7 @@ const command = {
 		const pagination = require("../utils/pagination");
 		const { MessageEmbed } = require("discord.js");
 		/**@type Collection<string, Palette> */
-		const palettes = message.client.canvas.palettes;
+		const palettes = message.client.palettes;
 
 		let pages = [];
 		for (let [ name, palette ] of palettes) {
