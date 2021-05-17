@@ -327,8 +327,8 @@ module.exports = {
 		},
 		"event": {
 			joined: {
-				fr: "tu as rejoint l'event !",
-				en: "you joined the event!"
+				fr: "tu as rejoint l'event ! Rejoint ce serveur pour placer des pixels dans un salon secret\nhttps://discord.gg/GfDZkJNrWA",
+				en: "you joined the event! Join the server below to place pixels in a hidden channel\nhttps://discord.gg/GfDZkJNrWA"
 			}
 		},
 		"favorite": {
@@ -511,6 +511,20 @@ module.exports = {
 			palette: {
 				fr: "Palette : **{1}**",
 				en: "Palette: **{1}**"
+			}
+		},
+		"place-chain": {
+			not_in_board: {
+				fr: "tu n'es dans aucun canevas. Rejoins-en un avec la commande `*board join`",
+				en: "you aren't in any canvas. Join one with `*board join`"	
+			},
+			invalid_coordinates: {
+				fr: "les coordonnées sont invalides",
+				en: "the coordinates are invalid"
+			},
+			placing: {
+				fr: "En train de placer {1} `{2}`...",
+				en: "Placing {1} `{2}`..."
 			}
 		},
 		"place": {

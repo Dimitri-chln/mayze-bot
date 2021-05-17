@@ -52,7 +52,6 @@ const command = {
 		const colorName = args
 			? args[2]
 			: options[2].value;
-
 		if (message.client.palettes.every(palette => !palette.has(colorName))) return message.reply(language.invalid_color).catch(console.error);
 		
 		await message.client.boards.get(board).setPixel(x, y, colorName);
