@@ -397,14 +397,21 @@ client.on("guildMemberUpdate", async (oldMember, member) => {
 });
 
 client.on("guildMemberRemove", async member => {
-	if (member.guild.id !== "689164798264606784") return;
-	const roleIDs = member.roles.cache.filter(role => role.id !== member.guild.id).map(role => role.id);
-	const roleString = `'{"${roleIDs.join("\",\"")}"}'`;
-	const { rows } = await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error);
-	if (rows.length) {
-		client.pg.query(`UPDATE member_roles SET roles = ${roleString} WHERE user_id = '${member.id}'`).catch(console.error);
-	} else {
-		client.pg.query(`INSERT INTO member_roles VALUES (${member.id}, ${roleString})`).catch(console.error);
+	if (member.guild.id === "689164798264606784") {
+		const roleIDs = member.roles.cache.filter(role => role.id !== member.guild.id).map(role => role.id);
+		const roleString = `'{"${roleIDs.join("\",\"")}"}'`;
+		const { rows } = await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error);
+		if (rows.length) {
+			client.pg.query(`UPDATE member_roles SET roles = ${roleString} WHERE user_id = '${member.id}'`).catch(console.error);
+		} else {
+			client.pg.query(`INSERT INTO member_roles VALUES (${member.id}, ${roleString})`).catch(console.error);
+		}
+	}
+
+	// EVENT
+	if (member.guild.id === "744291144946417755") {
+		let channel = member.guild.channels.cache.find(c => c.topic === member.id && c.parentID === "843817674948476929");
+		channel.delete().catch(console.error);
 	}
 });
 
