@@ -341,34 +341,35 @@ client.on("messageReactionRemove", async (reaction, user) => {
 });
 
 client.on("guildMemberAdd", async member => {
-	if (member.guild.id !== "689164798264606784") return;
-	let roles = ["735809874205737020", "735810286719598634", "735810462872109156"];
+	if (member.guild.id === "689164798264606784") {
+		let roles = ["735809874205737020", "735810286719598634", "735810462872109156"];
 
-	const { rows } = (await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error)) || {};
-	if (rows && rows.length) roles = roles.concat(rows[0].roles);
-	member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r.id))).catch(console.error);
+		const { rows } = (await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error)) || {};
+		if (rows && rows.length) roles = roles.concat(rows[0].roles);
+		member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r.id))).catch(console.error);
 
-	if (!rows || !rows.length) {
-		member.user.send({
-			embed: {
-				author: {
-					name: member.user.tag,
-					icon_url: client.user.avatarURL()
-				},
-				thumbnail: {
-					url: member.user.avatarURL({ dynamic: true })
-				},
-				title: "Bienvenue sur Mayze !",
-				color: member.guild.me.displayColor,
-				description: "Amuse-toi bien sur le serveur 😉",
-				footer: {
-					text: "✨ Mayze ✨"
+		if (!rows || !rows.length) {
+			member.user.send({
+				embed: {
+					author: {
+						name: member.user.tag,
+						icon_url: client.user.avatarURL()
+					},
+					thumbnail: {
+						url: member.user.avatarURL({ dynamic: true })
+					},
+					title: "Bienvenue sur Mayze !",
+					color: member.guild.me.displayColor,
+					description: "Amuse-toi bien sur le serveur 😉",
+					footer: {
+						text: "✨ Mayze ✨"
+					}
 				}
-			}
-		}).catch(console.error);
-	}
+			}).catch(console.error);
+		}
 
-	checkUnpingable(member);
+		checkUnpingable(member);
+	}
 
 	// EVENT
 	if (member.guild.id === "744291144946417755") {
@@ -377,6 +378,7 @@ client.on("guildMemberAdd", async member => {
 			if (!/^event-\d{18}$/.test(res.rows[0].board)) return;
 			
 			let channel = member.guild.channels.cache.find(c => c.topic === member.id && c.parentID === "843817674948476929");
+			
 			if (!channel) {
 				channel = await member.guild.channels.create(member.user.username, "text").catch(console.error);
 				channel.setParent("843817674948476929").catch(console.error);

@@ -327,7 +327,7 @@ module.exports = {
 		},
 		"event": {
 			joined: {
-				fr: "tu as rejoint l'event ! Rejoint ce serveur pour placer des pixels dans un salon secret\nhttps://discord.gg/GfDZkJNrWA",
+				fr: "tu as rejoint l'event ! Rejoins ce serveur pour placer des pixels dans un salon secret\nhttps://discord.gg/GfDZkJNrWA",
 				en: "you joined the event! Join the server below to place pixels in a hidden channel\nhttps://discord.gg/GfDZkJNrWA"
 			}
 		},
@@ -523,8 +523,8 @@ module.exports = {
 				en: "the coordinates are invalid"
 			},
 			placing: {
-				fr: "En train de placer {1} `{2}`...",
-				en: "Placing {1} `{2}`..."
+				fr: "En train de placer {1} `{2}` ...",
+				en: "Placing {1} `{2}` ..."
 			}
 		},
 		"place": {
