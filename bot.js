@@ -381,7 +381,7 @@ client.on("guildMemberAdd", async member => {
 			
 			if (!channel) {
 				channel = await member.guild.channels.create(member.user.username, "text").catch(console.error);
-				channel.setParent("843817674948476929").catch(console.error);
+				await channel.setParent("843817674948476929").catch(console.error);
 				channel.setTopic(member.id).catch(console.error);
 			} else {
 				channel.setName(member.user.username).catch(console.error);
