@@ -372,7 +372,7 @@ client.on("guildMemberAdd", async member => {
 
 	// EVENT
 	if (member.guild.id === "744291144946417755") {
-		client.pg.query(`SELECT * FROM boards WHERE user_id = '${member.id}'`).then(res => {
+		client.pg.query(`SELECT * FROM boards WHERE user_id = '${member.id}'`).then(async res => {
 			if (!res.rows.length) return;
 			if (!/^event-\d{18}$/.test(res.rows[0].board)) return;
 			
