@@ -228,7 +228,7 @@ client.on("message", async message => {
 			}
 			const f = x => Math.round(Math.sqrt(message.content.length) * config.XP_MULTIPLIER / x);
 			const newXP = f(client.xpMessages[message.author.id]);
-			chatXP(message, newXP);
+			chatXP(message, newXP, "fr");
 			client.xpMessages[message.author.id] ++;
 		}
 	}
