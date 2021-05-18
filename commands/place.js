@@ -60,14 +60,14 @@ const command = {
 		const blank = message.client.guilds.cache.get("744291144946417755").emojis.cache.find(e => e.name === "blank");
 
 		let content = `**${message.client.boards.get(board).name.replace(/^./, a => a.toUpperCase())} - (${x}, ${y})**\n`;
-		for (let i = 0; i < 9; i ++) {
+		for (let i = 0; i < 7; i ++) {
 			content += grid[i].map(c => c ? c.emote : blank).join("");
-			if (i === 3) content += " ⬆️";
-			if (i === 4) content += ` **${y}** (y)`;
-			if (i === 5) content += " ⬇️";
+			if (i === 2) content += " ⬆️";
+			if (i === 3) content += ` **${y}** (y)`;
+			if (i === 4) content += " ⬇️";
 			content += "\n";
 		}
-		content += `${blank}${blank} ⬅️ **${x}** (x) ➡️`;
+		content += `${blank} ⬅️ **${x}** (x) ➡️`;
 
 		message.channel.send({
 			content,

@@ -74,7 +74,7 @@ class Canvas {
 	}
 
 	/**
-	 * Get a 9x9 grid of the canvas around the selected pixel
+	 * Get a 7x7 grid of the canvas around the selected pixel
 	 * @param {number} x The x coordinate of the pixel
 	 * @param {number} y The y coordinate of the pixel
 	 */
@@ -83,9 +83,9 @@ class Canvas {
 
 		let data = await this.data;
 		let grid = [];
-		for (let yShift = -4; yShift <= 4; yShift ++) {
+		for (let yShift = -3; yShift <= 3; yShift ++) {
 			let row = [];
-			for (let xShift = -4; xShift <= 4; xShift ++) row.push(data[y + yShift] && data[y + yShift][x + xShift] ? this.#palettes.find(palette => palette.has(data[y + yShift][x + xShift])).get(data[y + yShift][x + xShift]) : undefined);
+			for (let xShift = -3; xShift <= 3; xShift ++) row.push(data[y + yShift] && data[y + yShift][x + xShift] ? this.#palettes.find(palette => palette.has(data[y + yShift][x + xShift])).get(data[y + yShift][x + xShift]) : undefined);
 			grid.push(row);
 		}
 
