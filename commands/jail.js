@@ -38,7 +38,7 @@ const command = {
 
 		const jailedRole = message.guild.roles.cache.get("695943648235487263");
 
-		if (!member.roles.cache.has(jailedRole)) {
+		if (!member.roles.cache.has(jailedRole.id)) {
 			const unJailedRoles = member.roles.cache.filter(role => message.guild.roles.cache.some(r => r.name === role.name + " (Jailed)"));
 			const jailedRoles = message.guild.roles.cache.filter(role => member.roles.cache.some(r => role.name === r.name + " (Jailed)"));
 			jailedRoles.set(jailedRole.id, jailedRole);
