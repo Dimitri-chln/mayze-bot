@@ -383,11 +383,10 @@ client.on("guildMemberAdd", async member => {
 				channel = await member.guild.channels.create(member.user.username, "text").catch(console.error);
 				await channel.setParent("843817674948476929").catch(console.error);
 				channel.setTopic(member.id).catch(console.error);
+				channel.createOverwrite(member, { "VIEW_CHANNEL": true }).catch(console.error);
 			} else {
 				channel.setName(member.user.username).catch(console.error);
 			}
-
-			channel.createOverwrite(member, { "VIEW_CHANNEL": true }).catch(console.error);
 		}).catch(console.error);
 	}
 });
