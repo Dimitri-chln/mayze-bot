@@ -36,14 +36,14 @@ const command = {
 		if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== OWNER_ID) 
 			return message.reply("tu ne peux pas mettre cette personne en prison").catch(console.error);
 
-		const jailedRole = "695943648235487263";
+		const jailedRole = message.guild.roles.cache.get("695943648235487263");
 
 		if (!member.roles.cache.has(jailedRole)) {
 			const unJailedRoles = member.roles.cache.filter(role => message.guild.roles.cache.some(r => r.name === role.name + " (Jailed)"));
 			const jailedRoles = message.guild.roles.cache.filter(role => member.roles.cache.some(r => role.name === r.name + " (Jailed)"));
+			jailedRoles.set(jailedRole.id, jailedRole);
 
 			await member.roles.remove(unJailedRoles).catch(console.error);
-			await member.roles.add(jailedRole).catch(console.error);
 			await member.roles.add(jailedRoles).catch(console.error);
 
 			if (message.deletable) message.react("🔗").catch(console.error);
@@ -52,9 +52,9 @@ const command = {
 		} else {
 			const jailedRoles = member.roles.cache.filter(role => message.guild.roles.cache.some(r => role.name === r.name + " (Jailed)"));
 			const unJailedRoles = message.guild.roles.cache.filter(role => member.roles.cache.some(r => r.name === role.name + " (Jailed)"));
+			jailedRoles.set(jailedRole.id, jailedRole);
 			
 			await member.roles.add(unJailedRoles).catch(console.error);
-			await member.roles.remove(jailedRole).catch(console.error);
 			await member.roles.remove(jailedRoles).catch(console.error);
 			if (message.deletable) message.react("👋").catch(console.error);
 			return;

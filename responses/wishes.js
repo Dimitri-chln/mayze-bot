@@ -16,7 +16,7 @@ const language = {
 	},
 	desc: {
 		fr: "**[{1}]({2})** a été roll dans {3} !\n→ {4}\n**{5}**<:kakeraMudae:796822222110720106>",
-		en: "**[{1}]({2})** have been rolled in {3} !\n→ {4}\n**{5}**<:kakeraMudae:796822222110720106>"
+		en: "**[{1}]({2})** has been rolled in {3} !\n→ {4}\n**{5}**<:kakeraMudae:796822222110720106>"
 	}
 };
 

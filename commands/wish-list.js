@@ -4,7 +4,7 @@ const command = {
 	name: "wish-list",
 	description: {
 		fr: "Obtenir la liste de tes wish pour Mudae",
-		en: "Get the liste of your Mudae wishes"
+		en: "Get the list of your Mudae wishes"
 	},
 	aliases: ["wishlist", "wl"],
 	args: 0,
