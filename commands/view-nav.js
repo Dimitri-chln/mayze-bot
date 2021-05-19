@@ -29,6 +29,8 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
+		const formatContent = require("../utils/canvas/formatContent");
+
 		const { rows } = (await message.client.pg.query(`SELECT * FROM boards WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
 		if (!rows) return message.channel.send(language.errors.database).catch(console.error);
 		if (!rows.length) return message.reply(language.not_in_board).catch(console.error);
@@ -46,18 +48,8 @@ const command = {
 		let grid = await message.client.boards.get(board).viewNav(x, y);
 		const blank = message.client.guilds.cache.get("744291144946417755").emojis.cache.find(e => e.name === "blank");
 
-		let content = `**${message.client.boards.get(board).name.replace(/^./, a => a.toUpperCase())} - (${x}, ${y})**\n`;
-		for (let i = 0; i < 7; i ++) {
-			content += grid[i].map(c => c ? c.emote : blank).join("");
-			if (i === 2) content += " ⬆️";
-			if (i === 3) content += ` **${y}** (y)`;
-			if (i === 4) content += " ⬇️";
-			content += "\n";
-		}
-		content += `${blank} ⬅️ **${x}** (x) ➡️`;
-
 		const msg = await message.channel.send({
-			content,
+			content: formatContent(message.client.boards.get(board), grid, x, y, blank),
 			embed: {
 				author: {
 					name: message.author.tag,
@@ -103,18 +95,8 @@ const command = {
 
 			grid = await message.client.boards.get(board).viewNav(x, y);
 
-			content = `**${message.client.boards.get(board).name.replace(/^./, a => a.toUpperCase())} - (${x}, ${y})**\n`;
-			for (let i = 0; i < 7; i ++) {
-				content += grid[i].map(c => c ? c.emote : blank).join("");
-				if (i === 2) content += " ⬆️";
-				if (i === 3) content += ` **${y}** (y)`;
-				if (i === 4) content += " ⬇️";
-				content += "\n";
-			}
-			content += `${blank} ⬅️ **${x}** (x) ➡️`;
-
 			await msg.edit({
-				content,
+				content: formatContent(message.client.boards.get(board), grid, x, y, blank),
 				embed: {
 					author: {
 						name: message.author.tag,

@@ -7,7 +7,7 @@ const command = {
 		fr: "Rejoindre un canevas",
 		en: "Join a canvas"
 	},
-	aliases: [""],
+	aliases: [],
 	args: 0,
 	usage: "join <board> | list",
 	slashOptions: [

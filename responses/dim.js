@@ -9,7 +9,7 @@ const command = {
 
 		const regex = /\b(?:dim+(?:itr(?:i|ax))?)+\b/i;
 		
-		if (regex.test(message.content)) {
+		if (message.author.id !== dim.id && regex.test(message.content) && !message.mentions.users.has(dim.id)) {
 			dim.send({
 				embed: {
 					author: {
