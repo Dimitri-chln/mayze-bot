@@ -34,6 +34,10 @@ module.exports = {
 				fr: "Quelque chose s'est mal passé en accédant à la base de données :/",
 				en: "Something went wrong when accessing the database :/"
 			},
+			database_reconnecting: {
+				fr: "reconnexion à la base de données. Réessaye dans quelques secondes",
+				en: "reconnecting to the database. Try again in a few seconds"
+			},
 			api: {
 				fr: "Quelque chose s'est mal passé en accédant à l'API {1} :/",
 				en: "Something went wrong when accessing the {1} API :/"

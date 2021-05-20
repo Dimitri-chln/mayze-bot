@@ -213,6 +213,7 @@ client.on("message", async message => {
 
 	const mayze = client.users.cache.get("703161067982946334");
 	if (client.beta && mayze.presence.status !== "offline") return;
+	if (client.isDatabaseReconnecting) return;
 
 	const chatXP = require("./utils/chatXP");
 	if (message.channel.type !== "dm" && !message.author.bot && !message.channel.name.includes("spam")) {
@@ -262,6 +263,8 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
  * @param {object[]} options 
  */
 async function processCommand(command, message, args, options) {
+	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting.en).catch(console.error);
+
 	let language = "en";
 	const res = await message.client.pg.query(`SELECT * FROM languages WHERE guild_id = '${message.guild.id}'`).catch(console.error);
 	if (res && res.rows.length) language = res.rows[0].language_code;
@@ -531,6 +534,8 @@ function newPgClient() {
 		connectionString: process.env.DATABASE_URL,
 		ssl: true
 	};
+
+	client.isDatabaseReconnecting = true;
 	const pgClient = new pg.Client(connectionString);
 
 	pgClient.on("error", err => {
@@ -539,13 +544,17 @@ function newPgClient() {
 		newPgClient();
 	});
 
+	client.isDatabaseReconnecting = false;
+
 	return pgClient;
 }
 
 function reconnectPgClient() {
+	client.isDatabaseReconnecting = true;
 	client.pg.end().catch(console.error);
 	client.pg = newPgClient();
 	client.pg.connect().then(() => console.log("Connected to the database")).catch(console.error);
+	client.isDatabaseReconnecting = false;
 }
 
 function pickLanguage(data = {}, language = "en") {
