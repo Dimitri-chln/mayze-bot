@@ -58,9 +58,13 @@ const command = {
 					}).catch(console.error);
 					break;
 				case "⛓️":
-					message.channel.send(`*jail ${message.author}`).then(m => {
-						message.client.commands.get("jail").execute(m, [ message.author.toString() ]);
-					}).catch(console.error);
+					if (message.channel.id === "695934227140837386") {
+						message.reply(language.jail_in_jail).catch(console.error);
+					} else {
+						message.channel.send(`*jail ${message.author}`).then(m => {
+							message.client.commands.get("jail").execute(m, [ message.author.toString() ]);
+						}).catch(console.error);
+					}
 					break;
 				case "🔇":
 					let muteDuration = Math.ceil(Math.random() * 10);

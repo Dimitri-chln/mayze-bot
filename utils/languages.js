@@ -735,6 +735,10 @@ module.exports = {
 				fr: "a perdu au casino",
 				en: "lost a slots game"
 			},
+			jail_in_jail: {
+				fr: "dommage <:sepince:750285894853984308>",
+				en: "nope <:sepince:750285894853984308>"
+			},
 			massping: {
 				fr: "mentionne une personne à spam ping",
 				en: "mention a user to spam ping"
