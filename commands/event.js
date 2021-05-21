@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "",
+	onlyInGuilds: ["689164798264606784", "744291144946417755"],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
@@ -44,6 +45,11 @@ const command = {
 			} else {
 				channel.setName(message.author.username).catch(console.error);
 			}
+		}
+
+		const guild = message.client.guilds.cache.get("689164798264606784");
+		if (guild.members.cache.has(message.author.id)) {
+			guild.members.cache.get(message.author.id).roles.add("845217535992791061").catch(console.error);
 		}
 		
 		message.reply(language.joined).catch(console.error);
