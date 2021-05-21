@@ -23,6 +23,7 @@ const command = {
 	*/
 	execute: async (message, args, options, language, languageCode) => {
 		const { OWNER_ID } = require("../config.json");
+
 		const member = args
 			? message.mentions.members.first() || message.guild.members.cache.get(args[0])
 			: message.guild.members.cache.get(options[0].value);
@@ -35,9 +36,9 @@ const command = {
 		try {
 			const jailedRoles = member.roles.cache.filter(role => message.guild.roles.cache.some(r => r.permissions.has("ADMINISTRATOR") && role.name === r.name + " (Jailed)"));
 			const unJailedRoles = message.guild.roles.cache.filter(role => role.permissions.has("ADMINISTRATOR") && member.roles.cache.some(r => r.name === role.name + " (Jailed)"));
-			
+			jailedRoles.set(mutedRole.id, mutedRole);
+
 			await member.roles.add(unJailedRoles);
-			await member.roles.remove(mutedRole);
 			await member.roles.remove(jailedRoles);
 
 			message.channel.send(`${member.user} a été unmute`).catch(console.error);
