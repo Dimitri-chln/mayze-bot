@@ -36,11 +36,18 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const { MessageAttachment } = require("discord.js");
+		const { OWNER_ID } = require("../config.json");
 
 		const { rows } = (await message.client.pg.query(`SELECT * FROM boards WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
 		if (!rows) return message.channel.send(language.errors.database).catch(console.error);
 		if (!rows.length) return message.reply(language.not_in_board).catch(console.error);
-		const { board } = rows[0];
+		let { board } = rows[0];
+
+		if (message.author.id === OWNER_ID && args && args.includes("-board")) {
+			let boardName = args[args.indexOf("-board") + 1];
+			if (message.client.boards.some(b => b.name === boardName))
+				board = boardName;
+		}
 
 		const x = args
 			? args[0] ? parseInt(args[0]) : "default"
