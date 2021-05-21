@@ -52,6 +52,7 @@ const command = {
 
 			switch (result[0]) {
 				case "🥊":
+					message.author.send(language.kick).catch(console.error);
 					message.channel.send(`*kick ${message.author} ${language.kick_reason}`).then(m => {
 						message.client.commands.get("kick").execute(m, [ message.author.toString(), language.kick_reason ]);
 					}).catch(console.error);

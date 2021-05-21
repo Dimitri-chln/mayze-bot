@@ -727,6 +727,10 @@ module.exports = {
 				fr: "Partie de casino",
 				en: "Slots game"
 			},
+			kick: {
+				fr: "Tu as été kick pour avoir perdu au casino",
+				en: "You have been kicked for losing a slots game"
+			},
 			kick_reason: {
 				fr: "a perdu au casino",
 				en: "lost a slots game"
