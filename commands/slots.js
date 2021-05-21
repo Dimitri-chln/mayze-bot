@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "",
+	cooldown: 10,
 	onlyInGuilds: ["689164798264606784"],
 	/**
 	* @param {Message} message 
