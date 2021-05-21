@@ -722,6 +722,24 @@ module.exports = {
 				en: "{1} have passed since {2}"
 			}
 		},
+		"slots": {
+			title: {
+				fr: "Partie de casino",
+				en: "Slots game"
+			},
+			kick_reason: {
+				fr: "a perdu au casino",
+				en: "lost a slots game"
+			},
+			massping: {
+				fr: "mentionne une personne à spam ping",
+				en: "mention a user to spam ping"
+			},
+			mute: {
+				fr: "mentionne une personne à mute",
+				en: "mention a user to mute"
+			}
+		},
 		"snipe": {
 			no_snipe: {
 				fr: "il n'y a aucun message à snipe dans ce salon",
