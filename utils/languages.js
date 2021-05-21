@@ -738,6 +738,10 @@ module.exports = {
 			mute: {
 				fr: "mentionne une personne à mute",
 				en: "mention a user to mute"
+			},
+			too_late: {
+				fr: "Le temps est écoulé 💤",
+				en: "Time is up 💤"
 			}
 		},
 		"snipe": {
