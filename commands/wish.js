@@ -34,7 +34,7 @@ const command = {
 			: options[0].value.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
 		const regex = args
 			? args.slice(1).join(" ").replace(series).trim().toLowerCase()
-			: options[1] ? option[1].value : null;
+			: options[1] ? options[1].value : null;
 
 		if (!message.guild.members.cache.has("432610292342587392")) return language.errors.mudae;
 
