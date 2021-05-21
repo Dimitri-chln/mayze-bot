@@ -47,6 +47,7 @@ const command = {
 			let boardName = args[args.indexOf("-board") + 1];
 			if (message.client.boards.some(b => b.name === boardName))
 				board = boardName;
+			args.splice(args.indexOf("-board"), 2);
 		}
 
 		const x = args
