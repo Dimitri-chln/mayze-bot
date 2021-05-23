@@ -16,6 +16,8 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
+		return message.channel.send(language.ended).catch(console.error);
+
 		const Canvas = require("../utils/canvas/Canvas");
 
 		const { rows } = (await message.client.pg.query(`SELECT * FROM boards WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};

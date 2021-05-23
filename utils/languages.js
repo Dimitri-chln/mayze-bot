@@ -333,6 +333,10 @@ module.exports = {
 			joined: {
 				fr: "tu as rejoint l'event ! Rejoins ce serveur pour placer des pixels dans un salon secret\nhttps://discord.gg/GfDZkJNrWA",
 				en: "you joined the event! Join the server below to place pixels in a hidden channel\nhttps://discord.gg/GfDZkJNrWA"
+			},
+			ended: {
+				fr: "L'event est terminé !",
+				en: "The event has ended!"
 			}
 		},
 		"favorite": {
