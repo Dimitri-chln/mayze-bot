@@ -523,8 +523,8 @@ module.exports = {
 		},
 		"place-chain": {
 			not_in_board: {
-				fr: "tu n'es dans aucun canevas. Rejoins-en un avec la commande `*board join`",
-				en: "you aren't in any canvas. Join one with `*board join`"	
+				fr: "tu n'es dans aucun canevas. Rejoins-en un avec la commande `*board join <canvas>`",
+				en: "you aren't in any canvas. Join one with `*board join <canvas>`"	
 			},
 			invalid_coordinates: {
 				fr: "les coordonnées sont invalides",
@@ -537,8 +537,8 @@ module.exports = {
 		},
 		"place": {
 			not_in_board: {
-				fr: "tu n'es dans aucun canevas. Rejoins-en un avec la commande `*board join`",
-				en: "you aren't in any canvas. Join one with `*board join`"	
+				fr: "tu n'es dans aucun canevas. Rejoins-en un avec la commande `*board join <canvas>`",
+				en: "you aren't in any canvas. Join one with `*board join <canvas>`"	
 			},
 			invalid_coordinates: {
 				fr: "les coordonnées sont invalides",
@@ -952,8 +952,8 @@ module.exports = {
 		},
 		"view": {
 			not_in_board: {
-				fr: "tu n'es dans aucun canevas. Rejoins-en un avec la commande `*board join`",
-				en: "you aren't in any canvas. Join one with `*board join`"	
+				fr: "tu n'es dans aucun canevas. Rejoins-en un avec la commande `*board join <canvas>`",
+				en: "you aren't in any canvas. Join one with `*board join <canvas>`"	
 			},
 			invalid_coordinates: {
 				fr: "les coordonnées sont invalides",
@@ -970,8 +970,8 @@ module.exports = {
 		},
 		"view-nav": {
 			not_in_board: {
-				fr: "tu n'es dans aucun canevas. Rejoins-en un avec la commande `*board join`",
-				en: "you aren't in any canvas. Join one with `*board join`"	
+				fr: "tu n'es dans aucun canevas. Rejoins-en un avec la commande `*board join <canvas>`",
+				en: "you aren't in any canvas. Join one with `*board join <canvas>`"	
 			},
 			invalid_coordinates: {
 				fr: "les coordonnées sont invalides",
