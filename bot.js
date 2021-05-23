@@ -375,23 +375,23 @@ client.on("guildMemberAdd", async member => {
 	}
 
 	// EVENT
-	if (member.guild.id === "744291144946417755") {
-		client.pg.query(`SELECT * FROM boards WHERE user_id = '${member.id}'`).then(async res => {
-			if (!res.rows.length) return;
-			if (!/^event-\d{18}$/.test(res.rows[0].board)) return;
+	// if (member.guild.id === "744291144946417755") {
+	// 	client.pg.query(`SELECT * FROM boards WHERE user_id = '${member.id}'`).then(async res => {
+	// 		if (!res.rows.length) return;
+	// 		if (!/^event-\d{18}$/.test(res.rows[0].board)) return;
 			
-			let channel = member.guild.channels.cache.find(c => c.topic === member.id && c.parentID === "843817674948476929");
+	// 		let channel = member.guild.channels.cache.find(c => c.topic === member.id && c.parentID === "843817674948476929");
 			
-			if (!channel) {
-				channel = await member.guild.channels.create(member.user.username, "text").catch(console.error);
-				await channel.setParent("843817674948476929").catch(console.error);
-				channel.setTopic(member.id).catch(console.error);
-				channel.createOverwrite(member, { "VIEW_CHANNEL": true }).catch(console.error);
-			} else {
-				channel.setName(member.user.username).catch(console.error);
-			}
-		}).catch(console.error);
-	}
+	// 		if (!channel) {
+	// 			channel = await member.guild.channels.create(member.user.username, "text").catch(console.error);
+	// 			await channel.setParent("843817674948476929").catch(console.error);
+	// 			channel.setTopic(member.id).catch(console.error);
+	// 			channel.createOverwrite(member, { "VIEW_CHANNEL": true }).catch(console.error);
+	// 		} else {
+	// 			channel.setName(member.user.username).catch(console.error);
+	// 		}
+	// 	}).catch(console.error);
+	// }
 });
 
 client.on("guildMemberUpdate", async (oldMember, member) => {
@@ -411,10 +411,10 @@ client.on("guildMemberRemove", async member => {
 	}
 
 	// EVENT
-	if (member.guild.id === "744291144946417755") {
-		let channel = member.guild.channels.cache.find(c => c.topic === member.id && c.parentID === "843817674948476929");
-		channel.delete().catch(console.error);
-	}
+	// if (member.guild.id === "744291144946417755") {
+	// 	let channel = member.guild.channels.cache.find(c => c.topic === member.id && c.parentID === "843817674948476929");
+	// 	channel.delete().catch(console.error);
+	// }
 });
 
 client.on("messageDelete", async message => {
