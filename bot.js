@@ -599,7 +599,7 @@ function ACNHReminders() {
 }
 
 function testReminders() {
-	const users = [ "408671348005797898", "463358584583880704" ];
+	const users = [ "408671348005797898", "463358584583880704", "608623753399762964", "329576537323995138" ];
 	const nubs = [ "408671348005797898" ];
 
 	const wednesday = new Cron.CronJob("0 45 15 * * 3", () => {
