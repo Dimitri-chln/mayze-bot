@@ -33,9 +33,9 @@ const command = {
 			img = `https://img.pokemondb.net/sprites/home/shiny/${pokemon.names.en.toLowerCase().replace(/\u2642/, "-m").replace(/\u2640/, "-f")}.png`;
 		}
 		let randomAlolan = Math.random(), alolan = false;
-		if (randomAlolan < alolanFrequency && pokemon.variations.some(v => v.condition === "Alolan")) {
+		if (randomAlolan < alolanFrequency && pokemon.variations.some(v => v.condition === "Alola")) {
 			alolan = true;
-			pokemon = pokemon.variations.find(v => v.condition === "Alolan");
+			pokemon = pokemon.variations.find(v => v.condition === "Alola");
 			img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}_f2.png`;
 		}
 
