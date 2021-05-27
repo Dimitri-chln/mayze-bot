@@ -15,6 +15,7 @@
 	"une part de pizza",
 	"un sushi",
 	"une portion de frites",
+	"un kebab",
 	{
 		"une glace": [
 			"à la vanille",
@@ -59,7 +60,7 @@
 			"de vin rouge",
 			"de vin blanc",
 			"de vin rosé",
-			"de bierre",
+			"de bière",
 			"de champagne",
 			"de vodka",
 			"de whisky"
@@ -75,7 +76,7 @@
 	"un jeu de société",
 	{
 		"un puzzle": [
-			"de 50 pièces",
+			"de 5 pièces",
 			"de 1500 pièces",
 			"en 3D",
 			"impossible"
@@ -96,7 +97,7 @@
 			"à clapet"
 		]
 	},
-	"un iphone",
+	"un iPhone",
 	"un chargeur",
 	"des écouteurs",
 	"des airpods",

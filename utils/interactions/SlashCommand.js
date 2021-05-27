@@ -1,7 +1,7 @@
-const { Client, Guild, Channel, User, GuildMember, TextChannel, Message, DiscordAPIError } = require("discord.js");
+const { Client, Guild, TextChannel, User, GuildMember, TextChannel, Message, DiscordAPIError } = require("discord.js");
 const Axios = require("axios").default;
 
-class EnhancedInteraction {
+class SlashCommand {
 	/**@type {string} */
 	id;
 	/**@type {string} */
@@ -14,7 +14,7 @@ class EnhancedInteraction {
 	applicationID;
 	/**@type {Guild} */
 	guild;
-	/**@type {Channel} */
+	/**@type {TextChannel} */
 	channel;
 	/**@type {User} */
 	author;
@@ -45,7 +45,7 @@ class EnhancedInteraction {
 			name: channel.name,
 			type: channel.type,
 			topic: channel.topic,
-			send: async (data) => {
+			send: async data => {
 				const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.token}/messages/@original`;
 		
 				if (typeof data === "string") data = { content: data };
@@ -74,7 +74,7 @@ class EnhancedInteraction {
 		await Axios.post(url, { type: 5 })
 			.catch(err => {
 				console.error(err);
-				throw new DiscordAPIError(err.response.request.path, err.response.data, "patch", err.response.status);
+				throw new DiscordAPIError(err.response.request.path, err.response.data, "post", err.response.status);
 			});
 	}
 
@@ -98,4 +98,4 @@ class EnhancedInteraction {
 	}
 }
 
-module.exports = EnhancedInteraction;
+module.exports = SlashCommand;

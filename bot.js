@@ -54,8 +54,17 @@ for (const file of reactionCommandsFiles) {
 	client.reactionCommands.push(reactionCommand);
 }
 
+client.componentCommands = new Discord.Collection();
+const componentCommandsFiles = Fs.readdirSync("./components").filter(file => file.endsWith(".js"));
+for (const file of componentCommandsFiles) {
+	const componentCommand = require(`./components/${file}`);
+	client.componentCommands.set(componentCommand.name, componentCommand);
+}
+
 client.cooldowns = new Discord.Collection();
 client.queues = new Discord.Collection();
+
+
 
 client.on("ready", async () => {
 	console.log("Connected to Discord");
@@ -246,13 +255,32 @@ client.on("message", async message => {
 });
 
 client.ws.on("INTERACTION_CREATE", async interaction => {
-	const command = client.commands.get(interaction.data.name) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.data.name));
-	const options = interaction.data.options;
-	const EnhancedInteraction = require("./utils/EnhancedInteraction");
-	const enhancedInteraction = new EnhancedInteraction(interaction, client);
-	await enhancedInteraction.acknowledge();
+	switch (interaction.type) {
+		case 1:
+			// Ping
+			break;
+		case 2: {
+			// Slash Command
+			const command = client.commands.get(interaction.data.name) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.data.name));
+			const options = interaction.data.options;
+			const SlashCommand = require("./utils/interactions/SlashCommand");
+			const slashCommand = new SlashCommand(interaction, client);
+			slashCommand.acknowledge();
 
-	if (command) await processCommand(command, enhancedInteraction, null, options);
+			if (command) processCommand(command, slashCommand, null, options);
+			break;
+		}
+		case 3: {
+			// Message Component
+			const MessageComponent = require("./utils/interactions/MessageComponent");
+			const messageComponent = new MessageComponent(interaction, client);
+			messageComponent.acknowledge();
+
+			const command = client.componentCommands.get(messageComponent.customID);
+			if (command) command.execute(messageComponent);
+			break;
+		}
+	}
 });
 
 /**
@@ -402,7 +430,9 @@ client.on("guildMemberRemove", async member => {
 	if (member.guild.id === "689164798264606784") {
 		const roleIDs = member.roles.cache.filter(role => role.id !== member.guild.id).map(role => role.id);
 		const roleString = `'{"${roleIDs.join("\",\"")}"}'`;
-		const { rows } = await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error);
+		const { rows } = (await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error)) || {};
+		if (!rows) return;
+
 		if (rows.length) {
 			client.pg.query(`UPDATE member_roles SET roles = ${roleString} WHERE user_id = '${member.id}'`).catch(console.error);
 		} else {

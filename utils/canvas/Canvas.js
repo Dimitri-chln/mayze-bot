@@ -148,7 +148,7 @@ class Canvas {
 				let color = data[yPixel] && data[yPixel][xPixel]
 					? this.#palettes.find(palette => palette.has(data[yPixel][xPixel])).get(data[yPixel][xPixel])
 					: 0x000000;
-				if (color) color = Jimp.rgbaToInt(color.red, color.green, color.blue, 255);
+				if (color) color = Jimp.rgbaToInt(color.red, color.green, color.blue, color.alias === "blnk" ? 128 : 255);
 
 				// Make it <pixelSize> large
 				for (let i = 0; i < pixelSize; i ++) {

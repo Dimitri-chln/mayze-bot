@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { Message, GuildMember } = require("discord.js");
 
 const command = {
 	name: "russian-roulette",
@@ -63,7 +63,7 @@ const command = {
 		switch (subCommand) {
 			case "create":
 				if (message.client.russianRoulette) return message.reply("une partie est déjà en cours!").catch(console.error);
-				message.client.russianRoulette = [ message.author ];
+				message.client.russianRoulette = [ message.member ];
 				message.channel.send({
 					embed: {
 						author: {
@@ -82,7 +82,7 @@ const command = {
 			case "join":
 				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
 				if (message.client.russianRoulette.some(u => u.id === message.author.id)) return message.reply("tu as déjà rejoint cette partie").catch(console.error);
-				message.client.russianRoulette.push(message.author);
+				message.client.russianRoulette.push(message.member);
 				message.channel.send(`<@${message.author.id}> a rejoint la partie de roulette russe`).catch(console.error);
 				break;
 			case "delete":
@@ -95,37 +95,41 @@ const command = {
 				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
 				if (message.client.russianRoulette.length < 2) return message.reply("il faut au minimum 2 joueurs pour lancer la partie").catch(console.error);
 				if (message.client.russianRoulette[0].id !== message.author.id && !message.member.hasPermission("KICK_MEMBERS")) return message.reply("seuls les modérateurs ainsi que la personne qui a créé la partie peuvent lancer la partie").catch(console.error);
+				
 				const shuffle = require("../utils/shuffle");
+				/**@type {GuildMember[]} */
 				const players = shuffle(message.client.russianRoulette);
 				const { MessageEmbed } = require("discord.js");
+
 				const embed = new MessageEmbed()
 					.setAuthor("La partie de roulette russe a commencé!", message.author.avatarURL({ dynamic: true }))
 					.setColor(message.guild.me.displayColor)
 					.setDescription("...")
 					.setFooter("✨ Mayze ✨")
 					.setTimestamp();
-				const msg = await message.channel.send({
-					embed: embed.toJSON()
-				}).catch(console.error);
+
+				const msg = await message.channel.send(embed).catch(console.error);
 				if (!msg) return message.reply("Quelque chose s'est mal passé en lançant la partie :/");
+				
 				await roulette();
 				delete message.client.russianRoulette;
 
 				async function roulette(i = 0) {
 					if (players.length > 1 && i < 5) {
 						setTimeout(async () => {
-							msg.edit(embed.setDescription(`${players.pop().username} ...`)).catch(console.error);
+							msg.edit(embed.setDescription(`${players.pop().user.username} ...`)).catch(console.error);
 							roulette(i + 1);
 						}, 2000);
 					} else {
 						setTimeout(async () => {
 							const deadPlayer = players.pop();
-							msg.edit(embed.setDescription(`🔫 ${deadPlayer.username} est mort !`)).catch(console.error);
+							msg.edit(embed.setDescription(`🔫 ${deadPlayer.user.username} est mort !`)).catch(console.error);
 							if (params.includes("-kick")) deadPlayer.kick("Roulette Russe").catch(console.error);
 							else if (params.includes("-mute")) {
 								const mute = message.client.commands.get("mute");
-								const muteMsg = await message.channel.send(`*mute ${deadPlayer} 5m`).catch(console.error);
-								mute.execute(muteMsg, ["5m"]);
+								message.channel.send(`*mute ${deadPlayer.user} 5m`)
+									.then(m => mute.execute(m, ["5m"]))
+									.catch(console.error);
 							}
 						}, 2000);
 					}
