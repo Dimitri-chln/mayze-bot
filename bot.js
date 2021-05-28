@@ -460,8 +460,9 @@ client.on("messageDelete", async message => {
 			avatar: message.author.avatarURL({ dynamic: true })
 		},
 		content: message.content,
-		attachments: message.attachments.map((attachment, id) => `${message.id}#${id}${Path.extname(attachment.url).toLowerCase()}`) || null
+		attachments: message.attachments.array()
 	};
+
 	setTimeout(() => { delete client.deletedMessages[message.channel.id] }, 600000);
 });
 
@@ -479,6 +480,7 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
 		},
 		content: oldMessage.content
 	};
+
 	setTimeout(() => { delete client.editedMessages[oldMessage.channel.id] }, 600000);
 });
 

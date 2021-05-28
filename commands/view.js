@@ -72,21 +72,21 @@ const command = {
 		if (!message.isInteraction) message.channel.stopTyping();
 		const endLoad = Date.now();
 
-		const channel = message.client.channels.cache.get("842099108473995355");
 		const attachment = new MessageAttachment(image, "canvas.png");
-		channel.send(attachment).then(msg => message.channel.send({
+		message.channel.send({
 			embed: {
 				title: language.get(language.title, message.client.boards.get(board).name.replace(/^./, a => a.toUpperCase()), message.client.boards.get(board).size, (endLoad - startLoad) / 1000),
 				color: message.guild.me.displayColor,
 				image: {
-					url: msg.attachments.first().url
+					url: "attachment://canvas.png"
 				},
 				footer: {
 					icon_url: message.author.avatarURL({ dynamic: true }),
 					text: "✨ Mayze ✨"
-				}
-			}
-		}).catch(console.error)).catch(console.error);
+				},
+			},
+			files: [attachment]
+		}).catch(console.error);
 	}
 };
 
