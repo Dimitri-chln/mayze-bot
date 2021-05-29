@@ -202,7 +202,7 @@ client.on("ready", async () => {
 
 		reminders.forEach(reminder => {
 			const timestamp = new Date(reminder.timestamp).valueOf();
-			if (timestamp < Date.now()) {
+			if (Date.now() > timestamp) {
 				client.users.fetch(reminder.user_id).then(user => user.send(`⏰ | ${reminder.content.replace(/U\+0027/g, "'")}`).catch(console.error)).catch(console.error);
 				client.pg.query(`DELETE FROM reminders WHERE id = ${reminder.id}`).catch(console.error);
 			}
@@ -210,7 +210,7 @@ client.on("ready", async () => {
 
 		blocks.forEach(block => {
 			const timestamp = new Date(block.expires_at).valueOf();
-			if (timestamp < Date.now()) {
+			if (Date.now() > timestamp) {
 				client.pg.query(`DELETE FROM trade_block WHERE id = ${block.id}`).catch(console.error);
 			}
 		})

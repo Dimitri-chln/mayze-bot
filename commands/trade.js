@@ -96,22 +96,22 @@ const command = {
 		switch (subCommand) {
 			case "block":
 				const duration = args
-					? dhms(args[2], true)
-					: dhms(options[0].options[1] ? options[0].options[1].value : null, true);
+					? dhms(args[2])
+					: dhms(options[0].options[1] ? options[0].options[1].value : null);
 
 				const res = (await message.client.pg.query(`SELECT * FROM trade_block WHERE user_id = '${message.author.id}' AND blocked_user_id = '${user.id}'`).catch(console.error));
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 				
 				if (res.rows.length && duration) {
 					message.client.pg.query(`UPDATE trade_block SET expires_at = '${new Date(Date.now() + duration).toISOString()}'`)
-						.then(() => message.channel.send(language.get(language.blocked, user.tag, timeToString(duration, languageCode))).catch(console.error))
+						.then(() => message.channel.send(language.get(language.blocked, user.tag, timeToString(duration / 1000, languageCode))).catch(console.error))
 						.catch(err => {
 							console.error(err);
 							message.channel.send(language.errors.database).catch(console.error);
 						});
 				} else {
 					message.client.pg.query(`INSERT INTO trade_block (user_id, blocked_user_id${duration ? `, expires_at` : ""}) VALUES ('${message.author.id}', '${user.id}'${duration ? `, '${new Date(Date.now() + duration).toISOString()}'` : ""})`)
-						.then(() => message.channel.send(language.get(language.blocked, user.tag, timeToString(duration, languageCode))).catch(console.error))
+						.then(() => message.channel.send(language.get(language.blocked, user.tag, timeToString(duration / 1000, languageCode))).catch(console.error))
 						.catch(err => {
 							console.error(err);
 							message.channel.send(language.errors.database).catch(console.error);
