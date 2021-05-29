@@ -835,6 +835,18 @@ module.exports = {
 				fr: "mentionne un autre utilisateur que toi",
 				en: "mention another user than you"
 			},
+			blocked: {
+				fr: "**{1}** a été bloqué[2? pendant {2}:]",
+				en: "**{1}** has been blocked[2? for {2}:]"
+			},
+			unblocked: {
+				fr: "**{1}** a été débloqué",
+				en: "**{1}** has been unblocked"
+			},
+			not_allowed: {
+				fr: "tu ne peux pas échanger avec **{1}**",
+				en: "you cannot trade with **{1}**"
+			},
 			empty_trade: {
 				fr: "l'échange ne doit pas être vide",
 				en: "the trade must not be empty"

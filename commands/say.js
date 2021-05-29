@@ -27,7 +27,7 @@ const command = {
 			? args.join(" ")
 			: (options ? options[0].value : null);
 		if (!msg) return;
-		message.channel.send(msg).catch(console.error);
+		message.channel.send(msg, { disableMentions: "everyone" }).catch(console.error);
 		if (message.deletable) message.delete().catch(console.error);
 	}
 };

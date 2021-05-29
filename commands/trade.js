@@ -7,27 +7,66 @@ const command = {
 		en: "Trade pokémons with other users"
 	},
 	aliases: [],
-	args: 1,
-	usage: "[<pokémons to offer>] <user> [<pokémons to ask for>]",
+	args: 2,
+	usage: "block <user> [<duration>] | unblock <user> | [<pokémons to offer>] <user> [<pokémons to ask for>]",
 	cooldown: 15,
 	slashOptions: [
 		{
-			name: "user",
-			description: "The user to trade with",
-			type: 6,
-			required: true
+			name: "start",
+			description: "Start a trade with someone",
+			type: 1,
+			options: [
+				{
+					name: "user",
+					description: "The user to trade with",
+					type: 6,
+					required: true
+				},
+				{
+					name: "pokemons-offer",
+					description: "The pokémons to offer",
+					type: 3,
+					required: false
+				},
+				{
+					name: "pokemons-demand",
+					description: "The pokémons to ask for",
+					type: 3,
+					required: false
+				}
+			]
 		},
 		{
-			name: "pokemons-offer",
-			description: "The pokémons to offer",
-			type: 3,
-			required: false
+			name: "block",
+			description: "Block a user from trading with you",
+			type: 1,
+			options: [
+				{
+					name: "user",
+					description: "The user to block",
+					type: 6,
+					required: true
+				},
+				{
+					name: "duration",
+					description: "The duration to block the user for (e.g. 2d12h)",
+					type: 3,
+					required: false
+				}
+			]
 		},
 		{
-			name: "pokemons-demand",
-			description: "The pokémons to ask for",
-			type: 3,
-			required: false
+			name: "unblock",
+			description: "Unblock a user from trading with you",
+			type: 1,
+			options: [
+				{
+					name: "user",
+					description: "The user to unblock",
+					type: 6,
+					required: true
+				}
+			]
 		}
 	],
 	/**
@@ -36,216 +75,269 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
+		const dhms = require("dhms");
+		const timeToString = require("../utils/timeToString");
 		const pokedex = require("oakdex-pokedex");
 		const legendaries = require("../assets/legendaries.json");
 		const beasts = require("../assets/ultra-beasts.json");
 		const { TRADE_LOG_CHANNEL_ID } = require("../config.json");
 		const logChannel = message.client.channels.cache.get(TRADE_LOG_CHANNEL_ID);
 
+		const subCommand = args
+			? ["block", "unblock"].includes(args[0].toLowerCase()) ? args[0].toLowerCase() : "start"
+			: options[0].name;
+		
 		const user = args
 			? message.mentions.users.first()
-			: message.guild.members.cache.get(options[0].value).user;
+			: message.guild.members.cache.get(options[0].options[0].value).user;
 		if (!user) return message.reply(language.invalid_user).catch(console.error);
 		if (user.id === message.author.id) return message.reply(language.same_user).catch(console.error);
-		let offer = args
-			? args.join(" ").split(new RegExp(`<@!?${user.id}>`))[0].trim().split(/,(?: *)?/).filter(s => s)
-			: options.find(o => o.name === "pokemons-offer") ? options.find(o => o.name === "pokemons-offer").value.split(/,(?: *)?/) : [];
-		let demand = args
-			? args.join(" ").split(new RegExp(`<@!?${user.id}>`))[1].trim().split(/,(?: *)?/).filter(s => s)
-			: options.find(o => o.name === "pokemons-demand") ? options.find(o => o.name === "pokemons-demand").value.split(/,(?: *)?/) : [];
-		
-		if (!offer.length && !demand.length) return message.reply(language.empty_trade).catch(console.error);
 
-		let error = "";
+		switch (subCommand) {
+			case "block":
+				const duration = args
+					? dhms(args[2], true)
+					: dhms(options[0].options[1] ? options[0].options[1].value : null, true);
 
-		offer = offer.map(input => {
-			const name = input.replace(/⭐?(?:#\d+)?$/, "");
-			const number = parseInt((input.match(/#(\d+)$/) || [])[1]) || 1;
-			const shiny = /⭐(?:#\d+)?$/.test(input);
-			const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
-
-			if (pokemon) return { data: pokemon, number, shiny, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
-			else error += language.get(language.invalid_pkm, name);
-		}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id) === i);
-
-		demand = demand.map(input => {
-			const name = input.replace(/⭐?(?:#\d+)?$/, "");
-			const number = parseInt((input.match(/#(\d+)$/) || [])[1]) || 1;
-			const shiny = /⭐(?:#\d+)?$/.test(input);
-			const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
-
-			if (pokemon) return { data: pokemon, number, shiny, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
-			else error += language.get(language.invalid_pkm, name);
-		}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id) === i);
-		
-		if (error) return message.channel.send(error);
-
-		const errors = await checkValidPokemons(message.author, offer, user, demand);
-		if (errors) return message.channel.send(errors).catch(console.error);
-
-		const msg = await message.channel.send({
-			content: user.toString(),
-			embed: {
-				author: {
-					name: language.get(language.title, message.author.tag, user.tag),
-					icon_url: message.author.avatarURL({ dynamic: true })
-				},
-				color: message.guild.me.displayColor,
-				fields: [
-					{
-						name: language.get(language.offer, message.author.username),
-						value: `\`\`\`\n${offer.map(pkm => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️ " : ""}${pkm.shiny ? "⭐": ""}`).join("\n") || "Ø"}\n\`\`\``,
-						inline: true
-					},
-					{
-						name: language.get(language.demand, user.username),
-						value: `\`\`\`\n${demand.map(pkm => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️ " : ""}${pkm.shiny ? "⭐": ""}`).join("\n") || "Ø"}\n\`\`\``,
-						inline: true
-					}
-				],
-				footer: {
-					text: "✨ Mayze ✨" + language.footer
+				const res = (await message.client.pg.query(`SELECT * FROM trade_block WHERE user_id = '${message.author.id}' AND blocked_user_id = '${user.id}'`).catch(console.error));
+				if (!res) return message.channel.send(language.errors.database).catch(console.error);
+				
+				if (res.rows.length && duration) {
+					message.client.pg.query(`UPDATE trade_block SET expires_at = '${new Date(Date.now() + duration).toISOString()}'`)
+						.then(() => message.channel.send(language.get(language.blocked, user.tag, timeToString(duration, languageCode))).catch(console.error))
+						.catch(err => {
+							console.error(err);
+							message.channel.send(language.errors.database).catch(console.error);
+						});
+				} else {
+					message.client.pg.query(`INSERT INTO trade_block (user_id, blocked_user_id${duration ? `, expires_at` : ""}) VALUES ('${message.author.id}', '${user.id}'${duration ? `, '${new Date(Date.now() + duration).toISOString()}'` : ""})`)
+						.then(() => message.channel.send(language.get(language.blocked, user.tag, timeToString(duration, languageCode))).catch(console.error))
+						.catch(err => {
+							console.error(err);
+							message.channel.send(language.errors.database).catch(console.error);
+						});
 				}
-			}
-		}).catch(console.error);
-		await msg.react("✅").catch(console.error);
-		await msg.react("❌").catch(console.error);
-
-		const filter = (reaction, rUser) => [message.author.id, user.id].includes(rUser.id) && ["✅", "❌"].includes(reaction.emoji.name);
-		const collector = msg.createReactionCollector(filter, { time: 60000 });
-		let cancel = null;
-		let accepted = [false, false];
-
-		collector.on("collect", async (reaction, rUser) => {
-			if (reaction.emoji.name === "❌") {
-				cancel = rUser.username;
-				collector.stop();
-			} else {
-				let index = rUser.id === message.author.id ? 0 : 1;
-				let field = msg.embeds[0].fields[index];
-				field.name = field.name.replace(/ ✅$/, "") + " ✅";
-				msg.edit(msg.embeds[0].spliceFields(index, 1, field)).catch(console.error);
-				accepted[index] = true;
-
-				if (accepted.every(v => v)) collector.stop();
-			}
-		});
-
-		collector.on("end", async () => {
-			msg.reactions.removeAll().catch(console.error);
-			if (!accepted.every(v => v)) return message.channel.send(language.get(language.cancelled, cancel)).catch(console.error);
+				break;
 			
-			const errorsNew = await checkValidPokemons(message.author, offer, user, demand);
-			if (errorsNew) return message.channel.send(errorsNew).catch(console.error);
+			case "unblock":
+				message.client.pg.query(`DELETE FROM trade_block WHERE user_id = '${message.author.id}' AND blocked_user_id = '${user.id}'`)
+					.then(() => message.channel.send(language.get(language.unblocked, user.tag)).catch(console.error))
+					.catch(err => {
+						console.error(err);
+						message.channel.send(language.errors.database).catch(console.error);
+					});
+				break;
 			
-			// EXCHANGE POKEMONS
-			const { "rows": offerPokemons1 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
-			const { "rows": demandPokemons1 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}'`).catch(console.error)) || {};
+			case "start":
+				const { "rows": blocked } = (await message.client.pg.query(`SELECT * FROM trade_block WHERE user_id = '${user.id}' AND blocked_user_id = '${message.author.id}'`).catch(console.error)) || {};
+				if (!blocked) return message.channel.send(language.errors.database).catch(console.error);
+				if (blocked.length) return message.reply(language.get(language.not_allowed, user.tag)).catch(console.error);
 
-			let offerSuccess = [];
-			for (const pkm of offer) {
-				let s = []
-
-				let p = demandPokemons1.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
-				if (p) message.client.pg.query(`UPDATE pokemons SET caught = ${p.caught + pkm.number} WHERE id = ${p.id}`)
-					.then(_res => s.push(1))
-					.catch(err => {
-						console.error(err);
-						s.push(0);
-					});
-				else message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, caught, shiny, legendary, ultra_beast) VALUES ('${user.id}', ${pkm.data.national_id}, '${pkm.data.names.en}', ${pkm.number}, ${pkm.shiny}, ${pkm.legendary}, ${pkm.ultra_beast})`)
-					.then(_res => s.push(1))
-					.catch(err => {
-						console.error(err);
-						s.push(0);
-					});
+				let offer = args
+					? args.join(" ").split(new RegExp(`<@!?${user.id}>`))[0].trim().split(/,(?: *)?/).filter(s => s)
+					: options[0].options.find(o => o.name === "pokemons-offer") ? options[0].options.find(o => o.name === "pokemons-offer").value.split(/,(?: *)?/) : [];
+				let demand = args
+					? args.join(" ").split(new RegExp(`<@!?${user.id}>`))[1].trim().split(/,(?: *)?/).filter(s => s)
+					: options[0].options.find(o => o.name === "pokemons-demand") ? options[0].options.find(o => o.name === "pokemons-demand").value.split(/,(?: *)?/) : [];
 				
-				let q = offerPokemons1.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
-				if (q.caught === pkm.number) message.client.pg.query(`DELETE FROM pokemons WHERE id = ${q.id}`)
-					.then(_res => s.push(1))
-					.catch(err => {
-						console.error(err);
-						s.push(0);
-					});
-				else message.client.pg.query(`UPDATE pokemons SET caught = ${q.caught - pkm.number} WHERE id = ${q.id}`)
-					.then(_res => s.push(1))
-					.catch(err => {
-						console.error(err);
-						s.push(0);
-					});
+				if (!offer.length && !demand.length) return message.reply(language.empty_trade).catch(console.error);
 
-				offerSuccess.push(s);
-			}
+				let error = "";
 
-			const { "rows": offerPokemons2 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
-			const { "rows": demandPokemons2 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}'`).catch(console.error)) || {};
+				offer = offer.map(input => {
+					const name = input.replace(/⭐?(?:#\d+)?$/, "");
+					const number = parseInt((input.match(/#(\d+)$/) || [])[1]) || 1;
+					const shiny = /⭐(?:#\d+)?$/.test(input);
+					const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
 
-			let demandSuccess = [];
-			for (const pkm of demand) {
-				let s = [];
+					if (pokemon) return { data: pokemon, number, shiny, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
+					else error += language.get(language.invalid_pkm, name);
+				}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id) === i);
 
-				let p = offerPokemons2.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
-				if (p) message.client.pg.query(`UPDATE pokemons SET caught = ${p.caught + pkm.number} WHERE id = '${p.id}'`)
-					.then(_res => s.push(1))
-					.catch(err => {
-						console.error(err);
-						s.push(0);
-					});
-				else message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, caught, shiny, legendary, ultra_beast) VALUES ('${message.author.id}', ${pkm.data.national_id}, '${pkm.data.names.en}', ${pkm.number}, ${pkm.shiny}, ${pkm.legendary}, ${pkm.ultra_beast})`)
-					.then(_res => s.push(1))
-					.catch(err => {
-						console.error(err);
-						s.push(0);
-					});
+				demand = demand.map(input => {
+					const name = input.replace(/⭐?(?:#\d+)?$/, "");
+					const number = parseInt((input.match(/#(\d+)$/) || [])[1]) || 1;
+					const shiny = /⭐(?:#\d+)?$/.test(input);
+					const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
+
+					if (pokemon) return { data: pokemon, number, shiny, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
+					else error += language.get(language.invalid_pkm, name);
+				}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id) === i);
 				
-				let q = demandPokemons2.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
-				if (q.caught === pkm.number) message.client.pg.query(`DELETE FROM pokemons WHERE id = ${q.id}`)
-					.then(_res => s.push(1))
-					.catch(err => {
-						console.error(err);
-						s.push(0);
-					});
-				else message.client.pg.query(`UPDATE pokemons SET caught = ${q.caught - pkm.number} WHERE id = ${q.id}`)
-					.then(_res => s.push(1))
-					.catch(err => {
-						console.error(err);
-						s.push(0);
-					});
-				
-				demandSuccess.push(s);
-			}
+				if (error) return message.channel.send(error);
 
-			// Dummy request to await for all other ones
-			await message.client.pg.query(`SELECT id FROM pokemons where id = 0`).catch(console.error);
-			
-			logChannel.send({
-				embed: {
-					author: {
-						name: `${message.author.tag} / ${user.tag}`,
-						url: msg.url,
-						icon_url: message.guild.iconURL({ dynamic: true })
-					},
-					color: 65793,
-					fields: [
-						{
-							name: "Offer:",
-							value: `\`\`\`\n${offer.map((pkm, i) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️" : ""} - ${offerSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
-							inline: true
+				const errors = await checkValidPokemons(message.author, offer, user, demand);
+				if (errors) return message.channel.send(errors).catch(console.error);
+
+				const msg = await message.channel.send({
+					content: user.toString(),
+					embed: {
+						author: {
+							name: language.get(language.title, message.author.tag, user.tag),
+							icon_url: message.author.avatarURL({ dynamic: true })
 						},
-						{
-							name: "Demand:",
-							value: `\`\`\`\n${demand.map((pkm, j) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️" : ""} - ${demandSuccess[j].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
-							inline: true
+						color: message.guild.me.displayColor,
+						fields: [
+							{
+								name: language.get(language.offer, message.author.username),
+								value: `\`\`\`\n${offer.map(pkm => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️ " : ""}${pkm.shiny ? "⭐": ""}`).join("\n") || "Ø"}\n\`\`\``,
+								inline: true
+							},
+							{
+								name: language.get(language.demand, user.username),
+								value: `\`\`\`\n${demand.map(pkm => `×${pkm.number} ${pkm.data.names[languageCode]} ${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️ " : ""}${pkm.shiny ? "⭐": ""}`).join("\n") || "Ø"}\n\`\`\``,
+								inline: true
+							}
+						],
+						footer: {
+							text: "✨ Mayze ✨" + language.footer
 						}
-					],
-					footer: {
-						text: "✨ Mayze ✨"
 					}
-				}
-			}).catch(console.error);
+				}).catch(console.error);
+				await msg.react("✅").catch(console.error);
+				await msg.react("❌").catch(console.error);
 
-			message.channel.send(language.trade_complete).catch(console.error);
-		});
+				const filter = (reaction, rUser) => [message.author.id, user.id].includes(rUser.id) && ["✅", "❌"].includes(reaction.emoji.name);
+				const collector = msg.createReactionCollector(filter, { time: 60000 });
+				let cancel = null;
+				let accepted = [false, false];
+
+				collector.on("collect", async (reaction, rUser) => {
+					if (reaction.emoji.name === "❌") {
+						cancel = rUser.username;
+						collector.stop();
+					} else {
+						let index = rUser.id === message.author.id ? 0 : 1;
+						let field = msg.embeds[0].fields[index];
+						field.name = field.name.replace(/ ✅$/, "") + " ✅";
+						msg.edit(msg.embeds[0].spliceFields(index, 1, field)).catch(console.error);
+						accepted[index] = true;
+
+						if (accepted.every(v => v)) collector.stop();
+					}
+				});
+
+				collector.on("end", async () => {
+					msg.reactions.removeAll().catch(console.error);
+					if (!accepted.every(v => v)) return message.channel.send(language.get(language.cancelled, cancel)).catch(console.error);
+					
+					const errorsNew = await checkValidPokemons(message.author, offer, user, demand);
+					if (errorsNew) return message.channel.send(errorsNew).catch(console.error);
+					
+					// EXCHANGE POKEMONS
+					const { "rows": offerPokemons1 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
+					const { "rows": demandPokemons1 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}'`).catch(console.error)) || {};
+
+					let offerSuccess = [];
+					for (const pkm of offer) {
+						let s = []
+
+						let p = demandPokemons1.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
+						if (p) message.client.pg.query(`UPDATE pokemons SET caught = ${p.caught + pkm.number} WHERE id = ${p.id}`)
+							.then(_res => s.push(1))
+							.catch(err => {
+								console.error(err);
+								s.push(0);
+							});
+						else message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, caught, shiny, legendary, ultra_beast) VALUES ('${user.id}', ${pkm.data.national_id}, '${pkm.data.names.en}', ${pkm.number}, ${pkm.shiny}, ${pkm.legendary}, ${pkm.ultra_beast})`)
+							.then(_res => s.push(1))
+							.catch(err => {
+								console.error(err);
+								s.push(0);
+							});
+						
+						let q = offerPokemons1.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
+						if (q.caught === pkm.number) message.client.pg.query(`DELETE FROM pokemons WHERE id = ${q.id}`)
+							.then(_res => s.push(1))
+							.catch(err => {
+								console.error(err);
+								s.push(0);
+							});
+						else message.client.pg.query(`UPDATE pokemons SET caught = ${q.caught - pkm.number} WHERE id = ${q.id}`)
+							.then(_res => s.push(1))
+							.catch(err => {
+								console.error(err);
+								s.push(0);
+							});
+
+						offerSuccess.push(s);
+					}
+
+					const { "rows": offerPokemons2 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
+					const { "rows": demandPokemons2 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}'`).catch(console.error)) || {};
+
+					let demandSuccess = [];
+					for (const pkm of demand) {
+						let s = [];
+
+						let p = offerPokemons2.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
+						if (p) message.client.pg.query(`UPDATE pokemons SET caught = ${p.caught + pkm.number} WHERE id = '${p.id}'`)
+							.then(_res => s.push(1))
+							.catch(err => {
+								console.error(err);
+								s.push(0);
+							});
+						else message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, caught, shiny, legendary, ultra_beast) VALUES ('${message.author.id}', ${pkm.data.national_id}, '${pkm.data.names.en}', ${pkm.number}, ${pkm.shiny}, ${pkm.legendary}, ${pkm.ultra_beast})`)
+							.then(_res => s.push(1))
+							.catch(err => {
+								console.error(err);
+								s.push(0);
+							});
+						
+						let q = demandPokemons2.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny);
+						if (q.caught === pkm.number) message.client.pg.query(`DELETE FROM pokemons WHERE id = ${q.id}`)
+							.then(_res => s.push(1))
+							.catch(err => {
+								console.error(err);
+								s.push(0);
+							});
+						else message.client.pg.query(`UPDATE pokemons SET caught = ${q.caught - pkm.number} WHERE id = ${q.id}`)
+							.then(_res => s.push(1))
+							.catch(err => {
+								console.error(err);
+								s.push(0);
+							});
+						
+						demandSuccess.push(s);
+					}
+
+					// Dummy request to await for all other ones
+					await message.client.pg.query(`SELECT id FROM pokemons where id = 0`).catch(console.error);
+					
+					logChannel.send({
+						embed: {
+							author: {
+								name: `${message.author.tag} / ${user.tag}`,
+								url: msg.url,
+								icon_url: message.guild.iconURL({ dynamic: true })
+							},
+							color: 65793,
+							fields: [
+								{
+									name: "Offer:",
+									value: `\`\`\`\n${offer.map((pkm, i) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️" : ""} - ${offerSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+									inline: true
+								},
+								{
+									name: "Demand:",
+									value: `\`\`\`\n${demand.map((pkm, j) => `×${pkm.number} ${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️" : ""} - ${demandSuccess[j].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+									inline: true
+								}
+							],
+							footer: {
+								text: "✨ Mayze ✨"
+							}
+						}
+					}).catch(console.error);
+
+					message.channel.send(language.trade_complete).catch(console.error);
+				});
+				break;
+			
+			default:
+				message.reply(language.errors.invalid_args).catch(console.error);
+		}
+
 
 
 		async function checkValidPokemons(user1, pokemons1, user2, pokemons2) {

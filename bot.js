@@ -194,10 +194,11 @@ client.on("ready", async () => {
 	// ACNHReminders();
 	testReminders();
 
-	// REMINDERS
+	// REMINDERS AND BLOCKS
 	setInterval(async () => {
 		const { "rows": reminders } = (await client.pg.query("SELECT * FROM reminders").catch(console.error)) || {};
-		if (!reminders) return;
+		const { "rows": blocks } = (await client.pg.query("SELECT * FROM trade_block WHERE expires_at").catch(console.error)) || {};
+		if (!reminders || !blocks) return;
 
 		reminders.forEach(reminder => {
 			const timestamp = new Date(reminder.timestamp).valueOf();
@@ -206,7 +207,14 @@ client.on("ready", async () => {
 				client.pg.query(`DELETE FROM reminders WHERE id = ${reminder.id}`).catch(console.error);
 			}
 		});
-	}, 60000);
+
+		blocks.forEach(block => {
+			const timestamp = new Date(block.expires_at).valueOf();
+			if (timestamp < Date.now()) {
+				client.pg.query(`DELETE FROM trade_block WHERE id = ${block.id}`).catch(console.error);
+			}
+		})
+	}, 10000);
 });
 
 client.on("message", async message => {
