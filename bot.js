@@ -197,7 +197,7 @@ client.on("ready", async () => {
 	// REMINDERS AND BLOCKS
 	setInterval(async () => {
 		const { "rows": reminders } = (await client.pg.query("SELECT * FROM reminders").catch(console.error)) || {};
-		const { "rows": blocks } = (await client.pg.query("SELECT * FROM trade_block WHERE expires_at").catch(console.error)) || {};
+		const { "rows": blocks } = (await client.pg.query("SELECT * FROM trade_block WHERE expires_at IS NOT NULL").catch(console.error)) || {};
 		if (!reminders || !blocks) return;
 
 		reminders.forEach(reminder => {
