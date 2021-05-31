@@ -27,7 +27,7 @@ const command = {
 				.setAuthor(language.title, message.client.user.avatarURL())
 				.setTitle(language.get(language.palette, name))
 				.setColor(message.guild.me.displayColor)
-				.setDescription(Array.from(palette.all()).map(([alias, color]) => `${color.emote} \`${alias}\` - **${color.name.replace(/U\+0027/g, "'")}** \`${color.hexadecimal}\``).join("\n"))
+				.setDescription(Array.from(palette.all()).map(([alias, color]) => `${color.emote} \`${alias}\` - **${color.name}** \`${color.hexadecimal}\``).join("\n"))
 				.setFooter("✨ Mayze ✨")
 			pages.push(embed);
 		}

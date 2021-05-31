@@ -24,7 +24,7 @@ const command = {
 
 		switch (subCommand) {
 			case "add":
-				const query = `INSERT INTO to_do (name) VALUES ('${task.replace(/'/g, "U+0027")}')`;
+				const query = `INSERT INTO to_do (name) VALUES ('${task.replace(/'/g, "''")}')`;
 				{
 					const res = await message.client.pg.query(query).catch(console.error);
 					if (!res) return message.reply("responsesQuelque chose s'est mal passé en accédant à la base de données :/").catch(console.error);
@@ -51,7 +51,7 @@ const command = {
 						},
 						color: message.guild.me.displayColor,
 						fields: toDo.map(t => {
-							return { name: `\`${t.id}.\` ${t.name.replace(/U\+0027/g, "'")}`, value: `*${t.created_at.toUTCString()}*`, inline: true }
+							return { name: `\`${t.id}.\` ${t.name}`, value: `*${t.created_at.toUTCString()}*`, inline: true }
 						}),
 						footer: {
 							text: "✨ Mayze ✨"

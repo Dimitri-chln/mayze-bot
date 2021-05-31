@@ -38,8 +38,8 @@ const command = {
 
 		if (!message.guild.members.cache.has("432610292342587392")) return language.errors.mudae;
 
-		let query = `INSERT INTO wishes (user_id, series) VALUES ('${message.author.id}', '${series.replace(/'/g, "U+0027")}')`;
-		if (regex) query = `INSERT INTO wishes (user_id, series, regex) VALUES ('${message.author.id}', '${series.replace(/'/g, "U+0027")}', '${regex.replace(/'/g, "U+0027")}')`;
+		let query = `INSERT INTO wishes (user_id, series) VALUES ('${message.author.id}', '${series.replace(/'/g, "''")}')`;
+		if (regex) query = `INSERT INTO wishes (user_id, series, regex) VALUES ('${message.author.id}', '${series.replace(/'/g, "''")}', '${regex.replace(/'/g, "''")}')`;
 		const res = await message.client.pg.query(query).catch(console.error);
 		if (!res) return message.channel.send(language.errors.database).catch(console.error);
 		if (message.deletable) message.react("✅").catch(console.error);

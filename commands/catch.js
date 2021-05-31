@@ -44,11 +44,11 @@ const command = {
 		const beasts = require("../assets/ultra-beasts.json");
 		const beast = beasts.includes(pokemon.names.en);
 
-		const { rows } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}' AND pokedex_name = '${pokemon.names.en.replace(/'/, "U+0027")}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error)) || {};
+		const { rows } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}' AND pokedex_name = '${pokemon.names.en.replace(/'/g, "''")}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error)) || {};
 		if (rows.length) {
-			message.client.pg.query(`UPDATE pokemons SET caught = ${rows[0].caught + 1} WHERE user_id = '${message.author.id}' AND pokedex_name = '${pokemon.names.en.replace(/'/, "U+0027")}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error);
+			message.client.pg.query(`UPDATE pokemons SET caught = ${rows[0].caught + 1} WHERE user_id = '${message.author.id}' AND pokedex_name = '${pokemon.names.en.replace(/'/g, "''")}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error);
 		} else {
-			message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, shiny, legendary, alolan, ultra_beast) VALUES ('${message.author.id}', ${pokemon.national_id}, '${pokemon.names.en.replace(/'/, "U+0027")}', ${shiny}, ${legendary}, ${alolan}, ${beast})`).catch(console.error);
+			message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, shiny, legendary, alolan, ultra_beast) VALUES ('${message.author.id}', ${pokemon.national_id}, '${pokemon.names.en.replace(/'/g, "''")}', ${shiny}, ${legendary}, ${alolan}, ${beast})`).catch(console.error);
 		}
 
 		const msg = await message.channel.send({

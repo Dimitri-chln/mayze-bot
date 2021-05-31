@@ -1,4 +1,4 @@
-const { Client, Guild, TextChannel, User, GuildMember, TextChannel, Message, DiscordAPIError } = require("discord.js");
+const { Client, Guild, TextChannel, User, GuildMember, Message, DiscordAPIError } = require("discord.js");
 const Axios = require("axios").default;
 
 class SlashCommand {

@@ -32,8 +32,8 @@ const command = {
 		const { "rows": wishlist } = (await message.client.pg.query(`SELECT * FROM wishes WHERE user_id='${user.id}'`).catch(console.error)) || {};
 		if (!wishlist) return message.channel.send(language.errors.database).catch(console.error);
 
-		let desc = wishlist.map((w, i) => `\`${i + 1}.\` ${w.series.replace(/U\+0027/g, "'")}`).join("\n");
-		if (args && args.includes("-r")) desc = wishlist.map((w, i) => `\`${i + 1}.\` ${w.series.replace(/U\+0027/g, "'")} -  *${w.regex ? w.regex.replace(/U\+0027/g, "'") : w.series.replace(/U\+0027/g, "'").toLowerCase()}*`).join("\n");
+		let desc = wishlist.map((w, i) => `\`${i + 1}.\` ${w.series}`).join("\n");
+		if (args && args.includes("-r")) desc = wishlist.map((w, i) => `\`${i + 1}.\` ${w.series} -  *${w.regex ? w.regex : w.series.toLowerCase()}*`).join("\n");
 
 		message.channel.send({
 			embed: {

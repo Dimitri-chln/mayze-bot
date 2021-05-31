@@ -195,6 +195,7 @@ const command = {
 				const nickname = args
 					? args[2]
 					: options[0].options[1].value;
+				if (nickname.length > 30) return message.reply(language.nickname_too_long).catch(console.error);
 				
 				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name.toLowerCase() === pokemonName));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
@@ -202,7 +203,7 @@ const command = {
 				const { "rows": pokemons } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}' AND pokedex_name = '${pokemon.names.en}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error)) || {};
 				if (!pokemons || !pokemons.length) return message.reply(language.pokemon_not_owned).catch(console.error);
 
-				const res = await message.client.pg.query(`UPDATE pokemons SET nickname = ${nickname ? `'${nickname.replace(/'/g, "U+0027")}'` : "NULL"} WHERE id = ${pokemons[0].id}`).catch(console.error);
+				const res = await message.client.pg.query(`UPDATE pokemons SET nickname = ${nickname ? `'${nickname.replace(/'/g, "''")}'` : "NULL"} WHERE id = ${pokemons[0].id}`).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 				if (!message.isInteraction) message.react("✅").catch(console.error);
 				else message.reply(language.nickname_updated).catch(console.error);
@@ -228,7 +229,7 @@ const command = {
 				if (hasParam(params, "shiny")) pokemons = pokemons.filter(p => p.shiny);
 				if (hasParam(params, "alolan")) pokemons = pokemons.filter(p => p.alolan);
 				if (hasParam(params, "id")) pokemons = hasParam(params, "id") ? pokemons.filter(p => p.pokedex_id === hasParam(params, "id")) : pokemons;
-				if (hasParam(params, "name")) pokemons = pokemons.filter(p => new RegExp(hasParam(params, "name"), "i").test(pokedex.findPokemon(p.pokedex_id).names[languageCode].replace(/\u2642/, "m").replace(/\u2640/, "f")) || (p.nickname && new RegExp(hasParam(params, "name"), "i").test(p.nickname ? p.nickname.replace(/U+0027/g, "'") : "")));
+				if (hasParam(params, "name")) pokemons = pokemons.filter(p => new RegExp(hasParam(params, "name"), "i").test(pokedex.findPokemon(p.pokedex_id).names[languageCode].replace(/\u2642/, "m").replace(/\u2640/, "f")) || (p.nickname && new RegExp(hasParam(params, "name"), "i").test(p.nickname ? p.nickname : "")));
 
 				const pkmPerPage = 15;
 				let pages = [];

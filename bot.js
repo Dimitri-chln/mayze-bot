@@ -169,8 +169,8 @@ client.on("ready", async () => {
 
 			client.slashCommands[guildID].set(slashCommand.name, slashCommand);
 
-			if (slashData.some(slash => slash.name === command.name)) client.pg.query(`UPDATE slash_commands SET id = '${slashCommand.id}', data = '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}' WHERE name = '${slashCommand.name}' AND guild_id = '${guildID}'`).catch(console.error);
-			else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.id}', '${guildID}', '${slashCommand.name}', '${JSON.stringify(slashCommand).replace(/'/g, "U+0027")}')`).catch(console.error);
+			if (slashData.some(slash => slash.name === command.name)) client.pg.query(`UPDATE slash_commands SET id = '${slashCommand.id}', data = '${JSON.stringify(slashCommand).replace(/'/g, "''")}' WHERE name = '${slashCommand.name}' AND guild_id = '${guildID}'`).catch(console.error);
+			else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.id}', '${guildID}', '${slashCommand.name}', '${JSON.stringify(slashCommand).replace(/'/g, "''")}')`).catch(console.error);
 		});
 	}));
 	console.log("Slash commands created");
@@ -203,7 +203,7 @@ client.on("ready", async () => {
 		reminders.forEach(reminder => {
 			const timestamp = new Date(reminder.timestamp).valueOf();
 			if (Date.now() > timestamp) {
-				client.users.fetch(reminder.user_id).then(user => user.send(`⏰ | ${reminder.content.replace(/U\+0027/g, "'")}`).catch(console.error)).catch(console.error);
+				client.users.fetch(reminder.user_id).then(user => user.send(`⏰ | ${reminder.content}`).catch(console.error)).catch(console.error);
 				client.pg.query(`DELETE FROM reminders WHERE id = ${reminder.id}`).catch(console.error);
 			}
 		});
@@ -607,7 +607,7 @@ function pickLanguage(data = {}, language = "en") {
 
 function slashChanged(oldSlash, newSlash) {
 	if (oldSlash.description !== newSlash.description) return true;
-	if (JSON.stringify(oldSlash.options) !== JSON.stringify(newSlash.options).replace(/'/g, "U+0027")) return true;
+	if (JSON.stringify(oldSlash.options) !== JSON.stringify(newSlash.options).replace(/'/g, "''")) return true;
 	return false;
 }
 

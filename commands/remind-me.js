@@ -72,7 +72,7 @@ const command = {
 					: options[0].options[1].value || "👀";
 				if (!/^https?:\/\//.test(content)) content = content.replace(/^./, a => a.toUpperCase());
 
-				const res = await message.client.pg.query(`INSERT INTO reminders (user_id, timestamp, content) VALUES ('${message.author.id}', '${timestamp}', '${content.replace(/'/g, "U+0027")}')`).catch(console.error);
+				const res = await message.client.pg.query(`INSERT INTO reminders (user_id, timestamp, content) VALUES ('${message.author.id}', '${timestamp}', '${content.replace(/'/g, "''")}')`).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 
 				message.reply(language.get(language.created, timeToString(duration / 1000, languageCode), content)).catch(console.error);
@@ -100,7 +100,7 @@ const command = {
 						color: message.guild.me.displayColor,
 						description: reminders.length ? null : language.no_reminder,
 						fields: reminders.map((reminder, i) => {
-							return { name: `\`${i + 1}.\` ${reminder.content.replace(/U\+0027/g, "'")}`, value: `*${reminder.timestamp}*`, inline: true };
+							return { name: `\`${i + 1}.\` ${reminder.content}`, value: `*${reminder.timestamp}*`, inline: true };
 						}),
 						footer: {
 							text: "✨ Mayze ✨"
