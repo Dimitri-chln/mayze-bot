@@ -69,7 +69,7 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const math = require("mathjs");
-		const { parse } = require("algebra.js");
+		const { parse, Fraction, Expression } = require("algebra.js");
 		const subCommand = args
 			? args[0].toLowerCase()
 			: options[0].name;
@@ -101,7 +101,13 @@ const command = {
 				try {
 					const equation = parse(expression);
 					const result = equation.solveFor(variable);
-					message.channel.send(`\`\`\`\n${equation.toString()}\n${variable} = ${(result || "No Solution").toString()}\n\`\`\``).catch(console.error);
+					
+					let resultString;
+					if (Array.isArray(result)) resultString = result.join(", ");
+					if (result instanceof Fraction) resultString = result.toString();
+					if (result instanceof Expression) resultString = result.toString();
+
+					message.channel.send(`\`\`\`\n${equation.toString()}\n${variable} = ${(resultString || "No Solution").toString()}\n\`\`\``).catch(console.error);
 				} catch (err) {
 					if (err.name === "SyntaxError") message.reply(language.errors.syntax).catch(console.error);
 					else message.channel.send(err.message).catch(console.error);
