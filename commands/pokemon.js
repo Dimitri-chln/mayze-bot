@@ -194,8 +194,8 @@ const command = {
 				
 				const nickname = args
 					? args[2]
-					: options[0].options[1].value;
-				if (nickname.length > 30) return message.reply(language.nickname_too_long).catch(console.error);
+					: options[0].options[1] ? options[0].options[1].value : null;
+				if (nickname && nickname.length > 30) return message.reply(language.nickname_too_long).catch(console.error);
 				
 				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name.toLowerCase() === pokemonName));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
