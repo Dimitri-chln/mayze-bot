@@ -75,7 +75,7 @@ const command = {
 				const res = await message.client.pg.query(`INSERT INTO reminders (user_id, timestamp, content) VALUES ('${message.author.id}', '${timestamp}', '${content.replace(/'/g, "''")}')`).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 
-				message.reply(language.get(language.created, timeToString(duration / 1000, languageCode), content)).catch(console.error);
+				message.reply(language.get(language.created, timeToString(duration / 1000, languageCode), content), { ephemeral: true }).catch(console.error);
 				break;
 			}
 			case "remove": {
@@ -86,8 +86,8 @@ const command = {
 
 				const res = await message.client.pg.query(`DELETE FROM reminders WHERE id = ${reminders[index - 1].id}`).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
-				if (message.deletable) message.react("✅").catch(console.error);
-				else message.reply(language.removed).catch(console.error);
+				if (!message.isInteraction) message.react("✅").catch(console.error);
+				else message.reply(language.removed, { ephemeral: true }).catch(console.error);
 				break;
 			}
 			case "list":

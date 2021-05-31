@@ -15,7 +15,7 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		message.channel.send(`Pong! **${message.client.ws.ping}**ms`).catch(console.error);
+		message.channel.send(`Pong! **${message.client.ws.ping}**ms`, { ephemeral: true }).catch(console.error);
 	}
 };
 

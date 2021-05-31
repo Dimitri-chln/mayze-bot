@@ -31,8 +31,8 @@ const command = {
 
 		const res = await message.client.pg.query(`DELETE FROM wishes WHERE user_id='${message.author.id}' AND series='${series.replace(/'/g, "''")}'`).catch(console.error);
 		if (!res) return message.reply(language.errors.database).catch(console.error);
-		if (message.deletable) message.react("✅").catch(console.error);
-		else message.reply(language.removed).catch(console.error);
+		if (!message.isInteraction) message.react("✅").catch(console.error);
+		else message.reply(language.removed, { ephemeral: true }).catch(console.error);
 	}
 };
 

@@ -15,7 +15,9 @@ const command = {
 	*/
 	execute: async (message, args, options, language, languageCode) => {
 		const nudes = require("../assets/nudes.json");
-		if (message.deletable) message.react("😏").catch(console.error);
+		if (!message.isInteraction) message.react("😏").catch(console.error);
+		else message.reply("😏", { ephemeral: true }).catch(console.error);
+
 		message.author.send({
 			embed: {
 				title: "Miam 😏",

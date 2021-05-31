@@ -18,16 +18,13 @@ const command = {
 	*/
 	execute: async (message, args, options, language, languageCode) => {
 		if (message.deletable) message.delete().catch(console.error);
+		
 		const nickname = args
 			? args.join(" ")
 			: options[0].value;
 		
 		message.member.setNickname(nickname).catch(async err => {
-			if (err.message === "Missing Permissions") {
-				const msg = await message.channel.send(language.errors.no_perms).catch(console.error);
-				msg.delete({ timeout: 4000 }).catch(console.error);
-				return;
-			}
+			if (err.message === "Missing Permissions") return message.channel.send(language.errors.no_perms, { ephemeral: true }).catch(console.error);
 			console.error(err);
 		});
 	}

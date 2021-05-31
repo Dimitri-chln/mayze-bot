@@ -120,8 +120,8 @@ const command = {
 					const m = await msg.edit(msg.embeds[0].setDescription(`${msg.embeds[0].description.replace("*Aucun rôle pour le moment*", "")}\n${emoji} • ${role}`)).catch(console.error);
 					if (!m) return message.channel.send("Quelque chose s'est mal passé en modifiant le message :/").catch(console.error);
 					msg.react(emoji).catch(console.error);
-					if (message.deletable) message.react("✅").catch(console.error);
-					else message.reply("rôle ajouté").catch(console.error);
+					if (!message.isInteraction) message.react("✅").catch(console.error);
+					else message.reply("rôle ajouté", { ephemeral: true }).catch(console.error);
 					break;
 				}
 				case "remove": {
@@ -139,8 +139,8 @@ const command = {
 					const m = await msg.edit(msg.embeds[0].setDescription(msg.embeds[0].description.replace(new RegExp(`${emoji} • ${role}\n?`), "") || "*Aucun rôle pour le moment*")).catch(console.error);
 					if (!m) return message.channel.send("Quelque chose s'est mal passé en modifiant le message :/").catch(console.error);
 					msg.reactions.cache.get(emoji).users.cache.forEach(u => msg.reactions.cache.get(emoji).users.remove(u).catch(console.error));
-					if (message.deletable) message.react("✅").catch(console.error);
-					else message.reply("rôle ajouté").catch(console.error);
+					if (!message.isInteraction) message.react("✅").catch(console.error);
+					else message.reply("rôle retiré", { ephemeral: true }).catch(console.error);
 					break;
 				}
 				default:

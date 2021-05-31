@@ -45,7 +45,7 @@ class SlashCommand {
 			name: channel.name,
 			type: channel.type,
 			topic: channel.topic,
-			send: async data => {
+			send: async (data, { ephemeral = false }) => {
 				const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.token}/messages/@original`;
 		
 				if (typeof data === "string") data = { content: data };
@@ -53,6 +53,7 @@ class SlashCommand {
 					data.embeds = [ data.embed ];
 					delete data.embed;
 				}
+				if (ephemeral) data.flags = 64;
 		
 				const res = await Axios.patch(url, data, { "Content-Type": "application/json" })
 					.catch(err => {
@@ -78,7 +79,7 @@ class SlashCommand {
 			});
 	}
 
-	async reply(data) {
+	async reply(data, { ephemeral = true }) {
 		const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.token}/messages/@original`;
 
 		if (typeof data === "string") data = { content: data };
@@ -86,6 +87,8 @@ class SlashCommand {
 			data.embeds = [ data.embed ];
 			delete data.embed;
 		}
+		if (ephemeral) data.flags = 64;
+		
 		data.content = data.content.replace(/^./, a => a.toUpperCase());
 
 		const res = await Axios.patch(url, data, { "Content-Type": "application/json" })

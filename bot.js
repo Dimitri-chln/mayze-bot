@@ -299,20 +299,20 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
  * @param {object[]} options 
  */
 async function processCommand(command, message, args, options) {
-	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting.en).catch(console.error);
+	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting.en, { ephemeral: true }).catch(console.error);
 
 	let language = "en";
 	const res = await message.client.pg.query(`SELECT * FROM languages WHERE guild_id = '${message.guild.id}'`).catch(console.error);
 	if (res && res.rows.length) language = res.rows[0].language_code;
 
 	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return; // message.reply(languages.data.unauthorized_guild[language]).catch(console.error);
-	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm) || (message.channel.viewable && message.channel.permissionsFor(message.member).has(perm))) && message.author.id !== config.OWNER_ID) return message.reply(languages.get(languages.data.unauthorized_perms[language], command.perms.join("`, `"))).catch(console.error);
+	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm) || (message.channel.viewable && message.channel.permissionsFor(message.member).has(perm))) && message.author.id !== config.OWNER_ID) return message.reply(languages.get(languages.data.unauthorized_perms[language], command.perms.join("`, `")), { ephemeral: true }).catch(console.error);
 	if (command.ownerOnly) {
 		if (command.allowedUsers) {
 			if (!command.allowedUsers.includes(message.author.id) && message.author.id !== config.OWNER_ID) return;
 		} else if (message.author.id !== config.OWNER_ID) return;
 	} else if (command.allowedUsers && !command.allowedUsers.includes(message.author.id)) return;
-	if (args && args.length < command.args) return message.channel.send(languages.get(languages.data.wrong_usage[language], `${client.prefix + command.name} ${command.usage}`)).catch(console.error);
+	if (args && args.length < command.args) return message.channel.send(languages.get(languages.data.wrong_usage[language], `${client.prefix + command.name} ${command.usage}`), { ephemeral: true }).catch(console.error);
 
 	if (!client.cooldowns.has(command.name)) client.cooldowns.set(command.name, new Discord.Collection());
 	const now = Date.now();
@@ -326,7 +326,7 @@ async function processCommand(command, message, args, options) {
 				.toUTCString()
 				.replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
 				.replace(/00h |00m /g, "");
-			return message.reply(languages.get(languages.data.cooldown[language], timeLeftHumanized, client.prefix + command.name)).catch(console.error);
+			return message.reply(languages.get(languages.data.cooldown[language], timeLeftHumanized, client.prefix + command.name), { ephemeral: true }).catch(console.error);
 		}
 	}
 
@@ -339,7 +339,7 @@ async function processCommand(command, message, args, options) {
 		})
 		.catch(err => {
 			console.error(err);
-			message.channel.send(languages.data.error[language]).catch(console.error);
+			message.channel.send(languages.data.error[language], { ephemeral: true }).catch(console.error);
 		});
 	return;
 }

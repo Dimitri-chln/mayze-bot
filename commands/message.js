@@ -39,10 +39,11 @@ const command = {
 			: options[1].value;
 		
 		const m = await channel.send(msg).catch(console.error);
+		
 		if (m) {
-			if (message.deletable) message.react("✅").catch(console.error);
-			else message.reply(language.msg_sent).catch(console.error);
-		} else message.channel.send(language.errors.message_send).catch(console.error);
+			if (!message.isInteraction) message.react("✅").catch(console.error);
+			else message.reply(language.msg_sent, { ephemeral: true }).catch(console.error);
+		} else message.channel.send(language.errors.message_send, { ephemeral: true }).catch(console.error);
 	}
 };
 
