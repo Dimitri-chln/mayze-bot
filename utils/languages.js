@@ -339,24 +339,6 @@ module.exports = {
 				en: "The event has ended!"
 			}
 		},
-		"favorite": {
-			invalid_pokemon: {
-				fr: "ce pokémon n'existe pas",
-				en: "this pokémon doesn't exist"
-			},
-			no_pokemon: {
-				fr: "tu n'as pas ce pokémon",
-				en: "you don't own this pokémon"
-			},
-			favorite_added: {
-				fr: "favori ajouté",
-				en: "favorite added"
-			},
-			favorite_removed: {
-				fr: "favori retiré",
-				en: "favorite removed"
-			}
-		},
 		"help": {
 			commands_list: {
 				fr: "Liste des commandes",
@@ -580,6 +562,26 @@ module.exports = {
 			}
 		},
 		"pokemon": {
+			invalid_pokemon: {
+				fr: "ce pokémon n'existe pas",
+				en: "this pokémon doesn't exist"
+			},
+			pokemon_not_owned: {
+				fr: "tu n'as pas ce pokémon",
+				en: "you don't own this pokémon"
+			},
+			favorite_added: {
+				fr: "favori ajouté",
+				en: "favorite added"
+			},
+			favorite_removed: {
+				fr: "favori retiré",
+				en: "favorite removed"
+			},
+			nickname_updated: {
+				fr: "nom mis à jour",
+				en: "nickname updated"
+			},
 			title: {
 				fr: "Pokémons de {1}",
 				en: "{1}'s pokémons"
@@ -593,8 +595,8 @@ module.exports = {
 				en: "*No pokémon matches the search*"
 			},
 			description: {
-				fr: "[1?🎖️ :][8?🎗️ :][2?⭐ :][7?**[{3}]({9})**[{4}]({9}):**{3}**{4}] - {5} attrapé{6}",
-				en: "[1?🎖️ :][8?🎗️ :][2?⭐ :][7?**[{3}]({9})**[{4}]({9}):**{3}**{4}] - {5} caught"
+				fr: "[1?🎖️ :][8?🎗️ :][2?⭐ :][7?**[{3}]({9})**[{4}]({9}):**{3}**{4}][10? - \"{10}\":] - {5} attrapé{6}",
+				en: "[1?🎖️ :][8?🎗️ :][2?⭐ :][7?**[{3}]({9})**[{4}]({9}):**{3}**{4}][10? - \"{10}\":] - {5} caught"
 			}
 		},
 		"poll": {
