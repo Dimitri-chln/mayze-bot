@@ -79,7 +79,7 @@ class SlashCommand {
 			});
 	}
 
-	async reply(data, { ephemeral = true }) {
+	async reply(data, { ephemeral = false } = {}) {
 		const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.token}/messages/@original`;
 
 		if (typeof data === "string") data = { content: data };

@@ -69,7 +69,7 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const math = require("mathjs");
-		const { parse } = require("algebra");
+		const { parse } = require("algebra.js");
 		const subCommand = args
 			? args[0].toLowerCase()
 			: options[0].name;
