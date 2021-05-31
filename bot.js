@@ -147,7 +147,7 @@ client.on("ready", async () => {
 	if (client.beta) return;
 
 	// SLASH COMMANDS
-	const slashGuilds = [ "724530039781326869", "689164798264606784", "544545798256590848" ];
+	const slashGuilds = [ "724530039781326869", "672516066756395031", "689164798264606784", "544545798256590848" ];
 	client.slashCommands = {};
 	for (const guildID of slashGuilds) client.slashCommands[guildID] = new Discord.Collection();
 
