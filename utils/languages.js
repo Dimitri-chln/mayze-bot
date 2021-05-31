@@ -579,8 +579,8 @@ module.exports = {
 				en: "favorite removed"
 			},
 			nickname_too_long: {
-				fr: "le nom ne doit pas dépasser 30 caractères (un ' vaut 6 caractères)",
-				en: "the nickname can't be over 30 characters (one ' equals 6 characters)"
+				fr: "le nom ne doit pas dépasser 30 caractères",
+				en: "the nickname can't be over 30 characters"
 			},
 			nickname_updated: {
 				fr: "nom mis à jour",
