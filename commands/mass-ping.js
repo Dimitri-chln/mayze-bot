@@ -62,7 +62,7 @@ const command = {
 		if (message.deletable) message.delete().catch(console.error);
 		
 		for (i = 1; i <= n; i++) {
-			const msg = await message.channel.send(`${user} ${pingMsg}`).catch(console.error);
+			const msg = await message.channel.send(`${user} ${pingMsg}`, { disableMentions: "everyone" }).catch(console.error);
 			messages.set(msg.id, msg);
 		}
 

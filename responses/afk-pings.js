@@ -33,7 +33,7 @@ const autoresponse = {
         if (!afkUsers) return;
         
         afkUsers.forEach(u => {
-            if (mentionned.has(u.user_id)) message.channel.send(language.get(language.afk_msg[lang], mentionned.get(u.user_id).username, timeToString(Math.floor((Date.now() - Date.parse(u.time)) / 1000), lang), u.message)).catch(console.error);
+            if (mentionned.has(u.user_id)) message.channel.send(language.get(language.afk_msg[lang], mentionned.get(u.user_id).username, timeToString(Math.floor((Date.now() - Date.parse(u.time)) / 1000), lang), u.message), { disableMentions: "everyone" }).catch(console.error);
             if (message.author.id === u.user_id && Date.now() - Date.parse(u.time) > 60000) {
                 message.client.pg.query(`DELETE FROM afk WHERE user_id = '${message.author.id}'`).catch(console.error);
                 message.react("👋").catch(console.error);

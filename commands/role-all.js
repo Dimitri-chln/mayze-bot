@@ -78,13 +78,14 @@ const command = {
 	*/
 	execute: async (message, args, options, language, languageCode) => {
 		const userValidation = require("../utils/userValidation");
+
 		const subCommand = args
 			? args[0].toLowerCase()
 			: options[0].name;
 		const role = args
 			? message.guild.roles.cache.get(args[1].toLowerCase()) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args[1].toLowerCase()) || message.guild.roles.cache.find(r => r.name.toLowerCase().includes(args[1].toLowerCase()))
 			: message.guild.roles.cache.get(options[0].options[0].value);
-		if (!role) return message.reply(language.invalid_role).catch(console.error);
+		if (!role || role === message.guild.roles.everyone) return message.reply(language.invalid_role).catch(console.error);
 		const params = args
 			? args.slice(2)
 			: (options[0].options[1] || { value: "" }).value.split(" ");

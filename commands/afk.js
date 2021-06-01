@@ -34,7 +34,7 @@ const command = {
 		if (AKFmessage) message.client.pg.query(`INSERT INTO afk (user_id, message) VALUES ('${message.author.id}', '${AKFmessage}')`).catch(console.error);
 		else message.client.pg.query(`INSERT INTO afk (user_id) VALUES ('${message.author.id}')`).catch(console.error);
 
-		message.channel.send(language.get(language.afk_message, message.author.toString(), AKFmessage ? `\n**→ ${AKFmessage}**` : ""), { ephemeral: true }).catch(console.error);
+		message.channel.send(language.get(language.afk_message, message.author.toString(), AKFmessage ? `\n**→ ${AKFmessage}**` : ""), { disableMentions: "everyone", ephemeral: true }).catch(console.error);
 	}
 };
 

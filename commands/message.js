@@ -43,7 +43,7 @@ const command = {
 		if (m) {
 			if (!message.isInteraction) message.react("✅").catch(console.error);
 			else message.reply(language.msg_sent, { ephemeral: true }).catch(console.error);
-		} else message.channel.send(language.errors.message_send, { ephemeral: true }).catch(console.error);
+		} else message.channel.send(language.errors.message_send, { disableMentions: "everyone", ephemeral: true }).catch(console.error);
 	}
 };
 
