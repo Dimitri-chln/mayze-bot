@@ -61,6 +61,7 @@ const command = {
 					id: message.guild.id,
 					name: message.guild.name
 				},
+				content: message.content,
 				args: { ...message.content.split(" ") },
 				mentions: {
 					users: {
@@ -81,7 +82,7 @@ const command = {
 				}
 			}
 
-			message.channel.send(response.response.replace(/\{.*?\}/g, a => parseObject(a.replace(/[\{\}]/g, ""), objects))).catch(console.error);
+			message.channel.send(response.response.replace(/\{.*?\}/g, a => parseObject(a.replace(/[\{\}]/g, ""), objects)), { disableMentions: "everyone" }).catch(console.error);
 		}
 
 		/**
