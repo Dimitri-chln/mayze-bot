@@ -13,6 +13,8 @@ const command = {
 			4: "ENDS_WITH"
 		};
 
+		if (message.author.bot) return;
+
 		const { "rows": responses } = (await message.client.pg.query("SELECT * FROM responses").catch(console.error)) || {};
 		if (!responses) return;
 
