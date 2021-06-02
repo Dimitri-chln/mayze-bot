@@ -24,7 +24,8 @@ async function chatXP(message, xp, languageCode = "en") {
 	const newXp = xp;
 	const { BASE_XP, XP_INCREMENT } = require("../config.json");
 	const { rows } = (await message.client.pg.query(`SELECT * FROM levels WHERE user_id='${message.author.id}'`).catch(console.error)) || {};
-
+	if (!rows) return;
+	
 	if (rows.length) {
 		xp += rows[0].xp;
 		message.client.pg.query(`UPDATE levels SET xp = ${xp} WHERE user_id='${message.author.id}'`).catch(console.error);
