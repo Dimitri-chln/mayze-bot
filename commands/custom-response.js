@@ -9,7 +9,7 @@ const command = {
 	aliases: ["customresponse", "response", "cr"],
 	args: 0,
 	usage: "add \"<trigger>\" \"<response>\" [<type>] | remove <#response>",
-	perms: ["MANAGE_MESSAGES"],
+	ownerOnly: true,
 	slashOptions: [
 		{
 			name: "add",
