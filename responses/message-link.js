@@ -32,15 +32,16 @@ const command = {
 		
 		const [ , guildID, channelID, messageID ] = message.content.match(regex);
 		if (message.guild.id !== guildID) return;
+
 		const channel = message.client.channels.cache.get(channelID);
 		const msg = await channel.messages.fetch(messageID).catch(console.error);
-		if (msg.embeds.length) return;
+		if (!msg || msg.embeds.length) return;
 
 		let lang = "en";
 	    const res = await message.client.pg.query(`SELECT * FROM languages WHERE guild_id = '${message.guild.id}'`).catch(console.error);
 	    if (res && res.rows.length) lang = res.rows[0].language_code;
 
-		message.channel.send({
+		const embed = {
 			embed: {
 				author: {
 					name: msg.author.tag,
@@ -60,7 +61,10 @@ const command = {
 				},
 				timestamp: msg.createdTimestamp
 			}
-		}).catch(console.error);
+		};
+
+		if (channelID === message.channel.id) msg.reply(emebd);
+		else message.channel.send(embed).catch(console.error);
 	}
 };
 
