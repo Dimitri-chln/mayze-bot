@@ -46,6 +46,8 @@ class SlashCommand {
 			type: channel.type,
 			topic: channel.topic,
 			send: async (data, { ephemeral = false } = {}) => {
+				console.log(ephemeral);
+				
 				const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.token}/messages/@original`;
 		
 				if (typeof data === "string") data = { content: data };
