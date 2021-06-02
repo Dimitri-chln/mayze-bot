@@ -133,7 +133,7 @@ const command = {
 							} else if (params.includes("-mute")) {
 								const mute = message.client.commands.get("mute");
 								message.channel.send(`*mute ${deadPlayer.user} 5m`)
-									.then(m => mute.execute(m, ["5m"]))
+									.then(m => mute.execute(m, [deadPlayer.user, "5m"]))
 									.catch(console.error);
 							}
 						}, 2000);
