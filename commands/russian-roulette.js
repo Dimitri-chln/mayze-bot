@@ -124,8 +124,13 @@ const command = {
 						setTimeout(async () => {
 							const deadPlayer = players.pop();
 							msg.edit(embed.setDescription(`🔫 ${deadPlayer.user.username} est mort !`)).catch(console.error);
-							if (params.includes("-kick")) deadPlayer.kick("Roulette Russe").catch(console.error);
-							else if (params.includes("-mute")) {
+							if (params.includes("-kick")) {
+								const kick = message.client.commands.get("kick");
+								message.channel.send(`*kick ${deadPlayer.user}`)
+									.then(m => kick.execute(m, [deadPlayer.user]))
+									.catch(console.error);
+							
+							} else if (params.includes("-mute")) {
 								const mute = message.client.commands.get("mute");
 								message.channel.send(`*mute ${deadPlayer.user} 5m`)
 									.then(m => mute.execute(m, ["5m"]))
