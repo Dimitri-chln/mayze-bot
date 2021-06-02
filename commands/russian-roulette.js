@@ -62,7 +62,7 @@ const command = {
 
 		switch (subCommand) {
 			case "create":
-				if (message.client.russianRoulette) return message.reply("une partie est déjà en cours!").catch(console.error);
+				if (message.client.russianRoulette) return message.reply("une partie est déjà en cours !").catch(console.error);
 				message.client.russianRoulette = [ message.member ];
 				message.channel.send({
 					embed: {
@@ -80,19 +80,19 @@ const command = {
 				}).catch(console.error);
 				break;
 			case "join":
-				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
+				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours ! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
 				if (message.client.russianRoulette.some(u => u.id === message.author.id)) return message.reply("tu as déjà rejoint cette partie").catch(console.error);
 				message.client.russianRoulette.push(message.member);
 				message.channel.send(`<@${message.author.id}> a rejoint la partie de roulette russe`).catch(console.error);
 				break;
 			case "delete":
-				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
+				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours ! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
 				if (message.client.russianRoulette[0].id !== message.author.id && !message.member.hasPermission("KICK_MEMBERS")) return message.reply("seuls les modérateurs ainsi que la personne qui a créé la partie peuvent supprimer la partie").catch(console.error);
 				delete message.client.russianRoulette;
 				message.reply("partie supprimée").catch(console.error);
 				break;
 			case "start":
-				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
+				if (!message.client.russianRoulette) return message.reply(`il n'y a pas de partie en cours ! Crée une partie avec la commande \`${message.client.prefix}russian-roulette create\``).catch(console.error);
 				if (message.client.russianRoulette.length < 2) return message.reply("il faut au minimum 2 joueurs pour lancer la partie").catch(console.error);
 				if (message.client.russianRoulette[0].id !== message.author.id && !message.member.hasPermission("KICK_MEMBERS")) return message.reply("seuls les modérateurs ainsi que la personne qui a créé la partie peuvent lancer la partie").catch(console.error);
 				
@@ -141,7 +141,7 @@ const command = {
 				}
 				break;
 			default:
-				message.reply("arguments incorrects !").catch(console.error);
+				message.reply(language.errors.invalid_args).catch(console.error);
 		}
 	}
 };
