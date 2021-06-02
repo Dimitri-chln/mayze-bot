@@ -19,7 +19,21 @@ const command = {
 		if (process.env.HOST === "HEROKU") return message.reply(language.errors.heroku).catch(console.error);
 
 		const shellExec = require("../utils/shellExec");
-		const output = shellExec("heroku logs --app mayze-bot");
+		
+		let output;
+		try {
+			output = shellExec("heroku logs --app mayze-bot");
+		} catch (err1) {
+			console.error(err1);
+			try {
+				output = shellExec("heroku logs --app mayze-bot2");
+			} catch (err2) {
+				console.error(err2);
+			}
+		}
+
+		if (!output) return message.channel.send(language.errors.shell).catch(console.error);
+
 		const charactersPerPage = 2000;
 		if (output.length < charactersPerPage) {
 			message.channel.send({
@@ -29,7 +43,7 @@ const command = {
 						icon_url: message.author.avatarURL({ dynamic: true })
 					},
 					color: message.guild.me.displayColor,
-					description: `\`\`\`\n${output}\n\`\`\``,
+					description: `\`\`\`\n${output || "*-*"}\n\`\`\``,
 					footer: {
 						text: "✨ Mayze ✨"
 					}
