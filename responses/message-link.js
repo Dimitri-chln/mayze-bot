@@ -63,7 +63,7 @@ const command = {
 			}
 		};
 
-		if (channelID === message.channel.id) msg.reply(emebd);
+		if (channelID === message.channel.id) msg.reply(embed);
 		else message.channel.send(embed).catch(console.error);
 	}
 };
