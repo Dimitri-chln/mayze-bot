@@ -7,8 +7,6 @@
     "start": "node bot.js"
   },
   "dependencies": {
-    "@discordjs/opus": "0.3.2",
-    "algebra": "^1.0.1",
     "algebra.js": "^0.2.6",
     "axios": "^0.21.1",
     "cron": "^1.8.2",
@@ -18,13 +16,12 @@
     "discord.js": "^12.5.3",
     "dotenv": "^8.2.0",
     "jimp": "^0.16.1",
-    "lodash": "^4.17.21",
     "lyrics-finder": "^21.7.0",
     "mathjs": "^9.0.0",
     "oakdex-pokedex": "^0.4.5",
     "pg": "^8.5.1",
     "unb-api": "^1.2.2",
-    "ytdl-core": "^4.5.0",
+    "ytdl-core": "^4.8.2",
     "ytdl-core-discord": "^1.2.5"
   },
   "engines": {
