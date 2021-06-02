@@ -20,8 +20,8 @@ class SlashCommand {
 	author;
 	/**@type {GuildMember} */
 	member;
+	/**@type {boolean} */
 	isInteraction = true;
-	alreadyReplied = false;
 
 	/**
 	 * @param {Object} interaction 
@@ -46,9 +46,7 @@ class SlashCommand {
 			type: channel.type,
 			topic: channel.topic,
 			send: async (data, { ephemeral = false } = {}) => {
-				const url = this.alreadyReplied
-					? `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.token}`
-					: `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.token}/messages/@original`;
+				const url = `https://discord.com/api/v8/webhooks/${this.applicationID}/${this.token}/messages/@original`;
 		
 				if (typeof data === "string") data = { content: data };
 				if (data.embed) {
@@ -57,12 +55,7 @@ class SlashCommand {
 				}
 				if (ephemeral) data.flags = 64;
 		
-				const res = await Axios({
-					method: this.alreadyReplied ? "POST" : "PATCH",
-					headers: { "Content-Type": "application/json" },
-					url,
-					data
-				})
+				const res = await Axios.patch(url, data, { "Content-Type": "application/json" })
 					.catch(err => {
 						console.error(err);
 						throw new DiscordAPIError(err.response.request.path, err.response.data, "patch", err.response.status);
