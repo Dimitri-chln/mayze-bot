@@ -41,7 +41,7 @@ const command = {
 	    const res = await message.client.pg.query(`SELECT * FROM languages WHERE guild_id = '${message.guild.id}'`).catch(console.error);
 	    if (res && res.rows.length) lang = res.rows[0].language_code;
 
-		const embed = {
+		message.channel.send({
 			embed: {
 				author: {
 					name: msg.author.tag,
@@ -61,10 +61,7 @@ const command = {
 				},
 				timestamp: msg.createdTimestamp
 			}
-		};
-
-		if (channelID === message.channel.id) msg.reply(embed);
-		else message.channel.send(embed).catch(console.error);
+		}).catch(console.error);
 	}
 };
 
