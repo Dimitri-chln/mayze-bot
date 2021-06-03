@@ -837,7 +837,7 @@ class Player extends EventEmitter {
             filter: 'audioonly',
             quality: Quality,
             dlChunkSize: 0,
-            highWaterMark: 1 << 64,
+            highWaterMark: 1 << 50,
         }).on('error', err => {
             /**
              * error event.
@@ -851,6 +851,9 @@ class Player extends EventEmitter {
         setTimeout(() => {
             if (queue.dispatcher) queue.dispatcher.destroy();
             let dispatcher = queue.connection.play(stream, {
+                type: "opus",
+                highWaterMark: 50,
+                bitrate: 128,
                 seek: seek / 1000 || 0
             });
             queue.dispatcher = dispatcher;
