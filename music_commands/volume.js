@@ -37,7 +37,7 @@ const command = {
 		} else {
 			if (volume < 0 || volume > 200) return message.reply(language.invalid_volume).catch(console.error);
 
-			message.client.player.setVolume(message.guild.id, volume);
+			message.client.player.setVolume(message, volume);
 			
 			message.channel.send(language.get(language.volume_changed, volume)).catch(console.error);
 		
