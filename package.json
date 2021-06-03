@@ -21,9 +21,7 @@
     "mathjs": "^9.0.0",
     "oakdex-pokedex": "^0.4.5",
     "pg": "^8.5.1",
-    "unb-api": "^1.2.3",
-    "ytdl-core": "^4.8.2",
-    "ytdl-core-discord": "^1.2.5"
+    "unb-api": "^1.2.3"
   },
   "engines": {
     "node": "14.x"
