@@ -549,8 +549,8 @@ const player = new Player(client, {
     quality: "high",
 	volume: 35
 });
+player.nowPlayings = new Discord.Collection();
 client.player = player;
-client.player.npTimers = {};
 
 player.on("clientDisconnect", (message, queue) => {
 	const l = message.client.languages.get(message.guild.id);
