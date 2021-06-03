@@ -838,7 +838,13 @@ class Player extends EventEmitter {
 			quality: Quality,
 			dlChunkSize: 0,
 			highWaterMark: 1 << 50,
-		}).on('error', err => {
+		}).catch(err => {
+			thisHelper.emit('error', queue.initMessage, err.message === 'Video unavailable' ? 'VideoUnavailable' : err.message);
+			queue.repeatMode = false;
+			return thisHelper._playSong(guildID, false);
+		});
+
+		stream.on('error', err => {
 			/**
 			 * error event.
 			 * @event Player#error
