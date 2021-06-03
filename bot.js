@@ -572,12 +572,11 @@ player.on("playlistAdd", (message, queue, playlist) => {
 player.on("queueEnd", (message, queue) => {
 	const l = message.client.languages.get(message.guild.id);
 
-	const [ toRemove, toKeep ] = player.nowPlayings.partition(nowPlaying => nowPlaying.guild.id === message.id);
-	player.nowPlayings = toKeep;
+	const nowPlayings = player.nowPlayings.filter(nowPlaying => nowPlaying.guild.id === message.id);
 
 	const song = queue.songs[0];
 
-	toRemove.forEach(msg => {
+	nowPlayings.forEach(msg => {
 		msg.edit({
 			embed: {
 				author: {
@@ -599,11 +598,32 @@ player.on("queueEnd", (message, queue) => {
 
 player.on("songAdd", (message, queue, song) => {
 	const l = message.client.languages.get(message.guild.id);
-	message.channel.send(languages.get(languages.music.song[l], Utils.MillisecondsToTime(queue.duration), song.name)).catch(console.error);
+	message.channel.send(languages.get(languages.music.song[l], Utils.MillisecondsToTime(queue.duration) || null, song.name)).catch(console.error);
 });
 
 player.on("songChanged", (message, newSong, OldSong) => {
 	const l = message.client.languages.get(message.guild.id);
+
+	const nowPlayings = player.nowPlayings.filter(nowPlaying => nowPlaying.guild.id === message.id);
+
+	nowPlayings.forEach(msg => {
+		msg.edit({
+			embed: {
+				author: {
+					name: languages.data["now-playing"].now_playing[l],
+					icon_url: message.client.user.avatarURL()
+				},
+				thumbnail: {
+					url: newSong.thumbnail,
+				},
+				color: message.guild.me.displayColor,
+				description: languages.get(languages.data["now-playing"].description[l], newSong.name, newSong.url, Utils.buildBar(Utils.TimeToMilliseconds(newSong.duration), Utils.TimeToMilliseconds(newSong.duration), 20, "━", "🔘"), newSong.requestedBy, "Ø", "**0:00**"),
+				footer: {
+					text: languages.data["now-playing"].footer_end[l]
+				}
+			}
+		}).catch(console.error);
+	});
 });
 
 player.on("songFirst", (message, song) => {
@@ -614,6 +634,9 @@ player.on("songFirst", (message, song) => {
 setInterval(() => {
 	player.nowPlayings.forEach(message => {
 		const l = message.client.languages.get(message.guild.id);
+
+		if (!player.isPlaying(message)) return player.nowPlayings.delete(msg.channel.id);
+
 		const song = player.nowPlaying(message);
 		
 		message.edit({
