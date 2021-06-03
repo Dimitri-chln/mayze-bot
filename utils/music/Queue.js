@@ -84,7 +84,7 @@ class Queue {
          */
      get duration() {
         return this.songs.reduce((sum, song) => sum + TimeToMilliseconds(song.duration), 0)
-            - this.dispatcher.streamTime
+            - this.dispatcher?.streamTime
             - (this.songs.length ? this.songs[0].seekTime : 0);
     }
 }
