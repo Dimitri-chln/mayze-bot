@@ -1,4 +1,4 @@
-const { BetterMessage } = require("../utils/better-discord");
+const { Message } = require("discord.js");
 
 const command = {
 	name: "skip-to",
@@ -18,7 +18,7 @@ const command = {
 		}
 	],
 	/**
-	 * @param {BetterMessage} message 
+	 * @param {Message} message 
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */

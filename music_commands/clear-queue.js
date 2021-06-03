@@ -1,4 +1,4 @@
-const { BetterMessage } = require("../utils/better-discord");
+const { Message } = require("discord.js");
 
 const command = {
 	name: "clear-queue",
@@ -11,7 +11,7 @@ const command = {
     usage: "",
     perms: ["KICK_MEMBERS"],
 	/**
-	 * @param {BetterMessage} message 
+	 * @param {Message} message 
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */

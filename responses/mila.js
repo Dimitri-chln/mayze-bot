@@ -1,8 +1,8 @@
-const { BetterMessage } = require("../utils/better-discord");
+const { Message } = require("discord.js");
 
 const command = {
 	/**
-	 * @param {BetterMessage} message 
+	 * @param {Message} message 
 	 */
 	execute: async message => {
 		const mila = await message.client.users.fetch("608623753399762964").catch(console.error);
