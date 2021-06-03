@@ -1,9 +1,10 @@
+const YouTubeClient = require("youtubei");
 /**
  * Represents a song.
  */
 class Song {
     /**
-     * @param {Video} video The Youtube video
+     * @param {YouTubeClient.Video|YouTubeClient.VideoCompact|YouTubeClient.LiveVideo} video The Youtube video
      * @param {Queue} queue The queue in which the song is
      * @param {String} requestedBy The request user
      */
@@ -15,7 +16,7 @@ class Song {
         this.name = video.title;
         /**
          * Song duration.
-         * @type {String}
+         * @type {String|Number}
          */
         this.duration = video.duration;
         /**
@@ -27,17 +28,22 @@ class Song {
          * Youtube video URL.
          * @type {String}
          */
-        this.url = video.url;
+        this.url = video['url'];
         /**
          * Youtube video thumbnail.
          * @type {String}
          */
-        this.thumbnail = video.thumbnail;
+        this.thumbnail = video['thumbnail'] || video.thumbnails.best;
         /**
          * The queue in which the song is.
          * @type {Queue}
          */
         this.queue = queue;
+        /**
+         * Whenever the song is a livestream.
+         * @type {Boolean}
+         */
+        this.isLive = video.isLiveContent;
         /**
          * The user who requested that song.
          * @type {String}
