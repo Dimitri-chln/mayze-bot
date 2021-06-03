@@ -1,20 +1,22 @@
-const { VoiceConnection, StreamDispatcher } = require('discord.js');
-const { EventEmitter } = require('events');
-const Song = require('./Song');
-const Util = require("./Util");
+const { Song } = require('discord-music-player');
+const Discord = require('discord.js');
+const { PlayerOptions, TimeToMilliseconds } = require('./Util');
 
 /**
  * Represents a guild queue.
+ * @param {string} guildID
+ * @param {PlayerOptions} options
+ * @param {Discord.Message} message
  */
-class Queue extends EventEmitter {
+class Queue {
 
     /**
      * Represents a guild queue.
      * @param {string} guildID
-     * @param {Object} options
+     * @param {PlayerOptions} options
+     * @param {Discord.Message} message
      */
-    constructor(guildID, options = {}){
-        super();
+    constructor(guildID, options, message){
         /**
          * The guild ID.
          * @type {Snowflake}
@@ -56,11 +58,6 @@ class Queue extends EventEmitter {
          */
         this.playing = true;
         /**
-         * Whether the song have been paused automatically.
-         * @type {Boolean}
-         */
-        this.paused = false;
-        /**
          * Whether the repeat mode is enabled.
          * @type {Boolean}
          */
@@ -70,18 +67,26 @@ class Queue extends EventEmitter {
          * @type {Boolean}
          */
         this.repeatQueue = false;
-
+        /**
+         * First message object.
+         * @type {Discord.Message}
+         */
+        this.initMessage = message;
+        /**
+         * Queue Options copied from Default Options.
+         * @type {PlayerOptions}
+         */
+        this.options = options;
     }
 
     /**
-	 * @returns {Number} The total duration of the queue
-	 */
-	get duration() {
-		return this.songs.reduce((sum, song) => sum + Util.TimeToMilliseconds(song.duration), 0)
+         * @returns {Number} The total duration of the queue
+         */
+     get duration() {
+        return this.songs.reduce((sum, song) => sum + TimeToMilliseconds(song.duration), 0)
             - this.dispatcher.streamTime
             - (this.songs.length ? this.songs[0].seekTime : 0);
-	}
-
+    }
 }
 
 module.exports = Queue;

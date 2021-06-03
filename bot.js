@@ -539,7 +539,7 @@ function parseArgs(input) {
 
 
 // MUSIC CODE
-const { Player } = require("discord-music-player");
+const Player = require("./utils/music/Player");
 const player = new Player(client, {
 	leaveOnEnd: true,
 	leaveOnStop: true,
@@ -569,7 +569,7 @@ player.on("playlistAdd", (message, queue, playlist) => {
 
 player.on("queueEnd", (message, queue) => {
 	const l = message.client.languages.get(message.guild.id);
-	const { Utils } = require("discord-music-player");
+	const Utils = require("./utils/music/Util");
 
 	const [ toRemove, toKeep ] = player.nowPlayings.partition(nowPlaying => nowPlaying.guild.id === message.id);
 	player.nowPlayings = toKeep;
@@ -612,7 +612,7 @@ player.on("songFirst", (message, song) => {
 });
 
 setTimeout(() => {
-	const { Utils } = require("discord-music-player");
+	const Utils = require("./utils/music/Util");
 
 	player.nowPlayings.forEach(message => {
 		const l = message.client.languages.get(message.guild.id);

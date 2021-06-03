@@ -25,7 +25,6 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const Axios = require("axios").default;
-		const { Utils } = require("discord-music-player");
 
 		if (!message.member.voice.channelID || (message.client.player.getQueue(message) && message.member.voice.channelID !== message.client.player.getQueue(message).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
 		const isPlaying = message.client.player.isPlaying(message);

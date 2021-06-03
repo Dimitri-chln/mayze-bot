@@ -1,23 +1,18 @@
-const scrapeYT = require('scrape-yt');
+const YouTubeClient = require("youtubei");
+const YouTube = new YouTubeClient.Client();
 const Playlist = require('./Playlist');
 const Song = require('./Song');
 const ytsr = require('ytsr');
-const { getPreview, getTracks } = require("spotify-url-info");
-const Deezer = require("deezer-public-api");
-const deezer = new Deezer();
+const { getPreview, getData } = require("spotify-url-info");
+const Discord = require('discord.js');
 
 //RegEx Definitions
 let VideoRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))((?!channel)(?!user)\/(?:[\w\-]+\?v=|embed\/|v\/)?)((?!channel)(?!user)[\w\-]+)(\S+)?$/;
 let VideoRegexID = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-let PlaylistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#&\?]*).*/;
+let PlaylistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#&?]*).*/;
 let PlaylistRegexID = /[&?]list=([^&]+)/;
 let SpotifyRegex = /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:track\/|\?uri=spotify:track:)((\w|-){22})(?:(?=\?)(?:[?&]foo=(\d*)(?=[&#]|$)|(?![?&]foo=)[^#])+)?(?=#|$)/;
-
-let SpotifyPlaylistRegex = /https?:\/\/(?:open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
-let DeezerRegex = /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?track\/(\d+)/;
-let DeezerPlaylistRegex = /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)/;
-let DeezerRegexScrap = /https?:\/\/deezer\.page\.link\/\w+/;
-
+let SpotifyPlaylistRegex = /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(album|playlist)\/|\?uri=spotify:playlist:)((\w|-){22})(?:(?=\?)(?:[?&]foo=(\d*)(?=[&#]|$)|(?![?&]foo=)[^#])+)?(?=#|$)/;
 
 /**
  * Get ID from YouTube link.
@@ -40,8 +35,8 @@ function playlist_parser(url) {
 }
 /**
  * Gets Video Duration from Int
- * @param {String} d
- * @returns {String}
+ * @param {String|Number} d
+ * @returns {String|Number}
  */
 function getVideoDuration(d) {
     let date = new Date(null);
@@ -84,6 +79,50 @@ class Util {
     constructor() { }
 
     /**
+     * Player options.
+     * @typedef {PlayerOptions}
+     *
+     * @property {Boolean} leaveOnEnd Whether the bot should leave the current voice channel when the queue ends.
+     * @property {Boolean} leaveOnStop Whether the bot should leave the current voice channel when the stop() function is used.
+     * @property {Boolean} leaveOnEmpty Whether the bot should leave the voice channel if there is no more member in it.
+     * @property {Boolean} deafenOnJoin Whether the bot should deafen while connecting to the voice channel.
+     * @property {Number} timeout After how much time the bot should leave the voice channel after the OnEnd & OnEmpty events. | Default: 0
+     * @property {Number} volume The default playing volume of the player. | Default: 100
+     * @property {String} quality Music quality ['high'/'low'] | Default: high
+     */
+    static PlayerOptions = {
+        leaveOnEnd: true,
+        leaveOnStop: true,
+        leaveOnEmpty: true,
+        deafenOnJoin: false,
+        timeout: 0,
+        volume: 100,
+        quality: 'high',
+    };
+
+    static PlayOptions = {
+        search: '',
+        uploadDate: null,
+        duration: null,
+        sortBy: 'relevance',
+        requestedBy: null,
+        index: null
+    };
+
+    static PlaylistOptions =  {
+        search: '',
+        maxSongs: -1,
+        requestedBy: null,
+        shuffle: false,
+    };
+
+    static ProgressOptions =  {
+        size: 20,
+        arrow: '🔘',
+        block: '━',
+    };
+
+    /**
      * Gets the first youtube results for your search.
      * @param {String} search The name of the video or the video URL.
      * @param {Object<defaultSearchOptions>} options Options.
@@ -94,17 +133,11 @@ class Util {
     static getVideoBySearch(search, options = {}, queue, requestedBy) {
         return new Promise(async (resolve, reject) => {
 
-            options = { ...defaultSearchOptions, ...options };
+            options = Object.assign({}, defaultSearchOptions, options);
             options = pick(options, Object.keys(defaultSearchOptions))
 
             if(SpotifyRegex.test(search)) {
                 search = await this.songFromSpotify(search).catch(err => {
-                    return reject(err);
-                });
-            }
-
-            if (DeezerRegex.test(search)) {
-                search = await this.songFromDeezer(search).catch(err => {
                     return reject(err);
                 });
             }
@@ -117,10 +150,9 @@ class Util {
                 let VideoID = youtube_parser(search);
                 if (!VideoID) return reject('SearchIsNull');
 
-                let video = await scrapeYT.getVideo(VideoID);
-
-                video.duration = getVideoDuration(video.duration);
-                video.url = search;
+                let video = await YouTube.getVideo(VideoID);
+                video['duration'] = getVideoDuration(video.duration || 0);
+                video['url'] = search;
 
                 return resolve(new Song(video, queue, requestedBy));
             } else {
@@ -188,11 +220,12 @@ class Util {
                             },
                             url: vid.url,
                             thumbnail: vid.bestThumbnail.url,
+                            isLiveContent: vid.isLive
                         };
                     }));
 
                     return resolve(new Song(items[0], queue, requestedBy));
-                }).catch((error) => {
+                }).catch(() => {
                     return reject('SearchIsNull');
                 });
 
@@ -206,75 +239,63 @@ class Util {
      * @param {Number} max Max playlist songs.
      * @param {Queue} queue Queue.
      * @param {String} requestedBy User that requested the song.
-     * @param {Boolean} shuffle If the playlist needs to be shuffled before being played.
      * @returns {Promise<Playlist>}
      */
-    static getVideoFromPlaylist(search, max, queue, requestedBy, shuffle) {
+    static getVideoFromPlaylist(search, max, queue, requestedBy) {
         return new Promise(async (resolve, reject) => {
 
-            let playlist = {};
+            let isSpotifyPlaylist = SpotifyPlaylistRegex.test(search);
+            let isPlaylistLink = PlaylistRegex.test(search);
+            if(isSpotifyPlaylist) {
+                // Spotify Playlist
+                let playlist = await getData(search).catch(() => null);
+                if(!playlist || !['playlist', 'album'].includes(playlist['type'])) return reject('InvalidPlaylist');
+                playlist = {
+                    title: playlist['name'],
+                    channel: playlist['type'] === 'playlist' ? { name: playlist['owner']['display_name'] } : playlist['artists'][0],
+                    url: search,
+                    videos: playlist['tracks'] ? playlist['tracks'].items : [],
+                    videoCount: 0,
+                    type: playlist['type']
+                }
 
-            if (SpotifyPlaylistRegex.test(search)) {
-                let tracks = await getTracks(search);
-                if (shuffle) tracks = tracks.sort(() => Math.random() - 0.5);
-
-                playlist.videos = await Promise.all(tracks.map(async (track, index) => {
-
+                playlist.videos = await Promise.all(playlist.videos.map(async (track, index) => {
                     if (max !== -1 && index >= max) return null;
-                    let spotifySearch = `${track.artists[0].name} - ${track.name} VEVO`;
-                    let song = await this.getVideoBySearch(spotifySearch, null, queue, requestedBy).catch(error => {
-                        return console.error(error);
-                    });
-
-                    return song;
+                    if(playlist['type'] === 'playlist')
+                        track = track['track'];
+                    return await this.getVideoBySearch(`${track['artists'][0].name} - ${track['name']}`, {}, queue, requestedBy).catch(() => null);
                 }));
-                playlist.videoCount = tracks.length;
+                playlist.videos = playlist.videos.filter(function (obj) { return obj });
+                playlist.videoCount = playlist.videos.length;
+                playlist.videoCount = max === -1 ? playlist.videoCount : playlist.videoCount > max ? max : playlist.videoCount;
 
-            } else if (DeezerPlaylistRegex.test(search)) {
-                let [ , playlistID ] = search.match(DeezerPlaylistRegex);
-                let result = await deezer.playlist(playlistID);
-                let tracks = result.tracks.data;
-                if (shuffle) tracks = tracks.sort(() => Math.random() - 0.5);
+                return resolve(new Playlist(playlist, queue, requestedBy));
 
-                playlist.videos = await Promise.all(tracks.map(async (track, index) => {
-
-                    if (max !== -1 && index >= max) return null;
-                    let deezerSearch = `${track.artist.name} - ${track.title} VEVO`;
-                    let song = await this.getVideoBySearch(deezerSearch, null, queue, requestedBy).catch(error => {
-                        return console.error(error);
-                    });
-
-                    return song;
-                }));
-                playlist.videoCount = tracks.length;
-
-            } else {
-                let isPlaylistLink = PlaylistRegex.test(search);
-                if (!isPlaylistLink) return reject('InvalidPlaylist');
-
+            } else if(isPlaylistLink) {
+                // YouTube Playlist
                 let PlaylistID = playlist_parser(search);
                 if (!PlaylistID) return reject('InvalidPlaylist');
 
-                playlist = await scrapeYT.getPlaylist(PlaylistID);
-                if (Object.keys(playlist).length === 0) return reject('InvalidPlaylist');
+                /**
+                 * @type {YouTubeClient.Playlist}
+                 */
+                let playlist = await YouTube.getPlaylist(PlaylistID);
+                if (!playlist || Object.keys(playlist).length === 0) return reject('InvalidPlaylist');
 
-                if (shuffle) playlist.videos = playlist.videos.sort(() => Math.random() - 0.5);
-
-                playlist.videos = await Promise.all(playlist.videos.map((video, index) => {
-
+                await Promise.all(playlist.videos = playlist.videos.map((video, index) => {
                     if (max !== -1 && index >= max) return null;
-                    video.duration = getVideoDuration(video.duration);
+                    video.duration = getVideoDuration(video.duration || 0);
                     video.url = `http://youtube.com/watch?v=${video.id}`;
+                    video.isLiveContent = video.isLive;
 
                     return new Song(video, queue, requestedBy);
                 }));
-            }
+                playlist.videos = playlist.videos.filter(function (obj) { return obj });
+                playlist['url'] = search;
+                playlist.videoCount = max === -1 ? playlist.videoCount : playlist.videoCount > max ? max : playlist.videoCount;
 
-            playlist.videos = playlist.videos.filter(function (obj) { return obj });
-            playlist.url = search;
-            playlist.videoCount = max === -1 ? playlist.videoCount : playlist.videoCount > max ? max : playlist.videoCount;
-
-            resolve(new Playlist(playlist, queue, requestedBy));
+                resolve(new Playlist(playlist, queue, requestedBy));
+            } else return reject('InvalidPlaylist');
         });
     }
 
@@ -287,25 +308,7 @@ class Util {
         return new Promise(async (resolve, reject) => {
             try {
                 let SpotifyResult = await getPreview(query);
-                resolve(`${SpotifyResult.artist} - ${SpotifyResult.title} VEVO`);
-            }
-            catch(err) {
-                reject('InvalidSpotify');
-            }
-        });
-    }
-
-    /**
-     * Converts a deezer track URL to a string containing the artist and song name.
-     * @param {String} query The deezer song URL.
-     * @returns {Promise<String>} The artist and song name (e.g. "Rick Astley - Never Gonna Give You Up")
-     */
-    static songFromDeezer(query) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let [ , trackID ] = query.match(DeezerRegex);
-                let DeezerResult = await deezer.track(trackID);
-                resolve(`${DeezerResult.artist.name} - ${DeezerResult.title} VEVO`);
+                resolve(`${SpotifyResult['artist']} - ${SpotifyResult['title']}`);
             }
             catch(err) {
                 reject('InvalidSpotify');
@@ -315,21 +318,19 @@ class Util {
 
     /**
      * Converts Milliseconds to Time (HH:MM:SS)
-     * @param {String} ms Milliseconds
+     * @param {Number} ms Milliseconds
      * @returns {String}
      */
     static MillisecondsToTime(ms) {
-        let seconds = ms / 1000;
-        let hours = parseInt(seconds / 3600);
-        seconds = seconds % 3600;
-        let minutes = parseInt(seconds / 60);
-        seconds = Math.ceil(seconds % 60);
+        const seconds = Math.floor(ms / 1000 % 60);
+        const minutes = Math.floor(ms / 60000 % 60);
+        const hours = Math.floor(ms / 3600000);
 
-        seconds = (`0${seconds}`).slice(-2);
-        minutes = (`0${minutes}`).slice(-2);
-        hours = (`0${hours}`).slice(-2);
+        const secondsT = `${seconds}`.padStart(2,'0');
+        const minutesT = `${minutes}`.padStart(2,'0');
+        const hoursT = `${hours}`.padStart(2,'0');
 
-        return `${hours == 0 ? '' : `${hours}:`}${minutes}:${seconds}`;
+        return `${hours ? `${hoursT}:` : ''}${minutesT}:${secondsT}`;
     }
 
     /**
@@ -338,28 +339,24 @@ class Util {
      * @returns {number}
      */
     static TimeToMilliseconds(time) {
-        let items = time.split(':'),
-            s = 0, m = 1;
-
-        while (items.length > 0) {
-            s += m * parseInt(items.pop(), 10);
-            m *= 60;
-        }
-
-        return s * 1000;
+        const items = time.split(':');
+        return items.reduceRight(
+            (prev,curr,i,arr) => prev + parseInt(curr) * 60**(arr.length-1-i),
+            0
+        ) * 1000;
     }
 
     /**
-	 * Create a text progress bar
-	 * @param {Number} value - The value to fill the bar
-	 * @param {Number} maxValue - The max value of the bar
-	 * @param {Number} size - The bar size (in letters)
-	 * @param {String} loadedIcon - Loaded Icon
-	 * @param {String} arrowIcon - Arrow Icon
-	 * @return {String} - Music Bar
-	 */
-	static buildBar(value, maxValue, size, loadedIcon, arrowIcon) {
-		const percentage = value / maxValue > 1 ? 0 : value / maxValue;
+     * Create a text progress bar
+     * @param {Number} value - The value to fill the bar
+     * @param {Number} maxValue - The max value of the bar
+     * @param {Number} size - The bar size (in letters)
+     * @param {String} loadedIcon - Loaded Icon
+     * @param {String} arrowIcon - Arrow Icon
+     * @return {String} - Music Bar
+     */
+    static buildBar(value, maxValue, size, loadedIcon, arrowIcon) {
+        const percentage = value / maxValue > 1 ? 0 : value / maxValue;
 		const progress = Math.round(size * percentage);
 		const emptyProgress = Math.round(size * (1 - percentage));
 
@@ -367,9 +364,81 @@ class Util {
 		const emptyProgressText = loadedIcon.repeat(emptyProgress);
 
 		return `[${progressText}](https://google.com)${emptyProgressText}\n${this.MillisecondsToTime(value)}/${this.MillisecondsToTime(maxValue)}`;
-	};
+    };
 
+    /**
+     * @param {Partial<Util.PlayerOptions>} options
+     * @returns {PlayerOptions|Partial<PlayerOptions>}
+     */
+    static deserializeOptionsPlayer(options) {
+        if(options && typeof options === 'object')
+            return Object.assign({}, this.PlayerOptions, options);
+        else return this.PlayerOptions;
+    }
 
-};
+    /**
+     * @param {Partial<Util.PlayOptions>|String} options
+     * @returns {Partial<PlayOptions>}
+     */
+    static deserializeOptionsPlay(options) {
+        if(options && typeof options === 'object')
+            return Object.assign({}, this.PlayOptions, options);
+        else if(typeof options === 'string')
+            return Object.assign({}, this.PlayOptions, { search: options });
+        else return this.PlayOptions;
+    }
+
+    /**
+     * @param {Partial<Util.PlaylistOptions>|String} options
+     * @returns {Partial<PlaylistOptions>}
+     */
+    static deserializeOptionsPlaylist(options) {
+        if(options && typeof options === 'object')
+            return Object.assign({}, this.PlaylistOptions, options);
+        else if(typeof options === 'string')
+            return Object.assign({}, this.PlaylistOptions, { search: options });
+        else return this.PlaylistOptions;
+    }
+
+    /**
+     * @param {Partial<Util.ProgressOptions>} options
+     * @returns {Partial<ProgressOptions>}
+     */
+    static deserializeOptionsProgress(options) {
+        if(options && typeof options === 'object')
+            return Object.assign({}, this.ProgressOptions, options);
+        else return this.ProgressOptions;
+    }
+
+    /**
+     * @param {Discord.VoiceState} voice
+     * @return {Boolean}
+     */
+    static isVoice(voice) {
+        if(voice.constructor.name !== Discord.VoiceState.name)
+            return false;
+        return voice.channel ? voice.channel.constructor.name === 'VoiceChannel' || voice.channel.constructor.name === 'StageChannel' : false;
+    }
+
+    /**
+     * @param {Array} array
+     * @return {Array}
+     */
+    static shuffle(array) {
+        if(!Array.isArray(array)) return [];
+        const clone = [...array];
+        const shuffled = [];
+        while(clone.length > 0) 
+            shuffled.push(
+                clone.splice(
+                    Math.floor(
+                        Math.random() * clone.length
+                    ), 1
+                )[0]
+            );
+        return shuffled;
+    }
+
+}
 
 module.exports = Util;
