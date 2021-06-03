@@ -552,6 +552,8 @@ const player = new Player(client, {
 player.nowPlayings = new Discord.Collection();
 client.player = player;
 
+const Utils = require("./utils/music/Util");
+
 player.on("clientDisconnect", (message, queue) => {
 	const l = message.client.languages.get(message.guild.id);
 	message.channel.send(languages.get(languages.music.disconnect[l], queue.connection.channel)).catch(console.error);
@@ -569,12 +571,10 @@ player.on("playlistAdd", (message, queue, playlist) => {
 
 player.on("queueEnd", (message, queue) => {
 	const l = message.client.languages.get(message.guild.id);
-	const Utils = require("./utils/music/Util");
 
 	const [ toRemove, toKeep ] = player.nowPlayings.partition(nowPlaying => nowPlaying.guild.id === message.id);
 	player.nowPlayings = toKeep;
 
-	console.log(queue);
 	const song = queue.songs[0];
 
 	toRemove.forEach(msg => {
@@ -599,7 +599,7 @@ player.on("queueEnd", (message, queue) => {
 
 player.on("songAdd", (message, queue, song) => {
 	const l = message.client.languages.get(message.guild.id);
-	message.channel.send(languages.get(languages.music.song[l], queue.duration, song.name)).catch(console.error);
+	message.channel.send(languages.get(languages.music.song[l], Utils.MillisecondsToTime(queue.duration), song.name)).catch(console.error);
 });
 
 player.on("songChanged", (message, newSong, OldSong) => {
@@ -612,7 +612,7 @@ player.on("songFirst", (message, song) => {
 });
 
 setTimeout(() => {
-	const Utils = require("./utils/music/Util");
+	console.log(player.nowPlayings)
 
 	player.nowPlayings.forEach(message => {
 		const l = message.client.languages.get(message.guild.id);
