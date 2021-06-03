@@ -559,7 +559,7 @@ player.on("clientDisconnect", (message, queue) => {
 
 player.on("error", (error, message) => {
 	const l = message.client.languages.get(message.guild.id);
-	message.channel.send(language.get(languages.music.error[l], error)).catch(console.error);
+	message.channel.send(languages.get(languages.music.error[l], error)).catch(console.error);
 });
 
 player.on("playlistAdd", (message, queue, playlist) => {
