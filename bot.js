@@ -19,9 +19,21 @@ if (process.env.HOST !== "HEROKU" && !process.env.NO_DATABASE_FETCH) {
 	const [ connectionURL, user, password, host, port, database ] = output.match(connectionURLregex);
 	process.env.DATABASE_URL = connectionURL;
 }
+
 const pg = require("pg");
 client.pg = newPgClient();
-client.pg.connect().then(() => console.log("Connected to the database")).catch(console.error);
+
+client.pg.connect().then(() => {
+	console.log("Connected to the database");
+
+	client.languages = new Discord.Collection();
+	client.pg.query(`SELECT * FROM languages`).then(res => {
+		for (const row of res.rows) {
+			client.languages.set(row.guild_id, row.language_code);
+		}
+	});
+});
+
 setInterval(reconnectPgClient, 3600000);
 
 const imageFiles = Fs.readdirSync("./discord-images");
@@ -100,8 +112,9 @@ client.on("ready", async () => {
 
 	// PREFIX
 	const mayze = client.users.cache.get("703161067982946334");
-	const prefix = client.beta ? ( mayze.presence.status === "offline" ? config.PREFIX : config.PREFIX_BETA ) : config.PREFIX;
-	client.prefix = prefix;
+	client.prefix = client.beta
+		? mayze.presence.status === "offline" ? config.PREFIX : config.PREFIX_BETA
+		: config.PREFIX;
 
 	// CANVAS
 	const Canvas = require("./utils/canvas/Canvas");
@@ -150,8 +163,8 @@ client.on("ready", async () => {
 
 	// SLASH COMMANDS
 	const slashGuilds = [ "724530039781326869", "672516066756395031", "689164798264606784", "544545798256590848" ];
-	client.slashCommands = {};
-	for (const guildID of slashGuilds) client.slashCommands[guildID] = new Discord.Collection();
+	client.slashCommands = new Discord.Collection();
+	for (const guildID of slashGuilds) client.slashCommands.set(guildID, new Discord.Collection());
 
 	await Promise.all(slashGuilds.map(async guildID => {
 		const { "rows": slashData } = (await client.pg.query(`SELECT * FROM slash_commands WHERE guild_id = '${guildID}'`).catch(console.error)) || {};
@@ -169,7 +182,7 @@ client.on("ready", async () => {
 			const slashCommand = await client.api.applications(client.user.id).guilds(guildID).commands.post({ data: slashOptions }).catch(console.error);
 			if (!slashCommand) return;
 
-			client.slashCommands[guildID].set(slashCommand.name, slashCommand);
+			client.slashCommands.get(guildID).set(slashCommand.name, slashCommand);
 
 			if (slashData.some(slash => slash.name === command.name)) client.pg.query(`UPDATE slash_commands SET id = '${slashCommand.id}', data = '${JSON.stringify(slashCommand).replace(/'/g, "''")}' WHERE name = '${slashCommand.name}' AND guild_id = '${guildID}'`).catch(console.error);
 			else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.id}', '${guildID}', '${slashCommand.name}', '${JSON.stringify(slashCommand).replace(/'/g, "''")}')`).catch(console.error);
@@ -248,7 +261,7 @@ client.on("message", async message => {
 			}
 			const f = x => Math.round(Math.sqrt(message.content.length) * config.XP_MULTIPLIER / x);
 			const newXP = f(client.xpMessages[message.author.id]);
-			chatXP(message, newXP, "fr");
+			chatXP(message, newXP, client.languages.get(message.guild.id));
 			client.xpMessages[message.author.id] ++;
 		}
 	}
@@ -301,11 +314,9 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
  * @param {object[]} options 
  */
 async function processCommand(command, message, args, options) {
-	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting.en, { ephemeral: true }).catch(console.error);
+	const language = client.languages.get(message.guild.id);
 
-	let language = "en";
-	const res = await message.client.pg.query(`SELECT * FROM languages WHERE guild_id = '${message.guild.id}'`).catch(console.error);
-	if (res && res.rows.length) language = res.rows[0].language_code;
+	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting[language], { ephemeral: true }).catch(console.error);
 
 	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return; // message.reply(languages.data.unauthorized_guild[language]).catch(console.error);
 	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm) || (message.channel.viewable && message.channel.permissionsFor(message.member).has(perm))) && message.author.id !== config.OWNER_ID) return message.reply(languages.get(languages.data.unauthorized_perms[language], command.perms.join("`, `")), { ephemeral: true }).catch(console.error);
@@ -540,6 +551,91 @@ const player = new Player(client, {
 });
 client.player = player;
 client.player.npTimers = {};
+
+player.on("clientDisconnect", (message, queue) => {
+	const l = message.client.languages.get(message.guild.id);
+	message.channel.send(languages.get(languages.music.disconnect[l], queue.connection.channel)).catch(console.error);
+});
+
+player.on("error", (error, message) => {
+	const l = message.client.languages.get(message.guild.id);
+	message.channel.send(language.get(languages.music.error[l], error)).catch(console.error);
+});
+
+player.on("playlistAdd", (message, queue, playlist) => {
+	const l = message.client.languages.get(message.guild.id);
+	message.channel.send(languages.get(languages.music.playlist[l], playlist.videoCount)).catch(console.error);
+});
+
+player.on("queueEnd", (message, queue) => {
+	const l = message.client.languages.get(message.guild.id);
+	const { Utils } = require("discord-music-player");
+
+	const [ toRemove, toKeep ] = player.nowPlayings.partition(nowPlaying => nowPlaying.guild.id === message.id);
+	player.nowPlayings = toKeep;
+
+	console.log(queue);
+	const song = queue.songs[0];
+
+	toRemove.forEach(msg => {
+		msg.edit({
+			embed: {
+				author: {
+					name: languages.data["now-playing"].now_playing[l],
+					icon_url: message.client.user.avatarURL()
+				},
+				thumbnail: {
+					url: song.thumbnail,
+				},
+				color: message.guild.me.displayColor,
+				description: languages.get(languages.data["now-playing"].description[l], song.name, song.url, Utils.buildBar(Utils.TimeToMilliseconds(song.duration), Utils.TimeToMilliseconds(song.duration), 20, "━", "🔘"), song.requestedBy, "Ø", "**0:00**"),
+				footer: {
+					text: languages.data["now-playing"].footer_end[l]
+				}
+			}
+		}).catch(console.error);
+	});
+});
+
+player.on("songAdd", (message, queue, song) => {
+	const l = message.client.languages.get(message.guild.id);
+	message.channel.send(languages.get(languages.music.song[l], queue.duration, song.name)).catch(console.error);
+});
+
+player.on("songChanged", (message, newSong, OldSong) => {
+	const l = message.client.languages.get(message.guild.id);
+});
+
+player.on("songFirst", (message, song) => {
+	const l = message.client.languages.get(message.guild.id);
+	message.channel.send(languages.get(languages.music.playing[l], song.name)).catch(console.error);
+});
+
+setTimeout(() => {
+	const { Utils } = require("discord-music-player");
+
+	player.nowPlayings.forEach(message => {
+		const l = message.client.languages.get(message.guild.id);
+		const song = player.nowPlaying(message);
+		
+		message.edit({
+			embed: {
+				author: {
+					name: languages.data["now-playing"].now_playing[l],
+					icon_url: client.user.avatarURL()
+				},
+				thumbnail: {
+					url: song.thumbnail
+				},
+				color: message.guild.me.displayColor,
+				description: languages.get(languages.data["now-playing"].description[l], song.name, song.url, player.createProgressBar(message), song.requestedBy, song.queue.repeatMode ? song.name : (song.queue.songs[1] ? song.queue.songs[1].name : (song.queue.repeatQueue ? song.queue.songs[0].name : "Ø")), Utils.MillisecondsToTime(song.queue.duration)),
+				footer: {
+					text: languages.get(languages.data["now-playing"].footer[l], song.queue.repeatMode, song.queue.repeatQueue)
+				}
+			}
+		}).catch(console.error);
+	});
+}, 10000);
 
 
 
