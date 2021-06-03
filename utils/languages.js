@@ -1183,10 +1183,6 @@ module.exports = {
 			no_song: {
 				fr: "je n'ai pas trouvé de musique avec ce titre",
 				en: "I couldn't find a song with this title"
-			},
-			playing: {
-				fr: "<a:blackCheck:803603780666523699> | **En train de jouer...**\n> {1}",
-				en: "<a:blackCheck:803603780666523699> | **Now playing...**\n> {1}"
 			}
 		},
 		"play-top": {
@@ -1197,14 +1193,6 @@ module.exports = {
 			no_song: {
 				fr: "je n'ai pas trouvé de musique avec ce titre",
 				en: "I couldn't find a song with this title"
-			},
-			added: {
-				fr: "<a:blackCheck:803603780666523699> | **Ajouté en début de queue**\n> {1}",
-				en: "<a:blackCheck:803603780666523699> | **Added at the beginning of the queue**\n> {1}"
-			},
-			playing: {
-				fr: "<a:blackCheck:803603780666523699> | **En train de jouer...**\n> {1}",
-				en: "<a:blackCheck:803603780666523699> | **Now playing...**\n> {1}"
 			}
 		},
 		"play": {
@@ -1216,21 +1204,9 @@ module.exports = {
 				fr: "Quelque chose s'est mal passé en récupérant la playlist :/",
 				en: "Something went wrong when retrieving the playlist :/"
 			},
-			playlist_added: {
-				fr: "<a:blackCheck:803603780666523699> | **Playlist ajoutée[1? et mélangée:]**\n> {2} musiques ont été ajoutées à la queue",
-				en: "<a:blackCheck:803603780666523699> | **Playlist added[1? and shuffled:]**\n> {2} song have been added to the queue"
-			},
-			playing: {
-				fr: "<a:blackCheck:803603780666523699> | **En train de jouer...**\n> {1}",
-				en: "<a:blackCheck:803603780666523699> | **Now playing...**\n> {1}"
-			},
 			no_song: {
 				fr: "je n'ai pas trouvé de musique avec ce titre",
 				en: "I couldn't find a song with this title"
-			},
-			added_to_queue: {
-				fr: "<a:blackCheck:803603780666523699> | **Ajouté à la queue • Joué dans {1}**\n> {2}",
-				en: "<a:blackCheck:803603780666523699> | **Added to the queue • Played in {1}**\n> {2}"
 			}
 		},
 		"playlist": {
@@ -1257,14 +1233,6 @@ module.exports = {
 			error_playlist: {
 				fr: "Quelque chose s'est mal passé en récupérant la playlist :/",
 				en: "Something went wrong when retrieving the playlist :/"
-			},
-			playlist_added: {
-				fr: "<a:blackCheck:803603780666523699> | **Playlist ajoutée[1? et mélangée:]**\n> {2} musiques ont été ajoutées à la queue",
-				en: "<a:blackCheck:803603780666523699> | **Playlist added[1? and shuffled:]**\n> {2} song have been added to the queue"
-			},
-			playing: {
-				fr: "<a:blackCheck:803603780666523699> | **En train de jouer...**\n> {1}",
-				en: "<a:blackCheck:803603780666523699> | **Now playing...**\n> {1}"
 			},
 			playlist_already_exists: {
 				fr: "une playlist avec ce nom existe déjà",
@@ -1390,6 +1358,29 @@ module.exports = {
 				fr: "<a:blackCheck:803603780666523699> | **Volume {1}%**",
 				en: "<a:blackCheck:803603780666523699> | **Volume {1}%**"
 			}
+		}
+	},
+
+	music: {
+		disconnect: {
+			fr: "<a:blackCheck:803603780666523699> | **Musique arrêtée**",
+			en: "<a:blackCheck:803603780666523699> | **Music stopped**"
+		},
+		error: {
+			fr: "Une erreur est survenue : `{1}`",
+			en: "An error occurred: `{1}`"
+		},
+		playlist: {
+			fr: "<a:blackCheck:803603780666523699> | **Playlist ajoutée**\n> {1} musiques ont été ajoutées à la queue",
+			en: "<a:blackCheck:803603780666523699> | **Playlist added**\n> {1} songs have been added to the queue"
+		},
+		song: {
+			fr: "<a:blackCheck:803603780666523699> | **Ajouté à la queue • Joué dans {1}**\n> {2}",
+			en: "<a:blackCheck:803603780666523699> | **Added to the queue • Played in {1}**\n> {2}"
+		},
+		playing: {
+			fr: "<a:blackCheck:803603780666523699> | **En train de jouer...**\n> {1}",
+			en: "<a:blackCheck:803603780666523699> | **Now playing...**\n> {1}"
 		}
 	}
 };

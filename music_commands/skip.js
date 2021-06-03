@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { BetterMessage } = require("../utils/better-discord");
 
 const command = {
 	name: "skip",
@@ -10,7 +10,7 @@ const command = {
 	args: 0,
 	usage: "",
 	/**
-	 * @param {Message} message 
+	 * @param {BetterMessage} message 
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
@@ -20,7 +20,9 @@ const command = {
 		const isPlaying = message.client.player.isPlaying(message);
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
-		const song = await message.client.player.skip(message);
+		const song = message.client.player.skip(message);
+		if (!song) return;
+		
 		message.channel.send(language.get(language.skipped, song.name)).catch(console.error);
 	}
 };

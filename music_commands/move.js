@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { BetterMessage } = require("../utils/better-discord");
 
 const command = {
 	name: "move",
@@ -24,7 +24,7 @@ const command = {
 		}
 	],
 	/**
-	 * @param {Message} message 
+	 * @param {BetterMessage} message 
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
@@ -44,8 +44,9 @@ const command = {
             : options[1].value;
         if (isNaN(position) || position < 0) return message.reply(language.invalid_pos).catch(console.error);
 		
-		const song = message.client.player.move(message.guild.id, songID, position);
-        if (!song || song.error) return message.reply(language.invalid_song).catch(console.error);
+		const song = message.client.player.move(message, songID, position);
+        if (!song) return message.reply(language.invalid_song).catch(console.error);
+		
 		message.channel.send(language.get(language.song_moved, song.name)).catch(console.error);
 	}
 };

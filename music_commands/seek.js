@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { BetterMessage } = require("../utils/better-discord");
 
 const command = {
 	name: "seek",
@@ -18,7 +18,7 @@ const command = {
 		}
 	],
 	/**
-	 * @param {Message} message 
+	 * @param {BetterMessage} message 
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
@@ -38,8 +38,10 @@ const command = {
 		
 		const timeInMs = Utils.TimeToMilliseconds(time);
 
-		const res = await message.client.player.seek(message.guild.id, timeInMs);
-		message.channel.send(language.get(language.seeked, time, res.song.name)).catch(console.error);
+		const song = await message.client.player.seek(message.guild.id, timeInMs);
+		if (!song) return;
+
+		message.channel.send(language.get(language.seeked, time, song.name)).catch(console.error);
 	}
 };
 

@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { BetterMessage } = require("../utils/better-discord");
 
 const command = {
 	name: "remove",
@@ -18,7 +18,7 @@ const command = {
 		}
 	],
 	/**
-	 * @param {Message} message 
+	 * @param {BetterMessage} message 
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
@@ -40,7 +40,7 @@ const command = {
             : options[0] ? options[0].value.match(numberRegex) || [ "0" ] : [ (queue.songs.length - 1).toString() ];
 		if (songs.join(" ").match(/\d+/g).some(s => parseInt(s) === 0 || parseInt(s) >= queue.songs.length)) return message.reply(language.get(language.invalid_numbers, queue.songs.length - 1));
 
-		const removedSongs = message.client.player.remove(message.guild.id, songs);
+		const removedSongs = message.client.player.remove(message, songs);
 		message.channel.send(language.get(language.removed, removedSongs.length, removedSongs.length > 1, removedSongs.length === 1 ? "\n> " + removedSongs[0].name : "")).catch(console.error);
 	}
 };

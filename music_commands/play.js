@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { BetterMessage } = require("../utils/better-discord");
 
 const command = {
 	name: "play",
@@ -19,7 +19,7 @@ const command = {
 		}
 	],
 	/**
-	 * @param {Message} message 
+	 * @param {BetterMessage} message 
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
@@ -43,50 +43,58 @@ const command = {
 			? args.includes("-shuffle")
 			: options[1].value.includes("-shuffle");
 
-		if (DeezerRegexScrap.test(search)) {
-			const res = await Axios.get(search).catch(err => {
-				console.error(err);
-				search = null;
-			});
-			let [ , scrap ] = res.data.match(/property="og:url" content="(.*)"/) || [];
-			search = scrap;
+		// if (DeezerRegexScrap.test(search)) {
+		// 	const res = await Axios.get(search).catch(err => {
+		// 		console.error(err);
+		// 		search = null;
+		// 	});
+		// 	let [ , scrap ] = res.data.match(/property="og:url" content="(.*)"/) || [];
+		// 	search = scrap;
 			
-			if (!search) return message.reply(language.error_deezer).catch(console.error);
-		}
+		// 	if (!search) return message.reply(language.error_deezer).catch(console.error);
+		// }
 		
-		if ((playlistRegex.test(search) || SpotifyPlaylistRegex.test(search) || DeezerPlaylistRegex.test(search)) && !videoRegex.test(search)) {
+		if ((playlistRegex.test(search) || SpotifyPlaylistRegex.test(search)) /*|| DeezerPlaylistRegex.test(search))*/ && !videoRegex.test(search)) {
 			if (!message.isInteraction) message.channel.startTyping(1);
-			const res = await message.client.player.playlist(message.guild.id, search, message.member.voice.channel, -1, message.author, shuffle);
-			if (!res.playlist) {
+
+			const playlist = await message.client.player.playlist(message, {
+				search,
+				maxSongs: -1,
+				requestedBy: message.author.tag,
+				shuffle
+			});
+
+			if (!playlist) {
 				console.error(res.error);
 				if (!message.isInteraction) message.channel.stopTyping();
 				return message.channel.send(language.error_playlist).catch(console.error);
 			}
 
-			message.channel.send(language.get(language.playlist_added, shuffle, res.playlist.videoCount)).catch(console.error);
-			if (!isPlaying) message.channel.send(language.get(language.playing, res.song.name)).catch(console.error);
 			if (!message.isInteraction) message.channel.stopTyping();
 
 		} else {
-			// If there's already a song playing
+
 			if (isPlaying) {
-				const queue = message.client.player.getQueue(message);
-				// Add the song to the queue
-				const res = await message.client.player.addToQueue(message.guild.id, search, null, message.author);
-				if (!res.song) {
+				const song = await message.client.player.addToQueue(message, {
+					search,
+					requestedBy: message.author.tag
+				});
+
+				if (!song) {
 					console.error(res.error);
 					return message.reply(language.no_song).catch(console.error);
 				}
-				message.channel.send(language.get(language.added_to_queue, Utils.MillisecondsToTime(queue.duration - Utils.TimeToMilliseconds(res.song.duration)), res.song.name)).catch(console.error);
 
 			} else {
-				// Else, play the song
-				const res = await message.client.player.play(message.member.voice.channel, search, null, message.author);
-				if (!res.song) {
+				const song = await message.client.player.play(message, {
+					search,
+					requestedBy: message.author.tag
+				});
+
+				if (!res) {
 					console.error(res.error);
 					return message.reply(language.no_song).catch(console.error);
 				}
-				message.channel.send(language.get(language.playing, res.song.name)).catch(console.error);
 			}
 		}
 	}

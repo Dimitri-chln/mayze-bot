@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { BetterMessage } = require("../utils/better-discord");
 
 const command = {
 	name: "volume",
@@ -18,7 +18,7 @@ const command = {
 		}
 	],
 	/**
-	 * @param {Message} message 
+	 * @param {BetterMessage} message 
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
@@ -38,6 +38,7 @@ const command = {
 			if (volume < 0 || volume > 200) return message.reply(language.invalid_volume).catch(console.error);
 
 			message.client.player.setVolume(message.guild.id, volume);
+			
 			message.channel.send(language.get(language.volume_changed, volume)).catch(console.error);
 		
 		}

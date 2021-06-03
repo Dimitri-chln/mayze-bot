@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { BetterMessage } = require("../utils/better-discord");
 
 const command = {
 	name: "language",
@@ -29,7 +29,7 @@ const command = {
 		}
 	],
 	/**
-	* @param {Message} message 
+	* @param {BetterMessage} message 
 	* @param {string[]} args 
 	* @param {Object[]} options
 	*/
@@ -46,6 +46,8 @@ const command = {
 		if (currentLanguage) var res = await message.client.pg.query(`UPDATE languages SET language_code = '${newLanguage}' WHERE guild_id = '${message.guild.id}'`).catch(console.error);
 		else var res = await message.client.pg.query(`INSERT INTO languages VALUES ('${message.guild.id}', '${newLanguage}')`).catch(console.error);
 		if (!res) return message.channel.send(language.errors.database).catch(console.error);
+
+		message.client.languages.set(message.guild.id, newLanguage);
 		
 		if (!message.isInteraction) message.react("✅").catch(console.error);
 		else message.reply(language.language_updated).catch(console.error);

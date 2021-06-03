@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { BetterMessage } = require("../utils/better-discord");
 
 const command = {
 	name: "stop",
@@ -10,7 +10,7 @@ const command = {
 	args: 0,
     usage: "",
 	/**
-	 * @param {Message} message 
+	 * @param {BetterMessage} message 
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
@@ -21,6 +21,7 @@ const command = {
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
 		message.client.player.stop(message);
+		
 		message.channel.send(language.stopped).catch(console.error);
 	}
 };

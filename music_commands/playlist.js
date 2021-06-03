@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { BetterMessage } = require("../utils/better-discord");
 
 const command = {
 	name: "playlist",
@@ -82,19 +82,20 @@ const command = {
 		}
 	],
 	/**
-	 * @param {Message} message 
+	 * @param {BetterMessage} message 
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options, language, languageCode) => {		
 		const subCommand = args
-			? args.length ? args[0].toLowerCase() : "get"
+			? args.length && args[0] !== "-me" ? args[0].toLowerCase() : "get"
 			: options[0].name;
 		const playlistName = args
 			? args[1]
 			: options[0].options ? options[0].options[0].value : null;
 		
-		const { "rows": playlists } = (await message.client.pg.query(`SELECT * FROM playlists WHERE private = false OR user_id = '${message.author.id}'`).catch(console.error)) || {};
+		const { "rows": playlists } = (await message.client.pg.query(`SELECT * FROM playlists WHERE NOT private OR user_id = '${message.author.id}'`).catch(console.error)) || {};
+		if (!playlists) return message.channel.send(language.errors.database).catch(console.error);
 		
 		switch (subCommand) {
 			case "get": {
@@ -119,8 +120,7 @@ const command = {
 			}
 			case "play": {
 				if (!message.member.voice.channelID || (message.client.player.getQueue(message) && message.member.voice.channelID !== message.client.player.getQueue(message).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
-				const isPlaying = message.client.player.isPlaying(message);
-
+				
 				const shuffle = args
 					? args.includes("-shuffle")
 					: options[0].options[1] ? options[0].options[1].value : false;
@@ -129,20 +129,26 @@ const command = {
 				if (!playlist) return message.reply(language.invalid_playlist).catch(console.error);
 
 				if (!message.isInteraction) message.channel.startTyping(1);
-				const res = await message.client.player.playlist(message.guild.id, playlist.url, message.member.voice.channel, -1, message.author, shuffle);
-				if (!res.playlist) {
+
+				const playlist = await message.client.player.playlist(message, {
+					search: playlist.url,
+					maxSongs: -1,
+					requestedBy: message.author.tag,
+					shuffle
+				});
+
+				if (!playlist) {
 					console.error(res.error);
 					if (!message.isInteraction) message.channel.stopTyping();
 					return message.channel.send(language.error_playlist).catch(console.error);
 				}
 
-				message.channel.send(language.get(language.playlist_added, shuffle, res.playlist.videoCount)).catch(console.error);
-				if (!isPlaying) message.channel.send(language.get(language.playing, res.song.name)).catch(console.error);
 				if (!message.isInteraction) message.channel.stopTyping();
 				break;
 			}
 			case "add": {
 				const { rows } = (await message.client.pg.query(`SELECT * FROM playlists WHERE name = '${playlistName}'`).catch(console.error)) || {};
+				if (!rows) return message.channel.send(language.errors.database).catch(console.error);
 				if (rows.length) return message.reply(language.playlist_already_exists).catch(console.error);
 
 				const url = args

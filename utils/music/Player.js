@@ -594,8 +594,7 @@ class Player {
                 } else {
                     // Change order if necessary
                     if (songEnd < songStart) {
-                        let temp = songEnd;
-                        songEnd = songStart, songStart = temp;
+                        [ songEnd, songStart ] = [ songStart, songEnd ];
                     }
                     // Mark the songs as removed
                     for (let i = songStart; i <= songEnd; i++) {

@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { BetterMessage } = require("../utils/better-discord");
 
 const command = {
 	name: "lyrics",
@@ -18,7 +18,7 @@ const command = {
 		}
 	],
 	/**
-	 * @param {Message} message 
+	 * @param {BetterMessage} message 
 	 * @param {string[]} args 
 	 * @param {Object[]} options 
 	 */
@@ -29,8 +29,8 @@ const command = {
 
 		const isPlaying = message.client.player.isPlaying(message);
 		const songName = args
-			? args.length ? args.join(" ") : (isPlaying ? (await message.client.player.nowPlaying(message)).name : null)
-			: options ? options[0].value : (isPlaying ? (await message.client.player.nowPlaying(message)).name : null);
+			? args.length ? args.join(" ") : (isPlaying ? message.client.player.nowPlaying(message).name : null)
+			: options ? options[0].value : (isPlaying ? message.client.player.nowPlaying(message).name : null);
 		if (!songName) return message.reply(language.no_song).catch(console.error);
 
 		if (!message.isInteraction) message.channel.startTyping(1);

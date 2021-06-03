@@ -1,13 +1,13 @@
-const { Message } = require("discord.js");
+const { BetterMessage } = require("../utils/better-discord");
 
 const command = {
 	/**
-	 * @param {Message} message 
+	 * @param {BetterMessage} message 
 	 */
 	execute: async message => {
 		const mila = await message.client.users.fetch("608623753399762964").catch(console.error);
 
-		const regex = /\bmila(?:y(?=na))(?:na)?\b/i;
+		const regex = /\bmila(?:y(?=na))?(?:na)?\b/i;
 		
 		if (message.author.id !== mila.id && regex.test(message.content) && !message.mentions.users.has(mila.id)) {
 			mila.send({
