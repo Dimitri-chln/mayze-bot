@@ -91,7 +91,7 @@ const command = {
 					requestedBy: message.author.tag
 				});
 
-				if (!res) {
+				if (!song) {
 					console.error(res.error);
 					return message.reply(language.no_song).catch(console.error);
 				}

@@ -1375,8 +1375,8 @@ module.exports = {
 			en: "<a:blackCheck:803603780666523699> | **Playlist added**\n> {1} songs have been added to the queue"
 		},
 		song: {
-			fr: "<a:blackCheck:803603780666523699> | **Ajouté à la queue • Joué dans {1}**\n> {2}",
-			en: "<a:blackCheck:803603780666523699> | **Added to the queue • Played in {1}**\n> {2}"
+			fr: "<a:blackCheck:803603780666523699> | **Ajouté à la queue • Joué [1?dans {1}:maintenant]**\n> {2}",
+			en: "<a:blackCheck:803603780666523699> | **Added to the queue • Played [1?in {1}:now]**\n> {2}"
 		},
 		playing: {
 			fr: "<a:blackCheck:803603780666523699> | **En train de jouer...**\n> {1}",
