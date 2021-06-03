@@ -25,7 +25,7 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const Axios = require("axios").default;
-		const Util = require("../utils/music/Util");
+		const { Utils } = require("discord-music-player");
 
 		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
@@ -33,8 +33,8 @@ const command = {
 		const videoRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))((?!channel)(?!user)\/(?:[\w\-]+\?v=|embed\/|v\/)?)((?!channel)(?!user)[\w\-]+)(\S+)?$/;
 		const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#&\?]*).*/;
 		const SpotifyPlaylistRegex = /https?:\/\/(?:open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
-		const DeezerPlaylistRegex = /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)/;
-		const DeezerRegexScrap = /https?:\/\/deezer\.page\.link\/\w+/;
+		// const DeezerPlaylistRegex = /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)/;
+		// const DeezerRegexScrap = /https?:\/\/deezer\.page\.link\/\w+/;
 
 		let search = args
 			? args.filter(a => a !== "-shuffle").join(" ")
@@ -77,7 +77,7 @@ const command = {
 					console.error(res.error);
 					return message.reply(language.no_song).catch(console.error);
 				}
-				message.channel.send(language.get(language.added_to_queue, Util.MillisecondsToTime(queue.duration - Util.TimeToMilliseconds(res.song.duration)), res.song.name)).catch(console.error);
+				message.channel.send(language.get(language.added_to_queue, Utils.MillisecondsToTime(queue.duration - Utils.TimeToMilliseconds(res.song.duration)), res.song.name)).catch(console.error);
 
 			} else {
 				// Else, play the song

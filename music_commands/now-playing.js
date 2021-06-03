@@ -15,7 +15,7 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		const Util = require("../utils/music/Util");
+		const { Utils } = require("discord-music-player");
 
 		const isPlaying = message.client.player.isPlaying(message.guild.id);
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
@@ -32,7 +32,7 @@ const command = {
 					url: song.thumbnail
 				},
 				color: message.guild.me.displayColor,
-				description: language.get(language.description, song.name, song.url, message.client.player.createProgressBar(message.guild.id), song.requestedBy.tag, queue.repeatMode ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Ø")), Util.MillisecondsToTime(queue.duration)),
+				description: language.get(language.description, song.name, song.url, message.client.player.createProgressBar(message.guild.id), song.requestedBy.tag, queue.repeatMode ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Ø")), Utils.MillisecondsToTime(queue.duration)),
 				footer: {
 					text: language.get(language.footer, queue.repeatMode, queue.repeatQueue)
 				}
@@ -59,7 +59,7 @@ const command = {
 						width: 1280
 					},
 					color: message.guild.me.displayColor,
-					description: language.get(language.description, lastSong.name, lastSong.url, Util.buildBar(Util.TimeToMilliseconds(lastSong.duration), Util.TimeToMilliseconds(lastSong.duration), 20, "━", "🔘"), lastSong.requestedBy.tag, "Ø", "**0:00**"),
+					description: language.get(language.description, lastSong.name, lastSong.url, Utils.buildBar(Utils.TimeToMilliseconds(lastSong.duration), Utils.TimeToMilliseconds(lastSong.duration), 20, "━", "🔘"), lastSong.requestedBy.tag, "Ø", "**0:00**"),
 					footer: {
 						text: language.footer_end
 					}
@@ -87,7 +87,7 @@ const command = {
 						width: 1280
 					},
 					color: message.guild.me.displayColor,
-					description: language.get(language.description, newSong.name, newSong.url, message.client.player.createProgressBar(message.guild.id, !!song), newSong.requestedBy.tag, queue.repeatMode ? newSong.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Ø")), Util.MillisecondsToTime(queue.duration)),
+					description: language.get(language.description, newSong.name, newSong.url, message.client.player.createProgressBar(message.guild.id, !!song), newSong.requestedBy.tag, queue.repeatMode ? newSong.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Ø")), Utils.MillisecondsToTime(queue.duration)),
 					footer: {
 						text: language.get(language.footer, queue.repeatMode, queue.repeatQueue)
 					}
