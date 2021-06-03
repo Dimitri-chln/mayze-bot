@@ -837,7 +837,7 @@ class Player extends EventEmitter {
             filter: 'audioonly',
             quality: Quality,
             dlChunkSize: 0,
-            highWaterMark: 1 << 25,
+            highWaterMark: 1 << 50,
         }).on('error', err => {
             /**
              * error event.
@@ -851,7 +851,7 @@ class Player extends EventEmitter {
         setTimeout(() => {
             if (queue.dispatcher) queue.dispatcher.destroy();
             let dispatcher = queue.connection.play(stream, {
-                seek: seek / 1000 || 0,
+                seek: seek / 1000 || 0
             });
             queue.dispatcher = dispatcher;
             // Set volume
