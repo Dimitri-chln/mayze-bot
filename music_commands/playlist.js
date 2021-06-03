@@ -118,8 +118,8 @@ const command = {
 				break;
 			}
 			case "play": {
-				if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
-				const isPlaying = message.client.player.isPlaying(message.guild.id);
+				if (!message.member.voice.channelID || (message.client.player.getQueue(message) && message.member.voice.channelID !== message.client.player.getQueue(message).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
+				const isPlaying = message.client.player.isPlaying(message);
 
 				const shuffle = args
 					? args.includes("-shuffle")

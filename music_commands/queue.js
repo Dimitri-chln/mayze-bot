@@ -18,10 +18,10 @@ const command = {
 		const pagination = require("../utils/pagination");
 		const { MessageEmbed } = require("discord.js");
 		const { Utils } = require("discord-music-player");
-		const isPlaying = message.client.player.isPlaying(message.guild.id);
+		const isPlaying = message.client.player.isPlaying(message);
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
-		const queue = message.client.player.getQueue(message.guild.id);
+		const queue = message.client.player.getQueue(message);
 
 		const songsPerPage = 15;
 		let pages = [];

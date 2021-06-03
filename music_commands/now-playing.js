@@ -17,11 +17,11 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		const { Utils } = require("discord-music-player");
 
-		const isPlaying = message.client.player.isPlaying(message.guild.id);
+		const isPlaying = message.client.player.isPlaying(message);
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
-		const queue = message.client.player.getQueue(message.guild.id);
+		const queue = message.client.player.getQueue(message);
 		
-		const song = message.client.player.nowPlaying(message.guild.id);
+		const song = message.client.player.nowPlaying(message);
 		const msg = await message.channel.send({
 			embed: {
 				author: {
@@ -32,7 +32,7 @@ const command = {
 					url: song.thumbnail
 				},
 				color: message.guild.me.displayColor,
-				description: language.get(language.description, song.name, song.url, message.client.player.createProgressBar(message.guild.id), song.requestedBy.tag, queue.repeatMode ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Ø")), Utils.MillisecondsToTime(queue.duration)),
+				description: language.get(language.description, song.name, song.url, message.client.player.createProgressBar(message), song.requestedBy.tag, queue.repeatMode ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Ø")), Utils.MillisecondsToTime(queue.duration)),
 				footer: {
 					text: language.get(language.footer, queue.repeatMode, queue.repeatQueue)
 				}
@@ -73,7 +73,7 @@ const command = {
 		});
 
 		async function updateMsg(song) {
-			const newSong = song || (await message.client.player.nowPlaying(message.guild.id));
+			const newSong = song || (await message.client.player.nowPlaying(message));
 
 			msg.edit({
 				embed: {

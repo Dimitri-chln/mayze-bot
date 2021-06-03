@@ -27,10 +27,10 @@ const command = {
 		const pagination = require("../utils/pagination");
 		const { MessageEmbed } = require("discord.js")
 
-		const isPlaying = message.client.player.isPlaying(message.guild.id);
+		const isPlaying = message.client.player.isPlaying(message);
 		const songName = args
-			? args.length ? args.join(" ") : (isPlaying ? (await message.client.player.nowPlaying(message.guild.id)).name : null)
-			: options ? options[0].value : (isPlaying ? (await message.client.player.nowPlaying(message.guild.id)).name : null);
+			? args.length ? args.join(" ") : (isPlaying ? (await message.client.player.nowPlaying(message)).name : null)
+			: options ? options[0].value : (isPlaying ? (await message.client.player.nowPlaying(message)).name : null);
 		if (!songName) return message.reply(language.no_song).catch(console.error);
 
 		if (!message.isInteraction) message.channel.startTyping(1);

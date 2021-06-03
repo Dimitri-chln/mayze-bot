@@ -15,12 +15,12 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
+		if (!message.member.voice.channelID || (message.client.player.getQueue(message) && message.member.voice.channelID !== message.client.player.getQueue(message).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
 
-		const isPlaying = message.client.player.isPlaying(message.guild.id);
+		const isPlaying = message.client.player.isPlaying(message);
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
-		message.client.player.stop(message.guild.id);
+		message.client.player.stop(message);
 		message.channel.send(language.stopped).catch(console.error);
 	}
 };

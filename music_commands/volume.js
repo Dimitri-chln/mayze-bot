@@ -23,15 +23,15 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		if (!message.member.voice.channelID || (message.client.player.getQueue(message.guild.id) && message.member.voice.channelID !== message.client.player.getQueue(message.guild.id).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
-		const isPlaying = message.client.player.isPlaying(message.guild.id);
+		if (!message.member.voice.channelID || (message.client.player.getQueue(message) && message.member.voice.channelID !== message.client.player.getQueue(message).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
+		const isPlaying = message.client.player.isPlaying(message);
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
 		const volume = args
 			? parseInt(args[0])
 			: options ? options[0].value : NaN;
 		if (isNaN(volume)) {
-			const volume = message.client.player.getQueue(message.guild.id).dispatcher.volumeLogarithmic * 200;
+			const volume = message.client.player.getQueue(message).dispatcher.volumeLogarithmic * 200;
 			message.channel.send(language.get(language.volume_info, volume)).catch(console.error);
 			
 		} else {
