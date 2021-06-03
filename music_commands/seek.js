@@ -38,7 +38,7 @@ const command = {
 		
 		const timeInMs = Utils.TimeToMilliseconds(time);
 
-		const song = await message.client.player.seek(message.guild.id, timeInMs);
+		const song = await message.client.player.seek(message, timeInMs);
 		if (!song) return;
 
 		message.channel.send(language.get(language.seeked, time, song.name)).catch(console.error);

@@ -35,7 +35,7 @@ const command = {
             : options[0].value;
         if (isNaN(songID) || songID < 1 || songID >= length) return message.reply(language.get(invalid_number, length - 1)).catch(console.error);
 
-		const song = message.client.player.skipTo(message.guild.id, songID);
+		const song = message.client.player.skipTo(message, songID);
 		if (!song) return;
 
 		message.channel.send(language.get(language.skipped, songID, songID > 1, song.name)).catch(console.error);
