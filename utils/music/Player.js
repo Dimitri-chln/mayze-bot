@@ -851,7 +851,8 @@ class Player extends EventEmitter {
         setTimeout(() => {
             if (queue.dispatcher) queue.dispatcher.destroy();
             let dispatcher = queue.connection.play(stream, {
-                seek: seek / 1000 || 0
+                seek: seek / 1000 || 0,
+                highWaterMark: 30
             });
             queue.dispatcher = dispatcher;
             // Set volume
