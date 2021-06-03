@@ -619,7 +619,7 @@ player.on("songChanged", (message, newSong, OldSong) => {
 				color: message.guild.me.displayColor,
 				description: languages.get(languages.data["now-playing"].description[l], newSong.name, newSong.url, Utils.buildBar(0, Utils.TimeToMilliseconds(newSong.duration), 20, "━", "🔘"), newSong.requestedBy, "Ø", "**0:00**"),
 				footer: {
-					text: languages.data["now-playing"].footer_end[l]
+					text: languages.get(languages.data["now-playing"].footer[l], song.queue.repeatMode, song.queue.repeatQueue)
 				}
 			}
 		}).catch(console.error);
