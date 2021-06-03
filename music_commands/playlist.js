@@ -138,7 +138,6 @@ const command = {
 				});
 
 				if (!playlist) {
-					console.error(res.error);
 					if (!message.isInteraction) message.channel.stopTyping();
 					return message.channel.send(language.error_playlist).catch(console.error);
 				}
