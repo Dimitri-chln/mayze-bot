@@ -528,11 +528,12 @@ function parseArgs(input) {
 
 
 // MUSIC CODE
-const Player = require("./utils/music/Player");
+const { Player } = require("discord-music-player");
 const player = new Player(client, {
 	leaveOnEnd: true,
 	leaveOnStop: true,
     leaveOnEmpty: true,
+	deafenOnJoin: true,
     timeout: 900000, // 15min
     quality: "high",
 	volume: 35
