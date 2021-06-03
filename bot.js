@@ -611,9 +611,7 @@ player.on("songFirst", (message, song) => {
 	message.channel.send(languages.get(languages.music.playing[l], song.name)).catch(console.error);
 });
 
-setTimeout(() => {
-	console.log(player.nowPlayings)
-
+setInterval(() => {
 	player.nowPlayings.forEach(message => {
 		const l = message.client.languages.get(message.guild.id);
 		const song = player.nowPlaying(message);
