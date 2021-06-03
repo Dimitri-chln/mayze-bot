@@ -598,7 +598,7 @@ player.on("queueEnd", (message, queue) => {
 
 player.on("songAdd", (message, queue, song) => {
 	const l = message.client.languages.get(message.guild.id);
-	message.channel.send(languages.get(languages.music.song[l], Utils.MillisecondsToTime(Utils.TimeToMilliseconds(queue.duration) - Utils.TimeToMilliseconds(song.duration)).replace(/:/g, "~d"), song.name)).catch(console.error);
+	message.channel.send(languages.get(languages.music.song[l], queue.duration ? Utils.MillisecondsToTime(Utils.TimeToMilliseconds(queue.duration) - Utils.TimeToMilliseconds(song.duration)).replace(/:/g, "~d") : null, song.name)).catch(console.error);
 });
 
 player.on("songChanged", (message, newSong, OldSong) => {
