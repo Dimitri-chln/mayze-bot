@@ -125,13 +125,13 @@ const command = {
 					? args.includes("-shuffle")
 					: options[0].options[1] ? options[0].options[1].value : false;
 				
-				const playlist = playlists.find(p => p.name === playlistName);
-				if (!playlist) return message.reply(language.invalid_playlist).catch(console.error);
+				const playlistData = playlists.find(p => p.name === playlistName);
+				if (!playlistData) return message.reply(language.invalid_playlist).catch(console.error);
 
 				if (!message.isInteraction) message.channel.startTyping(1);
 
 				const playlist = await message.client.player.playlist(message, {
-					search: playlist.url,
+					search: playlistData.url,
 					maxSongs: -1,
 					requestedBy: message.author.tag,
 					shuffle
