@@ -851,7 +851,6 @@ class Player extends EventEmitter {
         setTimeout(() => {
             if (queue.dispatcher) queue.dispatcher.destroy();
             let dispatcher = queue.connection.play(stream, {
-                type: "opus",
                 highWaterMark: 50,
                 bitrate: 128,
                 seek: seek / 1000 || 0
