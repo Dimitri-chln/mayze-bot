@@ -1,6 +1,6 @@
 const { Song } = require('discord-music-player');
 const Discord = require('discord.js');
-const { PlayerOptions, TimeToMilliseconds } = require('./Util');
+const { PlayerOptions, TimeToMilliseconds, MillisecondsToTime } = require('./Util');
 
 /**
  * Represents a guild queue.
@@ -83,9 +83,11 @@ class Queue {
          * @returns {Number} The total duration of the queue
          */
      get duration() {
-        return this.songs.reduce((sum, song) => sum + TimeToMilliseconds(song.duration), 0)
-            - this.dispatcher?.streamTime
-            - (this.songs.length ? this.songs[0].seekTime : 0);
+        return this.dispatcher
+            ? MillisecondsToTime(this.songs.reduce((sum, song) => sum + TimeToMilliseconds(song.duration), 0)
+                - this.dispatcher?.streamTime
+                - (this.songs.length ? this.songs[0].seekTime : 0))
+            : null;
     }
 }
 

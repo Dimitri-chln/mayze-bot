@@ -598,7 +598,7 @@ player.on("queueEnd", (message, queue) => {
 
 player.on("songAdd", (message, queue, song) => {
 	const l = message.client.languages.get(message.guild.id);
-	message.channel.send(languages.get(languages.music.song[l], Utils.MillisecondsToTime(queue.duration) || null, song.name)).catch(console.error);
+	message.channel.send(languages.get(languages.music.song[l], queue.duration, song.name)).catch(console.error);
 });
 
 player.on("songChanged", (message, newSong, OldSong) => {
@@ -617,7 +617,7 @@ player.on("songChanged", (message, newSong, OldSong) => {
 					url: newSong.thumbnail,
 				},
 				color: message.guild.me.displayColor,
-				description: languages.get(languages.data["now-playing"].description[l], newSong.name, newSong.url, Utils.buildBar(Utils.TimeToMilliseconds(newSong.duration), Utils.TimeToMilliseconds(newSong.duration), 20, "━", "🔘"), newSong.requestedBy, "Ø", "**0:00**"),
+				description: languages.get(languages.data["now-playing"].description[l], newSong.name, newSong.url, Utils.buildBar(0, Utils.TimeToMilliseconds(newSong.duration), 20, "━", "🔘"), newSong.requestedBy, "Ø", "**0:00**"),
 				footer: {
 					text: languages.data["now-playing"].footer_end[l]
 				}
@@ -635,7 +635,7 @@ setInterval(() => {
 	player.nowPlayings.forEach(message => {
 		const l = message.client.languages.get(message.guild.id);
 
-		if (!player.isPlaying(message)) return player.nowPlayings.delete(msg.channel.id);
+		if (!player.isPlaying(message)) return player.nowPlayings.delete(message.channel.id);
 
 		const song = player.nowPlaying(message);
 		
@@ -649,7 +649,7 @@ setInterval(() => {
 					url: song.thumbnail
 				},
 				color: message.guild.me.displayColor,
-				description: languages.get(languages.data["now-playing"].description[l], song.name, song.url, player.createProgressBar(message), song.requestedBy, song.queue.repeatMode ? song.name : (song.queue.songs[1] ? song.queue.songs[1].name : (song.queue.repeatQueue ? song.queue.songs[0].name : "Ø")), Utils.MillisecondsToTime(song.queue.duration)),
+				description: languages.get(languages.data["now-playing"].description[l], song.name, song.url, player.createProgressBar(message), song.requestedBy, song.queue.repeatMode ? song.name : (song.queue.songs[1] ? song.queue.songs[1].name : (song.queue.repeatQueue ? song.queue.songs[0].name : "Ø")), song.queue.duration),
 				footer: {
 					text: languages.get(languages.data["now-playing"].footer[l], song.queue.repeatMode, song.queue.repeatQueue)
 				}

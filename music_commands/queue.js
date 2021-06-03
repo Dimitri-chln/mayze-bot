@@ -28,7 +28,7 @@ const command = {
 		let pages = [];
 		let embed = new MessageEmbed()
 			.setAuthor(language.get(language.author, message.guild.name), message.client.user.avatarURL())
-			.setTitle(language.get(language.title, Utils.MillisecondsToTime(queue.duration)))
+			.setTitle(language.get(language.title, queue.duration))
 			.setColor(message.guild.me.displayColor)
 			.setDescription(language.no_song);
 		if (!queue.songs.length) pages.push(embed);
@@ -36,7 +36,7 @@ const command = {
 		for (i = 0; i < queue.songs.length; i += songsPerPage) {
 			embed = new MessageEmbed()
 			.setAuthor(language.get(language.author, message.guild.name), message.client.user.avatarURL())
-			.setTitle(language.get(language.title, Utils.MillisecondsToTime(queue.duration)))
+			.setTitle(language.get(language.title, queue.duration))
 			.setColor(message.guild.me.displayColor)
 			.setDescription(queue.songs.slice(i, i + songsPerPage).map((song, j) => `${i + j === 0 ? language.now_playing : `\`${i + j}.\``} ${song.name}${i + j === 0 ? "\n" : ""}`).join("\n"));
 			pages.push(embed);
