@@ -1226,6 +1226,10 @@ module.exports = {
 				fr: "ajoute l'URL de la playlist",
 				en: "add the playlist URL"
 			},
+			error_deezer: {
+				fr: "Quelque s'est mal passé en récupérant le lien Deezer :/",
+				en: "Something went wrong when retrieving the Deezer link :/"
+			},
 			invalid_url: {
 				fr: "l'URL est invalide",
 				en: "the URL is invalid"

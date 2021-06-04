@@ -87,6 +87,8 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options, language, languageCode) => {		
+		const Axios = require("axios").default;
+
 		const subCommand = args
 			? args.length && args[0] !== "-me" ? args[0].toLowerCase() : "get"
 			: options[0].name;
@@ -145,7 +147,7 @@ const command = {
 				if (!rows) return message.channel.send(language.errors.database).catch(console.error);
 				if (rows.length) return message.reply(language.playlist_already_exists).catch(console.error);
 
-				const url = args
+				let url = args
 					? args[2]
 					: options[0].options[1].value;
 				if (!playlistName) return message.reply(language.missing_name).catch(console.error);
@@ -153,7 +155,21 @@ const command = {
 
 				const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#\&\?]*).*/;
 				const spotifyPlaylistRegex = /https?:\/\/(?:open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
-				if (!playlistRegex.test(url) && !spotifyPlaylistRegex.test(url)) return message.reply(language.invalid_url).catch(console.error);
+				const DeezerPlaylistRegex = /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)/;
+				const DeezerRegexScrap = /https?:\/\/deezer\.page\.link\/\w+/;
+
+				if (DeezerRegexScrap.test(url)) {
+					const res = await Axios.get(search).catch(err => {
+						console.error(err);
+						url = null;
+					});
+					let [ , scrap ] = res.data.match(/property="og:url" content="(.*)"/) || [];
+					url = scrap;
+					
+					if (!url) return message.reply(language.error_deezer).catch(console.error);
+				}
+
+				if (!playlistRegex.test(url) && !spotifyPlaylistRegex.test(url) && !DeezerPlaylistRegex.test(url)) return message.reply(language.invalid_url).catch(console.error);
 
 				const private = args
 					? args.includes("-private")
