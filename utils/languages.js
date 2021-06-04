@@ -1381,6 +1381,52 @@ module.exports = {
 		playing: {
 			fr: "<a:blackCheck:803603780666523699> | **En train de jouer...**\n> {1}",
 			en: "<a:blackCheck:803603780666523699> | **Now playing...**\n> {1}"
+		},
+		errors: {
+			MessageTypeInvalid: {
+				fr: "Le message doit être du type Message",
+				en: "The message must be of type Message"
+			},
+			SearchIsNull: {
+				fr: "Je n'ai pas trouvé de musique avec ce titre",
+				en: "I couldn't find any song with this title"
+			},
+			VoiceChannelTypeInvalid: {
+				fr: "Le salon vocal doit être du type VoiceChannel",
+				en: "The voice channel must be of type VoiceChannel"
+			},
+			SongTypeInvalid: {
+				fr: "La chanson doit être du type String",
+				en: "The song must be of type String"
+			},
+			QueueIsNull: {
+				fr: "La queue du serveur n'existe pas",
+				en: "The guild queue doesn't exist"
+			},
+			OptionsTypeInvalid: {
+				fr: "Les options de recherche doivent être du type Object",
+				en: "The search options must be of type Object"
+			},
+			NotANumber: {
+				fr: "L'argument fourni n'est pas un nombre",
+				en: "The provided argument is not a number"
+			},
+			InvalidPlaylist: {
+				fr: "Aucune playlist n'a été trouvée avec ce lien",
+				en: "No playlist was found with that link"
+			},
+			MaxSongsTypeInvalid: {
+				fr: "Le nombre maximum de musiques doit être du type Number",
+				en: "The max number of songs must be of type Number"
+			},
+			PlaylistTypeInvalid: {
+				fr: "Le lien de la playlist doit être du type String",
+				en: "The playlist link must be of type String"
+			},
+			InvalidSpotify: {
+				fr: "Aucune musique Spotify n'a été trouvée avec ce lien",
+				en: "No Spotify song was found with that link"
+			}
 		}
 	}
 };

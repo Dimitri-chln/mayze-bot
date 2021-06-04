@@ -29,9 +29,9 @@ const command = {
 		if (!message.member.voice.channelID || (message.client.player.getQueue(message) && message.member.voice.channelID !== message.client.player.getQueue(message).connection.channel.id)) return message.reply(language.errors.not_in_vc).catch(console.error);
 		const isPlaying = message.client.player.isPlaying(message);
 
-		const videoRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))((?!channel)(?!user)\/(?:[\w\-]+\?v=|embed\/|v\/)?)((?!channel)(?!user)[\w\-]+)(\S+)?$/;
-		const playlistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#&\?]*).*/;
-		const SpotifyPlaylistRegex = /https?:\/\/(?:open\.)(?:spotify\.com\/)(?:playlist\/)((?:\w|-){22})/;
+		const VideoRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))((?!channel)(?!user)\/(?:[\w\-]+\?v=|embed\/|v\/)?)((?!channel)(?!user)[\w\-]+)(\S+)?$/;
+		const PlaylistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#&?]*).*/;
+		const SpotifyPlaylistRegex = /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(album|playlist)\/|\?uri=spotify:playlist:)((\w|-){22})(?:(?=\?)(?:[?&]foo=(\d*)(?=[&#]|$)|(?![?&]foo=)[^#])+)?(?=#|$)/;
 		// const DeezerPlaylistRegex = /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)/;
 		// const DeezerRegexScrap = /https?:\/\/deezer\.page\.link\/\w+/;
 
@@ -53,7 +53,10 @@ const command = {
 		// 	if (!search) return message.reply(language.error_deezer).catch(console.error);
 		// }
 		
-		if ((playlistRegex.test(search) || SpotifyPlaylistRegex.test(search)) /*|| DeezerPlaylistRegex.test(search))*/ && !videoRegex.test(search)) {
+		if (
+			(PlaylistRegex.test(search) || SpotifyPlaylistRegex.test(search)) /*|| DeezerPlaylistRegex.test(search))*/ 
+			&& !VideoRegex.test(search)
+		) {
 			if (!message.isInteraction) message.channel.startTyping(1);
 
 			const playlist = await message.client.player.playlist(message, {
