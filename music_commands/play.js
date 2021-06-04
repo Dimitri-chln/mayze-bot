@@ -32,8 +32,8 @@ const command = {
 		const VideoRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))((?!channel)(?!user)\/(?:[\w\-]+\?v=|embed\/|v\/)?)((?!channel)(?!user)[\w\-]+)(\S+)?$/;
 		const PlaylistRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#&?]*).*/;
 		const SpotifyPlaylistRegex = /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(album|playlist)\/|\?uri=spotify:playlist:)((\w|-){22})(?:(?=\?)(?:[?&]foo=(\d*)(?=[&#]|$)|(?![?&]foo=)[^#])+)?(?=#|$)/;
-		// const DeezerPlaylistRegex = /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)/;
-		// const DeezerRegexScrap = /https?:\/\/deezer\.page\.link\/\w+/;
+		const DeezerPlaylistRegex = /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)/;
+		const DeezerRegexScrap = /https?:\/\/deezer\.page\.link\/\w+/;
 
 		let search = args
 			? args.filter(a => a !== "-shuffle").join(" ")
@@ -42,58 +42,44 @@ const command = {
 			? args.includes("-shuffle")
 			: options[1].value.includes("-shuffle");
 
-		// if (DeezerRegexScrap.test(search)) {
-		// 	const res = await Axios.get(search).catch(err => {
-		// 		console.error(err);
-		// 		search = null;
-		// 	});
-		// 	let [ , scrap ] = res.data.match(/property="og:url" content="(.*)"/) || [];
-		// 	search = scrap;
+		if (DeezerRegexScrap.test(search)) {
+			const res = await Axios.get(search).catch(err => {
+				console.error(err);
+				search = null;
+			});
+			let [ , scrap ] = res.data.match(/property="og:url" content="(.*)"/) || [];
+			search = scrap;
 			
-		// 	if (!search) return message.reply(language.error_deezer).catch(console.error);
-		// }
+			if (!search) return message.reply(language.error_deezer).catch(console.error);
+		}
 		
 		if (
-			(PlaylistRegex.test(search) || SpotifyPlaylistRegex.test(search)) /*|| DeezerPlaylistRegex.test(search))*/ 
+			(PlaylistRegex.test(search) || SpotifyPlaylistRegex.test(search) || DeezerPlaylistRegex.test(search))
 			&& !VideoRegex.test(search)
 		) {
 			if (!message.isInteraction) message.channel.startTyping(1);
 
-			const playlist = await message.client.player.playlist(message, {
+			await message.client.player.playlist(message, {
 				search,
 				maxSongs: -1,
 				requestedBy: message.author.tag,
 				shuffle
 			});
 
-			if (!playlist) {
-				console.error(res.error);
-				if (!message.isInteraction) message.channel.stopTyping();
-				return message.channel.send(language.error_playlist).catch(console.error);
-			}
-
 			if (!message.isInteraction) message.channel.stopTyping();
 
 		} else {
 
 			if (isPlaying) {
-				const song = await message.client.player.addToQueue(message, {
+				await message.client.player.addToQueue(message, {
 					search,
 					requestedBy: message.author.tag
 				});
-
-				if (!song) {
-					console.error(res.error);
-					return message.reply(language.no_song).catch(console.error);
-				}
-
 			} else {
-				const song = await message.client.player.play(message, {
+				await message.client.player.play(message, {
 					search,
 					requestedBy: message.author.tag
 				});
-
-				if (!song) return message.reply(language.no_song).catch(console.error);
 			}
 		}
 	}

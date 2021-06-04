@@ -562,7 +562,7 @@ player.on("clientDisconnect", (message, queue) => {
 player.on("error", (error, message) => {
 	const l = message.client.languages.get(message.guild.id);
 	const errorMessage = languages.music.errors[error] || languages.music.error;
-	message.channel.send(languages.get(errorMessage[l], error)).catch(console.error);
+	message.reply(languages.get(errorMessage[l], error)).catch(console.error);
 });
 
 player.on("playlistAdd", (message, queue, playlist) => {

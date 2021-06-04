@@ -90,7 +90,7 @@ class Player extends EventEmitter {
 			// Joins the voice channel
 			queue.connection = await _voiceState.channel.join();
 			if(this.options['deafenOnJoin'])
-				await queue.connection.voice.setDeaf(true).catch(() => null);
+				await queue.connection.voice.setSelfDeaf(true).catch(() => null);
 			queue.songs.push(song);
 			// Add the queue to the list
 			this.queues.set(_voiceState.guild.id, queue);
