@@ -1179,34 +1179,18 @@ module.exports = {
 			playlists_unsupported: {
 				fr: "les playlists ne sont pas supportées pour cette commande",
 				en: "playlists aren't supported for this command"
-			},
-			no_song: {
-				fr: "je n'ai pas trouvé de musique avec ce titre",
-				en: "I couldn't find a song with this title"
 			}
 		},
 		"play-top": {
 			playlists_unsupported: {
 				fr: "les playlists ne sont pas supportées pour cette commande",
 				en: "playlists aren't supported for this command"
-			},
-			no_song: {
-				fr: "je n'ai pas trouvé de musique avec ce titre",
-				en: "I couldn't find a song with this title"
 			}
 		},
 		"play": {
 			error_deezer: {
 				fr: "Quelque s'est mal passé en récupérant le lien Deezer :/",
 				en: "Something went wrong when retrieving the Deezer link :/"
-			},
-			error_playlist: {
-				fr: "Quelque chose s'est mal passé en récupérant la playlist :/",
-				en: "Something went wrong when retrieving the playlist :/"
-			},
-			no_song: {
-				fr: "je n'ai pas trouvé de musique avec ce titre",
-				en: "I couldn't find a song with this title"
 			}
 		},
 		"playlist": {
@@ -1229,10 +1213,6 @@ module.exports = {
 			invalid_playlist: {
 				fr: "il n'y a pas de playlist avec ce nom ou elle est privée",
 				en: "there is no playlist with this name or it's private"
-			},
-			error_playlist: {
-				fr: "Quelque chose s'est mal passé en récupérant la playlist :/",
-				en: "Something went wrong when retrieving the playlist :/"
 			},
 			playlist_already_exists: {
 				fr: "une playlist avec ce nom existe déjà",
