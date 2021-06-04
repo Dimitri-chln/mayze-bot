@@ -130,17 +130,12 @@ const command = {
 
 				if (!message.isInteraction) message.channel.startTyping(1);
 
-				const playlist = await message.client.player.playlist(message, {
+				await message.client.player.playlist(message, {
 					search: playlistData.url,
 					maxSongs: -1,
 					requestedBy: message.author.tag,
 					shuffle
 				});
-
-				if (!playlist) {
-					if (!message.isInteraction) message.channel.stopTyping();
-					return message.channel.send(language.error_playlist).catch(console.error);
-				}
 
 				if (!message.isInteraction) message.channel.stopTyping();
 				break;
