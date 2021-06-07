@@ -24,7 +24,7 @@ const command = {
 
 		// Don't allow new users to create new entries in the database
 		const res = message.client.pg.query(`SELECT COUNT(id) FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error);
-		if (!res || !res.rows.length) {
+		if (!res || res.rows[0].count == "0") {
 			return message.reply(language.new_user).catch(console.error);
 		}
 
