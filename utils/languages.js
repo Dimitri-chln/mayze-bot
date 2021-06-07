@@ -200,6 +200,10 @@ module.exports = {
 			}
 		},
 		"catch": {
+			new_user: {
+				fr: "les nouveux utilisateurs ne peuvent malheureusement plus attraper de pokémon 😕\nJ'espère que ça changera bientôt, mais pour l'instant ça devra rester comme ça",
+				en: "new users aren't allowed to catch pokémons 😕\nI hope this can change soon, but for now it has to be that way"
+			},
 			caught: {
 				fr: "Pokémon capturé !",
 				en: "Pokémon caught!"

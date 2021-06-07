@@ -22,6 +22,12 @@ const command = {
 		const shinyFrequency = 0.004, alolanFrequency = 0.05;
 		const { catchRates } = message.client;
 
+		// Don't allow new users to create new entries in the database
+		const res = message.client.pg.query(`SELECT COUNT(id) FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error);
+		if (!res || !res.rows.length) {
+			return message.reply(language.new_user).catch(console.error);
+		}
+
 		const random = Math.random() * (catchRates.slice(-1)[0] + pokedex.findPokemon(catchRates.length).catch_rate);
 		let pokemon = findDrop(random);
 		
