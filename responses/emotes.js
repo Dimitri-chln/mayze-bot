@@ -6,7 +6,7 @@ const command = {
 	 */
 	execute: async (message) => {
 		const { WEBHOOKS } = require("../config.json");
-		if (message.channel.type === "dm" || message.author.bot || !["689164798264606784"].includes(message.guild.id)) return;
+		if (message.channel.type === "dm" || message.author.bot || !["689164798264606784", "590859421958275092"].includes(message.guild.id)) return;
 		if (!WEBHOOKS[message.guild.id]) return;
 
 		const regex = /(?:^|\s):[\w-_]+:(?:\s|$)/g;
