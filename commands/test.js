@@ -14,9 +14,7 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		const Utils = require("../utils/music/Util");
-
-		Utils.getVideoFromPlaylist("https://www.deezer.com/fr/playlist/8349642602");
+		
 
 
 

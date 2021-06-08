@@ -22,11 +22,11 @@ const command = {
 		
 		let output;
 		try {
-			output = shellExec("heroku logs --app mayze-bot");
+			output = shellExec("heroku logs --app mayze-bot --num 1500");
 		} catch (err1) {
 			console.error(err1);
 			try {
-				output = shellExec("heroku logs --app mayze-bot2");
+				output = shellExec("heroku logs --app mayze-bot2 --num 1500");
 			} catch (err2) {
 				console.error(err2);
 			}
