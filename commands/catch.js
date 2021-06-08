@@ -41,7 +41,9 @@ const command = {
 		let randomAlolan = Math.random(), alolan = false;
 		if (randomAlolan < alolanFrequency && pokemon.variations.some(v => v.condition === "Alola")) {
 			alolan = true;
-			pokemon = pokemon.variations.find(v => v.condition === "Alola");
+			let newPokemon = pokemon.variations.find(v => v.condition === "Alola");
+			newPokemon.national_id = pokemon.national_id;
+			pokemon = newPokemon;
 			img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}_f2.png`;
 		}
 
