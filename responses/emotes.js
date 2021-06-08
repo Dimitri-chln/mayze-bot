@@ -12,7 +12,7 @@ const command = {
 		const regex = /(?:^|\s):[\w-_]+:(?:\s|$)/g;
 		if (!regex.test(message.content)) return;
 		const emojiNames = message.content.match(regex).map(e => e.match(/[\w-_]+/)[0]);
-		if (!emojiNames.every(emojiName => message.guild.emojis.cache.find(emoji => emoji.name === emojiName))) return;
+		if (!emojiNames.every(emojiName => message.client.emojis.cache.find(emoji => emoji.name === emojiName))) return;
 
 		const newMsg = message.content.replace(regex, a => ` ${message.client.emojis.cache.find(e => e.name === a.match(/[\w-_]+/)[0])} `).trim();
 
