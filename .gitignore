@@ -1,2 +1,9 @@
+# Environment variables
 .env
+
+# Modules
+node_modules/
+
+# Others
 backups/
+.vscode/
