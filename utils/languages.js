@@ -406,7 +406,7 @@ module.exports = {
 			},
 			confirmation: {
 				fr: "Changer de pokémon à chasser va réinitialiser la chaîne actuelle. Commencer à chasser **{1}** ?",
-				en: "Change the pokémon to hunt will restart the current chain. Start hunting **{1}**?"
+				en: "Changing the pokémon to hunt will restart the current chain. Start hunting **{1}**?"
 			},
 			hunting: {
 				fr: "tu chasses désormais **{1}**",
