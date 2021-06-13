@@ -106,7 +106,7 @@ const command = {
 				color: shiny ? 14531360 : (legendary || beast ? 13512480 : message.guild.me.displayColor),
 				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (pokemon.names[languageCode] || pokemon.names.en), /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en)),
 				footer: {
-					text: "✨ Mayze ✨" + huntFooterText,
+					text: "✨ Mayze ✨" + (huntFooterText || ""),
 					icon_url: message.author.avatarURL({ dynamic: true })
 				}
 			}
