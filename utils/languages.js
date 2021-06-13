@@ -205,7 +205,7 @@ module.exports = {
 				en: "new users aren't allowed to catch pokémons 😕\nI hope this can change soon, but for now it has to be that way"
 			},
 			hunt_probability: {
-				fr: " | {2}% de chances supplémentaires d'avoir un {1}",
+				fr: " | {2}% plus de chance d'avoir un {1}",
 				en: " | {2}% more chance to get a {1}"
 			},
 			caught: {
