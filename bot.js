@@ -667,7 +667,10 @@ const legendaries = require("./assets/legendaries.json");
 const beasts = require("./assets/ultra-beasts.json");
 const values = pokedex.allPokemon()
 	.sort((a, b) => a.national_id - b.national_id)
-	.map((_pkm, i, dex) => dex.slice(0, i).reduce((sum, p) => sum + (legendaries.includes(p.names.en) || beasts.includes(p.names.en) ? 3 : p.catch_rate), 0));
+	.map((pkm, i, dex) => 
+		(legendaries.includes(pkm.names.en) || beasts.includes(pkm.names.en) ? 3 : pkm.catch_rate)
+		+ dex.slice(0, i).reduce((sum, p) => sum + (legendaries.includes(p.names.en) || beasts.includes(p.names.en) ? 3 : p.catch_rate), 0)
+	);
 client.catchRates = values;
 
 

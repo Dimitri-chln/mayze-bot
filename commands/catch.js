@@ -17,19 +17,52 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const pokedex = require("oakdex-pokedex");
+		const legendaries = require("../assets/legendaries.json");
+		const beasts = require("../assets/ultra-beasts.json");
 		const { pokeball } = require("../assets/misc.json");
 
 		const shinyFrequency = 0.004, alolanFrequency = 0.05;
 		const { catchRates } = message.client;
 
-		// Don't allow new users to create new entries in the database
-		const res = await message.client.pg.query(`SELECT COUNT(id) FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error);
-		if (!res || res.rows[0].count == "0") {
-			return message.reply(language.new_user).catch(console.error);
+		{
+			// Don't allow new users to create new entries in the database
+			const res = await message.client.pg.query(`SELECT COUNT(id) FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error);
+			if (!res || res.rows[0].count == "0")
+				return message.reply(language.new_user).catch(console.error);
 		}
 
-		const random = Math.random() * (catchRates.slice(-1)[0] + pokedex.findPokemon(catchRates.length).catch_rate);
+		const random = Math.random() * catchRates.slice(-1)[0];
 		let pokemon = findDrop(random);
+
+		let huntFooterText;
+		{
+			// Pokémon hunting
+			const HUNTED_TO_DOUBLE_CHANCE = 50;
+
+			const { rows } = (await message.client.pg.query(`SELECT * FROM pokemon_hunting WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
+			if (!rows) return message.channel.send(language.errors.database).catch(console.error);
+
+			if (rows.length) {
+				const huntedPokemon = pokedex.findPokemon(rows[0].pokemon_id);
+				const probability = (
+					rows[0].hunt_count
+					/ HUNTED_TO_DOUBLE_CHANCE
+				) * (
+					(legendaries.includes(huntedPokemon.names.en) || beasts.includes(huntedPokemon.names.en)
+						? 3
+						: huntedPokemon.catch_rate
+					) / catchRates.slice(-1)[0]
+				);
+
+				if (Math.random() * catchRates.slice(-1)[0] < probability) {
+					await message.client.pg.query(`UPDATE pokemon_hunting SET hunt_count = 0 WHERE user_id = '${message.author.id}'`);
+					pokemon = huntedPokemon;
+				
+				} else {
+					huntFooterText = language.get(language.hunt_probability, huntedPokemon.names[languageCode] || huntedPokemon.names.en, Math.round(probability * 100 * 10000) / 10000);
+				}
+			}
+		}
 		
 		let img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}.png`;
 
@@ -47,17 +80,19 @@ const command = {
 			img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}_f2.png`;
 		}
 
-		const legendaries = require("../assets/legendaries.json");
 		const legendary = legendaries.includes(pokemon.names.en);
-		const beasts = require("../assets/ultra-beasts.json");
 		const beast = beasts.includes(pokemon.names.en);
 
 		const { rows } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}' AND pokedex_name = '${pokemon.names.en.replace(/'/g, "''")}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error)) || {};
+		if (!rows) return message.channel.send(language.errors.database).catch(console.error);
+		
 		if (rows.length) {
 			message.client.pg.query(`UPDATE pokemons SET caught = ${rows[0].caught + 1} WHERE user_id = '${message.author.id}' AND pokedex_name = '${pokemon.names.en.replace(/'/g, "''")}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error);
 		} else {
 			message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, shiny, legendary, alolan, ultra_beast) VALUES ('${message.author.id}', ${pokemon.national_id}, '${pokemon.names.en.replace(/'/g, "''")}', ${shiny}, ${legendary}, ${alolan}, ${beast})`).catch(console.error);
 		}
+
+		message.client.pg.query(`UPDATE pokemon_hunting SET hunt_count = hunt_count + 1 WHERE user_id = '${message.author.id}'`).catch(console.error);
 
 		const msg = await message.channel.send({
 			embed: {
@@ -71,7 +106,7 @@ const command = {
 				color: shiny ? 14531360 : (legendary || beast ? 13512480 : message.guild.me.displayColor),
 				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (pokemon.names[languageCode] || pokemon.names.en), /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en)),
 				footer: {
-					text: "✨ Mayze ✨",
+					text: "✨ Mayze ✨" + huntFooterText,
 					icon_url: message.author.avatarURL({ dynamic: true })
 				}
 			}
@@ -97,13 +132,9 @@ const command = {
 			}
 		}).catch(console.error);
 
-		/**
-		 * @param {number} random A random number
-		 */
 		function findDrop(random) {
-			for (i = 0; i < catchRates.length; i ++)
-				if (random < catchRates[i]) return pokedex.findPokemon(i);
-			return pokedex.findPokemon(catchRates.length);
+			for (let i = 0; i < catchRates.length; i++)
+				if (random < catchRates[i]) return pokedex.findPokemon(i + 1);
 		}
 	}
 };

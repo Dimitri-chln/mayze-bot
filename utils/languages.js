@@ -204,6 +204,10 @@ module.exports = {
 				fr: "les nouveux utilisateurs ne peuvent malheureusement plus attraper de pokémon 😕\nJ'espère que ça changera bientôt, mais pour l'instant ça devra rester comme ça",
 				en: "new users aren't allowed to catch pokémons 😕\nI hope this can change soon, but for now it has to be that way"
 			},
+			hunt_probability: {
+				fr: " | {2}% de chances supplémentaires d'avoir un {1}",
+				en: " | {2}% more chance to get a {1}"
+			},
 			caught: {
 				fr: "Pokémon capturé !",
 				en: "Pokémon caught!"
@@ -393,6 +397,24 @@ module.exports = {
 			title: {
 				fr: "{1} fait un câlin à {2} 🤗",
 				en: "{1} gives {2} a hug 🤗"
+			}
+		},
+		"hunt": {
+			invalid_pokemon: {
+				fr: "ce pokémon n'existe pas",
+				en: "this pokémon doesn't exist"
+			},
+			confirmation: {
+				fr: "Changer de pokémon à chasser va réinitialiser la chaîne actuelle. Commencer à chasser **{1}** ?",
+				en: "Change the pokémon to hunt will restart the current chain. Start hunting **{1}**?"
+			},
+			hunting: {
+				fr: "tu chasses désormais **{1}**",
+				en: "you are now hunting **{1}**"
+			},
+			cancelled: {
+				fr: "changement annulé",
+				en: "change cancelled"
 			}
 		},
 		"info": {
