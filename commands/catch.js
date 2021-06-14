@@ -45,7 +45,7 @@ const command = {
 			if (rows.length) {
 				const huntedPokemon = pokedex.findPokemon(rows[0].pokemon_id);
 				const probability = (
-					rows[0].hunt_count
+					rows[0].hunt_count + 1	// Count the newly caught pokémon in the probability
 					/ HUNT_TO_DOUBLE_CHANCE
 				) * (
 					(legendaries.includes(huntedPokemon.names.en) || beasts.includes(huntedPokemon.names.en)
