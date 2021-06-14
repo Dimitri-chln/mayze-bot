@@ -37,7 +37,7 @@ const command = {
 		let huntFooterText;
 		{
 			// Pokémon hunting
-			const HUNTED_TO_DOUBLE_CHANCE = 50;
+			const { HUNT_TO_DOUBLE_CHANCE } = require("../config.json");
 
 			const { rows } = (await message.client.pg.query(`SELECT * FROM pokemon_hunting WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
 			if (!rows) return message.channel.send(language.errors.database).catch(console.error);
@@ -46,7 +46,7 @@ const command = {
 				const huntedPokemon = pokedex.findPokemon(rows[0].pokemon_id);
 				const probability = (
 					rows[0].hunt_count
-					/ HUNTED_TO_DOUBLE_CHANCE
+					/ HUNT_TO_DOUBLE_CHANCE
 				) * (
 					(legendaries.includes(huntedPokemon.names.en) || beasts.includes(huntedPokemon.names.en)
 						? 3
