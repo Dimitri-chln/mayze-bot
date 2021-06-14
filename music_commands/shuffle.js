@@ -21,7 +21,7 @@ const command = {
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		
 		const songs = message.client.player.shuffle(message);
-		message.channel.send(language.get(language.shuffled, songs.length - 1, songs.length === 2)).catch(console.error);
+		message.channel.send(language.get(language.shuffled, songs.length - 1, songs.length < 3)).catch(console.error);
 	}
 };
 
