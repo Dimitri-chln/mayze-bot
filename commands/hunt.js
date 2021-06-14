@@ -49,7 +49,7 @@ const command = {
                     ) / message.client.catchRates.slice(-1)[0]
                 );
     
-                message.channel.send(language.get(language.hunt_info, huntedPokemon.names[languageCode] || huntedPokemon.names.en, Math.round(probability * 100 * 10000) / 10000))
+                message.reply(language.get(language.hunt_info, huntedPokemon.names[languageCode] || huntedPokemon.names.en, Math.round(probability * 100 * 10000) / 10000))
             
             } else {
                 message.reply(language.not_hunting).catch(console.error);
