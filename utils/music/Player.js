@@ -688,6 +688,13 @@ class Player extends EventEmitter {
 		// Remove the songs from the queue
 		queue.songs = queue.songs.filter(s => !s.removed);
 
+		if (queue.autoplay && queue.songs.length < 5) {
+			Util.getRecommendations(queue, message.client.spotify)
+				.then(recommendations => {
+					queue.songs = queue.songs.concat(recommendations);
+				});
+		}
+
 		// Resolve
 		return removedSongs;
 	}
