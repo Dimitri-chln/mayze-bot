@@ -389,7 +389,7 @@ class Util {
 				let searchResult = await spotifyClient.searchTracks(`artist:${song['author']} track:${song['name']}`, {
 					limit: 1
 				});
-				return searchResult.body['tracks']['items'][0];
+				return searchResult.body['tracks'];
 			}));
 			console.log(items);
 			items.sort(() => Math.random() - 0.5);
