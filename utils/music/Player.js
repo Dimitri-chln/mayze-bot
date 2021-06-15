@@ -324,7 +324,8 @@ class Player extends EventEmitter {
 		queue.stopped = true;
 		queue.songs = [];
 		// Make sure dispatcher exists
-		if(queue.dispatcher) queue.dispatcher.end();
+		if (queue.dispatcher) queue.dispatcher.end();
+		else this._playSong(message.guild.id, false);
 
 		return true;
 	}
