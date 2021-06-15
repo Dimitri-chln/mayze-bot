@@ -1141,6 +1141,12 @@ module.exports = {
 
 		// MUSIC COMMANDS
 
+		"auto-play": {
+			toggled: {
+				fr: "<a:blackCheck:803603780666523699> | **Autoplay [1?activé:désactivé]**",
+				en: "<a:blackCheck:803603780666523699> | **Autoplay [1?enabled:disabled]**"
+			}
+		},
 		"clear-queue": {
 			deleted: {
 				fr: "<a:blackCheck:803603780666523699> | **Queue supprimée**",
@@ -1195,8 +1201,8 @@ module.exports = {
 				en: "[{1}]({2})\n\n**{3}**\n\n`Requested by:` **{4}**\n`Next:` **{5}**\n`Queue duration:` **{6}**"
 			},
 			footer: {
-				fr: "✨ Mayze ✨[1? | Répétition de la musique activée:][2? | Répétition de la queue activée:]",
-				en: "✨ Mayze ✨[1? | Song loop enabled:][2? | Queue loop enabled:]"
+				fr: "✨ Mayze ✨[1? | Répétition de la musique activée:][2? | Répétition de la queue activée:][3? | Autoplay activé:]",
+				en: "✨ Mayze ✨[1? | Song loop enabled:][2? | Queue loop enabled:][3? | Autoplay enabled:]"
 			},
 			footer_end: {
 				fr: "✨ Mayze ✨ | Queue terminée",

@@ -77,6 +77,11 @@ class Queue {
          * @type {PlayerOptions}
          */
         this.options = options;
+        /**
+         * Whether the autoplay is enabled.
+         * @type {Boolean}
+         */
+        this.autoplay = false;
     }
 
     /**

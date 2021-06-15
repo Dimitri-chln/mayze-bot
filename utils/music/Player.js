@@ -714,6 +714,31 @@ class Player extends EventEmitter {
 
 
 	/**
+	 * Toggles the autoplay function.
+	 * @param {Discord.Message} message The Discord Message object.
+	 * @returns {Boolean}
+	 */
+	toggleAutoPlay(message) {
+		// Gets guild queue
+		let queue = this.queues.get(message.guild.id);
+		if (!queue)
+		{
+			this.emit('error', 'QueueIsNull', message);
+			return null;
+		}
+
+		queue.autoplay = !queue.autoplay;
+
+		if (queue.songs.length === 1) {
+			let recommendations = await Util.getRecommendations(queue, message.client.spotify);
+			queue.songs.concat(recommendations);
+		}
+
+		return queue.autoplay;
+	}
+
+
+	/**
 	 * Creates a progress bar per current playing song.
 	 * @param {Discord.Message} message The Discord Message object.
 	 * @param {Partial<Util.ProgressOptions>} options Progressbar options.
@@ -759,7 +784,7 @@ class Player extends EventEmitter {
 	 * @param {Boolean} firstPlay Whether this is the first playing song in the Queue.
 	 * @param {?Number} seek Seek time.
 	 */
-	async _playSong(guildID, firstPlay, seek= null) {
+	async _playSong(guildID, firstPlay, seek = null, spotifyClient = null) {
 		// Gets guild queue
 		/**
 		 * @type {?Queue}
@@ -803,6 +828,7 @@ class Player extends EventEmitter {
 				+ 'Please do not use repeatMode and repeatQueue together');
 			else queue.songs.push(queue.songs[0]);
 		}
+
 		if (!firstPlay) {
 			let _oldSong;
 			if(!queue.repeatMode)
@@ -818,6 +844,11 @@ class Player extends EventEmitter {
 			 * @event Player#songFirst
 			 */
 			this.emit('songFirst', queue.initMessage, queue.songs[0]);
+		}
+
+		if (queue.autoplay && queue.songs.length < 5) {
+			let recommendations = await Util.getRecommendations(queue, spotifyClient);
+			queue.songs.concat(recommendations);
 		}
 
 		queue.skipped = false;

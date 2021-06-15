@@ -659,6 +659,41 @@ setInterval(() => {
 	});
 }, 10000);
 
+// SPOTIFY API
+const SpotifyWebApi = require("spotify-web-api-node");
+const spotify = new SpotifyWebApi({
+	clientId: process.env.SPOTIFY_CLIENT_ID,
+	clientSecret: process.env.SPOTIFY_CLIENT_SECRET
+});
+client.spotify = spotify;
+
+(function getSpotifyToken() {
+	spotify.clientCredentialsGrant()
+		.then(data => {
+			spotify.setAccessToken(data.body.access_token);
+			// Refresh the token 60s before the current one expires
+			setTimeout(getSpotifyToken, (data.body.expires_in - 60) * 1000);
+		})
+})();
+
+// (async function getSpotifyToken() {
+// 	const config = {
+// 		grant_type: "client_credentials"
+// 	};
+
+// 	const res = await Axios.post("https://accounts.spotify.com/api/token", new URLSearchParams(config), {
+// 		headers: {
+// 			"Content-Type": "application/x-www-form-urlencoded",
+// 			Authorization: `Basic ${Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString("base64")}`
+// 		}
+// 	});
+
+// 	client.spotifyToken = res.data.access_token;
+
+// 	// Get a new token 60 seconds before the current one expires
+// 	setTimeout(getSpotifyToken, (res.data.expires_in - 60) * 1000);
+// })();
+
 
 
 // POKEDEX CATCH RATES

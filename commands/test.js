@@ -14,7 +14,10 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		
+		message.client.spotify.searchTracks("artist:Imagine Dragons track:Follow You", {
+			limit: 1
+		})
+			.then(res => console.log(res));
 
 
 

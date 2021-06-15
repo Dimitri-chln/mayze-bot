@@ -2,11 +2,13 @@ const YouTubeClient = require("youtubei");
 const YouTube = new YouTubeClient.Client();
 const Playlist = require('./Playlist');
 const Song = require('./Song');
+const Queue = require('./Queue');
 const ytsr = require('ytsr');
 const { getPreview, getData } = require("spotify-url-info");
 const Deezer = require("deezer-public-api");
 const deezer = new Deezer();
 const Discord = require('discord.js');
+const SpotifyWebApi = require("spotify-web-api-node");
 
 //RegEx Definitions
 let VideoRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))((?!channel)(?!user)\/(?:[\w\-]+\?v=|embed\/|v\/)?)((?!channel)(?!user)[\w\-]+)(\S+)?$/;
@@ -301,7 +303,7 @@ class Util {
 
 				playlist.videos = await Promise.all(playlist.videos.map(async (track, index) => {
 					if (max !== -1 && index >= max) return null;
-					return await this.getVideoBySearch(`${track['artist'].name} - ${track['title_short']} VEVO`, {}, queue, requestedBy).catch(() => null);
+					return await this.getVideoBySearch(`${track['artist'].name} - ${track['title_short']}`, {}, queue, requestedBy).catch(() => null);
 				}));
 				playlist.videos = playlist.videos.filter(function (obj) { return obj });
 				playlist.videoCount = playlist.videos.length;
@@ -347,7 +349,7 @@ class Util {
 		return new Promise(async (resolve, reject) => {
 			try {
 				let SpotifyResult = await getPreview(query);
-				resolve(`${SpotifyResult['artist']} - ${SpotifyResult['title']} VEVO`);
+				resolve(`${SpotifyResult['artist']} - ${SpotifyResult['title']}`);
 			}
 			catch(err) {
 				reject('InvalidSpotify');
@@ -365,11 +367,43 @@ class Util {
 			try {
 				let [ , trackID ] = query.match(DeezerRegex);
 				let DeezerResult = await deezer.track(trackID);
-				resolve(`${DeezerResult['artist']['name']} - ${DeezerResult['title']} VEVO`);
+				resolve(`${DeezerResult['artist']['name']} - ${DeezerResult['title']}`);
 			}
 			catch(err) {
 				reject('InvalidDeezer');
 			}
+		});
+	}
+
+	/**
+	 * Gets recommendations based on a song list.
+	 * @param {Queue} queue The queue.
+	 * @param {SpotifyWebApi} spotifyClient The Spotify access token.
+	 * @returns {Promise<Song[]>}
+	 */
+	static getRecommendations(queue, spotifyClient) {
+		return new Promise(async (resolve, reject) => {
+			if (queue.songs.length > 4) return reject('InvalidSongList');
+
+			let items = await Promise.all(queue.songs.map(async song => {
+				let searchResult = await spotifyClient.searchTracks(`artist:${song['author']} track:${song['name']}`, {
+					limit: 1
+				});
+				return searchResult.body['tracks']['items'][0];
+			}));
+			items.sort(() => Math.random() - 0.5);
+
+			let recommendationsResult = await spotifyClient.getRecommendations({
+				limit: 5 - songs.length,
+				seed_artists: items.map(item => item['artists']['id']),
+				seed_tracks: items.map(item => item['id']).slice(0, 5 - songs.length)
+			});
+
+			let recommendations = await Promise.all(recommendationsResult.body.tracks.map(async (track, index) => {
+				return await this.getVideoBySearch(`${track['artists'][0]['name']} - ${track['name']}`, {}, queue, "Mayze#1696").catch(() => null);
+			}));
+
+			resolve(recommendations);
 		});
 	}
 
