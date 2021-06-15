@@ -394,9 +394,9 @@ class Util {
 			items.sort(() => Math.random() - 0.5);
 
 			let recommendationsResult = await spotifyClient.getRecommendations({
-				limit: 5 - songs.length,
+				limit: 5 - queue.songs.length,
 				seed_artists: items.map(item => item['artists']['id']),
-				seed_tracks: items.map(item => item['id']).slice(0, 5 - songs.length)
+				seed_tracks: items.map(item => item['id']).slice(0, 5 - queue.songs.length)
 			});
 
 			let recommendations = await Promise.all(recommendationsResult.body.tracks.map(async (track, index) => {
