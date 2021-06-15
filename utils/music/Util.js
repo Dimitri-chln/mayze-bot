@@ -386,7 +386,7 @@ class Util {
 			if (queue.songs.length > 4) return reject('InvalidSongList');
 
 			let items = await Promise.all(queue.songs.map(async song => {
-				let searchResult = await spotifyClient.searchTracks(song['name'], {
+				let searchResult = await spotifyClient.searchTracks(`track:${song['name']}`, {
 					limit: 1
 				});
 				return searchResult.body['tracks'];
