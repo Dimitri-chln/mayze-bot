@@ -393,15 +393,21 @@ class Util {
 					defaultArtist: song['author'],
 					defaultTitle: song['name']
 				});
+
 				let searchResult = await spotifyClient.searchTracks(artist && title ? `artist:${artist} track:${title}` : song['name'], {
 					limit: 1
 				});
+				if (!searchResult.body['tracks']['items'].length) {
+					searchResult = await spotifyClient.searchTracks(artist && title ? `artist:${title} track:${artist}` : song['name'], {
+						limit: 1
+					});
+				}
+
 				return searchResult.body['tracks']['items'][0];
 			}));
+
 			items = items.filter(item => item);
 			items.sort(() => Math.random() - 0.5);
-
-			console.log(items);
 
 			if (items.length) {
 				let recommendationsResult = await spotifyClient.getRecommendations({
