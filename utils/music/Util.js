@@ -395,6 +395,8 @@ class Util {
 			items = items.filter(item => item);
 			items.sort(() => Math.random() - 0.5);
 
+			console.log(items);
+
 			let recommendationsResult = await spotifyClient.getRecommendations({
 				limit: 5 - queue.songs.length,
 				seed_artists: items.map(item => item['artists'][0]['id']),
