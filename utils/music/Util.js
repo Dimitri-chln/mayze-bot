@@ -401,7 +401,7 @@ class Util {
 				seed_tracks: items.map(item => item['id']).slice(0, 5 - queue.songs.length)
 			});
 
-			console.log(recommendationsResult);
+			console.log(recommendationsResult.body.tracks);
 
 			let recommendations = await Promise.all(recommendationsResult.body.tracks.map(async track => {
 				return await this.getVideoBySearch(`${track['artists'][0]['name']} - ${track['name']}`, {}, queue, "Mayze#1696").catch(() => null);
