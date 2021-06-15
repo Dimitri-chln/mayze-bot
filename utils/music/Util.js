@@ -383,6 +383,8 @@ class Util {
 	 * @returns {Promise<Song[]>}
 	 */
 	static getRecommendations(queue, spotifyClient) {
+		console.log("Fetching recommendations...");
+		
 		return new Promise(async (resolve, reject) => {
 			if (queue.songs.length > 4) return reject('InvalidSongList');
 
