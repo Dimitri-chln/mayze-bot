@@ -384,7 +384,7 @@ class Util {
 	 */
 	static getRecommendations(queue, spotifyClient) {
 		console.log("Fetching recommendations...");
-		
+
 		return new Promise(async (resolve, reject) => {
 			if (queue.songs.length > 4) return reject('InvalidSongList');
 
@@ -400,6 +400,8 @@ class Util {
 			}));
 			items = items.filter(item => item);
 			items.sort(() => Math.random() - 0.5);
+
+			console.log(items);
 
 			if (items.length) {
 				let recommendationsResult = await spotifyClient.getRecommendations({
