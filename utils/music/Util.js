@@ -390,9 +390,9 @@ class Util {
 				let searchResult = await spotifyClient.searchTracks(artist && title ? `artist:${artist} track:${title}` : song['name'], {
 					limit: 1
 				});
-				return searchResult.body['tracks'];
+				return searchResult.body['tracks']['items'][0];
 			}));
-			console.log(items);
+			items = items.filter(item => item);
 			items.sort(() => Math.random() - 0.5);
 
 			let recommendationsResult = await spotifyClient.getRecommendations({
