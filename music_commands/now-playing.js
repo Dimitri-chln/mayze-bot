@@ -15,8 +15,6 @@ const command = {
 	 * @param {Object[]} options 
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		const Utils = require("../utils/music/Util");
-
 		const isPlaying = message.client.player.isPlaying(message);
 		if (!isPlaying) return message.channel.send(language.errors.no_music).catch(console.error);
 		const queue = message.client.player.getQueue(message);
