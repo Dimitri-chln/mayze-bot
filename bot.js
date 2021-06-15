@@ -574,8 +574,9 @@ player.on("queueEnd", (message, queue) => {
 	const l = message.client.languages.get(message.guild.id);
 
 	const nowPlayings = player.nowPlayings.filter(nowPlaying => nowPlaying.guild.id === message.guild.id);
-
 	const song = queue.songs[0];
+
+	if (queue.stopped) return;
 
 	nowPlayings.forEach(msg => {
 		msg.edit({
