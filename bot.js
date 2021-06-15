@@ -619,7 +619,7 @@ player.on("songChanged", (message, newSong, OldSong) => {
 					url: newSong.thumbnail,
 				},
 				color: message.guild.me.displayColor,
-				description: languages.get(languages.data["now-playing"].description[l], newSong.name, newSong.url, Utils.buildBar(0, Utils.TimeToMilliseconds(newSong.duration), 20, "━", "🔘"), newSong.requestedBy, "Ø", song.queue.repeatMode || song.queue.repeatQueue || song.queue.autoplay ? "♾️" : song.queue.duration),
+				description: languages.get(languages.data["now-playing"].description[l], newSong.name, newSong.url, Utils.buildBar(0, Utils.TimeToMilliseconds(newSong.duration), 20, "━", "🔘"), newSong.requestedBy, "Ø", newSong.queue.repeatMode || newSong.queue.repeatQueue || newSong.queue.autoplay ? "♾️" : newSong.queue.duration),
 				footer: {
 					text: languages.get(languages.data["now-playing"].footer[l], newSong.queue.repeatMode, newSong.queue.repeatQueue)
 				}
