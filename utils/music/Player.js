@@ -732,8 +732,7 @@ class Player extends EventEmitter {
 		if (queue.autoplay && queue.songs.length === 1) {
 			Util.getRecommendations(queue, message.client.spotify)
 				.then(recommendations => {
-					queue.songs.concat(recommendations);
-					console.log(recommendations);
+					queue.songs = queue.songs.concat(recommendations);
 				});
 		}
 
@@ -851,7 +850,7 @@ class Player extends EventEmitter {
 
 		if (queue.autoplay && queue.songs.length < 5) {
 			let recommendations = await Util.getRecommendations(queue, spotifyClient);
-			queue.songs.concat(recommendations);
+			queue.songs = queue.songs.concat(recommendations);
 		}
 
 		queue.skipped = false;
