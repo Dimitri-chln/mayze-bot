@@ -786,7 +786,7 @@ class Player extends EventEmitter {
 	 * @param {Boolean} firstPlay Whether this is the first playing song in the Queue.
 	 * @param {?Number} seek Seek time.
 	 */
-	async _playSong(guildID, firstPlay, seek = null, spotifyClient = null) {
+	async _playSong(guildID, firstPlay, seek = null) {
 		// Gets guild queue
 		/**
 		 * @type {?Queue}
@@ -849,7 +849,7 @@ class Player extends EventEmitter {
 		}
 
 		if (queue.autoplay && queue.songs.length < 5) {
-			let recommendations = await Util.getRecommendations(queue, spotifyClient);
+			let recommendations = await Util.getRecommendations(queue, this.client.spotify);
 			queue.songs = queue.songs.concat(recommendations);
 		}
 

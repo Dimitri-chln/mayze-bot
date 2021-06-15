@@ -621,7 +621,7 @@ player.on("songChanged", (message, newSong, OldSong) => {
 				color: message.guild.me.displayColor,
 				description: languages.get(languages.data["now-playing"].description[l], newSong.name, newSong.url, Utils.buildBar(0, Utils.TimeToMilliseconds(newSong.duration), 20, "━", "🔘"), newSong.requestedBy, "Ø", newSong.queue.repeatMode || newSong.queue.repeatQueue || newSong.queue.autoplay ? "♾️" : newSong.queue.duration),
 				footer: {
-					text: languages.get(languages.data["now-playing"].footer[l], newSong.queue.repeatMode, newSong.queue.repeatQueue)
+					text: languages.get(languages.data["now-playing"].footer[l], newSong.queue.repeatMode, newSong.queue.repeatQueue, newSong.queue.autoplay)
 				}
 			}
 		}).catch(console.error);
@@ -653,7 +653,7 @@ setInterval(() => {
 				color: message.guild.me.displayColor,
 				description: languages.get(languages.data["now-playing"].description[l], song.name, song.url, message.client.player.createProgressBar(message), song.requestedBy, song.queue.repeatMode ? song.name : (song.queue.songs[1] ? song.queue.songs[1].name : (song.queue.repeatQueue ? song.queue.songs[0].name : "Ø")), song.queue.repeatMode || song.queue.repeatQueue || song.queue.autoplay ? "♾️" : song.queue.duration),
 				footer: {
-					text: languages.get(languages.data["now-playing"].footer[l], song.queue.repeatMode, song.queue.repeatQueue)
+					text: languages.get(languages.data["now-playing"].footer[l], song.queue.repeatMode, song.queue.repeatQueue, song.queue.autoplay)
 				}
 			}
 		}).catch(console.error);
