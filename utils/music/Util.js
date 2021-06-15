@@ -405,8 +405,6 @@ class Util {
 				return await this.getVideoBySearch(`${track['artists'][0]['name']} - ${track['name']}`, {}, queue, "Mayze#1696").catch(() => null);
 			}));
 
-			console.log(recommendations);
-
 			resolve(recommendations);
 		});
 	}
