@@ -391,11 +391,12 @@ class Util {
 				});
 				return searchResult.body['tracks']['items'][0];
 			}));
+			console.log(items);
 			items.sort(() => Math.random() - 0.5);
 
 			let recommendationsResult = await spotifyClient.getRecommendations({
 				limit: 5 - queue.songs.length,
-				seed_artists: items.map(item => item['artists']['id']),
+				seed_artists: items.map(item => item['artists'][0]['id']),
 				seed_tracks: items.map(item => item['id']).slice(0, 5 - queue.songs.length)
 			});
 
