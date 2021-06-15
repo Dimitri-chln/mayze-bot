@@ -9,6 +9,7 @@ const Deezer = require("deezer-public-api");
 const deezer = new Deezer();
 const Discord = require('discord.js');
 const SpotifyWebApi = require("spotify-web-api-node");
+const getArtistTitle = require("get-artist-title");
 
 //RegEx Definitions
 let VideoRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))((?!channel)(?!user)\/(?:[\w\-]+\?v=|embed\/|v\/)?)((?!channel)(?!user)[\w\-]+)(\S+)?$/;
@@ -386,7 +387,10 @@ class Util {
 			if (queue.songs.length > 4) return reject('InvalidSongList');
 
 			let items = await Promise.all(queue.songs.map(async song => {
-				let [ , artist, title ] = song['name'].match(/(.+) - (.+) (?:\(.+\))?/) || [];
+				let [ artist, title ] = getArtistTitle(song['name'], {
+					defaultArtist: song['author'],
+					defaultTitle: song['name']
+				});
 				let searchResult = await spotifyClient.searchTracks(artist && title ? `artist:${artist} track:${title}` : song['name'], {
 					limit: 1
 				});
@@ -395,17 +399,20 @@ class Util {
 			items = items.filter(item => item);
 			items.sort(() => Math.random() - 0.5);
 
-			let recommendationsResult = await spotifyClient.getRecommendations({
-				limit: 5 - queue.songs.length,
-				seed_artists: items.map(item => item['artists'][0]['id']),
-				seed_tracks: items.map(item => item['id']).slice(0, 5 - queue.songs.length)
-			});
+			if (items.length) {
+				let recommendationsResult = await spotifyClient.getRecommendations({
+					limit: 5 - queue.songs.length,
+					seed_artists: items.map(item => item['artists'][0]['id']),
+					seed_tracks: items.map(item => item['id']).slice(0, 5 - queue.songs.length)
+				});
 
-			let recommendations = await Promise.all(recommendationsResult.body.tracks.map(async track => {
-				return await this.getVideoBySearch(`${track['artists'][0]['name']} - ${track['name']}`, {}, queue, "Mayze#1696").catch(() => null);
-			}));
+				let recommendations = await Promise.all(recommendationsResult.body.tracks.map(async track => {
+					return await this.getVideoBySearch(`${track['artists'][0]['name']} - ${track['name']}`, {}, queue, "Mayze#1696").catch(() => null);
+				}));
 
-			resolve(recommendations);
+				resolve(recommendations);
+
+			} else resolve([]);
 		});
 	}
 
