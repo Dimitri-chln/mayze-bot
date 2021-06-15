@@ -730,8 +730,8 @@ class Player extends EventEmitter {
 		queue.autoplay = !queue.autoplay;
 
 		if (queue.songs.length === 1) {
-			let recommendations = await Util.getRecommendations(queue, message.client.spotify);
-			queue.songs.concat(recommendations);
+			Util.getRecommendations(queue, message.client.spotify)
+				.then(recommendations => queue.songs.concat(recommendations));
 		}
 
 		return queue.autoplay;
