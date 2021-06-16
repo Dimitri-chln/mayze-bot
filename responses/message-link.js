@@ -1,17 +1,11 @@
 const { Message } = require("discord.js");
 
 const language = {
-    get: (text, ...args) => text
-		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
-		.replace(/\[\d+?\?.*?:.*?\]/gs, a => {
-			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/s);
-			if (args[parseInt(m[1]) - 1]) return m[2];
-			else return m[3];
-		}),
-    message_link: {
-        fr: "[Aller au message]({1})",
-        en: "[Go to message]({1})"
-    },
+	get: require("../utils/parseLanguageText"),
+	message_link: {
+		fr: "~sAller au message~t({1})",
+		en: "~sGo to message~t({1})"
+	},
 	quoted_by: {
 		fr: "Cité par {1}",
 		en: "Quoted by {1}"
@@ -38,8 +32,8 @@ const command = {
 		if (!msg || msg.embeds.length) return;
 
 		let lang = "en";
-	    const res = await message.client.pg.query(`SELECT * FROM languages WHERE guild_id = '${message.guild.id}'`).catch(console.error);
-	    if (res && res.rows.length) lang = res.rows[0].language_code;
+		const res = await message.client.pg.query(`SELECT * FROM languages WHERE guild_id = '${message.guild.id}'`).catch(console.error);
+		if (res && res.rows.length) lang = res.rows[0].language_code;
 
 		message.channel.send({
 			embed: {

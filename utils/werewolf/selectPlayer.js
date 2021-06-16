@@ -2,14 +2,7 @@ const { Channel, User } = require("discord.js");
 const Player = require("./Player");
 
 const language = {
-	get: (text, ...args) => text
-		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
-		.replace(/\[\d+?\?.*?:.*?\]/gs, a => {
-			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/s);
-			if (args[parseInt(m[1]) - 1]) return m[2];
-			else return m[3];
-		}),
-
+	get: require("../parseLanguageText"),
 	footer: {
 		fr: "🐺 Mayze 🐺 | Tu as {1}s pour répondre",
 		en: "🐺 Mayze 🐺 | You have {1}s to answer"

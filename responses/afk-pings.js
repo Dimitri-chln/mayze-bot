@@ -1,13 +1,7 @@
 const { Message } = require("discord.js");
 
 const language = {
-    get: (text, ...args) => text
-		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
-		.replace(/\[\d+?\?.*?:.*?\]/gs, a => {
-			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/s);
-			if (args[parseInt(m[1]) - 1]) return m[2];
-			else return m[3];
-		}),
+    get: require("../utils/parseLanguageText"),
     afk_msg: {
         fr: "{1} est AFK depuis {2} 💤[3?\n**→ {3}**:]",
         en: "{1} have been AFK for {2} 💤[3?\n**→ {3}**:]"

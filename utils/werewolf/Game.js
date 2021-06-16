@@ -5,14 +5,7 @@ const shuffle = require("../shuffle");
 const { roles } = require("../../assets/werewolf-composition.json");
 
 const language = {
-	get: (text, ...args) => text
-		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
-		.replace(/\[\d+?\?.*?:.*?\]/gs, a => {
-			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/s);
-			if (args[parseInt(m[1]) - 1]) return m[2];
-			else return m[3];
-		}),
-
+	get: require("../parseLanguageText"),
 	nightStart: {
 		fr: "La nuit tombe sur le village... (Nuit {1})",
 		en: "Night falls upon the village... (Night {1})"

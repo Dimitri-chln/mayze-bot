@@ -1,15 +1,7 @@
 const { Message } = require("discord.js");
 
 const language = {
-	get: (text, ...args) => text
-		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
-		.replace(/\[\d+?\?.*?:.*?\]/gs, a => {
-			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/s);
-			if (args[parseInt(m[1]) - 1]) return m[2];
-			else return m[3];
-		})
-		.replace(/~d/g, ":")
-		.replace(/~q/g, "?"),
+	get: require("../utils/parseLanguageText"),
 	level_up: {
 		fr: "**{1}** est passé au niveau **{2}** ! <:foxmayze:763146438120046632>",
 		en: "**{1}** is now level **{2}**! <:foxmayze:763146438120046632>"

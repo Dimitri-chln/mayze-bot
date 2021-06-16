@@ -4,14 +4,7 @@ const { roles } = require("../../assets/werewolf-composition.json");
 const Game = require("./Game");
 
 const language = {
-	get: (text, ...args) => text
-		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
-		.replace(/\[\d+?\?.*?:.*?\]/gs, a => {
-			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/s);
-			if (args[parseInt(m[1]) - 1]) return m[2];
-			else return m[3];
-		}),
-
+	get: require("../parseLanguageText"),
 	werewolfTitle: {
 		fr: "C'est l'heure de tuer quelqu'un !",
 		en: "It's time to kill someone!"

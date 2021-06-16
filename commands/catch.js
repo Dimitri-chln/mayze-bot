@@ -71,12 +71,10 @@ const command = {
 			shiny = true;
 			img = `https://img.pokemondb.net/sprites/home/shiny/${pokemon.names.en.toLowerCase().replace(/\u2642/, "-m").replace(/\u2640/, "-f")}.png`;
 		}
+		
 		let randomAlolan = Math.random(), alolan = false;
 		if (randomAlolan < alolanFrequency && pokemon.variations.some(v => v.condition === "Alola")) {
 			alolan = true;
-			let newPokemon = pokemon.variations.find(v => v.condition === "Alola");
-			newPokemon.national_id = pokemon.national_id;
-			pokemon = newPokemon;
 			img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}_f2.png`;
 		}
 
@@ -104,7 +102,7 @@ const command = {
 					url: img
 				},
 				color: shiny ? 14531360 : (legendary || beast ? 13512480 : message.guild.me.displayColor),
-				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (pokemon.names[languageCode] || pokemon.names.en), /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en)),
+				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (alolan ? "Alolan " : "") + (pokemon.names[languageCode] || pokemon.names.en), !shiny && (alolan || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en))),
 				footer: {
 					text: "✨ Mayze ✨" + (huntFooterText || ""),
 					icon_url: message.author.avatarURL({ dynamic: true })
@@ -124,7 +122,7 @@ const command = {
 					url: img
 				},
 				color: shiny ? 14531360 : (legendary || beast ? 13512480 : "#010101"),
-				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (pokemon.names[languageCode] || pokemon.names.en)),
+				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (alolan ? "Alolan " : "") + (pokemon.names[languageCode] || pokemon.names.en), !shiny && (alolan || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en))),
 				footer: {
 					text: "✨ Mayze ✨",
 					icon_url: message.author.avatarURL({ dynamic: true })

@@ -1,22 +1,14 @@
 const { Message } = require("discord.js");
 
 const language = {
-	get: (text, ...args) => text
-		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
-		.replace(/\[\d+?\?.*?:.*?\]/gs, a => {
-			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/s);
-			if (args[parseInt(m[1]) - 1]) return m[2];
-			else return m[3];
-		})
-		.replace(/~d/g, ":")
-		.replace(/~q/g, "?"),
+	get: require("../utils/parseLanguageText"),
 	title: {
 		fr: "Personnage souhaité",
 		en: "Wished character"
 	},
 	desc: {
-		fr: "**[{1}]({2})** a été roll dans {3} !\n→ {4}\n**{5}**<:kakeraMudae:796822222110720106>",
-		en: "**[{1}]({2})** has been rolled in {3} !\n→ {4}\n**{5}**<:kakeraMudae:796822222110720106>"
+		fr: "**~s{1}~t({2})** a été roll dans {3} !\n→ {4}\n**{5}**<:kakeraMudae:796822222110720106>",
+		en: "**~s{1}~t({2})** has been rolled in {3} !\n→ {4}\n**{5}**<:kakeraMudae:796822222110720106>"
 	}
 };
 

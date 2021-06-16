@@ -1,13 +1,5 @@
 module.exports = {
-	get: (text, ...args) => text
-		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1])
-		.replace(/\[\d+?\?.*?:.*?\]/gs, a => {
-			let m = a.match(/\[(\d+?)\?(.*?):(.*?)\]/s);
-			if (args[parseInt(m[1]) - 1]) return m[2];
-			else return m[3];
-		})
-		.replace(/~d/g, ":")
-		.replace(/~q/g, "?"),	// Please don't touch at all of the above
+	get: require("./parseLanguageText"),
 	data: {
 		unauthorized_guild: {
 			fr: "cette commande ne fonctionne pas sur ce serveur",
@@ -491,8 +483,8 @@ module.exports = {
 				en: "this image doesn't exist, see the list of available images with `{1}meme`"
 			},
 			copy_link: {
-				fr: "• Copier le [lien]({1})",
-				en: "• Copy [link]({1})"
+				fr: "• Copier le ~slien~t({1})",
+				en: "• Copy ~slink~t({1})"
 			},
 			image_list: {
 				fr: "Liste de tous les memes disponibles :",
@@ -637,8 +629,8 @@ module.exports = {
 				en: "*No pokémon matches the search*"
 			},
 			description: {
-				fr: "[1?🎖️ :][8?🎗️ :][2?⭐ :][11?**Alolan** :][7?**[{3}]({9})**[{4}]({9}):**{3}**{4}][10? - \"{10}\":] - {5} attrapé{6}",
-				en: "[1?🎖️ :][8?🎗️ :][2?⭐ :][11?**Alolan** :][7?**[{3}]({9})**[{4}]({9}):**{3}**{4}][10? - \"{10}\":] - {5} caught"
+				fr: "[1?🎖️ :][8?🎗️ :][2?⭐ :][7?**~s[11?Alolan :]{3}~t({9})**~s{4}~t({9}):**[11?Alolan :]{3}**{4}][10? - \"{10}\":] - {5} attrapé{6}",
+				en: "[1?🎖️ :][8?🎗️ :][2?⭐ :][7?**~s[11?Alolan :]{3}~t({9})**~s{4}~t({9}):**[11?Alolan :]{3}**{4}][10? - \"{10}\":] - {5} caught"
 			}
 		},
 		"poll": {
@@ -665,7 +657,8 @@ module.exports = {
 				en: "there is no reaction to snipe in this channel"
 			},
 			description: {
-				fr: "**{1}** [a réagi avec]({2}) {3}"
+				fr: "**{1}** ~sa réagi avec~t({2}) {3}",
+				en: "**{1}** ~sreacted with~t({2}) {3}"
 			}
 		},
 		"remind-me": {
@@ -1201,8 +1194,8 @@ module.exports = {
 				en: "Now playing"
 			},
 			description: {
-				fr: "[{1}]({2})\n\n**{3}**\n\n`Ajouté par :` **{4}**\n`Suivant :` **{5}**\n`Durée de la queue :` **{6}**",
-				en: "[{1}]({2})\n\n**{3}**\n\n`Requested by:` **{4}**\n`Next:` **{5}**\n`Queue duration:` **{6}**"
+				fr: "~s{1}~t({2})\n\n**{3}**\n\n`Ajouté par :` **{4}**\n`Suivant :` **{5}**\n`Durée de la queue :` **{6}**",
+				en: "~s{1}~t({2})\n\n**{3}**\n\n`Requested by:` **{4}**\n`Next:` **{5}**\n`Queue duration:` **{6}**"
 			},
 			footer: {
 				fr: "✨ Mayze ✨[1? | Répétition de la musique activée:][2? | Répétition de la queue activée:][3? | Autoplay activé:]",
