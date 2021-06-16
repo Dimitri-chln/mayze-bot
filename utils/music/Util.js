@@ -9,7 +9,6 @@ const Deezer = require("deezer-public-api");
 const deezer = new Deezer();
 const Discord = require('discord.js');
 const SpotifyWebApi = require("spotify-web-api-node");
-const getArtistTitle = require("get-artist-title");
 
 //RegEx Definitions
 let VideoRegex = /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))((?!channel)(?!user)\/(?:[\w\-]+\?v=|embed\/|v\/)?)((?!channel)(?!user)[\w\-]+)(\S+)?$/;
@@ -387,16 +386,14 @@ class Util {
 			if (queue.songs.length > 4) return reject('InvalidSongList');
 
 			let items = await Promise.all(queue.songs.map(async song => {
-				let [ artist, title ] = getArtistTitle(song['name'], {
-					defaultArtist: song['author'],
-					defaultTitle: song['name']
-				});
+				let [ artist, title ] = this.getArtistTitle(song);
 
-				let searchResult = await spotifyClient.searchTracks(artist && title ? `artist:${artist} track:${title}` : song['name'], {
+				let searchResult = await spotifyClient.searchTracks(artist ? `artist:${artist} track:${title}` : title, {
 					limit: 1
 				});
-				if (!searchResult.body['tracks']['items'].length) {
-					searchResult = await spotifyClient.searchTracks(artist && title ? `artist:${title} track:${artist}` : song['name'], {
+
+				if (!searchResult.body['tracks']['items'].length && artist) {
+					searchResult = await spotifyClient.searchTracks(`artist:${title} track:${artist}`, {
 						limit: 1
 					});
 				}
@@ -479,7 +476,7 @@ class Util {
 	 * @returns {PlayerOptions|Partial<PlayerOptions>}
 	 */
 	static deserializeOptionsPlayer(options) {
-		if(options && typeof options === 'object')
+		if (options && typeof options === 'object')
 			return Object.assign({}, this.PlayerOptions, options);
 		else return this.PlayerOptions;
 	}
@@ -489,9 +486,9 @@ class Util {
 	 * @returns {Partial<PlayOptions>}
 	 */
 	static deserializeOptionsPlay(options) {
-		if(options && typeof options === 'object')
+		if (options && typeof options === 'object')
 			return Object.assign({}, this.PlayOptions, options);
-		else if(typeof options === 'string')
+		else if (typeof options === 'string')
 			return Object.assign({}, this.PlayOptions, { search: options });
 		else return this.PlayOptions;
 	}
@@ -501,9 +498,9 @@ class Util {
 	 * @returns {Partial<PlaylistOptions>}
 	 */
 	static deserializeOptionsPlaylist(options) {
-		if(options && typeof options === 'object')
+		if (options && typeof options === 'object')
 			return Object.assign({}, this.PlaylistOptions, options);
-		else if(typeof options === 'string')
+		else if (typeof options === 'string')
 			return Object.assign({}, this.PlaylistOptions, { search: options });
 		else return this.PlaylistOptions;
 	}
@@ -513,7 +510,7 @@ class Util {
 	 * @returns {Partial<ProgressOptions>}
 	 */
 	static deserializeOptionsProgress(options) {
-		if(options && typeof options === 'object')
+		if (options && typeof options === 'object')
 			return Object.assign({}, this.ProgressOptions, options);
 		else return this.ProgressOptions;
 	}
@@ -523,7 +520,7 @@ class Util {
 	 * @return {Boolean}
 	 */
 	static isVoice(voice) {
-		if(voice.constructor.name !== Discord.VoiceState.name)
+		if (voice.constructor.name !== Discord.VoiceState.name)
 			return false;
 		return voice.channel ? voice.channel.constructor.name === 'VoiceChannel' || voice.channel.constructor.name === 'StageChannel' : false;
 	}
@@ -533,10 +530,10 @@ class Util {
 	 * @return {Array}
 	 */
 	static shuffle(array) {
-		if(!Array.isArray(array)) return [];
+		if (!Array.isArray(array)) return [];
 		const clone = [...array];
 		const shuffled = [];
-		while(clone.length > 0) 
+		while (clone.length > 0) 
 			shuffled.push(
 				clone.splice(
 					Math.floor(
@@ -545,6 +542,24 @@ class Util {
 				)[0]
 			);
 		return shuffled;
+	}
+
+	/**
+	 * Get the artist and title from a Song.
+	 * @param {Song} song The song.
+	 * @returns {[string | null, string]}
+	 */
+	static getArtistTitle(song) {
+		let defaultArtist = song['author'];
+		let defaultTitle = song['name'];
+
+		let text = song['name'];
+		text = text.replace(/\(.*?\)|\[.*?\]/g, '').trim();
+		text = text.replace(/f(?:ea)?t\. .+/g, '').trim();
+		let split = text.split(/ +- +/);
+		if (split.length === 1) split.unshift(null);
+
+		return split;
 	}
 
 }
