@@ -1001,7 +1001,7 @@ module.exports = {
 			},
 			response: {
 				fr: "Il reste {1} avant le {2}",
-				en: "{1} remaining since {2}"
+				en: "{1} remaining until {2}"
 			}
 		},
 		"uptime": {
