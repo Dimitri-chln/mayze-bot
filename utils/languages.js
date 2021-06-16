@@ -965,6 +965,10 @@ module.exports = {
 				fr: "__**Réponses :**__\n**{1}**",
 				en: "__**Answers:**__\n**{1}**"
 			},
+			inactive: {
+				fr: "La partie a été annulée pour inactivité",
+				en: "The game has been cancelled due to inactivity"
+			},
 			winner_msg_title: {
 				fr: "Nous avons un gagnant !",
 				en: "We have a winner!"

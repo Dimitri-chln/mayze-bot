@@ -30,6 +30,7 @@ const command = {
 			? parseInt(args[args.indexOf("-score") + 1])
 			: options[0].value;
 		if (isNaN(scoreLimit) || scoreLimit < 0) scoreLimit = 50;
+		if (scoreLimit > 250) scoreLimit = 250;
 
 		const startMsg = await message.channel.send({
 			embed: {
@@ -57,6 +58,7 @@ const command = {
 		const scores = {};
 		for (const [id] of players) scores[id] = 0;
 		let question = 0;
+		let unanswered = 0;
 
 		newQuestion();
 
@@ -86,6 +88,8 @@ const command = {
 			const answerFilter = msg => players.has(msg.author.id) && Object.values(pokemon.names).some(name => simplify(name) === simplify(msg.content));
 			let answers = await message.channel.awaitMessages(answerFilter, { time: 15000 });
 			answers.sweep(answer => answer.id !== answers.findKey(a => a.author.id === answer.author.id && simplify(a.content) === simplify(answer.content)));
+
+			if (!answers.size) ++unanswered;
 			
 			let newScores = {};
 			for (const [id] of players)
@@ -105,6 +109,10 @@ const command = {
 		
 			message.channel.send(answers.size ? `${language.get(language.answer, [bonusLanguage, ...Object.keys(pokemon.names).filter(l => l !== bonusLanguage)].map(l => `${flags[l]} ${pokemon.names[l]}`).join(", "))}\n${players.map(p => `> **${p.username}** - **${scores[p.id]}** \`(${Object.keys(newScores[p.id]).filter(l => newScores[p.id][l] !== 0).sort((a, b) => newScores[p.id][b] - newScores[p.id][a]).map(l => `${flags[l]} +${newScores[p.id][l]}`).join(", ") || "+0"})\``).join("\n")}` : language.get(language.no_correct_answer, Object.keys(pokemon.names).map(l => `${flags[l]} ${pokemon.names[l]}`).join("\n"))).catch(console.error);
 			
+			if (unanswered >= 5) {
+				return message.channel.send(language.inactive).catch(console.error);
+			}
+
 			if (Math.max(...Object.values(scores)) < scoreLimit) setTimeout(newQuestion, 10000);
 			else {
 				let results = Object.entries(scores).sort((a, b) => b[1]- a[1]);
