@@ -555,7 +555,7 @@ class Util {
 
 		let text = song['name'];
 		text = text.replace(/\(.*?\)|\[.*?\]/g, '').trim();
-		text = text.replace(/f(?:ea)?t\. .+/g, '').trim();
+		text = text.replace(/f(?:ea)?t\.? .+/g, '').trim();
 		let split = text.split(/ +- +/);
 		if (split.length === 1) split.unshift(null);
 
