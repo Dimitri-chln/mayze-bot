@@ -90,6 +90,7 @@ const command = {
 			answers.sweep(answer => answer.id !== answers.findKey(a => a.author.id === answer.author.id && simplify(a.content) === simplify(answer.content)));
 
 			if (!answers.size) ++unanswered;
+			else unanswered = 0;
 			
 			let newScores = {};
 			for (const [id] of players)

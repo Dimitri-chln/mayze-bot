@@ -14,55 +14,38 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		function get(text, ...args) {
-			text = text
-				.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1]);
+		const pokedex = require("oakdex-pokedex");
+		const pokemon = pokedex.findPokemon(args.join(" ").toLowerCase().replace(/^./, a => a.toUpperCase()));
 
-			while (/\[\d+?\?[^\[\]]*?:.*?\]/gs.test(text)) {
-				text = text
-					.replace(/\[\d+?\?[^\[\]]*?:.*?\]/gs, a => {
-						let m = a.match(/\[(\d+?)\?([^\[\]]*?):(.*?)\]/s);
-						if (args[parseInt(m[1]) - 1]) return m[2];
-						else return m[3];
-					});
+		let currentEvolution = pokemon;
+		while (currentEvolution.evolution_from) currentEvolution = pokedex.findPokemon(currentEvolution.evolution_from);
+
+		message.channel.send(JSON.stringify(getEvolutions(currentEvolution), null, 2));
+
+		// const data = [
+		// 	[ currentEvolution ]
+		// ];
+		// let evolutionDegree = 1;
+
+		// for (let i = 0; i < currentEvolution.evolutions.length; i++) {
+		// 	const evolution = currentEvolution.evolutions[i];
+		// 	if (!data[evolutionDegree]) data[evolutionDegree] = [];
+		// 	data[evolutionDegree][i] = evolution;
+		// }
+
+
+		function getEvolutions(pokemon) {
+			if (!pokemon.evolutions.length) return null;
+
+			const evolutionData = [
+				[]
+			];
+			for (const evolution of pokemon.evolutions) {
+				evolutionData[0].push(getEvolutions(pokedex.findPokemon(evolution.to)));
 			}
-
-			text = text
-				.replace(/~c/g, "{")
-				.replace(/~b/g, "}")
-				.replace(/~s/g, "[")
-				.replace(/~t/g, "]")
-				.replace(/~d/g, ":")
-				.replace(/~q/g, "?");
-
-			return text;
+			
+			return evolutionData;
 		}
-
-		message.channel.send(get("test [1?oui [2?o:n]:{3}] test", false, true, "ok"));
-
-
-
-		// message.client.api.channels[message.channel.id].messages.post({
-		// 	data: {
-		// 		content: "test",
-		// 		components: [
-		// 			{
-		// 				type: 1,
-		// 				components: [
-		// 					{
-		// 						type: 2,
-		// 						label: "Test",
-		// 						style: 4,
-		// 						emoji: {
-		// 							name: "✨"
-		// 						},
-		// 						custom_id: "test"
-		// 					}
-		// 				]
-		// 			}
-		// 		]
-		// 	}
-		// }).catch(console.error);
 	}
 };
 
