@@ -417,6 +417,13 @@ class Player extends EventEmitter {
 		let currentlyPlaying = queue.songs.shift();
 		queue.songs = [ currentlyPlaying ];
 
+		if (queue.autoplay) {
+			Util.getRecommendations(queue, message.client.spotify)
+				.then(recommendations => {
+					queue.songs = queue.songs.concat(recommendations);
+				});
+		}
+
 		return true;
 	}
 
