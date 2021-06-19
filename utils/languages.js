@@ -436,6 +436,10 @@ module.exports = {
 				fr: "tu ne peux pas être kick car tu boost ce serveur",
 				en: "you can't be kicked because you are boosting this server"
 			},
+			too_high_hierarchy: {
+				fr: "je ne suis pas assez haut dans la hiérarchie pour t'expulser",
+				en: "I am not high enough in the hierarchy to kick you"
+			},
 			reason: {
 				fr: "s'est kick lui/elle-même",
 				en: "kicked themselves"
