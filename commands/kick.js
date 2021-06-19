@@ -47,7 +47,7 @@ const command = {
         // Server booster
         if (member.premiumSince) return message.reply("ce membre boost le serveur").catch(console.error);
 
-		if (member.roles.highest.rawPosition >= message.guild.me.roles.highest.rawPosition)
+		if (member.roles.highest.position >= message.guild.me.roles.highest.position)
 			return message.reply(`je ne suis pas assez haut dans la hiérarchie pour expulser **${member.user.tag}**`).catch(console.error);
 
         member.kick(`Expulsé par ${message.author.tag}${reason ? `. Raison : ${reason}` : ""}`)

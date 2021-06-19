@@ -19,7 +19,7 @@ const command = {
 		// Server booster
         if (message.member.premiumSince) return message.reply(language.boost).catch(console.error);
 
-		if (message.member.roles.highest.rawPosition >= message.guild.me.roles.highest.rawPosition)
+		if (message.member.roles.highest.position >= message.guild.me.roles.highest.position)
 			return message.reply(language.too_high_hierarchy).catch(console.error);
 
 		const member = await message.member.kick(language.reason).catch(console.error);

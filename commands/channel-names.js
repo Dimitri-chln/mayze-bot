@@ -52,7 +52,7 @@ const command = {
 			.sort((a, b) => {
 				if (a.type === "text" && b.type === "voice") return -1;
 				if (a.type === "voice" && b.type === "text") return 1;
-				return a.rawPosition - b.rawPosition;
+				return a.position - b.position;
 			});
 		
 		const newChannels = channels.map(c => c.name.replace(regex, replace));
