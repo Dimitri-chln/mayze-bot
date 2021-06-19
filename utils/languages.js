@@ -432,6 +432,10 @@ module.exports = {
 			}
 		},
 		"kick-myself": {
+			boost: {
+				fr: "tu ne peux pas être kick car tu boost ce serveur",
+				en: "you can't be kicked because you are boosting this server"
+			},
 			reason: {
 				fr: "s'est kick lui/elle-même",
 				en: "kicked themselves"

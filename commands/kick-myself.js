@@ -16,7 +16,11 @@ const command = {
 	* @param {Object[]} options
 	*/
 	execute: async (message, args, options, language, languageCode) => {
+		// Server booster
+        if (message.member.premiumSince) return message.reply(language.boost).catch(console.error);
+
 		const member = await message.member.kick(language.reason).catch(console.error);
+
 		if (member) message.channel.send(language.get(language.kick_msg, message.author.username)).catch(console.error);
 		else message.channel.send(language.errors.kicking).catch(console.error);
 	}
