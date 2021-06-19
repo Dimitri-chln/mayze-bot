@@ -3,8 +3,8 @@ const { Message } = require("discord.js");
 const command = {
 	name: "kick-myself",
 	description: {
-		fr: "T'expulser du serveur sans aucune raison",
-		en: "Kick you from the server for no reason"
+		fr: "T'expulse du serveur sans aucune raison",
+		en: "Kicks you from the server for no reason"
 	},
 	aliases: ["kickmyself", "kms", "4-4-2"],
 	args: 0,
