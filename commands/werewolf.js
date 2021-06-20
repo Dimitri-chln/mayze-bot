@@ -74,7 +74,12 @@ const command = {
 				if (message.client.werewolfGames && message.client.werewolfGames.get(message.guild.id) && !message.client.werewolfGames.get(message.guild.id).ended) return message.reply(language.ongoing).catch(console.error);
 				if (message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame.id)).size === 16) return message.reply(language.max_players).catch(console.error);
 				
-				message.member.roles.add(roleIngame).catch(console.error);
+				const unJailedRoles = member.roles.cache.filter(role => role.permissions.has("ADMINISTRATOR") && message.guild.roles.cache.some(r => r.name === role.name + " (Jailed)"));
+				const jailedRoles = message.guild.roles.cache.filter(role => member.roles.cache.some(r => r.permissions.has("ADMINISTRATOR") && role.name === r.name + " (Jailed)"));
+				jailedRoles.set(roleIngame.id, roleIngame);
+
+				await member.roles.remove(unJailedRoles);
+				await member.roles.add(jailedRoles);
 								
 				message.channel.send(language.get(language.joined, message.author)).catch(console.error);
 				if (message.channel.id !== villageChannel.id) villageChannel.send(language.get(language.joined, message.author)).catch(console.error);
@@ -82,7 +87,12 @@ const command = {
 			case "leave":
 				if (message.client.werewolfGames && message.client.werewolfGames.get(message.guild.id) && !message.client.werewolfGames.get(message.guild.id).ended) return message.reply(language.already_started).catch(console.error);
 				
-				message.member.roles.remove(roleIngame).catch(console.error);
+				const jailedRoles = member.roles.cache.filter(role => message.guild.roles.cache.some(r => r.permissions.has("ADMINISTRATOR") && role.name === r.name + " (Jailed)"));
+				const unJailedRoles = message.guild.roles.cache.filter(role => role.permissions.has("ADMINISTRATOR") && member.roles.cache.some(r => r.name === role.name + " (Jailed)"));
+				jailedRoles.set(roleIngame.id, roleIngame);
+
+				await member.roles.add(unJailedRoles).catch(console.error);
+				await member.roles.remove(jailedRoles).catch(console.error);
 				
 				message.channel.send(language.get(language.left, message.author)).catch(console.error);
 				if (message.channel.id !== villageChannel.id) villageChannel.send(language.get(language.left, message.author)).catch(console.error);
