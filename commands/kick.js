@@ -10,6 +10,7 @@ const command = {
 	args: 1,
 	usage: "<user> [<reason>]",
 	perms: ["KICK_MEMBERS"],
+	botPerms: ["KICK_MEMBERS"],
 	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
 		{

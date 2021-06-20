@@ -9,6 +9,7 @@ const command = {
 	aliases: ["wishremove", "wr"],
 	args: 1,
 	usage: "<series>",
+	botPerms: ["ADD_REACTIONS"],
 	slashOptions: [
 		{
 			name: "series",

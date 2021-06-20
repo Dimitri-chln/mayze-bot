@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "",
+	botPerms: ["USE_EXTERNAL_EMOJIS"],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 

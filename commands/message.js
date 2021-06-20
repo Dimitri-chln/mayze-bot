@@ -10,6 +10,7 @@ const command = {
 	args: 2,
 	usage: "<channel> <message>",
 	perms: ["MANAGE_MESSAGES"],
+	botPerms: ["ADD_REACTIONS"],
 	slashOptions: [
 		{
 			name: "channel",

@@ -9,6 +9,7 @@ const command = {
 	aliases: ["ly", "l"],
 	args: 0,
 	usage: "[<song>]",
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
 	slashOptions: [
 		{
 			name: "song",

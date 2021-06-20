@@ -6,9 +6,10 @@ const command = {
 		fr: "T'expulse du serveur sans aucune raison",
 		en: "Kicks you from the server for no reason"
 	},
-	aliases: ["kickmyself", "kms", "4-4-2"],
+	aliases: ["kickmyself", "kms", "4-4-2", "442"],
 	args: 0,
 	usage: "",
+	botPerms: ["KICK_MEMBERS"],
 	onlyInGuilds: ["689164798264606784", "724530039781326869"],
 	/**
 	* @param {Message} message 

@@ -8,6 +8,7 @@ const command = {
 	usage: "<mention/id>",
 	onlyInGuilds: ["689164798264606784"],
 	perms: ["MANAGE_ROLES"],
+	botPerms: ["MANAGE_ROLES"],
 	slashOptions: [
 		{
 			name: "utilisateur",

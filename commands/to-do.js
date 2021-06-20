@@ -6,6 +6,7 @@ const command = {
 	aliases: ["toDo", "td"],
 	args: 0,
 	usage: "[add <tâche> | remove <tâche>]",
+	botPerms: ["EMBED_LINKS"],
 	ownerOnly: true,
 	/**
 	 * @param {Message} message 

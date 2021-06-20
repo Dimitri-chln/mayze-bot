@@ -6,6 +6,7 @@ const command = {
 	aliases: ["rose"],
 	args: 1,
 	usage: "react [<ID message>] | end",
+	botPerms: ["ADD_REACTIONS", "USE_EXTERNAL_EMOJIS"],
 	onlyInGuilds: ["689164798264606784"],
 	disableSlash: true,
 	/**

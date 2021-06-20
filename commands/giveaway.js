@@ -6,6 +6,7 @@ const command = {
 	aliases: ["gwa", "ga"],
 	args: 1,
 	usage: "create \"<prix>\" <durée> [<nombre gagnants>] [-mention <rôle>] [-role <rôle>] | end [<ID>] | delete [<ID>] | reroll [<ID>]",
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
 	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
 		{

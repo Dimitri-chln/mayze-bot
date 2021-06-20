@@ -9,7 +9,7 @@ const command = {
 	aliases: ["leaderboard", "lb", "topxp"],
 	args: 0,
 	usage: "",
-	slashOptions: null,
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 

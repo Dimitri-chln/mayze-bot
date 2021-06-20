@@ -9,6 +9,7 @@ const command = {
 	aliases: ["vol"],
 	args: 0,
 	usage: "[<volume>]",
+	botPerms: ["USE_EXTERNAL_EMOJIS"],
 	slashOptions: [
 		{
 			name: "volume",

@@ -8,6 +8,7 @@ const command = {
 	usage: "[-everyone] [-single] [-noping] [-votes <nombre de votes>]",
 	onlyInGuilds: ["689164798264606784"],
 	perms: ["ADMINISTRATOR"],
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
 	disableSlash: true,
 	/**
 	 * @param {Message} message

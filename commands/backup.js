@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 2,
 	usage: "start <table> | get <table>",
+	botPerms: ["ADD_REACTIONS"],
 	ownerOnly: true,
 	/**
 	 * @param {Message} message 

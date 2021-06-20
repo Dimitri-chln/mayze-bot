@@ -9,6 +9,7 @@ const command = {
 	aliases: ["customresponse", "response", "cr"],
 	args: 0,
 	usage: "add \"<trigger>\" \"<response>\" [<type>] | remove <#response>",
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS"],
 	ownerOnly: true,
 	slashOptions: [
 		{

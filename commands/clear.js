@@ -11,6 +11,7 @@ const command = {
 	args: 1,
 	usage: "<number> [<user>] [-bot] [-r <regex>]",
 	perms: ["MANAGE_MESSAGES"],
+	botPerms: ["MANAGE_MESSAGES"],
 	slashOptions: [
 		{
 			name: "number",

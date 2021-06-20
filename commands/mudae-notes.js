@@ -9,6 +9,7 @@ const command = {
 	aliases: ["notes"],
 	args: 0,
 	usage: "get | add <note> | remove <note>",
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS"],
 	slashOptions: [
 		{
 			name: "get",

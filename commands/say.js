@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "<text>",
+	botPerms: ["MANAGE_MESSAGES"],
 	slashOptions: [
 		{
 			name: "text",

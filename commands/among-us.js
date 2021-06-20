@@ -9,6 +9,7 @@ const command = {
 	aliases: ["amongus", "au"],
 	args: 0,
 	usage: "add <code> [<description>] | delete",
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS"],
 	slashOptions: [
 		{
 			name: "add",

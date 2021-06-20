@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "[<x>] [<y>] [<zoom>]",
+	botPerms: ["EMBED_LINKS", "ATTACH_FILES"],
 	slashOptions: [
 		{
 			name: "x",

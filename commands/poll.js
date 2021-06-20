@@ -9,6 +9,7 @@ const command = {
 	aliases: ["question", "vote"],
 	args: 1,
 	usage: "\"<question>\" \"[<answer>]\" \"[<answer>]\"... [-anonymous] [-single]",
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
 	slashOptions: [
 		{
 			name: "question",

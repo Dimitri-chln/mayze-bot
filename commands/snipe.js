@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "",
+	botPerms: ["EMBED_LINKS", "ATTACH_FILES"],
 	slashOptions: null,
 	/**
 	* @param {Message} message 

@@ -10,6 +10,7 @@ const command = {
 	args: 0,
     usage: "",
     perms: ["KICK_MEMBERS"],
+	botPerms: ["USE_EXTERNAL_EMOJIS"],
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 

@@ -9,7 +9,8 @@ const command = {
 	aliases: ["channelnames", "cn"],
 	args: 2,
 	usage: "\"<regex>\" \"<replacement>\" [text | voice | category]",
-	perms: ["ADMINISTRATOR"],
+	perms: ["MANAGE_CHANNELS"],
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_CHANNELS"],
 	slashOptions: [
 		{
 			name: "regex",

@@ -10,6 +10,7 @@ const command = {
 	args: 1,
 	usage: "fr | en",
 	perms: ["ADMINISTRATOR"],
+	botPerms: ["ADD_REACTIONS"],
 	slashOptions: [
 		{
 			name: "language",

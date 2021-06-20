@@ -6,6 +6,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "",
+	botPerms: ["ATTACH_FILES"],
 	ownerOnly: true,
 	/**
 	 * @param {Message} message 

@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "[pokémon]",
+	botPerms: ["EMBED_LINKS"],
 	slashOptions: [
 		{
 			name: "pokemon",

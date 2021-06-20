@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 2,
 	usage: "block <user> [<duration>] | unblock <user> | [<pokémon to offer>], [<pokémon to offer>]... <user> [<pokémon to ask for>], [<pokémon to ask for>]...",
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
 	cooldown: 15,
 	slashOptions: [
 		{

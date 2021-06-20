@@ -1,3 +1,9 @@
+/**
+ * 
+ * @param {string} text The base string
+ * @param  {...string} args The list of arguments to put in the base string
+ * @returns {string}
+ */
 function parse(text, ...args) {
     text = text
         .replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1]);

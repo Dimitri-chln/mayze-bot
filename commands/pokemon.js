@@ -9,6 +9,7 @@ const command = {
 	aliases: ["pokemons", "pkmn", "pkm", "poke"],
 	args: 0,
 	usage: "addfav <pokémon> | removefav <pokémon> | nick <pokémon> [<nickname>] | [<user>] [-favorite] [-legendary] [-beast] [-starter] [-shiny] [-alolan] [-id [<number>]] [-name <name>]",
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
 	slashOptions: [
 		{
 			name: "addfav",

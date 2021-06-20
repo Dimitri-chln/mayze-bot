@@ -10,6 +10,7 @@ const command = {
 	aliases: ["quiz"],
 	args: 0,
 	usage: "[-score <score>]",
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS"],
 	disableSlash: true,
 	slashOptions: [
 		{

@@ -9,6 +9,10 @@ module.exports = {
 			fr: "tu n'as pas les permissions nécessaires\n → `{1}`",
 			en: "you don't have enough permissions\n → `{1}`"
 		},
+		bot_missing_perms: {
+			fr: "il me manque ces permissions pour pouvoir exécuter cette commande :\n → `{1}`",
+			en: "I am missing these permissions to be able to execute the command:\n → `{1}`"
+		},
 		wrong_usage: {
 			fr: "Utilisation : `{1}`",
 			en: "Usage: `{1}`"

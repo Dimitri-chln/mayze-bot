@@ -6,6 +6,7 @@ const command = {
 	aliases: [],
 	args: 2,
 	usage: "<utilisateur> <message>",
+	botPerms: ["MANAGE_MESSAGES", "MANAGE_WEBHOOKS"],
 	ownerOnly: true,
 	allowedUsers: ["463358584583880704"],
 	/**

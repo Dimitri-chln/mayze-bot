@@ -9,6 +9,7 @@ const command = {
 	aliases: ["plist", "pl"],
 	args: 0,
 	usage: "get [-me] | play <name> [-shuffle] | add <name> <url> [-private] | remove <name>",
+	botPerms: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
 	slashOptions: [
 		{
 			name: "get",

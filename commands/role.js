@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 1,
 	usage: "<role>",
+	botPerms: ["EMBED_LINKS"],
 	slashOptions: [
 		{
 			name: "role",

@@ -9,6 +9,7 @@ const command = {
 	aliases: ["dmlink", "link"],
 	args: 1,
 	usage: "<channel> [<user>]",
+	botPerms: ["ADD_REACITIONS", "MANAGE_WEBHOOKS"],
 	ownerOnly: true,
 	allowedUsers: ["394633964138135563"],
 	/**

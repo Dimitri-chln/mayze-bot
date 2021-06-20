@@ -9,6 +9,7 @@ const command = {
 	aliases: ["goto"],
 	args: 1,
 	usage: "<timestamp>",
+	botPerms: ["USE_EXTERNAL_EMOJIS"],
 	slashOptions: [
 		{
 			name: "timestamp",

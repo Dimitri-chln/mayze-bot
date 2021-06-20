@@ -9,6 +9,7 @@ const command = {
 	aliases: ["viewnav"],
 	args: 2,
 	usage: "<x> <y>",
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES", "USE_EXTERNAL_EMOJIS"],
 	slashOptions: [
 		{
 			name: "x",

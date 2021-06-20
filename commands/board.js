@@ -10,6 +10,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "join <board> | list",
+	botPerms: ["EMBED_LINKS"],
 	slashOptions: [
 		{
 			name: "join",

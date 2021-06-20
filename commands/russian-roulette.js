@@ -3,9 +3,10 @@ const { Message, GuildMember } = require("discord.js");
 const command = {
 	name: "russian-roulette",
 	description: "Jouer à la roulette russe",
-	aliases: ["rr"],
+	aliases: ["russianroulette", "rroulette", "rr"],
 	args: 1,
 	usage: "create | join | delete | start [-kick | -mute]",
+	botPerms: ["EMBED_LINKS"],
 	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
 		{

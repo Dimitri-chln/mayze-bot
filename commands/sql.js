@@ -4,6 +4,7 @@ const command = {
 	aliases: ["postgresql", "pg", "psql"],
 	args: 1,
 	usage: "<query>",
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
 	ownerOnly: true,
 	/**
 	* @param {Message} message 

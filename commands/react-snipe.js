@@ -7,6 +7,7 @@ const command = {
 	aliases: ["reactsnipe"],
 	args: 0,
 	usage: "",
+	botPerms: ["EMBED_LINKS"],
 	slashOptions: null,
 	/**
 	* @param {Message} message 

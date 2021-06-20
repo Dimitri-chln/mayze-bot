@@ -9,6 +9,7 @@ const command = {
 	aliases: ["p"],
 	args: 1,
 	usage: "<song> [-shuffle]",
+	botPerms: ["USE_EXTERNAL_EMOJIS"],
 	cooldown: 5,
 	slashOptions: [
 		{

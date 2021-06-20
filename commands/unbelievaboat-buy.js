@@ -1,5 +1,4 @@
 const { Message } = require("discord.js");
-const { i } = require("mathjs");
 const shop = require("../assets/unb-shop");
 
 const command = {
@@ -8,6 +7,7 @@ const command = {
 	aliases: ["unb-buy", "buy"],
 	args: 1,
 	usage: "<objet>",
+	botPerms: ["EMBED_LINKS"],
 	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
 		{

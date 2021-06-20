@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "",
+	botPerms: ["EMBED_LINKS", "MANAGE_ROLES", "KICK_MEMBERS"],
 	cooldown: 10,
 	onlyInGuilds: ["689164798264606784"],
 	/**

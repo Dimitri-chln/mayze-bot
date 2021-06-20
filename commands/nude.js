@@ -7,6 +7,7 @@ const command = {
 	cooldown: 600,
 	args: 0,
 	usage: "",
+	botPerms: ["ADD_REACTIONS"],
 	onlyInGuilds: ["689164798264606784"],
 	/**
 	* @param {Message} message 

@@ -10,6 +10,7 @@ const command = {
 	args: 0,
 	usage: "[<nickname>]",
 	perms: ["CHANGE_NICKNAME"],
+	botPerms: ["MANAGE_NICKNAMES"],
 	disableSlash: true,
 	/**
 	* @param {Message} message 

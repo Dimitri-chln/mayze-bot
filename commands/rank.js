@@ -6,6 +6,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "[<rank>]",
+	botPerms: ["EMBED_LINKS", "MANAGE_ROLES"],
 	onlyInGuilds: ["689164798264606784"],
 	slashOptions: [
 		{

@@ -6,6 +6,7 @@ const command = {
 	aliases: ["unb-shop", "shop"],
 	args: 0,
 	usage: "",
+	botPerms: ["EMBED_LINKS"],
 	onlyInGuilds: ["689164798264606784"],
 	/**
 	* @param {Message} message 

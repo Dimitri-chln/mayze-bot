@@ -16,7 +16,7 @@ const data = [
     },
     {
         name: "Mute à double tranchant",
-        description: "Choisis une personne et une durée. Un de vous deux sera mute pendant cette durée (<1h)",
+        description: "Choisis une personne et une durée. Un de vous deux sera mute pendant cette durée (< 1h)",
         price: 7500,
         async buy(message) {
             const filter = response => response.mentions.users.size && response.author.id === message.author.id;

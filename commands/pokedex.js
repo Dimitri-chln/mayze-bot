@@ -9,6 +9,7 @@ const command = {
 	aliases: ["dex", "pd"],
 	args: 0,
 	usage: "[<pokémon/pokédex ID>] [-caught] [-uncaught] [-shiny] [-legendary]",
+	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"],
 	slashOptions: [
 		{
 			name: "pokémon",

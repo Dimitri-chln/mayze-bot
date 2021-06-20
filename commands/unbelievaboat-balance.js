@@ -6,6 +6,7 @@ const command = {
 	aliases: ["unb-balance", "unbelievaboat-bal", "balance", "bal"],
 	args: 0,
 	usage: "",
+	botPerms: ["EMBED_LINKS"],
 	onlyInGuilds: ["689164798264606784"],
 	slashOptions: null,
 	/**

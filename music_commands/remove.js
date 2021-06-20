@@ -9,6 +9,7 @@ const command = {
 	aliases: ["rm"],
 	args: 0,
     usage: "[<#song>] | <#songs interval>]...",
+	botPerms: ["USE_EXTERNAL_EMOJIS"],
 	slashOptions: [
 		{
 			name: "songs",

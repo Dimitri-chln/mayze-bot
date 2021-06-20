@@ -10,6 +10,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "[<image>] \"[<line>]\" \"[<line>]\"...",
+	botPerms: ["EMBED_LINKS"],
 	slashOptions: [
 		{
 			name: "image",

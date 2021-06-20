@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 1,
 	usage: "\"<serie>\" [<regex>]",
+	botPerms: ["ADD_REACTIONS"],
 	slashOptions: [
 		{
 			name: "series",
