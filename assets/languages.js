@@ -1,5 +1,5 @@
 module.exports = {
-	get: require("./parseLanguageText"),
+	get: require("../utils/parseLanguageText"),
 	data: {
 		unauthorized_guild: {
 			fr: "cette commande ne fonctionne pas sur ce serveur",

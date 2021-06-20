@@ -4,7 +4,7 @@ const Path = require("path");
 const Cron = require("cron");
 const config = require("./config.json");
 require('dotenv').config();
-const languages = require("./utils/languages");
+const languages = require("./assets/languages");
 
 require("./utils/prototypes");
 

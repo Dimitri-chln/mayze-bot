@@ -166,7 +166,7 @@ const command = {
 						let options = {};
 						if (role === werewolfInfo.roles.witch[languageCode]) options.canSave = true;
 						if (role === werewolfInfo.roles.shaman[languageCode]) {
-							deadChannel.updateOverwrite(player, { "VIEW_CHANNEL": true, "SEND_MESSAGES": false }).catch(console.error);
+							deadChannel.updateOverwrite(player, { "VIEW_CHANNEL": true }).catch(console.error);
 						};
 						
 						game.addPlayer(player, role, options);
