@@ -70,7 +70,7 @@ const command = {
 		const deadChannel = message.guild.channels.cache.get(DEAD_CHANNEL_ID);
 
 		switch (subCommand) {
-			case "join":
+			case "join": {
 				if (message.client.werewolfGames && message.client.werewolfGames.get(message.guild.id) && !message.client.werewolfGames.get(message.guild.id).ended) return message.reply(language.ongoing).catch(console.error);
 				if (message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame.id)).size === 16) return message.reply(language.max_players).catch(console.error);
 				
@@ -84,7 +84,8 @@ const command = {
 				message.channel.send(language.get(language.joined, message.author)).catch(console.error);
 				if (message.channel.id !== villageChannel.id) villageChannel.send(language.get(language.joined, message.author)).catch(console.error);
 				break;
-			case "leave":
+			}
+			case "leave": {
 				if (message.client.werewolfGames && message.client.werewolfGames.get(message.guild.id) && !message.client.werewolfGames.get(message.guild.id).ended) return message.reply(language.already_started).catch(console.error);
 				
 				const jailedRoles = member.roles.cache.filter(role => message.guild.roles.cache.some(r => r.permissions.has("ADMINISTRATOR") && role.name === r.name + " (Jailed)"));
@@ -97,6 +98,7 @@ const command = {
 				message.channel.send(language.get(language.left, message.author)).catch(console.error);
 				if (message.channel.id !== villageChannel.id) villageChannel.send(language.get(language.left, message.author)).catch(console.error);
 				break;
+			}
 			case "start":
 				if (message.channel.id !== villageChannel.id) return;
 				if (!message.member.hasPermission("ADMINISTRATOR") && message.author.id !== OWNER_ID) return message.reply(language.unauthorized).catch(console.error);
