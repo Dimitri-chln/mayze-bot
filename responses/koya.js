@@ -13,7 +13,7 @@ const command = {
 	 * @param {Message} message 
 	 */
 	execute: async (message) => {
-		const languages = require("../utils/languages");
+		const languages = require("../assets/languages");
 
 		if (message.channel.type === "dm") return;
 		const koya = message.guild.members.cache.get("276060004262477825");
