@@ -190,9 +190,9 @@ class Player {
 			case roles.cupid[this.game.languageCode]:
 				if (night !== 1) return;
 				if (players.some(player => player.couple)) return;
-				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), language.cupidFirst[this.game.languageCode], 15000, this.game.languageCode).catch(console.error);
+				const player_1 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), language.cupidFirst[this.game.languageCode], 30000, this.game.languageCode).catch(console.error);
 				if (!player_1) return this.member.send(language.tooLate[this.game.languageCode]);
-				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), language.cupidSecond[this.game.languageCode], 15000, this.game.languageCode).catch(console.error);
+				const player_2 = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id && p.member.id !== player_1.member.id), language.cupidSecond[this.game.languageCode], 30000, this.game.languageCode).catch(console.error);
 				if (!player_2) return this.member.send(language.tooLate[this.game.languageCode]);
 				player_1.setCouple(player_2);
 				player_2.setCouple(player_1);

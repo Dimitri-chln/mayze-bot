@@ -33,6 +33,7 @@ async function selectPlayer(channel, players, embedTitle, timeout = 30000, langu
 	emojis.forEach(async e => await msg.react(e).catch(console.error));
 	
 	const filter = (reaction, user) => emojis.includes(reaction.emoji.name) && !user.bot;
+	
 	try {
 		const collected = await msg.awaitReactions(filter, { max: 1, time: timeout, errors: ["time"] });
 		if (channel.type && channel.type !== "dm") msg.reactions.removeAll().catch(console.error);
