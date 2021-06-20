@@ -226,7 +226,7 @@ const command = {
 				break;
 			case "forceleave":
 				const playersToRemove = args[1] === "all"
-					? message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame))
+					? message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame.id))
 					: message.mentions.members;
 
 				message.channel.startTyping(1);
@@ -245,6 +245,7 @@ const command = {
 					});
 
 				message.channel.send(language.get(language.force_removed, playersToRemove.size, playersToRemove.size > 1, playersToRemove.map(m => `**${m.user.username}**`).join(", "))).catch(console.error);
+				message.channel.stopTyping();
 				break;
 			case "players":
 				if (message.client.werewolfGames && message.client.werewolfGames.has(message.guild.id) && message.channel.id === villageChannel.id) {
