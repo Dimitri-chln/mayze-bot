@@ -10,7 +10,7 @@ const command = {
 		const DMcategory = DMGuild.channels.cache.get("744292272300097549");
 		if (message.channel.type === "dm" && message.author.id !== message.client.user.id) {
 			const msg = `${message.content}\n${message.attachments.map(attachment => attachment.url).join("\n")}`;
-			let channel = DMGuild.channels.cache.find(c => c.topic === message.author.id);
+			let channel = DMGuild.channels.cache.find(c => c.topic === message.author.id && c.parentID === DMcategory.id);
 			if (!channel) {
 				channel = await DMGuild.channels.create(message.author.username, "text").catch(console.error);
 				channel.setParent(DMcategory.id).catch(console.error);
