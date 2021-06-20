@@ -202,7 +202,7 @@ class Player {
 				break;
 			case roles.avenger[this.game.languageCode]:
 				{
-					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), language.avengerTitle, 30000, this.game.languageCode).catch(console.error);
+					const player = await selectPlayer(this.member, players.filter(p => p.member.id !== this.member.id), language.avengerTitle[this.game.languageCode], 30000, this.game.languageCode).catch(console.error);
 					if (!player) return this.member.send(language.tooLate[this.game.languageCode]);
 					this.setOption("avenge", player);
 					this.member.send(language.get(language.avengerAnswer[this.game.languageCode], player.member.user.username)).catch(console.error);
