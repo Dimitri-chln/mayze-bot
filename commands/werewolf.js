@@ -72,7 +72,7 @@ const command = {
 		switch (subCommand) {
 			case "join": {
 				if (message.client.werewolfGames && message.client.werewolfGames.get(message.guild.id) && !message.client.werewolfGames.get(message.guild.id).ended) return message.reply(language.ongoing).catch(console.error);
-				if (message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame.id)).size === 16) return message.reply(language.max_players).catch(console.error);
+				if (message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame.id)).size >= 16) return message.reply(language.max_players).catch(console.error);
 				
 				const unJailedRoles = message.member.roles.cache.filter(role => role.permissions.has("ADMINISTRATOR") && message.guild.roles.cache.some(r => r.name === role.name + " (Jailed)"));
 				const jailedRoles = message.guild.roles.cache.filter(role => message.member.roles.cache.some(r => r.permissions.has("ADMINISTRATOR") && role.name === r.name + " (Jailed)"));
@@ -133,7 +133,15 @@ const command = {
 
 					if (players.size < 4) return villageChannel.send(language.not_enough_players).catch(console.error);
 
-					toRemove.forEach(m => m.roles.remove(roleIngame).catch(console.error));
+					toRemove.forEach(async m => {
+						const jailedRoles = m.roles.cache.filter(role => message.guild.roles.cache.some(r => r.permissions.has("ADMINISTRATOR") && role.name === r.name + " (Jailed)"));
+						const unJailedRoles = message.guild.roles.cache.filter(role => role.permissions.has("ADMINISTRATOR") && m.roles.cache.some(r => r.name === role.name + " (Jailed)"));
+						jailedRoles.set(roleIngame.id, roleIngame);
+
+						await m.roles.add(unJailedRoles).catch(console.error);
+						await m.roles.remove(jailedRoles).catch(console.error);
+					});
+
 					players.sort(() => Math.random() - 0.5);
 
 					const game = new Game(message.guild, roleIngame, roleVillage, roleWerewolves, villageChannel, werewolvesChannel, deadChannel, [], languageCode);
@@ -215,6 +223,28 @@ const command = {
 						}
 					}
 				}).catch(console.error);
+				break;
+			case "forceleave":
+				const playersToRemove = args[1] === "all"
+					? message.guild.members.cache.filter(m => m.roles.cache.has(roleIngame))
+					: message.mentions.members;
+
+				message.channel.startTyping(1);
+
+				await Promise.all(playersToRemove.map(async m => {
+					const jailedRoles = m.roles.cache.filter(role => message.guild.roles.cache.some(r => r.permissions.has("ADMINISTRATOR") && role.name === r.name + " (Jailed)"));
+					const unJailedRoles = message.guild.roles.cache.filter(role => role.permissions.has("ADMINISTRATOR") && m.roles.cache.some(r => r.name === role.name + " (Jailed)"));
+					jailedRoles.set(roleIngame.id, roleIngame);
+
+					await m.roles.add(unJailedRoles).catch(console.error);
+					await m.roles.remove(jailedRoles).catch(console.error);
+				}))
+					.catch(err => {
+						console.error(err);
+						message.channel.stopTyping();
+					});
+
+				message.channel.send(language.get(language.force_removed, playersToRemove.size, playersToRemove.size > 1, playersToRemove.map(m => `**${m.user.username}**`).join(", "))).catch(console.error);
 				break;
 			case "players":
 				if (message.client.werewolfGames && message.client.werewolfGames.has(message.guild.id) && message.channel.id === villageChannel.id) {

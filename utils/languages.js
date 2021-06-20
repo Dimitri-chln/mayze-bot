@@ -1134,6 +1134,10 @@ module.exports = {
 				fr: "• Rôle joueur : {1}\n• Rôle villagois : {2}\n• Rôle loup-garou : {3}\n• Salon du village : {4}\n• Salon des loups-garous : {5}\n• Salon des morts : {6}",
 				en: "• Player role: {1}\n• Villager role: {2}\n• Werewolf role: {3}\n• Village channel: {4}\n• Werewolves channel: {5}\n• Dead channel: {6}"
 			},
+			force_removed: {
+				fr: "**{1}** joueur[2?s:] [2?ont:a] été retiré[2?s:]\n → {3}",
+				en: "**{1}** player[2?s:] [2?have:has] been removed\n → {3}"
+			},
 			player_list: {
 				fr: "Liste des joueurs :",
 				en: "Player list:"
