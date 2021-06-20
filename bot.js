@@ -328,7 +328,7 @@ async function processCommand(command, message, args, options) {
 		} else if (message.author.id !== config.OWNER_ID) return;
 	} else if (command.allowedUsers && !command.allowedUsers.includes(message.author.id)) return;
 	if (args && args.length < command.args)	return message.channel.send(languages.get(languages.data.wrong_usage[language], `${client.prefix + command.name} ${command.usage}`), { ephemeral: true }).catch(console.error);
-	if (command.botPerms && !command.botPerms.every(perm => message.guild.me.permissionsIn(message.channel).has(perm))) return message.reply(languages.get(languages.data.bot_missing_perms, command.botPerms.filter(perm => !message.guild.me.permissionsIn(message.channel).has(perm)).join("`, `"))).catch(console.error);
+	if (command.botPerms && !command.botPerms.every(perm => message.guild.me.permissionsIn(message.channel).has(perm))) return message.channel.send(languages.get(languages.data.bot_missing_perms, command.botPerms.filter(perm => !message.guild.me.permissionsIn(message.channel).has(perm)).join("`, `"))).catch(console.error);
 
 	if (!client.cooldowns.has(command.name)) client.cooldowns.set(command.name, new Discord.Collection());
 	const now = Date.now();
