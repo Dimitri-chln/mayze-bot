@@ -10,7 +10,7 @@ require("./utils/prototypes");
 
 const Discord = require("discord.js");
 const intents = new Discord.Intents([ Discord.Intents.NON_PRIVILEGED, "GUILD_MEMBERS", "GUILD_PRESENCES" ]);
-const client = new Discord.Client({ presence: { activity: { name: "le meilleur clan", type: "WATCHING "} }, fetchAllMembers: true, partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
+const client = new Discord.Client({ presence: { activity: { name: "le meilleur clan", type: "WATCHING" } }, fetchAllMembers: true, partials: ["MESSAGE", "CHANNEL", "REACTION"] , ws: { intents }});
 
 if (process.env.HOST !== "HEROKU" && !process.env.NO_DATABASE_FETCH) {
 	const shellExec = require("./utils/shellExec");
