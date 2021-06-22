@@ -217,6 +217,7 @@ client.on("ready", async () => {
 		.then(messages => {
 			if (!messages) return;
 			const message = messages.first();
+			if (!message) return;
 			
 			const regex = /\*\*Starting at:\*\* `(.*)`\n\*\*Password:\*\* `(.*)`/;
 			const [ , dateString, password ] = message.content.match(regex) || [];
