@@ -214,7 +214,7 @@ client.on("ready", async () => {
 	/**@type {Discord.TextChannel} */
 	const roseChannel = client.channels.cache.get("856901268445069322");
 	roseChannel.messages.fetch({ limit: 1 })
-		.then((messages) => {
+		.then(messages => {
 			if (!messags) return;
 			const message = messages.first();
 			
