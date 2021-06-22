@@ -14,38 +14,19 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		const pokedex = require("oakdex-pokedex");
-		const pokemon = pokedex.findPokemon(args.join(" ").toLowerCase().replace(/^./, a => a.toUpperCase()));
+		const { TIMEZONE } = require("../config.json");
 
-		let currentEvolution = pokemon;
-		while (currentEvolution.evolution_from) currentEvolution = pokedex.findPokemon(currentEvolution.evolution_from);
+		function getTimezoneOffset(tz) {
+			const d = new Date();
+			const parts = d.toLocaleString("ja", { timeZone: tz }).split(/[/\s:]/);
+			parts[1]--;
 
-		message.channel.send(JSON.stringify(getEvolutions(currentEvolution), null, 2));
-
-		// const data = [
-		// 	[ currentEvolution ]
-		// ];
-		// let evolutionDegree = 1;
-
-		// for (let i = 0; i < currentEvolution.evolutions.length; i++) {
-		// 	const evolution = currentEvolution.evolutions[i];
-		// 	if (!data[evolutionDegree]) data[evolutionDegree] = [];
-		// 	data[evolutionDegree][i] = evolution;
-		// }
-
-
-		function getEvolutions(pokemon) {
-			if (!pokemon.evolutions.length) return null;
-
-			const evolutionData = [
-				[]
-			];
-			for (const evolution of pokemon.evolutions) {
-				evolutionData[0].push(getEvolutions(pokedex.findPokemon(evolution.to)));
-			}
-			
-			return evolutionData;
+			const utcDate = Date.UTC(...parts);
+			const tzDate = new Date(d).setMilliseconds(0);
+			return (utcDate - tzDate) / 60 / 60 / 1000;
 		}
+
+		message.channel.send(getTimezoneOffset(TIMEZONE));
 	}
 };
 

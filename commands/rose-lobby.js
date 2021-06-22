@@ -1,4 +1,4 @@
-const { Message, Collection, TextChannel } = require("discord.js");
+const { Message, TextChannel } = require("discord.js");
 
 const command = {
 	name: "rose-lobby",
@@ -16,6 +16,7 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const { CronJob } = require("cron");
+		const { TIMEZONE } = require("../config.json");
 
 		/**@type {TextChannel} */
 		const channel = message.guild.channels.cache.get("817365433509740554");
@@ -37,6 +38,7 @@ const command = {
 
 				let [ , hour ] = msg.content.match(/\*\*([0-5]?\dh(?:[0-5]\d)?)\*\*/) || [];
 				let password;
+
 				if (!hour) await chooseHour();
 				await choosePassword();
 
@@ -71,6 +73,9 @@ const command = {
 							job.start();
 							collector.stop();
 							message.author.send("Partie enregistrée").catch(console.error);
+
+							const logChannel = message.client.channels.cache.get("856901268445069322");
+							logChannel.send(`**Starting at:** \`${date.toUTCString()}\`\n**Password:**\`${password}\``).catch(console.error);
 							break;
 						case "⏱️":
 							chooseHour(true);
@@ -99,7 +104,7 @@ const command = {
 					if (!m) return message.reply("je n'ai pas pu te DM. As-tu désactivé les DM ?").catch(console.error);
 					const filter = rep => /.{1,12}/.test(rep.content);
 					const collected = await m.channel.awaitMessages(filter, { max: 1 }).catch(console.error);
-					password = collected.first().content;
+					password = collected.first().content.toUpperCase();
 
 					if (del) {
 						m.delete().catch(console.error);
@@ -123,11 +128,22 @@ const command = {
 					}).catch(console.error);
 				}
 
+				function getTimezoneOffset(tz) {
+					const d = new Date();
+					const parts = d.toLocaleString("ja", { timeZone: tz }).split(/[/\s:]/);
+					parts[1]--;
+		
+					const utcDate = Date.UTC(...parts);
+					const tzDate = new Date(d).setMilliseconds(0);
+					return (utcDate - tzDate) / 60 / 60;
+				}
+
 				function getDate(hour) {
 					hour = /^\dh/.test(hour) ? "0" + hour : hour;
 					hour = hour.endsWith("h") ? hour + "00:00" : hour + ":00";
 					hour = hour.replace("h", ":");
-					return new Date(new Date().toISOString().replace(/\d{2}:\d{2}:\d{2}(?:[\.,]\d+)?Z/, hour + "+02:00"));
+					offset = getTimezoneOffset(TIMEZONE);
+					return new Date(new Date().toISOString().replace(/\d{2}:\d{2}:\d{2}(?:[\.,]\d+)?Z/, hour + (offset > 0 ? "+" : "-") + Math.abs(offset).toString().padStart(2, "0") + ":00"));
 				}
 				break;
 			case "end":

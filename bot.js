@@ -202,12 +202,33 @@ client.on("ready", async () => {
 			if (message.partial) await message.fetch();
 			const timer = setInterval(() => updateGwaMsg(message), 10000);
 			client.giveawayTimers.set(id, timer);
+			console.log(`Restarted giveaway with ID: ${parseInt(id.slice(12)).toString(36).toUpperCase()}`);
 		}
 	}).catch(console.error);
 
 	// PREDEFINED REMINDERS
-	// ACNHReminders();
+		// ACNHReminders();
 	testReminders();
+
+	// ROSE LOBBY
+	/**@type {Discord.TextChannel} */
+	const roseChannel = client.channels.cache.get("856901268445069322");
+	roseChannel.messages.fetch({ limit: 1 })
+		.then(([ [ , message ] ]) => {
+			if (!message) return;
+			
+			const regex = /\*\*Starting at:\*\* `(.*)`\n\*\*Password:\*\* `(.*)`/;
+			const [ , dateString, password ] = message.content.match(regex) || [];
+			const date = new Date(dateString);
+			if (!date || !password) return;
+			if (date.valueOf() < Date.now()) return;
+
+			const announcementChannel = message.guild.channels.cache.get("817365433509740554");
+			const job = new Cron.CronJob(date, () => announcementChannel.send(`<@&833620668066693140>\nLa game de roses va démarrer, le mot de passe est \`${password}\``).catch(console.error));
+			job.start();
+			console.log(`Restarted rose lobby at ${date.toUTCString()} with password ${password}`);
+		})
+		.catch(console.error);
 
 	// REMINDERS AND BLOCKS
 	setInterval(async () => {
