@@ -68,7 +68,6 @@ const command = {
 					switch (reaction.emoji.name) {
 						case "✅":
 							const date = getDate(hour);
-							console.log(date);
 							if (Date.now() > date.valueOf()) return message.author.send("L'heure est déjà dépassée").catch(console.error);
 							if (message.client.roseTimer) message.client.roseTimer.stop();
 							message.client.roseTimer = new CronJob(date, () => channel.send(`<@&833620668066693140>\nLa game de roses va démarrer, le mot de passe est \`${password}\``).catch(console.error));
@@ -150,8 +149,7 @@ const command = {
 
 					const offset = getTimezoneOffset(TIMEZONE);
 					const dateString = dateWithoutOffset.toISOString().replace(/Z$/, (offset > 0 ? "+" : "-") + Math.abs(offset).toString().padStart(2, "0") + ":00")
-					console.log(dateString);
-
+					
 					return new Date(dateString);
 				}
 				break;
