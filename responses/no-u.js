@@ -8,7 +8,7 @@ const command = {
         const noURegex = /^no (?:you|u)/i;
 		if (!noURegex.test(message.content)) return;
 
-        message.channel.messages.fetch({ limit: 2, before: message.id }).then(([ [ , banMsg ], [ , botMsg ] ]) => {
+        message.channel.messages.fetch({ limit: 2, before: message.id }).then(([ [ , botMsg ], [ , banMsg ] ]) => {
             if (botMsg.author.id !== message.client.user.id) return;
             if (botMsg.content !== `${message.author} has been banned!`) return;
             if (banMsg.content !== `*ban ${message.author}`) return;
