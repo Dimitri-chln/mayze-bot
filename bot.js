@@ -188,7 +188,7 @@ client.on("ready", async () => {
 			else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.id}', '${guildID}', '${slashCommand.name}', '${JSON.stringify(slashCommand).replace(/'/g, "''")}')`).catch(console.error);
 		});
 	})).catch(console.error);
-	
+
 	console.log("Slash commands created");
 
 	// GIVEAWAYS
@@ -226,7 +226,7 @@ client.on("ready", async () => {
 			if (!date || !password) return;
 			if (date.valueOf() < Date.now()) return;
 
-			const announcementChannel = message.guild.channels.cache.get("817365433509740554");
+			const announcementChannel = client.channels.cache.get("817365433509740554");
 			if (client.roseTimer) client.roseTimer.stop();
 			client.roseTimer = new Cron.CronJob(date, () => announcementChannel.send(`<@&833620668066693140>\nLa game de roses va démarrer, le mot de passe est \`${password}\``).catch(console.error));
 			client.roseTimer.start();
