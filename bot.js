@@ -187,7 +187,8 @@ client.on("ready", async () => {
 			if (slashData.some(slash => slash.name === command.name)) client.pg.query(`UPDATE slash_commands SET id = '${slashCommand.id}', data = '${JSON.stringify(slashCommand).replace(/'/g, "''")}' WHERE name = '${slashCommand.name}' AND guild_id = '${guildID}'`).catch(console.error);
 			else client.pg.query(`INSERT INTO slash_commands VALUES ('${slashCommand.id}', '${guildID}', '${slashCommand.name}', '${JSON.stringify(slashCommand).replace(/'/g, "''")}')`).catch(console.error);
 		});
-	}));
+	})).catch(console.error);
+	
 	console.log("Slash commands created");
 
 	// GIVEAWAYS
