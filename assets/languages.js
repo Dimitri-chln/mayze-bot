@@ -1048,6 +1048,10 @@ module.exports = {
 			}
 		},
 		"wish": {
+			invalid_series: {
+				fr: "le nom de la série est invalide",
+				en: "the series' name is invalid"
+			},
 			added: {
 				fr: "wish ajouté",
 				en: "wish added"

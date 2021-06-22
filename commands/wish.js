@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: [],
 	args: 1,
-	usage: "\"<serie>\" [<regex>]",
+	usage: "<series> [-r <regex>]",
 	botPerms: ["ADD_REACTIONS"],
 	slashOptions: [
 		{
@@ -31,13 +31,14 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		const series = args
-			? args[0].toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase())
+			? (args.includes("-r") ? args.slice(0, args.indexOf("-r")) : args).join(" ").toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase())
 			: options[0].value.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
 		const regex = args
-			? args.slice(1).join(" ").replace(series).trim().toLowerCase()
+			? args.includes("-r") ? args.slice(args.indexOf("-r") + 1).join(" ").trim().toLowerCase() : null
 			: options[1] ? options[1].value : null;
 
 		if (!message.guild.members.cache.has("432610292342587392")) return language.errors.mudae;
+		if (!series) return message.reply(language.invalid_series).catch(console.error);
 
 		let query = `INSERT INTO wishes (user_id, series) VALUES ('${message.author.id}', '${series.replace(/'/g, "''")}')`;
 		if (regex) query = `INSERT INTO wishes (user_id, series, regex) VALUES ('${message.author.id}', '${series.replace(/'/g, "''")}', '${regex.replace(/'/g, "''")}')`;
