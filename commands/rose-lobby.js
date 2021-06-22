@@ -69,8 +69,9 @@ const command = {
 						case "✅":
 							const date = getDate(hour);
 							if (Date.now() > date.valueOf()) return message.author.send("L'heure est déjà dépassée").catch(console.error);
-							const job = new CronJob(date, () => channel.send(`<@&833620668066693140>\nLa game de roses va démarrer, le mot de passe est \`${password}\``).catch(console.error));
-							job.start();
+							if (message.client.roseTimer) message.client.roseTimer.stop();
+							message.client.roseTimer = new CronJob(date, () => channel.send(`<@&833620668066693140>\nLa game de roses va démarrer, le mot de passe est \`${password}\``).catch(console.error));
+							message.client.roseTimer.start();
 							collector.stop();
 							message.author.send("Partie enregistrée").catch(console.error);
 

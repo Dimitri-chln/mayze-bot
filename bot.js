@@ -214,8 +214,9 @@ client.on("ready", async () => {
 	/**@type {Discord.TextChannel} */
 	const roseChannel = client.channels.cache.get("856901268445069322");
 	roseChannel.messages.fetch({ limit: 1 })
-		.then(([ [ , message ] ]) => {
-			if (!message) return;
+		.then((messages) => {
+			if (!messags) return;
+			const message = messages.first();
 			
 			const regex = /\*\*Starting at:\*\* `(.*)`\n\*\*Password:\*\* `(.*)`/;
 			const [ , dateString, password ] = message.content.match(regex) || [];
@@ -224,8 +225,9 @@ client.on("ready", async () => {
 			if (date.valueOf() < Date.now()) return;
 
 			const announcementChannel = message.guild.channels.cache.get("817365433509740554");
-			const job = new Cron.CronJob(date, () => announcementChannel.send(`<@&833620668066693140>\nLa game de roses va démarrer, le mot de passe est \`${password}\``).catch(console.error));
-			job.start();
+			if (client.roseTimer) client.roseTimer.stop();
+			client.roseTimer = new Cron.CronJob(date, () => announcementChannel.send(`<@&833620668066693140>\nLa game de roses va démarrer, le mot de passe est \`${password}\``).catch(console.error));
+			client.roseTimer.start();
 			console.log(`Restarted rose lobby at ${date.toUTCString()} with password ${password}`);
 		})
 		.catch(console.error);
