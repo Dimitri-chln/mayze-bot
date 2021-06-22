@@ -215,7 +215,7 @@ client.on("ready", async () => {
 	const roseChannel = client.channels.cache.get("856901268445069322");
 	roseChannel.messages.fetch({ limit: 1 })
 		.then(messages => {
-			if (!messags) return;
+			if (!messages) return;
 			const message = messages.first();
 			
 			const regex = /\*\*Starting at:\*\* `(.*)`\n\*\*Password:\*\* `(.*)`/;
