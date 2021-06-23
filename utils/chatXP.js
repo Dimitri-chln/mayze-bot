@@ -16,7 +16,7 @@ async function chatXP(message, xp, languageCode = "en") {
 	const getLevel = require("./getLevel");
 	
 	const { rows } = (await message.client.pg.query(
-		"INSERT INTO levels (user_id, chat_xp) VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET chat_xp = chat_xp + $2 WHERE levels.user_id = $1 RETURNING levels.chat_xp",
+		"INSERT INTO levels (user_id, chat_xp) VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET levels.chat_xp = levels.chat_xp + $2 WHERE levels.user_id = $1 RETURNING levels.chat_xp",
 		[ message.author.id, xp ]
 	).catch(console.error)) || {};
 
