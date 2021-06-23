@@ -588,7 +588,7 @@ player.on("clientDisconnect", (message, queue) => {
 });
 
 player.on("error", (error, message) => {
-	console.error(err);
+	console.error(error);
 	const errorMessage = languages.music.errors[error] || languages.music.error;
 	message.reply(languages.get(errorMessage.en, error)).catch(console.error);
 });
