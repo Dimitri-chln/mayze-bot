@@ -24,20 +24,28 @@ const command = {
 	* @param {Object[]} options
 	*/
 	execute: async (message, args, options, language, languageCode) => {
-		const { BASE_XP, XP_INCREMENT } = require("../config.json");
+		const getLevel = require("../utils/getLevel");
 		const xpBar = ["█", "▁"], barSize = 20;
+
 		const user = args
-			? message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.author
+			? message.client.findMember(args.join(" ")) || message.author
 			: message.client.users.cache.get(options ? options[0].value : null) || message.author;
 
-		let { "rows": top } = (await message.client.pg.query("SELECT * FROM levels ORDER BY xp DESC").catch(console.err)) || {};
-		top = top.filter(u => message.guild.members.cache.has(u.user_id));
+		let { "rows": chatTop } = (await message.client.pg.query("SELECT * FROM levels ORDER BY chat_xp DESC").catch(console.err)) || {};
+		let { "rows": voiceTop } = (await message.client.pg.query("SELECT * FROM levels ORDER BY voice_xp DESC").catch(console.err)) || {};
+		if (!chatTop || !voiceTop) return;
+		chatTop = chatTop.filter(u => message.guild.members.cache.has(u.user_id));
+		voiceTop = voiceTop.filter(u => message.guild.members.cache.has(u.user_id));
 		
-		const userData = top.find(u => u.user_id === user.id);
-		const xp = userData ? userData.xp : 0;
-		const rank = top.indexOf(userData) + 1;
-		const [ level, xpLeft ] = getLevel(xp);
-		const xpForNextLevel = BASE_XP + level * XP_INCREMENT;
+		const userChatData = chatTop.find(u => u.user_id === user.id);
+		const chatXP = userChatData ? userChatData.chat_xp : 0;
+		const chatRank = chatTop.indexOf(userChatData) + 1;
+		const chatLevel = getLevel(chatXP);
+
+		const userVoiceData = voiceTop.find(u => u.user_id === user.id);
+		const voiceXP = userVoiceData ? userVoiceData.voice_xp : 0;
+		const voiceRank = voiceTop.indexOf(userVoiceData) + 1;
+		const voiceLevel = getLevel(voiceXP);
 
 		message.channel.send({
 			embed: {
@@ -46,18 +54,23 @@ const command = {
 					icon_url: user.avatarURL({ dynamic: true })
 				},
 				color: message.guild.me.displayColor,
-				description: language.get(language.description, level, rank, xpBar[0].repeat(Math.round(xpLeft / xpForNextLevel * barSize)) + xpBar[1].repeat(barSize - Math.round(xpLeft / xpForNextLevel * barSize)), xpLeft, xpForNextLevel),
+				fields: [
+					{
+						name: language.chat_title,
+						value: language.get(language.chat_description, chatLevel.level, chatRank, xpBar[0].repeat(Math.round(chatLevel.currentXP / chatLevel.neededXP * barSize)) + xpBar[1].repeat(barSize - Math.round(chatLevel.currentXP / chatLevel.neededXP * barSize)), chatLevel.currentXP, chatLevel.neededXP),
+						inline: true
+					},
+					{
+						name: language.voice_title,
+						value: language.get(language.voice_description, voiceLevel.level, voiceRank, xpBar[0].repeat(Math.round(voiceLevel.currentXP / voiceLevel.neededXP * barSize)) + xpBar[1].repeat(barSize - Math.round(voiceLevel.currentXP / voiceLevel.neededXP * barSize)), voiceLevel.currentXP, voiceLevel.neededXP),
+						inline: true
+					}
+				],
 				footer: {
 					text: "✨ Mayze ✨"
 				}
 			}
 		}).catch(console.error);
-
-		function getLevel(xp, lvl = 0) {
-			const xpPerLevel = BASE_XP + lvl * XP_INCREMENT;
-			if (xp < xpPerLevel) return [ lvl, xp ];
-			return getLevel(xp - xpPerLevel, lvl + 1);
-		}
 	}
 };
 

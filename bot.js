@@ -5,6 +5,8 @@ const Cron = require("cron");
 const config = require("./config.json");
 require('dotenv').config();
 const languages = require("./assets/languages");
+const chatXP = require("./utils/chatXP");
+const voiceXP = require("./utils/voiceXP");
 
 require("./utils/prototypes");
 
@@ -255,6 +257,21 @@ client.on("ready", async () => {
 			}
 		})
 	}, 10000);
+
+	// VOICE CHANNEL XP
+	setInterval(() => {
+		client.guilds.cache.forEach(guild => {
+			guild.members.cache.filter(m => m.voice.sessionID).forEach(member => {
+				let xp = 10;
+				if (member.voice.deaf) xp *= 0;
+				if (member.voice.mute) xp *= 0.5;
+				if (member.voice.selfVideo) xp *= 5;
+				if (member.voice.streaming) xp *= 3;
+	
+				voiceXP(member, xp, client.languages.get(member.guild.id));
+			});
+		});
+	}, 60000);
 });
 
 client.on("message", async message => {
@@ -272,7 +289,6 @@ client.on("message", async message => {
 	if (client.beta && mayze.presence.status !== "offline") return;
 	if (client.isDatabaseReconnecting) return;
 
-	const chatXP = require("./utils/chatXP");
 	if (message.channel.type !== "dm" && !message.author.bot && !message.channel.name.includes("spam")) {
 		const bots = message.guild.members.cache.filter(m => m.user.bot);
 		const prefixes = bots.map(b => (b.displayName.match(/\[.+\]/) || ["[!]"])[0].replace(/[\[\]]/g, ""));
@@ -537,11 +553,13 @@ client.on("error", async err => {
 	console.error(err);
 });
 
-client.on("presenceUpdate", async (_oldMember, newMember) => {
+client.on("presenceUpdate", async (oldMember, newMember) => {
 	if (newMember.user.id === "703161067982946334" && client.beta) {
 		client.prefix = newMember.user.presence.status === "offline" ? config.PREFIX : config.PREFIX_BETA;
 	}
 });
+
+
 
 client.login(process.env.TOKEN);
 

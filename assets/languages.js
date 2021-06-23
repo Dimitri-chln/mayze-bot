@@ -470,9 +470,21 @@ module.exports = {
 			}
 		},
 		"level": {
-			description: {
-				fr: "• **Niveau : `{1}`**\n• **Rang : `#{2}`**\n\n**XP** {3} {4}/{5}",
-				en: "• **Level: `{1}`**\n• **Rank: `#{2}`**\n\n**XP** {3} {4}/{5}"
+			chat_title: {
+				fr: "Niveau de chat textuel",
+				en: "Text chat level"
+			},
+			chat_description: {
+				fr: "• **Niveau : `{1}`** | • **Rang : `#{2}`**\n**XP** {3} {4}/{5}",
+				en: "• **Level: `{1}`** | • **Rank: `#{2}`**\n**XP** {3} {4}/{5}"
+			},
+			voice_title: {
+				fr: "Niveau de chat vocal",
+				en: "Voice chat level"
+			},
+			voice_description: {
+				fr: "• **Niveau : `{1}`** | • **Rang : `#{2}`**\n**XP** {3} {4}/{5}",
+				en: "• **Level: `{1}`** | • **Rank: `#{2}`**\n**XP** {3} {4}/{5}"
 			}
 		},
 		"mass-ping": {
@@ -863,8 +875,8 @@ module.exports = {
 		},
 		"top": {
 			title: {
-				fr: "Classement de {1}",
-				en: "{1}'s leaderboard"
+				fr: "Classement [2?textuel:vocal] de {1}",
+				en: "{1}'s [2?chat:voice] leaderboard"
 			},
 			no_member: {
 				fr: "*Aucun membre n'est encore classé*",
