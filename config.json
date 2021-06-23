@@ -9,6 +9,7 @@
   "BASE_XP": 1000,
   "XP_INCREMENT": 250,
   "XP_MULTIPLIER": 2.25,
+  "BASE_VOICE_XP": 10,
   "TIMEZONE": "Europe/Paris",
   "HUNT_TO_DOUBLE_CHANCE": 25,
   "WEBHOOKS": {
