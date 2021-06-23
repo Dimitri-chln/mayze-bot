@@ -475,8 +475,8 @@ module.exports = {
 				en: "Text chat level"
 			},
 			chat_description: {
-				fr: "• **Niveau : `{1}`** | • **Rang : `#{2}`**\n**XP** {3} {4}/{5}",
-				en: "• **Level: `{1}`** | • **Rank: `#{2}`**\n**XP** {3} {4}/{5}"
+				fr: "• **Niveau : `{1}`** | **Rang : `#{2}`**\n**XP** {3} {4}/{5}",
+				en: "• **Level: `{1}`** | **Rank: `#{2}`**\n**XP** {3} {4}/{5}"
 			},
 			voice_title: {
 				fr: "Niveau de chat vocal",

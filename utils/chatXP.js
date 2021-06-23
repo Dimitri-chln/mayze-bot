@@ -13,18 +13,19 @@ const language = {
  * @param {number} xp The XP to add to the member
  */
 async function chatXP(message, xp, languageCode = "en") {
+	const newXP = xp;
 	const getLevel = require("./getLevel");
 	
 	const { rows } = (await message.client.pg.query(
-		"INSERT INTO levels (user_id, chat_xp) VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET levels.chat_xp = levels.chat_xp + $2 WHERE levels.user_id = $1 RETURNING levels.chat_xp",
+		"INSERT INTO levels (user_id, chat_xp) VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET chat_xp = levels.chat_xp + $2 WHERE levels.user_id = $1 RETURNING levels.chat_xp",
 		[ message.author.id, xp ]
 	).catch(console.error)) || {};
 
-	if (rows && rows.length) xp = rows[0].xp;
+	if (rows && rows.length) xp = rows[0].chat_xp;
 
 	const level = getLevel(xp);
 
-	if (level.currentXP < xp && message.guild.id === "689164798264606784") {
+	if (level.currentXP < newXP && message.guild.id === "689164798264606784") {
 		message.channel.send(language.get(language.level_up[languageCode], message.author, level.level)).catch(console.error);
 	}
 };
