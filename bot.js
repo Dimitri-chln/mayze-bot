@@ -262,7 +262,7 @@ client.on("ready", async () => {
 	setInterval(() => {
 		client.guilds.cache.forEach(guild => {
 			guild.members.cache.filter(m => m.voice.sessionID && !m.user.bot).forEach(member => {
-				let xp = config.BASE_VOICE_XP * member.voice.channel.members.size;
+				let xp = config.BASE_VOICE_XP * member.voice.channel.members.filter(m => !m.user.bot).size;
 				if (member.voice.deaf) xp *= 0;
 				if (member.voice.mute) xp *= 0.5;
 				if (member.voice.selfVideo) xp *= 5;
