@@ -873,7 +873,7 @@ class Player extends EventEmitter {
 		let song = queue.songs[0];
 		// Live Video is unsupported
 		if(song.isLive) {
-			thisHelper.emit('error', queue.initMessage, 'LiveUnsupported');
+			thisHelper.emit('error', 'LiveUnsupported', queue.initMessage);
 			queue.repeatMode = false;
 			return thisHelper._playSong(guildID, false);
 		}
@@ -887,7 +887,7 @@ class Player extends EventEmitter {
 			dlChunkSize: 0,
 			highWaterMark: 1 << 50,
 		}).catch(err => {
-			thisHelper.emit('error', queue.initMessage, err.message === 'Video unavailable' ? 'VideoUnavailable' : err.message);
+			thisHelper.emit('error', err.message === 'Video unavailable' ? 'VideoUnavailable' : err.message, queue.initMessage);
 			queue.repeatMode = false;
 			return thisHelper._playSong(guildID, false);
 		});
@@ -897,7 +897,7 @@ class Player extends EventEmitter {
 			 * error event.
 			 * @event Player#error
 			 */
-			thisHelper.emit('error', queue.initMessage, err.message === 'Video unavailable' ? 'VideoUnavailable' : err.message);
+			thisHelper.emit('error', err.message === 'Video unavailable' ? 'VideoUnavailable' : err.message, queue.initMessage);
 			queue.repeatMode = false;
 			return thisHelper._playSong(guildID, false);
 		});
