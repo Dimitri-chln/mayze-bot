@@ -48,7 +48,7 @@ const command = {
 
 		try {
 			message.client.pg.query(
-				"INSERT INTO FROM mutes VALUES ($1, $2)",
+				"INSERT INTO mutes VALUES ($1, $2)",
 				[ member.user.id, new Date(Date.now() + duration).toISOString() ]
 			).catch(console.error);
 
