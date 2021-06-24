@@ -25,7 +25,7 @@ async function voiceXP(member, xp, languageCode = "en") {
 
 	const level = getLevel(xp);
 
-	if (level.currentXP < newXP && message.guild.id === "689164798264606784") {
+	if (level.currentXP < newXP && member.guild.id === "689164798264606784") {
 		member.send(language.get(language.level_up[languageCode], member.user, level.level)).catch(console.error);
 	}
 };
