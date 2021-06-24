@@ -222,27 +222,29 @@ client.on("ready", async () => {
 			const message = messages.first();
 			if (!message) return;
 			
-			const regex = /\*\*Starting at:\*\* `(.*)`\n\*\*Password:\*\* `(.*)`/;
+			const regex = /^\*\*Starting at:\*\* `(.*)`\n\*\*Password:\*\* `(.*)`$/;
 			const [ , dateString, password ] = message.content.match(regex) || [];
 			const date = new Date(dateString);
 			if (!date || !password) return;
-			if (date.valueOf() < Date.now()) return;
 
 			const announcementChannel = client.channels.cache.get("817365433509740554");
 			if (client.roseTimer) client.roseTimer.stop();
-			client.roseTimer = new Cron.CronJob(date, () => announcementChannel.send(`<@&833620668066693140>\nLa game de roses va démarrer, le mot de passe est \`${password}\``).catch(console.error));
+			client.roseTimer = new Cron.CronJob(date, () => {
+				announcementChannel.send(`<@&833620668066693140>\nLa game de roses va démarrer, le mot de passe est \`${password}\``).catch(console.error);
+				message.edit(`~~${message.content}~~`).catch(console.error);
+			});
 			client.roseTimer.start();
 			console.log(`Restarted rose lobby at ${date.toUTCString()} with password ${password}`);
 		})
 		.catch(console.error);
 
-	// REMINDERS AND BLOCKS
+	// REMINDERS, BLOCKS AND MUTES
 	setInterval(async () => {
 		const { "rows": reminders } = (await client.pg.query("SELECT * FROM reminders").catch(console.error)) || {};
 		const { "rows": blocks } = (await client.pg.query("SELECT * FROM trade_block WHERE expires_at IS NOT NULL").catch(console.error)) || {};
-		if (!reminders || !blocks) return;
+		const { "rows": mutes } = (await client.pg.query("SELECT * FROM mutes WHERE expires_at IS NOT NULL").catch(console.error)) || {};
 
-		reminders.forEach(reminder => {
+		if (reminders) reminders.forEach(async reminder => {
 			const timestamp = new Date(reminder.timestamp).valueOf();
 			if (Date.now() > timestamp) {
 				client.users.fetch(reminder.user_id).then(user => user.send(`⏰ | ${reminder.content}`).catch(console.error)).catch(console.error);
@@ -250,12 +252,35 @@ client.on("ready", async () => {
 			}
 		});
 
-		blocks.forEach(block => {
+		if (blocks) blocks.forEach(async block => {
 			const timestamp = new Date(block.expires_at).valueOf();
 			if (Date.now() > timestamp) {
 				client.pg.query(`DELETE FROM trade_block WHERE id = ${block.id}`).catch(console.error);
 			}
-		})
+		});
+
+		const guild = client.guilds.cache.get("689164798264606784");
+		const mutedRole = guild.roles.cache.get("695330946844721312");
+
+		if (mutes) mutes.forEach(async mute => {
+			const member = guild.members.cache.get(mute.user_id);
+			if (!member) return;
+
+			const timestamp = new Date(mute.expires_at).valueOf();
+			if (Date.now() > timestamp) {
+				client.pg.query(
+					"DELETE FROM mutes WHERE user_id = $1",
+					[ mute.user_id ]
+				).catch(console.error);
+
+				const jailedRoles = member.roles.cache.filter(role => guild.roles.cache.some(r => r.permissions.has("ADMINISTRATOR") && role.name === r.name + " (Jailed)"));
+				const unJailedRoles = guild.roles.cache.filter(role => role.permissions.has("ADMINISTRATOR") && member.roles.cache.some(r => r.name === role.name + " (Jailed)"));
+				jailedRoles.set(mutedRole.id, mutedRole);
+
+				await member.roles.add(unJailedRoles).catch(console.error);
+				await member.roles.remove(jailedRoles).catch(console.error);
+			}
+		});
 	}, 10000);
 
 	// VOICE CHANNEL XP

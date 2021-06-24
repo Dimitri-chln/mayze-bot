@@ -19,7 +19,9 @@ const command = {
 		const { TIMEZONE } = require("../config.json");
 
 		/**@type {TextChannel} */
-		const channel = message.guild.channels.cache.get("817365433509740554");
+		const announcementChannel = message.guild.channels.cache.get("817365433509740554");
+		/**@type {TextChannel} */
+		const logChannel = message.client.channels.cache.get("856901268445069322");
 		if (message.channel.id !== channel.id) return;
 
 		const subCommand = args[0].toLowerCase();
@@ -28,8 +30,8 @@ const command = {
 			case "react":
 				await message.delete();
 				const msg = args[1]
-					? (await channel.messages.fetch(args[1]).catch(console.error))
-					: (await channel.messages.fetch({ limit: 1 })).first();
+					? (await announcementChannel.messages.fetch(args[1]).catch(console.error))
+					: (await announcementChannel.messages.fetch({ limit: 1 })).first();
 				if (!msg) return message.reply("ID invalide")
 					.then(m => m.delete({ timeout: 4000 }).catch(console.error))
 					.catch(console.error);
@@ -70,12 +72,17 @@ const command = {
 							const date = getDate(hour);
 							if (Date.now() > date.valueOf()) return message.author.send("L'heure est déjà dépassée").catch(console.error);
 							if (message.client.roseTimer) message.client.roseTimer.stop();
-							message.client.roseTimer = new CronJob(date, () => channel.send(`<@&833620668066693140>\nLa game de roses va démarrer, le mot de passe est \`${password}\``).catch(console.error));
+							message.client.roseTimer = new Cron.CronJob(date, () => {
+								announcementChannel.send(`<@&833620668066693140>\nLa game de roses va démarrer, le mot de passe est \`${password}\``).catch(console.error);
+								logChannel.messages.fetch({ limit: 1 }).then(messages => {
+									const logMessage = messages.first();
+									logMessage.edit(`~~${logMessage.content}~~`).catch(console.error);
+								});
+							});
 							message.client.roseTimer.start();
 							collector.stop();
 							message.author.send("Partie enregistrée").catch(console.error);
 
-							const logChannel = message.client.channels.cache.get("856901268445069322");
 							logChannel.send(`**Starting at:** \`${date.toUTCString()}\`\n**Password:** \`${password}\``).catch(console.error);
 							break;
 						case "⏱️":
@@ -155,7 +162,7 @@ const command = {
 				break;
 			case "end":
 				message.channel.startTyping(1);
-				const msgs = await channel.messages.fetch({ limit: 100 }).catch(console.error);
+				const msgs = await announcementChannel.messages.fetch({ limit: 100 }).catch(console.error);
 				if (msgs) await Promise.all(msgs.filter(m => m.reactions.cache.has("833620353133707264"))
 					.map(async m => await m.reactions.cache.get("833620353133707264").remove().catch(console.error))
 				);

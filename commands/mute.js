@@ -47,6 +47,11 @@ const command = {
 			: dhms((options[1] || {}).value);
 
 		try {
+			message.client.pg.query(
+				"INSERT INTO FROM mutes VALUES ($1, $2)",
+				[ member.user.id, new Date(Date.now() + duration).toISOString() ]
+			).catch(console.error);
+
 			const unJailedRoles = member.roles.cache.filter(role => role.permissions.has("ADMINISTRATOR") && message.guild.roles.cache.some(r => r.name === role.name + " (Jailed)"));
 			const jailedRoles = message.guild.roles.cache.filter(role => member.roles.cache.some(r => r.permissions.has("ADMINISTRATOR") && role.name === r.name + " (Jailed)"));
 			jailedRoles.set(mutedRole.id, mutedRole);
@@ -55,19 +60,11 @@ const command = {
 			await member.roles.add(jailedRoles);
 
 			message.channel.send(`${member.user} a été mute ${duration ? `pendant ${timeToString(duration / 1000, languageCode)}` : "indéfiniment"}`).catch(console.error);
+		
 		} catch (err) {
 			console.error(err);
 			message.channel.send("Quelque chose s'est mal passé en mutant cette personne :/").catch(console.error);
 		}
-
-		if (duration) setTimeout(async () => {
-			const jailedRoles = member.roles.cache.filter(role => message.guild.roles.cache.some(r => r.permissions.has("ADMINISTRATOR") && role.name === r.name + " (Jailed)"));
-			const unJailedRoles = message.guild.roles.cache.filter(role => role.permissions.has("ADMINISTRATOR") && member.roles.cache.some(r => r.name === role.name + " (Jailed)"));
-			jailedRoles.set(mutedRole.id, mutedRole);
-
-			await member.roles.add(unJailedRoles).catch(console.error);
-			await member.roles.remove(jailedRoles).catch(console.error);
-		}, duration);
 	}
 };
 
