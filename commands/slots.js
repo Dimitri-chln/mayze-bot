@@ -77,7 +77,7 @@ const command = {
 					message.reply(language.massping).catch(console.error);
 					const massPingFilter = m => m.author.id === message.author.id && m.mentions.users.size;
 					const massPingCollected = await message.channel.awaitMessages(massPingFilter, { max: 1, time: 60000 }).catch(console.error);
-					if (!massPingCollected) return message.channel.send(language.too_late).catch(console.error);
+					if (!massPingCollected || !massPingCollected.size) return message.channel.send(language.too_late).catch(console.error);
 					message.channel.send(`*mass-ping ${massPingCollected.first().mentions.users.first()} 25`).then(m => {
 						message.client.commands.get("mass-ping").execute(m, [ massPingCollected.first().mentions.users.first().toString(), "25" ]);
 					}).catch(console.error);
@@ -86,7 +86,7 @@ const command = {
 					message.reply(language.mute).catch(console.error);
 					const muteFilter = m => m.author.id === message.author.id && m.mentions.users.size;
 					const muteCollected = await message.channel.awaitMessages(muteFilter, { max: 1, time: 60000 }).catch(console.error);
-					if (!muteCollected) return message.channel.send(language.too_late).catch(console.error);
+					if (!muteCollected || !muteCollected.size) return message.channel.send(language.too_late).catch(console.error);
 					message.channel.send(`*mute ${muteCollected.first().mentions.users.first()} 2m`).then(m => {
 						message.client.commands.get("mute").execute(m, [ muteCollected.first().mentions.users.first().toString(), "2m" ]);
 					}).catch(console.error);
