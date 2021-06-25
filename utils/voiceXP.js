@@ -25,7 +25,7 @@ async function voiceXP(member, xp, languageCode = "en") {
 
 	const level = getLevel(xp);
 
-	console.log(`Gave ${xp}XP to ${member.user.tag} in #${member.voice.channel.name}`);
+	console.log(`Gave ${newXP}XP to ${member.user.tag} in #${member.voice.channel.name}`);
 
 	// if (level.currentXP < newXP && member.guild.id === "689164798264606784") {
 	// 	member.send(language.get(language.level_up[languageCode], member.user, level.level)).catch(console.error);
