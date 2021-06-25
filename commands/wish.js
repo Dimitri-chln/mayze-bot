@@ -6,7 +6,7 @@ const command = {
 		fr: "Ajouter un wish pour une série pour Mudae",
 		en: "Add a series to your Mudae wishes"
 	},
-	aliases: [],
+	aliases: ["wosh"],
 	args: 1,
 	usage: "<series> [-r <regex>]",
 	botPerms: ["ADD_REACTIONS"],
