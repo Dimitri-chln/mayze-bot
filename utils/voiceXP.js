@@ -10,26 +10,24 @@ const language = {
 
 /**
  * @param {GuildMember} member The member receiving XP
- * @param {number} xp The XP to add to the member
+ * @param {number} givenXP The XP to add to the member
  */
-async function voiceXP(member, xp, languageCode = "en") {
-	const newXP = xp;
+async function voiceXP(member, givenXP, languageCode = "en") {
 	const getLevel = require("./getLevel");
 	
 	const { rows } = (await member.client.pg.query(
 		"INSERT INTO levels (user_id, voice_xp) VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET voice_xp = levels.voice_xp + $2 WHERE levels.user_id = $1 RETURNING levels.voice_xp",
-		[ member.user.id, xp ]
+		[ member.user.id, givenXP ]
 	).catch(console.error)) || {};
 
-	if (rows && rows.length) xp = rows[0].voice_xp;
+	if (rows && rows.length) const xp = rows[0].voice_xp;
+	else return;
 
 	const level = getLevel(xp);
 
-	console.log(`Gave ${newXP}XP to ${member.user.tag} in #${member.voice.channel.name}`);
-
-	// if (level.currentXP < newXP && member.guild.id === "689164798264606784") {
-	// 	member.send(language.get(language.level_up[languageCode], member.user, level.level)).catch(console.error);
-	// }
+	if (level.currentXP < givenXP && member.guild.id === "689164798264606784") {
+		member.user.send(language.get(language.level_up[languageCode], member.user, level.level)).catch(console.error);
+	}
 };
 
 module.exports = voiceXP;
