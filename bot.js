@@ -286,7 +286,7 @@ client.on("ready", async () => {
 	// VOICE CHANNEL XP
 	setInterval(() => {
 		client.guilds.cache.forEach(guild => {
-			guild.members.cache.filter(m => m.voice.sessionID && !m.user.bot).forEach(member => {
+			guild.members.cache.filter(m => m.voice.channelID && !m.user.bot).forEach(member => {
 				let xp = config.BASE_VOICE_XP;
 				if (member.voice.channel) xp *= member.voice.channel.members.filter(m => !m.user.bot).size;
 				if (member.voice.deaf) xp *= 0;
