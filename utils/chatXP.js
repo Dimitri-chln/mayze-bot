@@ -20,13 +20,13 @@ async function chatXP(message, givenXP, languageCode = "en") {
 		[ message.author.id, givenXP ]
 	).catch(console.error)) || {};
 
-	if (rows && rows.length) const xp = rows[0].chat_xp;
-	else return;
+	if (rows && rows.length) {
+		const xp = rows[0].chat_xp;
+		const level = getLevel(xp);
 
-	const level = getLevel(xp);
-
-	if (level.currentXP < givenXP && message.guild.id === "689164798264606784") {
-		message.channel.send(language.get(language.level_up[languageCode], message.author, level.level)).catch(console.error);
+		if (level.currentXP < givenXP && message.guild.id === "689164798264606784") {
+			message.channel.send(language.get(language.level_up[languageCode], message.author, level.level)).catch(console.error);
+		}
 	}
 };
 

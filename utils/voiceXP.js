@@ -20,14 +20,14 @@ async function voiceXP(member, givenXP, languageCode = "en") {
 		[ member.user.id, givenXP ]
 	).catch(console.error)) || {};
 
-	if (rows && rows.length) const xp = rows[0].voice_xp;
-	else return;
+	if (rows && rows.length) {
+		const xp = rows[0].voice_xp;
+		const level = getLevel(xp);
 
-	const level = getLevel(xp);
-
-	if (level.currentXP < givenXP && member.guild.id === "689164798264606784") {
-		member.user.send(language.get(language.level_up[languageCode], member.user, level.level)).catch(console.error);
-	}
+		if (level.currentXP < givenXP && member.guild.id === "689164798264606784") {
+			member.user.send(language.get(language.level_up[languageCode], member.user, level.level)).catch(console.error);
+		}
+	}	
 };
 
 module.exports = voiceXP;
