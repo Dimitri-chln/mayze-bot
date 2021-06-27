@@ -72,7 +72,7 @@ const command = {
 							const date = getDate(hour);
 							if (Date.now() > date.valueOf()) return message.author.send("L'heure est déjà dépassée").catch(console.error);
 							if (message.client.roseTimer) message.client.roseTimer.stop();
-							message.client.roseTimer = new Cron.CronJob(date, () => {
+							message.client.roseTimer = new CronJob(date, () => {
 								announcementChannel.send(`<@&833620668066693140>\nLa game de roses va démarrer, le mot de passe est \`${password}\``).catch(console.error);
 								logChannel.messages.fetch({ limit: 1 }).then(messages => {
 									const logMessage = messages.first();
