@@ -22,7 +22,7 @@ const command = {
 		const announcementChannel = message.guild.channels.cache.get("817365433509740554");
 		/**@type {TextChannel} */
 		const logChannel = message.client.channels.cache.get("856901268445069322");
-		if (message.channel.id !== channel.id) return;
+		if (message.channel.id !== announcementChannel.id) return;
 
 		const subCommand = args[0].toLowerCase();
 
