@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: [],
 	args: 0,
-	usage: "[pokémon]",
+	usage: "[pokémon] | caught [-legendary] [-beast]",
 	botPerms: ["EMBED_LINKS"],
 	slashOptions: [
 		{
@@ -35,18 +35,30 @@ const command = {
 			: options ? options[0].value : null;
 		
 		if (pokemonName) {
-			if (pokemonName.toLowerCase() === "caught") {
-				const { "rows": pokemons } = (await message.client.pg.query(
-					"SELECT pokedex_id, SUM(caught) AS total FROM pokemons GROUP BY pokedex_id ORDER BY total DESC"
+			if (args[0].toLowerCase() === "caught") {
+				let { "rows": pokemons } = (await message.client.pg.query(
+					"SELECT pokedex_id, SUM(caught) AS total, legendary, ultra_beast FROM pokemons GROUP BY pokedex_id, legendary, ultra_beast ORDER BY total DESC"
 				).catch(console.error)) || {};
 				if (!pokemons) return message.reply(language.errors.database).catch(console.error);
 
 				for (const pokemon of pokedex.allPokemon()) {
 					if (!pokemons.some(p => p.pokedex_id === pokemon.national_id)) pokemons.push({
 						pokedex_id: pokemon.national_id,
-						total: 0
+						total: 0,
+						legendary: legendaries.includes(pokemon.names.en),
+						ultra_beast: beasts.includes(pokemon.names.en)
 					});
 				}
+
+				const legendary = args
+					? args.includes("-legendary") || args.includes("-leg")
+					: false;
+				const beast = args
+					? args.includes("-beast") || args.includes("-ub")
+					: false;
+
+				if (legendary) pokemons = pokemons.filter(p => p.legendary);
+				if (beast) pokemons = pokemons.filter(p => p.ultra_beast);
 
 				const pkmPerPage = 15;
 				let pages = [];
