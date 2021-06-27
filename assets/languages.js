@@ -875,6 +875,14 @@ module.exports = {
 			title: {
 				fr: "Statistiques de Mayze",
 				en: "Mayze's statistics"
+			},
+			most_caught_title: {
+				fr: "Pokémons les plus attrapés",
+				en: "Most caught pokémons"
+			},
+			most_caught: {
+				fr: "`{1}.` [3?🎖️ :][4?🎗️ :]**{2}** - {5} attrapés",
+				en: "`{1}.` [3?🎖️ :][4?🎗️ :]**{2}** - {5} caught"
 			}
 		},
 		"top": {
