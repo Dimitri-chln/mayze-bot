@@ -48,7 +48,7 @@ const command = {
 
 		try {
 			message.client.pg.query(
-				"INSERT INTO mutes VALUES ($1, $2)",
+				"INSERT INTO mutes VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET expires_at = $2 WHERE mutes.user_id = $1",
 				[ member.user.id, new Date(Date.now() + duration).toISOString() ]
 			).catch(console.error);
 
