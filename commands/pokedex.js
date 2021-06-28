@@ -24,6 +24,8 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
+		return message.reply("Maintenance!").catch(console.error);
+		
 		const pokedex = require("oakdex-pokedex");
 		const legendaries = require("../assets/legendaries.json");
 		const beasts = require("../assets/ultra-beasts.json");
