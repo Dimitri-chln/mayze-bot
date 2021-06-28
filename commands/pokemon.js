@@ -233,7 +233,7 @@ const command = {
 
 			case "evoline": {
 				const pokemonName = args
-					? args[1].toLowerCase()
+					? args.slice(1).join(" ").toLowerCase()
 					: options[0].options[0].value.toLowerCase();
 
 				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name.toLowerCase() === pokemonName));
