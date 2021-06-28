@@ -803,8 +803,8 @@ client.findMember = (guild, string) => guild.members.cache.find(member =>
  */
 function newPgClient() {
 	const connectionString = {
-		connectionString: process.env.DATABASE_URL_H,
-		ssl: true // process.env.HOST === "HEROKU"
+		connectionString: process.env.DATABASE_URL,
+		ssl: process.env.HOST === "HEROKU"
 	};
 
 	client.isDatabaseReconnecting = true;
