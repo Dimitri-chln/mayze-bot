@@ -240,7 +240,7 @@ const command = {
 				if (!pokemons || !pokemons.length) return message.reply(language.pokemon_not_owned).catch(console.error);
 
 				const res = await message.client.pg.query(
-					`UPDATE pokemons SET users = jsonb_set(users, '{${message.author.id}, nickname}', 'test') WHERE pokedex_id = $1 AND shiny = $2 AND alolan = $3`,
+					`UPDATE pokemons SET users = jsonb_set(users, '{${message.author.id}, nickname}', $4) WHERE pokedex_id = $1 AND shiny = $2 AND alolan = $3`,
 					[ pokemon.national_id, shiny, alolan, nickname ]
 				).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
@@ -281,8 +281,8 @@ const command = {
 					: options[0].options && options[0].options.some(o => o.name === "user") ? message.guild.members.cache.get(options[0].options.find(o => o.name === "user").value).user : message.author;
 
 				let { "rows": pokemons }  = (await message.client.pg.query(
-					"SELECT * FROM pokemons WHERE users -> $1 IS NOT NULL ORDER BY legendary DESC, ultra_beast DESC, shiny DESC, (users -> $1 -> 'caught')::int DESC, pokedex_id ASC",
-					[ message.author.id ]
+					"SELECT * FROM pokemons WHERE users ? $1 ORDER BY legendary DESC, ultra_beast DESC, shiny DESC, (users -> $1 -> 'caught')::int DESC, pokedex_id ASC",
+					[ user.id ]
 				).catch(console.error)) || {};
 				if (!pokemons) return message.channel.send(language.errors.database).catch(console.error);
 
