@@ -143,8 +143,6 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		return message.reply("Maintenance!").catch(console.error);
-
 		const { MessageEmbed } = require("discord.js");
 		const pokedex = require("oakdex-pokedex");
 		const starters = require("../assets/starters.json");

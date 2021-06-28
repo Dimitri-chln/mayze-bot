@@ -76,8 +76,6 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		return message.reply("Maintenance!").catch(console.error);
-
 		const dhms = require("dhms");
 		const timeToString = require("../utils/timeToString");
 		const pokedex = require("oakdex-pokedex");

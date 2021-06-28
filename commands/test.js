@@ -14,19 +14,46 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		const { TIMEZONE } = require("../config.json");
+		return;
+		
+		const Fs = require("fs");
 
-		function getTimezoneOffset(tz) {
-			const d = new Date();
-			const parts = d.toLocaleString("ja", { timeZone: tz }).split(/[/\s:]/);
-			parts[1]--;
+		const data = JSON.parse(Fs.readFileSync("backups/database_pokemons.json"));
 
-			const utcDate = Date.UTC(...parts);
-			const tzDate = new Date(d).setMilliseconds(0);
-			return (utcDate - tzDate) / 60 / 60 / 1000;
+		const pokemons = [];
+
+		for (const pokemon of data) {
+			let pkm = pokemons.find(p => p.pokedex_id === pokemon.pokedex_id && p.shiny === pokemon.shiny && p.alolan === pokemon.alolan);
+			
+			if (!pkm) {
+				pkm = {
+					pokedex_id: pokemon.pokedex_id,
+					pokedex_name: pokemon.pokedex_name,
+					shiny: pokemon.shiny,
+					legendary: pokemon.legendary,
+					ultra_beast: pokemon.ultra_beast,
+					alolan: pokemon.alolan,
+					users: {}
+				};
+
+				pokemons.push(pkm);
+			}
+			
+			pokemons[pokemons.indexOf(pkm)].users[pokemon.user_id] = {
+				caught: pokemon.caught,
+				favorite: pokemon.favorite,
+				nickname: pokemon.nickname
+			};
 		}
 
-		message.channel.send(getTimezoneOffset(TIMEZONE));
+		console.log(pokemons);
+
+		for (const pokemon of pokemons) {
+			message.client.pg.query(
+				"INSERT INTO pokemons VALUES ($1, $2, $3, $4, $5, $6, $7)",
+				Object.values(pokemon)
+			).catch(console.error);
+		}
 	}
 };
 
