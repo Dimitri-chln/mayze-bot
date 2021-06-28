@@ -240,8 +240,8 @@ const command = {
 				if (!pokemons || !pokemons.length) return message.reply(language.pokemon_not_owned).catch(console.error);
 
 				const res = await message.client.pg.query(
-					`UPDATE pokemons SET users = jsonb_set(users, '{${message.author.id}, nickname}', $4) WHERE pokedex_id = $1 AND shiny = $2 AND alolan = $3`,
-					[ pokemon.national_id, shiny, alolan, nickname ]
+					`UPDATE pokemons SET users = jsonb_set(users, '{${message.author.id}, nickname}', '${nickname ? `"${nickname}"` : null}'::jsonb) WHERE pokedex_id = $1 AND shiny = $2 AND alolan = $3`,
+					[ pokemon.national_id, shiny, alolan ]
 				).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 				if (!message.isInteraction) message.react("✅").catch(console.error);
