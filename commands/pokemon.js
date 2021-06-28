@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: ["pokemons", "pkmn", "pkm", "poke"],
 	args: 0,
-	usage: "addfav <pokémon> | removefav <pokémon> | nick <pokémon> [<nickname>] | [<user>] [-favorite] [-legendary] [-beast] [-starter] [-shiny] [-alolan] [-id [<number>]] [-name <name>]",
+	usage: "addfav <pokémon> | removefav <pokémon> | nick <pokémon> [<nickname>] | [<user>] [-favorite] [-legendary] [-beast] [-starter] [-shiny] [-alolan] [-id [<number>]] [-name <name>] [-evolution <name>]",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
 	slashOptions: [
 		{
@@ -53,6 +53,19 @@ const command = {
 					description: "The new nickname of the pokémon. Leave blank to reset",
 					type: 3,
 					required: false
+				}
+			]
+		},
+		{
+			name: "evoline",
+			description: "Get the evolution line of a pokémon",
+			type: 1,
+			options: [
+				{
+					name: "pokemon",
+					description: "The pokémon to get the evolution line from",
+					type: 3,
+					required: true
 				}
 			]
 		},
@@ -114,6 +127,12 @@ const command = {
 					description: "An option to find a pokémon by its name of nickname",
 					type: 3,
 					required: false
+				},
+				{
+					name: "evolution",
+					description: "An option to show the whole evolution line of a pokemon",
+					type: 3,
+					required: false
 				}
 			]
 		}
@@ -128,9 +147,10 @@ const command = {
 		const pokedex = require("oakdex-pokedex");
 		const starters = require("../assets/starters.json");
 		const pagination = require("../utils/pagination");
+		const { getFlatEvolutionLine, getStringEvolutionLine } = require("../utils/pokemonEvo");
 
 		const subCommand = args
-			? args.length && ["addfav", "removefav", "nick"].includes(args[0].toLowerCase()) ? args[0].toLowerCase() : "list"
+			? args.length && ["addfav", "removefav", "nick", "evoline"].includes(args[0].toLowerCase()) ? args[0].toLowerCase() : "list"
 			: options[0].name;
 		
 		switch (subCommand) {
@@ -210,6 +230,32 @@ const command = {
 				else message.reply(language.nickname_updated).catch(console.error);
 				break;
 			}
+
+			case "evoline": {
+				const pokemonName = args
+					? args[1].toLowerCase()
+					: options[0].options[0].value.toLowerCase();
+
+				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name.toLowerCase() === pokemonName));
+				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
+
+				const stringEvolutionLine = getStringEvolutionLine(pokemon, languageCode);
+
+				message.channel.send({
+					embed: {
+						author: {
+							name: language.get(language.evoline_title, pokemon.names[languageCode] || pokemon.names.en),
+							icon_url: message.client.user.avatarURL()
+						},
+						color: message.guild.me.displayColor,
+						description: `\`\`\`\n${stringEvolutionLine}\n\`\`\``,
+						footer: {
+							text: "✨ Mayze ✨"
+						}
+					}
+				}).catch(console.error);
+				break;
+			}
 			
 			case "list": {
 				const user = args
@@ -231,6 +277,7 @@ const command = {
 				if (hasParam(params, "alolan")) pokemons = pokemons.filter(p => p.alolan);
 				if (hasParam(params, "id")) pokemons = hasParam(params, "id") ? pokemons.filter(p => p.pokedex_id === hasParam(params, "id")) : pokemons;
 				if (hasParam(params, "name")) pokemons = pokemons.filter(p => new RegExp(hasParam(params, "name"), "i").test(pokedex.findPokemon(p.pokedex_id).names[languageCode].replace(/\u2642/, "m").replace(/\u2640/, "f")) || (p.nickname && new RegExp(hasParam(params, "name"), "i").test(p.nickname ? p.nickname : "")));
+				if (hasParam(params, "evolution")) pokemons = pokemons.filter(p => getFlatEvolutionLine(hasParam(params, "evolution").toLowerCase().replace(/^./, a => a.toUpperCase())).some(pkm => pkm.names.en === p.pokedex_name));
 
 				const pkmPerPage = 15;
 				let pages = [];
@@ -267,6 +314,7 @@ const command = {
 					if (args.includes("-alolan")) paramList.push({ name: "alolan", value: true });
 					if (args.includes("-id")) paramList.push({ name: "id", value: parseInt(args[args.indexOf("-id") + 1]) || 0 });
 					if (args.includes("-name")) paramList.push({ name: "name", value: args[args.indexOf("-name") + 1] });
+					if (args.includes("-evolution") || args.includes("-evo")) paramList.push({ name: "evolution", value: args[args.indexOf("-evolution") + 1 || args.indexOf("-evo") + 1] });
 
 					return paramList;
 				}

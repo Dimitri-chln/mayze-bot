@@ -644,6 +644,10 @@ module.exports = {
 				fr: "nom mis à jour",
 				en: "nickname updated"
 			},
+			evoline_title: {
+				fr: "Évolutions de {1}",
+				en: "Evolution line of {1}"
+			},
 			title: {
 				fr: "Pokémons de {1}",
 				en: "{1}'s pokémons"
