@@ -18,7 +18,7 @@ const command = {
 	 */
 	execute: async (message, args, options, language, languageCode) => {
 		return message.reply("Maintenance!").catch(console.error);
-		
+
 		const pokedex = require("oakdex-pokedex");
 		const legendaries = require("../assets/legendaries.json");
 		const beasts = require("../assets/ultra-beasts.json");
@@ -26,13 +26,6 @@ const command = {
 
 		const shinyFrequency = 0.004, alolanFrequency = 0.05;
 		const { catchRates } = message.client;
-
-		{
-			// Don't allow new users to create new entries in the database
-			const res = await message.client.pg.query(`SELECT COUNT(id) FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error);
-			if (!res || res.rows[0].count == "0")
-				return message.reply(language.new_user).catch(console.error);
-		}
 
 		const random = Math.random() * catchRates.slice(-1)[0];
 		let pokemon = findDrop(random);
@@ -84,21 +77,41 @@ const command = {
 		const legendary = legendaries.includes(pokemon.names.en);
 		const beast = beasts.includes(pokemon.names.en);
 
-		const { rows } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}' AND pokedex_name = '${pokemon.names.en.replace(/'/g, "''")}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error)) || {};
-		if (!rows) return message.channel.send(language.errors.database).catch(console.error);
-		
-		if (rows.length) {
-			message.client.pg.query(`UPDATE pokemons SET caught = ${rows[0].caught + 1} WHERE user_id = '${message.author.id}' AND pokedex_name = '${pokemon.names.en.replace(/'/g, "''")}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error);
-		} else {
-			message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, shiny, legendary, alolan, ultra_beast) VALUES ('${message.author.id}', ${pokemon.national_id}, '${pokemon.names.en.replace(/'/g, "''")}', ${shiny}, ${legendary}, ${alolan}, ${beast})`).catch(console.error);
-		}
+		const defaultData = {};
+		defaultData[message.author.id] = { caught: 1, favorite: false, nickname: null };
+		const defaultUserData = { caught: 1, favorite: false, nickname: null };
+
+		const res = await message.client.pg.query(
+			`
+			INSERT INTO pokemons VALUES ($1, $2, $3, $4, $5, $6, $7)
+			ON CONFLICT (pokedex_id, shiny, alolan)
+			DO UPDATE SET users =
+				CASE
+					WHEN pokemons.users -> $8 IS NULL THEN jsonb_set(pokemons.users, '{${message.author.id}}', $9)
+					ELSE jsonb_set(pokemons.users, '{${message.author.id}, caught}', ((pokemons.users -> $8 -> 'caught')::int + 1)::text::jsonb)
+				END
+			WHERE pokemons.pokedex_id = EXCLUDED.pokedex_id AND pokemons.shiny = EXCLUDED.shiny AND pokemons.alolan = EXCLUDED.alolan
+			RETURNING (users -> $8 -> 'caught')::int AS caught
+			`,
+			[
+				pokemon.national_id,
+				pokemon.names.en,
+				shiny,
+				legendary,
+				beast,
+				alolan,
+				defaultData,
+				message.author.id,
+				defaultUserData
+			]
+		).catch(console.error);
 
 		message.client.pg.query(`UPDATE pokemon_hunting SET hunt_count = hunt_count + 1 WHERE user_id = '${message.author.id}'`).catch(console.error);
 
 		const msg = await message.channel.send({
 			embed: {
 				author: {
-					name: rows.length ? language.caught : language.caught_new,
+					name: res && res.rows[0].caught > 1 ? language.caught : language.caught_new,
 					icon_url: pokeball
 				},
 				image: {

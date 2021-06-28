@@ -109,7 +109,10 @@ const command = {
 			const beast = params.includes("-beast") || params.includes("-ub");
 			const alolan = params.includes("-alolan");
 
-			const { "rows": pokemons } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}' AND shiny = ${shiny} AND alolan = ${alolan}`).catch(console.error)) || {};
+			const { "rows": pokemons } = (await message.client.pg.query(
+				"SELECT * FROM pokemons WHERE users ? $1 AND shiny = $2 AND alolan = $3",
+				[ message.author.id, shiny, alolan ]
+			).catch(console.error)) || {};
 			if (!pokemons) return message.reply(language.errors.database).catch(console.error);
 			
 			let dex = pokedex.allPokemon().sort((a, b) => a.national_id - b.national_id);

@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { Message, User } = require("discord.js");
 
 const command = {
 	name: "trade",
@@ -76,6 +76,8 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
+		return message.reply("Maintenance!").catch(console.error);
+
 		const dhms = require("dhms");
 		const timeToString = require("../utils/timeToString");
 		const pokedex = require("oakdex-pokedex");
@@ -83,6 +85,16 @@ const command = {
 		const beasts = require("../assets/ultra-beasts.json");
 		const { TRADE_LOG_CHANNEL_ID } = require("../config.json");
 		const logChannel = message.client.channels.cache.get(TRADE_LOG_CHANNEL_ID);
+
+		/**
+		 * @typedef {object} OfferOrDemand
+		 * @property {pokedex.Pokemon} data
+		 * @property {number} number
+		 * @property {boolean} shiny
+		 * @property {boolean} alolan
+		 * @property {boolean} legendary
+		 * @property {boolean} ultra_beast
+		 * */
 
 		const subCommand = args
 			? ["block", "unblock"].includes(args[0].toLowerCase()) ? args[0].toLowerCase() : "start"
@@ -134,11 +146,13 @@ const command = {
 				if (!blocked) return message.channel.send(language.errors.database).catch(console.error);
 				if (blocked.length) return message.reply(language.get(language.not_allowed, user.tag)).catch(console.error);
 
+				/**@type {OfferOrDemand[]} */
 				let offer = args
-					? args.join(" ").split(new RegExp(`<@!?${user.id}>`))[0].trim().split(/,(?: *)?/).filter(s => s)
+					? args.join(" ").split(new RegExp(`<@!?${user.id}>`))[0].trim().split(/, */).filter(a => a)
 					: options[0].options.find(o => o.name === "pokemons-offer") ? options[0].options.find(o => o.name === "pokemons-offer").value.split(/,(?: *)?/) : [];
+				/**@type {OfferOrDemand[]} */
 				let demand = args
-					? args.join(" ").split(new RegExp(`<@!?${user.id}>`))[1].trim().split(/,(?: *)?/).filter(s => s)
+					? args.join(" ").split(new RegExp(`<@!?${user.id}>`))[1].trim().split(/, */).filter(a => a)
 					: options[0].options.find(o => o.name === "pokemons-demand") ? options[0].options.find(o => o.name === "pokemons-demand").value.split(/,(?: *)?/) : [];
 				
 				if (!offer.length && !demand.length) return message.reply(language.empty_trade).catch(console.error);
@@ -146,8 +160,8 @@ const command = {
 				let error = "";
 
 				offer = offer.map(input => {
-					const name = input.replace(/alolan|shiny|#\d+$/ig, "").trim();
-					const number = parseInt((input.match(/#(\d+)$/) || [])[1]) || 1;
+					const name = input.replace(/^\d+ *|alolan|shiny| *(= *|#)\d+$/ig, "").trim();
+					const number = parseInt((input.match(/^(\d+) *| *(?:= *|#)(\d+)$/) || []).filter(a => a)[1]) || 1;
 					const shiny = /shiny/i.test(input);
 					const alolan = /alolan/i.test(input);
 					const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
@@ -157,8 +171,8 @@ const command = {
 				}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id) === i);
 
 				demand = demand.map(input => {
-					const name = input.replace(/alolan|shiny|#\d+$/ig, "").trim();
-					const number = parseInt((input.match(/#(\d+)$/) || [])[1]) || 1;
+					const name = input.replace(/^\d+ *|alolan|shiny| *(= *|#)\d+$/ig, "").trim();
+					const number = parseInt((input.match(/^(\d+) *| *(?:= *|#)(\d+)$/) || []).filter(a => a)[1]) || 1;
 					const shiny = /shiny/i.test(input);
 					const alolan = /alolan/i.test(input);
 					const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
@@ -202,8 +216,7 @@ const command = {
 
 				const filter = (reaction, rUser) => [message.author.id, user.id].includes(rUser.id) && ["✅", "❌"].includes(reaction.emoji.name);
 				const collector = msg.createReactionCollector(filter, { time: 60000 });
-				let cancel = null;
-				let accepted = [false, false];
+				let cancel, accepted = [false, true];
 
 				collector.on("collect", async (reaction, rUser) => {
 					if (reaction.emoji.name === "❌") {
@@ -227,75 +240,86 @@ const command = {
 					const errorsNew = await checkValidPokemons(message.author, offer, user, demand);
 					if (errorsNew) return message.channel.send(errorsNew).catch(console.error);
 					
-					// EXCHANGE POKEMONS
-					const { "rows": offerPokemons1 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
-					const { "rows": demandPokemons1 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}'`).catch(console.error)) || {};
-
 					let offerSuccess = [];
-					for (const pkm of offer) {
-						let s = []
+					for (const pkm of offer) {						
+						const defaultUserData = { caught: pkm.number, favorite: false, nickname: null };
+						const s = [];
 
-						let p = demandPokemons1.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny && d.alolan === pkm.alolan);
-						if (p) message.client.pg.query(`UPDATE pokemons SET caught = ${p.caught + pkm.number} WHERE id = ${p.id}`)
-							.then(_res => s.push(1))
-							.catch(err => {
-								console.error(err);
-								s.push(0);
-							});
-						else message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, caught, shiny, legendary, ultra_beast, alolan) VALUES ('${user.id}', ${pkm.data.national_id}, '${pkm.data.names.en}', ${pkm.number}, ${pkm.shiny}, ${pkm.legendary}, ${pkm.ultra_beast}, ${pkm.alolan})`)
-							.then(_res => s.push(1))
+						message.client.pg.query(
+							`
+							UPDATE pokemons
+							SET users =
+								CASE
+									WHEN (users -> $1 -> 'caught')::int = $2 THEN users - $1
+									ELSE jsonb_set(users, '{${message.author.id}, caught}', ((users -> $1 -> 'caught')::int - $2)::text::jsonb)
+								END
+							WHERE pokedex_id = $3 AND shiny = $4 AND alolan = $5
+							`,
+							[ message.author.id, pkm.number, pkm.data.national_id, pkm.shiny, pkm.alolan ]
+						)
+							.then(() => s.push(1))
 							.catch(err => {
 								console.error(err);
 								s.push(0);
 							});
 						
-						let q = offerPokemons1.find(o => o.pokedex_id === pkm.data.national_id && o.shiny === pkm.shiny && o.alolan === pkm.alolan);
-						if (q.caught === pkm.number) message.client.pg.query(`DELETE FROM pokemons WHERE id = ${q.id}`)
-							.then(_res => s.push(1))
+						message.client.pg.query(
+							`
+							UPDATE pokemons
+							SET users =
+								CASE
+									WHEN users -> $1 IS NULL THEN jsonb_set(users, '{${user.id}}', $3)
+									ELSE jsonb_set(users, '{${user.id}, caught}', ((users -> $1 -> 'caught')::int + $2)::text::jsonb)
+								END
+							WHERE pokedex_id = $4 AND shiny = $5 AND alolan = $6
+							`,
+							[ user.id, pkm.number, defaultUserData, pkm.data.national_id, pkm.shiny, pkm.alolan ]
+						)
+							.then(() => s.push(1))
 							.catch(err => {
 								console.error(err);
 								s.push(0);
 							});
-						else message.client.pg.query(`UPDATE pokemons SET caught = ${q.caught - pkm.number} WHERE id = ${q.id}`)
-							.then(_res => s.push(1))
-							.catch(err => {
-								console.error(err);
-								s.push(0);
-							});
-
+						
 						offerSuccess.push(s);
 					}
 
-					const { "rows": offerPokemons2 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
-					const { "rows": demandPokemons2 } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user.id}'`).catch(console.error)) || {};
-
 					let demandSuccess = [];
 					for (const pkm of demand) {
-						let s = [];
-
-						let p = offerPokemons2.find(d => d.pokedex_id === pkm.data.national_id && d.shiny === pkm.shiny && d.alolan === pkm.alolan);
-						if (p) message.client.pg.query(`UPDATE pokemons SET caught = ${p.caught + pkm.number} WHERE id = '${p.id}'`)
-							.then(_res => s.push(1))
-							.catch(err => {
-								console.error(err);
-								s.push(0);
-							});
-						else message.client.pg.query(`INSERT INTO pokemons (user_id, pokedex_id, pokedex_name, caught, shiny, legendary, ultra_beast, alolan) VALUES ('${message.author.id}', ${pkm.data.national_id}, '${pkm.data.names.en}', ${pkm.number}, ${pkm.shiny}, ${pkm.legendary}, ${pkm.ultra_beast}, ${pkm.alolan})`)
-							.then(_res => s.push(1))
+						const defaultUserData = { caught: pkm.number, favorite: false, nickname: null };
+						const s = [];
+						
+						message.client.pg.query(
+							`
+							UPDATE pokemons
+							SET users =
+								CASE
+									WHEN (users -> $1 -> 'caught')::int = $2 THEN users - $1
+									ELSE jsonb_set(users, '{${user.id}, caught}', ((users -> $1 -> 'caught')::int - $2)::text::jsonb)
+								END
+							WHERE pokedex_id = $3 AND shiny = $4 AND alolan = $5
+							`,
+							[ user.id, pkm.number, pkm.data.national_id, pkm.shiny, pkm.alolan ]
+						)
+							.then(() => s.push(1))
 							.catch(err => {
 								console.error(err);
 								s.push(0);
 							});
 						
-						let q = demandPokemons2.find(o => o.pokedex_id === pkm.data.national_id && o.shiny === pkm.shiny && o.alolan === pkm.alolan);
-						if (q.caught === pkm.number) message.client.pg.query(`DELETE FROM pokemons WHERE id = ${q.id}`)
-							.then(_res => s.push(1))
-							.catch(err => {
-								console.error(err);
-								s.push(0);
-							});
-						else message.client.pg.query(`UPDATE pokemons SET caught = ${q.caught - pkm.number} WHERE id = ${q.id}`)
-							.then(_res => s.push(1))
+						message.client.pg.query(
+							`
+							UPDATE pokemons
+							SET users =
+								CASE
+									WHEN users -> $1 IS NULL THEN jsonb_set(users, '{${message.author.id}}', $3)
+									ELSE jsonb_set(users, '{${message.author.id}, caught}', ((users -> $1 -> 'caught')::int + $2)::text::jsonb)
+								END
+							WHERE pokedex_id = $4 AND shiny = $5 AND alolan = $6
+							`,
+							[ message.author.id, pkm.number, defaultUserData, pkm.data.national_id, pkm.shiny, pkm.alolan ]
+						)
+							.then(() => s.push(1))
 							.catch(err => {
 								console.error(err);
 								s.push(0);
@@ -304,8 +328,8 @@ const command = {
 						demandSuccess.push(s);
 					}
 
-					// Dummy request to await for all other ones
-					await message.client.pg.query(`SELECT id FROM pokemons where id = 0`).catch(console.error);
+					// Dummy request to await all other ones
+					await message.client.pg.query("SELECT pokedex_id FROM pokemons WHERE pokedex_id = 0").catch(console.error);
 					
 					logChannel.send({
 						embed: {
@@ -323,7 +347,7 @@ const command = {
 								},
 								{
 									name: "Demand:",
-									value: `\`\`\`\n${demand.map((pkm, j) => `×${pkm.number} ${pkm.alolan ? "Alolan " : ""}${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️" : ""} - ${demandSuccess[j].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+									value: `\`\`\`\n${demand.map((pkm, i) => `×${pkm.number} ${pkm.alolan ? "Alolan " : ""}${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️" : ""} - ${demandSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
 									inline: true
 								}
 							],
@@ -343,22 +367,28 @@ const command = {
 
 
 
+		/**
+		 * @param {User} user1 
+		 * @param {OfferOrDemand[]} pokemons1 
+		 * @param {OfferOrDemand[]} pokemons2 
+		 * @returns {Promise<?string>}
+		 */
 		async function checkValidPokemons(user1, pokemons1, user2, pokemons2) {
-			const { "rows": user1Pokemons } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user1.id}'`).catch(console.error)) || {};
-			const { "rows": user2Pokemons } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE user_id = '${user2.id}'`).catch(console.error)) || {};
+			const { "rows": user1Pokemons } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE users ? '${user1.id}'`).catch(console.error)) || {};
+			const { "rows": user2Pokemons } = (await message.client.pg.query(`SELECT * FROM pokemons WHERE users ? '${user2.id}'`).catch(console.error)) || {};
 
 			let errors1 = [], errors1fav = [];
 			for (const pokemon of pokemons1) {
-				let pkm = user1Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny && p.alolan === pokemon.alolan) || { caught: 0 };
-				if (pokemon.number > pkm.caught) errors1.push(`**${pokemon.number - pkm.caught} ${pokemon.alolan ? "Alolan " : ""}${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
-				if (pkm.favorite) errors1fav.push(`**${pokemon.alolan ? "Alolan " : ""}${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
+				let pkm = user1Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny && p.alolan === pokemon.alolan);
+				if (!pkm || pokemon.number > pkm.users[user1.id].caught) errors1.push(`**${pokemon.number - pkm.users[user1.id].caught} ${pokemon.alolan ? "Alolan " : ""}${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
+				if (pkm.users[user1.id].favorite) errors1fav.push(`**${pokemon.alolan ? "Alolan " : ""}${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
 			}
 
 			let errors2 = [], errors2fav = [];
 			for (const pokemon of pokemons2) {
-				let pkm = user2Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny && p.alolan === pokemon.alolan) || { caught: 0 };
-				if (pokemon.number > pkm.caught) errors2.push(`**${pokemon.number - pkm.caught} ${pokemon.alolan ? "Alolan " : ""}${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
-				if (pkm.favorite) errors2fav.push(`**${pokemon.alolan ? "Alolan " : ""}${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
+				let pkm = user2Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny && p.alolan === pokemon.alolan);
+				if (!pkm || pokemon.number > pkm.users[user2.id].caught) errors2.push(`**${pokemon.number - pkm.users[user2.id].caught} ${pokemon.alolan ? "Alolan " : ""}${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
+				if (pkm.users[user2.id].favorite) errors2fav.push(`**${pokemon.alolan ? "Alolan " : ""}${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
 			}
 
 			errors1 = errors1.length ? language.get(language.not_enough_pkm, user1.username, errors1.join(", ")) : "";
