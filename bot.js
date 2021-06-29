@@ -263,6 +263,8 @@ client.on("ready", async () => {
 		const mutedRole = guild.roles.cache.get("695330946844721312");
 
 		if (mutes) mutes.forEach(async mute => {
+			if (!mute.expires_at) return;
+			
 			const member = guild.members.cache.get(mute.user_id);
 			if (!member) return;
 
