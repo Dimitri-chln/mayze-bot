@@ -49,7 +49,7 @@ const command = {
 		try {
 			message.client.pg.query(
 				"INSERT INTO mutes VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET expires_at = $2 WHERE mutes.user_id = $1",
-				[ member.user.id, new Date(Date.now() + duration).toISOString() ]
+				[ member.user.id, duration ? new Date(Date.now() + duration).toISOString() : null ]
 			).catch(console.error);
 
 			const unJailedRoles = member.roles.cache.filter(role => role.permissions.has("ADMINISTRATOR") && message.guild.roles.cache.some(r => r.name === role.name + " (Jailed)"));
