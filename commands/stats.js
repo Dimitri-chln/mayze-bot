@@ -88,7 +88,7 @@ const command = {
 						.addField(language.most_caught_title, pokemons.slice(i, i + pkmPerPage).map((pkm, j) => {
 							// pokedex.findPokemon(459): null
 							const pokemon = pokedex.findPokemon(pkm.pokedex_id) || pokedex.findPokemon("Snover");
-							return language.get(language.most_caught, i + j + 1, pokemon.names[languageCode] || pokemon.names.en, legendaries.includes(pokemon.names.en), beasts.includes(pokemon.names.en), pkm.total);
+							return language.get(language.most_caught, i + j + 1, pokemon.names[languageCode] || pokemon.names.en, shiny, legendaries.includes(pokemon.names.en), beasts.includes(pokemon.names.en), alolan, pkm.total);
 						}).join("\n"));
 					pages.push(embed);
 				};
