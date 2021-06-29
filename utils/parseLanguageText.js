@@ -5,7 +5,7 @@
  * @returns {string}
  */
 function parse(text, ...args) {
-	args = args.map(a => a
+	args = args.map(a => a.toString()
 		.replace(/{/g, "~c")
 		.replace(/}/g, "~b")
 		.replace(/\[/g, "~s")
