@@ -14,45 +14,16 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		return;
-		
-		const Fs = require("fs");
+		const pokedex = require("oakdex-pokedex");
+		const download = require("../utils/download");
 
-		const data = JSON.parse(Fs.readFileSync("backups/database_pokemons.json"));
+		let downloaded = 0;
 
-		const pokemons = [];
-
-		for (const pokemon of data) {
-			let pkm = pokemons.find(p => p.pokedex_id === pokemon.pokedex_id && p.shiny === pokemon.shiny && p.alolan === pokemon.alolan);
-			
-			if (!pkm) {
-				pkm = {
-					pokedex_id: pokemon.pokedex_id,
-					pokedex_name: pokemon.pokedex_name,
-					shiny: pokemon.shiny,
-					legendary: pokemon.legendary,
-					ultra_beast: pokemon.ultra_beast,
-					alolan: pokemon.alolan,
-					users: {}
-				};
-
-				pokemons.push(pkm);
-			}
-			
-			pokemons[pokemons.indexOf(pkm)].users[pokemon.user_id] = {
-				caught: pokemon.caught,
-				favorite: pokemon.favorite,
-				nickname: pokemon.nickname
-			};
-		}
-
-		console.log(pokemons);
-
-		for (const pokemon of pokemons) {
-			message.client.pg.query(
-				"INSERT INTO pokemons VALUES ($1, $2, $3, $4, $5, $6, $7)",
-				Object.values(pokemon)
-			).catch(console.error);
+		for (const pokemon of pokedex.allPokemon()) {
+			const url = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}.png`;
+			await download(url, `assets/pokemons/${pokemon.national_id}.png`);
+			downloaded++;
+			console.log(`${downloaded}/809 downloaded`);
 		}
 	}
 };

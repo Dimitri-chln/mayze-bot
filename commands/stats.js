@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: [],
 	args: 0,
-	usage: "[pokémon] | caught [-legendary] [-beast]",
+	usage: "[pokémon] | caught [-shiny] [-legendary] [-beast] [-alolan]",
 	botPerms: ["EMBED_LINKS"],
 	slashOptions: [
 		{
@@ -37,7 +37,12 @@ const command = {
 		if (pokemonName) {
 			if (args[0].toLowerCase() === "caught") {
 				let { "rows": pokemons } = (await message.client.pg.query(
-					"SELECT pokedex_id, SUM(caught) AS total, legendary, ultra_beast FROM pokemons GROUP BY pokedex_id, legendary, ultra_beast ORDER BY total DESC"
+					`
+					SELECT pokedex_id, shiny, legendary, ultra_beast, alolan, SUM((value -> 'caught')::int) AS total
+					FROM pokemons, jsonb_each(users)
+					GROUP BY pokedex_id, shiny, legendary, ultra_beast, alolan
+					ORDER BY total DESC
+					`
 				).catch(console.error)) || {};
 				if (!pokemons) return message.reply(language.errors.database).catch(console.error);
 
@@ -50,21 +55,34 @@ const command = {
 					});
 				}
 
+				const shiny = args
+					? args.includes("-shiny")
+					: false;
 				const legendary = args
 					? args.includes("-legendary") || args.includes("-leg")
 					: false;
 				const beast = args
 					? args.includes("-beast") || args.includes("-ub")
 					: false;
+				const alolan = args
+					? args.includes("-alolan")
+					: false;
 
+				pokemons = pokemons.filter(p => p.shiny === shiny);
+				pokemons = pokemons.filter(p => p.alolan === alolan);
 				if (legendary) pokemons = pokemons.filter(p => p.legendary);
 				if (beast) pokemons = pokemons.filter(p => p.ultra_beast);
 
 				const pkmPerPage = 15;
 				let pages = [];
+				let embed = new MessageEmbed()
+					.setAuthor(language.get(language.title), message.client.user.avatarURL())
+					.setColor(message.guild.me.displayColor)
+					.setDescription(language.no_pokemon);
+				if (!pokemons.length) pages.push(embed);
 
 				for (i = 0; i < pokemons.length; i += pkmPerPage) {
-					let embed = new MessageEmbed()
+					embed = new MessageEmbed()
 						.setAuthor(language.get(language.title), message.client.user.avatarURL())
 						.setColor(message.guild.me.displayColor)
 						.addField(language.most_caught_title, pokemons.slice(i, i + pkmPerPage).map((pkm, j) => {
@@ -88,38 +106,66 @@ const command = {
 
 				let description = "", total = 0;
 
-				const { "rows": normal } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE pokedex_id = ${pokemon.national_id} AND shiny = false AND alolan = false`).catch(console.error)) || {};
+				const { "rows": normal } = (await message.client.pg.query(
+					`
+					SELECT SUM((value -> 'caught')::int) AS total
+					FROM pokemons, jsonb_each(users)
+					WHERE pokedex_id = $1 AND shiny = false AND alolan = false
+					`,
+					[ pokemon.national_id ]
+				).catch(console.error)) || {};
 				if (!normal) return message.channel.send(language.errors.database).catch(err => {
 					message.channel.stopTyping();
 					console.error(err);
 				});
-				description += language.get(language.normal, parseInt(normal[0].sum) || 0);
-				total += parseInt(normal[0].sum) || 0;
+				description += language.get(language.normal, parseInt(normal[0].total) || 0);
+				total += parseInt(normal[0].total) || 0;
 
-				const { "rows": shiny } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE pokedex_id = ${pokemon.national_id} AND shiny AND alolan = false`).catch(console.error)) || {};
+				const { "rows": shiny } = (await message.client.pg.query(
+					`
+					SELECT SUM((value -> 'caught')::int) AS total
+					FROM pokemons, jsonb_each(users)
+					WHERE pokedex_id = $1 AND shiny AND alolan = false
+					`,
+					[ pokemon.national_id ]
+				).catch(console.error)) || {};
 				if (!shiny) return message.channel.send(language.errors.database).catch(err => {
 					message.channel.stopTyping();
 					console.error(err);
 				});
-				description += language.get(language.shiny, parseInt(shiny[0].sum) || 0);
-				total += parseInt(shiny[0].sum) || 0;
+				description += language.get(language.shiny, parseInt(shiny[0].total) || 0);
+				total += parseInt(shiny[0].total) || 0;
 
 				if (pokemon.variations.some(v => v.condition === "Alola")) {
-					const { "rows": alolan } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE pokedex_id = ${pokemon.national_id} AND shiny = false AND alolan`).catch(console.error)) || {};
+					const { "rows": alolan } = (await message.client.pg.query(
+						`
+						SELECT SUM((value -> 'caught')::int) AS total
+						FROM pokemons, jsonb_each(users)
+						WHERE pokedex_id = $1 AND shiny = false AND alolan
+						`,
+						[ pokemon.national_id ]
+					).catch(console.error)) || {};
 					if (!alolan) return message.channel.send(language.errors.database).catch(err => {
 						message.channel.stopTyping();
 						console.error(err);
 					});
-					description += language.get(language.alolan, parseInt(alolan[0].sum) || 0);
-					total += parseInt(alolan[0].sum) || 0;
+					description += language.get(language.alolan, parseInt(alolan[0].total) || 0);
+					total += parseInt(alolan[0].total) || 0;
 
-					const { "rows": alolanShiny } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE pokedex_id = ${pokemon.national_id} AND shiny AND alolan`).catch(console.error)) || {};
+					const { "rows": alolanShiny } = (await message.client.pg.query(
+						`
+						SELECT SUM((value -> 'caught')::int) AS total
+						FROM pokemons, jsonb_each(users)
+						WHERE pokedex_id = $1 AND shiny AND alolan
+						`,
+						[ pokemon.national_id ]
+					).catch(console.error)) || {};
 					if (!alolanShiny) return message.channel.send(language.errors.database).catch(err => {
 						message.channel.stopTyping();
 						console.error(err);
 					});
-					description += language.get(language.alolan_shiny, parseInt(alolanShiny[0].sum) || 0);
-					total += parseInt(alolanShiny[0].sum) || 0;
+					description += language.get(language.alolan_shiny, parseInt(alolanShiny[0].total) || 0);
+					total += parseInt(alolanShiny[0].total) || 0;
 				}
 
 				description += language.get(language.total, total);
@@ -147,69 +193,117 @@ const command = {
 
 			let description = "", total = 0;
 
-			const { "rows": normal } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE shiny = false AND legendary = false AND ultra_beast = false`).catch(console.error)) || {};
+			const { "rows": normal } = (await message.client.pg.query(
+				`
+				SELECT SUM((value -> 'caught')::int) AS total
+				FROM pokemons, jsonb_each(users)
+				WHERE shiny = false AND legendary = false AND ultra_beast = false AND alolan = false
+				`
+				).catch(console.error)) || {};
 			if (!normal) return message.channel.send(language.errors.database).catch(err => {
 				message.channel.stopTyping();
 				console.error(err);
 			});
-			description += language.get(language.normal, parseInt(normal[0].sum) || 0);
-			total += parseInt(normal[0].sum) || 0;
+			description += language.get(language.normal, parseInt(normal[0].total) || 0);
+			total += parseInt(normal[0].total) || 0;
 
-			const { "rows": shiny } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE shiny AND legendary = false AND ultra_beast = false`).catch(console.error)) || {};
+			const { "rows": shiny } = (await message.client.pg.query(
+				`
+				SELECT SUM((value -> 'caught')::int) AS total
+				FROM pokemons, jsonb_each(users)
+				WHERE shiny AND legendary = false AND ultra_beast = false AND alolan = false
+				`
+				).catch(console.error)) || {};
 			if (!shiny) return message.channel.send(language.errors.database).catch(err => {
 				message.channel.stopTyping();
 				console.error(err);
 			});
-			description += language.get(language.shiny, parseInt(shiny[0].sum) || 0);
-			total += parseInt(shiny[0].sum) || 0;
+			description += language.get(language.shiny, parseInt(shiny[0].total) || 0);
+			total += parseInt(shiny[0].total) || 0;
 
-			const { "rows": legendary } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE shiny = false AND legendary`).catch(console.error)) || {};
+			const { "rows": legendary } = (await message.client.pg.query(
+				`
+				SELECT SUM((value -> 'caught')::int) AS total
+				FROM pokemons, jsonb_each(users)
+				WHERE shiny = false AND legendary AND ultra_beast = false AND alolan = false
+				`
+				).catch(console.error)) || {};
 			if (!legendary) return message.channel.send(language.errors.database).catch(err => {
 				message.channel.stopTyping();
 				console.error(err);
 			});
-			description += language.get(language.legendary, parseInt(legendary[0].sum) || 0);
-			total += parseInt(legendary[0].sum) || 0;
+			description += language.get(language.legendary, parseInt(legendary[0].total) || 0);
+			total += parseInt(legendary[0].total) || 0;
 
-			const { "rows": legendaryShiny } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE shiny AND legendary`).catch(console.error)) || {};
+			const { "rows": legendaryShiny } = (await message.client.pg.query(
+				`
+				SELECT SUM((value -> 'caught')::int) AS total
+				FROM pokemons, jsonb_each(users)
+				WHERE shiny AND legendary AND ultra_beast = false AND alolan = false
+				`
+				).catch(console.error)) || {};
 			if (!legendaryShiny) return message.channel.send(language.errors.database).catch(err => {
 				message.channel.stopTyping();
 				console.error(err);
 			});
-			description += language.get(language.legendary_shiny, parseInt(legendaryShiny[0].sum) || 0);
-			total += parseInt(legendaryShiny[0].sum) || 0;
+			description += language.get(language.legendary_shiny, parseInt(legendaryShiny[0].total) || 0);
+			total += parseInt(legendaryShiny[0].total) || 0;
 
-			const { "rows": beast } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE shiny = false AND ultra_beast`).catch(console.error)) || {};
+			const { "rows": beast } = (await message.client.pg.query(
+				`
+				SELECT SUM((value -> 'caught')::int) AS total
+				FROM pokemons, jsonb_each(users)
+				WHERE shiny = false AND legendary = false AND ultra_beast AND alolan = false
+				`
+				).catch(console.error)) || {};
 			if (!beast) return message.channel.send(language.errors.database).catch(err => {
 				message.channel.stopTyping();
 				console.error(err);
 			});
-			description += language.get(language.beast, parseInt(beast[0].sum) || 0);
-			total += parseInt(beast[0].sum) || 0;
+			description += language.get(language.beast, parseInt(beast[0].total) || 0);
+			total += parseInt(beast[0].total) || 0;
 
-			const { "rows": beastShiny } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE shiny AND ultra_beast`).catch(console.error)) || {};
+			const { "rows": beastShiny } = (await message.client.pg.query(
+				`
+				SELECT SUM((value -> 'caught')::int) AS total
+				FROM pokemons, jsonb_each(users)
+				WHERE shiny AND legendary = false AND ultra_beast AND alolan = false
+				`
+				).catch(console.error)) || {};
 			if (!beastShiny) return message.channel.send(language.errors.database).catch(err => {
 				message.channel.stopTyping();
 				console.error(err);
 			});
-			description += language.get(language.beast_shiny, parseInt(beastShiny[0].sum) || 0);
-			total += parseInt(beastShiny[0].sum) || 0;
+			description += language.get(language.beast_shiny, parseInt(beastShiny[0].total) || 0);
+			total += parseInt(beastShiny[0].total) || 0;
 
-			const { "rows": alolan } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE shiny = false AND alolan`).catch(console.error)) || {};
+			const { "rows": alolan } = (await message.client.pg.query(
+				`
+				SELECT SUM((value -> 'caught')::int) AS total
+				FROM pokemons, jsonb_each(users)
+				WHERE shiny = false AND legendary = false AND ultra_beast = false AND alolan
+				`
+				).catch(console.error)) || {};
 			if (!alolan) return message.channel.send(language.errors.database).catch(err => {
 				message.channel.stopTyping();
 				console.error(err);
 			});
-			description += language.get(language.alolan, parseInt(alolan[0].sum) || 0);
-			total += parseInt(alolan[0].sum) || 0;
+			description += language.get(language.alolan, parseInt(alolan[0].total) || 0);
+			total += parseInt(alolan[0].total) || 0;
 
-			const { "rows": alolanShiny } = (await message.client.pg.query(`SELECT SUM(caught) FROM pokemons WHERE shiny AND alolan`).catch(console.error)) || {};
+			const { "rows": alolanShiny } = (await message.client.pg.query(
+				`
+				SELECT SUM((value -> 'caught')::int) AS total
+				FROM pokemons, jsonb_each(users)
+				WHERE shiny AND legendary = false AND ultra_beast = false AND alolan
+				`
+				).catch(console.error)) || {};
 			if (!alolanShiny) return message.channel.send(language.errors.database).catch(err => {
 				message.channel.stopTyping();
 				console.error(err);
 			});
-			description += language.get(language.alolan_shiny, parseInt(alolanShiny[0].sum) || 0);
-			total += parseInt(alolanShiny[0].sum) || 0;
+			description += language.get(language.alolan_shiny, parseInt(alolanShiny[0].total) || 0);
+			total += parseInt(alolanShiny[0].total) || 0;
 
 			description += language.get(language.total, total);
 

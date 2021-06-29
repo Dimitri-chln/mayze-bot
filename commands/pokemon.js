@@ -308,13 +308,13 @@ const command = {
 					.setDescription(language.no_pokemon);
 				if (!pokemons.length) pages.push(embed);
 
-				let total = pokemons.reduce((sum, p) => sum + p.users[message.author.id].caught, 0);
+				let total = pokemons.reduce((sum, p) => sum + p.users[user.id].caught, 0);
 				for (i = 0; i < pokemons.length; i += pkmPerPage) {
 					embed = new MessageEmbed()
 						.setAuthor(language.get(language.title, user.tag), user.avatarURL({ dynamic: true }))
 						.setTitle(language.get(language.total, total, total > 1))
 						.setColor(message.guild.me.displayColor)
-						.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => language.get(language.description, p.legendary, p.shiny, pokedex.findPokemon(p.pokedex_id).names[languageCode], hasParam(params, "id") === 0 ? `#${p.pokedex_id}` : "", p.users[message.author.id].caught, p.users[message.author.id].caught > 1 ? "s" : "", p.users[message.author.id].favorite, p.ultra_beast, `https~d//pokemon.com/${languageCode === "en" ? "us" : languageCode}/pokedex/${pokedex.findPokemon(p.pokedex_id).names[languageCode].toLowerCase().replace(/[:\.']/g, "").replace(/\s/g, "-").replace(/\u2642/, "-male").replace(/\u2640/, "-female")}`, p.users[message.author.id].nickname ? p.users[message.author.id].nickname.replace(/:/g, "~d").replace(/\?/g, "~q") : null, p.alolan)).join("\n"));
+						.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => language.get(language.description, p.legendary, p.shiny, pokedex.findPokemon(p.pokedex_id).names[languageCode], hasParam(params, "id") === 0 ? `#${p.pokedex_id}` : "", p.users[user.id].caught, p.users[user.id].caught > 1 ? "s" : "", p.users[user.id].favorite, p.ultra_beast, `https~d//pokemon.com/${languageCode === "en" ? "us" : languageCode}/pokedex/${pokedex.findPokemon(p.pokedex_id).names[languageCode].toLowerCase().replace(/[:\.']/g, "").replace(/\s/g, "-").replace(/\u2642/, "-male").replace(/\u2640/, "-female")}`, p.users[user.id].nickname ? p.users[user.id].nickname.replace(/:/g, "~d").replace(/\?/g, "~q") : null, p.alolan)).join("\n"));
 						if (pokemons.length === 1) embed.setThumbnail(pokemons[0].shiny && !pokemons[0].alolan ? `https://img.pokemondb.net/sprites/home/shiny/${pokemons[0].pokedex_name.toLowerCase().replace(/\u2642/, "-m").replace(/\u2640/, "-f")}.png` : `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemons[0].pokedex_id}`).substr(-3)}${pokemons[0].alolan ? "_f2" : ""}.png`);
 					pages.push(embed);
 				};

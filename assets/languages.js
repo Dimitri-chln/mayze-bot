@@ -876,6 +876,10 @@ module.exports = {
 				fr: "Statistiques de Mayze",
 				en: "Mayze's statistics"
 			},
+			no_pokemon: {
+				fr: "*Aucun pokémon ne correspond à la recherche*",
+				en: "*No pokémon matches the search*"
+			},
 			most_caught_title: {
 				fr: "Pokémons les plus attrapés",
 				en: "Most caught pokémons"
