@@ -384,7 +384,7 @@ async function processCommand(command, message, args, options) {
 	const language = client.languages.get(message.guild.id);
 
 	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting[language], { ephemeral: true }).catch(console.error);
-	if (!message.guild.me.permissionsIn(message.channel).has("SEND_MESSAGES")) return;
+	if (!message.guild.me.permissionsIn(message.channel.id).has("SEND_MESSAGES")) return;
 
 
 	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return; // message.reply(languages.data.unauthorized_guild[language]).catch(console.error);
@@ -395,7 +395,7 @@ async function processCommand(command, message, args, options) {
 		} else if (message.author.id !== config.OWNER_ID) return;
 	} else if (command.allowedUsers && !command.allowedUsers.includes(message.author.id)) return;
 	if (args && args.length < command.args)	return message.channel.send(languages.get(languages.data.wrong_usage[language], `${client.prefix + command.name} ${command.usage}`), { ephemeral: true }).catch(console.error);
-	if (command.botPerms && !command.botPerms.every(perm => message.guild.me.permissionsIn(message.channel).has(perm))) return message.channel.send(languages.get(languages.data.bot_missing_perms, command.botPerms.filter(perm => !message.guild.me.permissionsIn(message.channel).has(perm)).join("`, `"))).catch(console.error);
+	if (command.botPerms && !command.botPerms.every(perm => message.guild.me.permissionsIn(message.channel.id).has(perm))) return message.channel.send(languages.get(languages.data.bot_missing_perms, command.botPerms.filter(perm => !message.guild.me.permissionsIn(message.channel.id).has(perm)).join("`, `"))).catch(console.error);
 
 	if (!client.cooldowns.has(command.name)) client.cooldowns.set(command.name, new Discord.Collection());
 	const now = Date.now();
