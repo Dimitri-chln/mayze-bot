@@ -264,7 +264,7 @@ client.on("ready", async () => {
 
 		if (mutes) mutes.forEach(async mute => {
 			if (!mute.expires_at) return;
-			
+
 			const member = guild.members.cache.get(mute.user_id);
 			if (!member) return;
 
@@ -289,6 +289,8 @@ client.on("ready", async () => {
 	setInterval(() => {
 		client.guilds.cache.forEach(guild => {
 			guild.members.cache.filter(m => m.voice.channelID && !m.user.bot).forEach(member => {
+				if (member.voice.channel.members.size < 2) return;
+
 				let xp = config.BASE_VOICE_XP;
 				if (member.voice.channel) xp *= member.voice.channel.members.filter(m => !m.user.bot).size;
 				if (member.voice.deaf) xp *= 0;
