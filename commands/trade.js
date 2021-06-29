@@ -214,7 +214,7 @@ const command = {
 
 				const filter = (reaction, rUser) => [message.author.id, user.id].includes(rUser.id) && ["✅", "❌"].includes(reaction.emoji.name);
 				const collector = msg.createReactionCollector(filter, { time: 60000 });
-				let cancel, accepted = [false, true];
+				let cancel, accepted = [false, false];
 
 				collector.on("collect", async (reaction, rUser) => {
 					if (reaction.emoji.name === "❌") {
