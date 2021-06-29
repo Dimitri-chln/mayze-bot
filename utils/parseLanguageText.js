@@ -5,13 +5,14 @@
  * @returns {string}
  */
 function parse(text, ...args) {
-	text = text
+	args = args.map(a => a
 		.replace(/{/g, "~c")
 		.replace(/}/g, "~b")
 		.replace(/\[/g, "~s")
 		.replace(/\]/g, "~t")
 		.replace(/:/g, "~d")
-		.replace(/\?/g, "~q");
+		.replace(/\?/g, "~q")
+	);
 
 	text = text
 		.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1]);
