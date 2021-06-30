@@ -89,7 +89,7 @@ const command = {
 				shiny,
 				legendary,
 				beast,
-				alolan,
+				variation === "alolan",
 				defaultData,
 				message.author.id,
 				defaultUserData
@@ -112,7 +112,7 @@ const command = {
 					: legendary || beast 
 						? 13512480
 						: message.guild.me.displayColor,
-				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (alolan ? "Alolan " : "") + (pokemon.names[languageCode] || pokemon.names.en), !shiny && (alolan || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en))),
+				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (variation ? variation.replace(/^./, a => a.toUpperCase()) + " " : "") + (pokemon.names[languageCode] || pokemon.names.en), !shiny && (variation === "alolan" || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en))),
 				footer: {
 					text: "✨ Mayze ✨" + (huntFooterText || ""),
 					icon_url: message.author.avatarURL({ dynamic: true })
@@ -129,10 +129,10 @@ const command = {
 					icon_url: message.guild.iconURL()
 				},
 				thumbnail: {
-					url: img
+					url: getPokemonImage(pokemon, shiny, variation)
 				},
 				color: shiny ? 14531360 : (legendary || beast ? 13512480 : "#010101"),
-				description: language.get(language.caught_title_en, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (alolan ? "Alolan " : "") + pokemon.names.en, !shiny && (alolan || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en))),
+				description: language.get(language.caught_title_en, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (variation ? variation.replace(/^./, a => a.toUpperCase()) + " " : "") + pokemon.names.en, !shiny && (variation === "alolan" || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en))),
 				footer: {
 					text: "✨ Mayze ✨",
 					icon_url: message.author.avatarURL({ dynamic: true })
