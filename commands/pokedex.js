@@ -27,6 +27,8 @@ const command = {
 		const pokedex = require("oakdex-pokedex");
 		const legendaries = require("../assets/legendaries.json");
 		const beasts = require("../assets/ultra-beasts.json");
+		const alolans = require("../assets/alolans.json");
+		const getPokemonImage = require("../utils/pokemonImage");
 		const pagination = require("../utils/pagination");
 		const { MessageEmbed } = require("discord.js");
 
@@ -37,29 +39,23 @@ const command = {
 		if (input) {
 			let pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === input));
 			if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
-			if ((args || options[0].value).includes("alolan")) pokemon = {
-				base_stats: pokemon.base_stats,
-				national_id: pokemon.national_id,
-				height_eu: pokemon.height_eu,
-				weight_eu: pokemon.weight_eu,
-				...pokemon.variations.find(v => v.condition === "Alola")
-			};
-			if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 
 			const shiny = args
 				? args.includes("shiny")
 				: options[0].value.toLowerCase().includes("shiny");
-			const url = shiny && pokemon.condition !== "Alola"
-				? `https://img.pokemondb.net/sprites/home/shiny/${pokemon.names.en.toLowerCase().replace(/\u2642/, "-m").replace(/\u2640/, "-f")}.png`
-				: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}${pokemon.condition === "Alola" ? "_f2" : ""}.png`
-
+			const variation = alolans.includes(pokemon.names.en) && (args ? args.includes("alolan")	: options[0].value.toLowerCase().includes("alolan"))
+				? "alolan"
+				: null;
+			
 			const flags = { en: "🇬🇧", fr: "🇫🇷", de: "🇩🇪", cz: "🇨🇿", es: "🇪🇸", it: "🇮🇹", jp: "🇯🇵", tr: "🇹🇷", dk: "🇩🇰", gr: "🇬🇷", pl: "🇵🇱" };
 
 			message.channel.send({
 				embed: {
-					title: `${legendaries.includes(pokemon.names.en) ? "🎖️ " : ""}${beasts.includes(pokemon.names.en) ? "🎗️ " : ""}${shiny ? "⭐ " : ""}${pokemon.names[languageCode] || pokemon.names.en} #${(`00${pokemon.national_id}`).substr(-3)}`,
+					title: `${legendaries.includes(pokemon.names.en) ? "🎖️ " : ""}${beasts.includes(pokemon.names.en) ? "🎗️ " : ""}${shiny ? "⭐ " : ""}${variation ? variation.replace(/^./, a => a.toUpperCase()) + " " : ""}${pokemon.names[languageCode] || pokemon.names.en} #${(`00${pokemon.national_id}`).substr(-3)}`,
 					color: message.guild.me.displayColor,
-					image: { url },
+					image: {
+						url: getPokemonImage(pokemon, shiny, variation)
+					},
 					footer: {
 						text: "✨ Mayze ✨"
 					},
@@ -102,6 +98,7 @@ const command = {
 			const params = args
 				? args
 				: options[0].value.split(" ");
+			
 			const shiny = params.includes("-shiny");
 			const legendary = params.includes("-legendary") || params.includes("-leg");
 			const beast = params.includes("-beast") || params.includes("-ub");
@@ -118,7 +115,7 @@ const command = {
 			if (params.includes("-uncaught")) dex = dex.filter(pkm => !pokemons.some(p => p.pokedex_id === pkm.national_id));
 			if (legendary) dex = dex.filter(pkm => legendaries.includes(pkm.names.en));
 			if (beast) dex = dex.filter(pkm => beasts.includes(pkm.names.en));
-			if (alolan) dex = dex.filter(p => p.variations.some(v => v.condition === "Alola"));
+			if (alolan) dex = dex.filter(p => alolans.includes(p.names.en));
 
 			const pkmPerPage = 15;
 			let pages = [];

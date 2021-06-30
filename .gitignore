@@ -2,6 +2,7 @@
 .env
 
 # Others
+assets/pokemons/
 backups/
 .vscode/
 commands/temp/

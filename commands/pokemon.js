@@ -146,6 +146,7 @@ const command = {
 		const { MessageEmbed } = require("discord.js");
 		const pokedex = require("oakdex-pokedex");
 		const starters = require("../assets/starters.json");
+		const getPokemonImage = require("../utils/pokemonImage");
 		const pagination = require("../utils/pagination");
 		const { getFlatEvolutionLine, getStringEvolutionLine } = require("../utils/pokemonEvo");
 
@@ -265,6 +266,9 @@ const command = {
 							name: language.get(language.evoline_title, pokemon.names[languageCode] || pokemon.names.en),
 							icon_url: message.client.user.avatarURL()
 						},
+						thumbnail: {
+							url: `https://assets.poketwo.net/images/${pokemon.national_id}.png?v=26`
+						},
 						color: message.guild.me.displayColor,
 						description: `\`\`\`\n${stringEvolutionLine}\n\`\`\``,
 						footer: {
@@ -315,7 +319,12 @@ const command = {
 						.setTitle(language.get(language.total, total, total > 1))
 						.setColor(message.guild.me.displayColor)
 						.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => language.get(language.description, p.legendary, p.shiny, pokedex.findPokemon(p.pokedex_id).names[languageCode], hasParam(params, "id") === 0 ? `#${p.pokedex_id}` : "", p.users[user.id].caught, p.users[user.id].caught > 1 ? "s" : "", p.users[user.id].favorite, p.ultra_beast, `https~d//pokemon.com/${languageCode === "en" ? "us" : languageCode}/pokedex/${pokedex.findPokemon(p.pokedex_id).names[languageCode].toLowerCase().replace(/[:\.']/g, "").replace(/\s/g, "-").replace(/\u2642/, "-male").replace(/\u2640/, "-female")}`, p.users[user.id].nickname ? p.users[user.id].nickname : null, p.alolan)).join("\n"));
-						if (pokemons.length === 1) embed.setThumbnail(pokemons[0].shiny && !pokemons[0].alolan ? `https://img.pokemondb.net/sprites/home/shiny/${pokemons[0].pokedex_name.toLowerCase().replace(/\u2642/, "-m").replace(/\u2640/, "-f")}.png` : `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemons[0].pokedex_id}`).substr(-3)}${pokemons[0].alolan ? "_f2" : ""}.png`);
+						
+						if (pokemons.length === 1) embed.setThumbnail(getPokemonImage(
+							pokedex.findPokemon(pokemons[0].pokedex_id),
+							pokemons[0].shiny,
+							pokemons[0].alolan ? "alolan" : null
+						));
 					pages.push(embed);
 				};
 				

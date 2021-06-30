@@ -20,6 +20,8 @@ const command = {
 		const pokedex = require("oakdex-pokedex");
 		const legendaries = require("../assets/legendaries.json");
 		const beasts = require("../assets/ultra-beasts.json");
+		const alolans = require("../assets/alolans.json");
+		const getPokemonImage = require("../utils/pokemonImage");
 		const { pokeball } = require("../assets/misc.json");
 
 		const shinyFrequency = 0.004, alolanFrequency = 0.05;
@@ -58,23 +60,13 @@ const command = {
 			}
 		}
 		
-		let img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}.png`;
-
-		let randomShiny = Math.random(), shiny = false;
-		if (randomShiny < shinyFrequency) {
-			shiny = true;
-			img = `https://img.pokemondb.net/sprites/home/shiny/${pokemon.names.en.toLowerCase().replace(/\u2642/, "-m").replace(/\u2640/, "-f")}.png`;
-		}
-		
-		let randomAlolan = Math.random(), alolan = false;
-		if (randomAlolan < alolanFrequency && pokemon.variations.some(v => v.condition === "Alola")) {
-			alolan = true;
-			img = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(`00${pokemon.national_id}`).substr(-3)}_f2.png`;
-		}
-
+		const shiny = Math.random() < shinyFrequency;
 		const legendary = legendaries.includes(pokemon.names.en);
 		const beast = beasts.includes(pokemon.names.en);
-
+		const variation = alolans.includes(pokemon.names.en) && Math.random() < alolanFrequency
+			? "alolan"
+			: null;
+		
 		const defaultData = {};
 		defaultData[message.author.id] = { caught: 1, favorite: false, nickname: null };
 		const defaultUserData = { caught: 1, favorite: false, nickname: null };
@@ -113,9 +105,13 @@ const command = {
 					icon_url: pokeball
 				},
 				image: {
-					url: img
+					url: getPokemonImage(pokemon, shiny, variation)
 				},
-				color: shiny ? 14531360 : (legendary || beast ? 13512480 : message.guild.me.displayColor),
+				color: shiny
+					? 15979784
+					: legendary || beast 
+						? 13512480
+						: message.guild.me.displayColor,
 				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (alolan ? "Alolan " : "") + (pokemon.names[languageCode] || pokemon.names.en), !shiny && (alolan || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en))),
 				footer: {
 					text: "✨ Mayze ✨" + (huntFooterText || ""),
