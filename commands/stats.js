@@ -102,8 +102,6 @@ const command = {
 				const pokemon = pokedex.allPokemon().find(p => Object.values(p.names).some(name => name.toLowerCase() === pokemonName.toLowerCase()));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 
-				message.channel.startTyping(1);
-
 				let description = "", total = 0;
 
 				const { "rows": normal } = (await message.client.pg.query(
@@ -115,7 +113,6 @@ const command = {
 					[ pokemon.national_id ]
 				).catch(console.error)) || {};
 				if (!normal) return message.channel.send(language.errors.database).catch(err => {
-					message.channel.stopTyping();
 					console.error(err);
 				});
 				description += language.get(language.normal, parseInt(normal[0].total) || 0);
@@ -130,7 +127,6 @@ const command = {
 					[ pokemon.national_id ]
 				).catch(console.error)) || {};
 				if (!shiny) return message.channel.send(language.errors.database).catch(err => {
-					message.channel.stopTyping();
 					console.error(err);
 				});
 				description += language.get(language.shiny, parseInt(shiny[0].total) || 0);
@@ -146,7 +142,6 @@ const command = {
 						[ pokemon.national_id ]
 					).catch(console.error)) || {};
 					if (!alolan) return message.channel.send(language.errors.database).catch(err => {
-						message.channel.stopTyping();
 						console.error(err);
 					});
 					description += language.get(language.alolan, parseInt(alolan[0].total) || 0);
@@ -161,7 +156,6 @@ const command = {
 						[ pokemon.national_id ]
 					).catch(console.error)) || {};
 					if (!alolanShiny) return message.channel.send(language.errors.database).catch(err => {
-						message.channel.stopTyping();
 						console.error(err);
 					});
 					description += language.get(language.alolan_shiny, parseInt(alolanShiny[0].total) || 0);
@@ -184,13 +178,9 @@ const command = {
 						}
 					}
 				}).catch(console.error);
-
-				message.channel.stopTyping();
 			}
 
 		} else {
-			message.channel.startTyping(1);
-
 			let description = "", total = 0;
 
 			const { "rows": normal } = (await message.client.pg.query(
@@ -201,7 +191,6 @@ const command = {
 				`
 				).catch(console.error)) || {};
 			if (!normal) return message.channel.send(language.errors.database).catch(err => {
-				message.channel.stopTyping();
 				console.error(err);
 			});
 			description += language.get(language.normal, parseInt(normal[0].total) || 0);
@@ -215,7 +204,6 @@ const command = {
 				`
 				).catch(console.error)) || {};
 			if (!shiny) return message.channel.send(language.errors.database).catch(err => {
-				message.channel.stopTyping();
 				console.error(err);
 			});
 			description += language.get(language.shiny, parseInt(shiny[0].total) || 0);
@@ -229,7 +217,6 @@ const command = {
 				`
 				).catch(console.error)) || {};
 			if (!legendary) return message.channel.send(language.errors.database).catch(err => {
-				message.channel.stopTyping();
 				console.error(err);
 			});
 			description += language.get(language.legendary, parseInt(legendary[0].total) || 0);
@@ -243,7 +230,6 @@ const command = {
 				`
 				).catch(console.error)) || {};
 			if (!legendaryShiny) return message.channel.send(language.errors.database).catch(err => {
-				message.channel.stopTyping();
 				console.error(err);
 			});
 			description += language.get(language.legendary_shiny, parseInt(legendaryShiny[0].total) || 0);
@@ -257,7 +243,6 @@ const command = {
 				`
 				).catch(console.error)) || {};
 			if (!beast) return message.channel.send(language.errors.database).catch(err => {
-				message.channel.stopTyping();
 				console.error(err);
 			});
 			description += language.get(language.beast, parseInt(beast[0].total) || 0);
@@ -271,7 +256,6 @@ const command = {
 				`
 				).catch(console.error)) || {};
 			if (!beastShiny) return message.channel.send(language.errors.database).catch(err => {
-				message.channel.stopTyping();
 				console.error(err);
 			});
 			description += language.get(language.beast_shiny, parseInt(beastShiny[0].total) || 0);
@@ -285,7 +269,6 @@ const command = {
 				`
 				).catch(console.error)) || {};
 			if (!alolan) return message.channel.send(language.errors.database).catch(err => {
-				message.channel.stopTyping();
 				console.error(err);
 			});
 			description += language.get(language.alolan, parseInt(alolan[0].total) || 0);
@@ -299,7 +282,6 @@ const command = {
 				`
 				).catch(console.error)) || {};
 			if (!alolanShiny) return message.channel.send(language.errors.database).catch(err => {
-				message.channel.stopTyping();
 				console.error(err);
 			});
 			description += language.get(language.alolan_shiny, parseInt(alolanShiny[0].total) || 0);
@@ -322,8 +304,6 @@ const command = {
 					}
 				}
 			}).catch(console.error);
-
-			message.channel.stopTyping();
 		}
 	}
 };
