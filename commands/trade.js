@@ -167,7 +167,7 @@ const command = {
 
 					if (pokemon) return { data: pokemon, number, shiny, variation, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
 					else error += language.get(language.invalid_pkm, name);
-				}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id) === i);
+				}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id && u.shiny === v.shiny && u.variation === v.variation) === i);
 
 				demand = demand.map(input => {
 					const name = input.replace(/^\d+ *|alolan|shiny| *(= *|#)\d+$/ig, "").trim();
@@ -178,7 +178,7 @@ const command = {
 
 					if (pokemon) return { data: pokemon, number, shiny, variation, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
 					else error += language.get(language.invalid_pkm, name);
-				}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id) === i);
+				}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id && u.shiny === v.shiny && u.variation === v.variation) === i);
 				
 				if (error) return message.channel.send(error);
 
@@ -379,15 +379,15 @@ const command = {
 			let errors1 = [], errors1fav = [];
 			for (const pokemon of pokemons1) {
 				let pkm = user1Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny && p.variation === pokemon.variation);
-				if (!pkm || pokemon.number > pkm.users[user1.id].caught) errors1.push(`**${pokemon.number - pkm.users[user1.id].caught} ${getPokemonName(pokemon.data, pokemon.shiny, pokemon.variation, languageCode)}**`);
-				if (pkm.users[user1.id].favorite) errors1fav.push(`**${getPokemonName(pokemon.data, pokemon.shiny, pokemon.variation, languageCode)}**`);
+				if (!pkm || pokemon.number > pkm.users[user1.id].caught) errors1.push(`**${pokemon.number - (pkm?.users?.[user1.id]?.caught ?? 0)} ${getPokemonName(pokemon.data, pokemon.shiny, pokemon.variation, languageCode)}**`);
+				if (pkm && pkm.users[user1.id].favorite) errors1fav.push(`**${getPokemonName(pokemon.data, pokemon.shiny, pokemon.variation, languageCode)}**`);
 			}
 
 			let errors2 = [], errors2fav = [];
 			for (const pokemon of pokemons2) {
 				let pkm = user2Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny && p.variation === pokemon.variation);
-				if (!pkm || pokemon.number > pkm.users[user2.id].caught) errors2.push(`**${pokemon.number - pkm.users[user2.id].caught} ${getPokemonName(pokemon.data, pokemon.shiny, pokemon.variation, languageCode)}**`);
-				if (pkm.users[user2.id].favorite) errors2fav.push(`**${getPokemonName(pokemon.data, pokemon.shiny, pokemon.variation, languageCode)}**`);
+				if (!pkm || pokemon.number > pkm.users[user2.id].caught) errors2.push(`**${pokemon.number - (pkm?.users?.[user2.id]?.caught ?? 0)} ${getPokemonName(pokemon.data, pokemon.shiny, pokemon.variation, languageCode)}**`);
+				if (pkm && pkm.users[user2.id].favorite) errors2fav.push(`**${getPokemonName(pokemon.data, pokemon.shiny, pokemon.variation, languageCode)}**`);
 			}
 
 			errors1 = errors1.length ? language.get(language.not_enough_pkm, user1.username, errors1.join(", ")) : "";
