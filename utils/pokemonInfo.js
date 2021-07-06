@@ -226,7 +226,7 @@ function getPokemonVariation(pokemonName) {
 	if (input.includes("mega") && Object.keys(megas).includes(cleanName)) {
 		if (input.includes("x") && megas[cleanName].types.x) return "megax";
 		if (input.includes("y") && megas[cleanName].types.y) return "megay";
-		return "mega";
+		if (megas[cleanName].types.default) return "mega";
 	}
 	if (input.includes("primal") && Object.keys(megas).includes(cleanName) && megas[cleanName].types.primal) return "primal";
 	if ((input.includes("gigantamax") || input.includes("giga")) /*&& gigantamaxes.includes(cleanName)*/) return "gigantamax";
