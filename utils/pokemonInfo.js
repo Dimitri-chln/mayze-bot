@@ -6,20 +6,26 @@ const pokedex = require("oakdex-pokedex");
  * @param {boolean} shiny 
  * @param {"default" | "alolan" | "galarian" | "mega" | "megax" | "megay" | "primal" | "gigantamax"} variation 
  * @param {string} languageCode 
+ * @param {"full" | "badge" | "raw"} type 
  * @returns {string}
  */
-function getPokemonName(pokemon, shiny, variation, languageCode) {
+function getPokemonName(pokemon, shiny, variation, languageCode, type = "full") {
 	const legendaries = require("../assets/legendaries.json");
 	const beasts = require("../assets/ultra-beasts.json");
 
-	return ""
+	return (""
 		+ (legendaries.includes(pokemon.names.en) ? "🎖️ " : "")
 		+ (beasts.includes(pokemon.names.en) ? "🎗️ " : "")
 		+ (shiny ? "⭐ " : "")
 		+ (variation !== "default" ? variation.replace(/mega(x|y)/, "mega").replace(/^./, a => a.toUpperCase()) + " " : "")
 		+ (pokemon.names[languageCode] || pokemon.names.en)
 		+ (variation === "megax" ? " X" : "")
-		+ (variation === "megay" ? " Y" : "");
+		+ (variation === "megay" ? " Y" : "")
+	)
+		.replace(
+			type === "badge" ? /\w/g : type === "raw" ? /⭐|🎖️|🎗️/g : /\0/,
+			""
+		).trim();
 }
 
 /**
