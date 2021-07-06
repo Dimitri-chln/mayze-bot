@@ -69,9 +69,7 @@ const command = {
 		const shiny = Math.random() < shinyFrequency;
 		const legendary = legendaries.includes(pokemon.names.en);
 		const beast = beasts.includes(pokemon.names.en);
-		const variation = alolans.includes(pokemon.names.en) && Math.random() < alolanFrequency
-			? "alolan"
-			: null;
+		const variation = alolans.includes(pokemon.names.en) && Math.random() < alolanFrequency ? "alolan" : "default";
 		
 		const defaultData = {};
 		defaultData[message.author.id] = { caught: 1, favorite: false, nickname: null };
