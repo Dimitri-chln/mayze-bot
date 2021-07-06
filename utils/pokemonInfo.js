@@ -16,7 +16,7 @@ function getPokemonName(pokemon, shiny, variation, languageCode) {
 		+ (legendaries.includes(pokemon.names.en) ? "🎖️ " : "")
 		+ (beasts.includes(pokemon.names.en) ? "🎗️ " : "")
 		+ (shiny ? "⭐ " : "")
-		+ (variation ? variation.replace(/mega(x|y)/, "mega").replace(/^./, a => a.toUpperCase()) + " " : "")
+		+ (variation !== "default" ? variation.replace(/mega(x|y)/, "mega").replace(/^./, a => a.toUpperCase()) + " " : "")
 		+ (pokemon.names[languageCode] || pokemon.names.en)
 		+ (variation === "megax" ? " X" : "")
 		+ (variation === "megay" ? " Y" : "");
