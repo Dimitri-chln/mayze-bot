@@ -1,10 +1,32 @@
 const pokedex = require("oakdex-pokedex");
 
 /**
+ * Get the name representing the pokemon
+ * @param {pokedex.Pokemon} pokemon 
+ * @param {boolean} shiny 
+ * @param {"default" | "alolan" | "galarian" | "mega" | "megax" | "megay" | "primal" | "gigantamax"} variation 
+ * @param {string} languageCode 
+ * @returns {string}
+ */
+function getPokemonName(pokemon, shiny, variation, languageCode) {
+	const legendaries = require("../assets/legendaries.json");
+	const beasts = require("../assets/ultra-beasts.json");
+
+	return ""
+		+ (legendaries.includes(pokemon.names.en) ? "🎖️ " : "")
+		+ (beasts.includes(pokemon.names.en) ? "🎗️ " : "")
+		+ (shiny ? "⭐ " : "")
+		+ (variation ? variation.replace(/mega(x|y)/, "mega").replace(/^./, a => a.toUpperCase()) + " " : "")
+		+ (pokemon.names[languageCode] || pokemon.names.en)
+		+ (variation === "megax" ? " X" : "")
+		+ (variation === "megay" ? " Y" : "");
+}
+
+/**
  * Get the image URL representing the pokemon
  * @param {pokedex.Pokemon} pokemon 
  * @param {boolean} shiny 
- * @param {"alolan" | "galarian" | "mega" | "megax" | "megay" | "primal" | "gigantamax"} variation 
+ * @param {"default" | "alolan" | "galarian" | "mega" | "megax" | "megay" | "primal" | "gigantamax"} variation 
  * @returns {string}
  */
 function getPokemonImage(pokemon, shiny, variation) {
@@ -178,4 +200,7 @@ function getPokemonImage(pokemon, shiny, variation) {
 	}
 }
 
-module.exports = getPokemonImage;
+module.exports = {
+	getPokemonImage,
+	getPokemonName
+};

@@ -21,7 +21,8 @@ const command = {
 		const legendaries = require("../assets/legendaries.json");
 		const beasts = require("../assets/ultra-beasts.json");
 		const alolans = require("../assets/alolans.json");
-		const getPokemonImage = require("../utils/pokemonImage");
+		const megas = require("../assets/mega.json");
+		const { getPokemonImage, getPokemonName } = require("../utils/pokemonInfo");
 		const { pokeball } = require("../assets/misc.json");
 
 		const shinyFrequency = 0.004, alolanFrequency = 0.05;
@@ -59,6 +60,11 @@ const command = {
 				}
 			}
 		}
+
+		let megaGem;
+		{
+			// Mega Gems
+		}
 		
 		const shiny = Math.random() < shinyFrequency;
 		const legendary = legendaries.includes(pokemon.names.en);
@@ -74,13 +80,13 @@ const command = {
 		const res = await message.client.pg.query(
 			`
 			INSERT INTO pokemons VALUES ($1, $2, $3, $4, $5, $6, $7)
-			ON CONFLICT (pokedex_id, shiny, alolan)
+			ON CONFLICT (pokedex_id, shiny, variation)
 			DO UPDATE SET users =
 				CASE
 					WHEN pokemons.users -> $8 IS NULL THEN jsonb_set(pokemons.users, '{${message.author.id}}', $9)
 					ELSE jsonb_set(pokemons.users, '{${message.author.id}, caught}', ((pokemons.users -> $8 -> 'caught')::int + 1)::text::jsonb)
 				END
-			WHERE pokemons.pokedex_id = EXCLUDED.pokedex_id AND pokemons.shiny = EXCLUDED.shiny AND pokemons.alolan = EXCLUDED.alolan
+			WHERE pokemons.pokedex_id = EXCLUDED.pokedex_id AND pokemons.shiny = EXCLUDED.shiny AND pokemons.variation = EXCLUDED.variation
 			RETURNING (users -> $8 -> 'caught')::int AS caught
 			`,
 			[
@@ -89,7 +95,7 @@ const command = {
 				shiny,
 				legendary,
 				beast,
-				variation === "alolan",
+				variation,
 				defaultData,
 				message.author.id,
 				defaultUserData
@@ -112,7 +118,7 @@ const command = {
 					: legendary || beast 
 						? 13512480
 						: message.guild.me.displayColor,
-				description: language.get(language.caught_title, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (variation ? variation.replace(/^./, a => a.toUpperCase()) + " " : "") + (pokemon.names[languageCode] || pokemon.names.en), !shiny && (variation === "alolan" || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en))),
+				description: language.get(language.caught_title, message.author.toString(), !shiny && (variation === "alolan" || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en)), getPokemonName(pokemon, shiny, variation, languageCode)),
 				footer: {
 					text: "✨ Mayze ✨" + (huntFooterText || ""),
 					icon_url: message.author.avatarURL({ dynamic: true })
@@ -124,15 +130,19 @@ const command = {
 		logChannel.send({
 			embed: {
 				author: {
-					name: `#${message.channel.name}`,
+					name: `#${message.channel.name} (${message.guild.name})`,
 					url: msg.url,
 					icon_url: message.guild.iconURL()
 				},
 				thumbnail: {
 					url: getPokemonImage(pokemon, shiny, variation)
 				},
-				color: shiny ? 14531360 : (legendary || beast ? 13512480 : "#010101"),
-				description: language.get(language.caught_title_en, message.author.toString(), (legendary ? "🎖️ " : "") + (beast ? "🎗️ " : "") + (shiny ? "⭐ " : "") + (variation ? variation.replace(/^./, a => a.toUpperCase()) + " " : "") + pokemon.names.en, !shiny && (variation === "alolan" || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en))),
+				color: shiny
+					? 15979784
+					: legendary || beast 
+						? 13512480
+						: "#010101",
+				description: language.get(language.caught_title, message.author.toString(), !shiny && (variation === "alolan" || /^[aeiou]/i.test(pokemon.names.en)), getPokemonName(pokemon, shiny, variation, languageCode)),
 				footer: {
 					text: "✨ Mayze ✨",
 					icon_url: message.author.avatarURL({ dynamic: true })

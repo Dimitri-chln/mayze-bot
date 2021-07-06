@@ -209,12 +209,12 @@ module.exports = {
 				en: "🔸 New pokémon!"
 			},
 			caught_title: {
-				fr: "{1} a attrapé un {2} !",
-				en: "{1} caught a[3?n:] {2}!"
+				fr: "{1} a attrapé un {3} !",
+				en: "{1} caught a[2?n:] {3}!"
 			},
 			caught_title_en: {
-				fr: "{1} caught a[3?n:] {2}!",
-				en: "{1} caught a[3?n:] {2}!"
+				fr: "{1} caught a[2?n:] {3}!",
+				en: "{1} caught a[2?n:] {3}!"
 			}
 		},
 		"channel-names": {
@@ -611,8 +611,8 @@ module.exports = {
 				en: "{1}'s pokédex"
 			},
 			description: {
-				fr: "[1?<~dpokeball~d829026553395937291>:<~dblank~d829352737946730576>] [4?🎖️ :][6?🎗️ :][5?⭐ :]**{2}#{3}**",
-				en: "[1?<~dpokeball~d829026553395937291>:<~dblank~d829352737946730576>] [4?🎖️ :][6?🎗️ :][5?⭐ :]**{2}#{3}**"
+				fr: "[1?<~dpokeball~d829026553395937291>:<~dblank~d829352737946730576>] **{2}#{3}**",
+				en: "[1?<~dpokeball~d829026553395937291>:<~dblank~d829352737946730576>] **{2}#{3}**"
 			}
 		},
 		"pokemon": {
@@ -657,8 +657,8 @@ module.exports = {
 				en: "*No pokémon matches the search*"
 			},
 			description: {
-				fr: "[1?🎖️ :][8?🎗️ :][2?⭐ :][7?**~s[11?Alolan :]{3}~t({9})**~s{4}~t({9}):**[11?Alolan :]{3}**{4}][10? - \"{10}\":] - {5} attrapé{6}",
-				en: "[1?🎖️ :][8?🎗️ :][2?⭐ :][7?**~s[11?Alolan :]{3}~t({9})**~s{4}~t({9}):**[11?Alolan :]{3}**{4}][10? - \"{10}\":] - {5} caught"
+				fr: "[6?~s:]**{1}**{2}[6?~t({6}):] [3? - \"{3}\":] - {4} attrapé[5?s:]",
+				en: "[6?~s:]**{1}**{2}[6?~t({6}):] [3? - \"{3}\":] - {4} caught"
 			}
 		},
 		"poll": {
@@ -844,14 +844,6 @@ module.exports = {
 				fr: "**Shinies :** `{1}`\n",
 				en: "**Shinies:** `{1}`\n"
 			},
-			alolan: {
-				fr: "**Alolan :** `{1}`\n",
-				en: "**Alolan:** `{1}`\n"
-			},
-			alolan_shiny: {
-				fr: "**Alolan shiny :** `{1}`\n",
-				en: "**Shiny alolan:** `{1}`\n"
-			},
 			legendary: {
 				fr: "**Légendaires :** `{1}`\n",
 				en: "**Legendaries:** `{1}`\n"
@@ -867,6 +859,14 @@ module.exports = {
 			beast_shiny: {
 				fr: "**Chimères shiny :** `{1}`\n",
 				en: "**Shiny ultra beasts:** `{1}`\n"
+			},
+			alolan: {
+				fr: "**Alolan :** `{1}`\n",
+				en: "**Alolan:** `{1}`\n"
+			},
+			alolan_shiny: {
+				fr: "**Alolan shiny :** `{1}`\n",
+				en: "**Shiny alolan:** `{1}`\n"
 			},
 			total: {
 				fr: "> __**Total :**__ `{1}`",
@@ -885,8 +885,8 @@ module.exports = {
 				en: "Most caught pokémons"
 			},
 			most_caught: {
-				fr: "`{1}.` [3?⭐ :][4?🎖️ :][5?🎗️ :]**[6?Alolan :]{2}** - {7} attrapés",
-				en: "`{1}.` [3?⭐ :][4?🎖️ :][5?🎗️ :]**[6?Alolan :]{2}** - {7} caught"
+				fr: "`{1}.` **{2}** - {3} attrapés",
+				en: "`{1}.` **{2}** - {3} caught"
 			}
 		},
 		"top": {

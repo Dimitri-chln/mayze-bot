@@ -81,6 +81,7 @@ const command = {
 		const pokedex = require("oakdex-pokedex");
 		const legendaries = require("../assets/legendaries.json");
 		const beasts = require("../assets/ultra-beasts.json");
+		const { getPokemonName } = require("../utils/pokemonInfo");
 		const { TRADE_LOG_CHANNEL_ID } = require("../config.json");
 		const logChannel = message.client.channels.cache.get(TRADE_LOG_CHANNEL_ID);
 
@@ -89,7 +90,7 @@ const command = {
 		 * @property {pokedex.Pokemon} data
 		 * @property {number} number
 		 * @property {boolean} shiny
-		 * @property {boolean} alolan
+		 * @property {"default" | "alolan"} variation
 		 * @property {boolean} legendary
 		 * @property {boolean} ultra_beast
 		 * */
@@ -161,10 +162,10 @@ const command = {
 					const name = input.replace(/^\d+ *|alolan|shiny| *(= *|#)\d+$/ig, "").trim();
 					const number = parseInt((input.match(/^(\d+) *| *(?:= *|#)(\d+)$/) || []).filter(a => a)[1]) || 1;
 					const shiny = /shiny/i.test(input);
-					const alolan = /alolan/i.test(input);
+					const variation = /alolan/i.test(input) ? "alolan" : "default";
 					const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
 
-					if (pokemon) return { data: pokemon, number, shiny, alolan, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
+					if (pokemon) return { data: pokemon, number, shiny, variation, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
 					else error += language.get(language.invalid_pkm, name);
 				}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id) === i);
 
@@ -172,10 +173,10 @@ const command = {
 					const name = input.replace(/^\d+ *|alolan|shiny| *(= *|#)\d+$/ig, "").trim();
 					const number = parseInt((input.match(/^(\d+) *| *(?:= *|#)(\d+)$/) || []).filter(a => a)[1]) || 1;
 					const shiny = /shiny/i.test(input);
-					const alolan = /alolan/i.test(input);
+					const variation = /alolan/i.test(input) ? "alolan" : "default";
 					const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
 
-					if (pokemon) return { data: pokemon, number, shiny, alolan, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
+					if (pokemon) return { data: pokemon, number, shiny, variation, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
 					else error += language.get(language.invalid_pkm, name);
 				}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id) === i);
 				
@@ -195,12 +196,12 @@ const command = {
 						fields: [
 							{
 								name: language.get(language.offer, message.author.username),
-								value: `\`\`\`\n${offer.map(pkm => `×${pkm.number} ${pkm.alolan ? "Alolan " : ""}${pkm.data.names[languageCode]} ${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️ " : ""}${pkm.shiny ? "⭐": ""}`).join("\n") || "Ø"}\n\`\`\``,
+								value: `\`\`\`\n${offer.map(pkm => `×${pkm.number} ${getPokemonName(pkm.data, pkm.shiny, pkm.variation, languageCode)}`).join("\n") || "Ø"}\n\`\`\``,
 								inline: true
 							},
 							{
 								name: language.get(language.demand, user.username),
-								value: `\`\`\`\n${demand.map(pkm => `×${pkm.number} ${pkm.alolan ? "Alolan " : ""}${pkm.data.names[languageCode]} ${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️ " : ""}${pkm.shiny ? "⭐": ""}`).join("\n") || "Ø"}\n\`\`\``,
+								value: `\`\`\`\n${demand.map(pkm => `×${pkm.number} ${getPokemonName(pkm.data, pkm.shiny, pkm.variation, languageCode)}`).join("\n") || "Ø"}\n\`\`\``,
 								inline: true
 							}
 						],
@@ -251,9 +252,9 @@ const command = {
 									WHEN (users -> $1 -> 'caught')::int = $2 THEN users - $1
 									ELSE jsonb_set(users, '{${message.author.id}, caught}', ((users -> $1 -> 'caught')::int - $2)::text::jsonb)
 								END
-							WHERE pokedex_id = $3 AND shiny = $4 AND alolan = $5
+							WHERE pokedex_id = $3 AND shiny = $4 AND variation = $5
 							`,
-							[ message.author.id, pkm.number, pkm.data.national_id, pkm.shiny, pkm.alolan ]
+							[ message.author.id, pkm.number, pkm.data.national_id, pkm.shiny, pkm.variation ]
 						)
 							.then(() => s.push(1))
 							.catch(err => {
@@ -269,9 +270,9 @@ const command = {
 									WHEN users -> $1 IS NULL THEN jsonb_set(users, '{${user.id}}', $3)
 									ELSE jsonb_set(users, '{${user.id}, caught}', ((users -> $1 -> 'caught')::int + $2)::text::jsonb)
 								END
-							WHERE pokedex_id = $4 AND shiny = $5 AND alolan = $6
+							WHERE pokedex_id = $4 AND shiny = $5 AND variation = $6
 							`,
-							[ user.id, pkm.number, defaultUserData, pkm.data.national_id, pkm.shiny, pkm.alolan ]
+							[ user.id, pkm.number, defaultUserData, pkm.data.national_id, pkm.shiny, pkm.variation ]
 						)
 							.then(() => s.push(1))
 							.catch(err => {
@@ -295,9 +296,9 @@ const command = {
 									WHEN (users -> $1 -> 'caught')::int = $2 THEN users - $1
 									ELSE jsonb_set(users, '{${user.id}, caught}', ((users -> $1 -> 'caught')::int - $2)::text::jsonb)
 								END
-							WHERE pokedex_id = $3 AND shiny = $4 AND alolan = $5
+							WHERE pokedex_id = $3 AND shiny = $4 AND variation = $5
 							`,
-							[ user.id, pkm.number, pkm.data.national_id, pkm.shiny, pkm.alolan ]
+							[ user.id, pkm.number, pkm.data.national_id, pkm.shiny, pkm.variation ]
 						)
 							.then(() => s.push(1))
 							.catch(err => {
@@ -313,9 +314,9 @@ const command = {
 									WHEN users -> $1 IS NULL THEN jsonb_set(users, '{${message.author.id}}', $3)
 									ELSE jsonb_set(users, '{${message.author.id}, caught}', ((users -> $1 -> 'caught')::int + $2)::text::jsonb)
 								END
-							WHERE pokedex_id = $4 AND shiny = $5 AND alolan = $6
+							WHERE pokedex_id = $4 AND shiny = $5 AND variation = $6
 							`,
-							[ message.author.id, pkm.number, defaultUserData, pkm.data.national_id, pkm.shiny, pkm.alolan ]
+							[ message.author.id, pkm.number, defaultUserData, pkm.data.national_id, pkm.shiny, pkm.variation ]
 						)
 							.then(() => s.push(1))
 							.catch(err => {
@@ -340,12 +341,12 @@ const command = {
 							fields: [
 								{
 									name: "Offer:",
-									value: `\`\`\`\n${offer.map((pkm, i) => `×${pkm.number} ${pkm.alolan ? "Alolan " : ""}${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️" : ""} - ${offerSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+									value: `\`\`\`\n${offer.map((pkm, i) => `×${pkm.number} ${getPokemonName(pkm.data, pkm.shiny, pkm.variation, languageCode)} - ${offerSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
 									inline: true
 								},
 								{
 									name: "Demand:",
-									value: `\`\`\`\n${demand.map((pkm, i) => `×${pkm.number} ${pkm.alolan ? "Alolan " : ""}${pkm.data.names.en} ${pkm.shiny ? "⭐": ""}${pkm.legendary ? "🎖️": ""}${pkm.ultra_beast ? "🎗️" : ""} - ${demandSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
+									value: `\`\`\`\n${demand.map((pkm, i) => `×${pkm.number} ${getPokemonName(pkm.data, pkm.shiny, pkm.variation, languageCode)} - ${demandSuccess[i].map(s => ["❌", "✅"][s]).join(" ")}`).join("\n") || "Ø"}\n\`\`\``,
 									inline: true
 								}
 							],
@@ -377,16 +378,16 @@ const command = {
 
 			let errors1 = [], errors1fav = [];
 			for (const pokemon of pokemons1) {
-				let pkm = user1Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny && p.alolan === pokemon.alolan);
-				if (!pkm || pokemon.number > pkm.users[user1.id].caught) errors1.push(`**${pokemon.number - pkm.users[user1.id].caught} ${pokemon.alolan ? "Alolan " : ""}${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
-				if (pkm.users[user1.id].favorite) errors1fav.push(`**${pokemon.alolan ? "Alolan " : ""}${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
+				let pkm = user1Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny && p.variation === pokemon.variation);
+				if (!pkm || pokemon.number > pkm.users[user1.id].caught) errors1.push(`**${pokemon.number - pkm.users[user1.id].caught} ${getPokemonName(pokemon.data, pokemon.shiny, pokemon.variation, languageCode)}**`);
+				if (pkm.users[user1.id].favorite) errors1fav.push(`**${getPokemonName(pokemon.data, pokemon.shiny, pokemon.variation, languageCode)}**`);
 			}
 
 			let errors2 = [], errors2fav = [];
 			for (const pokemon of pokemons2) {
-				let pkm = user2Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny && p.alolan === pokemon.alolan);
-				if (!pkm || pokemon.number > pkm.users[user2.id].caught) errors2.push(`**${pokemon.number - pkm.users[user2.id].caught} ${pokemon.alolan ? "Alolan " : ""}${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
-				if (pkm.users[user2.id].favorite) errors2fav.push(`**${pokemon.alolan ? "Alolan " : ""}${pokemon.data.names[languageCode]}${pokemon.shiny ? " ⭐": ""}${pokemon.legendary ? "🎖️": ""}${pokemon.ultra_beast ? "🎗️" : ""}**`);
+				let pkm = user2Pokemons.find(p => p.pokedex_id === pokemon.data.national_id && p.shiny === pokemon.shiny && p.variation === pokemon.variation);
+				if (!pkm || pokemon.number > pkm.users[user2.id].caught) errors2.push(`**${pokemon.number - pkm.users[user2.id].caught} ${getPokemonName(pokemon.data, pokemon.shiny, pokemon.variation, languageCode)}**`);
+				if (pkm.users[user2.id].favorite) errors2fav.push(`**${getPokemonName(pokemon.data, pokemon.shiny, pokemon.variation, languageCode)}**`);
 			}
 
 			errors1 = errors1.length ? language.get(language.not_enough_pkm, user1.username, errors1.join(", ")) : "";
