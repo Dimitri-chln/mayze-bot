@@ -212,6 +212,10 @@ module.exports = {
 				fr: "{1} a attrapé un {3} !",
 				en: "{1} caught a[2?n:] {3}!"
 			},
+			mega_gem: {
+				fr: "\n+ *__Bonus :__ **{1}***",
+				en: "\n+ *__Bonus:__ **{1}***"
+			},
 			caught_title_en: {
 				fr: "{1} caught a[2?n:] {3}!",
 				en: "{1} caught a[2?n:] {3}!"
@@ -499,6 +503,32 @@ module.exports = {
 			invalid_number_msg: {
 				fr: "le nombre doit être compris entre 1 et 100",
 				en: "the number must be between 1 and 100"
+			}
+		},
+		"mega-evolve": {
+			pokemon_not_owned: {
+				fr: "tu n'as pas ce pokémon",
+				en: "you don't own this pokémon"
+			},
+			not_mega_evolvable: {
+				fr: "ce pokémon n'a pas de méga évolution",
+				en: "this pokémon doesn't have a mega evolution"
+			},
+			no_mega_gem: {
+				fr: "tu ne possèdes pas la méga gemme **{1}**",
+				en: "you don't own the **{1}** mega gem"
+			},
+			xy: {
+				fr: "précise la valeur X ou Y pour ce pokémon",
+				en: "specify an X or Y value for this pokémon"
+			},
+			evolved: {
+				fr: "**{1}** a évolué en **{2}** !",
+				en: "**{1}** evovled into **{2}**!"
+			},
+			title: {
+				fr: "Méga gemmes de {1}",
+				en: "{1}'s mega gems"
 			}
 		},
 		"meme": {
@@ -867,6 +897,14 @@ module.exports = {
 			alolan_shiny: {
 				fr: "**Alolan shiny :** `{1}`\n",
 				en: "**Shiny alolan:** `{1}`\n"
+			},
+			mega: {
+				fr: "**Mégas :** `{1}`\n",
+				en: "**Megas:** `{1}`\n"
+			},
+			mega_shiny: {
+				fr: "**Mégas shiny :** `{1}`\n",
+				en: "**Shiny megas:** `{1}`\n"
 			},
 			total: {
 				fr: "> __**Total :**__ `{1}`",

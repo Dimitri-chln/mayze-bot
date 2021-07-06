@@ -206,7 +206,36 @@ function getPokemonImage(pokemon, shiny, variation) {
 	}
 }
 
+/**
+ * Get the variation name of the pokémon
+ * @param {string} pokemonName 
+ * @returns {"default" | "alolan" | "galarian" | "mega" | "megax" | "megay" | "primal" | "gigantamax"}
+ */
+function getPokemonVariation(pokemonName) {
+	const alolans = require("../assets/alolans.json");
+	// const galarians = require("../assets/galarians.json");
+	const megas = require("../assets/mega.json");
+	// const gigantamaxes = require("../assets/gigantamax.json");
+
+	const input = pokemonName.toLowerCase().split(" ");
+	const cleanRegex = /\b(?:shiny|alolan|galarian|mega|x|y|primal|giga(?:antamax)?)\b/ig;
+	const cleanName = pokemonName.toLowerCase().replace(cleanRegex, "").trim().replace(/^./, a => a.toUpperCase());
+
+	if (input.includes("alolan") && alolans.includes(cleanName)) return "alolan";
+	if (input.includes("galarian") /*&& galarians.includes(cleanName)*/) return "galarian";
+	if (input.includes("mega") && Object.keys(megas).includes(cleanName)) {
+		if (input.includes("x") && megas[cleanName].types.x) return "megax";
+		if (input.includes("y") && megas[cleanName].types.y) return "megay";
+		return "mega";
+	}
+	if (input.includes("primal") && Object.keys(megas).includes(cleanName) && megas[cleanName].types.primal) return "primal";
+	if ((input.includes("gigantamax") || input.includes("giga")) /*&& gigantamaxes.includes(cleanName)*/) return "gigantamax";
+
+	return "default";
+}
+
 module.exports = {
 	getPokemonImage,
-	getPokemonName
+	getPokemonName,
+	getPokemonVariation
 };

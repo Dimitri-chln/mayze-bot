@@ -1,60 +1,398 @@
 {
-    "default": [
-        "Venusaur",
-        "Blastoise",
-        "Beedrill",
-        "Pidgeot",
-        "Alakazam",
-        "Slowbro",
-        "Gengar",
-        "Kangaskhan",
-        "Pinsir",
-        "Gyarados",
-        "Aerodactyl",
-        "Ampharos",
-        "Steelix",
-        "Scizor",
-        "Heracross",
-        "Houndoom",
-        "Tyranitar",
-        "Sceptile",
-        "Blaziken",
-        "Swampert",
-        "Gardevoir",
-        "Sableye",
-        "Mawile",
-        "Aggron",
-        "Medicham",
-        "Manectric",
-        "Sharpedo",
-        "Camerupt",
-        "Altaria",
-        "Banette",
-        "Absol",
-        "Glalie",
-        "Salamence",
-        "Metagross",
-        "Latias",
-        "Latios",
-        "Rayquaza",
-        "Lopunny",
-        "Garchomp",
-        "Lucario",
-        "Abomasnow",
-        "Gallade",
-        "Audino",
-        "Diancie"
-    ],
-    "x": [
-        "Charizard",
-        "Mewtwo"
-    ],
-    "y": [
-        "Charizard",
-        "Mewtwo"
-    ],
-    "primal": [
-        "Groudon",
-        "Kyogre"
-    ]
+	"Venusaur": {
+		"types": {
+			"default": {
+				"fr": "Florizarrite",
+				"en": "Venusaurite"
+			}
+		}
+	},
+	"Charizard": {
+		"types": {
+			"x": {
+				"fr": "Dracaufite X",
+				"en": "Charizardite X"
+			},
+			"y": {
+				"fr": "Dracaufite Y",
+				"en": "Charizardite Y"
+			}
+		}
+	},
+	"Blastoise": {
+		"types": {
+			"default": {
+				"fr": "Tortankite",
+				"en": "Blastoisinite"
+			}
+		}
+	},
+	"Beedrill": {
+		"types": {
+			"default": {
+				"fr": "Dardargnite",
+				"en": "Beedrillite"
+			}
+		}
+	},
+	"Pidgeot": {
+		"types": {
+			"default": {
+				"fr": "Roucarnagite",
+				"en": "Pidgeotite"
+			}
+		}
+	},
+	"Alakazam": {
+		"types": {
+			"default": {
+				"fr": "Alakazamite",
+				"en": "Alakazite"
+			}
+		}
+	},
+	"Slowbro": {
+		"types": {
+			"default": {
+				"fr": "Flagadossite",
+				"en": "Slowbronite"
+			}
+		}
+	},
+	"Gengar": {
+		"types": {
+			"default": {
+				"fr": "Ectoplasmite",
+				"en": "Gengarite"
+			}
+		}
+	},
+	"Kangaskhan": {
+		"types": {
+			"default": {
+				"fr": "Kangourexite",
+				"en": "Kangaskhanite"
+			}
+		}
+	},
+	"Pinsir": {
+		"types": {
+			"default": {
+				"fr": "Scarabruite",
+				"en": "Pinsirite"
+			}
+		}
+	},
+	"Gyarados": {
+		"types": {
+			"default": {
+				"fr": "Léviatorite",
+				"en": "Gyaradosite"
+			}
+		}
+	},
+	"Aerodactyl": {
+		"types": {
+			"default": {
+				"fr": "Ptéraïte",
+				"en": "Aerodactylite"
+			}
+		}
+	},
+	"Mewtwo": {
+		"types": {
+			"x": {
+				"fr": "Mewtwoïte X",
+				"en": "Mewtwonite X"
+			},
+			"y": {
+				"fr": "Mewtwoïte Y",
+				"en": "Mewtwonite Y"
+			}
+		}
+	},
+	"Ampharos": {
+		"types": {
+			"default": {
+				"fr": "Pharampite",
+				"en": "Ampharosite"
+			}
+		}
+	},
+	"Steelix": {
+		"types": {
+			"default": {
+				"fr": "Steelixite",
+				"en": "Steelixite"
+			}
+		}
+	},
+	"Scizor": {
+		"types": {
+			"default": {
+				"fr": "Cizayoxite",
+				"en": "Scizorite"
+			}
+		}
+	},
+	"Heracross": {
+		"types": {
+			"default": {
+				"fr": "Scarhinoïte",
+				"en": "Heracronite"
+			}
+		}
+	},
+	"Houndoom": {
+		"types": {
+			"default": {
+				"fr": "Démolossite",
+				"en": "Houndoominite"
+			}
+		}
+	},
+	"Tyranitar": {
+		"types": {
+			"default": {
+				"fr": "Tyranocivite",
+				"en": "Tyranitarite"
+			}
+		}
+	},
+	"Sceptile": {
+		"types": {
+			"default": {
+				"fr": "Jungkite",
+				"en": "Sceptilite"
+			}
+		}
+	},
+	"Blaziken": {
+		"types": {
+			"default": {
+				"fr": "Braségalite",
+				"en": "Blazikenite"
+			}
+		}
+	},
+	"Swampert": {
+		"types": {
+			"default": {
+				"fr": "Laggronite",
+				"en": "Swampertite"
+			}
+		}
+	},
+	"Gardevoir": {
+		"types": {
+			"default": {
+				"fr": "Gardevoirite",
+				"en": "Gardevoirite"
+			}
+		}
+	},
+	"Sableye": {
+		"types": {
+			"default": {
+				"fr": "Ténéfixite",
+				"en": "Sablenite"
+			}
+		}
+	},
+	"Mawile": {
+		"types": {
+			"default": {
+				"fr": "Mysdibulite",
+				"en": "Mawilite"
+			}
+		}
+	},
+	"Aggron": {
+		"types": {
+			"default": {
+				"fr": "Galekingite",
+				"en": "Aggronite"
+			}
+		}
+	},
+	"Medicham": {
+		"types": {
+			"default": {
+				"fr": "Charminite",
+				"en": "Medichamite"
+			}
+		}
+	},
+	"Manectric": {
+		"types": {
+			"default": {
+				"fr": "Élecsprintite",
+				"en": "Manectite"
+			}
+		}
+	},
+	"Sharpedo": {
+		"types": {
+			"default": {
+				"fr": "Sharpedite",
+				"en": "Sharpedonite"
+			}
+		}
+	},
+	"Camerupt": {
+		"types": {
+			"default": {
+				"fr": "Caméruptite",
+				"en": "Cameruptite"
+			}
+		}
+	},
+	"Altaria": {
+		"types": {
+			"default": {
+				"fr": "Altarite",
+				"en": "Altarianite"
+			}
+		}
+	},
+	"Banette": {
+		"types": {
+			"default": {
+				"fr": "Branettite",
+				"en": "Banettite"
+			}
+		}
+	},
+	"Absol": {
+		"types": {
+			"default": {
+				"fr": "Absolite",
+				"en": "Absolite"
+			}
+		}
+	},
+	"Glalie": {
+		"types": {
+			"default": {
+				"fr": "Oniglalite",
+				"en": "Glalitite"
+			}
+		}
+	},
+	"Salamence": {
+		"types": {
+			"default": {
+				"fr": "Drattakite",
+				"en": "Salamencite"
+			}
+		}
+	},
+	"Metagross": {
+		"types": {
+			"default": {
+				"fr": "Métalossite",
+				"en": "Metagrossite"
+			}
+		}
+	},
+	"Latias": {
+		"types": {
+			"default": {
+				"fr": "Latiasite",
+				"en": "Latiasite"
+			}
+		}
+	},
+	"Latios": {
+		"types": {
+			"default": {
+				"fr": "Latiosite",
+				"en": "Latiosite"
+			}
+		}
+	},
+	"Kyogre": {
+		"types": {
+			"primal": {
+				"fr": "Gemme bleue",
+				"en": "Blue orb"
+			}
+		}
+	},
+	"Groudon": {
+		"types": {
+			"primal": {
+				"fr": "Gemme rouge",
+				"en": "Red orb"
+			}
+		}
+	},
+	"Rayquaza": {
+		"types": {
+			"other": {
+				"fr": "Draco-Ascension",
+				"en": "Dragon Ascent"
+			}
+		}
+	},
+	"Lopunny": {
+		"types": {
+			"default": {
+				"fr": "Lockpinite",
+				"en": "Lopunnite"
+			}
+		}
+	},
+	"Garchomp": {
+		"types": {
+			"default": {
+				"fr": "Carchacrokite",
+				"en": "Garchompite"
+			}
+		}
+	},
+	"Lucario": {
+		"types": {
+			"default": {
+				"fr": "Lucarite",
+				"en": "Lucarionite"
+			}
+		}
+	},
+	"Abomasnow": {
+		"types": {
+			"default": {
+				"fr": "Blizzarite",
+				"en": "Abomasite"
+			}
+		}
+	},
+	"Gallade": {
+		"types": {
+			"default": {
+				"fr": "Gallamite",
+				"en": "Galladite"
+			}
+		}
+	},
+	"Audino": {
+		"types": {
+			"default": {
+				"fr": "Nanméouïte",
+				"en": "Audinite"
+			}
+		}
+	},
+	"Diancie": {
+		"types": {
+			"default": {
+				"fr": "Diancite",
+				"en": "Diancite"
+			}
+		}
+	},
+	"primal": [
+		"Groudon",
+		"Kyogre"
+	]
 }

@@ -25,7 +25,7 @@ const command = {
 		const { getPokemonImage, getPokemonName } = require("../utils/pokemonInfo");
 		const { pokeball } = require("../assets/misc.json");
 
-		const shinyFrequency = 0.004, alolanFrequency = 0.05;
+		const shinyFrequency = 0.004, alolanFrequency = 0.05, megaGemFrequency = 0.04;
 		const { catchRates } = message.client;
 
 		const random = Math.random() * catchRates.slice(-1)[0];
@@ -64,6 +64,32 @@ const command = {
 		let megaGem;
 		{
 			// Mega Gems
+			if (Math.random() < megaGemFrequency) {
+				const megaGemPokemon = Object.values(megas)[Math.floor(Math.random() * Object.values(megas).length)];
+				megaGem = 
+					megaGemPokemon.types?.default ||
+					megaGemPokemon.types?.x ||
+					megaGemPokemon.types?.y ||
+					megaGemPokemon.types?.primal ||
+					megaGemPokemon.types?.other;
+
+				const defaultData = {};
+				defaultData[megaGem.en] = 1;
+
+				message.client.pg.query(
+					`
+					INSERT INTO mega_gems VALUES ($1, $2)
+					ON CONFLICT (user_id)
+					DO UPDATE SET gems = 
+						CASE
+							WHEN mega_gems.gems -> $3 IS NULL THEN mega_gems.gems || $2
+							ELSE jsonb_set(mega_gems.gems, '{${megaGem.en}}', ((mega_gems.gems -> $3)::int + 1)::text::jsonb)
+						END
+					WHERE mega_gems.user_id = EXCLUDED.user_id
+					`,
+					[ message.author.id, defaultData, megaGem.en ]
+				).catch(console.error);
+			}
 		}
 		
 		const shiny = Math.random() < shinyFrequency;
@@ -116,7 +142,8 @@ const command = {
 					: legendary || beast 
 						? 13512480
 						: message.guild.me.displayColor,
-				description: language.get(language.caught_title, message.author.toString(), !shiny && (variation === "alolan" || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en)), getPokemonName(pokemon, shiny, variation, languageCode)),
+				description: language.get(language.caught_title, message.author.toString(), !shiny && (variation === "alolan" || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en)), getPokemonName(pokemon, shiny, variation, languageCode))
+					+ (megaGem ? language.get(language.mega_gem, megaGem[languageCode]) : ""),
 				footer: {
 					text: "✨ Mayze ✨" + (huntFooterText || ""),
 					icon_url: message.author.avatarURL({ dynamic: true })

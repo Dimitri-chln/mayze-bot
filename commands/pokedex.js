@@ -28,13 +28,14 @@ const command = {
 		const legendaries = require("../assets/legendaries.json");
 		const beasts = require("../assets/ultra-beasts.json");
 		const alolans = require("../assets/alolans.json");
-		const { getPokemonImage, getPokemonName } = require("../utils/pokemonInfo");
+		const megas = require("../assets/mega.json");
+		const { getPokemonImage, getPokemonName, getPokemonVariation } = require("../utils/pokemonInfo");
 		const pagination = require("../utils/pagination");
 		const { MessageEmbed } = require("discord.js");
 
 		const input = args
-			? args.join(" ").toLowerCase().replace(/shiny|alolan|-caught|-uncaught|-shiny|-leg(?:endary)?|-u?b(?:east)?|-alolan/g, "").trim()
-			: options ? options[0].value.toLowerCase().replace(/shiny|alolan|-caught|-uncaught|-shiny|-leg(?:endary)?|-u?b(?:east)?|-alolan/g, "").trim() : "";
+			? args.join(" ").toLowerCase().replace(/shiny|alolan|mega|\bx\b|\by\b|primal|-caught|-uncaught|-shiny|-leg(?:endary)?|-u?b(?:east)?|-alolan|-mega/g, "").trim()
+			: options ? options[0].value.toLowerCase().replace(/shiny|alolan|mega|\bx\b|\by\b|primal|-caught|-uncaught|-shiny|-leg(?:endary)?|-u?b(?:east)?|-alolan|-mega/g, "").trim() : "";
 		
 		if (input) {
 			let pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === input));
@@ -43,7 +44,9 @@ const command = {
 			const shiny = args
 				? args.includes("shiny")
 				: options[0].value.toLowerCase().includes("shiny");
-			const variation = alolans.includes(pokemon.names.en) && (args ? args.includes("alolan")	: options[0].value.toLowerCase().includes("alolan")) ? "alolan" : "default";
+			const variation = args
+				? getPokemonVariation(args.join(" "))
+				: getPokemonVariation(options[0].value);
 			
 			const flags = { en: "🇬🇧", fr: "🇫🇷", de: "🇩🇪", cz: "🇨🇿", es: "🇪🇸", it: "🇮🇹", jp: "🇯🇵", tr: "🇹🇷", dk: "🇩🇰", gr: "🇬🇷", pl: "🇵🇱" };
 
@@ -100,11 +103,17 @@ const command = {
 			const shiny = params.includes("-shiny");
 			const legendary = params.includes("-legendary") || params.includes("-leg");
 			const beast = params.includes("-beast") || params.includes("-ub");
-			const variation = params.includes("-alolan") ? "alolan" : "default";
+			const variation = params.includes("-alolan") ? "alolan"
+				: params.includes("-mega") ? "mega"
+				: "default";
 
 			const { "rows": pokemons } = (await message.client.pg.query(
-				"SELECT * FROM pokemons WHERE users ? $1 AND shiny = $2 AND variation = $3",
-				[ message.author.id, shiny, variation ]
+				variation === "mega"
+					? "SELECT * FROM pokemons WHERE users ? $1 AND shiny = $2 AND variation = ANY('{ \"mega\", \"megax\", \"megay\", \"primal\" }')"
+					: "SELECT * FROM pokemons WHERE users ? $1 AND shiny = $2 AND variation = $3",
+				variation === "mega"
+					? [ message.author.id, shiny ]
+					: [ message.author.id, shiny, variation ]
 			).catch(console.error)) || {};
 			if (!pokemons) return message.reply(language.errors.database).catch(console.error);
 			
@@ -114,6 +123,7 @@ const command = {
 			if (legendary) dex = dex.filter(pkm => legendaries.includes(pkm.names.en));
 			if (beast) dex = dex.filter(pkm => beasts.includes(pkm.names.en));
 			if (variation === "alolan") dex = dex.filter(p => alolans.includes(p.names.en));
+			if (variation === "mega") dex = dex.filter(p => Object.keys(megas).includes(p.names.en));
 
 			const pkmPerPage = 15;
 			let pages = [];

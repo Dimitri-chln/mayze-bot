@@ -81,7 +81,7 @@ const command = {
 		const pokedex = require("oakdex-pokedex");
 		const legendaries = require("../assets/legendaries.json");
 		const beasts = require("../assets/ultra-beasts.json");
-		const { getPokemonName } = require("../utils/pokemonInfo");
+		const { getPokemonName, getPokemonVariation } = require("../utils/pokemonInfo");
 		const { TRADE_LOG_CHANNEL_ID } = require("../config.json");
 		const logChannel = message.client.channels.cache.get(TRADE_LOG_CHANNEL_ID);
 
@@ -90,7 +90,7 @@ const command = {
 		 * @property {pokedex.Pokemon} data
 		 * @property {number} number
 		 * @property {boolean} shiny
-		 * @property {"default" | "alolan"} variation
+		 * @property {"default" | "alolan" | "mega" | "megax" | "megay" | "primal"} variation
 		 * @property {boolean} legendary
 		 * @property {boolean} ultra_beast
 		 * */
@@ -159,10 +159,10 @@ const command = {
 				let error = "";
 
 				offer = offer.map(input => {
-					const name = input.replace(/^\d+ *|alolan|shiny| *(= *|#)\d+$/ig, "").trim();
+					const name = input.replace(/^\d+ *|alolan|mega|\bx\b|\by\b|primal|shiny| *(= *|#)\d+$/ig, "").trim();
 					const number = parseInt((input.match(/^(\d+) *| *(?:= *|#)(\d+)$/) || []).filter(a => a)[1]) || 1;
 					const shiny = /shiny/i.test(input);
-					const variation = /alolan/i.test(input) ? "alolan" : "default";
+					const variation = getPokemonVariation(input.replace(/^(\d+) *| *(?:= *|#)(\d+)$/g, ""));
 					const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
 
 					if (pokemon) return { data: pokemon, number, shiny, variation, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
@@ -170,10 +170,10 @@ const command = {
 				}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id && u.shiny === v.shiny && u.variation === v.variation) === i);
 
 				demand = demand.map(input => {
-					const name = input.replace(/^\d+ *|alolan|shiny| *(= *|#)\d+$/ig, "").trim();
+					const name = input.replace(/^\d+ *|alolan|mega|\bx\b|\by\b|primal|shiny| *(= *|#)\d+$/ig, "").trim();
 					const number = parseInt((input.match(/^(\d+) *| *(?:= *|#)(\d+)$/) || []).filter(a => a)[1]) || 1;
 					const shiny = /shiny/i.test(input);
-					const variation = /alolan/i.test(input) ? "alolan" : "default";
+					const variation = getPokemonVariation(input.replace(/^(\d+) *| *(?:= *|#)(\d+)$/g, ""));
 					const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
 
 					if (pokemon) return { data: pokemon, number, shiny, variation, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };

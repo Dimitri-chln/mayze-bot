@@ -28,6 +28,7 @@ const command = {
 		const legendaries = require("../assets/legendaries.json");
 		const beasts = require("../assets/ultra-beasts.json");
 		const alolans = require("../assets/alolans.json");
+		const megas = require("../assets/mega.json");
 		const pagination = require("../utils/pagination");
 		const { getPokemonName } = require("../utils/pokemonInfo");
 		const { MessageEmbed } = require("discord.js");
@@ -164,6 +165,36 @@ const command = {
 					total += parseInt(alolanShiny[0].total) || 0;
 				}
 
+				if (Object.keys(megas).includes(pokemon.names.en)) {
+					const { "rows": mega } = (await message.client.pg.query(
+						`
+						SELECT SUM((value -> 'caught')::int) AS total
+						FROM pokemons, jsonb_each(users)
+						WHERE pokedex_id = $1 AND shiny = false AND variation = ANY('{ "mega", "megax", "megay", "primal" }')
+						`,
+						[ pokemon.national_id ]
+					).catch(console.error)) || {};
+					if (!mega) return message.channel.send(language.errors.database).catch(err => {
+						console.error(err);
+					});
+					description += language.get(language.mega, parseInt(mega[0].total) || 0);
+					total += parseInt(mega[0].total) || 0;
+
+					const { "rows": megaShiny } = (await message.client.pg.query(
+						`
+						SELECT SUM((value -> 'caught')::int) AS total
+						FROM pokemons, jsonb_each(users)
+						WHERE pokedex_id = $1 AND shiny AND variation = ANY('{ "mega", "megax", "megay", "primal" }')
+						`,
+						[ pokemon.national_id ]
+					).catch(console.error)) || {};
+					if (!megaShiny) return message.channel.send(language.errors.database).catch(err => {
+						console.error(err);
+					});
+					description += language.get(language.mega_shiny, parseInt(megaShiny[0].total) || 0);
+					total += parseInt(megaShiny[0].total) || 0;
+				}
+
 				description += language.get(language.total, total);
 
 				message.channel.send({
@@ -288,6 +319,32 @@ const command = {
 			});
 			description += language.get(language.alolan_shiny, parseInt(alolanShiny[0].total) || 0);
 			total += parseInt(alolanShiny[0].total) || 0;
+
+			const { "rows": mega } = (await message.client.pg.query(
+				`
+				SELECT SUM((value -> 'caught')::int) AS total
+				FROM pokemons, jsonb_each(users)
+				WHERE shiny = false AND variation = ANY('{ "mega", "megax", "megay", "primal" }')
+				`
+				).catch(console.error)) || {};
+			if (!mega) return message.channel.send(language.errors.database).catch(err => {
+				console.error(err);
+			});
+			description += language.get(language.mega, parseInt(mega[0].total) || 0);
+			total += parseInt(mega[0].total) || 0;
+
+			const { "rows": megaShiny } = (await message.client.pg.query(
+				`
+				SELECT SUM((value -> 'caught')::int) AS total
+				FROM pokemons, jsonb_each(users)
+				WHERE shiny AND variation = ANY('{ "mega", "megax", "megay", "primal" }')
+				`
+				).catch(console.error)) || {};
+			if (!megaShiny) return message.channel.send(language.errors.database).catch(err => {
+				console.error(err);
+			});
+			description += language.get(language.mega_shiny, parseInt(megaShiny[0].total) || 0);
+			total += parseInt(megaShiny[0].total) || 0;
 
 			description += language.get(language.total, total);
 

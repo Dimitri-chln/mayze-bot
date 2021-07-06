@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: ["pokemons", "pkmn", "pkm", "poke"],
 	args: 0,
-	usage: "addfav <pokémon> | removefav <pokémon> | nick <pokémon> [<nickname>] | [<user>] [-favorite] [-legendary] [-beast] [-starter] [-shiny] [-alolan] [-id [<number>]] [-name <name>] [-evolution <name>]",
+	usage: "addfav <pokémon> | removefav <pokémon> | nick <pokémon> [<nickname>] | [<user>] [-favorite] [-legendary] [-beast] [-starter] [-shiny] [-alolan] [-mega] [-id [<number>]] [-name <name>] [-evolution <name>]",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
 	slashOptions: [
 		{
@@ -117,6 +117,12 @@ const command = {
 					required: false
 				},
 				{
+					name: "mega",
+					description: "An option to only display mega pokemons",
+					type: 5,
+					required: false
+				},
+				{
 					name: "id",
 					description: "An option to find a pokémon by its ID. To display IDs next to the pokémons, use the value 0",
 					type: 4,
@@ -146,7 +152,7 @@ const command = {
 		const { MessageEmbed } = require("discord.js");
 		const pokedex = require("oakdex-pokedex");
 		const starters = require("../assets/starters.json");
-		const { getPokemonImage, getPokemonName } = require("../utils/pokemonInfo");
+		const { getPokemonImage, getPokemonName, getPokemonVariation } = require("../utils/pokemonInfo");
 		const pagination = require("../utils/pagination");
 		const { getFlatEvolutionLine, getStringEvolutionLine } = require("../utils/pokemonEvo");
 
@@ -163,8 +169,8 @@ const command = {
 					? args.includes("shiny")
 					: options[0].options[0].value.toLowerCase().includes("shiny");
 				const variation = args
-					? args.includes("alolan") ? "alolan" : "default"
-					: options[0].options[0].value.toLowerCase().includes("alolan") ? "alolan" : "default";
+					? getPokemonVariation(args.join(" "))
+					: getPokemonVariation(options[0].options[0].value);
 				
 				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name.toLowerCase() === pokemonName));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
@@ -176,7 +182,10 @@ const command = {
 				if (!pokemons || !pokemons.length) return message.reply(language.pokemon_not_owned).catch(console.error);
 
 				const res = await message.client.pg.query(
-					`UPDATE pokemons SET users = jsonb_set(users, '{${message.author.id}, favorite}', TRUE::text::jsonb) WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3`,
+					`
+					UPDATE pokemons SET users = jsonb_set(users, '{${message.author.id}, favorite}', TRUE::text::jsonb)
+					WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3
+					`,
 					[ pokemon.national_id, shiny, variation ]
 				).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
@@ -193,8 +202,8 @@ const command = {
 					? args.includes("shiny")
 					: options[0].options[0].value.toLowerCase().includes("shiny");
 				const variation = args
-					? args.includes("alolan") ? "alolan" : "default"
-					: options[0].options[0].value.toLowerCase().includes("alolan") ? "alolan" : "default";
+					? getPokemonVariation(args.join(" "))
+					: getPokemonVariation(options[0].options[0].value);
 				
 				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name.toLowerCase() === pokemonName));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
@@ -206,7 +215,10 @@ const command = {
 				if (!pokemons || !pokemons.length) return message.reply(language.pokemon_not_owned).catch(console.error);
 
 				const res = await message.client.pg.query(
-					`UPDATE pokemons SET users = jsonb_set(users, '{${message.author.id}, favorite}', FALSE::text::jsonb) WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3`,
+					`
+					UPDATE pokemons SET users = jsonb_set(users, '{${message.author.id}, favorite}', FALSE::text::jsonb)
+					WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3
+					`,
 					[ pokemon.national_id, shiny, variation ]
 				).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
@@ -223,8 +235,8 @@ const command = {
 					? args[1].toLowerCase().includes("shiny")
 					: options[0].options[0].value.toLowerCase().includes("shiny");
 				const variation = args
-					? args.includes("alolan") ? "alolan" : "default"
-					: options[0].options[0].value.toLowerCase().includes("alolan") ? "alolan" : "default";
+					? getPokemonVariation(args.join(" "))
+					: getPokemonVariation(options[0].options[0].value);
 				
 				const nickname = args
 					? args[2] ? args[2].replace(/'/g, "''") : null
@@ -241,7 +253,10 @@ const command = {
 				if (!pokemons || !pokemons.length) return message.reply(language.pokemon_not_owned).catch(console.error);
 
 				const res = await message.client.pg.query(
-					`UPDATE pokemons SET users = jsonb_set(users, '{${message.author.id}, nickname}', '${nickname ? `"${nickname}"` : null}'::jsonb) WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3`,
+					`
+					UPDATE pokemons SET users = jsonb_set(users, '{${message.author.id}, nickname}', '${nickname ? `"${nickname}"` : null}'::jsonb)
+					WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3
+					`,
 					[ pokemon.national_id, shiny, variation ]
 				).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
@@ -300,6 +315,7 @@ const command = {
 				if (hasParam(params, "starter")) pokemons = pokemons.filter(p => starters.includes(p.pokedex_name));
 				if (hasParam(params, "shiny")) pokemons = pokemons.filter(p => p.shiny);
 				if (hasParam(params, "alolan")) pokemons = pokemons.filter(p => p.variation === "alolan");
+				if (hasParam(params, "mega")) pokemons = pokemons.filter(p => ["mega", "megax", "megay", "primal"].includes(p.variation));
 				if (hasParam(params, "id")) pokemons = hasParam(params, "id") ? pokemons.filter(p => p.pokedex_id === hasParam(params, "id")) : pokemons;
 				if (hasParam(params, "name")) pokemons = pokemons.filter(p => new RegExp(hasParam(params, "name"), "i").test(pokedex.findPokemon(p.pokedex_id).names[languageCode].replace(/\u2642/, "m").replace(/\u2640/, "f")) || (p.users[user.id].nickname && new RegExp(hasParam(params, "name"), "i").test(p.users[user.id].nickname)));
 				if (hasParam(params, "evolution")) pokemons = pokemons.filter(p => getFlatEvolutionLine(hasParam(params, "evolution").toLowerCase().replace(/^./, a => a.toUpperCase())).some(pkm => pkm.national_id === p.pokedex_id));
@@ -342,6 +358,7 @@ const command = {
 					if (args.includes("-starter")) paramList.push({ name: "starter", value: true });
 					if (args.includes("-shiny")) paramList.push({ name: "shiny", value: true });
 					if (args.includes("-alolan")) paramList.push({ name: "alolan", value: true });
+					if (args.includes("-mega")) paramList.push({ name: "mega", value: true });
 					if (args.includes("-id")) paramList.push({ name: "id", value: parseInt(args[args.indexOf("-id") + 1]) || 0 });
 					if (args.includes("-name")) paramList.push({ name: "name", value: args[args.indexOf("-name") + 1] });
 					if (args.includes("-evolution") || args.includes("-evo")) paramList.push({ name: "evolution", value: args[args.indexOf("-evolution") + 1 || args.indexOf("-evo") + 1] });
