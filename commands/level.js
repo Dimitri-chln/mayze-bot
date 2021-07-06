@@ -28,7 +28,7 @@ const command = {
 		const xpBar = ["█", "▁"], barSize = 20;
 
 		const user = args
-			? args.length ? message.mentions.users.first() || message.client.findMember(message.guild, args.join(" "))?.user : message.author
+			? args.length ? message.mentions.users.first() || message.client.findMember(message.guild, args.join(" "))?.user || message.author : message.author
 			: message.client.users.cache.get(options ? options[0].value : null) || message.author;
 
 		let { "rows": chatTop } = (await message.client.pg.query("SELECT * FROM levels ORDER BY chat_xp DESC").catch(console.err)) || {};
