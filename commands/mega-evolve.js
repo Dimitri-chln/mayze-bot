@@ -123,7 +123,7 @@ const command = {
 						icon_url: message.author.avatarURL({ dynamic: true })
 					},
 					color: message.guild.me.displayColor,
-					description: `\`\`\`\n${gemList.map(group => group.map(([ gem, number ]) => `${gem} ×${number}`.padEnd(20, " ")).join(" ")).join("\n")}\n\`\`\``,
+					description: `\`\`\`\n${gemList.map(group => group.map(([ gem, number ]) => `${findGem(gem)[languageCode]} ×${number}`.padEnd(20, " ")).join(" ")).join("\n")}\n\`\`\``,
 					footer: {
 						text: "✨ Mayze ✨"
 					}
@@ -150,6 +150,18 @@ const command = {
 				group[j].push(data[i])
 			}
 			return group;
+		}
+
+		function findGem(gem) {
+			const { types } = Object.values(megas).find(megaPokemon =>
+				megaPokemon.types.mega?.en === gem ||
+				megaPokemon.types.megax?.en === gem ||
+				megaPokemon.types.megay?.en === gem ||
+				megaPokemon.types.primal?.en === gem ||
+				megaPokemon.types.other?.en === gem
+			);
+
+			return types.mega || types.megax || types.megay || types.primal || types.other;
 		}
 	}
 };
