@@ -25,7 +25,7 @@ const command = {
 		const { getPokemonImage, getPokemonName } = require("../utils/pokemonInfo");
 		const { pokeball } = require("../assets/misc.json");
 
-		const shinyFrequency = 0.004, alolanFrequency = 0.05, megaGemFrequency = 0.04;
+		const shinyFrequency = 0.004, alolanFrequency = 0.05, megaGemFrequency = 0.02;
 		const { catchRates } = message.client;
 
 		const random = Math.random() * catchRates.slice(-1)[0];
