@@ -169,7 +169,7 @@ const command = {
 					? args.includes("shiny")
 					: options[0].options[0].value.toLowerCase().includes("shiny");
 				const variation = args
-					?getPokemonVariation(args.slice(1).join(" "))
+					? getPokemonVariation(args.slice(1).join(" "))
 					: getPokemonVariation(options[0].options[0].value);
 				
 				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name === pokemonName));
@@ -229,13 +229,13 @@ const command = {
 			
 			case "nick": {
 				const pokemonName = args
-					? getCleanName(args.slice(1).join(" "))
+					? getCleanName(args[1])
 					: getCleanName(options[0].options[0].value);
 				const shiny = args
 					? args[1].toLowerCase().includes("shiny")
 					: options[0].options[0].value.toLowerCase().includes("shiny");
 				const variation = args
-					? getPokemonVariation(args.slice(1).join(" "))
+					? getPokemonVariation(args[1])
 					: getPokemonVariation(options[0].options[0].value);
 				
 				const nickname = args
