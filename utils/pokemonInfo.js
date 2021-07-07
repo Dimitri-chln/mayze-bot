@@ -239,9 +239,10 @@ function getPokemonVariation(pokemonName) {
  * @returns {string}
  */
 function getCleanName(pokemonName) {
-	const cleanRegex = /(?:^| )(?:shiny|alolan|galarian|mega|x|y|primal|giga(?:antamax)?)(?: |$)/ig;
+	const cleanRegex = /(?<!-)\b(?:shiny|alolan|galarian|mega|x|y|primal|giga(?:antamax)?)\b/ig;
 	const cleanName = pokemonName.toLowerCase().replace(cleanRegex, "").trim().replace(/^./, a => a.toUpperCase());
 
+	console.log(cleanName)
 	return cleanName;
 }
 
