@@ -172,7 +172,7 @@ const command = {
 					? getPokemonVariation(args.join(" "))
 					: getPokemonVariation(options[0].options[0].value);
 				
-				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name.toLowerCase() === pokemonName));
+				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name === pokemonName));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 				
 				const { "rows": pokemons } = (await message.client.pg.query(
@@ -205,7 +205,7 @@ const command = {
 					? getPokemonVariation(args.join(" "))
 					: getPokemonVariation(options[0].options[0].value);
 				
-				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name.toLowerCase() === pokemonName));
+				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name === pokemonName));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 				
 				const { "rows": pokemons } = (await message.client.pg.query(
@@ -243,7 +243,7 @@ const command = {
 					: options[0].options[1] ? options[0].options[1].value : null;
 				if (nickname && nickname.length > 30) return message.reply(language.nickname_too_long).catch(console.error);
 				
-				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name.toLowerCase() === pokemonName));
+				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name === pokemonName));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 				
 				const { "rows": pokemons } = (await message.client.pg.query(
