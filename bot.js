@@ -291,12 +291,11 @@ client.on("ready", async () => {
 			guild.members.cache.filter(m => m.voice.channelID && !m.user.bot).forEach(member => {
 				if (member.voice.channel.members.size < 2) return;
 
-				let xp = config.BASE_VOICE_XP;
-				if (member.voice.channel) xp *= member.voice.channel.members.filter(m => !m.user.bot).size;
+				let xp = config.BASE_VOICE_XP * member.voice.channel.members.filter(m => !m.user.bot).size;
 				if (member.voice.deaf) xp *= 0;
 				if (member.voice.mute) xp *= 0.5;
-				if (member.voice.selfVideo) xp *= 5;
-				if (member.voice.streaming) xp *= 3;
+				if (member.voice.streaming && member.voice.channel.members.filter(m => !m.user.bot).size > 1) xp *= 3;
+				if (member.voice.selfVideo && member.voice.channel.members.filter(m => !m.user.bot).size > 1) xp *= 5;
 	
 				voiceXP(member, xp, client.languages.get(member.guild.id));
 			});
