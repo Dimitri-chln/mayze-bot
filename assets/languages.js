@@ -524,7 +524,7 @@ module.exports = {
 			},
 			evolved: {
 				fr: "**{1}** a évolué en **{2}** !",
-				en: "**{1}** evovled into **{2}**!"
+				en: "**{1}** evolved into **{2}**!"
 			},
 			title: {
 				fr: "Méga gemmes de {1}",
