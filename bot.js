@@ -861,13 +861,11 @@ function checkUnpingable(member) {
 
 function ACNHReminders() {
 	const turnipMorning = new Cron.CronJob("0 0 8 * * 1-6", () => {
-		const owner = client.guilds.cache.get("689164798264606784").members.cache.get(config.OWNER_ID).user;
-		owner.send("**Rappel :** `Navets Animal Crossing New Horizons`");
+		client.owner.send("**Rappel :** `Navets Animal Crossing New Horizons`");
 	}, null, true, "Europe/Paris");
 
 	const turnipAfternoon = new Cron.CronJob("0 0 14 * * 1-6", () => {
-		const owner = client.guilds.cache.get("689164798264606784").members.cache.get(config.OWNER_ID).user;
-		owner.send("**Rappel :** `Navets Animal Crossing New Horizons`");
+		client.owner.send("**Rappel :** `Navets Animal Crossing New Horizons`");
 	}, null, true, "Europe/Paris");
 
 	return { turnipMorning, turnipAfternoon };
@@ -894,4 +892,11 @@ function testReminders() {
 	function getMessage(minutes, nub) {
 		return `Test in ${minutes} minute${minutes > 1 ? "s" : ""}! <#463399799807410176>\n**Sunday 4pm CEST, Wednesday 6pm CEST**${nub ? "\nAnd because you are a nub that keeps forgetting it\n- It's __,t Name__" : ""}`;
 	}
+}
+
+function marieReminders() {
+	return new Cron.CronJob("0 0 11 * * 4", () => {
+		client.users.fetch("408671348005797898")
+			.then(u => u.send("Heyhi ✨ how are you doing? Do you take enough breaks? If not, take one for 2-3 minutes. Listen to you own breath & just be for a bit. If you really don’t have the time right now, don’t stress yourself. Just make sure to have those few minutes doing nothing at some point today.").catch(console.error));
+	}, null, true, null, null, false, 0);
 }
