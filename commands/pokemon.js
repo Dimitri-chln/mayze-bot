@@ -152,7 +152,7 @@ const command = {
 		const { MessageEmbed } = require("discord.js");
 		const pokedex = require("oakdex-pokedex");
 		const starters = require("../assets/starters.json");
-		const { getPokemonImage, getPokemonName, getPokemonVariation } = require("../utils/pokemonInfo");
+		const { getPokemonImage, getPokemonName, getPokemonVariation, getCleanName } = require("../utils/pokemonInfo");
 		const pagination = require("../utils/pagination");
 		const { getFlatEvolutionLine, getStringEvolutionLine } = require("../utils/pokemonEvo");
 
@@ -163,8 +163,8 @@ const command = {
 		switch (subCommand) {
 			case "addfav": {
 				const pokemonName = args
-					? args.slice(1).join(" ").toLowerCase().replace(/shiny|alolan/g, "").trim()
-					: options[0].options[0].value.toLowerCase().replace(/shiny|alolan/g, "").trim();
+					? getCleanName(args.slice(1).join(" "))
+					: getCleanName(options[0].options[0].value);
 				const shiny = args
 					? args.includes("shiny")
 					: options[0].options[0].value.toLowerCase().includes("shiny");
@@ -196,8 +196,8 @@ const command = {
 			
 			case "removefav": {
 				const pokemonName = args
-					? args.slice(1).join(" ").toLowerCase().replace(/shiny|alolan/g, "").trim()
-					: options[0].options[0].value.toLowerCase().replace(/shiny|alolan/g, "").trim();
+					? getCleanName(args.slice(1).join(" "))
+					: getCleanName(options[0].options[0].value);
 				const shiny = args
 					? args.includes("shiny")
 					: options[0].options[0].value.toLowerCase().includes("shiny");
@@ -229,8 +229,8 @@ const command = {
 			
 			case "nick": {
 				const pokemonName = args
-					? args[1].toLowerCase().replace(/shiny|alolan/g, "").trim()
-					: options[0].options[0].value.toLowerCase().replace(/shiny|alolan/g, "").trim();
+					? getCleanName(args.slice(1).join(" "))
+					: getCleanName(options[0].options[0].value);
 				const shiny = args
 					? args[1].toLowerCase().includes("shiny")
 					: options[0].options[0].value.toLowerCase().includes("shiny");
@@ -267,8 +267,8 @@ const command = {
 
 			case "evoline": {
 				const pokemonName = args
-					? args.slice(1).join(" ").toLowerCase()
-					: options[0].options[0].value.toLowerCase();
+					? getCleanName(args.slice(1).join(" "))
+					: getCleanName(options[0].options[0].value);
 
 				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name.toLowerCase() === pokemonName));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);

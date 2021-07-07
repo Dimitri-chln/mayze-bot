@@ -26,7 +26,7 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		const pokedex = require("oakdex-pokedex");
 		const megas = require("../assets/mega.json");
-		const { getPokemonName } = require("../utils/pokemonInfo");
+		const { getPokemonName, getCleanName } = require("../utils/pokemonInfo");
 
 		const res = await message.client.pg.query(
 			"SELECT * FROM mega_gems WHERE user_id = $1",
@@ -37,8 +37,8 @@ const command = {
 		const gems = res.rows[0]?.gems ?? {};
 
 		const pokemon = args
-			? pokedex.findPokemon(args.join(" ").toLowerCase().replace(/shiny|\bx\b|\by\b/g, "").trim().replace(/^./, a => a.toUpperCase()))
-			: options ? pokedex.findPokemon(options[0].value.toLowerCase().replace(/shiny|\bx\b|\by\b/g, "").trim().replace(/^./, a => a.toUpperCase())) : null;
+			? pokedex.findPokemon(getCleanName(args.join(" ")))
+			: options ? pokedex.findPokemon(getCleanName(options[0].value)) : null;
 		
 		if (pokemon) {
 			const shiny = args
@@ -57,9 +57,9 @@ const command = {
 			if (!pokemons || !pokemons.length) return message.reply(language.pokemon_not_owned).catch(console.error);
 
 			const megaGem =
-				megas[pokemon.names.en].types?.default ||
-				(xy === "x" ? megas[pokemon.names.en].types?.x : null) ||
-				(xy === "y" ? megas[pokemon.names.en].types?.y : null) ||
+				megas[pokemon.names.en].types?.mega ||
+				(xy === "x" ? megas[pokemon.names.en].types?.megax : null) ||
+				(xy === "y" ? megas[pokemon.names.en].types?.megay : null) ||
 				megas[pokemon.names.en].types?.primal ||
 				megas[pokemon.names.en].types?.other;
 			
@@ -134,9 +134,9 @@ const command = {
 		function getMegaType(pokemon, gem) {
 			const megaTypes = megas[pokemon.names.en].types;
 
-			return megaTypes.default === gem ? "mega"
-				: megaTypes.x === gem ? "megax"
-				: megaTypes.y === gem ? "megay"
+			return megaTypes.mega === gem ? "mega"
+				: megaTypes.megax === gem ? "megax"
+				: megaTypes.megay === gem ? "megay"
 				: megaTypes.primal === gem ? "primal"
 				: "mega";
 		}

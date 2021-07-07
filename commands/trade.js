@@ -159,22 +159,22 @@ const command = {
 				let error = "";
 
 				offer = offer.map(input => {
-					const name = input.replace(/^\d+ *|alolan|mega|\bx\b|\by\b|primal|shiny| *(= *|#)\d+$/ig, "").trim();
+					const name = input.replace(/^\d+ *|\b(?:shiny|alolan|mega|x|y|primal|giga(ntamax)?:)| *(= *|#)\d+$/ig, "").trim().toLowerCase();
 					const number = parseInt((input.match(/^(\d+) *| *(?:= *|#)(\d+)$/) || []).filter(a => a)[1]) || 1;
 					const shiny = /shiny/i.test(input);
 					const variation = getPokemonVariation(input.replace(/^(\d+) *| *(?:= *|#)(\d+)$/g, ""));
-					const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
+					const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name));
 
 					if (pokemon) return { data: pokemon, number, shiny, variation, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
 					else error += language.get(language.invalid_pkm, name);
 				}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id && u.shiny === v.shiny && u.variation === v.variation) === i);
 
 				demand = demand.map(input => {
-					const name = input.replace(/^\d+ *|alolan|mega|\bx\b|\by\b|primal|shiny| *(= *|#)\d+$/ig, "").trim();
+					const name = input.replace(/^\d+ *|\b(?:shiny|alolan|mega|x|y|primal|giga(ntamax)?:)| *(= *|#)\d+$/ig, "").trim().toLowerCase();
 					const number = parseInt((input.match(/^(\d+) *| *(?:= *|#)(\d+)$/) || []).filter(a => a)[1]) || 1;
 					const shiny = /shiny/i.test(input);
 					const variation = getPokemonVariation(input.replace(/^(\d+) *| *(?:= *|#)(\d+)$/g, ""));
-					const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name.toLowerCase()));
+					const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === name));
 
 					if (pokemon) return { data: pokemon, number, shiny, variation, legendary: legendaries.includes(pokemon.names.en), ultra_beast: beasts.includes(pokemon.names.en) };
 					else error += language.get(language.invalid_pkm, name);

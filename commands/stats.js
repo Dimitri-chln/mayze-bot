@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: [],
 	args: 0,
-	usage: "[pokémon] | caught [-shiny] [-legendary] [-beast] [-alolan]",
+	usage: "[pokémon] | caught [-shiny] [-legendary] [-beast] [-alolan] [-mega]",
 	botPerms: ["EMBED_LINKS"],
 	slashOptions: [
 		{
@@ -30,12 +30,12 @@ const command = {
 		const alolans = require("../assets/alolans.json");
 		const megas = require("../assets/mega.json");
 		const pagination = require("../utils/pagination");
-		const { getPokemonName } = require("../utils/pokemonInfo");
+		const { getPokemonName, getCleanName } = require("../utils/pokemonInfo");
 		const { MessageEmbed } = require("discord.js");
 
 		const pokemonName = args
-			? args.join(" ")
-			: options ? options[0].value : null;
+			? getCleanName(args.join(" "))
+			: options ? getCleanName(options[0].value) : null;
 		
 		if (pokemonName) {
 			if (args[0].toLowerCase() === "caught") {
@@ -68,8 +68,11 @@ const command = {
 					? args.includes("-beast") || args.includes("-ub")
 					: false;
 				const variation = args
-					? args.includes("-alolan") ? "alolan" : "default"
-					: "default";
+					? 
+						  args.includes("-alolan") ? "alolan"
+						: args.includes("-mega") ? "mega" : "default"
+					: 
+						"default";
 
 				pokemons = pokemons.filter(p => p.shiny === shiny);
 				pokemons = pokemons.filter(p => p.variation === variation);

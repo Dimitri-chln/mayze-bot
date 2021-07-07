@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: ["dex", "pd"],
 	args: 0,
-	usage: "[<pokémon/pokédex ID>] [-caught] [-uncaught] [-shiny] [-legendary]",
+	usage: "[<pokémon/pokédex ID>] [-caught] [-uncaught] [-shiny] [-legendary] [-beast] [-mega]",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"],
 	slashOptions: [
 		{
@@ -29,13 +29,13 @@ const command = {
 		const beasts = require("../assets/ultra-beasts.json");
 		const alolans = require("../assets/alolans.json");
 		const megas = require("../assets/mega.json");
-		const { getPokemonImage, getPokemonName, getPokemonVariation } = require("../utils/pokemonInfo");
+		const { getPokemonImage, getPokemonName, getPokemonVariation, getCleanName } = require("../utils/pokemonInfo");
 		const pagination = require("../utils/pagination");
 		const { MessageEmbed } = require("discord.js");
 
 		const input = args
-			? args.join(" ").toLowerCase().replace(/shiny|alolan|mega|\bx\b|\by\b|primal|-caught|-uncaught|-shiny|-leg(?:endary)?|-u?b(?:east)?|-alolan|-mega/g, "").trim()
-			: options ? options[0].value.toLowerCase().replace(/shiny|alolan|mega|\bx\b|\by\b|primal|-caught|-uncaught|-shiny|-leg(?:endary)?|-u?b(?:east)?|-alolan|-mega/g, "").trim() : "";
+			? getCleanName(args.join(" ")).replace(/\b-\w+\b/g, "").trim()
+			: options ? getCleanName(options[0].value).replace(/\b-\w+\b/g, "").trim() : "";
 		
 		if (input) {
 			let pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === input));
@@ -103,7 +103,8 @@ const command = {
 			const shiny = params.includes("-shiny");
 			const legendary = params.includes("-legendary") || params.includes("-leg");
 			const beast = params.includes("-beast") || params.includes("-ub");
-			const variation = params.includes("-alolan") ? "alolan"
+			const variation = 
+				  params.includes("-alolan") ? "alolan"
 				: params.includes("-mega") ? "mega"
 				: "default";
 

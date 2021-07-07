@@ -67,9 +67,9 @@ const command = {
 			if (Math.random() < megaGemFrequency) {
 				const megaGemPokemon = Object.values(megas)[Math.floor(Math.random() * Object.values(megas).length)];
 				megaGem = 
-					megaGemPokemon.types?.default ||
-					megaGemPokemon.types?.x ||
-					megaGemPokemon.types?.y ||
+					megaGemPokemon.types?.mega ||
+					megaGemPokemon.types?.megax ||
+					megaGemPokemon.types?.megay ||
 					megaGemPokemon.types?.primal ||
 					megaGemPokemon.types?.other;
 

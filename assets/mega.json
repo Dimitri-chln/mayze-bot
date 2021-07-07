@@ -1,7 +1,7 @@
 {
 	"Venusaur": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Florizarrite",
 				"en": "Venusaurite"
 			}
@@ -9,11 +9,11 @@
 	},
 	"Charizard": {
 		"types": {
-			"x": {
+			"megax": {
 				"fr": "Dracaufite X",
 				"en": "Charizardite X"
 			},
-			"y": {
+			"megay": {
 				"fr": "Dracaufite Y",
 				"en": "Charizardite Y"
 			}
@@ -21,7 +21,7 @@
 	},
 	"Blastoise": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Tortankite",
 				"en": "Blastoisinite"
 			}
@@ -29,7 +29,7 @@
 	},
 	"Beedrill": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Dardargnite",
 				"en": "Beedrillite"
 			}
@@ -37,7 +37,7 @@
 	},
 	"Pidgeot": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Roucarnagite",
 				"en": "Pidgeotite"
 			}
@@ -45,7 +45,7 @@
 	},
 	"Alakazam": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Alakazamite",
 				"en": "Alakazite"
 			}
@@ -53,7 +53,7 @@
 	},
 	"Slowbro": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Flagadossite",
 				"en": "Slowbronite"
 			}
@@ -61,7 +61,7 @@
 	},
 	"Gengar": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Ectoplasmite",
 				"en": "Gengarite"
 			}
@@ -69,7 +69,7 @@
 	},
 	"Kangaskhan": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Kangourexite",
 				"en": "Kangaskhanite"
 			}
@@ -77,7 +77,7 @@
 	},
 	"Pinsir": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Scarabruite",
 				"en": "Pinsirite"
 			}
@@ -85,7 +85,7 @@
 	},
 	"Gyarados": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Léviatorite",
 				"en": "Gyaradosite"
 			}
@@ -93,7 +93,7 @@
 	},
 	"Aerodactyl": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Ptéraïte",
 				"en": "Aerodactylite"
 			}
@@ -101,11 +101,11 @@
 	},
 	"Mewtwo": {
 		"types": {
-			"x": {
+			"megax": {
 				"fr": "Mewtwoïte X",
 				"en": "Mewtwonite X"
 			},
-			"y": {
+			"megay": {
 				"fr": "Mewtwoïte Y",
 				"en": "Mewtwonite Y"
 			}
@@ -113,7 +113,7 @@
 	},
 	"Ampharos": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Pharampite",
 				"en": "Ampharosite"
 			}
@@ -121,7 +121,7 @@
 	},
 	"Steelix": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Steelixite",
 				"en": "Steelixite"
 			}
@@ -129,7 +129,7 @@
 	},
 	"Scizor": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Cizayoxite",
 				"en": "Scizorite"
 			}
@@ -137,7 +137,7 @@
 	},
 	"Heracross": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Scarhinoïte",
 				"en": "Heracronite"
 			}
@@ -145,7 +145,7 @@
 	},
 	"Houndoom": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Démolossite",
 				"en": "Houndoominite"
 			}
@@ -153,7 +153,7 @@
 	},
 	"Tyranitar": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Tyranocivite",
 				"en": "Tyranitarite"
 			}
@@ -161,7 +161,7 @@
 	},
 	"Sceptile": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Jungkite",
 				"en": "Sceptilite"
 			}
@@ -169,7 +169,7 @@
 	},
 	"Blaziken": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Braségalite",
 				"en": "Blazikenite"
 			}
@@ -177,7 +177,7 @@
 	},
 	"Swampert": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Laggronite",
 				"en": "Swampertite"
 			}
@@ -185,7 +185,7 @@
 	},
 	"Gardevoir": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Gardevoirite",
 				"en": "Gardevoirite"
 			}
@@ -193,7 +193,7 @@
 	},
 	"Sableye": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Ténéfixite",
 				"en": "Sablenite"
 			}
@@ -201,7 +201,7 @@
 	},
 	"Mawile": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Mysdibulite",
 				"en": "Mawilite"
 			}
@@ -209,7 +209,7 @@
 	},
 	"Aggron": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Galekingite",
 				"en": "Aggronite"
 			}
@@ -217,7 +217,7 @@
 	},
 	"Medicham": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Charminite",
 				"en": "Medichamite"
 			}
@@ -225,7 +225,7 @@
 	},
 	"Manectric": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Élecsprintite",
 				"en": "Manectite"
 			}
@@ -233,7 +233,7 @@
 	},
 	"Sharpedo": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Sharpedite",
 				"en": "Sharpedonite"
 			}
@@ -241,7 +241,7 @@
 	},
 	"Camerupt": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Caméruptite",
 				"en": "Cameruptite"
 			}
@@ -249,7 +249,7 @@
 	},
 	"Altaria": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Altarite",
 				"en": "Altarianite"
 			}
@@ -257,7 +257,7 @@
 	},
 	"Banette": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Branettite",
 				"en": "Banettite"
 			}
@@ -265,7 +265,7 @@
 	},
 	"Absol": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Absolite",
 				"en": "Absolite"
 			}
@@ -273,7 +273,7 @@
 	},
 	"Glalie": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Oniglalite",
 				"en": "Glalitite"
 			}
@@ -281,7 +281,7 @@
 	},
 	"Salamence": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Drattakite",
 				"en": "Salamencite"
 			}
@@ -289,7 +289,7 @@
 	},
 	"Metagross": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Métalossite",
 				"en": "Metagrossite"
 			}
@@ -297,7 +297,7 @@
 	},
 	"Latias": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Latiasite",
 				"en": "Latiasite"
 			}
@@ -305,7 +305,7 @@
 	},
 	"Latios": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Latiosite",
 				"en": "Latiosite"
 			}
@@ -337,7 +337,7 @@
 	},
 	"Lopunny": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Lockpinite",
 				"en": "Lopunnite"
 			}
@@ -345,7 +345,7 @@
 	},
 	"Garchomp": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Carchacrokite",
 				"en": "Garchompite"
 			}
@@ -353,7 +353,7 @@
 	},
 	"Lucario": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Lucarite",
 				"en": "Lucarionite"
 			}
@@ -361,7 +361,7 @@
 	},
 	"Abomasnow": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Blizzarite",
 				"en": "Abomasite"
 			}
@@ -369,7 +369,7 @@
 	},
 	"Gallade": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Gallamite",
 				"en": "Galladite"
 			}
@@ -377,7 +377,7 @@
 	},
 	"Audino": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Nanméouïte",
 				"en": "Audinite"
 			}
@@ -385,14 +385,10 @@
 	},
 	"Diancie": {
 		"types": {
-			"default": {
+			"mega": {
 				"fr": "Diancite",
 				"en": "Diancite"
 			}
 		}
-	},
-	"primal": [
-		"Groudon",
-		"Kyogre"
-	]
+	}
 }
