@@ -23,7 +23,7 @@ function getPokemonName(pokemon, shiny, variation, languageCode, type = "full") 
 		+ (variation === "megay" ? " Y" : "")
 	)
 		.replace(
-			type === "badge" ? /\w/g : type === "raw" ? /⭐|🎖️|🎗️/g : /\0/,
+			type === "badge" ? /\w.+\w/ : type === "raw" ? /⭐|🎖️|🎗️/g : /\0/,
 			""
 		).trim();
 }
