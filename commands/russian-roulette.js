@@ -8,6 +8,7 @@ const command = {
 	usage: "create | join | delete | start [-kick | -mute]",
 	botPerms: ["EMBED_LINKS"],
 	onlyInGuilds: ["689164798264606784"],
+	category: "miscellaneous",
 	slashOptions: [
 		{
 			name: "create",

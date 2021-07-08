@@ -10,6 +10,7 @@ const command = {
 	args: 0,
 	usage: "[pokémon] | caught [-shiny] [-legendary] [-beast] [-alolan] [-mega]",
 	botPerms: ["EMBED_LINKS"],
+	category: "pokémon",
 	slashOptions: [
 		{
 			name: "pokemon",

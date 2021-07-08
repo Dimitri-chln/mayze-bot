@@ -10,6 +10,7 @@ const command = {
 	args: 0,
 	usage: "[text | voice]",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
+	category: "levels",
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 

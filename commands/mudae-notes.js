@@ -10,6 +10,7 @@ const command = {
 	args: 0,
 	usage: "get | add <note> | remove <note>",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS"],
+	category: "games",
 	slashOptions: [
 		{
 			name: "get",

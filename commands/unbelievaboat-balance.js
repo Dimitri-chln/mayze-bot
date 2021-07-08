@@ -8,7 +8,7 @@ const command = {
 	usage: "",
 	botPerms: ["EMBED_LINKS"],
 	onlyInGuilds: ["689164798264606784"],
-	slashOptions: null,
+	category: "miscellaneous",
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 

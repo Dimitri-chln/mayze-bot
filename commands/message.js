@@ -11,6 +11,7 @@ const command = {
 	usage: "<channel> <message>",
 	perms: ["MANAGE_MESSAGES"],
 	botPerms: ["ADD_REACTIONS"],
+	category: "utility",
 	slashOptions: [
 		{
 			name: "channel",

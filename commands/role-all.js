@@ -12,6 +12,7 @@ const command = {
 	usage: "add <role> [-bot|-human] | remove <role> [-bot|-human]",
 	perms: ["MANAGE_ROLES"],
 	botPerms: ["ADD_REACTIONS", "MANAGE_ROLES"],
+	category: "utility",
 	slashOptions: [
 		{
 			name: "add",

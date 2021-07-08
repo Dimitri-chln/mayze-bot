@@ -9,6 +9,7 @@ const command = {
 	onlyInGuilds: ["689164798264606784"],
 	perms: ["MANAGE_ROLES"],
 	botPerms: ["MANAGE_ROLES"],
+	category: "utility",
 	slashOptions: [
 		{
 			name: "utilisateur",

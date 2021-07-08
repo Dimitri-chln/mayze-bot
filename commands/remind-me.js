@@ -9,6 +9,7 @@ const command = {
 	aliases: ["remindme", "rmd", "reminder"],
 	args: 0,
 	usage: "<duration> <reminder> | remove <#reminder>",
+	category: "utility",
 	slashOptions: [
 		{
 			name: "list",

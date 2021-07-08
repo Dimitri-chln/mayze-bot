@@ -9,6 +9,7 @@ const command = {
 	onlyInGuilds: ["689164798264606784"],
 	perms: ["ADMINISTRATOR"],
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
+	category: "wolvesville",
 	disableSlash: true,
 	/**
 	 * @param {Message} message

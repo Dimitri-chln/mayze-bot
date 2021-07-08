@@ -11,6 +11,7 @@ const command = {
 	args: 0,
 	usage: "[<image>] \"[<line>]\" \"[<line>]\"...",
 	botPerms: ["EMBED_LINKS"],
+	category: "miscellaneous",
 	slashOptions: [
 		{
 			name: "image",

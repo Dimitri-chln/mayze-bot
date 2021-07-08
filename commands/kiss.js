@@ -10,6 +10,7 @@ const command = {
 	args: 1,
 	usage: "<user> [cheek]",
 	botPerms: ["EMBED_LINKS"],
+	category: "miscellaneous",
 	slashOptions: [
 		{
 			name: "user",

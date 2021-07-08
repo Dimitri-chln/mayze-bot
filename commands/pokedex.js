@@ -10,6 +10,7 @@ const command = {
 	args: 0,
 	usage: "[<pokémon/pokédex ID>] [-caught] [-uncaught] [-shiny] [-legendary] [-beast] [-mega]",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"],
+	category: "pokémon",
 	slashOptions: [
 		{
 			name: "pokémon",

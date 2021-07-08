@@ -11,6 +11,7 @@ const command = {
 	usage: "\"<regex>\" \"<replacement>\" [text | voice | category]",
 	perms: ["MANAGE_CHANNELS"],
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_CHANNELS"],
+	category: "utility",
 	slashOptions: [
 		{
 			name: "regex",

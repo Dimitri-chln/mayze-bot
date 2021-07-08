@@ -11,6 +11,7 @@ const command = {
 	args: 0,
 	usage: "",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES"],
+	category: "games",
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 

@@ -8,6 +8,7 @@ const command = {
 	usage: "[<rank>]",
 	botPerms: ["EMBED_LINKS", "MANAGE_ROLES"],
 	onlyInGuilds: ["689164798264606784"],
+	category: "utility",
 	slashOptions: [
 		{
 			name: "rank",

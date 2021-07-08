@@ -8,7 +8,7 @@ const command = {
 	args: 0,
 	usage: "",
 	botPerms: ["EMBED_LINKS"],
-	slashOptions: null,
+	category: "miscellaneous",
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 

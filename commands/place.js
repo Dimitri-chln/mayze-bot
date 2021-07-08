@@ -10,6 +10,7 @@ const command = {
 	args: 3,
 	usage: "<x> <y> <color>",
 	botPerms: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
+	category: "games",
 	slashOptions: [
 		{
 			name: "x",

@@ -11,6 +11,7 @@ const command = {
 	usage: "join | leave | start | end | config",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES", "MANAGE_ROLES", "MANAGE_CHANNELS"],
 	onlyInGuilds: ["689164798264606784", "724530039781326869"],
+	category: "games",
 	slashOptions: [
 		{
 			name: "join",

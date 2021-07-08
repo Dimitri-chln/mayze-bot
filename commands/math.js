@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 2,
 	usage: "eval <expression> | solve <equation> [, <variable>] | derivative <function> [, <variable>]",
+	category: "utility",
 	slashOptions: [
 		{
 			name: "eval",

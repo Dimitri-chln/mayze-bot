@@ -9,6 +9,7 @@ const command = {
 	usage: "<objet>",
 	botPerms: ["EMBED_LINKS"],
 	onlyInGuilds: ["689164798264606784"],
+	category: "miscellaneous",
 	slashOptions: [
 		{
 			name: "objet",

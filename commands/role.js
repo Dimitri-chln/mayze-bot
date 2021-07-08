@@ -10,6 +10,7 @@ const command = {
 	args: 1,
 	usage: "<role>",
 	botPerms: ["EMBED_LINKS"],
+	category: "utility",
 	slashOptions: [
 		{
 			name: "role",

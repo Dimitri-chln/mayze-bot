@@ -9,7 +9,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "",
-	slashOptions: null,
+	category: "utility",
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 

@@ -10,6 +10,7 @@ const command = {
 	args: 0,
 	usage: "addfav <pokémon> | removefav <pokémon> | nick <pokémon> [<nickname>] | [<user>] [-favorite] [-legendary] [-beast] [-starter] [-shiny] [-alolan] [-mega] [-id [<number>]] [-name <name>] [-evolution <name>]",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
+	category: "pokémon",
 	slashOptions: [
 		{
 			name: "addfav",

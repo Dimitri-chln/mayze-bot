@@ -11,6 +11,7 @@ const command = {
 	usage: "fr | en",
 	perms: ["ADMINISTRATOR"],
 	botPerms: ["ADD_REACTIONS"],
+	category: "utility",
 	slashOptions: [
 		{
 			name: "language",

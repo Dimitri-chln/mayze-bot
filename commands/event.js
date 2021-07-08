@@ -10,6 +10,7 @@ const command = {
 	args: 0,
 	usage: "",
 	onlyInGuilds: ["689164798264606784", "744291144946417755"],
+	category: "miscellaneous",
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 

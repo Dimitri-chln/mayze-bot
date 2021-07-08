@@ -10,6 +10,7 @@ const command = {
 	args: 1,
 	usage: "<series> [-r <regex>]",
 	botPerms: ["ADD_REACTIONS"],
+	category: "games",
 	slashOptions: [
 		{
 			name: "series",

@@ -10,6 +10,7 @@ const command = {
 	args: 1,
 	usage: "\"<question>\" \"[<answer>]\" \"[<answer>]\"... [-anonymous] [-single]",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
+	category: "utility",
 	slashOptions: [
 		{
 			name: "question",

@@ -11,6 +11,7 @@ const command = {
 	args: 0,
 	usage: "join <board> | list",
 	botPerms: ["EMBED_LINKS"],
+	category: "games",
 	slashOptions: [
 		{
 			name: "join",

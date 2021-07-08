@@ -8,6 +8,7 @@ const command = {
 	usage: "react [<ID message>] | end",
 	botPerms: ["ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_MESSAGES", "MANAGE_ROLES"],
 	onlyInGuilds: ["689164798264606784"],
+	category: "wolvesville",
 	disableSlash: true,
 	/**
 	 * @param {Message} message 

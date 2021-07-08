@@ -9,6 +9,7 @@ const command = {
 	aliases: [],
 	args: 1,
 	usage: "<date>",
+	category: "utility",
 	slashOptions: [
 		{
 			name: "date",

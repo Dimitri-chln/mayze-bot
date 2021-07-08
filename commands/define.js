@@ -9,6 +9,7 @@ const command = {
 	aliases: ["def", "google"],
 	args: 1,
 	usage: "<word> [-language <code>]",
+	category: "miscellaneous",
 	slashOptions: [
 		{
 			name: "word",

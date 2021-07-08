@@ -12,6 +12,7 @@ const command = {
 	perms: ["KICK_MEMBERS"],
 	botPerms: ["KICK_MEMBERS"],
 	onlyInGuilds: ["689164798264606784"],
+	category: "utility",
 	slashOptions: [
 		{
 			name: "user",

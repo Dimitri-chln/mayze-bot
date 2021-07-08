@@ -13,6 +13,7 @@ const command = {
 	perms: ["MANAGE_ROLES"],
 	botPerms: ["ADD_REACTIONS", "MANAGE_ROLES"],
 	onlyInGuilds: ["689164798264606784"],
+	category: "utility",
 	slashOptions: [
 		{
 			name: "utilisateur",

@@ -12,6 +12,7 @@ const command = {
 	perms: ["MANAGE_MESSAGES"],
 	botPerms: ["MANAGE_MESSAGES"],
 	onlyInGuilds: ["689164798264606784", "724530039781326869"],
+	category: "miscellaneous",
 	disableSlash: true,
 	slashOptions: [
 		{

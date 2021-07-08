@@ -11,6 +11,7 @@ const command = {
 	args: 0,
 	usage: "[-score <score>]",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS"],
+	category: "pokémon",
 	disableSlash: true,
 	slashOptions: [
 		{

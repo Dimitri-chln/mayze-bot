@@ -10,6 +10,7 @@ const command = {
 	args: 0,
 	usage: "add <code> [<description>] | delete",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS"],
+	category: "games",
 	slashOptions: [
 		{
 			name: "add",

@@ -12,6 +12,7 @@ const command = {
 	botPerms: ["EMBED_LINKS", "MANAGE_ROLES", "KICK_MEMBERS"],
 	cooldown: 10,
 	onlyInGuilds: ["689164798264606784"],
+	category: "miscellaneous",
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 

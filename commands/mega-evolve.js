@@ -10,6 +10,7 @@ const command = {
 	args: 0,
 	usage: "[<pokemon>]",
 	botPerms: ["ADD_REACTIONS"],
+	category: "pokémon",
 	slashOptions: [
 		{
 			name: "pokemon",

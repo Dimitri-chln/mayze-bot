@@ -11,6 +11,7 @@ const command = {
 	args: 0,
 	usage: "",
 	botPerms: ["EMBED_LINKS"],
+	category: "pokémon",
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
