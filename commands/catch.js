@@ -178,7 +178,7 @@ const command = {
 
 		function findDrop(random) {
 			for (let i = 0; i < catchRates.length; i++)
-				if (random < catchRates[i]) return pokedex.findPokemon(i + 1);
+				if (random < catchRates[i]) return pokedex.findPokemon(i + 1) || pokedex.findPokemon("Snover");
 		}
 	}
 };

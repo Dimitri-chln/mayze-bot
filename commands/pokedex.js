@@ -48,9 +48,6 @@ const command = {
 			const variation = args
 				? getPokemonVariation(args.join(" "))
 				: getPokemonVariation(options[0].value);
-
-				console.log(input)
-				console.log(variation)
 			
 			const flags = { en: "🇬🇧", fr: "🇫🇷", de: "🇩🇪", cz: "🇨🇿", es: "🇪🇸", it: "🇮🇹", jp: "🇯🇵", tr: "🇹🇷", dk: "🇩🇰", gr: "🇬🇷", pl: "🇵🇱" };
 

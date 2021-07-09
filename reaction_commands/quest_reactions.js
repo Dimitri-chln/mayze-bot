@@ -15,8 +15,11 @@ const command = {
 
 		if (membersOnly) {
 			if (!reaction.message.guild.members.cache.get(user.id).roles.cache.has("689169027922526235")) {
-				try { reaction.users.remove(user.id);}
-				catch (err) { console.log(err); }
+				try {
+					reaction.users.remove(user.id);
+				} catch (err) {
+					console.error(err);
+				}
 			}
 		}
 

@@ -44,7 +44,7 @@ const command = {
 					}
 				}
 			}).catch(err => {
-			console.log(err);
+			console.error(err);
 			message.channel.send("Quelque chose s'est mal passé en envoyant le message :/").catch(console.error);
 		});
 		

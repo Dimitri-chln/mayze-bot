@@ -50,7 +50,7 @@ const command = {
 					await message.member.roles.remove(rank);
 					message.channel.send(`${message.author} a quitté le rank \`${rank.name}\``).catch(console.error);
 				} catch (err) {
-					console.log(err);
+					console.error(err);
 					message.channel.send("Quelque chose s'est mal passé en te retirant le rôle :/").catch(console.error);
 				}
 			}
