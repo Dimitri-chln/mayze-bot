@@ -4,7 +4,7 @@ const language = {
     get: require("../utils/parseLanguageText"),
     afk_msg: {
         fr: "{1} est AFK depuis {2} 💤[3?\n**→ {3}**:]",
-        en: "{1} have been AFK for {2} 💤[3?\n**→ {3}**:]"
+        en: "{1} has been AFK for {2} 💤[3?\n**→ {3}**:]"
     }
 };
 
