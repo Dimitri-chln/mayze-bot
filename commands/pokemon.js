@@ -271,7 +271,7 @@ const command = {
 					? getCleanName(args.slice(1).join(" "))
 					: getCleanName(options[0].options[0].value);
 
-				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name.toLowerCase() === pokemonName));
+				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name === pokemonName));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 
 				const stringEvolutionLine = getStringEvolutionLine(pokemon, languageCode);
