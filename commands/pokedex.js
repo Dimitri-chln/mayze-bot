@@ -35,11 +35,11 @@ const command = {
 		const { MessageEmbed } = require("discord.js");
 
 		const input = args
-			? getCleanName(args.join(" ")).replace(/-\w+/g, "").trim()
-			: options ? getCleanName(options[0].value).replace(/-\w+/g, "").trim() : "";
+			? getCleanName(args.join(" "))
+			: options ? getCleanName(options[0].value) : "";
 		
 		if (input) {
-			let pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === input));
+			let pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === input.toLowerCase()));
 			if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 
 			const shiny = args
