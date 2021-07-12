@@ -197,8 +197,8 @@ module.exports = {
 		},
 		"catch": {
 			hunt_probability: {
-				fr: " | Probabilité supplémentaire d'avoir un {1} : {2}%",
-				en: " | Additional probability to get a {1}: {2}%"
+				fr: " | Probabilité supplémentaire d'avoir un {2} : {3}%",
+				en: " | Additional probability to get a[1?n:] {2}: {3}%"
 			},
 			caught: {
 				fr: "Pokémon capturé !",

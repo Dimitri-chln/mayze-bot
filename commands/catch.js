@@ -56,7 +56,7 @@ const command = {
 					pokemon = huntedPokemon;
 				
 				} else {
-					huntFooterText = language.get(language.hunt_probability, huntedPokemon.names[languageCode] || huntedPokemon.names.en, Math.round(probability * 100 * 10000) / 10000);
+					huntFooterText = language.get(language.hunt_probability, /^[aeiou]/i.test(huntedPokemon.names[languageCode] || huntedPokemon.names.en), huntedPokemon.names[languageCode] || huntedPokemon.names.en, Math.round(probability * 100 * 10000) / 10000);
 				}
 			}
 		}
