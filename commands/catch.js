@@ -40,7 +40,7 @@ const command = {
 
 			if (rows.length) {
 				const huntedPokemon = pokedex.findPokemon(rows[0].pokemon_id) || pokedex.findPokemon("Snover");
-				const probability = (
+				let probability = (
                     rows[0].hunt_count
                     / 100
                 ) * (
@@ -49,8 +49,9 @@ const command = {
                         : huntedPokemon.catch_rate
                     ) / 255
                 );
+				if (probability > 1) probability = 1;
 
-				if (Math.random() * catchRates.slice(-1)[0] < probability) {
+				if (Math.random() < probability) {
 					await message.client.pg.query(`UPDATE pokemon_hunting SET hunt_count = 0 WHERE user_id = '${message.author.id}'`);
 					pokemon = huntedPokemon;
 				

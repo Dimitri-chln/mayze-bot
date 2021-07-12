@@ -39,7 +39,7 @@ const command = {
 
 			if (rows.length) {
 				const huntedPokemon = pokedex.findPokemon(rows[0].pokemon_id) || pokedex.findPokemon("Snover");
-				const probability = (
+				let probability = (
 					rows[0].hunt_count
 					/ 100
 				) * (
@@ -48,6 +48,7 @@ const command = {
 						: huntedPokemon.catch_rate
 					) / 255
 				);
+				if (probability > 1) probability = 1;
 	
 				message.reply(language.get(language.hunt_info, huntedPokemon.names[languageCode] || huntedPokemon.names.en, Math.round(probability * 100 * 10000) / 10000))
 			
