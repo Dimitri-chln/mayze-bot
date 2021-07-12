@@ -402,7 +402,7 @@ module.exports = {
 		"hunt": {
 			hunt_info: {
 				fr: "tu es en train de chasser **{1}** avec une probabilité supplémentaire de **{2}%**",
-				en: "you are currently hunting **{1}** with an additional probability of  **{2}%**"
+				en: "you are currently hunting **{1}** with an additional probability of **{2}%**"
 			},
 			not_hunting: {
 				fr: "tu ne chasses aucun pokémon",
