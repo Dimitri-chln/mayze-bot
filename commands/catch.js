@@ -41,7 +41,7 @@ const command = {
 			if (rows.length) {
 				const huntedPokemon = pokedex.findPokemon(rows[0].pokemon_id) || pokedex.findPokemon("Snover");
 				let probability = (
-                    rows[0].hunt_count
+                    rows[0].hunt_count + 1
                     / 100
                 ) * (
                     (legendaries.includes(huntedPokemon.names.en) || beasts.includes(huntedPokemon.names.en)
