@@ -35,22 +35,20 @@ const command = {
 		let huntFooterText;
 		{
 			// Pokémon hunting
-			const { HUNT_TO_DOUBLE_CHANCE } = require("../config.json");
-
 			const { rows } = (await message.client.pg.query(`SELECT * FROM pokemon_hunting WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
 			if (!rows) return message.channel.send(language.errors.database).catch(console.error);
 
 			if (rows.length) {
-				const huntedPokemon = pokedex.findPokemon(rows[0].pokemon_id);
+				const huntedPokemon = pokedex.findPokemon(rows[0].pokemon_id) || pokedex.findPokemon("Snover");
 				const probability = (
-					(rows[0].hunt_count + 1) // Count the newly caught pokémon in the probability
-					/ HUNT_TO_DOUBLE_CHANCE
-				) * (
-					(legendaries.includes(huntedPokemon.names.en) || beasts.includes(huntedPokemon.names.en)
-						? 3
-						: huntedPokemon.catch_rate
-					) / catchRates.slice(-1)[0]
-				);
+                    rows[0].hunt_count
+                    / 100
+                ) * (
+                    (legendaries.includes(huntedPokemon.names.en) || beasts.includes(huntedPokemon.names.en)
+                        ? 3
+                        : huntedPokemon.catch_rate
+                    ) / 255
+                );
 
 				if (Math.random() * catchRates.slice(-1)[0] < probability) {
 					await message.client.pg.query(`UPDATE pokemon_hunting SET hunt_count = 0 WHERE user_id = '${message.author.id}'`);
