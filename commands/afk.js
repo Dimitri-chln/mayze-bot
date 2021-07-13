@@ -30,12 +30,12 @@ const command = {
 		
 		const res = await message.client.pg.query(
 			`
-			INSERT INTO afk VALUES ($1, $2)
+			INSERT INTO afk VALUES ($1, $2, $3)
 			ON CONFLICT (user_id)
-			DO UPDATE SET message = $2
-			WHERE afk.user_id = EXLUDED.user_id
+			DO UPDATE SET message = $3
+			WHERE afk.user_id = EXCLUDED.user_id
 			`,
-			[ message.author.id, AKFmessage ]
+			[ message.author.id, new Date().toISOString(), AKFmessage ]
 		).catch(console.error);
 
 		if (!res) return message.channel.send(language.errors.database, { ephemeral: true }).catch(console.error);
