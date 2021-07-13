@@ -4,7 +4,7 @@ const command = {
 	name: "afk",
 	description: {
 		fr: "Ajouter un statut AFK",
-		en: "Set AFK status"
+		en: "Set an AFK status"
 	},
 	aliases: [],
 	args: 0,
