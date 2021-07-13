@@ -35,8 +35,8 @@ const command = {
 		const { MessageEmbed } = require("discord.js");
 
 		const input = args
-			? getCleanName(args.join(" "))
-			: options ? getCleanName(options[0].value) : "";
+			? getCleanName(args.join(" ").replace(/(?:^|\s)-\w+/g, ""))
+			: options ? getCleanName(options[0].value.replace(/(?:^|\s)-\w+/g, "")) : "";
 		
 		if (input) {
 			let pokemon = pokedex.findPokemon(input) || pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === input.toLowerCase()));
