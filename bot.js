@@ -403,7 +403,7 @@ async function processCommand(command, message, args, options) {
 	if (!client.cooldowns.has(command.name)) client.cooldowns.set(command.name, new Discord.Collection());
 	const now = Date.now();
 	const timestamps = client.cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 2) * 1000;
+	const cooldownAmount = (command.cooldown ?? 2) * 1000;
 	if (timestamps.has(message.author.id)) {
 		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 		if (now < expirationTime) {

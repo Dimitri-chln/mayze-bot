@@ -40,6 +40,7 @@ const command = {
 
 			if (rows.length) {
 				const huntedPokemon = pokedex.findPokemon(rows[0].pokemon_id) || pokedex.findPokemon("Snover");
+
 				let probability = (
                     (rows[0].hunt_count + 1)
                     / 100
@@ -50,11 +51,11 @@ const command = {
                     ) / 255
                 );
 				if (probability > 1) probability = 1;
-
-				if (Math.random() < probability) {
+				
+				let r = Math.random();
+				if (r < probability) {
 					await message.client.pg.query(`UPDATE pokemon_hunting SET hunt_count = 0 WHERE user_id = '${message.author.id}'`);
 					pokemon = huntedPokemon;
-				
 				} else {
 					huntFooterText = language.get(language.hunt_probability, /^[aeiou]/i.test(huntedPokemon.names[languageCode] || huntedPokemon.names.en), huntedPokemon.names[languageCode] || huntedPokemon.names.en, Math.round(probability * 100 * 10000) / 10000);
 				}
