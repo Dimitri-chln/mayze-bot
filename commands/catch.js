@@ -168,7 +168,7 @@ const command = {
 					: legendary || beast 
 						? 13512480
 						: "#010101",
-				description: language.get(language.caught_title, message.author.toString(), !shiny && (variation === "alolan" || /^[aeiou]/i.test(pokemon.names.en)), getPokemonName(pokemon, shiny, variation, languageCode)),
+				description: language.get(language.caught_title_en, message.author.toString(), !shiny && (variation === "alolan" || /^[aeiou]/i.test(pokemon.names.en)), getPokemonName(pokemon, shiny, variation, "en")),
 				footer: {
 					text: "✨ Mayze ✨",
 					icon_url: message.author.avatarURL({ dynamic: true })
