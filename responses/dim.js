@@ -18,7 +18,7 @@ const command = {
 						url: message.url
 					},
 					title: `#${message.channel.name}`,
-					color: 65793,
+					color: message.guild.me.displayColor,
 					description: message.content,
 					image: {
 						url: message.attachments.size ? message.attachments.first().url : null
