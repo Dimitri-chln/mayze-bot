@@ -13,6 +13,7 @@ const command = {
 	perms: ["MANAGE_MESSAGES"],
 	botPerms: ["MANAGE_MESSAGES"],
 	category: "utility",
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "number",

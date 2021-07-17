@@ -13,6 +13,7 @@ const command = {
 	botPerms: ["KICK_MEMBERS"],
 	onlyInGuilds: ["689164798264606784"],
 	category: "utility",
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "user",

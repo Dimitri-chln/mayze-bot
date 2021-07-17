@@ -14,6 +14,7 @@ const command = {
 	onlyInGuilds: ["689164798264606784", "724530039781326869"],
 	category: "miscellaneous",
 	disableSlash: true,
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "user",

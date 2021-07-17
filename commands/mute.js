@@ -10,6 +10,7 @@ const command = {
 	perms: ["MANAGE_ROLES"],
 	botPerms: ["MANAGE_ROLES"],
 	category: "utility",
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "utilisateur",
