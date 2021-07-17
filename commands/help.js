@@ -30,7 +30,7 @@ const command = {
 
 		const commands = message.client.commands.filter(cmd =>
 			(!cmd.onlyInGuilds || cmd.onlyInGuilds.includes(message.guild.id)) &&
-			(message.channel.id === "865997369745080341" ? !cmd.perms : true)
+			(message.channel.id === "865997369745080341" ? cmd.perms : true)
 		);
 		
 		const commandName = args

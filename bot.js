@@ -388,7 +388,7 @@ async function processCommand(command, message, args, options) {
 
 	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting[language], { ephemeral: true }).catch(console.error);
 	if (!message.guild.me.permissionsIn(message.channel.id).has("SEND_MESSAGES")) return;
-	if (message.channel.id === "865997369745080341" && command.perms) return; // Disable public commands in the newbies channel
+	if (message.channel.id === "865997369745080341" && !command.perms) return; // Disable public commands in the newbies channel
 
 	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return; // message.reply(languages.data.unauthorized_guild[language]).catch(console.error);
 	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm) || (message.channel.viewable && message.channel.permissionsFor(message.member).has(perm))) && message.author.id !== config.OWNER_ID) return message.reply(languages.get(languages.data.unauthorized_perms[language], command.perms.join("`, `")), { ephemeral: true }).catch(console.error);
