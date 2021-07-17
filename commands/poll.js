@@ -11,6 +11,7 @@ const command = {
 	usage: "\"<question>\" \"[<answer>]\" \"[<answer>]\"... [-anonymous] [-single]",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
 	category: "utility",
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "question",

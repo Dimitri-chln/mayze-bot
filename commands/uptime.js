@@ -10,6 +10,7 @@ const command = {
 	args: 0,
 	usage: "",
 	category: "utility",
+	newbiesAllowed: true,
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 

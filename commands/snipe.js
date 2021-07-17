@@ -11,6 +11,7 @@ const command = {
 	usage: "",
 	botPerms: ["EMBED_LINKS", "ATTACH_FILES"],
 	category: "miscellaneous",
+	newbiesAllowed: true,
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 

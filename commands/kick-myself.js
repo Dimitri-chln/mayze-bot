@@ -11,6 +11,7 @@ const command = {
 	usage: "",
 	botPerms: ["KICK_MEMBERS"],
 	category: "miscellaneous",
+	newbiesAllowed: true,
 	onlyInGuilds: ["689164798264606784", "724530039781326869"],
 	/**
 	* @param {Message} message 

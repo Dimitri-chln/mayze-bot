@@ -10,6 +10,7 @@ const command = {
 	args: 1,
 	usage: "<question>",
 	category: "miscellaneous",
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "question",

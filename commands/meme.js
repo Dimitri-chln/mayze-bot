@@ -12,6 +12,7 @@ const command = {
 	usage: "[<image>] \"[<line>]\" \"[<line>]\"...",
 	botPerms: ["EMBED_LINKS"],
 	category: "miscellaneous",
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "image",

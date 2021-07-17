@@ -10,6 +10,7 @@ const command = {
 	args: 1,
 	usage: "<word> [-language <code>]",
 	category: "miscellaneous",
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "word",

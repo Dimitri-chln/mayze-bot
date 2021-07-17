@@ -10,6 +10,7 @@ const command = {
 	args: 0,
 	usage: "<duration> <reminder> | remove <#reminder>",
 	category: "utility",
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "list",

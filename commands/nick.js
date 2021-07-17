@@ -12,6 +12,7 @@ const command = {
 	perms: ["CHANGE_NICKNAME"],
 	botPerms: ["MANAGE_NICKNAMES"],
 	category: "utility",
+	newbiesAllowed: true,
 	disableSlash: true,
 	/**
 	* @param {Message} message 

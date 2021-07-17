@@ -11,6 +11,7 @@ const command = {
 	usage: "<role>",
 	botPerms: ["EMBED_LINKS"],
 	category: "utility",
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "role",

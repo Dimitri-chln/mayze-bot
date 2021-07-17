@@ -7,6 +7,7 @@ const command = {
 	args: 1,
 	usage: "<date>",
 	category: "utility",
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "date",

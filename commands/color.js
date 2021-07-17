@@ -11,6 +11,7 @@ const command = {
 	usage: "<color>",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS"],
 	category: "miscellaneous",
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "color",

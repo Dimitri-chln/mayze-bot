@@ -11,6 +11,7 @@ const command = {
 	usage: "<text>",
 	botPerms: ["MANAGE_MESSAGES"],
 	category: "miscellaneous",
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "text",

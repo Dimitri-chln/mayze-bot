@@ -9,6 +9,7 @@ const command = {
 	cooldown: 60,
 	onlyInGuilds: ["689164798264606784"],
 	category: "miscellaneous",
+	newbiesAllowed: true,
 	slashOptions: [
 		{
 			name: "utilisateur",
