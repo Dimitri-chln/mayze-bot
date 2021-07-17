@@ -8,6 +8,7 @@ const command = {
 	args: 1,
 	usage: "[-image (+image)] [-everyone|-members] [-single|-multiple]",
 	onlyInGuilds: ["689164798264606784"],
+	perms: ["ADMINISTRATOR"],
 	category: "wolvesville",
 	disableSlash: true,
 	/**
