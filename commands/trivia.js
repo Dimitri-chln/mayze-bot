@@ -38,7 +38,7 @@ const command = {
 			embed: {
 				author: {
 					name: language.start_msg_title,
-					icon_url: message.client.user.avatarURL()
+					icon_url: message.client.user.displayAvatarURL()
 				},
 				title: language.get(language.score_limit, scoreLimit),
 				color: message.guild.me.displayColor,
@@ -74,7 +74,7 @@ const command = {
 				embed: {
 					author: {
 						name: language.get(language.question, question),
-						icon_url: message.client.user.avatarURL()
+						icon_url: message.client.user.displayAvatarURL()
 					},
 					color: message.guild.me.displayColor,
 					description: language.whats_this_pkm,
@@ -124,11 +124,11 @@ const command = {
 					embed: {
 						author: {
 							name: language.winner_msg_title,
-							icon_url: message.client.user.avatarURL()
+							icon_url: message.client.user.displayAvatarURL()
 						},
 						color: message.guild.me.displayColor,
 						thumbnail: {
-							url: players.find(p => p.id === results[0][0]).avatarURL({ dynamic: true })
+							url: players.find(p => p.id === results[0][0]).displayAvatarURL({ dynamic: true })
 						},
 						description: results.map(([id, score], i) => {
 							if (i === 0) return `👑 **${players.find(p => p.id === id).username}** - **${score}** 👑\n`;

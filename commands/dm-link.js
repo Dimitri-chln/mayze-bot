@@ -28,7 +28,7 @@ const command = {
 			: options[1] ? message.client.users.cache.get(options[1].value) : message.author;
 
 		const loadingMsg = await message.channel.send(language.creating_webhook).catch(console.error);
-		const webhook = await channel.createWebhook(`${message.author.tag}'s *dm-link`, { avatar: message.client.user.avatarURL({ size: 4096 }) }).catch(console.error);
+		const webhook = await channel.createWebhook(`${message.author.tag}'s *dm-link`, { avatar: message.client.user.displayAvatarURL({ size: 4096 }) }).catch(console.error);
 		if (webhook) loadingMsg.delete().catch(console.error);
 		else return loadingMsg.edit(language.errors.webhook_create).catch(console.error);
 
@@ -36,7 +36,7 @@ const command = {
 			embed: {
 				author: {
 					name: message.author.tag,
-					icon_url: message.author.avatarURL({ dynamic: true })
+					icon_url: message.author.displayAvatarURL({ dynamic: true })
 				},
 				title: language.get(language.title, channel.name),
 				color: message.guild.me.displayColor,
@@ -69,7 +69,7 @@ const command = {
 					embed: {
 						author: {
 							name: message.author.tag,
-							icon_url: message.author.avatarURL({ dynamic: true })
+							icon_url: message.author.displayAvatarURL({ dynamic: true })
 						},
 						title: language.get(language.end, channel.name),
 						color: channel.guild.me.displayColor,
@@ -79,7 +79,7 @@ const command = {
 					}
 				}).catch(console.error);
 			} else {
-				webhook.send(msg.content, { avatarURL: user.avatarURL(), username: channel.guild.member(user).displayName }).catch(console.error);
+				webhook.send(msg.content, { avatarURL: user.displayAvatarURL(), username: channel.guild.member(user).displayName }).catch(console.error);
 			}
 		});
 	}

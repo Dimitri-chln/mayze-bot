@@ -25,7 +25,7 @@ const command = {
 			embed: {
 				author: {
 					name: `Balance Unbelievaboat de ${message.author.tag}`,
-					icon_url: message.author.avatarURL({ dynamic: true })
+					icon_url: message.author.displayAvatarURL({ dynamic: true })
 				},
 				color: message.guild.me.displayColor,
 				description: `• Rang: **#${user.rank.toLocaleString()}**\n• Cash: **✨${user.cash.toLocaleString()}**\n• Bank: **✨${user.bank.toLocaleString()}**\n• Total: **✨${user.total.toLocaleString()}**`,

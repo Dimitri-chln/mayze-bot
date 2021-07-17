@@ -91,7 +91,7 @@ const command = {
 						embed: {
 							author: {
 								name: title,
-								icon_url: message.client.user.avatarURL()
+								icon_url: message.client.user.displayAvatarURL()
 							},
 							color: message.guild.me.displayColor,
 							description: "*Aucun rôle pour le moment*",

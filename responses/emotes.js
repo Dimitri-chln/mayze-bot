@@ -21,7 +21,7 @@ const command = {
 		await webhook.edit({ channel: message.channel.id });
 
 		message.delete().catch(console.error);
-		webhook.send(newMsg, { avatarURL: message.author.avatarURL(), username: message.member.displayName, disableMentions: "everyone" }).catch(console.error);
+		webhook.send(newMsg, { avatarURL: message.author.displayAvatarURL(), username: message.member.displayName, disableMentions: "everyone" }).catch(console.error);
 	}
 };
 

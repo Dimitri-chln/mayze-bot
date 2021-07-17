@@ -43,7 +43,7 @@ const command = {
 				embed: {
 					author: {
 						name: language.commands_list,
-						icon_url: message.client.user.avatarURL()
+						icon_url: message.client.user.displayAvatarURL()
 					},
 					color: message.guild.me.displayColor,
 					description: commands.filter(cmd => !cmd.ownerOnly && !cmd.category).map(cmd => cmd.name).join(", "),
@@ -72,7 +72,7 @@ const command = {
 				embed: {
 					author: {
 						name: language.get(language.title, message.client.prefix + command.name),
-						icon_url: message.client.user.avatarURL()
+						icon_url: message.client.user.displayAvatarURL()
 					},
 					color: message.guild.me.displayColor,
 					description: data,

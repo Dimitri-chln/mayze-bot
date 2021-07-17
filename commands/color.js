@@ -34,7 +34,7 @@ const command = {
 			embed: {
 				author: {
 					name: language.selector,
-					icon_url: message.client.user.avatarURL()
+					icon_url: message.client.user.displayAvatarURL()
 				},
 				color: message.guild.me.displayColor,
 				description: language.get(language.desc, RGBToHex(color), color[0], color[1], color[2], RGBToDec(color)),
@@ -169,7 +169,7 @@ const command = {
 				embed: {
 					author: {
 						name: language.selector,
-						icon_url: message.client.user.avatarURL()
+						icon_url: message.client.user.displayAvatarURL()
 					},
 					color: message.guild.me.displayColor,
 					description: language.get(language.desc, RGBToHex(color), color[0], color[1], color[2], RGBToDec(color)),

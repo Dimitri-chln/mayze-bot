@@ -57,7 +57,7 @@ const command = {
 				embed: {
 					author: {
 						name: message.author.tag,
-						icon_url: message.author.avatarURL({ dynamic: true })
+						icon_url: message.author.displayAvatarURL({ dynamic: true })
 					},
 					description: language.get(language.copy_link, url),
 					color: message.guild.me.displayColor,

@@ -59,7 +59,7 @@ const command = {
 				embed: {
 					author: {
 					name: "Ranks du serveur 🎗️",
-					icon_url: message.client.user.avatarURL()
+					icon_url: message.client.user.displayAvatarURL()
 					},
 					color: message.guild.me.displayColor,
 					description: ranks.map(rank => `• ${rank}${message.member.roles.cache.has(rank.id) ? ` | ✅` : ""}`).join("\n"),

@@ -41,7 +41,7 @@ const command = {
 			embed: {
 				author: {
 					name: language.get(language.title, user.tag),
-					icon_url: user.avatarURL()
+					icon_url: user.displayAvatarURL()
 				},
 				color: message.guild.me.displayColor,
 				description: desc || language.no_wish,

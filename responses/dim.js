@@ -14,7 +14,7 @@ const command = {
 				embed: {
 					author: {
 						name: message.author.tag,
-						icon_url: message.author.avatarURL({ dynamic: true }),
+						icon_url: message.author.displayAvatarURL({ dynamic: true }),
 						url: message.url
 					},
 					title: `#${message.channel.name}`,

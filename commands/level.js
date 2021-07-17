@@ -52,7 +52,7 @@ const command = {
 			embed: {
 				author: {
 					name: user.tag,
-					icon_url: user.avatarURL({ dynamic: true })
+					icon_url: user.displayAvatarURL({ dynamic: true })
 				},
 				color: message.guild.me.displayColor,
 				fields: [

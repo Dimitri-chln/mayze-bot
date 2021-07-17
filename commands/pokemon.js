@@ -280,7 +280,7 @@ const command = {
 					embed: {
 						author: {
 							name: language.get(language.evoline_title, pokemon.names[languageCode] || pokemon.names.en),
-							icon_url: message.client.user.avatarURL()
+							icon_url: message.client.user.displayAvatarURL()
 						},
 						thumbnail: {
 							url: `https://assets.poketwo.net/images/${pokemon.national_id}.png?v=26`
@@ -324,7 +324,7 @@ const command = {
 				const pkmPerPage = 15;
 				let pages = [];
 				let embed = new MessageEmbed()
-					.setAuthor(language.get(language.title, user.tag), user.avatarURL({ dynamic: true }))
+					.setAuthor(language.get(language.title, user.tag), user.displayAvatarURL({ dynamic: true }))
 					.setColor(message.guild.me.displayColor)
 					.setDescription(language.no_pokemon);
 				if (!pokemons.length) pages.push(embed);
@@ -332,7 +332,7 @@ const command = {
 				let total = pokemons.reduce((sum, p) => sum + p.users[user.id].caught, 0);
 				for (i = 0; i < pokemons.length; i += pkmPerPage) {
 					embed = new MessageEmbed()
-						.setAuthor(language.get(language.title, user.tag), user.avatarURL({ dynamic: true }))
+						.setAuthor(language.get(language.title, user.tag), user.displayAvatarURL({ dynamic: true }))
 						.setTitle(language.get(language.total, total, total > 1))
 						.setColor(message.guild.me.displayColor)
 						.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => language.get(language.description, getPokemonName(pokedex.findPokemon(p.pokedex_id) || pokedex.findPokemon("Snover"), p.shiny, p.variation, languageCode, "badge"), getPokemonName(pokedex.findPokemon(p.pokedex_id) || pokedex.findPokemon("Snover"), p.shiny, p.variation, languageCode, "raw"), hasParam(params, "id") === 0 ? `#${p.pokedex_id}` : "", p.users[user.id].nickname, p.users[user.id].caught, p.users[user.id].caught > 1, p.users[user.id].favorite ? `https~d//pokemon.com/${languageCode === "en" ? "us" : languageCode}/pokedex/${(pokedex.findPokemon(p.pokedex_id) || pokedex.findPokemon("Snover")).names[languageCode].toLowerCase().replace(/[:\.']/g, "").replace(/\s/g, "-").replace(/\u2642/, "-male").replace(/\u2640/, "-female")}` : "")).join("\n"));

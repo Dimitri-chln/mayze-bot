@@ -124,7 +124,7 @@ const command = {
 				embed: {
 					author: {
 						name: message.author.tag,
-						icon_url: message.author.avatarURL({ dynamic: true })
+						icon_url: message.author.displayAvatarURL({ dynamic: true })
 					},
 					title: `« ${question.replace(/["'«»]/g, "")} »`,
 					color: message.guild.me.displayColor,
@@ -147,7 +147,7 @@ const command = {
 				embed: {
 					author: {
 						name: message.author.tag,
-						icon_url: message.author.avatarURL({ dynamic: true })
+						icon_url: message.author.displayAvatarURL({ dynamic: true })
 					},
 					title: `« ${question.replace(/["'«»]/g, "")} »`,
 					color: message.guild.me.displayColor,
@@ -223,7 +223,7 @@ const command = {
 				embed: {
 					author: {
 						name: message.author.tag,
-						icon_url: message.author.avatarURL({ dynamic: true })
+						icon_url: message.author.displayAvatarURL({ dynamic: true })
 					},
 					title: `« ${question.replace(/["'«»]/g, "")} »`,
 					color: message.guild.me.displayColor,

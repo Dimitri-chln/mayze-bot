@@ -26,7 +26,7 @@ const command = {
 		let pages = [];
 		for (let [ name, palette ] of palettes) {
 			let embed = new MessageEmbed()
-				.setAuthor(language.title, message.client.user.avatarURL())
+				.setAuthor(language.title, message.client.user.displayAvatarURL())
 				.setTitle(language.get(language.palette, name))
 				.setColor(message.guild.me.displayColor)
 				.setDescription(Array.from(palette.all()).map(([alias, color]) => `${color.emote} \`${alias}\` - **${color.name}** \`${color.hexadecimal}\``).join("\n"))

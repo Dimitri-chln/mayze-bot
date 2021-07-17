@@ -83,14 +83,14 @@ const command = {
 				const pkmPerPage = 15;
 				let pages = [];
 				let embed = new MessageEmbed()
-					.setAuthor(language.get(language.title), message.client.user.avatarURL())
+					.setAuthor(language.get(language.title), message.client.user.displayAvatarURL())
 					.setColor(message.guild.me.displayColor)
 					.setDescription(language.no_pokemon);
 				if (!pokemons.length) pages.push(embed);
 
 				for (i = 0; i < pokemons.length; i += pkmPerPage) {
 					embed = new MessageEmbed()
-						.setAuthor(language.get(language.title), message.client.user.avatarURL())
+						.setAuthor(language.get(language.title), message.client.user.displayAvatarURL())
 						.setColor(message.guild.me.displayColor)
 						.addField(language.most_caught_title, pokemons.slice(i, i + pkmPerPage).map((pkm, j) => {
 							// pokedex.findPokemon(459): null
@@ -205,7 +205,7 @@ const command = {
 					embed: {
 						author: {
 							name: language.title,
-							icon_url: message.client.user.avatarURL()
+							icon_url: message.client.user.displayAvatarURL()
 						},
 						title: `${pokemon.names[languageCode]}#${("00" + pokemon.national_id).substr(-3)}`,
 						color: message.guild.me.displayColor,
@@ -356,7 +356,7 @@ const command = {
 				embed: {
 					author: {
 						name: language.title,
-						icon_url: message.client.user.avatarURL()
+						icon_url: message.client.user.displayAvatarURL()
 					},
 					color: message.guild.me.displayColor,
 					fields: [

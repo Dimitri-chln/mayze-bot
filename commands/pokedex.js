@@ -131,14 +131,14 @@ const command = {
 			const pkmPerPage = 15;
 			let pages = [];
 			let embed = new MessageEmbed()
-				.setAuthor(language.get(language.title, message.author.tag), message.author.avatarURL({ dynamic: true }))
+				.setAuthor(language.get(language.title, message.author.tag), message.author.displayAvatarURL({ dynamic: true }))
 				.setColor(message.guild.me.displayColor)
 				.setDescription(language.no_pokemon);
 			if (!dex.length) pages.push(embed);
 
 			for (i = 0; i < dex.length; i += pkmPerPage) {
 				let embed = new MessageEmbed()
-					.setAuthor(language.get(language.title, message.author.tag), message.author.avatarURL({ dynamic: true }))
+					.setAuthor(language.get(language.title, message.author.tag), message.author.displayAvatarURL({ dynamic: true }))
 					.setColor(message.guild.me.displayColor)
 					.setDescription(dex.slice(i, i + pkmPerPage).map(p => language.get(language.description, pokemons.some(pkm => pkm.pokedex_id === p.national_id), getPokemonName(p, shiny, variation, languageCode), ("00" + p.national_id).substr(-3))).join("\n"));
 				pages.push(embed);

@@ -84,7 +84,7 @@ const command = {
 					embed: {
 						author: {
 							name: language.ongoing_games,
-							icon_url: message.client.user.avatarURL()
+							icon_url: message.client.user.displayAvatarURL()
 						},
 						color: message.guild.me.displayColor,
 						description: Object.entries(games).map(e => `${message.client.users.cache.get(e[0])}: **${e[1].code}**\n*${e[1].description}*\n(${language.get(language.time_ago, timeToString((Date.now() - e[1].time) / 1000, language, languageCode))})`).join("\n\n") || language.no_ongoing,

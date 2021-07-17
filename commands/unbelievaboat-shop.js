@@ -20,7 +20,7 @@ const command = {
 			embed: {
 				author: {
 					name: "Shop Unbelievaboat",
-					icon_url: message.client.user.avatarURL()
+					icon_url: message.client.user.displayAvatarURL()
 				},
 				color: message.guild.me.displayColor,
 				fields: shop.map(item => {

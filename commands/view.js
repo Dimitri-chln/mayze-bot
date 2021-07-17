@@ -83,7 +83,7 @@ const command = {
 					url: "attachment://canvas.png"
 				},
 				footer: {
-					icon_url: message.author.avatarURL({ dynamic: true }),
+					icon_url: message.author.displayAvatarURL({ dynamic: true }),
 					text: "✨ Mayze ✨"
 				},
 			},

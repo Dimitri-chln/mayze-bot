@@ -71,7 +71,7 @@ const command = {
 					embed: {
 						author: {
 							name: "Une partie de roulette russe a été lancée!",
-							icon_url: message.author.avatarURL({ dynamic: true })
+							icon_url: message.author.displayAvatarURL({ dynamic: true })
 						},
 						color: message.guild.me.displayColor,
 						description:
@@ -105,7 +105,7 @@ const command = {
 				const { MessageEmbed } = require("discord.js");
 
 				const embed = new MessageEmbed()
-					.setAuthor("La partie de roulette russe a commencé!", message.author.avatarURL({ dynamic: true }))
+					.setAuthor("La partie de roulette russe a commencé!", message.author.displayAvatarURL({ dynamic: true }))
 					.setColor(message.guild.me.displayColor)
 					.setDescription("...")
 					.setFooter("✨ Mayze ✨")

@@ -82,7 +82,7 @@ const command = {
 					embed: {
 						author: {
 							name: language.get(language.title, message.author.tag),
-							icon_url: message.author.avatarURL({ dynamic: true })
+							icon_url: message.author.displayAvatarURL({ dynamic: true })
 						},
 						color: message.guild.me.displayColor,
 						description: notes.map((n, i) => `\`${i+1}.\` ${n.note}`).join("\n") || language.no_note,
@@ -120,7 +120,7 @@ const command = {
 						embed: {
 							author: {
 								name: message.author.tag,
-								icon_url: message.author.avatarURL({ dynamic: true })
+								icon_url: message.author.displayAvatarURL({ dynamic: true })
 							},
 							color: message.guild.me.displayColor,
 							description: `\`\`\`\n${n.note.replace(/<a?(:.+:)\d{18}>/, "$1")}\n\`\`\``,

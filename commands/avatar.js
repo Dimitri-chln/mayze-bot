@@ -34,11 +34,11 @@ const command = {
 			embed: {
 				author: {
 					name: language.get(language.title, user.tag),
-					icon_url: message.client.user.avatarURL()
+					icon_url: message.client.user.displayAvatarURL()
 				},
 				color: message.guild.me.displayColor,
 				image: {
-					url: user.avatarURL({ size: 4096, dynamic: true })
+					url: user.displayAvatarURL({ size: 4096, dynamic: true })
 				},
 				footer: {
 					text: "✨ Mayze ✨"

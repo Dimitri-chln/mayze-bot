@@ -49,7 +49,7 @@ const command = {
 					embed: {
 						author: {
 							name: "Game de roses",
-							icon_url: message.client.user.avatarURL()
+							icon_url: message.client.user.displayAvatarURL()
 						},
 						color: message.guild.me.displayColor,
 						description: `**Heure :** \`${hour}\`\n**Mot de passe :** \`${password}\``,
@@ -126,7 +126,7 @@ const command = {
 						embed: {
 							author: {
 								name: "Game de roses",
-								icon_url: message.client.user.avatarURL()
+								icon_url: message.client.user.displayAvatarURL()
 							},
 							color: message.guild.me.displayColor,
 							description: `**Heure :** \`${hour}\`\n**Mot de passe :** \`${password}\``,

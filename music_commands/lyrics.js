@@ -43,14 +43,14 @@ const command = {
 		const parsedLyrics = lyrics.match(new RegExp(`(.*\n){${linesPerPage}}`, "yg"));
 		let pages = [];
 		let embed = new MessageEmbed()
-			.setAuthor(language.get(language.title, songName.replace(/^./, a => a.toUpperCase())), message.client.user.avatarURL())
+			.setAuthor(language.get(language.title, songName.replace(/^./, a => a.toUpperCase())), message.client.user.displayAvatarURL())
 			.setColor(message.guild.me.displayColor)
 			.setDescription(language.empty_lyrics);
 		if (!parsedLyrics.length) pages.push(embed);
 
 		for (i = 0; i < parsedLyrics.length; i++) {
 			embed = new MessageEmbed()
-			.setAuthor(language.get(language.title, songName.replace(/^./, a => a.toUpperCase())), message.client.user.avatarURL())
+			.setAuthor(language.get(language.title, songName.replace(/^./, a => a.toUpperCase())), message.client.user.displayAvatarURL())
 			.setColor(message.guild.me.displayColor)
 			.setDescription(parsedLyrics[i]);
 			pages.push(embed);

@@ -41,7 +41,7 @@ const command = {
 				embed: {
 					author: {
 						name: "Heroku Logs",
-						icon_url: message.author.avatarURL({ dynamic: true })
+						icon_url: message.author.displayAvatarURL({ dynamic: true })
 					},
 					color: message.guild.me.displayColor,
 					description: `\`\`\`\n${output || "*-*"}\n\`\`\``,
@@ -59,7 +59,7 @@ const command = {
 			for (i = 0; i < matches.length; i++) {;
 				let embed = new MessageEmbed()
 					.setColor(message.guild.me.displayColor)
-					.setAuthor("Heroku Logs", message.author.avatarURL({ dynamic: true }))
+					.setAuthor("Heroku Logs", message.author.displayAvatarURL({ dynamic: true }))
 					.setDescription(`\`\`\`\n${matches[i]}\n\`\`\``);
 				pages.push(embed);
 			}

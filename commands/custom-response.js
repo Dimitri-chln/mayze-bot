@@ -129,7 +129,7 @@ const command = {
 					embed: {
 						author: {
 							name: language.embed_title,
-							icon_url: message.client.user.avatarURL()
+							icon_url: message.client.user.displayAvatarURL()
 						},
 						color: message.guild.me.displayColor,
 						description: responses.map((response, i) => `\`${i + 1}.\` ${language.trigger_types[response.trigger_type]} \`${response.trigger}\`\n\t→ \`${response.response}\``).join("\n"),

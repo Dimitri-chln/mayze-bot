@@ -26,7 +26,7 @@ const command = {
 						embed: {
 							author: {
 								name: command,
-								icon_url: message.author.avatarURL({ dynamic: true })
+								icon_url: message.author.displayAvatarURL({ dynamic: true })
 							},
 							color: message.guild.me.displayColor,
 							description: `\`\`\`json\n${resString}\n\`\`\``,
@@ -46,7 +46,7 @@ const command = {
 						let embed = new MessageEmbed()
 							.setColor(message.guild.me.displayColor)
 							.setTitle(`Le résultat contient ${res.rowCount} lignes`)
-							.setAuthor(command, message.author.avatarURL({ dynamic: true }))
+							.setAuthor(command, message.author.displayAvatarURL({ dynamic: true }))
 							.setDescription(`\`\`\`json\n${matches[i]}\n\`\`\``);
 						pages.push(embed);
 					}

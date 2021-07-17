@@ -26,7 +26,7 @@ const command = {
 			embed: {
 				author: {
 					name: language.now_playing,
-					icon_url: message.client.user.avatarURL()
+					icon_url: message.client.user.displayAvatarURL()
 				},
 				thumbnail: {
 					url: song.thumbnail

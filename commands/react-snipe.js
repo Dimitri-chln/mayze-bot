@@ -23,7 +23,7 @@ const command = {
 			embed: {
 				author: {
 					name: snipedReaction.author.tag,
-					icon_url: snipedReaction.author.avatarURL({ dynamic: true})
+					icon_url: snipedReaction.author.displayAvatarURL({ dynamic: true})
                 },
                 thumbnail: {
                     url: snipedReaction.emoji.url
@@ -35,7 +35,7 @@ const command = {
                 ],
 				footer: {
 					text: "✨ Mayze ✨",
-					icon_url: snipedReaction.user.avatarURL({ dynamic: true })
+					icon_url: snipedReaction.user.displayAvatarURL({ dynamic: true })
 				}
 			}
 		}).catch(console.error);

@@ -95,7 +95,7 @@ client.on("ready", async () => {
 			embed: {
 				author: {
 					name: "Démarrage du bot...",
-					icon_url: client.user.avatarURL()
+					icon_url: client.user.displayAvatarURL()
 				},
 				color: 65793,
 				description: `• **Version:** \`${version}\`\n• **Ping:** Calcul...`,
@@ -477,10 +477,10 @@ client.on("guildMemberAdd", async member => {
 				embed: {
 					author: {
 						name: member.user.tag,
-						icon_url: client.user.avatarURL()
+						icon_url: client.user.displayAvatarURL()
 					},
 					thumbnail: {
-						url: member.user.avatarURL({ dynamic: true })
+						url: member.user.displayAvatarURL({ dynamic: true })
 					},
 					title: "Bienvenue sur Mayze !",
 					color: member.guild.me.displayColor,
@@ -550,7 +550,7 @@ client.on("messageDelete", async message => {
 		author: {
 			id: message.author.id,
 			tag: message.author.tag,
-			avatar: message.author.avatarURL({ dynamic: true })
+			avatar: message.author.displayAvatarURL({ dynamic: true })
 		},
 		content: message.content,
 		attachments: message.attachments.array()
@@ -569,7 +569,7 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
 		author: {
 			id: oldMessage.author.id,
 			tag: oldMessage.author.tag,
-			avatar: oldMessage.author.avatarURL({ dynamic: true })
+			avatar: oldMessage.author.displayAvatarURL({ dynamic: true })
 		},
 		content: oldMessage.content
 	};
@@ -657,7 +657,7 @@ player.on("queueEnd", (message, queue) => {
 			embed: {
 				author: {
 					name: languages.data["now-playing"].now_playing[l],
-					icon_url: message.client.user.avatarURL()
+					icon_url: message.client.user.displayAvatarURL()
 				},
 				thumbnail: {
 					url: song.thumbnail,
@@ -687,7 +687,7 @@ player.on("songChanged", (message, newSong, OldSong) => {
 			embed: {
 				author: {
 					name: languages.data["now-playing"].now_playing[l],
-					icon_url: message.client.user.avatarURL()
+					icon_url: message.client.user.displayAvatarURL()
 				},
 				thumbnail: {
 					url: newSong.thumbnail,
@@ -719,7 +719,7 @@ setInterval(() => {
 			embed: {
 				author: {
 					name: languages.data["now-playing"].now_playing[l],
-					icon_url: client.user.avatarURL()
+					icon_url: client.user.displayAvatarURL()
 				},
 				thumbnail: {
 					url: song.thumbnail

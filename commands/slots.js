@@ -27,7 +27,7 @@ const command = {
 			embed: {
 				author: {
 					name: language.title,
-					icon_url: message.author.avatarURL()
+					icon_url: message.author.displayAvatarURL()
 				},
 				color: message.guild.me.displayColor,
 				description: spinning + spinning + spinning,

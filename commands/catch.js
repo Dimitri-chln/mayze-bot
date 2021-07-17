@@ -147,7 +147,7 @@ const command = {
 					+ (megaGem ? language.get(language.mega_gem, megaGem[languageCode]) : ""),
 				footer: {
 					text: "✨ Mayze ✨" + (huntFooterText || ""),
-					icon_url: message.author.avatarURL({ dynamic: true })
+					icon_url: message.author.displayAvatarURL({ dynamic: true })
 				}
 			}
 		}).catch(console.error);
@@ -171,7 +171,7 @@ const command = {
 				description: language.get(language.caught_title_en, message.author.toString(), !shiny && (variation === "alolan" || /^[aeiou]/i.test(pokemon.names.en)), getPokemonName(pokemon, shiny, variation, "en")),
 				footer: {
 					text: "✨ Mayze ✨",
-					icon_url: message.author.avatarURL({ dynamic: true })
+					icon_url: message.author.displayAvatarURL({ dynamic: true })
 				}
 			}
 		}).catch(console.error);

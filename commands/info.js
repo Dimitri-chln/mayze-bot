@@ -24,7 +24,7 @@ const command  = {
 			embed: {
 				author: {
 					name: message.client.user.username,
-					icon_url: message.client.user.avatarURL()
+					icon_url: message.client.user.displayAvatarURL()
 				},
 				title: language.title,
 				color: message.guild.me.displayColor,

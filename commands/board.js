@@ -76,7 +76,7 @@ const command = {
 					embed: {
 						author: {
 							name: language.title,
-							icon_url: message.client.user.avatarURL()
+							icon_url: message.client.user.displayAvatarURL()
 						},
 						color: message.guild.me.displayColor,
 						description: publicBoards.map(board => `\`${board.name}\` - **${board.size}x${board.size}**`).join("\n"),

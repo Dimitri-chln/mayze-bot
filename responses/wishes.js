@@ -51,7 +51,7 @@ const command = {
 						embed: {
 							author: {
 								name: language.title[lang],
-								icon_url: user.avatarURL()
+								icon_url: user.displayAvatarURL()
 							},
 							color: message.guild.me.displayColor,
 							description: language.get(language.desc[lang], characterName, message.url, message.channel, characterSeries, kakeraValue),

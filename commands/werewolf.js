@@ -110,7 +110,7 @@ const command = {
 					embed: {
 						author: {
 							name: language.start_msg_title,
-							icon_url: message.client.user.avatarURL()
+							icon_url: message.client.user.displayAvatarURL()
 						},
 						color: message.guild.me.displayColor,
 						description: language.start_msg_description,
@@ -182,7 +182,7 @@ const command = {
 						embed: {
 							author: {
 								name: language.started_title,
-								icon_url: message.client.user.avatarURL()
+								icon_url: message.client.user.displayAvatarURL()
 							},
 							description: game.players.map((player, i) =>  `\`${i + 1}.\` ${player.role}`).join("\n"),
 							color: message.guild.me.displayColor,
@@ -256,7 +256,7 @@ const command = {
 						embed: {
 							author: {
 								name: language.player_list,
-								icon_url: message.client.user.avatarURL()
+								icon_url: message.client.user.displayAvatarURL()
 							},
 							color: message.guild.me.displayColor,
 							fields: [
@@ -286,7 +286,7 @@ const command = {
 						embed: {
 							author: {
 								name: language.player_list,
-								icon_url: message.client.user.avatarURL()
+								icon_url: message.client.user.displayAvatarURL()
 							},
 							color: message.guild.me.displayColor,
 							description: joined.map((m, i) => `\`${i + 1}.\` ${m.user.username}`).join("\n") || language.no_player,
