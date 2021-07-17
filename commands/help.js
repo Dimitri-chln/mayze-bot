@@ -26,9 +26,13 @@ const command = {
 	*/
 	execute: async (message, args, options, language, languageCode) => {
 		const timeToString = require("../utils/timeToString");
-
-		const commands = message.client.commands.filter(cmd => !cmd.onlyInGuilds || cmd.onlyInGuilds.includes(message.guild.id));
 		const { OWNER_ID } = require("../config.json");
+
+		const commands = message.client.commands.filter(cmd =>
+			(!cmd.onlyInGuilds || cmd.onlyInGuilds.includes(message.guild.id)) &&
+			(message.channel.id === "865997369745080341" ? !cmd.perms : true)
+		);
+		
 		const commandName = args
 			? (args[0] || "").toLowerCase()
 			: (options ? options[0].value : "").toLowerCase();

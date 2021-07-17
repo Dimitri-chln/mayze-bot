@@ -388,7 +388,7 @@ async function processCommand(command, message, args, options) {
 
 	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting[language], { ephemeral: true }).catch(console.error);
 	if (!message.guild.me.permissionsIn(message.channel.id).has("SEND_MESSAGES")) return;
-
+	if (message.channel.id === "865997369745080341" && command.perms) return; // Disable public commands in the newbies channel
 
 	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return; // message.reply(languages.data.unauthorized_guild[language]).catch(console.error);
 	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm) || (message.channel.viewable && message.channel.permissionsFor(message.member).has(perm))) && message.author.id !== config.OWNER_ID) return message.reply(languages.get(languages.data.unauthorized_perms[language], command.perms.join("`, `")), { ephemeral: true }).catch(console.error);
@@ -468,7 +468,6 @@ client.on("messageReactionRemove", async (reaction, user) => {
 client.on("guildMemberAdd", async member => {
 	if (member.guild.id === "689164798264606784") {
 		let roles = ["735809874205737020", "735810286719598634", "735810462872109156", "759694957132513300"];
-
 		const { rows } = (await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error)) || {};
 		if (rows && rows.length) roles = roles.concat(rows[0].roles);
 		member.roles.add(member.guild.roles.cache.filter(r => roles.includes(r.id))).catch(console.error);
