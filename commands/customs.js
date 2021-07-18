@@ -35,18 +35,24 @@ const command = {
 			case "info":
 				message.channel.send({
 					embed: {
-						author: {
-							name: member.user.tag,
-							url: member.user.displayAvatarURL({ dynamic: true })
-						},
 						thumbnail: {
 							url: member.user.displayAvatarURL({ dynamic: true })
 						},
-						color: message.guild.me.displayColor,
+						color: member.displayColor,
 						fields: [
 							{
-								name: "Rôles",
-								value: member.roles.cache.map(r => r.toString()).join(", "),
+								name: "Pseudo",
+								value: member.user.tag,
+								inline: true
+							},
+							{
+								name: "Surnom",
+								value: member.displayName,
+								inline: true
+							},
+							{
+								name: "ID",
+								value: member.user.id,
 								inline: true
 							},
 							{
@@ -57,6 +63,16 @@ const command = {
 							{
 								name: "Date d'arrivée",
 								value: `<t:${Math.round(member.joinedAt / 1000)}:R>`,
+								inline: true
+							},
+							{
+								name: "Lien de l'avatar",
+								value: `[Lien de l'avatar](${member.user.displayAvatarURL({ dynamic: true, size: 4096 })})`,
+								inline: true
+							},
+							{
+								name: "Rôles",
+								value: member.roles.cache.map(r => r.toString()).join(" "),
 								inline: true
 							}
 						],
