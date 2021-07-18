@@ -26,7 +26,7 @@ const command = {
 	*/
 	execute: async (message, args, options, language, languageCode) => {
 		const user = args
-			? message.mentions.users.first() || message.client.findMember(message.guild, args.join(" "))?.user || message.author
+			? message.mentions.users.first() || message.client.findMember(message.guild, args[0])?.user || message.author
 			: message.client.users.cache.get((options ? options[0] : {}).value) || message.author;
 
 		if (!message.guild.members.cache.has("432610292342587392")) return language.errors.mudae;
