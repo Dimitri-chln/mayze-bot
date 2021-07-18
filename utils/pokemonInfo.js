@@ -218,7 +218,7 @@ function getPokemonVariation(pokemonName) {
 	// const gigantamaxes = require("../assets/gigantamax.json");
 
 	const input = pokemonName.toLowerCase().split(" ");
-	const cleanName = getCleanName(pokemonName);
+	const cleanName = pokedex.findPokemon(getCleanName(pokemonName))?.names?.en || getCleanName(pokemonName);
 
 	if (input.includes("alolan") && alolans.includes(cleanName)) return "alolan";
 	if (input.includes("galarian") /*&& galarians.includes(cleanName)*/) return "galarian";
