@@ -520,7 +520,7 @@ client.on("guildMemberUpdate", async (oldMember, member) => {
 });
 
 client.on("guildMemberRemove", async member => {
-	if (member.guild.id === "689164798264606784" && (member.roles.cache.has("689169027922526235") || member.roles.cache.has("689169136374644752"))) {
+	if (!member.user.bot && member.guild.id === "689164798264606784" && (member.roles.cache.has("689169027922526235") || member.roles.cache.has("689169136374644752"))) {
 		const roleIDs = member.roles.cache.filter(role => role.id !== member.guild.id).map(role => role.id);
 		const roleString = `'{"${roleIDs.join("\",\"")}"}'`;
 		const { rows } = (await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error)) || {};
