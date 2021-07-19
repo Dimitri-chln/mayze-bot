@@ -17,6 +17,12 @@ const command = {
 			description: "The song to play",
 			type: 3,
 			required: true
+		},
+		{
+			name: "shuffle",
+			description: "Whether to shuffle the playlist or not",
+			type: 5,
+			required: false
 		}
 	],
 	/**
@@ -38,10 +44,10 @@ const command = {
 
 		let search = args
 			? args.filter(a => a !== "-shuffle").join(" ")
-			: options[0].value;
+			: options ? options[0].value : null;
 		const shuffle = args
 			? args.includes("-shuffle")
-			: options[1].value.includes("-shuffle");
+			: options[1] ? options[1].value : false;
 
 		if (DeezerRegexScrap.test(search)) {
 			const res = await Axios.get(search).catch(err => {
