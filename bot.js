@@ -524,7 +524,7 @@ client.on("guildMemberUpdate", async (oldMember, member) => {
 			DO UPDATE SET roles = $2
 			WHERE member_roles.user_id = EXCLUDED.user_id
 			`,
-			[ member.user.id, Array.from(member.roles.cache).map(r => r[0]) ]
+			[ member.user.id, member.roles.cache.filter(role => role.id !== member.guild.id).map(role => role.id) ]
 		).catch(console.error);
 	}
 
