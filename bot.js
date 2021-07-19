@@ -466,7 +466,7 @@ client.on("messageReactionRemove", async (reaction, user) => {
 });
 
 client.on("guildMemberAdd", async member => {
-	if (member.guild.id === "689164798264606784") {
+	if (!member.user.bot && member.guild.id === "689164798264606784") {
 		let roles = ["735809874205737020", "735810286719598634", "735810462872109156", "759694957132513300"];
 		const { rows } = (await client.pg.query(`SELECT * FROM member_roles WHERE user_id = '${member.id}'`).catch(console.error)) || {};
 		if (rows && rows.length) roles = roles.concat(rows[0].roles);
@@ -517,6 +517,9 @@ client.on("guildMemberAdd", async member => {
 
 client.on("guildMemberUpdate", async (oldMember, member) => {
 	checkUnpingable(member);
+
+	if (!oldMember.roles.cache.every(r => member.roles.cache.has(r.id))) return;
+	if (!member.roles.cache.every(r => oldMember.roles.cache.has(r.id))) return;
 });
 
 client.on("guildMemberRemove", async member => {
