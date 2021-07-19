@@ -516,7 +516,7 @@ client.on("guildMemberAdd", async member => {
 });
 
 client.on("guildMemberUpdate", async (oldMember, member) => {
-	if (oldMember.roles.cache.every(r => member.roles.cache.has(r.id)) && member.roles.cache.every(r => oldMember.roles.cache.has(r.id))) {
+	if (!oldMember.roles.cache.every(r => member.roles.cache.has(r.id)) || !member.roles.cache.every(r => oldMember.roles.cache.has(r.id))) {
 		client.pg.query(
 			`
 			INSERT INTO member_roles VALUES ($1, $2)
