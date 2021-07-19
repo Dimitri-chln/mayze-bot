@@ -522,7 +522,7 @@ client.on("guildMemberUpdate", async (oldMember, member) => {
 			INSERT INTO member_roles VALUES ($1, $2)
 			ON CONFLICT (user_id)
 			DO UPDATE SET roles = $2
-			WHERE member_roles.user_id = EXLUDED.user_id
+			WHERE member_roles.user_id = EXCLUDED.user_id
 			`,
 			[ member.user.id, Array.from(member.roles.cache).map(r => r[0]) ]
 		).catch(console.error);
