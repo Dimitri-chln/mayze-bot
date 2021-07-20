@@ -38,8 +38,8 @@ const command = {
 		const gems = res.rows[0]?.gems ?? {};
 
 		const pokemon = args
-			? pokedex.findPokemon(getCleanName(args.join(" ")))
-			: options ? pokedex.findPokemon(getCleanName(options[0].value)) : null;
+			? pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.replace(/\u2642/, "m").replace(/\u2640/, "f") === getCleanName(args.join(" "))))
+			: options ? pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.replace(/\u2642/, "m").replace(/\u2640/, "f") === getCleanName(options[0].value))) : null;
 		
 		if (pokemon) {
 			const shiny = args
