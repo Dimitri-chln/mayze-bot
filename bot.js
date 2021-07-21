@@ -349,6 +349,9 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
 			break;
 		case 2: {
 			// Slash Command
+			const channelCooldown = client.channelCooldowns.get(message.channel.id);
+			if (channelCooldown) return;
+
 			const command = client.commands.get(interaction.data.name) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(interaction.data.name));
 			const options = interaction.data.options;
 			const SlashCommand = require("./utils/interactions/SlashCommand");
