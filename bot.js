@@ -38,12 +38,6 @@ client.pg.connect().then(() => {
 
 setInterval(reconnectPgClient, 3600000);
 
-const imageFiles = Fs.readdirSync("./discord-images");
-for (const imageFile of imageFiles) {
-	if (imageFile !== "file.txt")
-		Fs.unlinkSync(`./discord-images/${imageFile}`, () => {});
-}
-
 client.commands = new Discord.Collection();
 const commandFiles = Fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
 for (const file of commandFiles) {
@@ -78,6 +72,7 @@ for (const file of componentCommandsFiles) {
 }
 
 client.cooldowns = new Discord.Collection();
+client.channelCooldowns = new Discord.Collection();
 client.queues = new Discord.Collection();
 
 
@@ -388,8 +383,12 @@ async function processCommand(command, message, args, options) {
 
 	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting[language], { ephemeral: true }).catch(console.error);
 	if (!message.guild.me.permissionsIn(message.channel.id).has("SEND_MESSAGES")) return;
-	if (message.channel.id === "865997369745080341" && !command.newbiesAllowed) return; // Disable public commands in the newbies channel
 
+	if (client.channelCooldowns.get(message.channel.id)) return;
+	client.channelCooldowns.set(message.channel.id, true);
+	setTimeout(() => client.channelCooldowns.delete(message.channel.id), 1500);
+
+	if (message.channel.id === "865997369745080341" && !command.newbiesAllowed) return; // Disable public commands in the newbies channel
 	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return; // message.reply(languages.data.unauthorized_guild[language]).catch(console.error);
 	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm) || (message.channel.viewable && message.channel.permissionsFor(message.member).has(perm))) && message.author.id !== config.OWNER_ID) return message.reply(languages.get(languages.data.unauthorized_perms[language], command.perms.join("`, `")), { ephemeral: true }).catch(console.error);
 	if (command.ownerOnly) {
