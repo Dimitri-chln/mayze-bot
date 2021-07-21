@@ -388,7 +388,7 @@ async function processCommand(command, message, args, options) {
 	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting[language], { ephemeral: true }).catch(console.error);
 	if (!message.guild.me.permissionsIn(message.channel.id).has("SEND_MESSAGES")) return;
 
-	const channelCooldown = client.channelCooldowns.get(message.channel.id) ?? 0;
+	const channelCooldown = client.channelCooldowns.get(message.channel.id) || 0;
 	if (channelCooldown === 0) setTimeout(() => client.channelCooldowns.delete(message.channel.id), 6000);
 	if (channelCooldown >= 5) return;
 	client.channelCooldowns.set(message.channel.id, channelCooldown + 1);
@@ -407,7 +407,7 @@ async function processCommand(command, message, args, options) {
 	if (!client.cooldowns.has(command.name)) client.cooldowns.set(command.name, new Discord.Collection());
 	const now = Date.now();
 	const timestamps = client.cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown ?? 2) * 1000;
+	const cooldownAmount = (command.cooldown || 2) * 1000;
 	if (timestamps.has(message.author.id)) {
 		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 		if (now < expirationTime) {
