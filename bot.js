@@ -384,9 +384,10 @@ async function processCommand(command, message, args, options) {
 	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting[language], { ephemeral: true }).catch(console.error);
 	if (!message.guild.me.permissionsIn(message.channel.id).has("SEND_MESSAGES")) return;
 
-	if (client.channelCooldowns.get(message.channel.id)) return;
-	client.channelCooldowns.set(message.channel.id, true);
-	setTimeout(() => client.channelCooldowns.delete(message.channel.id), 1500);
+	const channelCooldown = client.channelCooldowns.get(message.channel.id) ?? 0;
+	if (channelCooldown === 0) setTimeout(() => client.channelCooldowns.delete(message.channel.id), 6000);
+	if (channelCooldown >= 5) return;
+	client.channelCooldowns.set(message.channel.id, channelCooldown + 1);
 
 	if (message.channel.id === "865997369745080341" && !command.newbiesAllowed) return; // Disable public commands in the newbies channel
 	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return; // message.reply(languages.data.unauthorized_guild[language]).catch(console.error);
