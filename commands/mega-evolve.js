@@ -112,7 +112,7 @@ const command = {
 				[ message.author.id, pokemon.national_id, shiny, "default" ]
 			).catch(console.error);
 
-			message.channel.send(language.get(language.evolved, getPokemonName(pokemon, shiny, "default"), getPokemonName(pokemon, shiny, getMegaType(pokemon, megaGem)))).catch(console.error);
+			message.channel.send(language.get(language.evolved, getPokemonName(pokemon, shiny, "default", languageCode), getPokemonName(pokemon, shiny, getMegaType(pokemon, megaGem), language))).catch(console.error);
 
 		} else {
 			const gemList = groupArr(Object.entries(gems), 2);
