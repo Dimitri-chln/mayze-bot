@@ -3,12 +3,9 @@
  * @returns {string}
  */
 function escapeMarkdown(string) {
-    return string ? string
-        .replace(/\*/g, "\\*")
-        .replace(/_/g, "\\_")
-        .replace(/`/, "\\`")
-        .replace(/>/g, "\\>")
-    : null;
+	return string 
+		? string.replace(/^>|[*_`]/gm, "\\$&")
+		: null;
 }
 
 module.exports = escapeMarkdown;
