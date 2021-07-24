@@ -319,7 +319,7 @@ const command = {
 				if (hasParam(params, "mega")) pokemons = pokemons.filter(p => ["mega", "megax", "megay", "primal"].includes(p.variation));
 				if (hasParam(params, "id")) pokemons = hasParam(params, "id") ? pokemons.filter(p => p.pokedex_id === hasParam(params, "id")) : pokemons;
 				if (hasParam(params, "name")) pokemons = pokemons.filter(p => new RegExp(hasParam(params, "name"), "i").test((pokedex.findPokemon(p.pokedex_id) || pokedex.findPokemon("Snover")).names[languageCode].replace(/\u2642/, "m").replace(/\u2640/, "f")) || (p.users[user.id].nickname && new RegExp(hasParam(params, "name"), "i").test(p.users[user.id].nickname)));
-				if (hasParam(params, "evolution")) pokemons = pokemons.filter(p => getFlatEvolutionLine(hasParam(params, "evolution").toLowerCase().replace(/(?:^|[\s-])\w(?!$)/g, a => a.toUpperCase())).some(pkm => pkm.national_id === p.pokedex_id));
+				if (hasParam(params, "evolution")) pokemons = pokemons.filter(p => getFlatEvolutionLine(pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name.toLowerCase() === hasParam(params, "evolution").toLowerCase()))).some(pkm => pkm.national_id === p.pokedex_id));
 
 				const pkmPerPage = 15;
 				let pages = [];
