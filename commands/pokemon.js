@@ -156,6 +156,7 @@ const command = {
 		const { getPokemonImage, getPokemonName, getPokemonVariation, getCleanName } = require("../utils/pokemonInfo");
 		const pagination = require("../utils/pagination");
 		const { getFlatEvolutionLine, getStringEvolutionLine } = require("../utils/pokemonEvo");
+		const escapeMarkdown = require("../utils/espapeMarkdown");
 
 		const subCommand = args
 			? args.length && ["addfav", "removefav", "nick", "evoline"].includes(args[0].toLowerCase()) ? args[0].toLowerCase() : "list"
@@ -173,7 +174,7 @@ const command = {
 					? getPokemonVariation(args.slice(1).join(" "))
 					: getPokemonVariation(options[0].options[0].value);
 				
-				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name === pokemonName));
+				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === pokemonName.toLowerCase()));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 				
 				const { "rows": pokemons } = (await message.client.pg.query(
@@ -206,7 +207,7 @@ const command = {
 					? getPokemonVariation(args.slice(1).join(" "))
 					: getPokemonVariation(options[0].options[0].value);
 				
-				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name === pokemonName));
+				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === pokemonName.toLowerCase()));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 				
 				const { "rows": pokemons } = (await message.client.pg.query(
@@ -244,7 +245,7 @@ const command = {
 					: options[0].options[1] ? options[0].options[1].value : null;
 				if (nickname && nickname.length > 30) return message.reply(language.nickname_too_long).catch(console.error);
 				
-				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name === pokemonName));
+				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === pokemonName.toLowerCase()));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 				
 				const { "rows": pokemons } = (await message.client.pg.query(
@@ -271,7 +272,7 @@ const command = {
 					? getCleanName(args.slice(1).join(" "))
 					: getCleanName(options[0].options[0].value);
 
-				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(name => name === pokemonName));
+				const pokemon = pokedex.allPokemon().find(pkm => Object.values(pkm.names).some(n => n.toLowerCase().replace(/\u2642/, "m").replace(/\u2640/, "f") === pokemonName.toLowerCase()));
 				if (!pokemon) return message.reply(language.invalid_pokemon).catch(console.error);
 
 				const stringEvolutionLine = getStringEvolutionLine(pokemon, languageCode);
@@ -335,7 +336,7 @@ const command = {
 						.setAuthor(language.get(language.title, user.tag), user.displayAvatarURL({ dynamic: true }))
 						.setTitle(language.get(language.total, total, total > 1))
 						.setColor(message.guild.me.displayColor)
-						.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => language.get(language.description, getPokemonName(pokedex.findPokemon(p.pokedex_id) || pokedex.findPokemon("Snover"), p.shiny, p.variation, languageCode, "badge"), getPokemonName(pokedex.findPokemon(p.pokedex_id) || pokedex.findPokemon("Snover"), p.shiny, p.variation, languageCode, "raw"), hasParam(params, "id") === 0 ? `#${p.pokedex_id}` : "", p.users[user.id].nickname, p.users[user.id].caught, p.users[user.id].caught > 1, p.users[user.id].favorite ? `https~d//pokemon.com/${languageCode === "en" ? "us" : languageCode}/pokedex/${(pokedex.findPokemon(p.pokedex_id) || pokedex.findPokemon("Snover")).names[languageCode].toLowerCase().replace(/[:\.']/g, "").replace(/\s/g, "-").replace(/\u2642/, "-male").replace(/\u2640/, "-female")}` : "")).join("\n"));
+						.setDescription(pokemons.slice(i, i + pkmPerPage).map(p => language.get(language.description, getPokemonName(pokedex.findPokemon(p.pokedex_id) || pokedex.findPokemon("Snover"), p.shiny, p.variation, languageCode, "badge"), getPokemonName(pokedex.findPokemon(p.pokedex_id) || pokedex.findPokemon("Snover"), p.shiny, p.variation, languageCode, "raw"), hasParam(params, "id") === 0 ? `#${p.pokedex_id}` : "", escapeMarkdown(p.users[user.id].nickname), p.users[user.id].caught, p.users[user.id].caught > 1, p.users[user.id].favorite ? `https~d//pokemon.com/${languageCode === "en" ? "us" : languageCode}/pokedex/${(pokedex.findPokemon(p.pokedex_id) || pokedex.findPokemon("Snover")).names[languageCode].toLowerCase().replace(/[:\.']/g, "").replace(/\s/g, "-").replace(/\u2642/, "-male").replace(/\u2640/, "-female")}` : "")).join("\n"));
 						
 						if (pokemons.length === 1) embed.setThumbnail(getPokemonImage(
 							pokedex.findPokemon(pokemons[0].pokedex_id) || pokedex.findPokemon("Snover"),
