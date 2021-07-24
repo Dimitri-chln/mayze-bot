@@ -4,7 +4,9 @@
  */
 function escapeMarkdown(string) {
 	return string 
-		? string.replace(/^>|[*_`|]/gm, "\\$&")
+		? string
+			.replace(/^>|\|\||[*_`]/gm, "\\$&")
+			.replace(/(\[.*\])(\(https?:\/\/.+\))/gs, "$1\\$2")
 		: null;
 }
 
