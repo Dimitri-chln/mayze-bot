@@ -331,7 +331,8 @@ client.on("message", async message => {
 		}
 	}
 
-	client.responses.forEach(async autoresponse => autoresponse.execute(message).catch(console.error));
+	if (message.channel.type !== "dm")
+		client.responses.forEach(async autoresponse => autoresponse.execute(message).catch(console.error));
 
 	if (!message.attachments.size) return;
 	const download = require("./utils/download");
