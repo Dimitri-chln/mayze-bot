@@ -123,7 +123,7 @@ const command = {
 					if (!m) return message.channel.send("Quelque chose s'est mal passé en modifiant le message :/").catch(console.error);
 					msg.react(emoji).catch(console.error);
 					if (!message.isInteraction) message.react("✅").catch(console.error);
-					else message.reply("rôle ajouté", { ephemeral: true }).catch(console.error);
+					else message.reply("rôle ajouté").catch(console.error);
 					break;
 				}
 				case "remove": {
@@ -142,7 +142,7 @@ const command = {
 					if (!m) return message.channel.send("Quelque chose s'est mal passé en modifiant le message :/").catch(console.error);
 					msg.reactions.cache.get(emoji).users.cache.forEach(u => msg.reactions.cache.get(emoji).users.remove(u).catch(console.error));
 					if (!message.isInteraction) message.react("✅").catch(console.error);
-					else message.reply("rôle retiré", { ephemeral: true }).catch(console.error);
+					else message.reply("rôle retiré").catch(console.error);
 					break;
 				}
 				default:

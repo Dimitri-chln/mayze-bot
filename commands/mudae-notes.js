@@ -58,23 +58,23 @@ const command = {
 			: options[0].options ? options[0].options[0].value : null;
 		
 		const { "rows": notes } = (await message.client.pg.query(`SELECT * FROM mudae_notes WHERE user_id = '${message.author.id}'`).catch(console.error)) || {};
-		if (!notes) return message.channel.send(language.errors.database, { ephemeral: true }).catch(console.error);
+		if (!notes) return message.channel.send(language.errors.database).catch(console.error);
 		
 		switch(subCommand) {
 			case "add": {
 				const res = await message.client.pg.query(`INSERT INTO mudae_notes (user_id, note) VALUES ('${message.author.id}', '${note}')`).catch(console.error);
-				if (!res) return message.channel.send(language.errors.database, { ephemeral: true }).catch(console.error);
+				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 				if (!message.isInteraction) message.react("✅").catch(console.error);
-				else message.reply(language.note_added, { ephemeral: true }).catch(console.error);
+				else message.reply(language.note_added).catch(console.error);
 				break;
 			}
 			case "remove": {
 				const noteToRemove = notes[parseInt(note) - 1];
 				if (!noteToRemove) return message.reply(language.invalid_note).catch(console.error);
 				const res = await message.client.pg.query(`DELETE FROM mudae_notes WHERE user_id = '${message.author.id}' AND note = '${noteToRemove.note}'`).catch(console.error);
-				if (!res) return message.channel.send(language.errors.database, { ephemeral: true }).catch(console.error);
+				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 				if (!message.isInteraction) message.react("✅").catch(console.error);
-				else message.reply(language.note_removed, { ephemeral: true }).catch(console.error);
+				else message.reply(language.note_removed).catch(console.error);
 				break;
 			}
 			case "get":

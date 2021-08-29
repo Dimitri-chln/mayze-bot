@@ -6,7 +6,6 @@ const command = {
 	aliases: ["gift"],
 	args: 1,
 	usage: "<utilisateur>",
-	cooldown: 60,
 	onlyInGuilds: ["689164798264606784"],
 	category: "miscellaneous",
 	newbiesAllowed: true,

@@ -71,13 +71,13 @@ const command = {
 				};
 				message.client.amongUsGames = games;
 				if (!message.isInteraction) message.react("✅").catch(console.error);
-				else message.reply(language.game_added, { ephemeral: true }).catch(console.error);
+				else message.reply(language.game_added).catch(console.error);
 				break;
 			case "delete":
 				if (!games[message.author.id]) return message.reply(language.user_no_ongoing).catch(console.error);
 				delete games[message.author.id];
 				if (!message.isInteraction) message.react("✅").catch(console.error);
-				else message.reply(language.game_deleted, { ephemeral: true }).catch(console.error);
+				else message.reply(language.game_deleted).catch(console.error);
 				break;
 			default:
 				message.channel.send({

@@ -20,7 +20,7 @@ const command = {
 		const timeToString = require("../utils/timeToString");
 		const uptime = Date.now() - message.client.readyAt;
 		const uptimeString = timeToString(uptime / 1000, languageCode);
-		message.channel.send(language.get(language.response, uptimeString), { ephemeral: true }).catch(console.error);
+		message.channel.send(language.get(language.response, uptimeString)).catch(console.error);
 	}
 };
 

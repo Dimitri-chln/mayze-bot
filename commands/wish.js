@@ -46,7 +46,7 @@ const command = {
 		const res = await message.client.pg.query(query).catch(console.error);
 		if (!res) return message.channel.send(language.errors.database).catch(console.error);
 		if (!message.isInteraction) message.react("✅").catch(console.error);
-		else message.reply(language.added, { ephemeral: true }).catch(console.error);
+		else message.reply(language.added).catch(console.error);
 	}
 };
 

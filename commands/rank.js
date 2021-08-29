@@ -44,8 +44,8 @@ const command = {
 					console.error(err);
 					message.channel.send("Quelque chose s'est mal passé en te donnant le rôle :/").catch(console.error);
 				}
-			}
-			if (message.member.roles.cache.has(rank.id)) {
+			
+			} else {
 				try {
 					await message.member.roles.remove(rank);
 					message.channel.send(`${message.author} a quitté le rank \`${rank.name}\``).catch(console.error);

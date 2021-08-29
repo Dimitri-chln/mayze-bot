@@ -385,23 +385,23 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
 async function processCommand(command, message, args, options) {
 	const language = client.languages.get(message.guild.id);
 
-	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting[language], { ephemeral: true }).catch(console.error);
+	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting[language]).catch(console.error);
 	if (!message.guild.me.permissionsIn(message.channel.id).has("SEND_MESSAGES")) return;
 
 	const channelCooldown = client.channelCooldowns.get(message.channel.id) || 0;
-	if (channelCooldown === 0) setTimeout(() => client.channelCooldowns.delete(message.channel.id), 6000);
+	if (channelCooldown === 0) setTimeout(() => client.channelCooldowns.delete(message.channel.id), 10000);
 	if (channelCooldown >= 5) return;
 	client.channelCooldowns.set(message.channel.id, channelCooldown + 1);
 
 	if (message.channel.id === "865997369745080341" && !command.newbiesAllowed) return; // Disable public commands in the newbies channel
 	if (command.onlyInGuilds && !command.onlyInGuilds.includes(message.guild.id)) return; // message.reply(languages.data.unauthorized_guild[language]).catch(console.error);
-	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm) || (message.channel.viewable && message.channel.permissionsFor(message.member).has(perm))) && message.author.id !== config.OWNER_ID) return message.reply(languages.get(languages.data.unauthorized_perms[language], command.perms.join("`, `")), { ephemeral: true }).catch(console.error);
+	if (command.perms && !command.perms.every(perm => message.member.hasPermission(perm) || (message.channel.viewable && message.channel.permissionsFor(message.member).has(perm))) && message.author.id !== config.OWNER_ID) return message.reply(languages.get(languages.data.unauthorized_perms[language], command.perms.join("`, `"))).catch(console.error);
 	if (command.ownerOnly) {
 		if (command.allowedUsers) {
 			if (!command.allowedUsers.includes(message.author.id) && message.author.id !== config.OWNER_ID) return;
 		} else if (message.author.id !== config.OWNER_ID) return;
 	} else if (command.allowedUsers && !command.allowedUsers.includes(message.author.id)) return;
-	if (args && args.length < command.args)	return message.channel.send(languages.get(languages.data.wrong_usage[language], `${client.prefix + command.name} ${command.usage}`), { ephemeral: true }).catch(console.error);
+	if (args && args.length < command.args)	return message.channel.send(languages.get(languages.data.wrong_usage[language], `${client.prefix + command.name} ${command.usage}`)).catch(console.error);
 	if (command.botPerms && !command.botPerms.every(perm => message.guild.me.permissionsIn(message.channel.id).has(perm))) return message.channel.send(languages.get(languages.data.bot_missing_perms, command.botPerms.filter(perm => !message.guild.me.permissionsIn(message.channel.id).has(perm)).join("`, `"))).catch(console.error);
 
 	if (!client.cooldowns.has(command.name)) client.cooldowns.set(command.name, new Discord.Collection());
@@ -411,12 +411,12 @@ async function processCommand(command, message, args, options) {
 	if (timestamps.has(message.author.id)) {
 		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 		if (now < expirationTime) {
-			const timeLeft = (expirationTime - now) / 1000;
+			const timeLeft = Math.ceil((expirationTime - now) / 1000);
 			const timeLeftHumanized = new Date((timeLeft % 86400) * 1000)
 				.toUTCString()
 				.replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
 				.replace(/00h |00m /g, "");
-			return message.reply(languages.get(languages.data.cooldown[language], timeLeftHumanized, client.prefix + command.name), { ephemeral: true }).catch(console.error);
+			return message.reply(languages.get(languages.data.cooldown[language], timeLeftHumanized, client.prefix + command.name)).catch(console.error);
 		}
 	}
 
@@ -429,7 +429,7 @@ async function processCommand(command, message, args, options) {
 		})
 		.catch(err => {
 			console.error(err);
-			message.channel.send(languages.data.error[language], { ephemeral: true }).catch(console.error);
+			message.channel.send(languages.data.error[language]).catch(console.error);
 		});
 	return;
 }

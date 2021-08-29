@@ -38,7 +38,7 @@ const command = {
 			[ message.author.id, new Date().toISOString(), AKFmessage ]
 		).catch(console.error);
 
-		if (!res) return message.channel.send(language.errors.database, { ephemeral: true }).catch(console.error);
+		if (!res) return message.channel.send(language.errors.database).catch(console.error);
 
 		message.channel.send(language.get(language.afk_message, message.author.toString(), AKFmessage ? `\n**→ ${AKFmessage}**` : ""), { disableMentions: "everyone", ephemeral: true }).catch(console.error);
 	}

@@ -27,7 +27,7 @@ const command = {
 			: options[0].value;
 		
 		message.member.setNickname(nickname).catch(async err => {
-			if (err.message === "Missing Permissions") return message.channel.send(language.errors.no_perms, { ephemeral: true }).catch(console.error);
+			if (err.message === "Missing Permissions") return message.channel.send(language.errors.no_perms).catch(console.error);
 			console.error(err);
 		});
 	}

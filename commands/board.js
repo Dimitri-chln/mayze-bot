@@ -56,18 +56,18 @@ const command = {
 				if (rows.length) {
 					message.client.pg.query(`UPDATE boards SET board = '${boardName}' WHERE user_id = '${message.author.id}'`)
 						.then(() => {
-							message.channel.send(language.get(language.joined, boardName), { ephemeral: true }).catch(console.error);
+							message.channel.send(language.get(language.joined, boardName)).catch(console.error);
 						}).catch(err => {
 							console.error(err);
-							message.channel.send(language.errors.database, { ephemeral: true }).catch(console.error);
+							message.channel.send(language.errors.database).catch(console.error);
 						});
 				} else {
 					message.client.pg.query(`INSERT INTO boards VALUES ('${message.author.id}', '${boardName}')`)
 						.then(() => {
-							message.channel.send(language.get(language.joined, boardName), { ephemeral: true }).catch(console.error);
+							message.channel.send(language.get(language.joined, boardName)).catch(console.error);
 						}).catch(err => {
 							console.error(err);
-							message.channel.send(language.errors.database, { ephemeral: true }).catch(console.error);
+							message.channel.send(language.errors.database).catch(console.error);
 						});
 				}
 				break;
