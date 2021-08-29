@@ -603,6 +603,10 @@ client.on("presenceUpdate", async (oldMember, newMember) => {
 	}
 });
 
+client.on("roleUpdate", async (oldRole, newRole) => {
+	console.log(`${newRole} has been updated`);
+});
+
 
 
 client.login(process.env.TOKEN);
