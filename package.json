@@ -19,6 +19,7 @@
     "jimp": "^0.16.1",
     "lyrics-finder": "^21.7.0",
     "mathjs": "^9.0.0",
+    "minecraft-server-ping": "^0.0.4",
     "oakdex-pokedex": "^0.4.5",
     "pg": "^8.5.1",
     "spotify-web-api-node": "^5.0.2",

@@ -43,7 +43,7 @@ const command = {
 			embed = new MessageEmbed()
 				.setAuthor(language.get(language.title, message.guild.name, leaderboard === "chat_xp"), message.client.user.displayAvatarURL())
 				.setColor(message.guild.me.displayColor)
-				.setDescription(top.slice(i, i + memberPerPage).map((user, i) => language.get(language.description, i + 1, message.guild.members.cache.get(user.user_id).user.username, getLevel(user[leaderboard]).level)).join("\n"));
+				.setDescription(top.slice(i, i + memberPerPage).map((user, j) => language.get(language.description, i + j + 1, message.guild.members.cache.get(user.user_id).user.username, getLevel(user[leaderboard]).level)).join("\n"));
 			pages.push(embed);
 		};
 		
