@@ -24,7 +24,7 @@ const command = {
 				const embed = new MessageEmbed()
 					.setAuthor("Serveur Minecraft de Mayze", message.client.user.avatarURL())
 					.setColor(message.guild.me.displayColor)
-					.setDescription(`**État du serveur :** ${isOnline(res) ? "<:online:882260452627849216> `En ligne" : "<:dnd:882260897077264414> `Hors ligne"}\`${isOnline(res) ? `\n**Version :** \`${res.version.name}\`\n**Joueurs :** \`${res.players.online}/${res.players.max}\`**Ping :** \`${res.ping}ms\`` : ""}`)
+					.setDescription(`**IP du serveur :** \`Lap1BleuKuro.aternos.me\`\n**État du serveur :** ${isOnline(res) ? "<:online:882260452627849216> `En ligne" : "<:dnd:882260897077264414> `Hors ligne"}\`${isOnline(res) ? `\n**Version :** \`${res.version.name}\`\n**Joueurs :** \`${res.players.online}/${res.players.max}\`**Ping :** \`${res.ping}ms\`` : ""}`)
 					.setFooter("✨ Mayze ✨");
 				
 				if (isOnline(res)) embed
