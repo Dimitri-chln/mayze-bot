@@ -17,7 +17,7 @@ const command = {
 		];
 		
 		for (const userData of users) {
-			if (!message.author.bot && message.author.id !== userData.user.id && userData.regex.test(message.content) && !message.mentions.users.has(userData.user.id) && message.channel.members.has(userData.user.id)) {
+			if (message.channel.type !== "dm" && !message.author.bot && message.author.id !== userData.user.id && userData.regex.test(message.content) && !message.mentions.users.has(userData.user.id) && message.channel.members.has(userData.user.id)) {
 				userData.user.send({
 					embed: {
 						author: {
