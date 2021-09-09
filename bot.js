@@ -384,12 +384,12 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
  */
 async function processCommand(command, message, args, options) {
 	const language = client.languages.get(message.guild.id);
+	const now = Date.now();
 
 	if (client.isDatabaseReconnecting) return message.reply(languages.data.errors.database_reconnecting[language]).catch(console.error);
 	if (!message.guild.me.permissionsIn(message.channel.id).has("SEND_MESSAGES")) return;
 
 	const channelCooldown = client.channelCooldowns.get(message.channel.id) ?? { number: 0, last: null };
-	const now = Date.now();
 	if (channelCooldown.number === 0) setTimeout(() => client.channelCooldowns.delete(message.channel.id), 10000);
 	if (channelCooldown.number >= 5) return;
 	if (channelCooldown.last && now - channelCooldown.last < 500) return;
@@ -407,7 +407,6 @@ async function processCommand(command, message, args, options) {
 	if (command.botPerms && !command.botPerms.every(perm => message.guild.me.permissionsIn(message.channel.id).has(perm))) return message.channel.send(languages.get(languages.data.bot_missing_perms, command.botPerms.filter(perm => !message.guild.me.permissionsIn(message.channel.id).has(perm)).join("`, `"))).catch(console.error);
 
 	if (!client.cooldowns.has(command.name)) client.cooldowns.set(command.name, new Discord.Collection());
-	const now = Date.now();
 	const timestamps = client.cooldowns.get(command.name);
 	const cooldownAmount = (command.cooldown || 2) * 1000;
 	if (timestamps.has(message.author.id)) {
