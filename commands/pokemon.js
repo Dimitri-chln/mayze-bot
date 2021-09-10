@@ -8,7 +8,7 @@ const command = {
 	},
 	aliases: ["pokemons", "pkmn", "pkm", "poke"],
 	args: 0,
-	usage: "addfav <pokémon> | removefav <pokémon> | nick <pokémon> [<nickname>] | [<user>] [-favorite] [-legendary] [-beast] [-starter] [-shiny] [-alolan] [-mega] [-id [<number>]] [-name <name>] [-evolution <name>]",
+	usage: "addfav <pokémon> | removefav <pokémon> | nick <pokémon> [<nickname>] | [<user>] [-normal] [-favorite] [-legendary] [-beast] [-starter] [-shiny] [-alolan] [-mega] [-id [<number>]] [-name <name>] [-evolution <name>]",
 	botPerms: ["EMBED_LINKS", "ADD_REACTIONS", "MANAGE_MESSAGES"],
 	category: "pokémon",
 	slashOptions: [
@@ -79,6 +79,12 @@ const command = {
 					name: "user",
 					description: "A user to check the pokémons from",
 					type: 6,
+					required: false
+				},
+				{
+					name: "normal",
+					description: "An option to display only normal pokémons",
+					type: 5,
 					required: false
 				},
 				{
@@ -311,6 +317,7 @@ const command = {
 					? parseParams(args)
 					: options[0].options || [];
 
+				if (hasParam(params, "normal")) pokemons = pokemons.filter(p => !p.shiny && !p.alolan && !p.mega);
 				if (hasParam(params, "favorite")) pokemons = pokemons.filter(p => p.users[user.id].favorite);
 				if (hasParam(params, "legendary")) pokemons = pokemons.filter(p => p.legendary);
 				if (hasParam(params, "ultra-beast")) pokemons = pokemons.filter(p => p.ultra_beast);
@@ -354,6 +361,7 @@ const command = {
 				function parseParams(args) {
 					const paramList = [];
 
+					if (args.includes("-normal")) paramList.push({ name: "normal", value: true });
 					if (args.includes("-favorite") || args.includes("-fav")) paramList.push({ name: "favorite", value: true });
 					if (args.includes("-legendary") || args.includes("-leg")) paramList.push({ name: "legendary", value: true });
 					if (args.includes("-beast") || args.includes("-ub")) paramList.push({ name: "ultra-beast", value: true });

@@ -64,7 +64,7 @@ const command = {
 					name: message.guild.name
 				},
 				content: message.content,
-				args: { ...message.content.split(" ") },
+				args: parseArgs(message.content),
 				mentions: {
 					users: {
 						...message.mentions.users.map(u => {
@@ -94,6 +94,23 @@ const command = {
 			const properties = string.split(".");
 			if (properties.length === 1) return objects[properties[0]];
 			return parseObject(properties.slice(1).join("."), objects[properties[0]]);
+		}
+
+		/**
+		 * @param {string} input 
+		 */
+		function parseArgs(input) {
+			const argsRegex = /("[^"]*")|([^"\s]*)/g;
+			let args = input.match(argsRegex);
+
+			args.forEach((a, i) => {
+				if (!/^".*"$/.test(a)) args.splice(i, 1, ...a.split(/ +/g));
+			});
+
+			args = args.filter(a => a);
+			args = args.map(a => a.replace(/"/g, ""));
+
+			return args;
 		}
 	}
 };

@@ -605,7 +605,18 @@ client.on("presenceUpdate", async (oldMember, newMember) => {
 });
 
 client.on("roleUpdate", async (oldRole, newRole) => {
-	console.log(`${newRole} has been updated`);
+	// if (newRole.guild.id !== "689164798264606784") return;
+
+	// const colorConversion = require("./utils/colorConversion");
+
+	// const roleTop1 = newRole.guild.roles.cache.get("735810462872109156");
+	// const roleBottom1 = newRole.guild.roles.cache.get("759694957132513300");
+	// const roleTop2 = newRole.guild.roles.cache.get("818531980480086086");
+	// const roleBottom2 = newRole.guild.roles.cache.get("735809874205737020");
+
+	// if (roleTop1.position > newRole.position > roleBottom1.position) {
+	// 	const roles = newRole.guild.roles.cache.filter(r => roleTop1.position > r.position > roleBottom1.position);
+	// }
 });
 
 
