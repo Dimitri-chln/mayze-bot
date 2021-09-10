@@ -18,18 +18,19 @@ const command = {
 		const Minecraft = require("minecraft-server-ping");
 
 		const isOnline = pingResult => /^Bienvenue sur le serveur de .+!$/.test(pingResult.description.text);
+		const serverIP = "Lap1BleuKuro.aternos.me";
 
-		Minecraft.ping("Lap1BleuKuro.aternos.me")
+		Minecraft.ping(serverIP)
 			.then(async res => {
 				const embed = new MessageEmbed()
 					.setAuthor("Serveur Minecraft de Mayze", message.client.user.avatarURL())
 					.setColor(message.guild.me.displayColor)
-					.setDescription(`**IP du serveur :** \`Lap1BleuKuro.aternos.me\`\n**État du serveur :** ${isOnline(res) ? "<:online:882260452627849216> `En ligne" : "<:dnd:882260897077264414> `Hors ligne"}\`${isOnline(res) ? `\n**Version :** \`${res.version.name}\`\n**Joueurs :** \`${res.players.online}/${res.players.max}\`**Ping :** \`${res.ping}ms\`` : ""}`)
+					.setDescription(`**IP du serveur :** \`${serverIP}\`\n**État du serveur :** ${isOnline(res) ? "<:online:882260452627849216> `En ligne" : "<:dnd:882260897077264414> `Hors ligne"}\`${isOnline(res) ? `\n**Version :** \`${res.version.name}\`\n**Joueurs :** \`${res.players.online}/${res.players.max}\`**Ping :** \`${res.ping}ms\`` : ""}`)
 					.setFooter("✨ Mayze ✨");
 				
 				if (isOnline(res)) embed
-					.setThumbnail("attachment://favicon.png")
-					.attachFiles([ new MessageAttachment(Buffer.from(res.favicon, "base64"), "favicon.png") ]);
+					.attachFiles([ new MessageAttachment(Buffer.from(res.favicon, "base64"), "favicon.png") ])
+					.setThumbnail("attachment://favicon.png");
 				
 				message.channel.send(embed).catch(console.error);
 			})
