@@ -32,7 +32,7 @@ const command = {
 					url: song.thumbnail
 				},
 				color: message.guild.me.displayColor,
-				description: language.get(language.description, song.name, song.url, message.client.player.createProgressBar(message), song.requestedBy, queue.repeatMode ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Ø")), queue.repeatMode || queue.repeatQueue || queue.autoplay ? "♾️" : queue.duration),
+				description: language.get(language.description, song.name, song.url, message.client.player.createProgressBar(message, { size: 20, arrow: "━", block: "🔘" }), song.requestedBy, queue.repeatMode ? song.name : (queue.songs[1] ? queue.songs[1].name : (queue.repeatQueue ? queue.songs[0].name : "Ø")), queue.repeatMode || queue.repeatQueue || queue.autoplay ? "♾️" : queue.duration),
 				footer: {
 					text: language.get(language.footer, queue.repeatMode, queue.repeatQueue, queue.autoplay)
 				}
