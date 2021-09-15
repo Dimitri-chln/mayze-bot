@@ -757,7 +757,7 @@ setInterval(() => {
 					url: song.thumbnail
 				},
 				color: message.guild.me.displayColor,
-				description: languages.get(languages.data["now-playing"].description[l], song.name, song.url, message.client.player.createProgressBar(message), song.requestedBy, song.queue.repeatMode ? song.name : (song.queue.songs[1] ? song.queue.songs[1].name : (song.queue.repeatQueue ? song.queue.songs[0].name : "Ø")), song.queue.repeatMode || song.queue.repeatQueue || song.queue.autoplay ? "♾️" : song.queue.duration),
+				description: languages.get(languages.data["now-playing"].description[l], song.name, song.url, message.client.player.createProgressBar(message, { size: 20, arrow: "🔘", block: "━" }), song.requestedBy, song.queue.repeatMode ? song.name : (song.queue.songs[1] ? song.queue.songs[1].name : (song.queue.repeatQueue ? song.queue.songs[0].name : "Ø")), song.queue.repeatMode || song.queue.repeatQueue || song.queue.autoplay ? "♾️" : song.queue.duration),
 				footer: {
 					text: languages.get(languages.data["now-playing"].footer[l], song.queue.repeatMode, song.queue.repeatQueue, song.queue.autoplay)
 				}
