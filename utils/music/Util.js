@@ -360,25 +360,25 @@ class Util {
         ) * 1000;
     }
 
-    /**
-     * Create a text progress bar
-     * @param {Number} value - The value to fill the bar
-     * @param {Number} maxValue - The max value of the bar
-     * @param {Number} size - The bar size (in letters)
-     * @param {String} loadedIcon - Loaded Icon
-     * @param {String} arrowIcon - Arrow Icon
-     * @return {String} - Music Bar
-     */
-    static buildBar(value, maxValue, size, loadedIcon, arrowIcon) {
-        const percentage = value / maxValue;
-        const progress = Math.round((size * percentage));
-        const emptyProgress = size - progress;
+	/**
+	 * Create a text progress bar
+	 * @param {Number} value - The value to fill the bar
+	 * @param {Number} maxValue - The max value of the bar
+	 * @param {Number} size - The bar size (in letters)
+	 * @param {String} loadedIcon - Loaded Icon
+	 * @param {String} arrowIcon - Arrow Icon
+	 * @return {String} - Music Bar
+	 */
+	static buildBar(value, maxValue, size, loadedIcon, arrowIcon) {
+		const percentage = value / maxValue > 1 ? 0 : value / maxValue;
+		const progress = Math.round(size * percentage);
+		const emptyProgress = Math.round(size * (1 - percentage));
 
-        const progressText = loadedIcon.repeat(progress) + arrowIcon;
-        const emptyProgressText = ' '.repeat(emptyProgress);
+		const progressText = loadedIcon.repeat(progress) + arrowIcon;
+		const emptyProgressText = loadedIcon.repeat(emptyProgress);
 
-        return `[${progressText}${emptyProgressText}][${this.MillisecondsToTime(value)}/${this.MillisecondsToTime(maxValue)}]`;
-    };
+		return `[${progressText}](https://mayze.herokuapp.com)${emptyProgressText}\n${this.MillisecondsToTime(value)}/${this.MillisecondsToTime(maxValue)}`;
+	};
 
     /**
      * @param {Partial<PlayerOptions>} options
