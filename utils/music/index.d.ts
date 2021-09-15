@@ -1,7 +1,7 @@
 import {Client, VoiceChannel, Message, Snowflake, StreamDispatcher, VoiceConnection} from "discord.js";
 import { Video, Playlist } from "@sushibtw/youtubei";
 import ytsr from "ytsr";
-import Util from "discord-music-player/src/Util";
+import Util from "../src/Util";
 
 interface PlayerEvents {
     channelEmpty: [message: Message, queue: Queue];

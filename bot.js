@@ -658,7 +658,7 @@ const player = new Player(client, {
 player.nowPlayings = new Discord.Collection();
 client.player = player;
 
-const Utils = require("./utils/music/Util");
+const Utils = require("./utils/music_old/Util");
 
 player.on("clientDisconnect", (message, queue) => {
 	const l = message.client.languages.get(message.guild.id);

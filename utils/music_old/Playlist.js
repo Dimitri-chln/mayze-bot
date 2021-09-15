@@ -1,3 +1,4 @@
+const YouTube = require('youtubei');
 /**
  * Represents a playlist.
  */

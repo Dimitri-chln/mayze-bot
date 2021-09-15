@@ -1,5 +1,6 @@
-const Discord = require('discord.js')
-const Util = require('./Util');
+const { Song } = require('discord-music-player');
+const Discord = require('discord.js');
+const { PlayerOptions, TimeToMilliseconds, MillisecondsToTime } = require('./Util');
 
 /**
  * Represents a guild queue.
@@ -12,7 +13,7 @@ class Queue {
     /**
      * Represents a guild queue.
      * @param {string} guildID
-     * @param {Util.PlayerOptions} options
+     * @param {PlayerOptions} options
      * @param {Discord.Message} message
      */
     constructor(guildID, options, message){
@@ -50,7 +51,7 @@ class Queue {
          * The stream volume.
          * @type {Number}
          */
-        this.volume = options['volume'] ?? 100;
+        this.volume = options.volume || 100;
         /**
          * Whether the stream is currently playing.
          * @type {Boolean}
@@ -76,9 +77,23 @@ class Queue {
          * @type {PlayerOptions}
          */
         this.options = options;
-
+        /**
+         * Whether the autoplay is enabled.
+         * @type {Boolean}
+         */
+        this.autoplay = false;
     }
 
+    /**
+         * @returns {Number} The total duration of the queue
+         */
+     get duration() {
+        return this.dispatcher
+            ? MillisecondsToTime(this.songs.reduce((sum, song) => sum + TimeToMilliseconds(song.duration), 0)
+                - this.dispatcher?.streamTime
+                - (this.songs.length ? this.songs[0].seekTime : 0))
+            : null;
+    }
 }
 
 module.exports = Queue;
