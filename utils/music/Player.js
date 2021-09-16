@@ -518,6 +518,38 @@ class Player extends EventEmitter {
         return queue.repeatQueue;
     }
 
+    
+    /**
+	 * Moves a song to another position in the queue
+	 * @param {Discord.Message} message The Discord Message object.
+	 * @param {Number} index The index of the song to remove or the song to remove object.
+	 * @param {number} position The index to which the song needs to be moved.
+	 * @returns {?Song}
+	 */
+	move(message, index, position) {
+		// Gets guild queue
+		let queue = this.queues.get(message.guild.id);
+		if (!queue)
+		{
+			this.emit('error', 'QueueIsNull', message);
+			return null;
+		}
+
+		// Remove the song from the queue
+		let songFound = null;
+		if (typeof index === "number" && typeof position === "number") {
+			songFound = queue.songs[index];
+			if (songFound) {
+				queue.songs.splice(position, 0, queue.songs.splice(index, 1)[0]);
+			}
+		} else {
+			this.emit('error', 'NotANumber', message);
+			return;
+		}
+
+		// Resolve
+		return songFound;
+	}
 
     /**
      * Removes a song from the queue
