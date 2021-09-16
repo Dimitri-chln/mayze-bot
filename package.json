@@ -9,6 +9,7 @@
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
     "algebra.js": "^0.2.6",
+    "archiver": "^5.3.0",
     "axios": "^0.21.1",
     "cron": "^1.8.2",
     "deezer-public-api": "^1.0.4",

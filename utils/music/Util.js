@@ -377,7 +377,7 @@ class Util {
 		const progressText = loadedIcon.repeat(progress) + arrowIcon;
 		const emptyProgressText = loadedIcon.repeat(emptyProgress);
 
-		return `[${progressText}](https://mayze.herokuapp.com)${emptyProgressText}\n${this.MillisecondsToTime(value)}/${this.MillisecondsToTime(maxValue)}`;
+		return `[${progressText}](https://mayze.herokuapp.com)${emptyProgressText}\n**${this.MillisecondsToTime(value)}/${this.MillisecondsToTime(maxValue)}**`;
 	};
 
     /**

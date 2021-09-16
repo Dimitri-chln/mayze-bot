@@ -13,11 +13,23 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		const Minecraft = require("minecraft-server-ping");
+		const Fs = require("fs");
+		const ytdl = require("ytdl-core");
 
-		Minecraft.ping("Lap1BleuKuro.aternos.me")
-			.then(console.log)
-			.catch(console.error);
+		const url = args[0];
+		const info = await ytdl.getInfo(url);
+
+		ytdl(url, {
+			quality: "highestaudio",
+			filter: "audioonly"
+		})
+			.on("data", chunk => {
+				console.log(`Received ${chunk.length} bytes`);
+			})
+			.on("finish", () => {
+				console.log("Download complete");
+			})
+			.pipe(Fs.createWriteStream(`./assets/downloads/${info.videoDetails.title}.mp3`));
 	}
 };
 

@@ -313,6 +313,24 @@ module.exports = {
 				en: "Synonyms"
 			}
 		},
+		"download": {
+			error: {
+				fr: "Lien invalide",
+				en: "Invalid link"
+			},
+			title: {
+				fr: "Progression du téléchargement :",
+				en: "Download progress:"
+			},
+			finished: {
+				fr: "Téléchargement terminé",
+				en: "Download complete"
+			},
+			file_too_big: {
+				fr: "Le fichier est trop lourd pour être envoyé :/ (max 8Mo)",
+				en: "The file is too big to be sent :/ (8Mb max)"
+			}
+		},
 		"dm-link": {
 			invalid_channel: {
 				fr: "entre un salon textuel valide",
@@ -454,7 +472,7 @@ module.exports = {
 			},
 			kick_msg: {
 				fr: "**{1}** a fui ses responsabilités",
-				en: "**{1}** evaded his responsabilities"
+				en: "**{1}** evaded their responsabilities"
 			},
 		},
 		"kiss": {
@@ -793,6 +811,16 @@ module.exports = {
 			description: {
 				fr: "**ID :** `{1}`\n**Couleur** (dec) **:** `{2}`\n**Couleur** (hex) **:** `#{3}`\n**Position :** `{4}`\n**Membres :** `{5}`\n```\n{6}\n```",
 				en: "**ID:** `{1}`\n**Color** (dec)**:** `{2}`\n**Color** (hex)**:** `#{3}`\n**Position:** `{4}`\n**Members:** `{5}`\n```\n{6}\n```"
+			}
+		},
+		"shop": {
+			title: {
+				fr: "Magasin d'améliorations",
+				en: "Upgrades shop"
+			},
+			catch_cooldown_reduction: {
+				fr: "Temps d'attente pour attraper un pokémon",
+				en: "Catch cooldown"
 			}
 		},
 		"since": {
