@@ -6,7 +6,7 @@ const command = {
 		fr: "Acheter des améliorations pour Mayze",
 		en: "Buy upgrades for mayze"
 	},
-	aliases: [""],
+	aliases: [],
 	args: 0,
 	usage: "[<upgrade>]",
 	category: "pokémon",
