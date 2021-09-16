@@ -819,8 +819,24 @@ module.exports = {
 				en: "Upgrades shop"
 			},
 			catch_cooldown_reduction: {
-				fr: "Temps d'attente pour attraper un pokémon",
-				en: "Catch cooldown"
+				fr: "Réduction du temps d'attente pour attraper un pokémon",
+				en: "Catch cooldown reduction"
+			},
+			new_pokemon_probability: {
+				fr: "Probabilité d'obtenir un nouveau pokémon",
+				en: "Probability of getting a new pokémon"
+			},
+			legendary_ub_probability: {
+				fr: "Probabilité d'obtenir un pokémon légendaire ou une chimère",
+				en: "Probability of getting a legendary pokémon or an ultra beast"
+			},
+			mega_gem_probability: {
+				fr: "Probabilité d'obtenir une méga gemme",
+				en: "Probability of getting a mega gem"
+			},
+			shiny_probability: {
+				fr: "Probabilité d'obtenir un pokémon shiny",
+				en: "Probability of getting a shiny pokémon"
 			}
 		},
 		"since": {

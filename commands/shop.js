@@ -59,7 +59,27 @@ const command = {
 					fields: [
 						{
 							name: language.catch_cooldown_reduction,
-							value: `**-${upgrades.catch_cooldown_reduction}m** (${message.client.commands.get("catch").cooldown / 60}m → ${(message.client.commands.get("catch").cooldown / 60) - upgrades.catch_cooldown_reduction}m)`,
+							value: `**${upgrades.catch_cooldown_reduction}min** (${message.client.commands.get("catch").cooldown / 60}m → ${(message.client.commands.get("catch").cooldown / 60) - upgrades.catch_cooldown_reduction}min)`,
+							inline: true
+						},
+						{
+							name: language.new_pokemon_probability,
+							value: `**+${upgrades.new_pokemon_probability}%**`,
+							inline: true
+						},
+						{
+							name: language.legendary_ub_probability,
+							value: `**+${upgrades.legendary_ub_probability}%**`,
+							inline: true
+						},
+						{
+							name: language.mega_gem_probability,
+							value: `**+${upgrades.mega_gem_probability}%**`,
+							inline: true
+						},
+						{
+							name: language.shiny_probability,
+							value: `**+${upgrades.shiny_probability}%**`,
 							inline: true
 						}
 					],
