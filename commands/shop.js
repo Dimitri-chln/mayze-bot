@@ -67,15 +67,15 @@ const command = {
 						},
 						{
 							name: language.legendary_ub_probability,
-							value: `+${upgrades.legendary_ub_probability}%`,
+							value: `+${upgrades.legendary_ub_probability}% ${language.probability}`,
 						},
 						{
 							name: language.mega_gem_probability,
-							value: `+${upgrades.mega_gem_probability}%`,
+							value: `+${upgrades.mega_gem_probability}% ${language.probability}`,
 						},
 						{
 							name: language.shiny_probability,
-							value: `+${upgrades.shiny_probability}%`,
+							value: `+${upgrades.shiny_probability}% ${language.probability}`,
 						}
 					],
 					footer: {
