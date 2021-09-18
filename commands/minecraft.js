@@ -25,24 +25,25 @@ const command = {
 
 		await Promise.all(
 			serverIPs.map(async serverIP => {
+				embed = new MessageEmbed()
+					.setAuthor("Serveurs Minecraft", message.client.user.avatarURL())
+					.setColor(message.guild.me.displayColor)
+					
 				const res = await Minecraft.ping(serverIP).catch(console.error);
 				if (res) {
-					console.log(res);
-					embed = new MessageEmbed()
-						.setAuthor("Serveurs Minecraft", message.client.user.avatarURL())
-						.setColor(message.guild.me.displayColor)
-						.setDescription(`**IP du serveur :** \`${serverIP}\`\n**État du serveur :** ${isOnline(res) ? "<:online:882260452627849216> `En ligne" : "<:dnd:882260897077264414> `Hors ligne"}\`${isOnline(res) ? `\n**Version :** \`${res.version.name}\`\n**Joueurs :** \`${res.players.online}/${res.players.max}\`**Ping :** \`${res.ping}ms\`` : ""}`);
-					if (isOnline(res)) {
-						embed
-							.attachFiles([ new MessageAttachment(Buffer.from(res.favicon, "base64"), "favicon.png") ])
-							.setThumbnail("attachment://favicon.png");
-					}
-					pages.push(embed);
+					embed
+						.setDescription(`**IP du serveur :** \`${serverIP}\`\n**État du serveur :** ${isOnline(res) ? "<:online:882260452627849216> `En ligne" : "<:dnd:882260897077264414> `Hors ligne"}\`${isOnline(res) ? `\n**Version :** \`${res.version.name}\`\n**Joueurs :** \`${res.players.online}/${res.players.max}\`**Ping :** \`${res.ping}ms\`` : ""}`)
+						// .attachFiles([ new MessageAttachment(Buffer.from(res.favicon, "base64"), "favicon.png") ])
+						// .setThumbnail("attachment://favicon.png");
 				} else {
-					message.channel.send("Quelque chose s'est mal passé en se connectant au serveur Minecraft :/").catch(console.error);
+					embed.setDescription(`**IP du serveur :** \`${serverIP}\`\n*Impossible de se connecter*`);
 				}
+
+				pages.push(embed);
 			})
 		);
+
+		pages.sort((a, b) => isOnline(b) - isOnline(a));
 
 		pagination(message, pages).catch(err => {
 			console.error(err);
