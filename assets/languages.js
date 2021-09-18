@@ -822,21 +822,25 @@ module.exports = {
 				fr: "Réduction du temps d'attente pour attraper un pokémon",
 				en: "Catch cooldown reduction"
 			},
+			probability: {
+				fr: "de chance",
+				en: "probability"
+			},
 			new_pokemon_probability: {
-				fr: "Probabilité d'obtenir un nouveau pokémon",
-				en: "Probability of getting a new pokémon"
+				fr: "Nouveau pokémon",
+				en: "New pokémon"
 			},
 			legendary_ub_probability: {
-				fr: "Probabilité d'obtenir un pokémon légendaire ou une chimère",
-				en: "Probability of getting a legendary pokémon or an ultra beast"
+				fr: "Pokémon légendaire ou une chimère",
+				en: "Legendary pokémon or an ultra beast"
 			},
 			mega_gem_probability: {
-				fr: "Probabilité d'obtenir une méga gemme",
-				en: "Probability of getting a mega gem"
+				fr: "Méga gemme",
+				en: "Mega gem"
 			},
 			shiny_probability: {
-				fr: "Probabilité d'obtenir un pokémon shiny",
-				en: "Probability of getting a shiny pokémon"
+				fr: "Pokémon shiny",
+				en: "Shiny pokémon"
 			}
 		},
 		"since": {
