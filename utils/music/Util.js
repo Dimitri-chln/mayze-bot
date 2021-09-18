@@ -21,7 +21,7 @@ const RegExpList = {
     Spotify: /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:track\/|\?uri=spotify:track:)((\w|-){22})(?:(?=\?)(?:[?&]foo=(\d*)(?=[&#]|$)|(?![?&]foo=)[^#])+)?(?=#|$)/,
     SpotifyPlaylist: /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(album|playlist)\/|\?uri=spotify:playlist:)((\w|-){22})(?:(?=\?)(?:[?&]foo=(\d*)(?=[&#]|$)|(?![?&]foo=)[^#])+)?(?=#|$)/,
     Deezer: /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?track\/(\d+)/,
-    DeezerPlaylist: /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?(?:playlist|album)d+)/
+    DeezerPlaylist: /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?(?:playlist|album)\/(\d+)/
 
 }
 
