@@ -9,6 +9,8 @@ const YTSR = require('ytsr');
 const YouTubeClient = require("@sushibtw/youtubei");
 const YouTube = new YouTubeClient.Client();
 const { getPreview, getData } = require("spotify-url-info");
+const Deezer = require("deezer-public-api");
+const deezer = new Deezer();
 
 // RegExp Definitions
 const RegExpList = {
@@ -18,6 +20,8 @@ const RegExpList = {
     YouTubePlaylistID: /[&?]list=([^&]+)/,
     Spotify: /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:track\/|\?uri=spotify:track:)((\w|-){22})(?:(?=\?)(?:[?&]foo=(\d*)(?=[&#]|$)|(?![?&]foo=)[^#])+)?(?=#|$)/,
     SpotifyPlaylist: /https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(album|playlist)\/|\?uri=spotify:playlist:)((\w|-){22})(?:(?=\?)(?:[?&]foo=(\d*)(?=[&#]|$)|(?![?&]foo=)[^#])+)?(?=#|$)/,
+    Deezer: /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?track\/(\d+)/,
+    DeezerPlaylist: /https?:\/\/(?:www\.)?deezer\.com\/(?:\w{2}\/)?playlist\/(\d+)/
 
 }
 
@@ -183,6 +187,8 @@ class Util {
 
         let SpotifyLink =
             RegExpList.Spotify.test(Search);
+        let DeezerLink = 
+            RegExpList.Deezer.test(Search);
         let YouTubeLink =
             RegExpList.YouTubeVideo.test(Search);
 
@@ -200,6 +206,21 @@ class Util {
             catch(e) {
                 throw 'InvalidSpotify';
             }
+        } else if(DeezerLink) {
+            try {
+				let [ , trackID ] = Search.match(RegExpList.Deezer);
+				let DeezerResult = await deezer.track(trackID);
+				let SearchResult = await this.search(
+                    `${DeezerResult['artist']['name']} - ${DeezerResult['title']}`,
+                    null,
+                    Queue,
+                    Requester
+                );
+                return SearchResult[0];
+			}
+			catch(err) {
+				throw 'InvalidDeezer';
+			}
         } else if(YouTubeLink) {
             let VideoID = ParseYouTubeVideo(Search);
             if (!VideoID) throw 'SearchIsNull';
@@ -258,6 +279,8 @@ class Util {
 
         let SpotifyPlaylistLink =
             RegExpList.SpotifyPlaylist.test(Search);
+        let DeezerPlaylistLink =
+            RegExpList.DeezerPlaylist.test(Search);
         let YouTubePlaylistLink =
             RegExpList.YouTubePlaylist.test(Search);
 
@@ -267,6 +290,45 @@ class Util {
                 throw 'InvalidPlaylist';
 
             SpotifyResult = {
+                title: SpotifyResult['name'],
+                channel: SpotifyResult['type'] === 'playlist' ? { name: SpotifyResult['owner']['display_name'] } : SpotifyResult['artists'][0],
+                url: Search,
+                videos: SpotifyResult['tracks'] ? SpotifyResult['tracks'].items : [],
+                videoCount: 0,
+                type: SpotifyResult['type']
+            }
+
+            SpotifyResult.videos = await Promise.all(SpotifyResult.videos.map(async (track, index) => {
+                if (Limit !== -1 && index >= Limit) return null;
+                if(SpotifyResult['type'] === 'playlist')
+                    track = track['track'];
+                let Result = await this.search(
+                    `${track['artists'][0].name} - ${track['name']}`,
+                    null,
+                    Queue,
+                    Requester
+                ).catch(() => null);
+                return Result ? Result[0] : null;
+            })
+                .filter(V => V)
+            )
+            SpotifyResult.videoCount =
+                Limit === -1 ?
+                    SpotifyResult.videos.length :
+                    SpotifyResult.videos.length > Limit ?
+                        Limit :
+                        SpotifyResult.videos.length;
+
+            return new Playlist(SpotifyResult, Queue, Requester);
+        } else if(DeezerPlaylistLink) {
+            let [ , playlistID ] = Search.match(RegExpList.DeezerPlaylist);
+            let DeezerResult = await deezer.playlist(playlistID).catch(() => null);
+            return console.log(DeezerResult);
+            
+            if(!DeezerResult || !['playlist', 'album'].includes(DeezerResult['type']))
+                throw 'InvalidPlaylist';
+
+            DeezerResult = {
                 title: SpotifyResult['name'],
                 channel: SpotifyResult['type'] === 'playlist' ? { name: SpotifyResult['owner']['display_name'] } : SpotifyResult['artists'][0],
                 url: Search,
