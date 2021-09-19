@@ -1,8 +1,14 @@
-const { Message, MessageEmbed } = require("discord.js");
+const { Message, MessageEmbed, MessageAttachment } = require("discord.js");
+
+/**
+ * @typedef {object} Page
+ * @property {MessageEmbed} embed
+ * @property {MessageAttachment[]} files
+ */
 
  /**
   * @param {Message} message The message channel to send the paginator
-  * @param {MessageEmbed[]} pages The pages of the paginator
+  * @param {Page[] | MessageEmbed[]} pages The pages of the paginator
   * @param {string[]} emojiList The reactions added to the paginator
   * @param {number} timeout The time the paginator lasts
   * @returns {MessageEmbed} The pages the paginator finished on
@@ -11,9 +17,15 @@ const { Message, MessageEmbed } = require("discord.js");
     if (emojiList.length !== 2) throw new Error("Need two emojis.");
     
 	let page = 0;
-    const currentPage = await message.channel.send({
-		embed: pages[page].setFooter(`Page ${page + 1} / ${pages.length}`).toJSON()
-	}).catch(console.error);
+	console.log(pages)
+
+	pages = pages.map((p, i) => {
+		if (p instanceof MessageEmbed) p.setFooter(`Page ${i + 1} / ${pages.length}`);
+		else p.embed.setFooter(`Page ${i + 1} / ${pages.length}`);
+		return p;
+	});
+
+    const currentPage = await message.channel.send(pages[page]).catch(console.error);
 	if (!currentPage) throw new Error("Failed to send paginator");
 
     for (const emoji of emojiList) await currentPage.react(emoji).catch(console.error);
@@ -27,6 +39,7 @@ const { Message, MessageEmbed } = require("discord.js");
 		reaction.users.remove(user);
 		clearTimeout(timer);
 		timer = setTimeout(() => reactionCollector.stop(), timeout);
+		
 		switch (reaction.emoji.name) {
 			case emojiList[0]:
 				page = page > 0 ? --page : pages.length - 1;
@@ -37,7 +50,8 @@ const { Message, MessageEmbed } = require("discord.js");
 			default:
 				break;
 		}
-		currentPage.edit(pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)).catch(console.error);
+
+		currentPage.edit(pages[page]).catch(console.error);
     });
     
 	reactionCollector.on("end", () => {

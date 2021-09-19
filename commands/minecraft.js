@@ -17,32 +17,39 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		const isOnline = pingResult => /^Bienvenue sur le serveur de .+!$/.test(pingResult.description.text);
+		const isOnline = pingResult => /^Bienvenue sur le serveur de .+!$/.test(pingResult.description?.text);
 
 		const serverIPs = process.env.MINECRAFT_SERVER_IPS.split(",");
 
-		let pages = [], embed;
+		/**@type {pagination.Page[]} */
+		let pages = [];
 
 		await Promise.all(
 			serverIPs.map(async serverIP => {
-				embed = new MessageEmbed()
-					.setAuthor("Serveurs Minecraft", message.client.user.avatarURL())
-					.setColor(message.guild.me.displayColor)
+				/**@type {pagination.Page} */
+				let page = {
+					embed: new MessageEmbed()
+						.setAuthor("Serveurs Minecraft", message.client.user.avatarURL())
+						.setColor(message.guild.me.displayColor),
+					files: []
+				};
 					
 				const res = await Minecraft.ping(serverIP).catch(console.error);
+				
 				if (res) {
-					embed
+					page.embed
 						.setDescription(`**IP du serveur :** \`${serverIP}\`\n**État du serveur :** ${isOnline(res) ? "<:online:882260452627849216> `En ligne" : "<:dnd:882260897077264414> `Hors ligne"}\`${isOnline(res) ? `\n**Version :** \`${res.version.name}\`\n**Joueurs :** \`${res.players.online}/${res.players.max}\`**Ping :** \`${res.ping}ms\`` : ""}`)
-						// .attachFiles([ new MessageAttachment(Buffer.from(res.favicon, "base64"), "favicon.png") ])
-						// .setThumbnail("attachment://favicon.png");
+						.setThumbnail("attachment://favicon.png");
+					page.files.push(new MessageAttachment(Buffer.from(res.favicon.replace(/.*;base64,/, ""), "base64"), "favicon.png"));
 				} else {
-					embed.setDescription(`**IP du serveur :** \`${serverIP}\`\n*Impossible de se connecter*`);
+					page.embed.setDescription(`**IP du serveur :** \`${serverIP}\`\n**État du serveur :** *Impossible de se connecter*`);
 				}
 
-				pages.push(embed);
+				pages.push(page);
 			})
 		);
 
+		// Sort online server first
 		pages.sort((a, b) => isOnline(b) - isOnline(a));
 
 		pagination(message, pages).catch(err => {
