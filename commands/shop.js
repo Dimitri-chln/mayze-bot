@@ -59,7 +59,7 @@ const command = {
 					fields: [
 						{
 							name: language.catch_cooldown_reduction,
-							value: `${upgrades.catch_cooldown_reduction}min (${message.client.commands.get("catch").cooldown / 60}m → ${(message.client.commands.get("catch").cooldown / 60) - upgrades.catch_cooldown_reduction}min)`,
+							value: `${upgrades.catch_cooldown_reduction}min (${message.client.commands.get("catch").cooldown / 60}min → ${(message.client.commands.get("catch").cooldown / 60) - upgrades.catch_cooldown_reduction}min)`,
 						},
 						{
 							name: language.new_pokemon_probability,
