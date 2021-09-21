@@ -3,7 +3,7 @@ const { Message } = require("discord.js");
 const command = {
 	name: "unbelievaboat-shop",
 	description: "La liste des objets à vendre sur le serveur",
-	aliases: ["unb-shop", "shop"],
+	aliases: ["unb-shop"],
 	args: 0,
 	usage: "",
 	botPerms: ["EMBED_LINKS"],
