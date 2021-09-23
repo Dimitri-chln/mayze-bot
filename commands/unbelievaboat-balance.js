@@ -3,7 +3,7 @@ const { Message } = require("discord.js");
 const command = {
 	name: "unbelievaboat-balance",
 	description: "Obtenir ta balance UnbelieveBoat",
-	aliases: ["unb-balance", "unbelievaboat-bal", "balance", "bal"],
+	aliases: ["unb-balance", "unbelievaboat-bal", "unb-bal"],
 	args: 0,
 	usage: "",
 	botPerms: ["EMBED_LINKS"],

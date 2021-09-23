@@ -181,6 +181,20 @@ module.exports = {
 				en: "there is no backup corresponding to this table"
 			}
 		},
+		"balance": {
+			title: {
+				fr: "Balance de {1}",
+				en: "{1}'s balance"
+			},
+			description: {
+				fr: "**✨ Argent :** `{1}`\n**Daily disponible :** [2?<t~d{2}~dR>:Maintenant]",
+				en: "**✨ Money:** `{1}`\n**Daily available:** [2?<t~d{2}~dR>:Now]"
+			},
+			now: {
+				fr: "Maintenant",
+				en: "Now"
+			}
+		},
 		"board": {
 			title: {
 				fr: "Liste des canevas",
@@ -301,6 +315,20 @@ module.exports = {
 			embed_title: {
 				fr: "Réponses personnalisées",
 				en: "Custom responses"
+			}
+		},
+		"daily": {
+			cooldown: {
+				fr: "Tu peux récupérer ta prochaine récompense dans **{1}**",
+				en: "You can claim your next reward in **{1}**"
+			},
+			title: {
+				fr: "Récompense quotidienne",
+				en: "Daily reward"
+			},
+			description: {
+				fr: "Tu as obtenu **✨{1}** - Total : **✨{2}**",
+				en: "You just got **✨{1}** - Total: **✨{2}**"
 			}
 		},
 		"define": {
