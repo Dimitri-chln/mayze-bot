@@ -27,7 +27,7 @@ const command = {
 		const DAY_IN_MS = 1000 * 60 * 60 * 24, NOW = Date.now();
 
 		const user = args
-			? message.client.findMember(message.guild.id, args.join(" "))?.user ?? message.author
+			? message.client.findMember(message.guild, args.join(" "))?.user ?? message.author
 			: options ? message.guild.members.cache.get(options[0].value).user : message.author
 		
 		const { rows } = (await message.client.pg.query(
