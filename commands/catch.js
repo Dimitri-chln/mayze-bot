@@ -25,6 +25,7 @@ const command = {
 		const megas = require("../assets/mega.json");
 		const { getPokemonImage, getPokemonName } = require("../utils/pokemonInfo");
 		const { pokeball } = require("../assets/misc.json");
+		const { CATCH_REWARD, SHINY_MULTIPLIER, ALOLAN_MULTIPLIER } = require("../config.json");
 
 		const shinyFrequency = 0.004, alolanFrequency = 0.05, megaGemFrequency = 0.02;
 		const { catchRates } = message.client;
@@ -42,14 +43,14 @@ const command = {
 				const huntedPokemon = pokedex.findPokemon(rows[0].pokemon_id) || pokedex.findPokemon("Snover");
 
 				let probability = (
-                    (rows[0].hunt_count + 1)
-                    / 100
-                ) * (
-                    (legendaries.includes(huntedPokemon.names.en) || beasts.includes(huntedPokemon.names.en)
-                        ? 3
-                        : huntedPokemon.catch_rate
-                    ) / 255
-                );
+					(rows[0].hunt_count + 1)
+					/ 100
+				) * (
+					(legendaries.includes(huntedPokemon.names.en) || beasts.includes(huntedPokemon.names.en)
+						? 3
+						: huntedPokemon.catch_rate
+					) / 255
+				);
 				if (probability > 1) probability = 1;
 				
 				let r = Math.random();
@@ -97,6 +98,12 @@ const command = {
 		const legendary = legendaries.includes(pokemon.names.en);
 		const beast = beasts.includes(pokemon.names.en);
 		const variation = alolans.includes(pokemon.names.en) && Math.random() < alolanFrequency ? "alolan" : "default";
+
+		const catchReward = Math.round(CATCH_REWARD * (
+			255 / (
+				legendaries.includes(pokemon.names.en) || beasts.includes(pokemon.names.en) ? 3 : pokemon.catch_rate
+			) * (shiny ? SHINY_MULTIPLIER : 1) * (variation === "alolan" ? ALOLAN_MULTIPLIER : 1)
+		));
 		
 		const defaultData = {};
 		defaultData[message.author.id] = { caught: 1, favorite: false, nickname: null };
@@ -127,7 +134,20 @@ const command = {
 			]
 		).catch(console.error);
 
-		message.client.pg.query(`UPDATE pokemon_hunting SET hunt_count = hunt_count + 1 WHERE user_id = '${message.author.id}'`).catch(console.error);
+		message.client.pg.query(
+			"UPDATE pokemon_hunting SET hunt_count = hunt_count + 1 WHERE user_id = $1",
+			[ message.author.id ]
+		).catch(console.error);
+
+		message.client.pg.query(
+			`
+			INSERT INTO currency VALUES ($1, $2)
+			ON CONFLICT (user_id)
+			DO UPDATE SET money = currency.money + $2
+			WHERE currency.user_id = EXCLUDED.user_id
+			`,
+			[ message.author.id, catchReward ]
+		).catch(console.error);
 
 		const msg = await message.channel.send({
 			embed: {
@@ -143,7 +163,7 @@ const command = {
 					: legendary || beast 
 						? 13512480
 						: message.guild.me.displayColor,
-				description: language.get(language.caught_title, message.author.toString(), !shiny && (variation === "alolan" || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en)), getPokemonName(pokemon, shiny, variation, languageCode))
+				description: language.get(language.caught_title, message.author.toString(), !shiny && (variation === "alolan" || /^[aeiou]/i.test(pokemon.names[languageCode] || pokemon.names.en)), getPokemonName(pokemon, shiny, variation, languageCode), catchReward)
 					+ (megaGem ? language.get(language.mega_gem, megaGem[languageCode]) : ""),
 				footer: {
 					text: "✨ Mayze ✨" + (huntFooterText || ""),

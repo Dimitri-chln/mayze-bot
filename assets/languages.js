@@ -223,16 +223,16 @@ module.exports = {
 				en: "🔸 New pokémon!"
 			},
 			caught_title: {
-				fr: "{1} a attrapé un {3} !",
-				en: "{1} caught a[2?n:] {3}!"
+				fr: "{1} a attrapé un {3} ! (+ **✨{4}**)",
+				en: "{1} caught a[2?n:] {3}! (+ **✨{4}**)"
 			},
 			mega_gem: {
 				fr: "\n+ *__Bonus :__ **{1}***",
 				en: "\n+ *__Bonus:__ **{1}***"
 			},
 			caught_title_en: {
-				fr: "{1} caught a[2?n:] {3}!",
-				en: "{1} caught a[2?n:] {3}!"
+				fr: "{1} caught a[2?n:] {3}!\n",
+				en: "{1} caught a[2?n:] {3}!\n"
 			}
 		},
 		"channel-names": {

@@ -16,10 +16,8 @@ const command = {
 	* @param {Object[]} options
 	*/
 	execute: async (message, args, options, language, languageCode) => {
+		const { DAILY_REWARD }= require("../config.json");
 		const DAY_IN_MS = 1000 * 60 * 60 * 24, NOW = Date.now();
-
-		// The daily reward
-		const DAILY_MONEY = 1000;
 
 		const { rows } = (await message.client.pg.query(
 			"SELECT * FROM currency WHERE user_id = $1",
@@ -52,7 +50,7 @@ const command = {
 			WHERE currency.user_id = EXCLUDED.user_id
 			RETURNING money
 			`,
-			[ message.author.id, DAILY_MONEY, new Date(NOW).toISOString() ]
+			[ message.author.id, DAILY_REWARD, new Date(NOW).toISOString() ]
 		).catch(console.error);
 
 		if (!res) return message.channel.send(language.errors.database).catch(console.error);
@@ -64,7 +62,7 @@ const command = {
 					icon_url: message.author.avatarURL({ dynamic: true })
 				},
 				color: message.guild.me.displayColor,
-				description: language.get(language.description, DAILY_MONEY, res.rows[0].money),
+				description: language.get(language.description, DAILY_REWARD, res.rows[0].money),
 				footer: {
 					text: "✨ Mayze ✨"
 				}
