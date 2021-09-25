@@ -70,10 +70,13 @@ const command = {
 				const megaGemPokemon = Object.values(megas)[Math.floor(Math.random() * Object.values(megas).length)];
 				megaGem = 
 					megaGemPokemon.types?.mega ||
-					megaGemPokemon.types?.megax ||
-					megaGemPokemon.types?.megay ||
 					megaGemPokemon.types?.primal ||
 					megaGemPokemon.types?.other;
+
+				if (megaGemPokemon.types.megax && megaGemPokemon.types.megay) {
+					if (Math.random() < 0.5) megaGem = megaGemPokemon.types.megax;
+					else megaGem = megaGemPokemon.types.megay;
+				}
 
 				const defaultData = {};
 				defaultData[megaGem.en] = 1;
