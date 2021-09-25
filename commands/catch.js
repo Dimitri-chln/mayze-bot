@@ -175,6 +175,8 @@ const command = {
 			}
 		}).catch(console.error);
 
+		if (message.client.beta) return;
+
 		const logChannel = message.client.channels.cache.get('839538540206882836');
 		logChannel.send({
 			embed: {
