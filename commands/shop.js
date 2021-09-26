@@ -96,7 +96,7 @@ const command = {
 
 			if (userData.money < upgradeCost)
 				return message.reply(language.not_enough_money).catch(console.error);
-			if (upgrades[upgrade] === UPGRADES_MAX_TIER[upgrade])
+			if (upgrades[upgrade] >= UPGRADES_MAX_TIER[upgrade])
 				return message.channel.send(language.max_tier_reached).catch(console.error);
 			
 			upgrades[upgrade]++;
