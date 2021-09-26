@@ -869,6 +869,30 @@ module.exports = {
 			shiny_probability: {
 				fr: "Pokémon shiny",
 				en: "Shiny pokémon"
+			},
+			tier: {
+				fr: "**Palier {1} :**",
+				en: "**Tier {1}:**"
+			},
+			next_tier: {
+				fr: "Palier suivant :",
+				en: "Next tier:"
+			},
+			invalid_upgrade: {
+				fr: "amélioration invalide",
+				en: "invalid upgrade"
+			},
+			not_enough_money: {
+				fr: "tu n'as pas assez d'argent pour acheter ce palier",
+				en: "you don't have enough money to buy this tier"
+			},
+			max_tier_reached: {
+				fr: "tu as déjà atteint le dernier palier pour cette amélioration",
+				en: "you already reached the last tier for this upgrade"
+			},
+			new_tier: {
+				fr: "tu as atteint le palier **{1}** pour **✨{2}**",
+				en: "you reached tier **{1}** for **✨{2}**"
 			}
 		},
 		"since": {

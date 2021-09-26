@@ -52,7 +52,7 @@ const command = {
 				description: language.get(
 					language.description,
 					money,
-					nextDaily === NOW ? null : Math.round(nextDaily / 1000)
+					nextDaily === NOW || nextDaily < NOW ? null : Math.round(nextDaily / 1000)
 				),
 				footer: {
 					text: "✨ Mayze ✨"
