@@ -416,7 +416,7 @@ async function processCommand(command, message, args, options) {
 			"SELECT catch_cooldown_reduction FROM upgrades WHERE user_id = $1",
 			[ message.author.id ]
 		).catch(console.error)) || {};
-		if (upgradesData) cooldownReduction += 30 * upgradesData[0].catch_cooldown_reduction;
+		if (upgradesData && upgradesData.length) cooldownReduction += 30 * upgradesData[0].catch_cooldown_reduction;
 	}
 
 	const cooldownAmount = ((command.cooldown || 2) - cooldownReduction) * 1000;
