@@ -17,7 +17,6 @@ const { Message, MessageEmbed, MessageAttachment } = require("discord.js");
     if (emojiList.length !== 2) throw new Error("Need two emojis.");
     
 	let page = 0;
-	console.log(pages)
 
 	pages = pages.map((p, i) => {
 		if (p instanceof MessageEmbed) p.setFooter(`Page ${i + 1} / ${pages.length}`);
