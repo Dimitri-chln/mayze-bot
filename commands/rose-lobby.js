@@ -39,10 +39,10 @@ const command = {
 				
 				msg.react("833620353133707264").catch(console.error);
 
-				let [ , hour ] = msg.content.match(/\*\*([0-5]?\dh(?:[0-5]\d)?)\*\*/) || [];
+				let timestamp = secondstoTimestamp(msg.content.match(/<t:(\d+)(?::[tTdDfFR])?>/));
 				let password;
 
-				if (!hour) await chooseHour();
+				if (!timestamp) await chooseTime();
 				await choosePassword();
 
 				const finalMsg = await message.author.send({
@@ -52,7 +52,7 @@ const command = {
 							icon_url: message.client.user.displayAvatarURL()
 						},
 						color: message.guild.me.displayColor,
-						description: `**Heure :** \`${hour}\`\n**Mot de passe :** \`${password}\``,
+						description: `**Le :** \`<t:${Math.round(timestamp / 1000)}>\`\n**Mot de passe :** \`${password}\``,
 						footer: {
 							text: "✨ Mayze ✨"
 						}
@@ -70,7 +70,7 @@ const command = {
 				collector.on("collect", (reaction, user) => {
 					switch (reaction.emoji.name) {
 						case "✅":
-							const date = getDate(hour);
+							const date = new Date(timestamp);
 							if (Date.now() > date.valueOf()) return message.author.send("L'heure est déjà dépassée").catch(console.error);
 							if (message.client.roseTimer) message.client.roseTimer.stop();
 							message.client.roseTimer = new CronJob(date, () => {
@@ -87,7 +87,7 @@ const command = {
 							logChannel.send(`**Starting at:** \`${date.toUTCString()}\`\n**Password:** \`${password}\``).catch(console.error);
 							break;
 						case "⏱️":
-							chooseHour(true);
+							chooseTime(true);
 							break;
 						case "#️⃣":
 							choosePassword(true);
@@ -95,12 +95,18 @@ const command = {
 					}
 				});
 
-				async function chooseHour(del) {
-					const m = await message.author.send("À quelle heure doit commencer la game de roses ?").catch(console.error);
+				function secondstoTimestamp(match) {
+					if (!match) return;
+					return parseInt(match[1]) * 1000;
+				}
+
+				async function chooseTime(del) {
+					const m = await message.author.send("À quelle heure doit commencer la game de roses ? (`<t:...>`)").catch(console.error);
 					if (!m) return message.reply("je n'ai pas pu te DM. As-tu désactivé les DM ?").catch(console.error);
-					const filter = rep => /[0-5]?\dh(?:[0-5]\d)?/.test(rep.content);
+					const filter = rep => /<t:\d+(:[tTdDfFR])?>/.test(rep.content);
 					const collected = await m.channel.awaitMessages(filter, { max: 1 }).catch(console.error);
-					hour = collected.first().content;
+					time = collected.first().content;
+					timestamp = secondstoTimestamp(time.match(/<t:(\d+)(?::[tTdDfFR])?>/));
 
 					if (del) {
 						m.delete().catch(console.error);
@@ -129,7 +135,7 @@ const command = {
 								icon_url: message.client.user.displayAvatarURL()
 							},
 							color: message.guild.me.displayColor,
-							description: `**Heure :** \`${hour}\`\n**Mot de passe :** \`${password}\``,
+							description: `**Le :** \`<t:${Math.round(timestamp / 1000)}>\`\n**Mot de passe :** \`${password}\``,
 							footer: {
 								text: "✨ Mayze ✨"
 							}
