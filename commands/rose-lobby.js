@@ -52,7 +52,7 @@ const command = {
 							icon_url: message.client.user.displayAvatarURL()
 						},
 						color: message.guild.me.displayColor,
-						description: `**Le :** \`<t:${Math.round(timestamp / 1000)}>\`\n**Mot de passe :** \`${password}\``,
+						description: `**Le :** \`<t:${timestamp / 1000}>\`\n**Mot de passe :** \`${password}\``,
 						footer: {
 							text: "✨ Mayze ✨"
 						}
