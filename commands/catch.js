@@ -27,9 +27,55 @@ const command = {
 		const { pokeball } = require("../assets/misc.json");
 		const { CATCH_REWARD, SHINY_MULTIPLIER, ALOLAN_MULTIPLIER } = require("../config.json");
 
-		const shinyFrequency = 0.004, alolanFrequency = 0.05, megaGemFrequency = 0.02;
-		const { catchRates } = message.client;
+		const UPGRADES_BENEFITS = {
+			catch_cooldown_reduction: tier => 0.5 * tier,
+			new_pokemon_probability: tier => 2 * tier,
+			legendary_ub_probability: tier => 2 * tier,
+			mega_gem_probability: tier => 2 * tier,
+			shiny_probability: tier => 2 * tier
+		};
 
+		const shinyFrequency = 0.004, alolanFrequency = 0.05, megaGemFrequency = 0.02;
+
+		const { "rows": upgradesData } = (await message.client.pg.query(
+			"SELECT * FROM upgrades WHERE user_id = $1",
+			[ message.author.id ]
+		).catch(console.error)) || {};
+		if (!upgradesData) return message.channel.send(language.errors.database).catch(console.error);
+		
+		const upgrades = upgradesData.length
+			? upgradesData[0]
+			: {
+				user_id: message.author.id,
+				catch_cooldown_reduction: 0,
+				new_pokemon_probability: 0,
+				legendary_ub_probability: 0,
+				mega_gem_probability: 0,
+				shiny_probability: 0
+			};
+
+		// Clone the array
+		let catchRates = [ ...message.client.catchRates ];
+
+		const { "rows": caughtPokemons } = (await message.client.pg.query(
+			"SELECT pokedex_id FROM pokemons WHERE users ? $1 AND variation = 'default'",
+			[ message.author.id ]
+		).catch(console.error)) || {};
+
+		// Increase new pokemons and legendaries/ub probability
+		catchRates.forEach((catchRate, i) => {
+			const currentPokemon = pokedex.findPokemon(i + 1) ?? pokedex.findPokemon("Snover");
+			if (legendaries.includes(currentPokemon.names.en) || beasts.includes(currentPokemon.names.en)) {
+				const delta = 3 * (UPGRADES_BENEFITS.legendary_ub_probability(upgrades.legendary_ub_probability) / 100);
+				for (let j = i; j < catchRates.length; j++) catchRates[j] += delta;
+			}
+
+			if (!caughtPokemons.some(p => p.pokedex_id === currentPokemon.national_id)) {
+				const delta = (catchRates[i] - catchRates[i - 1]) * (UPGRADES_BENEFITS.new_pokemon_probability(upgrades.new_pokemon_probability) / 100);
+				for (let j = i; j < catchRates.length; j++) catchRates[j] += delta;
+			}
+		});
+	
 		const random = Math.random() * catchRates.slice(-1)[0];
 		let pokemon = findDrop(random);
 
@@ -66,7 +112,7 @@ const command = {
 		let megaGem;
 		{
 			// Mega Gems
-			if (Math.random() < megaGemFrequency) {
+			if (Math.random() < megaGemFrequency * (1 + (UPGRADES_BENEFITS.mega_gem_probability(upgrades.mega_gem_probability) / 100))) {
 				const megaGemPokemon = Object.values(megas)[Math.floor(Math.random() * Object.values(megas).length)];
 				megaGem = 
 					megaGemPokemon.types?.mega ||
@@ -97,7 +143,7 @@ const command = {
 			}
 		}
 		
-		const shiny = Math.random() < shinyFrequency;
+		const shiny = Math.random() < shinyFrequency * (1 + (UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_probability) / 100));
 		const legendary = legendaries.includes(pokemon.names.en);
 		const beast = beasts.includes(pokemon.names.en);
 		const variation = alolans.includes(pokemon.names.en) && Math.random() < alolanFrequency ? "alolan" : "default";
@@ -201,9 +247,9 @@ const command = {
 			}
 		}).catch(console.error);
 
-		function findDrop(random) {
+		function findDrop(random, newPokemonMultiplier = 1, legUbMultiplier = 1) {
 			for (let i = 0; i < catchRates.length; i++)
-				if (random < catchRates[i]) return pokedex.findPokemon(i + 1) || pokedex.findPokemon("Snover");
+				if (random < catchRates[i]) return pokedex.findPokemon(i + 1) ?? pokedex.findPokemon("Snover");
 		}
 	}
 };

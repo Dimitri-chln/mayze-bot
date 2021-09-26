@@ -62,7 +62,7 @@ const command = {
 		const { rows } = (await message.client.pg.query(
 			"SELECT * FROM upgrades WHERE user_id = $1",
 			[ message.author.id ]
-		).catch(console.error) || {});
+		).catch(console.error)) || {};
 		if (!rows) return message.channel.send(language.errors.database).catch(console.error);
 		
 		const upgrades = rows.length

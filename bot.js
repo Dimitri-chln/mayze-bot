@@ -408,7 +408,18 @@ async function processCommand(command, message, args, options) {
 
 	if (!client.cooldowns.has(command.name)) client.cooldowns.set(command.name, new Discord.Collection());
 	const timestamps = client.cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 2) * 1000;
+
+	let cooldownReduction = 0;
+		
+	if (command.name === "catch") {
+		const { "rows": upgradesData } = (await client.pg.query(
+			"SELECT catch_cooldown_reduction FROM upgrades WHERE user_id = $1",
+			[ message.author.id ]
+		).catch(console.error)) || {};
+		if (upgradesData) cooldownReduction += 30 * upgradesData[0].catch_cooldown_reduction;
+	}
+
+	const cooldownAmount = ((command.cooldown || 2) - cooldownReduction) * 1000;
 	if (timestamps.has(message.author.id)) {
 		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 		if (now < expirationTime) {
