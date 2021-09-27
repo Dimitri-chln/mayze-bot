@@ -7,7 +7,7 @@ const command = {
 		en: "Catch a pokémon!"
 	},
 	aliases: ["c"],
-	cooldown: 1,
+	cooldown: 1200,
 	args: 0,
 	usage: "",
 	botPerms: ["EMBED_LINKS"],
