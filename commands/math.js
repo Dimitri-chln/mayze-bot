@@ -85,7 +85,7 @@ const command = {
 				try {
 					const parsedExp = math.parse(expression);
 					const result = math.evaluate(expression);
-					message.channel.send(`\`\`\`\n${parsedExp.toString()}\n= ${result}\n\`\`\``).catch(console.error);
+					message.channel.send(`\`\`\`\n${parsedExp.toString()}\n= ${result.toLocaleString(languageCode)}\n\`\`\``).catch(console.error);
 				} catch (err) {
 					if (err.name === "SyntaxError") message.reply(language.errors.syntax).catch(console.error);
 					else message.channel.send(err.message).catch(console.error);
@@ -106,8 +106,8 @@ const command = {
 					
 					let resultString;
 					if (Array.isArray(result)) resultString = result.join(", ");
-					if (result instanceof Fraction) resultString = result.toString();
-					if (result instanceof Expression) resultString = result.toString();
+					if (result instanceof Fraction) resultString = result.toLocaleString(languageCode);
+					if (result instanceof Expression) resultString = result.toLocaleString(languageCode);
 
 					message.channel.send(`\`\`\`\n${equation.toString()}\n${variable} = ${(resultString || "No Solution").toString()}\n\`\`\``).catch(console.error);
 				} catch (err) {
