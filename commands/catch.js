@@ -7,7 +7,7 @@ const command = {
 		en: "Catch a pokémon!"
 	},
 	aliases: ["c"],
-	cooldown: 1200,
+	cooldown: 1,
 	args: 0,
 	usage: "",
 	botPerms: ["EMBED_LINKS"],
@@ -65,13 +65,14 @@ const command = {
 		// Increase new pokemons and legendaries/ub probability
 		catchRates.forEach((catchRate, i) => {
 			const currentPokemon = pokedex.findPokemon(i + 1) ?? pokedex.findPokemon("Snover");
+
 			if (legendaries.includes(currentPokemon.names.en) || beasts.includes(currentPokemon.names.en)) {
 				const delta = 3 * (UPGRADES_BENEFITS.legendary_ub_probability(upgrades.legendary_ub_probability) / 100);
 				for (let j = i; j < catchRates.length; j++) catchRates[j] += delta;
 			}
 
 			if (!caughtPokemons.some(p => p.pokedex_id === currentPokemon.national_id)) {
-				const delta = (catchRates[i] - catchRates[i - 1]) * (UPGRADES_BENEFITS.new_pokemon_probability(upgrades.new_pokemon_probability) / 100);
+				const delta = (catchRate - (catchRates[i - 1] ?? 0)) * (UPGRADES_BENEFITS.new_pokemon_probability(upgrades.new_pokemon_probability) / 100);
 				for (let j = i; j < catchRates.length; j++) catchRates[j] += delta;
 			}
 		});
@@ -247,8 +248,8 @@ const command = {
 			}
 		}).catch(console.error);
 
-		function findDrop(random, newPokemonMultiplier = 1, legUbMultiplier = 1) {
-			for (let i = 0; i < catchRates.length; i++)
+		function findDrop(random) {
+			for (i = 0; i < catchRates.length; i++)
 				if (random < catchRates[i]) return pokedex.findPokemon(i + 1) ?? pokedex.findPokemon("Snover");
 		}
 	}
