@@ -21,6 +21,7 @@ const command = {
 		).catch(console.error)) || {};
 		if (!pokemons) return message.channel.send(language.errors.database).catch(console.error);
 
+		/**@type {Collection<string, number>} */
 		const users = new Collection();
 
 		for (const pokemon of pokemons) {
@@ -44,6 +45,22 @@ const command = {
 				description: users.map((money, userID) => `<@${userID}> => ${money}`).join("\n")
 			}
 		}).catch(console.error);
+
+		for (const [ userID, money ] of users) {
+			message.client.pg.query(
+				`
+				INSERT INTO currency VALUES ($1, $2)
+				ON CONFLICT (user_id)
+				DO UPDATE SET money = currency.money + $2
+				WHERE currency.user_id = EXCLUDED.user_id
+				`,
+				[ userID, money ]
+			)
+				.catch(err => {
+					console.error(err);
+					message.channel.send(`Failed adding ✨${money} to <@${userID}>`).catch(console.error);
+				});
+		}
 	}
 };
 
