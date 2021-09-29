@@ -8,13 +8,19 @@ const command = {
 	},
 	aliases: ["upgrades"],
 	args: 0,
-	usage: "[<upgrade>]",
+	usage: "[<upgrade>] [<number>]",
 	category: "currency",
 	slashOptions: [
 		{
 			name: "upgrade",
 			description: "The upgrade to buy",
 			type: 3,
+			required: false
+		},
+		{
+			name: "number",
+			description: "The number of tiers to buy",
+			type: 4,
 			required: false
 		}
 	],
@@ -75,16 +81,25 @@ const command = {
 				mega_gem_probability: 0,
 				shiny_probability: 0
 			};
-
+		
+		/**@type {string} */
 		const upgradeInput = args
 			? args.join(" ")
 			: options[0].value;
 		
 		if (upgradeInput) {
-			const upgrade = Object.keys(UPGRADES_REGEX).find(key => UPGRADES_REGEX[key].test(upgradeInput));
+			let [ number ] = args
+				? upgradeInput.match(/\d+$/) || []
+				: [ options[0].value ];
+			number = number ? parseInt(number) : 1;
+			const upgradeName = upgradeInput.replace(" " + number, "");
+			
+			const upgrade = Object.keys(UPGRADES_REGEX).find(key => UPGRADES_REGEX[key].test(upgradeName));
 			if (!upgrade) return message.reply(language.invalid_upgrade).catch(console.error);
 
-			const upgradeCost = UPGRADES_PRICES[upgrade](upgrades[upgrade]);
+			const upgradeCost = number * (
+				UPGRADES_PRICES[upgrade](upgrades[upgrade]) + UPGRADES_PRICES[upgrade](upgrades[upgrade] + number - 1)
+			) / 2;
 
 			const { "rows": moneyData } = (await message.client.pg.query(
 				"SELECT * FROM currency WHERE user_id = $1",
@@ -96,10 +111,10 @@ const command = {
 
 			if (userData.money < upgradeCost)
 				return message.reply(language.not_enough_money).catch(console.error);
-			if (upgrades[upgrade] >= UPGRADES_MAX_TIER[upgrade])
+			if (upgrades[upgrade] + number > UPGRADES_MAX_TIER[upgrade])
 				return message.reply(language.max_tier_reached).catch(console.error);
 			
-			upgrades[upgrade]++;
+			upgrades[upgrade] += number;
 			
 			try {
 				await message.client.pg.query(
