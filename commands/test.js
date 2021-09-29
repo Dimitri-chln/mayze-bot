@@ -6,7 +6,7 @@ const command = {
 	aliases: [],
 	args: 0,
 	usage: "",
-	ownerOnly: true,
+	// ownerOnly: true,
 	/**
 	 * @param {Message} message 
 	 * @param {string[]} args 
