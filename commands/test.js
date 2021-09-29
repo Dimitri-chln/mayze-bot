@@ -13,23 +13,26 @@ const command = {
 	 * @param {Object[]} options
 	 */
 	execute: async (message, args, options, language, languageCode) => {
-		const Fs = require("fs");
-		const ytdl = require("ytdl-core");
+		const pokedex = require("oakdex-pokedex");
+		const { CATCH_REWARD, SHINY_MULTIPLIER, ALOLAN_MULTIPLIER } = require("../config.json");
 
-		const url = args[0];
-		const info = await ytdl.getInfo(url);
+		const { "rows": pokemons }  = (await message.client.pg.query(
+			"SELECT * FROM pokemons WHERE users ? $1 ORDER BY legendary DESC, ultra_beast DESC, shiny DESC, (users -> $1 -> 'caught')::int DESC, pokedex_id ASC",
+			[ message.author.id ]
+		).catch(console.error)) || {};
+		if (!pokemons) return message.channel.send(language.errors.database).catch(console.error);
 
-		ytdl(url, {
-			quality: "highestaudio",
-			filter: "audioonly"
-		})
-			.on("data", chunk => {
-				console.log(`Received ${chunk.length} bytes`);
-			})
-			.on("finish", () => {
-				console.log("Download complete");
-			})
-			.pipe(Fs.createWriteStream(`./assets/downloads/${info.videoDetails.title}.mp3`));
+		let money = 0;
+
+		for (const pokemon of pokemons) {
+			money += Math.round(CATCH_REWARD * (
+				255 / (
+					pokemon.legendary || pokemon.ultra_beast ? 3 : (pokedex.findPokemon(pokemon.pokedex_id) ?? pokedex.findPokemon("Snover")).catch_rate
+				) * (pokemon.shiny ? SHINY_MULTIPLIER : 1) * (pokemon.variation === "alolan" ? ALOLAN_MULTIPLIER : 1)
+			));
+		}
+
+		message.channel.send(`**✨${money}**`).catch(console.error);
 	}
 };
 
