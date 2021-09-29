@@ -160,7 +160,7 @@ const command = {
 				let error = "";
 
 				offer = offer.map(input => {
-					const name = input.replace(/^\d+ *|\b(?:shiny|alolan|mega|x|y|primal|giga(ntamax)?:)| *(= *|#)\d+$/ig, "").trim().toLowerCase();
+					const name = input.replace(/^\d+ *|\b(?:shiny|alolan|mega|x|y|primal|giga(?:ntamax)?)\b| *(= *|#)\d+$/ig, "").trim().toLowerCase();
 					const number = parseInt((input.match(/^(\d+) *| *(?:= *|#)(\d+)$/) || []).filter(a => a)[1]) || 1;
 					const shiny = /shiny/i.test(input);
 					const variation = getPokemonVariation(input.replace(/^(\d+) *| *(?:= *|#)(\d+)$/g, ""));
@@ -171,7 +171,7 @@ const command = {
 				}).filter(p => p).filter((v, i, a) => a.findIndex(u => u.data.national_id === v.data.national_id && u.shiny === v.shiny && u.variation === v.variation) === i);
 
 				demand = demand.map(input => {
-					const name = input.replace(/^\d+ *|\b(?:shiny|alolan|mega|x|y|primal|giga(ntamax)?:)| *(= *|#)\d+$/ig, "").trim().toLowerCase();
+					const name = input.replace(/^\d+ *|\b(?:shiny|alolan|mega|x|y|primal|giga(?:ntamax)?)\b| *(= *|#)\d+$/ig, "").trim().toLowerCase();
 					const number = parseInt((input.match(/^(\d+) *| *(?:= *|#)(\d+)$/) || []).filter(a => a)[1]) || 1;
 					const shiny = /shiny/i.test(input);
 					const variation = getPokemonVariation(input.replace(/^(\d+) *| *(?:= *|#)(\d+)$/g, ""));
