@@ -568,6 +568,14 @@ module.exports = {
 				fr: "précise la valeur X ou Y pour ce pokémon",
 				en: "specify an X or Y value for this pokémon"
 			},
+			evolving_title: {
+				fr: "Méga évolution de {1}",
+				en: "{1}'s mega evolution"
+			},
+			evolving: {
+				fr: "**{1}** est en train d'évoluer...",
+				en: "**{1}** is evolving..."
+			},
 			evolved: {
 				fr: "**{1}** a évolué en **{2}** !",
 				en: "**{1}** evolved into **{2}**!"

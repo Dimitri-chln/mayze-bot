@@ -27,7 +27,7 @@ const command = {
 	execute: async (message, args, options, language, languageCode) => {
 		const pokedex = require("oakdex-pokedex");
 		const megas = require("../assets/mega.json");
-		const { getPokemonName, getCleanName } = require("../utils/pokemonInfo");
+		const { getPokemonName, getCleanName, getPokemonImage } = require("../utils/pokemonInfo");
 
 		const res = await message.client.pg.query(
 			"SELECT * FROM mega_gems WHERE user_id = $1",
@@ -112,7 +112,28 @@ const command = {
 				[ message.author.id, pokemon.national_id, shiny, "default" ]
 			).catch(console.error);
 
-			message.channel.send(language.get(language.evolved, getPokemonName(pokemon, shiny, "default", languageCode), getPokemonName(pokemon, shiny, getMegaType(pokemon, megaGem), languageCode))).catch(console.error);
+			const msg = await message.channel.send({
+				embed: {
+					author: {
+						name: language.get(language.evolving_title, message.author.tag),
+						icon_url: message.author.avatarURL({ dynamic: true })
+					},
+					color: message.guild.me.displayColor,
+					thumbnail: {
+						url: getPokemonImage(pokemon, shiny, "default")
+					},
+					description: language.get(language.evolving, getPokemonName(pokemon, shiny, "default", languageCode))
+				}
+			}).catch(console.error);
+			if (!msg) return message.channel.send(language.errors.message_send).catch(console.error);
+
+			setTimeout(() => {
+				msg.edit(
+					msg.embeds[0]
+						.setThumbnail(getPokemonImage(pokemon, shiny, getMegaType(pokemon, megaGem)))
+						.setDescription(language.get(language.evolved, getPokemonName(pokemon, shiny, "default", languageCode), getPokemonName(pokemon, shiny, getMegaType(pokemon, megaGem), languageCode)))
+				).catch(console.error);
+			}, 3000);
 
 		} else {
 			const gemList = groupArr(Object.entries(gems), 2);
@@ -124,7 +145,7 @@ const command = {
 						icon_url: message.author.displayAvatarURL({ dynamic: true })
 					},
 					color: message.guild.me.displayColor,
-					description: `\`\`\`\n${gemList.map(group => group.map(([ gem, number ]) => `${findGem(gem)[languageCode]} ×${number}`.padEnd(20, " ")).join(" ")).join("\n")}\n\`\`\``,
+					description: `\`\`\`\n${gemList.map(group => group.map(([ gem, number ]) => `${findGem(gem)} ×${number}`.padEnd(20, " ")).join(" ")).join("\n")}\n\`\`\``,
 					footer: {
 						text: "✨ Mayze ✨"
 					}
@@ -154,15 +175,13 @@ const command = {
 		}
 
 		function findGem(gem) {
-			const { types } = Object.values(megas).find(megaPokemon =>
-				megaPokemon.types.mega?.en === gem ||
-				megaPokemon.types.megax?.en === gem ||
-				megaPokemon.types.megay?.en === gem ||
-				megaPokemon.types.primal?.en === gem ||
-				megaPokemon.types.other?.en === gem
-			);
+			if (Object.values(megas).some(megaPokemon => megaPokemon.types.mega?.en === gem)) return Object.values(megas).find(megaPokemon => megaPokemon.types.mega?.en === gem).types.mega[languageCode];
+			if (Object.values(megas).some(megaPokemon => megaPokemon.types.megax?.en === gem)) return Object.values(megas).find(megaPokemon => megaPokemon.types.megax?.en === gem).types.megax[languageCode];
+			if (Object.values(megas).some(megaPokemon => megaPokemon.types.megay?.en === gem)) return Object.values(megas).find(megaPokemon => megaPokemon.types.megay?.en === gem).types.megay[languageCode];
+			if (Object.values(megas).some(megaPokemon => megaPokemon.types.primal?.en === gem)) return Object.values(megas).find(megaPokemon => megaPokemon.types.primal?.en === gem).types.primal[languageCode];
+			if (Object.values(megas).some(megaPokemon => megaPokemon.types.other?.en === gem)) return Object.values(megas).find(megaPokemon => megaPokemon.types.other?.en === gem).types.other[languageCode];
 
-			return types.mega || types.megax || types.megay || types.primal || types.other;
+			return "Unknown gem";
 		}
 	}
 };
