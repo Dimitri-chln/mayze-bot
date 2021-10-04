@@ -679,7 +679,7 @@ player.on("clientDisconnect", (message, queue) => {
 player.on("error", (error, message) => {
 	console.error(error);
 	const errorMessage = languages.music.errors[error] || languages.music.error;
-	message.reply(languages.get(errorMessage.en, error)).catch(console.error);
+	message.channel.send(languages.get(errorMessage.en, error)).catch(console.error);
 });
 
 player.on("playlistAdd", (message, queue, playlist) => {

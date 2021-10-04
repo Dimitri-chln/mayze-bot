@@ -342,6 +342,10 @@ module.exports = {
 			}
 		},
 		"download": {
+			no_url_found: {
+				fr: "je n'ai pas trouvé de musique à télécharger",
+				en: "I couldn't find any music to download"
+			},
 			error: {
 				fr: "Lien invalide",
 				en: "Invalid link"

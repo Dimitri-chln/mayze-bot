@@ -7,8 +7,8 @@ const command = {
 		en: "Download a song or a playlist from Youtube"
 	},
 	aliases: ["dl"],
-	args: 1,
-	usage: "<url>",
+	args: 0,
+	usage: "[<url>]",
 	botPerms: ["EMBED_LINKS", "ATTACH_FILES"],
 	category: "music",
 	/**
@@ -30,7 +30,15 @@ const command = {
 			YouTubePlaylist: /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#&?]*).*/,
 		};
 
-		const url = args[0];
+		const url = args
+			? args.length
+				? args[0]
+				: message.client.player.isPlaying(message) ? message.client.player.nowPlaying(message)?.url : null
+			: options
+				? options[0].value
+				: message.client.player.isPlaying(message) ? message.client.player.nowPlaying(message)?.url : null;
+		if (!url) return message.reply(language.no_url_found).catch(console.error);
+
 		const type = RegExpList.YouTubeVideo.test(url) 
 			? "video"
 			: RegExpList.YouTubePlaylist.test(url)
@@ -43,9 +51,9 @@ const command = {
 			.setColor(message.guild.me.displayColor)
 			.setDescription(Util.buildBar(0, 100, 20, "━", "🔘"))
 			.setFooter("✨ Mayze ✨");
-		
 		const msg = await message.channel.send(embed).catch(console.error);
 		if (!msg) return;
+
 		let lastProgressUpdate = Date.now();
 
 		switch (type) {
@@ -114,7 +122,8 @@ const command = {
 					.setTitle(`${language.title} ${info.videoDetails.title} (${number + 1}/${total})`)
 					.setDescription(Util.buildBar(0, duration, 20, "━", "🔘"))
 					.setThumbnail(info.videoDetails.thumbnails[0].url);
-				if (Date.now() - lastProgressUpdate > 1200) {
+				
+					if (Date.now() - lastProgressUpdate > 1200) {
 					msg.edit(embed).catch(console.error);
 					lastProgressUpdate = Date.now();
 				}
