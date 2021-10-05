@@ -8,9 +8,33 @@ const command = {
 	},
 	aliases: ["dl"],
 	args: 0,
-	usage: "[<url>]",
+	usage: "[<url>] [-mp4]",
 	botPerms: ["EMBED_LINKS", "ATTACH_FILES"],
 	category: "music",
+	slashOptions: [
+		{
+			name: "url",
+			description: "The URL of the video",
+			type: 3,
+			required: false
+		},
+		{
+			name: "file-type",
+			dscription: "The type of the file to download",
+			type: 3,
+			required: false,
+			choices: [
+				{
+					name: "MP3 - Audio only",
+					value: "mp3"
+				},
+				{
+					name: "MP4 - Video and audio",
+					value: "mp4"
+				}
+			]
+		}
+	],
 	/**
 	* @param {Message} message 
 	* @param {string[]} args 
@@ -30,6 +54,17 @@ const command = {
 			YouTubePlaylist: /^((?:https?:)\/\/)?((?:www|m)\.)?((?:youtube\.com)).*(youtu.be\/|list=)([^#&?]*).*/,
 		};
 
+		const downloadOptions = {
+			"mp3": {
+				quality: "highestaudio",
+				filter: "audioonly"
+			},
+			"mp4": {
+				quality: "highestvideo",
+				filter: "videoandaudio"
+			}
+		}
+
 		const url = args
 			? args.length
 				? args[0]
@@ -38,6 +73,10 @@ const command = {
 				? options[0].value
 				: message.client.player.isPlaying(message) ? message.client.player.nowPlaying(message)?.url : null;
 		if (!url) return message.reply(language.no_url_found).catch(console.error);
+
+		const fileType = args
+			? args.includes("-mp4") ? "mp4" : "mp3"
+			: options && options[1] ? options[1].value : "mp3";
 
 		const type = RegExpList.YouTubeVideo.test(url) 
 			? "video"
@@ -128,10 +167,7 @@ const command = {
 					lastProgressUpdate = Date.now();
 				}
 
-				ytdl(url, {
-					quality: "highestaudio",
-					filter: "audioonly"
-				})
+				ytdl(url, downloadOptions[fileType])
 					.on("progress", (chunkLength, downloadedBytes, totalBytes) => {
 						if (Date.now - lastProgressUpdate > 1200) {
 							embed.setDescription(Util.buildBar(Util.TimeToMilliseconds((downloadedBytes / totalBytes) * parseInt(info.videoDetails.lengthSeconds)), duration, 20, "━", "🔘"));
@@ -140,9 +176,9 @@ const command = {
 						}
 					})
 					.on("finish", () => {
-						resolve({ path: `./downloads/${dir}${info.videoDetails.title}.mp3`, filename: `${info.videoDetails.title}.mp3`, duration });
+						resolve({ path: `./downloads/${dir}${info.videoDetails.title}.${fileType}`, filename: `${info.videoDetails.title}.${fileType}`, duration });
 					})
-					.pipe(Fs.createWriteStream(`./downloads/${dir}${info.videoDetails.title}.mp3`));
+					.pipe(Fs.createWriteStream(`./downloads/${dir}${info.videoDetails.title}.${fileType}`));
 			});
 		}
 	}
