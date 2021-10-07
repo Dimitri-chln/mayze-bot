@@ -310,7 +310,7 @@ client.on("message", async message => {
 	}
 
 	const mayze = client.users.cache.get("703161067982946334");
-	if (client.beta && mayze.presence.status !== "offline") return;
+	// if (client.beta && mayze.presence.status !== "offline") return;
 	if (client.isDatabaseReconnecting) return;
 
 	if (message.channel.type !== "dm" && !message.author.bot && !message.channel.name.includes("spam") && message.channel.id !== "865997369745080341") {
@@ -338,7 +338,7 @@ client.on("message", async message => {
 
 	message.attachments.forEach(async (attachment, id) => {
 		if (![".png", ".jpg", ".jpeg", ".gif"].includes(Path.extname(attachment.url).toLowerCase())) return;
-		download(attachment.url, `./discord-images/${message.id}#${id}${Path.extname(attachment.url).toLowerCase()}`);
+		download(attachment.url, `./discord-images/${message.id}_${id}${Path.extname(attachment.url).toLowerCase()}`);
 	});
 });
 
@@ -443,7 +443,6 @@ async function processCommand(command, message, args, options) {
 			console.error(err);
 			message.channel.send(languages.data.error[language]).catch(console.error);
 		});
-	return;
 }
 
 client.on("messageReactionAdd", async (reaction, user) => {
