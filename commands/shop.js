@@ -10,7 +10,7 @@ const command = {
 	args: 0,
 	usage: "[<upgrade>] [<number>]",
 	category: "currency",
-	slashOptions: [
+	options: [
 		{
 			name: "upgrade",
 			description: "The upgrade to buy",
@@ -65,11 +65,18 @@ const command = {
 			shiny_probability: 99
 		};
 
-		const { rows } = (await message.client.pg.query(
+		const { rows } = (await message.client.database.query(
 			"SELECT * FROM upgrades WHERE user_id = $1",
 			[ message.author.id ]
 		).catch(console.error)) || {};
 		if (!rows) return message.channel.send(language.errors.database).catch(console.error);
+
+		const { "rows": moneyData } = (await message.client.database.query(
+			"SELECT * FROM currency WHERE user_id = $1",
+			[ message.author.id ]
+		).catch(console.error)) || {};
+		if (!moneyData) return message.channel.send(language.errors.database).catch(console.error);
+		const userMoney = moneyData[0];
 		
 		const upgrades = rows.length
 			? rows[0]
@@ -101,15 +108,7 @@ const command = {
 				UPGRADES_PRICES[upgrade](upgrades[upgrade]) + UPGRADES_PRICES[upgrade](upgrades[upgrade] + number - 1)
 			) / 2;
 
-			const { "rows": moneyData } = (await message.client.pg.query(
-				"SELECT * FROM currency WHERE user_id = $1",
-				[ message.author.id ]
-			).catch(console.error)) || {};
-			if (!moneyData) return message.channel.send(language.errors.database).catch(console.error);
-
-			const userData = moneyData[0];
-
-			if (userData.money < upgradeCost)
+			if (userMoney.money < upgradeCost)
 				return message.reply(language.not_enough_money).catch(console.error);
 			if (upgrades[upgrade] + number > UPGRADES_MAX_TIER[upgrade])
 				return message.reply(language.max_tier_reached).catch(console.error);
@@ -117,12 +116,12 @@ const command = {
 			upgrades[upgrade] += number;
 			
 			try {
-				await message.client.pg.query(
+				await message.client.database.query(
 					"UPDATE currency SET money = money - $2 WHERE user_id = $1",
 					[ message.author.id, upgradeCost ]
 				);
 
-				await message.client.pg.query(
+				await message.client.database.query(
 					`
 					INSERT INTO upgrades VALUES ($1, $2, $3, $4, $5, $6)
 					ON CONFLICT (user_id)
@@ -151,6 +150,7 @@ const command = {
 						icon_url: message.client.user.avatarURL()
 					},
 					color: message.guild.me.displayColor,
+					title: language.get(language.balance, userMoney.money),
 					fields: [
 						{
 							name: language.catch_cooldown_reduction,
