@@ -11,7 +11,7 @@ module.exports = {
 		},
 		bot_missing_perms: {
 			fr: "Il me manque ces permissions pour pouvoir exécuter cette commande :\n → `{1}`",
-			en: "I am missing these permissions to be able to execute the command:\n → `{1}`"
+			en: "I am missing these permissions to be able to run the command:\n → `{1}`"
 		},
 		wrong_usage: {
 			fr: "Utilisation : `{1}`",
@@ -29,10 +29,6 @@ module.exports = {
 			database: {
 				fr: "Quelque chose s'est mal passé en accédant à la base de données :/",
 				en: "Something went wrong when accessing the database :/"
-			},
-			database_reconnecting: {
-				fr: "reconnexion à la base de données. Réessaye dans quelques secondes",
-				en: "reconnecting to the database. Try again in a few seconds"
 			},
 			shell: {
 				fr: "Erreur",
@@ -857,6 +853,10 @@ module.exports = {
 			title: {
 				fr: "Magasin d'améliorations",
 				en: "Upgrades shop"
+			},
+			balance: {
+				fr: "Argent : ✨{1}",
+				en: "Money: ✨{1}"
 			},
 			catch_cooldown_reduction: {
 				fr: "Réduction du temps d'attente pour attraper un pokémon",
