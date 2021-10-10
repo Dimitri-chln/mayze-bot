@@ -65,17 +65,17 @@ const command = {
 			shiny_probability: 99
 		};
 
-		const { rows } = (await message.client.database.query(
+		const { rows } = (await message.client.pg.query(
 			"SELECT * FROM upgrades WHERE user_id = $1",
 			[ message.author.id ]
 		).catch(console.error)) || {};
-		if (!rows) return message.channel.send(language.errors.database).catch(console.error);
+		if (!rows) return message.channel.send(language.errors.pg).catch(console.error);
 
-		const { "rows": moneyData } = (await message.client.database.query(
+		const { "rows": moneyData } = (await message.client.pg.query(
 			"SELECT * FROM currency WHERE user_id = $1",
 			[ message.author.id ]
 		).catch(console.error)) || {};
-		if (!moneyData) return message.channel.send(language.errors.database).catch(console.error);
+		if (!moneyData) return message.channel.send(language.errors.pg).catch(console.error);
 		const userMoney = moneyData[0];
 		
 		const upgrades = rows.length
@@ -116,12 +116,12 @@ const command = {
 			upgrades[upgrade] += number;
 			
 			try {
-				await message.client.database.query(
+				await message.client.pg.query(
 					"UPDATE currency SET money = money - $2 WHERE user_id = $1",
 					[ message.author.id, upgradeCost ]
 				);
 
-				await message.client.database.query(
+				await message.client.pg.query(
 					`
 					INSERT INTO upgrades VALUES ($1, $2, $3, $4, $5, $6)
 					ON CONFLICT (user_id)
@@ -137,7 +137,7 @@ const command = {
 				);
 			} catch (err) {
 				console.error(err);
-				return message.channel.send(language.errors.database).catch(console.error);
+				return message.channel.send(language.errors.pg).catch(console.error);
 			}
 
 			message.reply(language.get(language.new_tier, upgrades[upgrade], upgradeCost)).catch(console.error);
