@@ -450,6 +450,10 @@ client.on("interactionCreate", async interaction => {
 			break;
 		}
 
+		case "APPLICATION_COMMAND_AUTOCOMPLETE": {
+			break;
+		}
+
 		case "MESSAGE_COMPONENT": {
 			break;
 		}

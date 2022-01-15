@@ -83,38 +83,6 @@ module.exports = {
 				en: "Mudae isn't on this server"
 			}
 		},
-		"hug": {
-			title: {
-				fr: "{1} fait un câlin à {2} 🤗",
-				en: "{1} gives {2} a hug 🤗"
-			}
-		},
-		"hunt": {
-			hunt_info: {
-				fr: "tu es en train de chasser **{1}** avec une probabilité supplémentaire de **{2}%**",
-				en: "you are currently hunting **{1}** with an additional probability of **{2}%**"
-			},
-			not_hunting: {
-				fr: "tu ne chasses aucun pokémon",
-				en: "you are not hunting any pokémon"
-			},
-			invalid_pokemon: {
-				fr: "ce pokémon n'existe pas",
-				en: "this pokémon doesn't exist"
-			},
-			confirmation: {
-				fr: "Changer de pokémon à chasser va réinitialiser la chaîne actuelle. Commencer à chasser **{1}** ?",
-				en: "Changing the pokémon to hunt will restart the current chain. Start hunting **{1}**?"
-			},
-			hunting: {
-				fr: "tu chasses désormais **{1}**",
-				en: "you are now hunting **{1}**"
-			},
-			cancelled: {
-				fr: "changement annulé",
-				en: "change cancelled"
-			}
-		},
 		"info": {
 			title: {
 				fr: "• Informations sur le bot",
