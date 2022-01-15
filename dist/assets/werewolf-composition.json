@@ -1,0 +1,138 @@
+{
+    "composition": [
+        {
+            "werewolves": 0,
+            "villagers": 0
+        },
+        {
+            "werewolves": 0,
+            "villagers": 1
+        },
+        {
+            "werewolves": 0,
+            "villagers": 2
+        },
+        {
+            "werewolves": 0,
+            "villagers": 3
+        },
+        {
+            "werewolves": 1,
+            "villagers": 3
+        },
+        {
+            "werewolves": 1,
+            "villagers": 4
+        },
+        {
+            "werewolves": 1,
+            "villagers": 5
+        },
+        {
+            "werewolves": 2,
+            "villagers": 5
+        },
+        {
+            "werewolves": 2,
+            "villagers": 6
+        },
+        {
+            "werewolves": 2,
+            "villagers": 7
+        },
+        {
+            "werewolves": 3,
+            "villagers": 7
+        },
+        {
+            "werewolves": 3,
+            "villagers": 9
+        },
+        {
+            "werewolves": 3,
+            "villagers": 9
+        },
+        {
+            "werewolves": 3,
+            "villagers": 10
+        },
+        {
+            "werewolves": 3,
+            "villagers": 11
+        },
+        {
+            "werewolves": 4,
+            "villagers": 11
+        },
+        {
+            "werewolves": 4,
+            "villagers": 12
+        }
+    ],
+    "villagerRoles": {
+        "fr": [
+            "Villageois simple",
+            "Sorcière",
+            "Chasseur",
+            "Petite fille",
+            "Chaman",
+            "Ange",
+            "Cupidon"
+        ],
+        "en": [
+            "Villager",
+            "Witch",
+            "Avenger",
+            "Little girl",
+            "Shaman",
+            "Angel",
+            "Cupid"
+        ]
+    },
+    "werewolfRoles": {
+        "fr": [
+            "Loup-garou"
+        ],
+        "en": [
+            "Werewolf"
+        ]
+    },
+    "roles": {
+        "villager": {
+            "fr": "Villageois simple",
+            "en": "Villager"
+        },
+        "seer": {
+            "fr": "Voyante",
+            "en": "Seer"
+        },
+        "witch": {
+            "fr": "Sorcière",
+            "en": "Witch"
+        },
+        "avenger": {
+            "fr": "Chasseur",
+            "en": "Avenger"
+        },
+        "little_girl": {
+            "fr": "Petite fille",
+            "en": "Little girl"
+        },
+        "shaman": {
+            "fr": "Chaman",
+            "en": "Shaman"
+        },
+        "angel": {
+            "fr": "Ange",
+            "en": "Angel"
+        },
+        "cupid": {
+            "fr": "Cupidon",
+            "en": "Cupid"
+        },
+        "werewolf": {
+            "fr": "Loup-garou",
+            "en": "Werewolf"
+        }
+    }
+}

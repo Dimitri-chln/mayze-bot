@@ -1,0 +1,122 @@
+[
+    "un cookie",
+    "une pom'potes",
+    "un caprisun",
+    "un carré de chocolat",
+    "une tablette de chocolat",
+    "un bonbon",
+    "un paquet de bonbons",
+    "une boîte de bonbons",
+    "un carambar",
+    "un dragibus",
+    "une fraise tagada",
+    "un churros",
+    "une barbe à papa",
+    "une part de pizza",
+    "un sushi",
+    "une portion de frites",
+    "un kebab",
+    {
+        "une glace": [
+            "à la vanille",
+            "au chocolat",
+            "à la fraise",
+            "à la framboise",
+            "à la pistache",
+            "au caramel",
+            "au citron",
+            "à la menthe",
+            "à la mangue",
+            "à la cerise",
+            "au café",
+            "à la noix de coco",
+            "à la banane",
+            "au praliné",
+            "au speculoos",
+            "au nougat"
+        ]
+    },
+    {
+        "une pizza": [
+            "reine",
+            "margherita",
+            "napolitaine",
+            "végétarienne",
+            "quatres fromages",
+            "hawaïenne"
+        ]
+    },
+    {
+        "un verre": [
+            "de coca cola",
+            "de pepsi",
+            "d'orangina",
+            "d'oasis",
+            "d'ice yea",
+            "de 7up",
+            "de canada dry",
+            "de schweppes",
+            "de champomy",
+            "de vin rouge",
+            "de vin blanc",
+            "de vin rosé",
+            "de bière",
+            "de champagne",
+            "de vodka",
+            "de whisky"
+        ]
+    },
+    "un câlin",
+    "un nude",
+    "une gifle",
+    "une milayette",
+    "des lego",
+    "des playmobil",
+    "un jeu de cartes",
+    "un jeu de société",
+    {
+        "un puzzle": [
+            "de 5 pièces",
+            "de 1500 pièces",
+            "en 3D",
+            "impossible"
+        ]
+    },
+    {
+        "un livre": [
+            "génial",
+            "très long",
+            "très ennuyeux",
+            "de 1240 pages"
+        ]
+    },
+    {
+        "un téléphone": [
+            "portable",
+            "fixe",
+            "à clapet"
+        ]
+    },
+    "un iPhone",
+    "un chargeur",
+    "des écouteurs",
+    "des airpods",
+    "un mp3",
+    "une tablette",
+    {
+        "un ordinateur": [
+            "portable",
+            "de la NASA",
+            "défectueux"
+        ]
+    },
+    {
+        "une télévision": [
+            "écran plat",
+            "en noir et blanc",
+            "4K OLED",
+            "incurvée",
+            "de 1996"
+        ]
+    }
+]

@@ -1,0 +1,10 @@
+{
+    "title": {
+        "fr": "Balance de {1}",
+        "en": "{1}'s balance"
+    },
+    "description": {
+        "fr": "**✨ Argent :** `{1}`\n**Daily disponible :** [2?<t~d{2}~dR>:Maintenant]",
+        "en": "**✨ Money:** `{1}`\n**Daily available:** [2?<t~d{2}~dR>:Now]"
+    }
+}

@@ -1,0 +1,14 @@
+{
+	"cooldown": {
+		"fr": "Tu peux récupérer ta prochaine récompense dans **{1}**",
+		"en": "You can claim your next reward in **{1}**"
+	},
+	"title": {
+		"fr": "Récompense quotidienne",
+		"en": "Daily reward"
+	},
+	"description": {
+		"fr": "Tu as obtenu **✨{1}** - Total : **✨{2}**",
+		"en": "You just got **✨{1}** - Total: **✨{2}**"
+	}
+}

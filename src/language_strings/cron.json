@@ -1,0 +1,14 @@
+{
+	"invalid_date": {
+		"fr": "la date entrée est invalide (mm-dd-yyyy hh:mm:ss)",
+		"en": "the given date is invalid (mm-dd-yy hh:mm:ss)"
+	},
+	"date_passed": {
+		"fr": "la date ne doit pas être dépassée",
+		"en": "the date must not be passed"
+	},
+	"saved": {
+		"fr": "Tâche enregistrée",
+		"en": "Task saved"
+	}
+}

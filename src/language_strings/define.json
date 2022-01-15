@@ -1,0 +1,10 @@
+{
+	"invalid_word": {
+		"fr": "ce mot n'existe pas ou il est mal orthographié",
+		"en": "this word doesn't exist"
+	},
+	"synonyms": {
+		"fr": "Synonymes",
+		"en": "Synonyms"
+	}
+}

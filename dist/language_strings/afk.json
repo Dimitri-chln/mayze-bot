@@ -1,0 +1,6 @@
+{
+    "afk_message": {
+        "fr": "{1} est maintenant AFK 💤[2?\n**→ {2}**:]",
+        "en": "{1} is now AFK 💤[2?\n**→ {2}**:]"
+    }
+}

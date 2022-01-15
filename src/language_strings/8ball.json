@@ -1,0 +1,10 @@
+{
+	"reply": {
+		"fr": "**Question :** *{1}*\n**Réponse :** *{2}*",
+		"en": "**Quesion:** *{1}*\n**Answer:** *{2}*"
+	},
+	"answers": {
+		"fr": [ "Oui", "Non", "Certainement", "Évidemment", "Bien-sûr", "Toujours", "Sans hésiter", "Probablement", "Pas du tout", "Peut-être", "Jamais", "C'est possible", "Je ne pense pas", "Probablement pas", "bien-sûr que non", "Je ne sais pas", "Pas sûr" ],
+		"en": [ "Yes", "No", "Certainly", "Obviously", "For sure", "Always", "Without a doubt", "Probably", "Not at all", "Perhaps", "Never", "That's possible", "I don't think so", "Probably not", "Obviously not", "I don't know", "Not sure" ]
+	}
+}

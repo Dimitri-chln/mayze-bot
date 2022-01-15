@@ -1,0 +1,18 @@
+{
+	"commands_list": {
+		"fr": "Liste des commandes",
+		"en": "List of commands"
+	},
+	"invalid_command": {
+		"fr": "cette commande n'existe pas",
+		"en": "this command doesn't exist"
+	},
+	"title": {
+		"fr": "Informations sur la commande {1}",
+		"en": "Help for {1}"
+	},
+	"description": {
+		"fr": "**Nom :** `{1}`\n**Catégorie :** {2}\n**Description :** {3}\n**Permissions :** `{4}`\n**Cooldown :** {5}",
+		"en": "**Name:** `{1}`\n**Category:** {2}\n**Description:** {3}\n**Permissions:** `{4}`\n**Cooldown:** {5}"
+	}
+}

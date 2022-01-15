@@ -1,0 +1,22 @@
+{
+	"no_url": {
+		"fr": "Ajoute un URL à la commande",
+		"en": "Add an URL to the command"
+	},
+	"error": {
+		"fr": "URL invalide",
+		"en": "Invalid URL"
+	},
+	"title": {
+		"fr": "Progression du téléchargement :",
+		"en": "Download progress:"
+	},
+	"complete": {
+		"fr": "Téléchargement terminé",
+		"en": "Download complete"
+	},
+	"file_too_big": {
+		"fr": "Le fichier est trop lourd pour être envoyé :/\nRéessaye sur le [site](https://mayze.xyz/download) !",
+		"en": "The file is too big to be sent :/\nTry again on the [website](https://mayze.xyz/download)!"
+	}
+}
