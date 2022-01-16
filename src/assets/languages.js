@@ -83,38 +83,6 @@ module.exports = {
 				en: "Mudae isn't on this server"
 			}
 		},
-		"info": {
-			title: {
-				fr: "• Informations sur le bot",
-				en: "• Information about the bot"
-			},
-			description: {
-				fr: "**Préfixe :** `{1}`\n**Propriétaire :** `{2}`\n**Version :** `{3}`",
-				en: "**Prefix:** `{1}`\n**Owner:** `{2}`\n**Version:** `{3}`"
-			},
-			unknown: {
-				fr: "**Inconnu**",
-				en: "**Unknown**"
-			}
-		},
-		"kick-myself": {
-			boost: {
-				fr: "tu ne peux pas être kick car tu boost ce serveur",
-				en: "you can't be kicked because you are boosting this server"
-			},
-			too_high_hierarchy: {
-				fr: "je ne suis pas assez haut dans la hiérarchie pour t'expulser",
-				en: "I am not high enough in the hierarchy to kick you"
-			},
-			reason: {
-				fr: "s'est kick lui/elle-même",
-				en: "kicked themselves"
-			},
-			kick_msg: {
-				fr: "**{1}** a fui ses responsabilités",
-				en: "**{1}** evaded their responsabilities"
-			},
-		},
 		"kiss": {
 			title: {
 				fr: "{1} fait un bisous à {2} 😘",

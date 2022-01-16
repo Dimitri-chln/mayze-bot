@@ -34,7 +34,7 @@ const command = {
 	* @param {Object[]} options
 	*/
 	run: async (message, args, options, language, languageCode) => {
-		const { OWNER_ID } = require("../config.json");
+		const { OWNER_ID } = require("../../config.json");
 		
 		const member = args
             ? message.mentions.members.first() || message.guild.members.cache.get(args[0])

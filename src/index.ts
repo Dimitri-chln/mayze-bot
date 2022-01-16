@@ -152,7 +152,6 @@ client.on("ready", async () => {
 	
 	Util.beta = client.user.id === Util.config.BETA_CLIENT_ID;
 
-	const {	version } = require("../package.json");
 	const logChannel = client.channels.cache.get(Util.config.LOG_CHANNEL_ID);
 	
 	(logChannel as Discord.TextChannel).send({
@@ -163,7 +162,7 @@ client.on("ready", async () => {
 					iconURL: client.user.displayAvatarURL()
 				},
 				color: 65793,
-				description: `• **Version:** \`${version}\`\n• **Ping:** \`${client.ws.ping}\``,
+				description: `• **Version:** \`${Util.version}\`\n• **Ping:** \`${client.ws.ping}\``,
 				footer: {
 					text: "✨ Mayze ✨"
 				},

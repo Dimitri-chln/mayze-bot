@@ -1,0 +1,14 @@
+{
+	"not_allowed": {
+		"fr": "tu ne peux pas mettre cet utilisateur en prison",
+		"en": "you are not allowed to jail this user"
+	},
+	"jailed": {
+		"fr": "`{1}` a été mis en prison",
+		"en": "`{1}` has been jailed"
+	},
+	"unjailed": {
+		"fr": "`{1}` a été libéré",
+		"en": "`{1}` has been unjailed"
+	}
+}

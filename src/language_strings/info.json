@@ -1,0 +1,10 @@
+{
+	"title": {
+		"fr": "• Informations sur le bot",
+		"en": "• Information about the bot"
+	},
+	"description": {
+		"fr": "**Préfixe :** `{1}`\n**Propriétaire :** `{2}`\n**Version :** `{3}`",
+		"en": "**Prefix:** `{1}`\n**Owner:** `{2}`\n**Version:** `{3}`"
+	}
+}

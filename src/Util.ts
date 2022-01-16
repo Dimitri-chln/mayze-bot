@@ -17,11 +17,13 @@ import parseArgs from "./utils/misc/parseArgs";
 import chatXp from "./utils/misc/chatXp";
 import findMember from "./utils/misc/findMember";
 import config from "./config.json";
+import { version } from "../package.json";
 
 
 
 export default class Util {
 	static config = config;
+	static version = version;
 	static database: Pg.Client;
 	static languages: Collection<Snowflake, Language> = new Collection();
 	static commands: Collection<string, Command> = new Collection();
