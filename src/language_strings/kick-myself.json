@@ -1,5 +1,5 @@
 {
-	"boost": {
+	"boosting": {
 		"fr": "tu ne peux pas être kick car tu boost ce serveur",
 		"en": "you can't be kicked because you are boosting this server"
 	},

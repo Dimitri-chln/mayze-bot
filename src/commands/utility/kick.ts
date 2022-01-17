@@ -1,65 +1,95 @@
-const { Message } = require("discord.js");
+import { CommandInteraction, Message } from "discord.js";
+import Command from "../../types/structures/Command";
+import LanguageStrings from "../../types/structures/LanguageStrings";
+import Util from "../../Util";
 
-const command = {
+import { GuildMember } from "discord.js";
+
+
+
+const command: Command = {
 	name: "kick",
 	description: {
 		fr: "Expulser un membre du serveur",
 		en: "Kick a member from the server"
 	},
-	aliases: [],
-	args: 1,
-	usage: "<user> [<reason>]",
-	perms: ["KICK_MEMBERS"],
-	botPerms: ["KICK_MEMBERS"],
-	onlyInGuilds: ["689164798264606784"],
-	category: "utility",
-	newbiesAllowed: true,
-	options: [
-		{
-			name: "user",
-			description: "The user to kick",
-			type: 6,
-			required: true
-		},
-        {
-            name: "reason",
-            description: "The reason",
-            type: 3,
-            required: false
-        }
-	],
-	/**
-	* @param {Message} message 
-	* @param {string[]} args 
-	* @param {Object[]} options
-	*/
-	run: async (message, args, options, language, languageCode) => {
-		const { OWNER_ID } = require("../../config.json");
+	userPermissions: ["KICK_MEMBERS"],
+	botPermissions: ["KICK_MEMBERS"],
+	guildIds: ["689164798264606784"],
+	
+	options: {
+		fr: [
+			{
+				name: "user",
+				description: "L'utilisateur à expulser",
+				type: "USER",
+				required: true
+			},
+			{
+				name: "reason",
+				description: "La raison de l'expulsion",
+				type: "STRING",
+				required: false
+			}
+		],
+		en: [
+			{
+				name: "user",
+				description: "The user to kick",
+				type: "USER",
+				required: true
+			},
+			{
+				name: "reason",
+				description: "The reason of the kick",
+				type: "STRING",
+				required: false
+			}
+		]
+	},
+	
+	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+		const member = interaction.guild.members.cache.get(
+			interaction.options.getUser("user").id
+		);
 		
-		const member = args
-            ? message.mentions.members.first() || message.guild.members.cache.get(args[0])
-            : message.guild.members.cache.get(options[0].value);
-        if (!member) return message.reply("mentionne un membre du serveur").catch(console.error);
-        const reason = args
-            ? args.slice(1).join(" ") || null
-            : options[1] ? options[1].value : null;
+		const reason = interaction.options.getString("reason");
 
-        if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== OWNER_ID) 
-			return message.reply("tu ne peux pas expulser cette personne").catch(console.error);
+		if (
+			member.roles.highest.position >= (interaction.member as GuildMember).roles.highest.position
+			&& interaction.user.id !== Util.owner.id
+		) 
+			return interaction.reply({
+				content: languageStrings.data.not_allowed(),
+				ephemeral: true
+			});
 
-        // Server booster
-        if (member.premiumSince) return message.reply("ce membre boost le serveur").catch(console.error);
+		// Server booster
+		if (member.premiumSinceTimestamp) return interaction.reply({
+			content: languageStrings.data.boosting(),
+			ephemeral: true
+		});
 
-		if (member.roles.highest.position >= message.guild.me.roles.highest.position)
-			return message.reply(`je ne suis pas assez haut dans la hiérarchie pour expulser **${member.user.tag}**`).catch(console.error);
+		if (member.roles.highest.position >= interaction.guild.me.roles.highest.position)
+			return interaction.reply({
+				content: languageStrings.data.too_high_hierarchy(member.user.tag),
+				ephemeral: true
+			});
 
-        member.kick(`Expulsé par ${message.author.tag}${reason ? `. Raison : ${reason}` : ""}`)
-            .then(m => message.channel.send(`**${m.user.tag}** a été expulsé`).catch(console.error))
-            .catch(err => {
-                console.error(err);
-                message.channel.send("Quelque chose s'est mal passé en expulsant ce membre :/").catch(console.error);
-            });
+		member.kick(
+			languageStrings.data.reason(
+				interaction.user.tag,
+				reason
+			)
+		)
+			.then(m => {
+				interaction.reply(
+					languageStrings.data.kicked(m.user.tag)
+				);
+			});
 	}
 };
 
-module.exports = command;
+
+
+export default command;

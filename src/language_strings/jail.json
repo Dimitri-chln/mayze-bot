@@ -8,7 +8,7 @@
 		"en": "`{1}` has been jailed"
 	},
 	"unjailed": {
-		"fr": "`{1}` a été libéré",
-		"en": "`{1}` has been unjailed"
+		"fr": "**{1}** a été libéré",
+		"en": "**{1}** has been unjailed"
 	}
 }

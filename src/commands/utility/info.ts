@@ -32,7 +32,8 @@ const command: Command = {
 					description: languageStrings.data.description(
 						Util.prefix,
 						Util.owner.tag,
-						Util.version
+						Util.version,
+						Math.round(interaction.client.uptime / 1000).toString()
 					),
 					footer: {
 						text: "✨ Mayze ✨"

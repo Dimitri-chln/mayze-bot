@@ -83,22 +83,6 @@ module.exports = {
 				en: "Mudae isn't on this server"
 			}
 		},
-		"kiss": {
-			title: {
-				fr: "{1} fait un bisous à {2} 😘",
-				en: "{1} kisses {2} 😘"
-			}
-		},
-		"language": {
-			invalid_language: {
-				fr: "langues disponibles : `{1}`",
-				en: "available languages: `{1}`"
-			},
-			language_updated: {
-				fr: "Langue modifiée",
-				en: "Language updated"
-			}
-		},
 		"level": {
 			chat_title: {
 				fr: "Niveau de chat textuel",

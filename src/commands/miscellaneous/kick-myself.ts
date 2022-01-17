@@ -26,7 +26,7 @@ const command: Command = {
 		// Server booster
         if ((interaction.member as GuildMember).premiumSinceTimestamp)
 			return interaction.reply({
-				content: languageStrings.data.boost(),
+				content: languageStrings.data.boosting(),
 				ephemeral: true
 			});
 
