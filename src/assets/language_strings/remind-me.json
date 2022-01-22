@@ -1,0 +1,30 @@
+{
+	"invalid_duration": {
+		"fr": "la durée est invalide (exemple : 2d15h)",
+		"en": "the duration is invalid (example: 2d15h)"
+	},
+	"invalid_date": {
+		"fr": "la date est invalide (exemple : mm/jj/aaaa)",
+		"en": "the date is invalid (example: mm/dd/yyyy)"
+	},
+	"created": {
+		"fr": "__Rappel dans {1} :__\n> {2}",
+		"en": "__I will remind you in {1}:__\n> {2}"
+	},
+	"invalid_number": {
+		"fr": "le nombre doit être compris entre 1 et {1}",
+		"en": "the number must be between 1 and {1}"
+	},
+	"removed": {
+		"fr": "rappel retiré",
+		"en": "reminder removed"
+	},
+	"title": {
+		"fr": "Rappels de {1}",
+		"en": "{1}'s reminders"
+	},
+	"no_reminder": {
+		"fr": "*Aucun rappel*",
+		"en": "*No reminder*"
+	}
+}

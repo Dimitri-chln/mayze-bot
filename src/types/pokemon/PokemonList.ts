@@ -1,18 +1,20 @@
-import CaughtPokemon, { PokemonVariationName, PokemonData } from "./CaughtPokemon";
-import Pokemon from "./Pokemon";
+import { Snowflake } from "discord.js";
+import { VariationType } from "../../utils/pokemon/pokemonInfo";
+import CaughtPokemon from "./CaughtPokemon";
+import Pokemon, { DatabasePokemon } from "./Pokemon";
 
 
 
 export default class PokemonList {
 	pokemons: CaughtPokemon[];
 
-	constructor(pokemonList: PokemonData[]) {
+	constructor(pokemonList: DatabasePokemon[], userId: Snowflake) {
 		this.pokemons = pokemonList.map(pokemonData =>
-			new CaughtPokemon(pokemonData)	
+			new CaughtPokemon(pokemonData, userId)
 		);
 	}
 
-	has(pokemon: Pokemon, variation?: PokemonVariationName) {
-		return this.pokemons.some(pkm => pkm.data.nationalId === pokemon.nationalId && pkm.variation === (variation ?? "default"));
+	has(pokemon: Pokemon, variation: VariationType = "default") {
+		return this.pokemons.some(pkm => pkm.data.nationalId === pokemon.nationalId && pkm.variation === variation);
 	}
 }

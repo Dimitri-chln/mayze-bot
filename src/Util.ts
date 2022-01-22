@@ -1,4 +1,4 @@
-import { Collection, Message, MessageReaction, Snowflake, User } from "discord.js";
+import { Client, Collection, Message, MessageReaction, Snowflake, User } from "discord.js";
 import Pg from "pg";
 import { CronJob } from "cron";
 import MusicPlayer from "./utils/music/MusicPlayer";
@@ -24,6 +24,7 @@ import { version } from "../package.json";
 export default class Util {
 	static config = config;
 	static version = version;
+	static client: Client;
 	static database: Pg.Client;
 	static languages: Collection<Snowflake, Language> = new Collection();
 	static commands: Collection<string, Command> = new Collection();
@@ -33,7 +34,6 @@ export default class Util {
 	static channelCooldowns: Collection<Snowflake, ChannelCooldown> = new Collection();
 	static beta: boolean;
 	static owner: User;
-	static prefix: string;
 	static palettes: Collection<string, Palette> = new Collection();
 	static canvas: Collection<string, Canvas> = new Collection();
 	static roseLobby: CronJob;

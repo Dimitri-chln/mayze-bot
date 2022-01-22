@@ -166,7 +166,7 @@ const command: Command = {
 
 				await Util.database.query(
 					"INSERT INTO responses (trigger, response, trigger_type) VALUES ($1, $2, $3)",
-					[ trigger.replace(/"/g, "U+0022"), response.replace(/"/g, "U+0022"), triggerType ]
+					[ trigger, response, triggerType ]
 				);
 
 				interaction.reply({

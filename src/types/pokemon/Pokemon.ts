@@ -1,3 +1,4 @@
+import { Snowflake } from "discord.js";
 import { EvolutionLine } from "../../utils/pokemon/pokemonEvolutionLine";
 import { FormatType, VariationType } from "../../utils/pokemon/pokemonInfo";
 import { Language } from "../structures/LanguageStrings";
@@ -38,8 +39,8 @@ export default interface Pokemon {
 	weightUs: `${number} lbs.`;
 	color: string;
 	baseStats: BaseStats;
-	megaEvolutions?: MegaEvolution[];
-	variations?: PokemonVariation[];
+	megaEvolutions: MegaEvolution[];
+	variations: PokemonVariation[];
 	legendary: boolean;
 	ultraBeast: boolean;
 	evolutionFrom?(): Pokemon;
@@ -179,4 +180,17 @@ export interface PokemonVariation {
 	names: PokemonNames;
 	types: PokemonType[];
 	abilities: PokemonAbility[];
+}
+
+export interface DatabasePokemon {
+	pokedex_id: number;
+	shiny: boolean;
+	variation: VariationType;
+	users: {
+		[K: Snowflake]: {
+			caught: number;
+			favorite: boolean;
+			nickname?: string;
+		}
+	}
 }

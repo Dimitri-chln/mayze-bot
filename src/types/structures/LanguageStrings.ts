@@ -20,7 +20,7 @@ export default class LanguageStrings {
 		this.filename = filename;
 		this.language = language;
 
-		const rawData = require(`../../language_strings/${filename}.json`);
+		const rawData = require(`../../assets/language_strings/${filename}.json`);
 		this._data = new Collection(
 			Object.entries(rawData).map(([ key, value ]) => [ key, value[language] ])
 		);

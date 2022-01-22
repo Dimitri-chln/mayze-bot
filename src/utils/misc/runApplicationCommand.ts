@@ -1,6 +1,5 @@
 import Path from "path";
 import { CommandInteraction, GuildMember, Permissions } from "discord.js";
-import { OWNER_ID } from "../../config.json";
 import Util from "../../Util";
 import Command from "../../types/structures/Command";
 import LanguageStrings from "../../types/structures/LanguageStrings";
@@ -32,7 +31,7 @@ export default async function runApplicationCommand(command: Command, interactio
 		}
 	);
 
-	if (command.category === "admin" && interaction.user.id !== OWNER_ID) return;
+	if (command.category === "admin" && interaction.user.id !== Util.owner.id) return;
 
 	const userPermissions = interaction.member instanceof GuildMember
 		? interaction.member.permissionsIn(interaction.channel.id)
@@ -40,7 +39,7 @@ export default async function runApplicationCommand(command: Command, interactio
 	
 	const missingUserPermissions = command.userPermissions.filter(permission => !userPermissions.has(permission));
 
-	if (missingUserPermissions.length && interaction.user.id !== OWNER_ID)
+	if (missingUserPermissions.length && interaction.user.id !== Util.owner.id)
 		return interaction.reply({
 			content: languageStrings.data.user_missing_permissions(missingUserPermissions.join("`, `")),
 			ephemeral: true

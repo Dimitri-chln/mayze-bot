@@ -36,7 +36,6 @@ const command: Command = {
 	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
 		const message = interaction.options.getString("message")
 			?.replace(/^./, a => a.toUpperCase())
-			?.replace(/"/g, "U+0022")
 			?? "";
 		
 		Util.database.query(

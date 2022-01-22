@@ -1,0 +1,6 @@
+{
+    "gift": {
+        "fr": "> 🎁 {1}, tu as reçu __**{2}**__ de la part de **{3}**",
+        "en": "> 🎁 {1}, you received __**{2}**__ from **{3}**"
+    }
+}

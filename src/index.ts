@@ -150,6 +150,7 @@ for (const commandName of Util.commands.keys()) {
 client.on("ready", async () => {
 	console.log("Connected to Discord");
 	
+	Util.client = client;
 	Util.beta = client.user.id === Util.config.BETA_CLIENT_ID;
 
 	const logChannel = client.channels.cache.get(Util.config.LOG_CHANNEL_ID);
@@ -174,54 +175,6 @@ client.on("ready", async () => {
 
 
 	client.users.fetch(Util.config.OWNER_ID).then((owner: Discord.User) => Util.owner = owner).catch(console.error);
-
-	
-	
-	// Prefix
-	Util.prefix = Util.beta
-		? Util.config.PREFIX_BETA
-		: Util.config.PREFIX;
-
-	
-	
-	// Canvas
-	const { emojis } = client.guilds.cache.get("842836119757914173");
-
-	Util.database.query(
-		"SELECT * FROM colors"
-	).then(async ({ rows: colors }) => {
-		for (const color of colors) {
-			let emoji = emojis.cache.find(e => e.name === `pl_${color.alias}`);
-			
-			if (!emoji) {
-				let red = Math.floor(color.code / (256 * 256));
-				let green = Math.floor((color.code % (256 * 256)) / 256);
-				let blue = color.code % 256;
-				let hex = red.toString(16).padStart(2, "0")
-					+ green.toString(16).padStart(2, "0")
-					+ blue.toString(16).padStart(2, "0");
-				emoji = await emojis.create(`https://dummyimage.com/100/${hex}?text=+`, `pl_${color.alias}`);
-			}
-
-			if (!Util.palettes.has(color.palette))
-				Util.palettes.set(color.palette, new Palette(color.palette));
-			
-			Util.palettes.get(color.palette).add(new Color(color.name, color.alias, color.code, emoji));
-		}
-
-		emojis.cache.forEach(e => {
-			if (!colors.some(c => `pl_${c.alias}` === e.name)) e.delete().catch(console.error);
-		});
-
-		Util.database.query(
-			"SELECT name FROM canvas"
-		).then(res => {
-			for (const row of res.rows) {
-				const canvas = new Canvas(row.name, client, Util.database, Util.palettes);
-				Util.canvas.set(canvas.name, canvas);
-			}
-		});
-	});
 
 
 
@@ -304,6 +257,47 @@ client.on("ready", async () => {
 
 
 
+	// Canvas
+	const { emojis } = client.guilds.cache.get(Util.config.CANVAS_GUILD_ID);
+
+	Util.database.query(
+		"SELECT * FROM colors"
+	).then(async ({ rows: colors }) => {
+		for (const color of colors) {
+			let emoji = emojis.cache.find(e => e.name === `pl_${color.alias}`);
+			
+			if (!emoji) {
+				let red = Math.floor(color.code / (256 * 256));
+				let green = Math.floor((color.code % (256 * 256)) / 256);
+				let blue = color.code % 256;
+				let hex = red.toString(16).padStart(2, "0")
+					+ green.toString(16).padStart(2, "0")
+					+ blue.toString(16).padStart(2, "0");
+				emoji = await emojis.create(`https://dummyimage.com/256/${hex}?text=+`, `pl_${color.alias}`);
+			}
+
+			if (!Util.palettes.has(color.palette))
+				Util.palettes.set(color.palette, new Palette(color.palette));
+			
+			Util.palettes.get(color.palette).add(new Color(color.name, color.alias, color.code, emoji));
+		}
+
+		emojis.cache.forEach(e => {
+			if (!colors.some(c => `pl_${c.alias}` === e.name)) e.delete().catch(console.error);
+		});
+
+		Util.database.query(
+			"SELECT name FROM canvas"
+		).then(res => {
+			for (const row of res.rows) {
+				const canvas = new Canvas(row.name, client, Util.database, Util.palettes);
+				Util.canvas.set(canvas.name, canvas);
+			}
+		});
+	});
+
+
+
 	if (Util.beta) return;
 	
 	
@@ -344,8 +338,7 @@ client.on("ready", async () => {
 		try {
 			const { rows: reminders } = await Util.database.query("SELECT * FROM reminders");
 			const { rows: blocks } = await Util.database.query("SELECT * FROM trade_block WHERE expires_at IS NOT NULL");
-			const { rows: mutes } = await Util.database.query("SELECT * FROM mutes WHERE expires_at IS NOT NULL");
-
+			
 			// Reminders
 			reminders.forEach(async reminder => {
 				const timestamp = new Date(reminder.timestamp).valueOf();
@@ -371,34 +364,6 @@ client.on("ready", async () => {
 						"DELETE FROM trade_block WHERE id = $1",
 						[ block.id ]
 					).catch(console.error);
-				}
-			});
-
-			// Mutes
-			const guild = client.guilds.cache.get(Util.config.MAIN_GUILD_ID);
-			const mutedRole = guild.roles.cache.get("695330946844721312");
-
-			mutes.forEach(async mute => {
-				const member = await guild.members.fetch(mute.user_id).catch(console.error);
-				if (!member) return;
-
-				const timestamp = new Date(mute.expires_at).valueOf();
-				if (Date.now() > timestamp) {
-					Util.database.query(
-						"DELETE FROM mutes WHERE user_id = $1",
-						[ mute.user_id ]
-					).catch(console.error);
-
-					const jailedRoles = member.roles.cache.filter(role =>
-						guild.roles.cache.some(r => r.permissions.has(Discord.Permissions.FLAGS.ADMINISTRATOR) && role.name === r.name + " (Jailed)")
-					);
-					const unJailedRoles = guild.roles.cache.filter(role =>
-						role.permissions.has(Discord.Permissions.FLAGS.ADMINISTRATOR) && member.roles.cache.some(r => r.name === role.name + " (Jailed)")
-					);
-					jailedRoles.set(mutedRole.id, mutedRole);
-
-					await member.roles.add(unJailedRoles).catch(console.error);
-					await member.roles.remove(jailedRoles).catch(console.error);
 				}
 			});
 		

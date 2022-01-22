@@ -1,0 +1,18 @@
+{
+	"not_in_canvas": {
+		"fr": "tu n'es dans aucun canevas. Rejoins-en un avec la commande `/canvas join`",
+		"en": "you aren't in any canvas. Join one with `/canvas join`"	
+	},
+	"invalid_coordinates": {
+		"fr": "les coordonnées sont invalides",
+		"en": "the coordinates are invalid"
+	},
+	"invalid_color": {
+		"fr": "cette couleur n'existe pas. Tu peux voir la liste de toutes les couleurs grâce à la commande `*palette`",
+		"en": "this color doesn't exist. See the list of all colors with the `*palette` command"
+	},
+	"placing": {
+		"fr": "En train de placer {1} `{2}` ...",
+		"en": "Placing {1} `{2}` ..."
+	}
+}

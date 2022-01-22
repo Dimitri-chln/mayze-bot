@@ -20,8 +20,8 @@ const command: Command = {
 	},
 	
 	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
-		const snipedMsg = Util.sniping.editedMessages.get(interaction.channel.id);
-		if (!snipedMsg) return interaction.reply({
+		const snipedMessage = Util.sniping.editedMessages.get(interaction.channel.id);
+		if (!snipedMessage) return interaction.reply({
 			content: languageStrings.data.no_message(),
 			ephemeral: true
 		});
@@ -30,11 +30,11 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name: snipedMsg.author.tag,
-						iconURL: snipedMsg.author.avatar
+						name: snipedMessage.author.tag,
+						iconURL: snipedMessage.author.avatar
 					},
 					color: interaction.guild.me.displayColor,
-					description: snipedMsg.content,
+					description: snipedMessage.content,
 					footer: {
 						text: "✨ Mayze ✨"
 					}

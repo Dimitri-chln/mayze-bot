@@ -1,0 +1,18 @@
+{
+	"not_allowed": {
+		"fr": "tu ne peux pas timeout cet utilisateur",
+		"en": "you are not allowed to timeout this user"
+	},
+	"too_high_hierarchy": {
+		"fr": "je ne suis pas assez haut dans la hiérarchie pour timeout **{1}**",
+		"en": "I am not high enough in the hierarchy to timeout **{1}**"
+	},
+	"reason": {
+		"fr": "Timeout par {1}",
+		"en": "Timed out by {1}"
+	},
+	"timed_out": {
+		"fr": "**{1}** a été timeout [2?pendant {3}:indéfiniment]",
+		"en": "**{1}** has been timed out [2?for {3}:indefinitely]"
+	}
+}

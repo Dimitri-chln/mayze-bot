@@ -103,7 +103,7 @@ const command: Command = {
 		await msg.react("✅").catch(console.error);
 		await msg.react("❌").catch(console.error);
 
-		const filter: CollectorFilter<[ MessageReaction, User ]> = (reaction, user) => user.id === interaction.user.id && ["✅", "❌"].includes(reaction.emoji.name);
+		const filter: CollectorFilter<[MessageReaction, User]> = (reaction, user) => user.id === interaction.user.id && ["✅", "❌"].includes(reaction.emoji.name);
 		const collected = await msg.awaitReactions({ filter, max: 1, time: 30000 });
 		
 		msg.reactions.removeAll().catch(console.error);

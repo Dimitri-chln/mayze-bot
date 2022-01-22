@@ -12,7 +12,7 @@ const command: Command = {
 		en: "Change the server's bot language"
 	},
 	userPermissions: ["ADMINISTRATOR"],
-	botPermissions: ["ADD_REACTIONS"],
+	botPermissions: [],
 	
 	options: {
 		fr: [

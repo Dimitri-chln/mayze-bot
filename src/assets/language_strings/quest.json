@@ -1,0 +1,18 @@
+{
+	"not_allowed": {
+		"fr": "tu n'es pas autorisé(e) à exécuter cette commande",
+		"en": "you are not allowed to run this command"
+	},
+	"wrong_channel": {
+		"fr": "cette commande n'est pas exécutable dans ce salon",
+		"en": "this command is not executable in this channel"
+	},
+	"await_image": {
+		"fr": "envoie l'image des quêtes dans ce salon",
+		"en": "please send the quests image here"
+	},
+	"title": {
+		"fr": "Nouvelles quêtes disponibles !",
+		"en": "New quests available!"
+	}
+}

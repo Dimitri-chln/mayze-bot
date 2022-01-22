@@ -5,6 +5,7 @@ import Jimp from "jimp";
 import Util from "../../Util";
 import Palette from "./Palette";
 import Color from "./Color";
+import Grid from "./Grid";
 
 
 
@@ -142,11 +143,11 @@ export default class Canvas {
 	/**
 	 * Get a 7x7 grid of the canvas around the selected pixel.
 	 */
-	async viewGrid(x: number, y: number): Promise<Color[][]> {
+	async viewGrid(x: number, y: number): Promise<Grid> {
 		if (x < 0 || x >= this.size || y < 0 || y >= this.size) throw new Error("InvalidCoordinates");
 
 		let data = await this.data;
-		let grid = [];
+		let grid: Color[][] = [];
 		
 		for (let yShift = -3; yShift <= 3; yShift ++) {
 			let row = [];
@@ -162,7 +163,7 @@ export default class Canvas {
 			grid.push(row);
 		}
 
-		return grid;
+		return new Grid(this, x, y, grid);
 	}
 
 	/**

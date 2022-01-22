@@ -1,0 +1,10 @@
+{
+	"title": {
+		"fr": "Palettes de couleurs pour le canevas",
+		"en": "Color palettes for the canvas"
+	},
+	"palette": {
+		"fr": "Palette : **{1}**",
+		"en": "Palette: **{1}**"
+	}
+}

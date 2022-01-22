@@ -1,0 +1,10 @@
+{
+	"no_reaction": {
+		"fr": "il n'y a aucune réaction à snipe dans ce salon",
+		"en": "there is no reaction to snipe in this channel"
+	},
+	"description": {
+		"fr": "**{1}** ~sa réagi avec~t({2}) {3}",
+		"en": "**{1}** ~sreacted with~t({2}) {3}"
+	}
+}

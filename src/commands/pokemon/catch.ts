@@ -6,10 +6,10 @@ import Util from "../../Util";
 import { TextChannel } from "discord.js";
 import Pokedex from "../../types/pokemon/Pokedex";
 import CatchRates, { PokemonUpgrades } from "../../types/pokemon/CatchRates";
-import { PokemonVariationName } from "../../types/pokemon/CaughtPokemon";
 import PokemonList from "../../types/pokemon/PokemonList";
 import { pokeball } from "../../assets/image-urls.json";
 import { CATCH_REWARD, SHINY_REWARD_MULTIPLIER, ALOLAN_REWARD_MULTIPLIER } from "../../config.json";
+import { VariationType } from "../../utils/pokemon/pokemonInfo";
 
 
 
@@ -41,7 +41,7 @@ const command: Command = {
 			[ interaction.user.id ]
 		);
 
-		const pokemonList = new PokemonList(caughtPokemonsData);
+		const pokemonList = new PokemonList(caughtPokemonsData, interaction.user.id);
 
 		const { rows: [ userUpgrades ] } = await Util.database.query(
 			"SELECT * FROM upgrades WHERE user_id = $1",
@@ -122,7 +122,7 @@ const command: Command = {
 		}
 		
 		const shiny = Math.random() < SHINY_FREQUENCY * (1 + (UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_tier) / 100));
-		const variation: PokemonVariationName = 
+		const variation: VariationType = 
 			randomPokemon.variations.some(variation => variation.suffix === "alola") && Math.random() < ALOLAN_FREQUENCY
 				? "alola"
 				: "default";
