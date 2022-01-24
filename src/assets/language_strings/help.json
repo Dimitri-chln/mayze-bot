@@ -1,7 +1,7 @@
 {
 	"commands_list": {
-		"fr": "Liste des commandes",
-		"en": "List of commands"
+		"fr": "Liste des commandes disponibles",
+		"en": "List of available commands"
 	},
 	"invalid_command": {
 		"fr": "cette commande n'existe pas",
