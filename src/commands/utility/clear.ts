@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { Collection, TextChannel } from "discord.js";
@@ -75,12 +75,12 @@ const command: Command = {
 		]
 	},
 
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const number = interaction.options.getInteger("number");
 
 		if (isNaN(number) || number <= 0 || number > 100)
 			return interaction.reply({
-				content: languageStrings.data.invalid_number(),
+				content: translations.data.invalid_number(),
 				ephemeral: true
 			});
 
@@ -102,7 +102,7 @@ const command: Command = {
 		await (interaction.channel as TextChannel).bulkDelete(messages, true);
 
 		const reply = await interaction.reply({
-			content: languageStrings.data.deleted(messages.size.toString(), messages.size > 1),
+			content: translations.data.deleted(messages.size.toString(), messages.size > 1),
 			fetchReply: true
 		}) as Message;
 		

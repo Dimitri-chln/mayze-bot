@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 
@@ -57,7 +57,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const subCommand = interaction.options.getSubcommand();
 		
 		const userCanvas = Util.canvas.filter(canvas =>
@@ -73,7 +73,7 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: languageStrings.data.title(),
+								name: translations.data.title(),
 								iconURL: interaction.client.user.displayAvatarURL()
 							},
 							color: interaction.guild.me.displayColor,
@@ -92,12 +92,12 @@ const command: Command = {
 				const canvasName = interaction.options.getString("canvas").toLowerCase();
 				const newCanvas = userCanvas.find(canvas => canvas.name === canvasName); 
 
-				if (!newCanvas) return interaction.reply(languageStrings.data.invalid_canvas());
+				if (!newCanvas) return interaction.reply(translations.data.invalid_canvas());
 
 				newCanvas.addUser(interaction.user);
 
 				interaction.reply({
-					content: languageStrings.data.joined(canvasName),
+					content: translations.data.joined(canvasName),
 					ephemeral: true
 				});
 

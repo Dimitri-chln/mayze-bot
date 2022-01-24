@@ -9,7 +9,7 @@ type Dynamic<T> = {
 	[x: string]: T;
 }
 
-export default class LanguageStrings {
+export default class Translations {
 	filename: string;
 	language: Language;
 	private _data: Collection<string, string>;
@@ -26,8 +26,8 @@ export default class LanguageStrings {
 		);
 		this.data = {};
 
-		for (const languageStringName of this._data.keys()) {
-			this.data[languageStringName] = (...args: (string | boolean)[]) => {
+		for (const translationName of this._data.keys()) {
+			this.data[translationName] = (...args: (string | boolean)[]) => {
 				args = args.map(a => a
 					? a.toString()
 						.replace(/{/g, "~c")
@@ -39,7 +39,7 @@ export default class LanguageStrings {
 					: a
 				);
 			
-				let text = this._data.get(languageStringName);
+				let text = this._data.get(translationName);
 				
 				if (typeof text !== "string") return text;
 					

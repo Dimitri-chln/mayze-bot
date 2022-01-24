@@ -75,13 +75,13 @@ var command = {
             }
         ]
     },
-    run: function (interaction, languageStrings) { return __awaiter(void 0, void 0, void 0, function () {
+    run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
         var date, taskString, task, job;
         return __generator(this, function (_a) {
             date = new Date(interaction.options.getString("date"));
             if (!date)
                 return [2 /*return*/, interaction.reply({
-                        content: languageStrings.data.invalid_date(),
+                        content: translations.data.invalid_date(),
                         ephemeral: true
                     }).catch(console.error)];
             taskString = interaction.options.getString("task");
@@ -93,12 +93,12 @@ var command = {
             catch (err) {
                 console.error(err);
                 return [2 /*return*/, interaction.reply({
-                        content: languageStrings.data.date_passed(),
+                        content: translations.data.date_passed(),
                         ephemeral: true
                     }).catch(console.error)];
             }
             interaction.reply({
-                content: languageStrings.data.saved(),
+                content: translations.data.saved(),
                 ephemeral: true
             }).catch(console.error);
             return [2 /*return*/];

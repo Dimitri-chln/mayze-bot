@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Pokedex from "../../types/pokemon/Pokedex";
@@ -289,7 +289,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const subCommand = interaction.options.getSubcommand();
 		
 		switch (subCommand) {
@@ -299,7 +299,7 @@ const command: Command = {
 				) ?? {};
 				
 				if (!pokemon) return interaction.reply({
-					content: languageStrings.data.invalid_pokemon(),
+					content: translations.data.invalid_pokemon(),
 					ephemeral: true
 				});
 				
@@ -309,7 +309,7 @@ const command: Command = {
 				);
 				
 				if (!pokemons.length) return interaction.reply({
-					content: languageStrings.data.pokemon_not_owned(),
+					content: translations.data.pokemon_not_owned(),
 					ephemeral: true
 				});
 
@@ -322,7 +322,7 @@ const command: Command = {
 				);
 				
 				interaction.reply({
-					content: languageStrings.data.favorite_added(pokemon.formatName(shiny, variationType, languageStrings.language)),
+					content: translations.data.favorite_added(pokemon.formatName(shiny, variationType, translations.language)),
 					ephemeral: true
 				});
 				break;
@@ -334,7 +334,7 @@ const command: Command = {
 				) ?? {};
 				
 				if (!pokemon) return interaction.reply({
-					content: languageStrings.data.invalid_pokemon(),
+					content: translations.data.invalid_pokemon(),
 					ephemeral: true
 				});
 				
@@ -344,7 +344,7 @@ const command: Command = {
 				);
 				
 				if (!pokemons.length) return interaction.reply({
-					content: languageStrings.data.pokemon_not_owned(),
+					content: translations.data.pokemon_not_owned(),
 					ephemeral: true
 				});
 
@@ -357,7 +357,7 @@ const command: Command = {
 				);
 				
 				interaction.reply({
-					content: languageStrings.data.favorite_removed(pokemon.formatName(shiny, variationType, languageStrings.language)),
+					content: translations.data.favorite_removed(pokemon.formatName(shiny, variationType, translations.language)),
 					ephemeral: true
 				});
 				break;
@@ -369,13 +369,13 @@ const command: Command = {
 				) ?? {};
 				
 				if (!pokemon) return interaction.reply({
-					content: languageStrings.data.invalid_pokemon(),
+					content: translations.data.invalid_pokemon(),
 					ephemeral: true
 				});
 
 				const nickname = interaction.options.getString("nickname");
 				if (nickname && nickname.length > 30) return interaction.reply({
-					content: languageStrings.data.nickname_too_long()
+					content: translations.data.nickname_too_long()
 				});
 				
 				const { rows: pokemons } = await Util.database.query(
@@ -384,7 +384,7 @@ const command: Command = {
 				);
 				
 				if (!pokemons.length) return interaction.reply({
-					content: languageStrings.data.pokemon_not_owned(),
+					content: translations.data.pokemon_not_owned(),
 					ephemeral: true
 				});
 
@@ -397,8 +397,8 @@ const command: Command = {
 				);
 				
 				interaction.reply({
-					content: languageStrings.data.nickname_updated(
-						pokemon.formatName(shiny, variationType, languageStrings.language),
+					content: translations.data.nickname_updated(
+						pokemon.formatName(shiny, variationType, translations.language),
 						nickname
 					),
 					ephemeral: true
@@ -410,17 +410,17 @@ const command: Command = {
 				const pokemon = Pokedex.findByName(interaction.options.getString("pokemon"));
 
 				if (!pokemon) return interaction.reply({
-					content: languageStrings.data.invalid_pokemon(),
+					content: translations.data.invalid_pokemon(),
 					ephemeral: true
 				});
 
-				const stringEvolutionLine = pokemon.stringEvolutionLine(languageStrings.language);
+				const stringEvolutionLine = pokemon.stringEvolutionLine(translations.language);
 
 				interaction.reply({
 					embeds: [
 						{
 							author: {
-								name: languageStrings.data.evoline_title(pokemon.names[languageStrings.language] ?? pokemon.names.en),
+								name: translations.data.evoline_title(pokemon.names[translations.language] ?? pokemon.names.en),
 								iconURL: interaction.client.user.displayAvatarURL()
 							},
 							thumbnail: {
@@ -463,7 +463,7 @@ const command: Command = {
 						
 						if (
 							interaction.options.getString("name") &&
-							!new RegExp(interaction.options.getString("name"), "i").test(Pokedex.findById(pkm.pokedex_id).names[languageStrings.language]) &&
+							!new RegExp(interaction.options.getString("name"), "i").test(Pokedex.findById(pkm.pokedex_id).names[translations.language]) &&
 							!new RegExp(interaction.options.getString("name"), "i").test(pkm.users[user.id].nickname)
 						) return false;
 
@@ -483,11 +483,11 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: languageStrings.data.title(user.tag),
+								name: translations.data.title(user.tag),
 								iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 							},
 							color: interaction.guild.me.displayColor,
-							description: languageStrings.data.no_pokemon()
+							description: translations.data.no_pokemon()
 						}
 					]
 				};
@@ -498,21 +498,21 @@ const command: Command = {
 				for (let i = 0; i < pokemonList.pokemons.length; i += Util.config.ITEMS_PER_PAGE) {
 					page.embeds[0] = {
 						author: {
-							name: languageStrings.data.title(user.tag),
+							name: translations.data.title(user.tag),
 							iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 						},
-						title: languageStrings.data.total(total.toString(), total > 1),
+						title: translations.data.total(total.toString(), total > 1),
 						color: interaction.guild.me.displayColor,
 						description: pokemonList.pokemons
 							.slice(i, i + Util.config.ITEMS_PER_PAGE)
-							.map(p => languageStrings.data.description(
-								p.data.formatName(p.shiny, p.variation, languageStrings.language, "badge"),
-								p.data.formatName(p.shiny, p.variation, languageStrings.language, "raw"),
+							.map(p => translations.data.description(
+								p.data.formatName(p.shiny, p.variation, translations.language, "badge"),
+								p.data.formatName(p.shiny, p.variation, translations.language, "raw"),
 								interaction.options.getInteger("id") === 0 ? `#${p.data.nationalId.toString().padStart(3, "0")}` : "",
 								escapeMarkdown(p.nickname),
 								p.caught.toString(),
 								p.caught > 1,
-								p.favorite ? `https~d//www.pokemon.com/${languageStrings.language === "en" ? "us" : languageStrings.language}/pokedex/${p.data.names[languageStrings.language].toLowerCase().replace(/[:\.']/g, "").replace(/\s/g, "-").replace(/\u2642/, "-male").replace(/\u2640/, "-female")}` : ""
+								p.favorite ? `https~d//www.pokemon.com/${translations.language === "en" ? "us" : translations.language}/pokedex/${p.data.names[translations.language].toLowerCase().replace(/[:\.']/g, "").replace(/\s/g, "-").replace(/\u2642/, "-male").replace(/\u2640/, "-female")}` : ""
 							)).join("\n")
 					};
 						

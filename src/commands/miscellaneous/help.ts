@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import formatTime from "../../utils/misc/formatTime";
@@ -36,7 +36,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const commands = Util.commands.filter(cmd => !cmd.guildIds?.includes(interaction.guild.id));
 		const commandName = interaction.options.getString("command").toLowerCase();
 
@@ -54,7 +54,7 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: languageStrings.data.commands_list(),
+							name: translations.data.commands_list(),
 							iconURL: interaction.client.user.displayAvatarURL()
 						},
 						color: interaction.guild.me.displayColor,
@@ -72,7 +72,7 @@ const command: Command = {
 
 			const command = commands.get(commandName);
 			if (!command) return interaction.reply({
-				content: languageStrings.data.invalid_command(),
+				content: translations.data.invalid_command(),
 				ephemeral: true
 			});
 
@@ -80,14 +80,14 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: languageStrings.data.title(Util.prefix + command.name),
+							name: translations.data.title(Util.prefix + command.name),
 							iconURL: interaction.client.user.displayAvatarURL()
 						},
 						color: interaction.guild.me.displayColor,
-						description: languageStrings.data.description(
+						description: translations.data.description(
 							command.name,
 							command.category.replace(/^./, a => a.toUpperCase()),
-							command.description[languageStrings.language],
+							command.description[translations.language],
 							command.userPermissions.join("`, `") ?? "∅",
 							(command.cooldown ?? 2).toString()
 						),

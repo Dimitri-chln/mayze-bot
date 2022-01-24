@@ -184,7 +184,7 @@ var command = {
             }
         ]
     },
-    run: function (interaction, languageStrings) { return __awaiter(void 0, void 0, void 0, function () {
+    run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
         var subCommand, responses, _a, trigger, response, triggerType, res, n, response, res;
         var _b;
         return __generator(this, function (_c) {

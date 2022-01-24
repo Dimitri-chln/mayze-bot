@@ -99,7 +99,7 @@ var command = {
             }
         ]
     },
-    run: function (interaction, languageStrings) { return __awaiter(void 0, void 0, void 0, function () {
+    run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
         var number, messages, user, bot, regex, reply;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -107,7 +107,7 @@ var command = {
                     number = interaction.options.getInteger("number");
                     if (isNaN(number) || number <= 0 || number > 100)
                         return [2 /*return*/, interaction.reply({
-                                content: languageStrings.data.invalid_number(),
+                                content: translations.data.invalid_number(),
                                 ephemeral: true
                             })];
                     return [4 /*yield*/, interaction.channel.messages.fetch({ limit: 100 })];
@@ -127,7 +127,7 @@ var command = {
                 case 2:
                     _a.sent();
                     return [4 /*yield*/, interaction.reply({
-                            content: languageStrings.data.deleted(messages.size.toString(), messages.size > 1),
+                            content: translations.data.deleted(messages.size.toString(), messages.size > 1),
                             fetchReply: true
                         })];
                 case 3:

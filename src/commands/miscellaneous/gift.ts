@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import gifts from "../../assets/gifts.json";
@@ -36,13 +36,13 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const user = interaction.options.getUser("user");
 		
 		interaction.reply(
-			languageStrings.data.gift(
+			translations.data.gift(
 				user.toString(),
-				getGift(gifts[languageStrings.language]),
+				getGift(gifts[translations.language]),
 				interaction.user.username
 			)
 		);

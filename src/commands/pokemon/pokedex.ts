@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Pokedex from "../../types/pokemon/Pokedex";
@@ -151,7 +151,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const { getPokemonVariation, getCleanName } = require("../utils/pokemonInfo");
 		
 		const subCommand = interaction.options.getSubcommand();
@@ -172,37 +172,37 @@ const command: Command = {
 					: "default";
 					
 				if (!pokemon) return interaction.reply({
-					content: languageStrings.data.invalid_pokemon(),
+					content: translations.data.invalid_pokemon(),
 					ephemeral: true
 				});
 
 				interaction.reply({
 					embeds: [
 						{
-							title: `${pokemon.formatName(shiny, variation, languageStrings.language)} #${pokemon.nationalId.toString().padStart(3, "0")}`,
+							title: `${pokemon.formatName(shiny, variation, translations.language)} #${pokemon.nationalId.toString().padStart(3, "0")}`,
 							color: interaction.guild.me.displayColor,
 							image: {
 								url: pokemon.image(shiny, variation)
 							},
 							fields: [
 								{
-									name: languageStrings.data.field_alternative_names(),
-									value: Object.keys(pokemon.names).filter(l => l !== languageStrings.language).map(l => `${Util.config.LANUAGE_FLAGS[l]} ${pokemon.names[l]}`).join("\n"),
+									name: translations.data.field_alternative_names(),
+									value: Object.keys(pokemon.names).filter(l => l !== translations.language).map(l => `${Util.config.LANUAGE_FLAGS[l]} ${pokemon.names[l]}`).join("\n"),
 									inline: true
 								},
 								{
-									name: languageStrings.data.field_height(),
+									name: translations.data.field_height(),
 									value: pokemon.heightEu,
 									inline: true
 								},
 								{
-									name: languageStrings.data.field_weight(),
+									name: translations.data.field_weight(),
 									value: pokemon.weightEu,
 									inline: true
 								},
 								{
-									name: languageStrings.data.field_base_stats(),
-									value: languageStrings.data.base_stats(
+									name: translations.data.field_base_stats(),
+									value: translations.data.base_stats(
 										pokemon.baseStats.hp.toString(),
 										pokemon.baseStats.atk.toString(),
 										pokemon.baseStats.def.toString(),
@@ -213,14 +213,14 @@ const command: Command = {
 									inline: true
 								},
 								{
-									name: languageStrings.data.field_forms(),
+									name: translations.data.field_forms(),
 									value: 
-										pokemon.variations.map(variation => `• ${variation.names[languageStrings.language]}`).join("\n") + "\n" +
-										pokemon.megaEvolutions.map(megaEvolution => `• ${megaEvolution.names[languageStrings.language]}`).join("\n"),
+										pokemon.variations.map(variation => `• ${variation.names[translations.language]}`).join("\n") + "\n" +
+										pokemon.megaEvolutions.map(megaEvolution => `• ${megaEvolution.names[translations.language]}`).join("\n"),
 									inline: true
 								},
 								{
-									name: languageStrings.data.field_types(),
+									name: translations.data.field_types(),
 									value: pokemon.types.map(type => `• ${type}`).join("\n"),
 									inline: true
 								}
@@ -260,11 +260,11 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: languageStrings.data.title(interaction.user.tag),
+								name: translations.data.title(interaction.user.tag),
 								iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 							},
 							color: interaction.guild.me.displayColor,
-							description: languageStrings.data.no_pokemon()
+							description: translations.data.no_pokemon()
 						}
 					]
 				};
@@ -275,9 +275,9 @@ const command: Command = {
 						.slice(i, i + Util.config.ITEMS_PER_PAGE)
 						.map(pkm => {
 							if (interaction.options.getBoolean("mega")) {
-								return pkm.megaEvolutions.map(megaEvolution => languageStrings.data.description(
+								return pkm.megaEvolutions.map(megaEvolution => translations.data.description(
 									pokemonList.has(pkm),
-									pkm.formatName(shiny, megaEvolution.suffix, languageStrings.language),
+									pkm.formatName(shiny, megaEvolution.suffix, translations.language),
 									pkm.nationalId.toString().padStart(3, "0")
 								)).join("\n");
 							
@@ -286,9 +286,9 @@ const command: Command = {
 									? "alola"
 									: "default";
 								
-								return languageStrings.data.description(
+								return translations.data.description(
 									pokemonList.has(pkm),
-									pkm.formatName(shiny, variationType, languageStrings.language),
+									pkm.formatName(shiny, variationType, translations.language),
 									pkm.nationalId.toString().padStart(3, "0")
 								);
 							}

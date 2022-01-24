@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { GuildMember } from "discord.js";
@@ -22,24 +22,24 @@ const command: Command = {
 		en: []
 	},
 
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		// Server booster
         if ((interaction.member as GuildMember).premiumSinceTimestamp)
 			return interaction.reply({
-				content: languageStrings.data.boosting(),
+				content: translations.data.boosting(),
 				ephemeral: true
 			});
 
 		if ((interaction.member as GuildMember).roles.highest.position >= interaction.guild.me.roles.highest.position)
 			return interaction.reply({
-				content: languageStrings.data.too_high_hierarchy(),
+				content: translations.data.too_high_hierarchy(),
 				ephemeral: true
 			});
 
-		(interaction.member as GuildMember).kick(languageStrings.data.reason())
+		(interaction.member as GuildMember).kick(translations.data.reason())
 			.then(() => {
 				interaction.reply(
-					languageStrings.data.kick_message()
+					translations.data.kick_message()
 				);
 			});
 	}

@@ -1,7 +1,7 @@
 import { Snowflake } from "discord.js";
 import { EvolutionLine } from "../../utils/pokemon/pokemonEvolutionLine";
 import { FormatType, VariationType } from "../../utils/pokemon/pokemonInfo";
-import { Language } from "../structures/LanguageStrings";
+import { Language } from "../structures/Translations";
 
 
 

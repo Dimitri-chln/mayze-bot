@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 
@@ -19,7 +19,7 @@ const command: Command = {
 		en: []
 	},
 
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		interaction.reply({
 			embeds: [
 				{
@@ -27,9 +27,9 @@ const command: Command = {
 						name: interaction.client.user.username,
 						iconURL: interaction.client.user.displayAvatarURL()
 					},
-					title: languageStrings.data.title(),
+					title: translations.data.title(),
 					color: interaction.guild.me.displayColor,
-					description: languageStrings.data.description(
+					description: translations.data.description(
 						Util.prefix,
 						Util.owner.tag,
 						Util.version,

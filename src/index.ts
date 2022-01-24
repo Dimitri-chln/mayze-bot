@@ -8,7 +8,7 @@ import Discord from "discord.js";
 import Pg from "pg";
 import SpotifyWebApi from "spotify-web-api-node";
 
-import LanguageStrings from "./types/structures/LanguageStrings";
+import Translations from "./types/structures/Translations";
 
 import Command from "./types/structures/Command";
 import MessageResponse from "./types/structures/MessageResponse";
@@ -636,29 +636,29 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 Util.musicPlayer
 	.on("clientDisconnect", (message, queue) => {
 		const language = Util.languages.get(message.guild.id);
-		const languageStrings = new LanguageStrings(__filename, language);
+		const translations = new Translations(__filename, language);
 
-		message.channel.send(languageStrings.data.music_player_disconnect(queue.connection.channel.toString())).catch(console.error);
+		message.channel.send(translations.data.music_player_disconnect(queue.connection.channel.toString())).catch(console.error);
 	})
 
 	.on("error", (error, message) => {
 		const language = Util.languages.get(message.guild.id);
-		const languageStrings = new LanguageStrings(__filename, language);
+		const translations = new Translations(__filename, language);
 
 		console.error(error);
-		message.channel.send(languageStrings.data.music_player_error(error.toString())).catch(console.error);
+		message.channel.send(translations.data.music_player_error(error.toString())).catch(console.error);
 	})
 
 	.on("playlistAdd", (message, queue, playlist) => {
 		const language = Util.languages.get(message.guild.id);
-		const languageStrings = new LanguageStrings(__filename, language);
+		const translations = new Translations(__filename, language);
 
-		message.channel.send(languageStrings.data.music_player_add_playlist(playlist.videoCount.toString())).catch(console.error);
+		message.channel.send(translations.data.music_player_add_playlist(playlist.videoCount.toString())).catch(console.error);
 	})
 
 	.on("queueEnd", (message, queue) => {
 		const language = Util.languages.get(message.guild.id);
-		const languageStrings = new LanguageStrings(__filename, language);
+		const translations = new Translations(__filename, language);
 
 		const songDisplays = Util.songDisplays.filter(songDisplay => songDisplay.guild.id === message.guild.id);
 		const lastSong = queue.songs[0];
@@ -669,7 +669,7 @@ Util.musicPlayer
 			songDisplay.edit({
 				embeds: [
 					songDisplay.embeds[0]
-						.setDescription(languageStrings.data.song_display_description(
+						.setDescription(translations.data.song_display_description(
 							lastSong.name.toString(),
 							lastSong.url.toString(),
 							MusicUtil.buildBar(MusicUtil.timeToMilliseconds(lastSong.duration),
@@ -678,7 +678,7 @@ Util.musicPlayer
 							"Ø",
 							"**0:00**"
 						))
-						.setFooter(languageStrings.data.song_display_footer_end(language))
+						.setFooter(translations.data.song_display_footer_end(language))
 				]
 			}).catch(console.error);
 		});
@@ -686,9 +686,9 @@ Util.musicPlayer
 
 	.on("songAdd", (message, queue, song) => {
 		const language = Util.languages.get(message.guild.id);
-		const languageStrings = new LanguageStrings(__filename, language);
+		const translations = new Translations(__filename, language);
 
-		message.channel.send(languageStrings.data.music_player_add_song(
+		message.channel.send(translations.data.music_player_add_song(
 			(getQueueDuration(queue) ? MusicUtil.millisecondsToTime(MusicUtil.timeToMilliseconds(getQueueDuration(queue)) - MusicUtil.timeToMilliseconds(song.duration)) : 0).toString(),
 			song.name
 		)).catch(console.error);
@@ -696,7 +696,7 @@ Util.musicPlayer
 
 	.on("songChanged", (message, newSong, OldSong) => {
 		const language = Util.languages.get(message.guild.id);
-		const languageStrings = new LanguageStrings(__filename, language);
+		const translations = new Translations(__filename, language);
 
 		const songDisplays = Util.songDisplays.filter(songDisplay => songDisplay.guild.id === message.guild.id);
 
@@ -704,7 +704,7 @@ Util.musicPlayer
 			songDisplay.edit({
 				embeds: [
 					songDisplay.embeds[0]
-						.setDescription(languageStrings.data.song_display_description(
+						.setDescription(translations.data.song_display_description(
 							newSong.name.toString(),
 							newSong.url.toString(),
 							MusicUtil.buildBar(0, MusicUtil.timeToMilliseconds(newSong.duration), 20, "━", "🔘"),
@@ -716,7 +716,7 @@ Util.musicPlayer
 									: (newSong.queue.repeatQueue ? newSong.queue.songs[0].name.toString() : "Ø")),
 							newSong.queue.repeatMode || newSong.queue.repeatQueue ? "♾️" : getQueueDuration(newSong.queue).toString()
 						))
-						.setFooter(languageStrings.data.song_display_footer(language,
+						.setFooter(translations.data.song_display_footer(language,
 							Boolean(newSong.queue.repeatMode),
 							Boolean(newSong.queue.repeatQueue)
 						))
@@ -727,9 +727,9 @@ Util.musicPlayer
 
 	.on("songFirst", (message, song) => {
 		const language = Util.languages.get(message.guild.id);
-		const languageStrings = new LanguageStrings(__filename, language);
+		const translations = new Translations(__filename, language);
 
-		message.channel.send(languageStrings.data.music_player_playing(song.name.toString())).catch(console.error);
+		message.channel.send(translations.data.music_player_playing(song.name.toString())).catch(console.error);
 	})
 
 
@@ -737,7 +737,7 @@ Util.musicPlayer
 setInterval(() => {
 	Util.songDisplays.forEach(songDisplay => {
 		const language = Util.languages.get(songDisplay.guild.id);
-		const languageStrings = new LanguageStrings(__filename, language);
+		const translations = new Translations(__filename, language);
 
 		if (!player.isPlaying(songDisplay)) return Util.songDisplays.delete(songDisplay.channel.id);
 
@@ -746,7 +746,7 @@ setInterval(() => {
 		songDisplay.edit({
 			embeds: [
 				songDisplay.embeds[0]
-					.setDescription(languageStrings.data.song_display_description(
+					.setDescription(translations.data.song_display_description(
 						song.name.toString(),
 						song.url.toString(),
 						Util.player.createProgressBar(songDisplay, { size: 20, arrow: "🔘", block: "━" }).toString(),
@@ -758,7 +758,7 @@ setInterval(() => {
 								: (song.queue.repeatQueue ? song.queue.songs[0].name.toString() : "Ø")),
 						song.queue.repeatMode || song.queue.repeatQueue ? "♾️" : getQueueDuration(song.queue).toString()
 					))
-					.setFooter(languageStrings.data.song_display_footer(language,
+					.setFooter(translations.data.song_display_footer(language,
 						Boolean(song.queue.repeatMode),
 						Boolean(song.queue.repeatQueue)
 					))	

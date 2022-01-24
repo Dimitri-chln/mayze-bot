@@ -39,17 +39,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var LanguageStrings_1 = __importDefault(require("../types/structures/LanguageStrings"));
+var Translations_1 = __importDefault(require("../types/structures/Translations"));
 var getLevel_1 = __importDefault(require("./getLevel"));
 var config_json_1 = require("../config.json");
 function chatXp(database, message, givenXP, language) {
     if (language === void 0) { language = "en"; }
     return __awaiter(this, void 0, void 0, function () {
-        var languageStrings, rows, xp, levelInfo, err_1;
+        var translations, rows, xp, levelInfo, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    languageStrings = new LanguageStrings_1.default(__filename, language);
+                    translations = new Translations_1.default(__filename, language);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -59,7 +59,7 @@ function chatXp(database, message, givenXP, language) {
                     xp = rows[0].chat_xp;
                     levelInfo = (0, getLevel_1.default)(xp);
                     if (levelInfo.currentXP < givenXP && message.guild.id === config_json_1.MAIN_GUILD_ID)
-                        message.channel.send(languageStrings.data.level_up(language, message.author.toString(), levelInfo.level.toString())).catch(console.error);
+                        message.channel.send(translations.data.level_up(language, message.author.toString(), levelInfo.level.toString())).catch(console.error);
                     return [3 /*break*/, 4];
                 case 3:
                     err_1 = _a.sent();

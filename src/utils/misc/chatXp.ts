@@ -1,13 +1,13 @@
 import { Message } from "discord.js";
 import Pg from "pg";
-import LanguageStrings, { Language } from "../../types/structures/LanguageStrings";
+import Translations, { Language } from "../../types/structures/Translations";
 import getLevel from "./getLevel";
 import { MAIN_GUILD_ID } from "../../config.json";
 
 
 
 export default async function chatXp(database: Pg.Client, message: Message, givenXP: number, language: Language = "en") {
-	const languageStrings = new LanguageStrings(__filename, language);
+	const translations = new Translations(__filename, language);
 	
 	try {
 		const { rows } = await database.query(
@@ -25,7 +25,7 @@ export default async function chatXp(database: Pg.Client, message: Message, give
 		const levelInfo = getLevel(xp);
 
 		if (levelInfo.currentXP < givenXP && message.guild.id === MAIN_GUILD_ID)
-			message.channel.send(languageStrings.data.level_up(language, message.author.toString(), levelInfo.level.toString())).catch(console.error);
+			message.channel.send(translations.data.level_up(language, message.author.toString(), levelInfo.level.toString())).catch(console.error);
 	
 	} catch (err) {
 		throw err;

@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 
@@ -33,7 +33,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const message = interaction.options.getString("message")
 			?.replace(/^./, a => a.toUpperCase())
 			?? "";
@@ -48,7 +48,7 @@ const command: Command = {
 			[ interaction.user.id, new Date().toISOString(), message ]
 		);
 
-		interaction.reply(languageStrings.data.afk_message(
+		interaction.reply(translations.data.afk_message(
 			interaction.user.toString(),
 			message
 		));

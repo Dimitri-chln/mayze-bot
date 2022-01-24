@@ -57,7 +57,7 @@ var command = {
         fr: [],
         en: []
     },
-    run: function (interaction, languageStrings) { return __awaiter(void 0, void 0, void 0, function () {
+    run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
         var SHINY_FREQUENCY, ALOLAN_FREQUENCY, MEGA_GEM_FREQUENCY, UPGRADES_BENEFITS, caughtPokemonsData, pokemonList, upgradesData, upgrades, catchRates, randomPokemon, huntFooterText, rows, huntedPokemon, probability, megaGem, megaPokemon, defaultData_1, shiny, variation, catchReward, defaultData, defaultUserData, res, reply, logChannel;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -102,7 +102,7 @@ var command = {
                     randomPokemon = huntedPokemon;
                     return [3 /*break*/, 6];
                 case 5:
-                    huntFooterText = languageStrings.data.hunt_probability(/^[aeiou]/i.test(huntedPokemon.names[languageStrings.language]), huntedPokemon.names[languageStrings.language], Math.round(probability * 100 * 10000 / 10000).toString());
+                    huntFooterText = translations.data.hunt_probability(/^[aeiou]/i.test(huntedPokemon.names[translations.language]), huntedPokemon.names[translations.language], Math.round(probability * 100 * 10000 / 10000).toString());
                     _a.label = 6;
                 case 6:
                     {
@@ -149,7 +149,7 @@ var command = {
                             embeds: [
                                 {
                                     author: {
-                                        name: res && res.rows[0].caught > 1 ? languageStrings.data.caught() : languageStrings.data.caught_new(),
+                                        name: res && res.rows[0].caught > 1 ? translations.data.caught() : translations.data.caught_new(),
                                         iconURL: image_urls_json_1.pokeball
                                     },
                                     image: {
@@ -160,7 +160,7 @@ var command = {
                                         : randomPokemon.legendary || randomPokemon.ultraBeast
                                             ? 0xCE2F20
                                             : interaction.guild.me.displayColor,
-                                    description: languageStrings.data.caught_title(interaction.user.toString(), !shiny && (variation === "alola" || /^[aeiou]/i.test(randomPokemon.names[languageStrings.language])), randomPokemon.formatName(shiny, variation, languageStrings.language), catchReward.toString()) + (megaGem ? languageStrings.data.mega_gem(megaGem) : ""),
+                                    description: translations.data.caught_title(interaction.user.toString(), !shiny && (variation === "alola" || /^[aeiou]/i.test(randomPokemon.names[translations.language])), randomPokemon.formatName(shiny, variation, translations.language), catchReward.toString()) + (megaGem ? translations.data.mega_gem(megaGem) : ""),
                                     footer: {
                                         text: "✨ Mayze ✨" + (huntFooterText || ""),
                                         iconURL: interaction.user.displayAvatarURL({ dynamic: true })
@@ -190,7 +190,7 @@ var command = {
                                     : randomPokemon.legendary || randomPokemon.ultraBeast
                                         ? 0xCE2F20
                                         : 0x010101,
-                                description: languageStrings.data.caught_title_en(interaction.user.toString(), !shiny && (variation === "alola" || /^[aeiou]/i.test(randomPokemon.names.en)), randomPokemon.formatName(shiny, variation, "en")),
+                                description: translations.data.caught_title_en(interaction.user.toString(), !shiny && (variation === "alola" || /^[aeiou]/i.test(randomPokemon.names.en)), randomPokemon.formatName(shiny, variation, "en")),
                                 footer: {
                                     text: "✨ Mayze ✨",
                                     iconURL: interaction.user.displayAvatarURL({ dynamic: true })

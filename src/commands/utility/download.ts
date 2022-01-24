@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Fs from "fs";
@@ -72,7 +72,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const YouTube = new YouTubeClient.Client();
 
 		const REGEX_LIST = {
@@ -95,7 +95,7 @@ const command: Command = {
 			?? Util.musicPlayer.get(interaction.guild.id)?.nowPlaying?.url;
 
 		if (!url) return interaction.reply({
-			content: languageStrings.data.no_url(),
+			content: translations.data.no_url(),
 			ephemeral: true
 		});
 
@@ -110,7 +110,7 @@ const command: Command = {
 				name: interaction.user.tag,
 				iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 			},
-			title: languageStrings.data.title(),
+			title: translations.data.title(),
 			color: interaction.guild.me.displayColor,
 			description: MusicUtil.buildBar(0, 100),
 			footer: {
@@ -132,7 +132,7 @@ const command: Command = {
 				embed
 					.setDescription(MusicUtil.buildBar(result.duration, result.duration))
 					.setFooter({
-						text: `✨ Mayze ✨ | ${languageStrings.data.complete()}`
+						text: `✨ Mayze ✨ | ${translations.data.complete()}`
 					});
 				
 				reply.edit({
@@ -147,7 +147,7 @@ const command: Command = {
 					.catch(err => {
 						if (err.code === 40005) {
 							embed.setDescription(
-								languageStrings.data.file_too_big()
+								translations.data.file_too_big()
 							);
 
 							reply.edit({
@@ -174,7 +174,7 @@ const command: Command = {
 						MusicUtil.buildBar(playlistInfo.videos.slice(-1)[0].duration * 1000, playlistInfo.videos.slice(-1)[0].duration * 1000)
 					)
 					.setFooter({
-						text: `✨ Mayze ✨ | ${languageStrings.data.complete()}`
+						text: `✨ Mayze ✨ | ${translations.data.complete()}`
 					});
 				
 				reply.edit({
@@ -197,7 +197,7 @@ const command: Command = {
 					.catch(err => {
 						if (err.code === 40005) {
 							embed.setDescription(
-								languageStrings.data.file_too_big()
+								translations.data.file_too_big()
 							);
 
 							reply.edit({
@@ -213,7 +213,7 @@ const command: Command = {
 			}
 			
 			default:
-				interaction.channel.send(languageStrings.data.invalid_url());
+				interaction.channel.send(translations.data.invalid_url());
 		}
 
 
@@ -225,7 +225,7 @@ const command: Command = {
 				const path = Path.join(__dirname, "..", "..", "downloads", outputDirectory, filename);
 
 				embed
-					.setTitle(`${languageStrings.data.title()} ${info.videoDetails.title} (${songIndex + 1}/${totalSongs})`)
+					.setTitle(`${translations.data.title()} ${info.videoDetails.title} (${songIndex + 1}/${totalSongs})`)
 					.setDescription(MusicUtil.buildBar(0, duration))
 					.setThumbnail(info.videoDetails.thumbnails[0].url);
 				

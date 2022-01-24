@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Math from "mathjs";
@@ -126,7 +126,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const subCommand = interaction.options.getSubcommand();
 		
 		switch (subCommand) {
@@ -143,7 +143,7 @@ const command: Command = {
 				
 				} catch (err) {
 					interaction.reply({
-						content: languageStrings.data.syntax_error(err.message),
+						content: translations.data.syntax_error(err.message),
 						ephemeral: true
 					});
 				}
@@ -163,12 +163,12 @@ const command: Command = {
 						: result.toString();
 
 					interaction.reply(
-						`\`\`\`\n${equation.toString()}\n${variable} = ${resultString.toString() ?? languageStrings.data.no_solution()}\n\`\`\``
+						`\`\`\`\n${equation.toString()}\n${variable} = ${resultString.toString() ?? translations.data.no_solution()}\n\`\`\``
 					);
 				
 				} catch (err) {
 					interaction.reply({
-						content: languageStrings.data.syntax_error(err.message),
+						content: translations.data.syntax_error(err.message),
 						ephemeral: true
 					});
 				}
@@ -189,7 +189,7 @@ const command: Command = {
 				
 				} catch (err) {
 					interaction.reply({
-						content: languageStrings.data.syntax_error(err.message),
+						content: translations.data.syntax_error(err.message),
 						ephemeral: true
 					});
 				}

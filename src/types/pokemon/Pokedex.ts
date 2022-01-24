@@ -1,6 +1,6 @@
 import { evolutionLine, flatEvolutionLine, stringEvolutionLine } from "../../utils/pokemon/pokemonEvolutionLine";
 import Pokemon, { MegaEvolution, PokemonVariation, RawPokemon } from "./Pokemon";
-import { Language } from "../structures/LanguageStrings";
+import { Language } from "../structures/Translations";
 import { formatName, FormatType, pokemonImage, VariationType } from "../../utils/pokemon/pokemonInfo";
 
 

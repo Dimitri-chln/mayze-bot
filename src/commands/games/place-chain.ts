@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { ButtonInteraction, CollectorFilter } from "discord.js";
@@ -63,10 +63,10 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const canvas = Util.canvas.find(c => c.users.has(interaction.user.id));
 		if (!canvas) return interaction.reply({
-			content: languageStrings.data.not_in_canvas(),
+			content: translations.data.not_in_canvas(),
 			ephemeral: true
 		});
 
@@ -75,14 +75,14 @@ const command: Command = {
 		
 		if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
 			return interaction.reply({
-				content: languageStrings.data.invalid_coordinates(),
+				content: translations.data.invalid_coordinates(),
 				ephemeral: true
 			});
 
 		const colorName = interaction.options.getString("color");
 		if (!Util.palettes.some(palette => palette.has(colorName))) 
 			return interaction.reply({
-				content: languageStrings.data.invalid_color(),
+				content: translations.data.invalid_color(),
 				ephemeral: true
 			});
 		const color = Util.palettes.find(palette => palette.has(colorName)).get(colorName);
@@ -98,7 +98,7 @@ const command: Command = {
 						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 					},
 					color: interaction.guild.me.displayColor,
-					description: languageStrings.data.placing(
+					description: translations.data.placing(
 						color.emoji.toString(),
 						color.alias
 					),
@@ -185,7 +185,7 @@ const command: Command = {
 							iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 						},
 						color: interaction.guild.me.displayColor,
-						description: languageStrings.data.placing(
+						description: translations.data.placing(
 							color.emoji.toString(),
 							color.alias
 						),
@@ -246,7 +246,7 @@ const command: Command = {
 							iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 						},
 						color: interaction.guild.me.displayColor,
-						description: languageStrings.data.placing(
+						description: translations.data.placing(
 							color.emoji.toString(),
 							color.alias
 						),

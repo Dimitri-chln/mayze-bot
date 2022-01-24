@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { CronJob } from "cron";
@@ -47,13 +47,13 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const date = new Date(
 			interaction.options.getString("date")
 		);
 
 		if (!date) return interaction.reply({
-			content: languageStrings.data.invalid_date(),
+			content: translations.data.invalid_date(),
 			ephemeral: true
 		});
 		
@@ -68,13 +68,13 @@ const command: Command = {
 			console.error(err);
 			
 			return interaction.reply({
-				content: languageStrings.data.date_passed(),
+				content: translations.data.date_passed(),
 				ephemeral: true
 			});
 		}
 		
 		interaction.reply({
-			content: languageStrings.data.saved(),
+			content: translations.data.saved(),
 			ephemeral: true
 		});
 	}

@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import dhms from "dhms";
@@ -49,7 +49,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const member = interaction.guild.members.cache.get(interaction.options.getUser("user").id);
 		
 		if (
@@ -57,7 +57,7 @@ const command: Command = {
 			&& interaction.user.id !== Util.owner.id
 		)
 			return interaction.reply({
-				content: languageStrings.data.not_allowed(),
+				content: translations.data.not_allowed(),
 				ephemeral: true
 			});
 		
@@ -65,14 +65,14 @@ const command: Command = {
 
 		await member.timeout(
 			duration ?? 365 * 24 * 60 * 60 * 1000,
-			languageStrings.data.reason(interaction.user.tag)
+			translations.data.reason(interaction.user.tag)
 		);
 
 		interaction.reply(
-			languageStrings.data.timed_out(
+			translations.data.timed_out(
 				member.user.tag,
 				Boolean(duration),
-				formatTime(duration, languageStrings.language)
+				formatTime(duration, translations.language)
 			)
 		);
 	}

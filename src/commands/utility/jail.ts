@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { GuildMember } from "discord.js";
@@ -36,7 +36,7 @@ const command: Command = {
 		]
 	},
 
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const member = interaction.guild.members.cache.get(
 			interaction.options.getUser("user").id
 		);
@@ -46,7 +46,7 @@ const command: Command = {
 			&& interaction.user.id !== Util.owner.id
 		)
 			return interaction.reply({
-				content: languageStrings.data.not_allowed(),
+				content: translations.data.not_allowed(),
 				ephemeral: true
 			});
 
@@ -61,7 +61,7 @@ const command: Command = {
 			await member.roles.add(jailedRoles).catch(console.error);
 
 			return interaction.reply(
-				languageStrings.data.jailed(
+				translations.data.jailed(
 					member.user.tag
 				)
 			);
@@ -75,7 +75,7 @@ const command: Command = {
 			await member.roles.remove(jailedRoles).catch(console.error);
 			
 			return interaction.reply(
-				languageStrings.data.unjailed(
+				translations.data.unjailed(
 					member.user.tag
 				)
 			);

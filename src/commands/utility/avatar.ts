@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 
@@ -33,7 +33,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const user = interaction.options.getUser("user")
 			?? interaction.user;
 		
@@ -41,7 +41,7 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name: languageStrings.data.title(user.tag),
+						name: translations.data.title(user.tag),
 						iconURL: interaction.client.user.displayAvatarURL()
 					},
 					color: interaction.guild.me.displayColor,

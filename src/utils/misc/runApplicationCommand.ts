@@ -2,15 +2,15 @@ import Path from "path";
 import { CommandInteraction, GuildMember, Permissions } from "discord.js";
 import Util from "../../Util";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 
 
 
 export default async function runApplicationCommand(command: Command, interaction: CommandInteraction) {
 	const language = Util.languages.get(interaction.guild.id);
-	const languageStrings = new LanguageStrings(__filename, language);
+	const translations = new Translations(__filename, language);
 	const commandFileName = Path.basename(command.path, Path.extname(command.path));
-	const commandLanguageString = new LanguageStrings(commandFileName, language);
+	const commandLanguageString = new Translations(commandFileName, language);
 
 	const now = Date.now();
 
@@ -41,7 +41,7 @@ export default async function runApplicationCommand(command: Command, interactio
 
 	if (missingUserPermissions.length && interaction.user.id !== Util.owner.id)
 		return interaction.reply({
-			content: languageStrings.data.user_missing_permissions(missingUserPermissions.join("`, `")),
+			content: translations.data.user_missing_permissions(missingUserPermissions.join("`, `")),
 			ephemeral: true
 		}).catch(console.error);
 	
@@ -49,7 +49,7 @@ export default async function runApplicationCommand(command: Command, interactio
 	
 	if (missingBotPermissions.length)
 		return interaction.reply({
-			content: languageStrings.data.bot_missing_perms(missingBotPermissions.join("`, `")),
+			content: translations.data.bot_missing_perms(missingBotPermissions.join("`, `")),
 			ephemeral: true
 		}).catch(console.error);
 
@@ -76,7 +76,7 @@ export default async function runApplicationCommand(command: Command, interactio
 				.replace(/00h |00m /g, "");
 			
 			return interaction.reply({
-				content: languageStrings.data.cooldown(timeLeftHumanized, Util.prefix + command.name),
+				content: translations.data.cooldown(timeLeftHumanized, Util.prefix + command.name),
 				ephemeral: true
 			}).catch(console.error);
 		}
@@ -89,8 +89,8 @@ export default async function runApplicationCommand(command: Command, interactio
 		.catch(err => {
 			console.error(err);
 			if (interaction.replied)
-				interaction.channel.send(languageStrings.data.error()).catch(console.error);
+				interaction.channel.send(translations.data.error()).catch(console.error);
 			else
-				interaction.reply(languageStrings.data.error()).catch(console.error);
+				interaction.reply(translations.data.error()).catch(console.error);
 		});
 }

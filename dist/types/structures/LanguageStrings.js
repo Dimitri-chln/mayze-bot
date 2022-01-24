@@ -32,8 +32,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
 var discord_js_1 = require("discord.js");
-var LanguageStrings = /** @class */ (function () {
-    function LanguageStrings(pathOrFilename, language) {
+var Translations = /** @class */ (function () {
+    function Translations(pathOrFilename, language) {
         var e_1, _a;
         var _this = this;
         var filename = path_1.default.basename(pathOrFilename, path_1.default.extname(pathOrFilename));
@@ -99,6 +99,6 @@ var LanguageStrings = /** @class */ (function () {
             finally { if (e_1) throw e_1.error; }
         }
     }
-    return LanguageStrings;
+    return Translations;
 }());
-exports.default = LanguageStrings;
+exports.default = Translations;

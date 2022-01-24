@@ -62,12 +62,12 @@ var command = {
             }
         ]
     },
-    run: function (interaction, languageStrings) { return __awaiter(void 0, void 0, void 0, function () {
+    run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
         var question, randomReply;
         return __generator(this, function (_a) {
             question = interaction.options.getString("question");
-            randomReply = languageStrings.data.answers()[Math.floor(Math.random() * languageStrings.data.answers().length)];
-            interaction.reply(languageStrings.data.reply(question, randomReply));
+            randomReply = translations.data.answers()[Math.floor(Math.random() * translations.data.answers().length)];
+            interaction.reply(translations.data.reply(question, randomReply));
             return [2 /*return*/];
         });
     }); }

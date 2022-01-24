@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { CollectorFilter, MessageReaction, User } from "discord.js";
@@ -35,18 +35,18 @@ const command: Command = {
 		]
 	},
 
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const color = hexToRGB(interaction.options.getString("color"));
 
 		const reply = await interaction.reply({
 			embeds: [
 				{
 					author: {
-						name: languageStrings.data.title(),
+						name: translations.data.title(),
 						iconURL: interaction.client.user.displayAvatarURL()
 					},
 					color: interaction.guild.me.displayColor,
-					description: languageStrings.data.description(
+					description: translations.data.description(
 						RGBToHex(color),
 						color[0].toString(),
 						color[1].toString(),
@@ -184,11 +184,11 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: languageStrings.data.title(),
+							name: translations.data.title(),
 							iconURL: interaction.client.user.displayAvatarURL()
 						},
 						color: interaction.guild.me.displayColor,
-						description: languageStrings.data.description(
+						description: translations.data.description(
 							RGBToHex(color),
 							color[0].toString(),
 							color[1].toString(),

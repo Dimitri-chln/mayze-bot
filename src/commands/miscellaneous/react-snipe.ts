@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 
@@ -19,10 +19,10 @@ const command: Command = {
 		en: []
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const snipedReaction = Util.sniping.messageReactions.get(interaction.channel.id);
 		if (!snipedReaction) return interaction.reply({
-			content: languageStrings.data.no_reaction(),
+			content: translations.data.no_reaction(),
 			ephemeral: true
 		});
 		
@@ -41,7 +41,7 @@ const command: Command = {
 					fields: [
 						{
 							name: "\u200b",
-								value: languageStrings.data.description(
+								value: translations.data.description(
 								snipedReaction.user.tag,
 								snipedReaction.reaction.message.url,
 								snipedReaction.reaction.emoji.toString()

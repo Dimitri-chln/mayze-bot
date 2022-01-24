@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import pagination, { Page } from "../../utils/misc/pagination";
@@ -24,7 +24,7 @@ const command: Command = {
 		en: []
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const serverIPs = process.env.MINECRAFT_SERVER_IPS.split(",");
 
 		const pages: Page[] = [];
@@ -42,13 +42,13 @@ const command: Command = {
 				
 					page.embeds.push({
 						author: {
-							name: languageStrings.data.title(),
+							name: translations.data.title(),
 							iconURL: interaction.client.user.displayAvatarURL()
 						},
 						thumbnail: {
 							url: "attachment://favicon.png"
 						},
-						description: languageStrings.data.description(
+						description: translations.data.description(
 							serverIP,
 							isOnline(res),
 							res.version.name,
@@ -68,9 +68,9 @@ const command: Command = {
 				} catch (err) {
 					page.embeds.push({
 						author: {
-							name: languageStrings.data.title(),
+							name: translations.data.title(),
 						},
-						description: languageStrings.data.failed_description(serverIP)
+						description: translations.data.failed_description(serverIP)
 					});
 				}
 

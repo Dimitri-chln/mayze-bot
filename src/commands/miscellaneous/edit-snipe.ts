@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 
@@ -19,10 +19,10 @@ const command: Command = {
 		en: []
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const snipedMessage = Util.sniping.editedMessages.get(interaction.channel.id);
 		if (!snipedMessage) return interaction.reply({
-			content: languageStrings.data.no_message(),
+			content: translations.data.no_message(),
 			ephemeral: true
 		});
 		

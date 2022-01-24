@@ -1,4 +1,4 @@
-import { Language } from "../../types/structures/LanguageStrings";
+import { Language } from "../../types/structures/Translations";
 
 
 

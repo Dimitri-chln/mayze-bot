@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 
@@ -151,7 +151,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const subCommand = interaction.options.getSubcommand();
 		
 		const { rows: responses } = await Util.database.query(
@@ -170,7 +170,7 @@ const command: Command = {
 				);
 
 				interaction.reply({
-					content: languageStrings.data.response_added(),
+					content: translations.data.response_added(),
 					ephemeral: true
 				});
 				break;
@@ -180,7 +180,7 @@ const command: Command = {
 				const number = interaction.options.getNumber("response");
 				
 				if (number < 1 || number > responses.length) return interaction.reply({
-					content: languageStrings.data.invalid_number(
+					content: translations.data.invalid_number(
 						responses.length.toString()
 					),
 					ephemeral: true
@@ -194,7 +194,7 @@ const command: Command = {
 				);
 				
 				interaction.reply({
-					content: languageStrings.data.response_removed(),
+					content: translations.data.response_removed(),
 					ephemeral: true
 				});
 				break;
@@ -205,12 +205,12 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: languageStrings.data.title(),
+								name: translations.data.title(),
 								iconURL: interaction.client.user.displayAvatarURL()
 							},
 							color: interaction.guild.me.displayColor,
 							description: responses.map((response, i) =>
-								`\`${i + 1}.\` ${languageStrings.data.trigger_types()[response.trigger_type]} \`${response.trigger}\`\n\t→ \`${response.response}\``
+								`\`${i + 1}.\` ${translations.data.trigger_types()[response.trigger_type]} \`${response.trigger}\`\n\t→ \`${response.response}\``
 							).join("\n"),
 							footer: {
 								text: "✨ Mayze ✨"

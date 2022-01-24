@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 
@@ -53,7 +53,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const newLanguage = interaction.options.getString("language") as "fr" | "en";
 
 		await Util.database.query(
@@ -69,7 +69,7 @@ const command: Command = {
 		Util.languages.set(interaction.guild.id, newLanguage);
 		
 		interaction.reply(
-			languageStrings.data.language_updated()
+			translations.data.language_updated()
 		);
 	}
 };

@@ -114,7 +114,7 @@ var command = {
             }
         ]
     },
-    run: function (interaction, languageStrings) { return __awaiter(void 0, void 0, void 0, function () {
+    run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
         var subCommand, games, _a, _b, _c, code, description;
         var _d, _e;
         var _f, _g, _h;
@@ -135,7 +135,7 @@ var command = {
                     _d = {};
                     _e = {
                         author: {
-                            name: languageStrings.data.ongoing_games(),
+                            name: translations.data.ongoing_games(),
                             iconURL: interaction.client.user.displayAvatarURL()
                         },
                         color: interaction.guild.me.displayColor
@@ -148,7 +148,7 @@ var command = {
                                         _a = {};
                                         return [4 /*yield*/, interaction.client.users.fetch(userId)];
                                     case 1: return [2 /*return*/, (_a.name = (_b.sent()).tag,
-                                            _a.value = "**" + game.code + "**\n*" + game.description + "*\n(" + languageStrings.data.time_ago((0, formatTime_1.default)(Date.now() - game.time, languageStrings.language)) + ")",
+                                            _a.value = "**" + game.code + "**\n*" + game.description + "*\n(" + translations.data.time_ago((0, formatTime_1.default)(Date.now() - game.time, translations.language)) + ")",
                                             _a.inline = false,
                                             _a)];
                                 }
@@ -157,7 +157,7 @@ var command = {
                 case 2:
                     _c.apply(_b, [(_d.embeds = [
                             (_e.fields = (_g = _j.sent()) !== null && _g !== void 0 ? _g : [{
-                                    name: languageStrings.data.no_ongoing_game(),
+                                    name: translations.data.no_ongoing_game(),
                                     value: "\u200b",
                                     inline: false
                                 }],
@@ -171,10 +171,10 @@ var command = {
                 case 3:
                     {
                         code = interaction.options.getString("code").toUpperCase();
-                        description = (_h = interaction.options.getString("description")) !== null && _h !== void 0 ? _h : languageStrings.data.default_description();
+                        description = (_h = interaction.options.getString("description")) !== null && _h !== void 0 ? _h : translations.data.default_description();
                         if (!/^\w{6}$/.test(code))
                             return [2 /*return*/, interaction.reply({
-                                    content: languageStrings.data.invalid_code(),
+                                    content: translations.data.invalid_code(),
                                     ephemeral: true
                                 }).catch(console.error)];
                         games.set(interaction.user.id, {
@@ -183,7 +183,7 @@ var command = {
                             time: Date.now(),
                         });
                         interaction.reply({
-                            content: languageStrings.data.game_added(),
+                            content: translations.data.game_added(),
                             ephemeral: true
                         }).catch(console.error);
                         return [3 /*break*/, 5];
@@ -193,12 +193,12 @@ var command = {
                     {
                         if (!games.has(interaction.user.id))
                             return [2 /*return*/, interaction.reply({
-                                    content: languageStrings.data.user_has_no_game(),
+                                    content: translations.data.user_has_no_game(),
                                     ephemeral: true
                                 }).catch(console.error)];
                         games.delete(interaction.user.id);
                         interaction.reply({
-                            content: languageStrings.data.game_deleted(),
+                            content: translations.data.game_deleted(),
                             ephemeral: true
                         }).catch(console.error);
                         return [3 /*break*/, 5];

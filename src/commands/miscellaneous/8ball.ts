@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 
@@ -33,13 +33,13 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const question = interaction.options.getString("question");
 
-		const randomReply = languageStrings.data.answers()[Math.floor(Math.random() * languageStrings.data.answers().length)];
+		const randomReply = translations.data.answers()[Math.floor(Math.random() * translations.data.answers().length)];
 		
 		interaction.reply(
-			languageStrings.data.reply(question, randomReply)
+			translations.data.reply(question, randomReply)
 		);
 	}
 };

@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { TextChannel } from "discord.js";
@@ -27,7 +27,7 @@ const command: Command = {
 		en: []
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const SHINY_FREQUENCY = 0.004, ALOLAN_FREQUENCY = 0.05, MEGA_GEM_FREQUENCY = 0.02;
 
 		const UPGRADES_BENEFITS = {
@@ -85,7 +85,7 @@ const command: Command = {
 					randomPokemon = huntedPokemon;
 				
 				} else {
-					huntFooterText = languageStrings.data.hunt_probability(/^[aeiou]/i.test(huntedPokemon.names[languageStrings.language]), huntedPokemon.names[languageStrings.language], Math.round(probability * 100 * 10000 / 10000).toString());
+					huntFooterText = translations.data.hunt_probability(/^[aeiou]/i.test(huntedPokemon.names[translations.language]), huntedPokemon.names[translations.language], Math.round(probability * 100 * 10000 / 10000).toString());
 				}
 			}
 		}
@@ -186,7 +186,7 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name: caughtTotal > 1 ? languageStrings.data.caught() : languageStrings.data.caught_new(),
+						name: caughtTotal > 1 ? translations.data.caught() : translations.data.caught_new(),
 						iconURL: pokeball
 					},
 					image: {
@@ -197,12 +197,12 @@ const command: Command = {
 						: randomPokemon.legendary || randomPokemon.ultraBeast 
 							? 0xCE2F20
 							: interaction.guild.me.displayColor,
-					description: languageStrings.data.caught_title(
+					description: translations.data.caught_title(
 						interaction.user.toString(),
-						!shiny && (variation === "alola" || /^[aeiou]/i.test(randomPokemon.names[languageStrings.language])),
-						randomPokemon.formatName(shiny, variation, languageStrings.language),
+						!shiny && (variation === "alola" || /^[aeiou]/i.test(randomPokemon.names[translations.language])),
+						randomPokemon.formatName(shiny, variation, translations.language),
 						catchReward.toString()
-					) + (megaGem ? languageStrings.data.mega_gem(megaGem) : ""),
+					) + (megaGem ? translations.data.mega_gem(megaGem) : ""),
 					footer: {
 						text: "✨ Mayze ✨" + (huntFooterText || ""),
 						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
@@ -232,7 +232,7 @@ const command: Command = {
 						: randomPokemon.legendary || randomPokemon.ultraBeast 
 							? 0xCE2F20
 							: 0x010101,
-					description: languageStrings.data.caught_title_en(
+					description: translations.data.caught_title_en(
 						interaction.user.toString(),
 						!shiny && (variation === "alola" || /^[aeiou]/i.test(randomPokemon.names.en)),
 						randomPokemon.formatName(shiny, variation, "en")

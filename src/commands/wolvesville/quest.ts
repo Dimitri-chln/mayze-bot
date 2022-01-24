@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { CollectorFilter, GuildMember, TextChannel } from "discord.js";
@@ -52,25 +52,25 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		if (
 			!(interaction.member as GuildMember).roles.cache.has("696751852267765872") &&	// Chef
 			!(interaction.member as GuildMember).roles.cache.has("696751614177837056")	// Sous-chef
 		) return interaction.reply({
-			content: languageStrings.data.not_allowed(),
+			content: translations.data.not_allowed(),
 			ephemeral: true
 		});
 		
 		if (!["707304882662801490", "689212233439641649"].includes(interaction.channel.id))
 			return interaction.reply({
-				content: languageStrings.data.wrong_channel(),
+				content: translations.data.wrong_channel(),
 				ephemeral: true
 			});
 	
 		const questChannel = interaction.client.channels.cache.get("689385764219387905") as TextChannel;
 
 		interaction.reply(
-			languageStrings.data.await_image()
+			translations.data.await_image()
 		);
 
 		const filter: CollectorFilter<[Message]> = msg => msg.author.id === interaction.user.id && msg.attachments.size === 1;
@@ -86,7 +86,7 @@ const command: Command = {
 			content: "<@&689169027922526235>",
 			embeds: [
 				{
-					title: languageStrings.data.title(),
+					title: translations.data.title(),
 					color: interaction.guild.me.displayColor,
 					image: {
 						url: imageURL

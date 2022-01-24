@@ -66,7 +66,7 @@ var command = {
             }
         ]
     },
-    run: function (interaction, languageStrings) { return __awaiter(void 0, void 0, void 0, function () {
+    run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
         var DAY_IN_MS, NOW, user, rows, _a, money, last_daily, nextDaily;
         var _b;
         return __generator(this, function (_c) {
@@ -91,11 +91,11 @@ var command = {
                         embeds: [
                             {
                                 author: {
-                                    name: languageStrings.data.title(user.tag),
+                                    name: translations.data.title(user.tag),
                                     iconURL: user.displayAvatarURL({ dynamic: true })
                                 },
                                 color: interaction.guild.me.displayColor,
-                                description: languageStrings.data.description(money, nextDaily > NOW
+                                description: translations.data.description(money, nextDaily > NOW
                                     ? Math.round(nextDaily / 1000).toString()
                                     : null),
                                 footer: {

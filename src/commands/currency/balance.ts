@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 
@@ -33,7 +33,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const DAY_IN_MS = 1000 * 60 * 60 * 24;
 		const NOW = Date.now();
 
@@ -59,11 +59,11 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name: languageStrings.data.title(user.tag),
+						name: translations.data.title(user.tag),
 						iconURL: user.displayAvatarURL({ dynamic: true })
 					},
 					color: interaction.guild.me.displayColor,
-					description: languageStrings.data.description(
+					description: translations.data.description(
 						money,
 						nextDaily > NOW
 							? Math.round(nextDaily / 1000).toString()

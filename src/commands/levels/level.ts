@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import getLevel from "../../utils/misc/getLevel";
@@ -35,7 +35,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const barSize = 20, xpBar = {
 			full: "█",
 			empty: "▁"
@@ -73,8 +73,8 @@ const command: Command = {
 					color: interaction.guild.me.displayColor,
 					fields: [
 						{
-							name: languageStrings.data.chat_title(),
-							value: languageStrings.data.chat_description(
+							name: translations.data.chat_title(),
+							value: translations.data.chat_description(
 								chatLevel.level.toString(),
 								chatRank.toString(),
 								xpBar.full.repeat(Math.round(chatLevel.currentXP / chatLevel.neededXP * barSize)) + xpBar.empty.repeat(barSize - Math.round(chatLevel.currentXP / chatLevel.neededXP * barSize)),
@@ -84,8 +84,8 @@ const command: Command = {
 							inline: true
 						},
 						{
-							name: languageStrings.data.voice_title(),
-							value: languageStrings.data.voice_description(
+							name: translations.data.voice_title(),
+							value: translations.data.voice_description(
 								voiceLevel.level.toString(),
 								voiceRank.toString(),
 								xpBar.full.repeat(Math.round(voiceLevel.currentXP / voiceLevel.neededXP * barSize)) + xpBar.empty.repeat(barSize - Math.round(voiceLevel.currentXP / voiceLevel.neededXP * barSize)),

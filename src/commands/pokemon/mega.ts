@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Pokedex from "../../types/pokemon/Pokedex";
@@ -120,7 +120,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const subCommand = interaction.options.getSubcommand();
 		
 		const { rows: [ { gems } ] } = await Util.database.query(
@@ -140,19 +140,19 @@ const command: Command = {
 				);
 				
 				if (!pokemonData) return interaction.reply({
-					content: languageStrings.data.pokemon_not_owned(),
+					content: translations.data.pokemon_not_owned(),
 					ephemeral: true
 				});
 
 				const megaEvolution = pokemon.megaEvolutions.find(mega => mega.suffix === megaType);
 				
 				if (!megaEvolution) return interaction.reply({
-					content: languageStrings.data.invalid_mega_evolution(),
+					content: translations.data.invalid_mega_evolution(),
 					ephemeral: true
 				});
 
 				if (!gems[megaEvolution.megaStone]) return interaction.reply({
-					content: languageStrings.data.no_mega_gem(megaEvolution.megaStone),
+					content: translations.data.no_mega_gem(megaEvolution.megaStone),
 					ephemeral: true
 				});
 
@@ -204,15 +204,15 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: languageStrings.data.evolving_title(interaction.user.tag),
+								name: translations.data.evolving_title(interaction.user.tag),
 								iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 							},
 							color: interaction.guild.me.displayColor,
 							thumbnail: {
 								url: pokemon.image(shiny, "default")
 							},
-							description: languageStrings.data.evolving(
-								pokemon.formatName(shiny, "default", languageStrings.language)
+							description: translations.data.evolving(
+								pokemon.formatName(shiny, "default", translations.language)
 							)
 						}
 					],
@@ -225,9 +225,9 @@ const command: Command = {
 							reply.embeds[0]
 								.setThumbnail(pokemon.image(shiny, megaEvolution.suffix))
 								.setDescription(
-									languageStrings.data.evolved(
-										pokemon.formatName(shiny, "default", languageStrings.language),
-										pokemon.formatName(shiny, megaEvolution.suffix, languageStrings.language)
+									translations.data.evolved(
+										pokemon.formatName(shiny, "default", translations.language),
+										pokemon.formatName(shiny, megaEvolution.suffix, translations.language)
 									)
 								)
 						]
@@ -243,7 +243,7 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: languageStrings.data.title(interaction.user.tag),
+								name: translations.data.title(interaction.user.tag),
 								iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 							},
 							color: interaction.guild.me.displayColor,

@@ -43,18 +43,18 @@ var path_1 = __importDefault(require("path"));
 var discord_js_1 = require("discord.js");
 var config_json_1 = require("../config.json");
 var Util_1 = __importDefault(require("../Util"));
-var LanguageStrings_1 = __importDefault(require("../types/structures/LanguageStrings"));
+var Translations_1 = __importDefault(require("../types/structures/Translations"));
 function runApplicationCommand(command, interaction) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var language, languageStrings, commandFileName, commandLanguageString, now, channelCooldown, userPermissions, missingUserPermissions, missingBotPermissions, cooldownReduction, rows, cooldownAmount, expirationTime, timeLeft, timeLeftHumanized;
+        var language, translations, commandFileName, commandLanguageString, now, channelCooldown, userPermissions, missingUserPermissions, missingBotPermissions, cooldownReduction, rows, cooldownAmount, expirationTime, timeLeft, timeLeftHumanized;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     language = Util_1.default.languages.get(interaction.guild.id);
-                    languageStrings = new LanguageStrings_1.default(__filename, language);
+                    translations = new Translations_1.default(__filename, language);
                     commandFileName = path_1.default.basename(command.path, path_1.default.extname(command.path));
-                    commandLanguageString = new LanguageStrings_1.default(commandFileName, language);
+                    commandLanguageString = new Translations_1.default(commandFileName, language);
                     now = Date.now();
                     channelCooldown = (_a = Util_1.default.channelCooldowns.get(interaction.channel.id)) !== null && _a !== void 0 ? _a : {
                         numberOfMessages: 0,
@@ -78,13 +78,13 @@ function runApplicationCommand(command, interaction) {
                     missingUserPermissions = command.userPermissions.filter(function (permission) { return !userPermissions.has(permission); });
                     if (missingUserPermissions.length && interaction.user.id !== config_json_1.OWNER_ID)
                         return [2 /*return*/, interaction.reply({
-                                content: languageStrings.data.user_missing_permissions(missingUserPermissions.join("`, `")),
+                                content: translations.data.user_missing_permissions(missingUserPermissions.join("`, `")),
                                 ephemeral: true
                             }).catch(console.error)];
                     missingBotPermissions = command.botPermissions.filter(function (permission) { return !interaction.guild.me.permissionsIn(interaction.channel.id).has(permission); });
                     if (missingBotPermissions.length)
                         return [2 /*return*/, interaction.reply({
-                                content: languageStrings.data.bot_missing_perms(missingBotPermissions.join("`, `")),
+                                content: translations.data.bot_missing_perms(missingBotPermissions.join("`, `")),
                                 ephemeral: true
                             }).catch(console.error)];
                     cooldownReduction = 0;
@@ -106,7 +106,7 @@ function runApplicationCommand(command, interaction) {
                                 .replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
                                 .replace(/00h |00m /g, "");
                             return [2 /*return*/, interaction.reply({
-                                    content: languageStrings.data.cooldown(timeLeftHumanized, Util_1.default.prefix + command.name),
+                                    content: translations.data.cooldown(timeLeftHumanized, Util_1.default.prefix + command.name),
                                     ephemeral: true
                                 }).catch(console.error)];
                         }
@@ -117,9 +117,9 @@ function runApplicationCommand(command, interaction) {
                         .catch(function (err) {
                         console.error(err);
                         if (interaction.replied)
-                            interaction.channel.send(languageStrings.data.error()).catch(console.error);
+                            interaction.channel.send(translations.data.error()).catch(console.error);
                         else
-                            interaction.reply(languageStrings.data.error()).catch(console.error);
+                            interaction.reply(translations.data.error()).catch(console.error);
                     });
                     return [2 /*return*/];
             }

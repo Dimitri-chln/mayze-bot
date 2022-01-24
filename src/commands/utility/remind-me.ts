@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import dhms from "dhms";
@@ -190,7 +190,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const subCommand = interaction.options.getSubcommand();
 		
 		const { rows: reminders } = await Util.database.query(
@@ -203,7 +203,7 @@ const command: Command = {
 				const duration: number = dhms(interaction.options.getString("duration"));
 				
 				if (!duration) return interaction.reply({
-					content: languageStrings.data.invalid_duration(),
+					content: translations.data.invalid_duration(),
 					ephemeral: true
 				});
 				
@@ -218,8 +218,8 @@ const command: Command = {
 				);
 				
 				interaction.reply(
-					languageStrings.data.created(
-						formatTime(duration, languageStrings.language),
+					translations.data.created(
+						formatTime(duration, translations.language),
 						content
 					)
 				);
@@ -230,7 +230,7 @@ const command: Command = {
 				const date = new Date(interaction.options.getString("duration"));
 
 				if (!date) return interaction.reply({
-					content: languageStrings.data.invalid_date(),
+					content: translations.data.invalid_date(),
 					ephemeral: true
 				});
 
@@ -245,8 +245,8 @@ const command: Command = {
 				);
 				
 				interaction.reply(
-					languageStrings.data.created(
-						formatTime(duration, languageStrings.language),
+					translations.data.created(
+						formatTime(duration, translations.language),
 						content
 					)
 				);
@@ -257,7 +257,7 @@ const command: Command = {
 				const duration: number = dhms(interaction.options.getString("duration"));
 				
 				if (!duration) return interaction.reply({
-					content: languageStrings.data.invalid_duration(),
+					content: translations.data.invalid_duration(),
 					ephemeral: true
 				});
 				
@@ -272,8 +272,8 @@ const command: Command = {
 				);
 				
 				interaction.reply(
-					languageStrings.data.created(
-						formatTime(duration, languageStrings.language),
+					translations.data.created(
+						formatTime(duration, translations.language),
 						content
 					)
 				);
@@ -283,7 +283,7 @@ const command: Command = {
 			case "remove": {
 				const number = interaction.options.getInteger("reminder");
 				if (number < 1 || number > reminders.length) return interaction.reply({
-					content: languageStrings.data.invalid_number(reminders.length.toString()),
+					content: translations.data.invalid_number(reminders.length.toString()),
 					ephemeral: true
 				});
 
@@ -292,7 +292,7 @@ const command: Command = {
 					[ reminders[number - 1].id ]
 				);
 				
-				interaction.reply(languageStrings.data.removed());
+				interaction.reply(translations.data.removed());
 				break;
 			}
 
@@ -301,11 +301,11 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: languageStrings.data.title(interaction.user.tag),
+								name: translations.data.title(interaction.user.tag),
 								iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 							},
 							color: interaction.guild.me.displayColor,
-							description: reminders.length ? null : languageStrings.data.no_reminder(),
+							description: reminders.length ? null : translations.data.no_reminder(),
 							fields: reminders.map((reminder, i) => {
 								return {
 									name: `\`${i + 1}.\` ${reminder.content}`,

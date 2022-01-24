@@ -4,7 +4,7 @@ import { CronJob } from "cron";
 import MusicPlayer from "./utils/music/MusicPlayer";
 import SpotifyWebApi from "spotify-web-api-node";
 
-import { Language } from "./types/structures/LanguageStrings";
+import { Language } from "./types/structures/Translations";
 import Command from "./types/structures/Command";
 import MessageResponse from "./types/structures/MessageResponse";
 import ReactionCommand from "./types/structures/ReactionCommand";

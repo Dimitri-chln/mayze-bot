@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import pagination, { Page } from "../../utils/misc/pagination";
@@ -21,7 +21,7 @@ const command: Command = {
 		en: []
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const pages: Page[] = [];
 		
 		for (const [ name, palette ] of Util.palettes) {
@@ -29,10 +29,10 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: languageStrings.data.title(),
+							name: translations.data.title(),
 							iconURL: interaction.client.user.displayAvatarURL()
 						},
-						title: languageStrings.data.palette(name),
+						title: translations.data.palette(name),
 						color: interaction.guild.me.displayColor,
 						description: palette.all().map((color, alias) => `${color.emoji} \`${alias}\` - **${color.name}** \`${color.hex}\``).join("\n")
 					}

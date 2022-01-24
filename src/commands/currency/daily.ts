@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 
@@ -19,7 +19,7 @@ const command: Command = {
 		en: []
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const DAY_IN_MS = 1000 * 60 * 60 * 24;
 		const NOW = new Date();
 		const MIDNIGHT = new Date();
@@ -42,7 +42,7 @@ const command: Command = {
 				.replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
 				.replace(/00h |00m /g, "");
 			return interaction.reply({
-				content: languageStrings.data.cooldown(timeLeftHumanized),
+				content: translations.data.cooldown(timeLeftHumanized),
 				ephemeral: true
 			});
 		}
@@ -64,11 +64,11 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name: languageStrings.data.title(),
+						name: translations.data.title(),
 						iconURL: interaction.user.displayAvatarURL({ dynamic: true })
 					},
 					color: interaction.guild.me.displayColor,
-					description: languageStrings.data.description(
+					description: translations.data.description(
 						Util.config.DAILY_REWARD.toString(),
 						money.toString()
 					),

@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { Role } from "discord.js";
@@ -35,7 +35,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const role = interaction.options.getRole("role") as Role;
 		
 		const roleMembers = role.members.map(m => m.user.tag);
@@ -48,7 +48,7 @@ const command: Command = {
 						iconURL: `https://dummyimage.com/50/${role.hexColor}/${role.hexColor}.png?text=+`
 					},
 					color: interaction.guild.me.displayColor,
-					description: languageStrings.data.description(
+					description: translations.data.description(
 						role.id,
 						role.color.toString(),
 						role.hexColor,

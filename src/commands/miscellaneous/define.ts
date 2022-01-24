@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Axios from "axios";
@@ -67,22 +67,22 @@ const command: Command = {
 		]
 	},
 
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const apiURL = "https://api.dictionaryapi.dev/api/v2/entries";
 
 		const word = interaction.options.getString("word").toLowerCase();
-		const searchLanguage = interaction.options.getString("language") ?? languageStrings.language;
+		const searchLanguage = interaction.options.getString("language") ?? translations.language;
 		
 		Axios.get(`${apiURL}/${searchLanguage}/${encodeURIComponent(word)}`)
 			.then(async ({ data }: { data: DictionaryResult[] }) => {
 				interaction.reply(
-					`__**${data[0].word.replace(/^./, (a: string) => a.toUpperCase())}**__: ${data[0].phonetics[0].text ? `(${data[0].phonetics[0].text})` : ""}\n${data[0].meanings.map(meaning => `> __${meaning.partOfSpeech.replace(/^./, a => a.toUpperCase())}:__ ${meaning.definitions[0].definition}${meaning.definitions[0].synonyms && meaning.definitions[0].synonyms.length ? `\n*${languageStrings.data.synonyms()}: ${meaning.definitions[0].synonyms.join(", ")}*` : ""}`).join("\n\n")}`
+					`__**${data[0].word.replace(/^./, (a: string) => a.toUpperCase())}**__: ${data[0].phonetics[0].text ? `(${data[0].phonetics[0].text})` : ""}\n${data[0].meanings.map(meaning => `> __${meaning.partOfSpeech.replace(/^./, a => a.toUpperCase())}:__ ${meaning.definitions[0].definition}${meaning.definitions[0].synonyms && meaning.definitions[0].synonyms.length ? `\n*${translations.data.synonyms()}: ${meaning.definitions[0].synonyms.join(", ")}*` : ""}`).join("\n\n")}`
 				);
 			})
 			.catch(async err => {
 				if (err.response.data.title && err.response.data.title === "No Definitions Found")
 					return interaction.reply({
-						content: languageStrings.data.invalid_word(),
+						content: translations.data.invalid_word(),
 						ephemeral: true
 					});
 				

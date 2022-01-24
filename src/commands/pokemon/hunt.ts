@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Pokedex from "../../types/pokemon/Pokedex";
@@ -37,7 +37,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const input = interaction.options.getString("pokemon");
 		
 		if (!input) {
@@ -54,8 +54,8 @@ const command: Command = {
 					: 1;
 	
 				interaction.reply({
-					content: languageStrings.data.hunt_info(
-						huntedPokemon.names[languageStrings.language] ?? huntedPokemon.names.en,
+					content: translations.data.hunt_info(
+						huntedPokemon.names[translations.language] ?? huntedPokemon.names.en,
 						(Math.round(probability * 100 * 10_000) / 10_000).toString()
 					),
 					ephemeral: true
@@ -63,7 +63,7 @@ const command: Command = {
 			
 			} else {
 				interaction.reply({
-					content: languageStrings.data.not_hunting(),
+					content: translations.data.not_hunting(),
 					ephemeral: true
 				});
 			}
@@ -78,7 +78,7 @@ const command: Command = {
 			)
 				.then(() => {
 					interaction.reply({
-						content: languageStrings.data.deleted(),
+						content: translations.data.deleted(),
 						ephemeral: true
 					});
 				});
@@ -88,13 +88,13 @@ const command: Command = {
 				
 		const pokemon = Pokedex.findByName(input);
 		if (!pokemon) return interaction.reply({
-			content: languageStrings.data.invalid_pokemon(),
+			content: translations.data.invalid_pokemon(),
 			ephemeral: true
 		});
 
 		const msg = await interaction.reply({
-			content: languageStrings.data.confirmation(
-				pokemon.names[languageStrings.language] ?? pokemon.names.en
+			content: translations.data.confirmation(
+				pokemon.names[translations.language] ?? pokemon.names.en
 			),
 			ephemeral: true,
 			fetchReply: true
@@ -121,15 +121,15 @@ const command: Command = {
 			);
 			
 			interaction.reply({
-				content: languageStrings.data.hunting(
-					pokemon.names[languageStrings.language] ?? pokemon.names.en
+				content: translations.data.hunting(
+					pokemon.names[translations.language] ?? pokemon.names.en
 				),
 				ephemeral: true
 			});
 
 		} else {
 			interaction.reply({
-				content: languageStrings.data.cancelled(),
+				content: translations.data.cancelled(),
 				ephemeral: true
 			});
 		}

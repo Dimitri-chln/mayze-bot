@@ -1,6 +1,6 @@
 import { CommandInteraction, Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import LanguageStrings from "../../types/structures/LanguageStrings";
+import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 
@@ -139,7 +139,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, languageStrings: LanguageStrings) => {
+	run: async (interaction: CommandInteraction, translations: Translations) => {
 		const subCommand = interaction.options.getSubcommand();
 		const role = interaction.options.getRole("role");
 		const option: "bot" | "human" | "all" = interaction.options.getString("option") as "bot" | "human" ?? "all";
@@ -152,7 +152,7 @@ const command: Command = {
 		let errors = 0;
 		
 		interaction.reply(
-			languageStrings.data.updating(
+			translations.data.updating(
 				members.size.toString(),
 				members.size > 1
 			)
@@ -183,7 +183,7 @@ const command: Command = {
 		}
 
 		interaction.editReply(
-			languageStrings.data.updated(
+			translations.data.updated(
 				members.size - errors === 0,
 				members.size - errors === 1,
 				members.size - errors > 1,

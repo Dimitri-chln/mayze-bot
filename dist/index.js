@@ -75,7 +75,7 @@ var dotenv_1 = __importDefault(require("dotenv"));
 var discord_js_1 = __importDefault(require("discord.js"));
 var pg_1 = __importDefault(require("pg"));
 var spotify_web_api_node_1 = __importDefault(require("spotify-web-api-node"));
-var LanguageStrings_1 = __importDefault(require("./types/structures/LanguageStrings"));
+var Translations_1 = __importDefault(require("./types/structures/Translations"));
 var Color_1 = __importDefault(require("./types/canvas/Color"));
 var Palette_1 = __importDefault(require("./types/canvas/Palette"));
 var Canvas_1 = __importDefault(require("./types/canvas/Canvas"));
@@ -881,23 +881,23 @@ discord_music_player_1.Utils.buildBar = function (value, maxValue, size, loadedI
 player
     .on("clientDisconnect", function (message, queue) {
     var language = Util_1.default.languages.get(message.guild.id);
-    var languageStrings = new LanguageStrings_1.default(__filename, language);
-    message.channel.send(languageStrings.data.music_player_disconnect(queue.connection.channel.toString())).catch(console.error);
+    var translations = new Translations_1.default(__filename, language);
+    message.channel.send(translations.data.music_player_disconnect(queue.connection.channel.toString())).catch(console.error);
 })
     .on("error", function (error, message) {
     var language = Util_1.default.languages.get(message.guild.id);
-    var languageStrings = new LanguageStrings_1.default(__filename, language);
+    var translations = new Translations_1.default(__filename, language);
     console.error(error);
-    message.channel.send(languageStrings.data.music_player_error(error.toString())).catch(console.error);
+    message.channel.send(translations.data.music_player_error(error.toString())).catch(console.error);
 })
     .on("playlistAdd", function (message, queue, playlist) {
     var language = Util_1.default.languages.get(message.guild.id);
-    var languageStrings = new LanguageStrings_1.default(__filename, language);
-    message.channel.send(languageStrings.data.music_player_add_playlist(playlist.videoCount.toString())).catch(console.error);
+    var translations = new Translations_1.default(__filename, language);
+    message.channel.send(translations.data.music_player_add_playlist(playlist.videoCount.toString())).catch(console.error);
 })
     .on("queueEnd", function (message, queue) {
     var language = Util_1.default.languages.get(message.guild.id);
-    var languageStrings = new LanguageStrings_1.default(__filename, language);
+    var translations = new Translations_1.default(__filename, language);
     var songDisplays = Util_1.default.songDisplays.filter(function (songDisplay) { return songDisplay.guild.id === message.guild.id; });
     var lastSong = queue.songs[0];
     if (!lastSong)
@@ -906,56 +906,56 @@ player
         songDisplay.edit({
             embeds: [
                 songDisplay.embeds[0]
-                    .setDescription(languageStrings.data.song_display_description(lastSong.name.toString(), lastSong.url.toString(), discord_music_player_1.Utils.buildBar(discord_music_player_1.Utils.TimeToMilliseconds(lastSong.duration), discord_music_player_1.Utils.TimeToMilliseconds(lastSong.duration), 20, "━", "🔘"), lastSong.requestedBy, "Ø", "**0:00**"))
-                    .setFooter(languageStrings.data.song_display_footer_end(language))
+                    .setDescription(translations.data.song_display_description(lastSong.name.toString(), lastSong.url.toString(), discord_music_player_1.Utils.buildBar(discord_music_player_1.Utils.TimeToMilliseconds(lastSong.duration), discord_music_player_1.Utils.TimeToMilliseconds(lastSong.duration), 20, "━", "🔘"), lastSong.requestedBy, "Ø", "**0:00**"))
+                    .setFooter(translations.data.song_display_footer_end(language))
             ]
         }).catch(console.error);
     });
 })
     .on("songAdd", function (message, queue, song) {
     var language = Util_1.default.languages.get(message.guild.id);
-    var languageStrings = new LanguageStrings_1.default(__filename, language);
-    message.channel.send(languageStrings.data.music_player_add_song((0, getQueueDuration_1.default)(queue) ? discord_music_player_1.Utils.MillisecondsToTime(discord_music_player_1.Utils.TimeToMilliseconds((0, getQueueDuration_1.default)(queue)) - discord_music_player_1.Utils.TimeToMilliseconds(song.duration)) : 0, song.name.toString())).catch(console.error);
+    var translations = new Translations_1.default(__filename, language);
+    message.channel.send(translations.data.music_player_add_song((0, getQueueDuration_1.default)(queue) ? discord_music_player_1.Utils.MillisecondsToTime(discord_music_player_1.Utils.TimeToMilliseconds((0, getQueueDuration_1.default)(queue)) - discord_music_player_1.Utils.TimeToMilliseconds(song.duration)) : 0, song.name.toString())).catch(console.error);
 })
     .on("songChanged", function (message, newSong, OldSong) {
     var language = Util_1.default.languages.get(message.guild.id);
-    var languageStrings = new LanguageStrings_1.default(__filename, language);
+    var translations = new Translations_1.default(__filename, language);
     var songDisplays = Util_1.default.songDisplays.filter(function (songDisplay) { return songDisplay.guild.id === message.guild.id; });
     songDisplays.forEach(function (songDisplay) {
         songDisplay.edit({
             embeds: [
                 songDisplay.embeds[0]
-                    .setDescription(languageStrings.data.song_display_description(newSong.name.toString(), newSong.url.toString(), discord_music_player_1.Utils.buildBar(0, discord_music_player_1.Utils.TimeToMilliseconds(newSong.duration), 20, "━", "🔘"), newSong.requestedBy, newSong.queue.repeatMode
+                    .setDescription(translations.data.song_display_description(newSong.name.toString(), newSong.url.toString(), discord_music_player_1.Utils.buildBar(0, discord_music_player_1.Utils.TimeToMilliseconds(newSong.duration), 20, "━", "🔘"), newSong.requestedBy, newSong.queue.repeatMode
                     ? newSong.name.toString()
                     : (newSong.queue.songs[1]
                         ? newSong.queue.songs[1].name.toString()
                         : (newSong.queue.repeatQueue ? newSong.queue.songs[0].name.toString() : "Ø")), newSong.queue.repeatMode || newSong.queue.repeatQueue ? "♾️" : (0, getQueueDuration_1.default)(newSong.queue).toString()))
-                    .setFooter(languageStrings.data.song_display_footer(language, Boolean(newSong.queue.repeatMode), Boolean(newSong.queue.repeatQueue)))
+                    .setFooter(translations.data.song_display_footer(language, Boolean(newSong.queue.repeatMode), Boolean(newSong.queue.repeatQueue)))
             ]
         }).catch(console.error);
     });
 })
     .on("songFirst", function (message, song) {
     var language = Util_1.default.languages.get(message.guild.id);
-    var languageStrings = new LanguageStrings_1.default(__filename, language);
-    message.channel.send(languageStrings.data.music_player_playing(song.name.toString())).catch(console.error);
+    var translations = new Translations_1.default(__filename, language);
+    message.channel.send(translations.data.music_player_playing(song.name.toString())).catch(console.error);
 });
 setInterval(function () {
     Util_1.default.songDisplays.forEach(function (songDisplay) {
         var language = Util_1.default.languages.get(songDisplay.guild.id);
-        var languageStrings = new LanguageStrings_1.default(__filename, language);
+        var translations = new Translations_1.default(__filename, language);
         if (!player.isPlaying(songDisplay))
             return Util_1.default.songDisplays.delete(songDisplay.channel.id);
         var song = player.nowPlaying(songDisplay);
         songDisplay.edit({
             embeds: [
                 songDisplay.embeds[0]
-                    .setDescription(languageStrings.data.song_display_description(song.name.toString(), song.url.toString(), Util_1.default.player.createProgressBar(songDisplay, { size: 20, arrow: "🔘", block: "━" }).toString(), song.requestedBy, song.queue.repeatMode
+                    .setDescription(translations.data.song_display_description(song.name.toString(), song.url.toString(), Util_1.default.player.createProgressBar(songDisplay, { size: 20, arrow: "🔘", block: "━" }).toString(), song.requestedBy, song.queue.repeatMode
                     ? song.name.toString()
                     : (song.queue.songs[1]
                         ? song.queue.songs[1].name.toString()
                         : (song.queue.repeatQueue ? song.queue.songs[0].name.toString() : "Ø")), song.queue.repeatMode || song.queue.repeatQueue ? "♾️" : (0, getQueueDuration_1.default)(song.queue).toString()))
-                    .setFooter(languageStrings.data.song_display_footer(language, Boolean(song.queue.repeatMode), Boolean(song.queue.repeatQueue)))
+                    .setFooter(translations.data.song_display_footer(language, Boolean(song.queue.repeatMode), Boolean(song.queue.repeatQueue)))
             ]
         }).catch(console.error);
     });
