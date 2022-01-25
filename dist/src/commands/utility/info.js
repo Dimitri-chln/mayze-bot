@@ -63,7 +63,7 @@ var command = {
                         },
                         title: translations.data.title(),
                         color: interaction.guild.me.displayColor,
-                        description: translations.data.description(Util_1.default.prefix, Util_1.default.owner.tag, Util_1.default.version, Math.round(interaction.client.uptime / 1000).toString()),
+                        description: translations.data.description(Util_1.default.owner.tag, Util_1.default.version, Math.round(interaction.client.uptime / 1000).toString()),
                         footer: {
                             text: "✨ Mayze ✨"
                         }

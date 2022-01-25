@@ -17,6 +17,7 @@ import Color from "./types/canvas/Color";
 import Palette from "./types/canvas/Palette";
 import Canvas from "./types/canvas/Canvas";
 import runApplicationCommand from "./utils/misc/runApplicationCommand";
+import getLevel from "./utils/misc/getLevel";
 import MusicPlayer from "./utils/music/MusicPlayer";
 import MusicUtil from "./utils/music/MusicUtil";
 import getQueueDuration from "./utils/misc/getQueueDuration";
@@ -376,18 +377,45 @@ client.on("ready", async () => {
 
 	// Voice xp
 	setInterval(() => {
-		client.guilds.cache.forEach(guild => {
-			guild.members.cache.filter(m => m.voice.channelId && !m.user.bot).forEach(member => {
+		client.guilds.cache.forEach(async guild => {
+			const translations = await new Translations("index_levels", Util.languages.get(guild.id)).init();
+
+			guild.members.cache.filter(m => m.voice.channelId && !m.user.bot).forEach(async member => {
 				if (member.voice.channel.members.size < 2) return;
 
-				let xp = Util.config.BASE_VOICE_XP * member.voice.channel.members.filter(m => !m.user.bot).size;
+				let newXp = Util.config.BASE_VOICE_XP * member.voice.channel.members.filter(m => !m.user.bot).size;
 				
-				if (member.voice.deaf) xp *= 0;
-				if (member.voice.mute) xp *= 0.5;
-				if (member.voice.streaming && member.voice.channel.members.filter(m => !m.user.bot).size > 1) xp *= 3;
-				if (member.voice.selfVideo && member.voice.channel.members.filter(m => !m.user.bot).size > 1) xp *= 5;
+				if (member.voice.deaf) newXp *= 0;
+				if (member.voice.mute) newXp *= 0.5;
+				if (member.voice.streaming && member.voice.channel.members.filter(m => !m.user.bot).size > 1) newXp *= 3;
+				if (member.voice.selfVideo && member.voice.channel.members.filter(m => !m.user.bot).size > 1) newXp *= 5;
 	
-				Util.voiceXp(Util.database, member, xp, Util.languages.get(member.guild.id));
+	
+				try {
+					const { rows: [ { voice_xp: xp } ] } = await Util.database.query(
+						`
+						INSERT INTO levels (user_id, voice_xp) VALUES ($1, $2)
+						ON CONFLICT (user_id)
+						DO UPDATE SET
+							voice_xp = levels.voice_xp + $2 WHERE levels.user_id = $1
+						RETURNING levels.voice_xp
+						`,
+						[ member.user.id, newXp ]
+					);
+
+					const levelInfo = getLevel(xp);
+
+					if (levelInfo.currentXP < newXp && member.guild.id === Util.config.MAIN_GUILD_ID)
+						member.user.send(
+							translations.data.voice_level_up(
+								translations.language,
+								levelInfo.level.toString()
+							)
+						);
+				
+				} catch (err) {
+					console.error(err);
+				}
 			});
 		});
 	}, 60000);
@@ -428,6 +456,8 @@ client.on("interactionCreate", async interaction => {
 
 client.on("messageCreate", async message => {
 	if (Util.beta) return;
+
+	const translations = await new Translations("index_levels", Util.languages.get(message.guild.id)).init();
 	
 	// Chat xp
 	if (
@@ -456,7 +486,32 @@ client.on("messageCreate", async message => {
 				
 				Util.xpMessages.set(message.author.id, Util.xpMessages.get(message.author.id) + 1);
 				
-				Util.chatXp(Util.database, message, newXP, Util.languages.get(message.guild.id));
+				try {
+					const { rows: [ { chat_xp: xp }] } = await Util.database.query(
+						`
+						INSERT INTO levels (user_id, chat_xp) VALUES ($1, $2)
+						ON CONFLICT (user_id)
+						DO UPDATE SET
+							chat_xp = levels.chat_xp + $2 WHERE levels.user_id = $1
+						RETURNING levels.chat_xp
+						`,
+						[ message.author.id, newXP ]
+					);
+				
+					const levelInfo = getLevel(xp);
+
+					if (levelInfo.currentXP < newXP && message.guild.id === Util.config.MAIN_GUILD_ID)
+						message.channel.send(
+							translations.data.chat_level_up(
+								translations.language,
+								message.author.toString(),
+								levelInfo.level.toString()
+							)
+						);
+
+				} catch (err) {
+					console.error(err);
+				}
 			}
 		}
 	}

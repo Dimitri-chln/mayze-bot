@@ -74,7 +74,7 @@ const command: Command = {
 					fields: [
 						{
 							name: translations.data.chat_title(),
-							value: translations.data.chat_description(
+							value: translations.data.description(
 								chatLevel.level.toString(),
 								chatRank.toString(),
 								xpBar.full.repeat(Math.round(chatLevel.currentXP / chatLevel.neededXP * barSize)) + xpBar.empty.repeat(barSize - Math.round(chatLevel.currentXP / chatLevel.neededXP * barSize)),
@@ -85,7 +85,7 @@ const command: Command = {
 						},
 						{
 							name: translations.data.voice_title(),
-							value: translations.data.voice_description(
+							value: translations.data.description(
 								voiceLevel.level.toString(),
 								voiceRank.toString(),
 								xpBar.full.repeat(Math.round(voiceLevel.currentXP / voiceLevel.neededXP * barSize)) + xpBar.empty.repeat(barSize - Math.round(voiceLevel.currentXP / voiceLevel.neededXP * barSize)),

@@ -4,6 +4,7 @@
     "description": "Pour le meilleur clan!",
     "main": "dist/index.js",
     "scripts": {
+        "build": "tsc",
         "start": "node .",
         "debug": "node debug"
     },

@@ -80,7 +80,7 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: translations.data.title(Util.prefix + command.name),
+							name: translations.data.title(command.name),
 							iconURL: interaction.client.user.displayAvatarURL()
 						},
 						color: interaction.guild.me.displayColor,

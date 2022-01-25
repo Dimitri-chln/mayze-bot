@@ -80,6 +80,7 @@ var Color_1 = __importDefault(require("./types/canvas/Color"));
 var Palette_1 = __importDefault(require("./types/canvas/Palette"));
 var Canvas_1 = __importDefault(require("./types/canvas/Canvas"));
 var runApplicationCommand_1 = __importDefault(require("./utils/misc/runApplicationCommand"));
+var getLevel_1 = __importDefault(require("./utils/misc/getLevel"));
 var MusicPlayer_1 = __importDefault(require("./utils/music/MusicPlayer"));
 var MusicUtil_1 = __importDefault(require("./utils/music/MusicUtil"));
 var getQueueDuration_1 = __importDefault(require("./utils/misc/getQueueDuration"));
@@ -524,22 +525,51 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
                 }); }, 10000);
                 // Voice xp
                 setInterval(function () {
-                    client.guilds.cache.forEach(function (guild) {
-                        guild.members.cache.filter(function (m) { return m.voice.channelId && !m.user.bot; }).forEach(function (member) {
-                            if (member.voice.channel.members.size < 2)
-                                return;
-                            var xp = Util_1.default.config.BASE_VOICE_XP * member.voice.channel.members.filter(function (m) { return !m.user.bot; }).size;
-                            if (member.voice.deaf)
-                                xp *= 0;
-                            if (member.voice.mute)
-                                xp *= 0.5;
-                            if (member.voice.streaming && member.voice.channel.members.filter(function (m) { return !m.user.bot; }).size > 1)
-                                xp *= 3;
-                            if (member.voice.selfVideo && member.voice.channel.members.filter(function (m) { return !m.user.bot; }).size > 1)
-                                xp *= 5;
-                            Util_1.default.voiceXp(Util_1.default.database, member, xp, Util_1.default.languages.get(member.guild.id));
+                    client.guilds.cache.forEach(function (guild) { return __awaiter(void 0, void 0, void 0, function () {
+                        var translations;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, new Translations_1.default("index_levels", Util_1.default.languages.get(guild.id)).init()];
+                                case 1:
+                                    translations = _a.sent();
+                                    guild.members.cache.filter(function (m) { return m.voice.channelId && !m.user.bot; }).forEach(function (member) { return __awaiter(void 0, void 0, void 0, function () {
+                                        var newXp, _a, xp, levelInfo, err_3;
+                                        return __generator(this, function (_b) {
+                                            switch (_b.label) {
+                                                case 0:
+                                                    if (member.voice.channel.members.size < 2)
+                                                        return [2 /*return*/];
+                                                    newXp = Util_1.default.config.BASE_VOICE_XP * member.voice.channel.members.filter(function (m) { return !m.user.bot; }).size;
+                                                    if (member.voice.deaf)
+                                                        newXp *= 0;
+                                                    if (member.voice.mute)
+                                                        newXp *= 0.5;
+                                                    if (member.voice.streaming && member.voice.channel.members.filter(function (m) { return !m.user.bot; }).size > 1)
+                                                        newXp *= 3;
+                                                    if (member.voice.selfVideo && member.voice.channel.members.filter(function (m) { return !m.user.bot; }).size > 1)
+                                                        newXp *= 5;
+                                                    _b.label = 1;
+                                                case 1:
+                                                    _b.trys.push([1, 3, , 4]);
+                                                    return [4 /*yield*/, Util_1.default.database.query("\n\t\t\t\t\t\tINSERT INTO levels (user_id, voice_xp) VALUES ($1, $2)\n\t\t\t\t\t\tON CONFLICT (user_id)\n\t\t\t\t\t\tDO UPDATE SET\n\t\t\t\t\t\t\tvoice_xp = levels.voice_xp + $2 WHERE levels.user_id = $1\n\t\t\t\t\t\tRETURNING levels.voice_xp\n\t\t\t\t\t\t", [member.user.id, newXp])];
+                                                case 2:
+                                                    _a = __read.apply(void 0, [(_b.sent()).rows, 1]), xp = _a[0].voice_xp;
+                                                    levelInfo = (0, getLevel_1.default)(xp);
+                                                    if (levelInfo.currentXP < newXp && member.guild.id === Util_1.default.config.MAIN_GUILD_ID)
+                                                        member.user.send(translations.data.voice_level_up(translations.language, levelInfo.level.toString()));
+                                                    return [3 /*break*/, 4];
+                                                case 3:
+                                                    err_3 = _b.sent();
+                                                    console.error(err_3);
+                                                    return [3 /*break*/, 4];
+                                                case 4: return [2 /*return*/];
+                                            }
+                                        });
+                                    }); });
+                                    return [2 /*return*/];
+                            }
                         });
-                    });
+                    }); });
                 }, 60000);
                 return [2 /*return*/];
         }
@@ -576,40 +606,53 @@ client.on("interactionCreate", function (interaction) { return __awaiter(void 0,
     });
 }); });
 client.on("messageCreate", function (message) { return __awaiter(void 0, void 0, void 0, function () {
-    var bots, prefixes, newXP;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var translations, bots, prefixes, newXP, _a, xp, levelInfo, err_4;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 if (Util_1.default.beta)
                     return [2 /*return*/];
+                return [4 /*yield*/, new Translations_1.default("index_levels", Util_1.default.languages.get(message.guild.id)).init()];
+            case 1:
+                translations = _b.sent();
                 if (!(message.channel.type !== "DM"
                     && !message.author.bot
                     && !message.channel.name.includes("spam")
                     && message.channel.id !== "865997369745080341") // #tki
-                ) return [3 /*break*/, 2]; // #tki
+                ) return [3 /*break*/, 6]; // #tki
                 return [4 /*yield*/, message.guild.members.fetch().catch(console.error)];
-            case 1:
-                bots = _a.sent();
-                if (bots) {
-                    prefixes = bots.map(function (bot) {
-                        var _a;
-                        var _b = __read((_a = bot.displayName.match(/\[(.+)\]/)) !== null && _a !== void 0 ? _a : [], 2), prefix = _b[1];
-                        return prefix;
-                    }).filter(function (p) { return p; });
-                    if (!prefixes.some(function (p) { return message.content.toLowerCase().startsWith(p); })) {
-                        if (!Util_1.default.xpMessages.has(message.author.id)) {
-                            Util_1.default.xpMessages.set(message.author.id, 0);
-                            setTimeout(function () {
-                                Util_1.default.xpMessages.delete(message.author.id);
-                            }, 60000);
-                        }
-                        newXP = Math.round(Math.sqrt(message.content.length) * Util_1.default.config.XP_MULTIPLIER / Util_1.default.xpMessages.get(message.author.id));
-                        Util_1.default.xpMessages.set(message.author.id, Util_1.default.xpMessages.get(message.author.id) + 1);
-                        Util_1.default.chatXp(Util_1.default.database, message, newXP, Util_1.default.languages.get(message.guild.id));
-                    }
-                }
-                _a.label = 2;
             case 2:
+                bots = _b.sent();
+                if (!bots) return [3 /*break*/, 6];
+                prefixes = bots.map(function (bot) {
+                    var _a;
+                    var _b = __read((_a = bot.displayName.match(/\[(.+)\]/)) !== null && _a !== void 0 ? _a : [], 2), prefix = _b[1];
+                    return prefix;
+                }).filter(function (p) { return p; });
+                if (!!prefixes.some(function (p) { return message.content.toLowerCase().startsWith(p); })) return [3 /*break*/, 6];
+                if (!Util_1.default.xpMessages.has(message.author.id)) {
+                    Util_1.default.xpMessages.set(message.author.id, 0);
+                    setTimeout(function () {
+                        Util_1.default.xpMessages.delete(message.author.id);
+                    }, 60000);
+                }
+                newXP = Math.round(Math.sqrt(message.content.length) * Util_1.default.config.XP_MULTIPLIER / Util_1.default.xpMessages.get(message.author.id));
+                Util_1.default.xpMessages.set(message.author.id, Util_1.default.xpMessages.get(message.author.id) + 1);
+                _b.label = 3;
+            case 3:
+                _b.trys.push([3, 5, , 6]);
+                return [4 /*yield*/, Util_1.default.database.query("\n\t\t\t\t\t\tINSERT INTO levels (user_id, chat_xp) VALUES ($1, $2)\n\t\t\t\t\t\tON CONFLICT (user_id)\n\t\t\t\t\t\tDO UPDATE SET\n\t\t\t\t\t\t\tchat_xp = levels.chat_xp + $2 WHERE levels.user_id = $1\n\t\t\t\t\t\tRETURNING levels.chat_xp\n\t\t\t\t\t\t", [message.author.id, newXP])];
+            case 4:
+                _a = __read.apply(void 0, [(_b.sent()).rows, 1]), xp = _a[0].chat_xp;
+                levelInfo = (0, getLevel_1.default)(xp);
+                if (levelInfo.currentXP < newXP && message.guild.id === Util_1.default.config.MAIN_GUILD_ID)
+                    message.channel.send(translations.data.chat_level_up(translations.language, message.author.toString(), levelInfo.level.toString()));
+                return [3 /*break*/, 6];
+            case 5:
+                err_4 = _b.sent();
+                console.error(err_4);
+                return [3 /*break*/, 6];
+            case 6:
                 // Message responses
                 Util_1.default.messageResponses.forEach(function (messageResponse) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
                     return [2 /*return*/, messageResponse.run(message).catch(console.error)];
@@ -645,7 +688,7 @@ client.on("messageUpdate", function (message, newMessage) { return __awaiter(voi
     });
 }); });
 client.on("messageReactionAdd", function (reaction, user) { return __awaiter(void 0, void 0, void 0, function () {
-    var err_3, _a, _b, reactionCommand;
+    var err_5, _a, _b, reactionCommand;
     var e_11, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -664,8 +707,8 @@ client.on("messageReactionAdd", function (reaction, user) { return __awaiter(voi
                 _d.label = 4;
             case 4: return [3 /*break*/, 6];
             case 5:
-                err_3 = _d.sent();
-                console.error(err_3);
+                err_5 = _d.sent();
+                console.error(err_5);
                 return [3 /*break*/, 6];
             case 6:
                 if (reaction.partial || reaction.message.partial)
@@ -691,7 +734,7 @@ client.on("messageReactionAdd", function (reaction, user) { return __awaiter(voi
     });
 }); });
 client.on("messageReactionRemove", function (reaction, user) { return __awaiter(void 0, void 0, void 0, function () {
-    var err_4, _a, _b, reactionCommand;
+    var err_6, _a, _b, reactionCommand;
     var e_12, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -704,8 +747,8 @@ client.on("messageReactionRemove", function (reaction, user) { return __awaiter(
                 _d.label = 2;
             case 2: return [3 /*break*/, 4];
             case 3:
-                err_4 = _d.sent();
-                console.error(err_4);
+                err_6 = _d.sent();
+                console.error(err_6);
                 return [3 /*break*/, 4];
             case 4:
                 if (reaction.partial || reaction.message.partial)
@@ -738,7 +781,7 @@ client.on("messageReactionRemove", function (reaction, user) { return __awaiter(
     });
 }); });
 client.on("guildMemberAdd", function (member) { return __awaiter(void 0, void 0, void 0, function () {
-    var roleIds, _a, memberRoles, err_5;
+    var roleIds, _a, memberRoles, err_7;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -779,8 +822,8 @@ client.on("guildMemberAdd", function (member) { return __awaiter(void 0, void 0,
                 }
                 return [3 /*break*/, 4];
             case 3:
-                err_5 = _b.sent();
-                console.error(err_5);
+                err_7 = _b.sent();
+                console.error(err_7);
                 return [3 /*break*/, 4];
             case 4:
                 member.roles.add(roleIds.map(function (roleId) { return member.guild.roles.cache.get(roleId); })).catch(console.error);

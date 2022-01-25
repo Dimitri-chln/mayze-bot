@@ -37,7 +37,7 @@ const command = {
 		if (timePassed < 0) return message.reply(language.already_passed).catch(console.error);
 		const timePassedString = timeToString(timePassed, languageCode);
 
-		const [ month, day, year] = args
+		const [ month, day, year ] = args
 			? args[0].split(/\/|-/)
 			: options[0].value.split(" ")[0].split(/\/|-/);
 		if (!day || !month || !year) return message.reply(language.invalid_date).catch(console.error);

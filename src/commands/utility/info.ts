@@ -30,7 +30,6 @@ const command: Command = {
 					title: translations.data.title(),
 					color: interaction.guild.me.displayColor,
 					description: translations.data.description(
-						Util.prefix,
 						Util.owner.tag,
 						Util.version,
 						Math.round(interaction.client.uptime / 1000).toString()

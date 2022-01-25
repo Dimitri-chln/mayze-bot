@@ -105,12 +105,12 @@ var command = {
                                 fields: [
                                     {
                                         name: translations.data.chat_title(),
-                                        value: translations.data.chat_description(chatLevel.level.toString(), chatRank.toString(), xpBar.full.repeat(Math.round(chatLevel.currentXP / chatLevel.neededXP * barSize)) + xpBar.empty.repeat(barSize - Math.round(chatLevel.currentXP / chatLevel.neededXP * barSize)), chatLevel.currentXP.toString(), chatLevel.neededXP.toString()),
+                                        value: translations.data.description(chatLevel.level.toString(), chatRank.toString(), xpBar.full.repeat(Math.round(chatLevel.currentXP / chatLevel.neededXP * barSize)) + xpBar.empty.repeat(barSize - Math.round(chatLevel.currentXP / chatLevel.neededXP * barSize)), chatLevel.currentXP.toString(), chatLevel.neededXP.toString()),
                                         inline: true
                                     },
                                     {
                                         name: translations.data.voice_title(),
-                                        value: translations.data.voice_description(voiceLevel.level.toString(), voiceRank.toString(), xpBar.full.repeat(Math.round(voiceLevel.currentXP / voiceLevel.neededXP * barSize)) + xpBar.empty.repeat(barSize - Math.round(voiceLevel.currentXP / voiceLevel.neededXP * barSize)), voiceLevel.currentXP.toString(), voiceLevel.neededXP.toString()),
+                                        value: translations.data.description(voiceLevel.level.toString(), voiceRank.toString(), xpBar.full.repeat(Math.round(voiceLevel.currentXP / voiceLevel.neededXP * barSize)) + xpBar.empty.repeat(barSize - Math.round(voiceLevel.currentXP / voiceLevel.neededXP * barSize)), voiceLevel.currentXP.toString(), voiceLevel.neededXP.toString()),
                                         inline: true
                                     }
                                 ],

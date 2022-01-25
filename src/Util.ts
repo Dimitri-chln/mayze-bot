@@ -1,5 +1,6 @@
-import { Client, Collection, Message, MessageReaction, Snowflake, User } from "discord.js";
+import { Client, Collection, GuildMember, Message, MessageReaction, Snowflake, User } from "discord.js";
 import Pg from "pg";
+import { google as Google, Auth } from "googleapis";
 import { CronJob } from "cron";
 import MusicPlayer from "./utils/music/MusicPlayer";
 import SpotifyWebApi from "spotify-web-api-node";
@@ -12,9 +13,7 @@ import Palette from "./types/canvas/Palette";
 import Canvas from "./types/canvas/Canvas";
 import Pokedex from "./types/pokemon/Pokedex";
 
-import voiceXp from "./utils/misc/voiceXp";
 import parseArgs from "./utils/misc/parseArgs";
-import chatXp from "./utils/misc/chatXp";
 import findMember from "./utils/misc/findMember";
 import config from "./config.json";
 import { version } from "../package.json";
@@ -22,10 +21,16 @@ import { version } from "../package.json";
 
 
 export default class Util {
-	static config = config;
-	static version = version;
+	static readonly config = config;
+	static readonly version = version;
 	static client: Client;
 	static database: Pg.Client;
+	static readonly googleAuth = new Google.auth.JWT(
+		process.env.GOOGLE_CLIENT_EMAIL,
+		null,
+		process.env.GOOGLE_PRIVATE_KEY,
+		[ "https://www.googleapis.com/auth/spreadsheets.readonly" ]
+	);
 	static languages: Collection<Snowflake, Language> = new Collection();
 	static commands: Collection<string, Command> = new Collection();
 	static messageResponses: MessageResponse[] = [];
@@ -37,8 +42,6 @@ export default class Util {
 	static palettes: Collection<string, Palette> = new Collection();
 	static canvas: Collection<string, Canvas> = new Collection();
 	static roseLobby: CronJob;
-	static chatXp = chatXp;
-	static voiceXp = voiceXp;
 	static parseArgs = parseArgs;
 	static xpMessages: Collection<Snowflake, number> = new Collection();
 	static sniping: SnipingData = {
@@ -53,6 +56,7 @@ export default class Util {
 	static findMember = findMember;
 
 	static amongUsGames: Collection<Snowflake, AmongUsGame> = new Collection();
+	static russianRouletteGames: Collection<Snowflake, RussianRouletteGame> = new Collection();
 }
 
 
@@ -77,4 +81,9 @@ interface AmongUsGame {
 	code: string;
 	description: string;
 	time: number;
+}
+
+interface RussianRouletteGame {
+	creator: GuildMember;
+	members: Collection<Snowflake, GuildMember>;
 }

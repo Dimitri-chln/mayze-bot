@@ -79,64 +79,6 @@ module.exports = {
 				en: "Mudae isn't on this server"
 			}
 		},
-		"shop": {
-			title: {
-				fr: "Magasin d'améliorations",
-				en: "Upgrades shop"
-			},
-			balance: {
-				fr: "Argent : ✨{1}",
-				en: "Money: ✨{1}"
-			},
-			catch_cooldown_reduction: {
-				fr: "Réduction du temps d'attente pour attraper un pokémon",
-				en: "Catch cooldown reduction"
-			},
-			probability: {
-				fr: "de chance",
-				en: "probability"
-			},
-			new_pokemon_probability: {
-				fr: "Nouveau pokémon",
-				en: "New pokémon"
-			},
-			legendary_ub_probability: {
-				fr: "Pokémon légendaire ou une chimère",
-				en: "Legendary pokémon or an ultra beast"
-			},
-			mega_gem_probability: {
-				fr: "Méga gemme",
-				en: "Mega gem"
-			},
-			shiny_probability: {
-				fr: "Pokémon shiny",
-				en: "Shiny pokémon"
-			},
-			tier: {
-				fr: "**Palier {1} :**",
-				en: "**Tier {1}:**"
-			},
-			next_tier: {
-				fr: "Palier suivant :",
-				en: "Next tier:"
-			},
-			invalid_upgrade: {
-				fr: "amélioration invalide",
-				en: "invalid upgrade"
-			},
-			not_enough_money: {
-				fr: "tu n'as pas assez d'argent pour acheter ce palier",
-				en: "you don't have enough money to buy this tier"
-			},
-			max_tier_reached: {
-				fr: "tu as déjà atteint le dernier palier pour cette amélioration",
-				en: "you already reached the last tier for this upgrade"
-			},
-			new_tier: {
-				fr: "tu as atteint le palier **{1}** pour **✨{2}**",
-				en: "you reached tier **{1}** for **✨{2}**"
-			}
-		},
 		"since": {
 			invalid_date: {
 				fr: "le format de la date est incorrect (mm-dd-yyyy [hh:mm:ss])",

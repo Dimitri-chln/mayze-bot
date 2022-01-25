@@ -112,7 +112,7 @@ var command = {
                     embeds: [
                         {
                             author: {
-                                name: translations.data.title(Util_1.default.prefix + command_1.name),
+                                name: translations.data.title(command_1.name),
                                 iconURL: interaction.client.user.displayAvatarURL()
                             },
                             color: interaction.guild.me.displayColor,

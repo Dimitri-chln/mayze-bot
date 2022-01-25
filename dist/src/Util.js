@@ -4,10 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var discord_js_1 = require("discord.js");
+var googleapis_1 = require("googleapis");
 var Pokedex_1 = __importDefault(require("./types/pokemon/Pokedex"));
-var voiceXp_1 = __importDefault(require("./utils/misc/voiceXp"));
 var parseArgs_1 = __importDefault(require("./utils/misc/parseArgs"));
-var chatXp_1 = __importDefault(require("./utils/misc/chatXp"));
 var findMember_1 = __importDefault(require("./utils/misc/findMember"));
 var config_json_1 = __importDefault(require("./config.json"));
 var package_json_1 = require("../package.json");
@@ -16,6 +15,7 @@ var Util = /** @class */ (function () {
     }
     Util.config = config_json_1.default;
     Util.version = package_json_1.version;
+    Util.googleAuth = new googleapis_1.google.auth.JWT(process.env.GOOGLE_CLIENT_EMAIL, null, process.env.GOOGLE_PRIVATE_KEY, ["https://www.googleapis.com/auth/spreadsheets.readonly"]);
     Util.languages = new discord_js_1.Collection();
     Util.commands = new discord_js_1.Collection();
     Util.messageResponses = [];
@@ -24,8 +24,6 @@ var Util = /** @class */ (function () {
     Util.channelCooldowns = new discord_js_1.Collection();
     Util.palettes = new discord_js_1.Collection();
     Util.canvas = new discord_js_1.Collection();
-    Util.chatXp = chatXp_1.default;
-    Util.voiceXp = voiceXp_1.default;
     Util.parseArgs = parseArgs_1.default;
     Util.xpMessages = new discord_js_1.Collection();
     Util.sniping = {
@@ -37,6 +35,7 @@ var Util = /** @class */ (function () {
     Util.pokedex = Pokedex_1.default;
     Util.findMember = findMember_1.default;
     Util.amongUsGames = new discord_js_1.Collection();
+    Util.russianRouletteGames = new discord_js_1.Collection();
     return Util;
 }());
 exports.default = Util;

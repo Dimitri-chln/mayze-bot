@@ -39,22 +39,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var path_1 = __importDefault(require("path"));
 var discord_js_1 = require("discord.js");
 var Util_1 = __importDefault(require("../../Util"));
 var Translations_1 = __importDefault(require("../../types/structures/Translations"));
 function runApplicationCommand(command, interaction) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var language, translations, commandFileName, commandLanguageString, now, channelCooldown, userPermissions, missingUserPermissions, missingBotPermissions, cooldownReduction, rows, cooldownAmount, expirationTime, timeLeft, timeLeftHumanized;
+        var language, translations, commandTranslations, NOW, channelCooldown, userPermissions, missingUserPermissions, missingBotPermissions, cooldownReduction, rows, cooldownAmount, expirationTime, timeLeft, timeLeftHumanized;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     language = Util_1.default.languages.get(interaction.guild.id);
-                    translations = new Translations_1.default(__filename, language);
-                    commandFileName = path_1.default.basename(command.path, path_1.default.extname(command.path));
-                    commandLanguageString = new Translations_1.default(commandFileName, language);
-                    now = Date.now();
+                    return [4 /*yield*/, new Translations_1.default("run", language).init()];
+                case 1:
+                    translations = _c.sent();
+                    commandTranslations = new Translations_1.default("cmd_" + command.name, language);
+                    NOW = Date.now();
                     channelCooldown = (_a = Util_1.default.channelCooldowns.get(interaction.channel.id)) !== null && _a !== void 0 ? _a : {
                         numberOfMessages: 0,
                         lastMessageTimestamp: 0
@@ -63,11 +63,11 @@ function runApplicationCommand(command, interaction) {
                         setTimeout(function () { return Util_1.default.channelCooldowns.delete(interaction.channel.id); }, 10000);
                     if (channelCooldown.numberOfMessages >= 5)
                         return [2 /*return*/];
-                    if (now - channelCooldown.lastMessageTimestamp < 500)
+                    if (NOW - channelCooldown.lastMessageTimestamp < 500)
                         return [2 /*return*/];
                     Util_1.default.channelCooldowns.set(interaction.channel.id, {
                         numberOfMessages: channelCooldown.numberOfMessages + 1,
-                        lastMessageTimestamp: now
+                        lastMessageTimestamp: NOW
                     });
                     if (command.category === "admin" && interaction.user.id !== Util_1.default.owner.id)
                         return [2 /*return*/];
@@ -87,32 +87,32 @@ function runApplicationCommand(command, interaction) {
                                 ephemeral: true
                             }).catch(console.error)];
                     cooldownReduction = 0;
-                    if (!(command.name === "catch")) return [3 /*break*/, 2];
+                    if (!(command.name === "catch")) return [3 /*break*/, 3];
                     return [4 /*yield*/, Util_1.default.database.query("SELECT catch_cooldown_reduction FROM upgrades WHERE user_id = $1", [interaction.user.id])];
-                case 1:
+                case 2:
                     rows = (_c.sent()).rows;
                     if (rows.length)
                         cooldownReduction += 30 * rows[0].catch_cooldown_reduction;
-                    _c.label = 2;
-                case 2:
+                    _c.label = 3;
+                case 3:
                     cooldownAmount = (((_b = command.cooldown) !== null && _b !== void 0 ? _b : 2) - cooldownReduction) * 1000;
                     if (command.cooldowns.has(interaction.user.id)) {
                         expirationTime = command.cooldowns.get(interaction.user.id) + cooldownAmount;
-                        if (now < expirationTime) {
-                            timeLeft = Math.ceil((expirationTime - now) / 1000);
+                        if (NOW < expirationTime) {
+                            timeLeft = Math.ceil((expirationTime - NOW) / 1000);
                             timeLeftHumanized = new Date((timeLeft % 86400) * 1000)
                                 .toUTCString()
                                 .replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
                                 .replace(/00h |00m /g, "");
                             return [2 /*return*/, interaction.reply({
-                                    content: translations.data.cooldown(timeLeftHumanized, Util_1.default.prefix + command.name),
+                                    content: translations.data.cooldown(timeLeftHumanized, command.name),
                                     ephemeral: true
                                 }).catch(console.error)];
                         }
                     }
-                    command.cooldowns.set(interaction.user.id, now);
+                    command.cooldowns.set(interaction.user.id, NOW);
                     setTimeout(function () { return command.cooldowns.delete(interaction.user.id); }, cooldownAmount);
-                    command.run(interaction, commandLanguageString)
+                    command.run(interaction, commandTranslations)
                         .catch(function (err) {
                         console.error(err);
                         if (interaction.replied)
