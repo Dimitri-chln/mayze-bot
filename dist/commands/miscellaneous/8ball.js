@@ -72,4 +72,4 @@ var command = {
         });
     }); }
 };
-module.exports = command;
+exports.default = command;

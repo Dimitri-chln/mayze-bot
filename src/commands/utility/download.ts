@@ -141,7 +141,7 @@ const command: Command = {
 
 				const buffer = Fs.readFileSync(result.path);
 
-				await interaction.channel.send({
+				await interaction.followUp({
 					files: [ new MessageAttachment(buffer, result.filename) ]
 				})
 					.catch(err => {
@@ -213,7 +213,10 @@ const command: Command = {
 			}
 			
 			default:
-				interaction.channel.send(translations.data.invalid_url());
+				interaction.followUp({
+					content: translations.data.invalid_url(),
+					ephemeral: true
+				});
 		}
 
 

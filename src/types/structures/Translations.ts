@@ -53,9 +53,14 @@ export default class Translations {
 						);
 					
 						let text = this._data.get(translationName);
+						
+						try {
+							text = JSON.parse(text);
+						} catch (err) {}
+
 						if (typeof text !== "string") return text;
 							
-						text = text.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[\{\}]/g, "")) - 1] as string);
+						text = text.replace(/\{\d+?\}/g, a => args[parseInt(a.replace(/[{}]/g, "")) - 1] as string);
 					
 						while (/\[\d+?\?[^\[\]]*?:.*?\]/gs.test(text)) {
 							text = text

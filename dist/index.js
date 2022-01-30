@@ -79,9 +79,11 @@ var Translations_1 = __importDefault(require("./types/structures/Translations"))
 var Color_1 = __importDefault(require("./types/canvas/Color"));
 var Palette_1 = __importDefault(require("./types/canvas/Palette"));
 var Canvas_1 = __importDefault(require("./types/canvas/Canvas"));
-var runApplicationCommand_1 = __importDefault(require("./utils/runApplicationCommand"));
-var discord_music_player_1 = require("discord-music-player");
-var getQueueDuration_1 = __importDefault(require("./utils/getQueueDuration"));
+var runApplicationCommand_1 = __importDefault(require("./utils/misc/runApplicationCommand"));
+var getLevel_1 = __importDefault(require("./utils/misc/getLevel"));
+var MusicPlayer_1 = __importDefault(require("./utils/music/MusicPlayer"));
+var MusicUtil_1 = __importDefault(require("./utils/music/MusicUtil"));
+var getQueueDuration_1 = __importDefault(require("./utils/misc/getQueueDuration"));
 dotenv_1.default.config();
 var intents = new discord_js_1.default.Intents([
     discord_js_1.default.Intents.FLAGS.DIRECT_MESSAGES,
@@ -130,7 +132,6 @@ function reconnectDatabase(database) {
 Util_1.default.database = newDatabaseClient();
 Util_1.default.database.connect().then(function () {
     console.log("Connected to the database");
-    Util_1.default.languages = new discord_js_1.default.Collection();
     Util_1.default.database.query("SELECT * FROM languages").then(function (res) {
         var e_6, _a;
         try {
@@ -149,7 +150,6 @@ Util_1.default.database.connect().then(function () {
     });
 });
 setInterval(function () { return reconnectDatabase(Util_1.default.database); }, 3600000);
-Util_1.default.commands = new discord_js_1.default.Collection();
 var directories = fs_1.default.readdirSync(path_1.default.resolve(__dirname, "commands"), { withFileTypes: true })
     .filter(function (dirent) { return dirent.isDirectory() && dirent.name !== "disabled"; })
     .map(function (dirent) { return dirent.name; });
@@ -185,7 +185,6 @@ finally {
     }
     finally { if (e_1) throw e_1.error; }
 }
-Util_1.default.messageResponses = [];
 var messageResponseFiles = fs_1.default.readdirSync(path_1.default.resolve(__dirname, "responses"))
     .filter(function (file) { return file.endsWith(".js"); });
 try {
@@ -202,7 +201,6 @@ finally {
     }
     finally { if (e_3) throw e_3.error; }
 }
-Util_1.default.reactionCommands = [];
 var reactionCommandsFiles = fs_1.default.readdirSync(path_1.default.resolve(__dirname, "reaction_commands"))
     .filter(function (file) { return file.endsWith(".js"); });
 try {
@@ -219,7 +217,6 @@ finally {
     }
     finally { if (e_4) throw e_4.error; }
 }
-Util_1.default.commandCooldowns = new discord_js_1.default.Collection();
 try {
     for (var _f = __values(Util_1.default.commands.keys()), _g = _f.next(); !_g.done; _g = _f.next()) {
         var commandName = _g.value;
@@ -233,21 +230,14 @@ finally {
     }
     finally { if (e_5) throw e_5.error; }
 }
-Util_1.default.channelCooldowns = new discord_js_1.default.Collection();
-Util_1.default.xpMessages = new discord_js_1.default.Collection();
-Util_1.default.sniping = {
-    deletedMessages: new discord_js_1.default.Collection(),
-    editedMessages: new discord_js_1.default.Collection(),
-    messageReactions: new discord_js_1.default.Collection()
-};
 client.on("ready", function () { return __awaiter(void 0, void 0, void 0, function () {
-    var version, logChannel, emojis, roseChannel, announcementChannel;
+    var logChannel, emojis, roseChannel, announcementChannel;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 console.log("Connected to Discord");
+                Util_1.default.client = client;
                 Util_1.default.beta = client.user.id === Util_1.default.config.BETA_CLIENT_ID;
-                version = require("../package.json").version;
                 logChannel = client.channels.cache.get(Util_1.default.config.LOG_CHANNEL_ID);
                 logChannel.send({
                     embeds: [
@@ -257,7 +247,7 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
                                 iconURL: client.user.displayAvatarURL()
                             },
                             color: 65793,
-                            description: "\u2022 **Version:** `" + version + "`\n\u2022 **Ping:** `" + client.ws.ping + "`",
+                            description: "\u2022 **Ping:** `" + client.ws.ping + "`",
                             footer: {
                                 text: "✨ Mayze ✨"
                             },
@@ -266,104 +256,10 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
                     ]
                 }).catch(console.error);
                 client.users.fetch(Util_1.default.config.OWNER_ID).then(function (owner) { return Util_1.default.owner = owner; }).catch(console.error);
-                // Prefix
-                Util_1.default.prefix = Util_1.default.beta
-                    ? Util_1.default.config.PREFIX_BETA
-                    : Util_1.default.config.PREFIX;
-                emojis = client.guilds.cache.get("842836119757914173").emojis;
-                Util_1.default.database.query("SELECT * FROM colors").then(function (_a) {
-                    var colors = _a["rows"];
-                    return __awaiter(void 0, void 0, void 0, function () {
-                        var palettes, _loop_1, colors_1, colors_1_1, color, e_7_1;
-                        var e_7, _b;
-                        return __generator(this, function (_c) {
-                            switch (_c.label) {
-                                case 0:
-                                    palettes = new discord_js_1.default.Collection();
-                                    _loop_1 = function (color) {
-                                        var emoji, red, green, blue, hex;
-                                        return __generator(this, function (_d) {
-                                            switch (_d.label) {
-                                                case 0:
-                                                    emoji = emojis.cache.find(function (e) { return e.name === "pl_" + color.alias; });
-                                                    if (!!emoji) return [3 /*break*/, 2];
-                                                    red = Math.floor(color.code / (256 * 256));
-                                                    green = Math.floor((color.code % (256 * 256)) / 256);
-                                                    blue = color.code % 256;
-                                                    hex = red.toString(16).padStart(2, "0")
-                                                        + green.toString(16).padStart(2, "0")
-                                                        + blue.toString(16).padStart(2, "0");
-                                                    return [4 /*yield*/, emojis.create("https://dummyimage.com/100/" + hex + "?text=+", "pl_" + color.alias)];
-                                                case 1:
-                                                    emoji = _d.sent();
-                                                    _d.label = 2;
-                                                case 2:
-                                                    if (!palettes.has(color.palette))
-                                                        palettes.set(color.palette, new Palette_1.default(color.palette));
-                                                    palettes.get(color.palette).add(new Color_1.default(color.name, color.alias, color.code, emoji));
-                                                    return [2 /*return*/];
-                                            }
-                                        });
-                                    };
-                                    _c.label = 1;
-                                case 1:
-                                    _c.trys.push([1, 6, 7, 8]);
-                                    colors_1 = __values(colors), colors_1_1 = colors_1.next();
-                                    _c.label = 2;
-                                case 2:
-                                    if (!!colors_1_1.done) return [3 /*break*/, 5];
-                                    color = colors_1_1.value;
-                                    return [5 /*yield**/, _loop_1(color)];
-                                case 3:
-                                    _c.sent();
-                                    _c.label = 4;
-                                case 4:
-                                    colors_1_1 = colors_1.next();
-                                    return [3 /*break*/, 2];
-                                case 5: return [3 /*break*/, 8];
-                                case 6:
-                                    e_7_1 = _c.sent();
-                                    e_7 = { error: e_7_1 };
-                                    return [3 /*break*/, 8];
-                                case 7:
-                                    try {
-                                        if (colors_1_1 && !colors_1_1.done && (_b = colors_1.return)) _b.call(colors_1);
-                                    }
-                                    finally { if (e_7) throw e_7.error; }
-                                    return [7 /*endfinally*/];
-                                case 8:
-                                    emojis.cache.forEach(function (e) {
-                                        if (!colors.some(function (c) { return "pl_" + c.alias === e.name; }))
-                                            e.delete().catch(console.error);
-                                    });
-                                    Util_1.default.palettes = palettes;
-                                    Util_1.default.canvas = new discord_js_1.default.Collection();
-                                    Util_1.default.database.query("SELECT name FROM canvas").then(function (res) {
-                                        var e_8, _a;
-                                        try {
-                                            for (var _b = __values(res.rows), _c = _b.next(); !_c.done; _c = _b.next()) {
-                                                var row = _c.value;
-                                                var canvas = new Canvas_1.default(row.name, client, Util_1.default.database, palettes);
-                                                Util_1.default.canvas.set(canvas.name, canvas);
-                                            }
-                                        }
-                                        catch (e_8_1) { e_8 = { error: e_8_1 }; }
-                                        finally {
-                                            try {
-                                                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-                                            }
-                                            finally { if (e_8) throw e_8.error; }
-                                        }
-                                    });
-                                    return [2 /*return*/];
-                            }
-                        });
-                    });
-                });
                 // Slash commands
                 return [4 /*yield*/, Promise.all(Util_1.default.commands.map(function (command) { return __awaiter(void 0, void 0, void 0, function () {
                         var applicationCommandData, applicationCommand, newApplicationCommand, err_1, _a, _b, guildId, _c, _d, guildId;
-                        var e_9, _e, e_10, _f;
+                        var e_7, _e, e_8, _f;
                         return __generator(this, function (_g) {
                             switch (_g.label) {
                                 case 0:
@@ -424,12 +320,12 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
                                                     client.application.commands.edit(applicationCommand.id, applicationCommandData, guildId).catch(console.error);
                                                 }
                                             }
-                                            catch (e_9_1) { e_9 = { error: e_9_1 }; }
+                                            catch (e_7_1) { e_7 = { error: e_7_1 }; }
                                             finally {
                                                 try {
                                                     if (_b && !_b.done && (_e = _a.return)) _e.call(_a);
                                                 }
-                                                finally { if (e_9) throw e_9.error; }
+                                                finally { if (e_7) throw e_7.error; }
                                             }
                                         }
                                         else {
@@ -442,12 +338,12 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
                                                     client.application.commands.create(applicationCommandData, guildId).catch(console.error);
                                                 }
                                             }
-                                            catch (e_10_1) { e_10 = { error: e_10_1 }; }
+                                            catch (e_8_1) { e_8 = { error: e_8_1 }; }
                                             finally {
                                                 try {
                                                     if (_d && !_d.done && (_f = _c.return)) _f.call(_c);
                                                 }
-                                                finally { if (e_10) throw e_10.error; }
+                                                finally { if (e_8) throw e_8.error; }
                                             }
                                         }
                                         // Global commands
@@ -469,6 +365,93 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
             case 1:
                 // Slash commands
                 _a.sent();
+                emojis = client.guilds.cache.get(Util_1.default.config.CANVAS_GUILD_ID).emojis;
+                Util_1.default.database.query("SELECT * FROM colors").then(function (_a) {
+                    var colors = _a.rows;
+                    return __awaiter(void 0, void 0, void 0, function () {
+                        var _loop_1, colors_1, colors_1_1, color, e_9_1;
+                        var e_9, _b;
+                        return __generator(this, function (_c) {
+                            switch (_c.label) {
+                                case 0:
+                                    _loop_1 = function (color) {
+                                        var emoji, red, green, blue, hex;
+                                        return __generator(this, function (_d) {
+                                            switch (_d.label) {
+                                                case 0:
+                                                    emoji = emojis.cache.find(function (e) { return e.name === "pl_" + color.alias; });
+                                                    if (!!emoji) return [3 /*break*/, 2];
+                                                    red = Math.floor(color.code / (256 * 256));
+                                                    green = Math.floor((color.code % (256 * 256)) / 256);
+                                                    blue = color.code % 256;
+                                                    hex = red.toString(16).padStart(2, "0")
+                                                        + green.toString(16).padStart(2, "0")
+                                                        + blue.toString(16).padStart(2, "0");
+                                                    return [4 /*yield*/, emojis.create("https://dummyimage.com/256/" + hex + "?text=+", "pl_" + color.alias)];
+                                                case 1:
+                                                    emoji = _d.sent();
+                                                    _d.label = 2;
+                                                case 2:
+                                                    if (!Util_1.default.palettes.has(color.palette))
+                                                        Util_1.default.palettes.set(color.palette, new Palette_1.default(color.palette));
+                                                    Util_1.default.palettes.get(color.palette).add(new Color_1.default(color.name, color.alias, color.code, emoji));
+                                                    return [2 /*return*/];
+                                            }
+                                        });
+                                    };
+                                    _c.label = 1;
+                                case 1:
+                                    _c.trys.push([1, 6, 7, 8]);
+                                    colors_1 = __values(colors), colors_1_1 = colors_1.next();
+                                    _c.label = 2;
+                                case 2:
+                                    if (!!colors_1_1.done) return [3 /*break*/, 5];
+                                    color = colors_1_1.value;
+                                    return [5 /*yield**/, _loop_1(color)];
+                                case 3:
+                                    _c.sent();
+                                    _c.label = 4;
+                                case 4:
+                                    colors_1_1 = colors_1.next();
+                                    return [3 /*break*/, 2];
+                                case 5: return [3 /*break*/, 8];
+                                case 6:
+                                    e_9_1 = _c.sent();
+                                    e_9 = { error: e_9_1 };
+                                    return [3 /*break*/, 8];
+                                case 7:
+                                    try {
+                                        if (colors_1_1 && !colors_1_1.done && (_b = colors_1.return)) _b.call(colors_1);
+                                    }
+                                    finally { if (e_9) throw e_9.error; }
+                                    return [7 /*endfinally*/];
+                                case 8:
+                                    emojis.cache.forEach(function (e) {
+                                        if (!colors.some(function (c) { return "pl_" + c.alias === e.name; }))
+                                            e.delete().catch(console.error);
+                                    });
+                                    Util_1.default.database.query("SELECT name FROM canvas").then(function (res) {
+                                        var e_10, _a;
+                                        try {
+                                            for (var _b = __values(res.rows), _c = _b.next(); !_c.done; _c = _b.next()) {
+                                                var row = _c.value;
+                                                var canvas = new Canvas_1.default(row.name, client, Util_1.default.database, Util_1.default.palettes);
+                                                Util_1.default.canvas.set(canvas.name, canvas);
+                                            }
+                                        }
+                                        catch (e_10_1) { e_10 = { error: e_10_1 }; }
+                                        finally {
+                                            try {
+                                                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                                            }
+                                            finally { if (e_10) throw e_10.error; }
+                                        }
+                                    });
+                                    return [2 /*return*/];
+                            }
+                        });
+                    });
+                });
                 if (Util_1.default.beta)
                     return [2 /*return*/];
                 // Predefined reminders
@@ -495,20 +478,17 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
                 }).catch(console.error);
                 // Reminders, trade blocks and mutes
                 setInterval(function () { return __awaiter(void 0, void 0, void 0, function () {
-                    var reminders, blocks, mutes, guild_1, mutedRole_1, err_2;
+                    var reminders, blocks, err_2;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                _a.trys.push([0, 4, , 5]);
+                                _a.trys.push([0, 3, , 4]);
                                 return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM reminders")];
                             case 1:
-                                reminders = (_a.sent())["rows"];
+                                reminders = (_a.sent()).rows;
                                 return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM trade_block WHERE expires_at IS NOT NULL")];
                             case 2:
-                                blocks = (_a.sent())["rows"];
-                                return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM mutes WHERE expires_at IS NOT NULL")];
-                            case 3:
-                                mutes = (_a.sent())["rows"];
+                                blocks = (_a.sent()).rows;
                                 // Reminders
                                 reminders.forEach(function (reminder) { return __awaiter(void 0, void 0, void 0, function () {
                                     var timestamp;
@@ -534,65 +514,62 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
                                         return [2 /*return*/];
                                     });
                                 }); });
-                                guild_1 = client.guilds.cache.get(Util_1.default.config.MAIN_GUILD_ID);
-                                mutedRole_1 = guild_1.roles.cache.get("695330946844721312");
-                                mutes.forEach(function (mute) { return __awaiter(void 0, void 0, void 0, function () {
-                                    var member, timestamp, jailedRoles, unJailedRoles;
-                                    return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0: return [4 /*yield*/, guild_1.members.fetch(mute.user_id).catch(console.error)];
-                                            case 1:
-                                                member = _a.sent();
-                                                if (!member)
-                                                    return [2 /*return*/];
-                                                timestamp = new Date(mute.expires_at).valueOf();
-                                                if (!(Date.now() > timestamp)) return [3 /*break*/, 4];
-                                                Util_1.default.database.query("DELETE FROM mutes WHERE user_id = $1", [mute.user_id]).catch(console.error);
-                                                jailedRoles = member.roles.cache.filter(function (role) {
-                                                    return guild_1.roles.cache.some(function (r) { return r.permissions.has(discord_js_1.default.Permissions.FLAGS.ADMINISTRATOR) && role.name === r.name + " (Jailed)"; });
-                                                });
-                                                unJailedRoles = guild_1.roles.cache.filter(function (role) {
-                                                    return role.permissions.has(discord_js_1.default.Permissions.FLAGS.ADMINISTRATOR) && member.roles.cache.some(function (r) { return r.name === role.name + " (Jailed)"; });
-                                                });
-                                                jailedRoles.set(mutedRole_1.id, mutedRole_1);
-                                                return [4 /*yield*/, member.roles.add(unJailedRoles).catch(console.error)];
-                                            case 2:
-                                                _a.sent();
-                                                return [4 /*yield*/, member.roles.remove(jailedRoles).catch(console.error)];
-                                            case 3:
-                                                _a.sent();
-                                                _a.label = 4;
-                                            case 4: return [2 /*return*/];
-                                        }
-                                    });
-                                }); });
-                                return [3 /*break*/, 5];
-                            case 4:
+                                return [3 /*break*/, 4];
+                            case 3:
                                 err_2 = _a.sent();
                                 console.error(err_2);
-                                return [3 /*break*/, 5];
-                            case 5: return [2 /*return*/];
+                                return [3 /*break*/, 4];
+                            case 4: return [2 /*return*/];
                         }
                     });
                 }); }, 10000);
                 // Voice xp
                 setInterval(function () {
-                    client.guilds.cache.forEach(function (guild) {
-                        guild.members.cache.filter(function (m) { return m.voice.channelId && !m.user.bot; }).forEach(function (member) {
-                            if (member.voice.channel.members.size < 2)
-                                return;
-                            var xp = Util_1.default.config.BASE_VOICE_XP * member.voice.channel.members.filter(function (m) { return !m.user.bot; }).size;
-                            if (member.voice.deaf)
-                                xp *= 0;
-                            if (member.voice.mute)
-                                xp *= 0.5;
-                            if (member.voice.streaming && member.voice.channel.members.filter(function (m) { return !m.user.bot; }).size > 1)
-                                xp *= 3;
-                            if (member.voice.selfVideo && member.voice.channel.members.filter(function (m) { return !m.user.bot; }).size > 1)
-                                xp *= 5;
-                            Util_1.default.voiceXp(Util_1.default.database, member, xp, Util_1.default.languages.get(member.guild.id));
+                    client.guilds.cache.forEach(function (guild) { return __awaiter(void 0, void 0, void 0, function () {
+                        var translations;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, new Translations_1.default("index_levels", Util_1.default.languages.get(guild.id)).init()];
+                                case 1:
+                                    translations = _a.sent();
+                                    guild.members.cache.filter(function (m) { return m.voice.channelId && !m.user.bot; }).forEach(function (member) { return __awaiter(void 0, void 0, void 0, function () {
+                                        var newXp, _a, xp, levelInfo, err_3;
+                                        return __generator(this, function (_b) {
+                                            switch (_b.label) {
+                                                case 0:
+                                                    if (member.voice.channel.members.size < 2)
+                                                        return [2 /*return*/];
+                                                    newXp = Util_1.default.config.BASE_VOICE_XP * member.voice.channel.members.filter(function (m) { return !m.user.bot; }).size;
+                                                    if (member.voice.deaf)
+                                                        newXp *= 0;
+                                                    if (member.voice.mute)
+                                                        newXp *= 0.5;
+                                                    if (member.voice.streaming && member.voice.channel.members.filter(function (m) { return !m.user.bot; }).size > 1)
+                                                        newXp *= 3;
+                                                    if (member.voice.selfVideo && member.voice.channel.members.filter(function (m) { return !m.user.bot; }).size > 1)
+                                                        newXp *= 5;
+                                                    _b.label = 1;
+                                                case 1:
+                                                    _b.trys.push([1, 3, , 4]);
+                                                    return [4 /*yield*/, Util_1.default.database.query("\n\t\t\t\t\t\tINSERT INTO levels (user_id, voice_xp) VALUES ($1, $2)\n\t\t\t\t\t\tON CONFLICT (user_id)\n\t\t\t\t\t\tDO UPDATE SET\n\t\t\t\t\t\t\tvoice_xp = levels.voice_xp + $2 WHERE levels.user_id = $1\n\t\t\t\t\t\tRETURNING levels.voice_xp\n\t\t\t\t\t\t", [member.user.id, newXp])];
+                                                case 2:
+                                                    _a = __read.apply(void 0, [(_b.sent()).rows, 1]), xp = _a[0].voice_xp;
+                                                    levelInfo = (0, getLevel_1.default)(xp);
+                                                    if (levelInfo.currentXP < newXp && member.guild.id === Util_1.default.config.MAIN_GUILD_ID)
+                                                        member.user.send(translations.data.voice_level_up(translations.language, levelInfo.level.toString()));
+                                                    return [3 /*break*/, 4];
+                                                case 3:
+                                                    err_3 = _b.sent();
+                                                    console.error(err_3);
+                                                    return [3 /*break*/, 4];
+                                                case 4: return [2 /*return*/];
+                                            }
+                                        });
+                                    }); });
+                                    return [2 /*return*/];
+                            }
                         });
-                    });
+                    }); });
                 }, 60000);
                 return [2 /*return*/];
         }
@@ -618,6 +595,9 @@ client.on("interactionCreate", function (interaction) { return __awaiter(void 0,
                 }
                 break;
             }
+            case "APPLICATION_COMMAND_AUTOCOMPLETE": {
+                break;
+            }
             case "MESSAGE_COMPONENT": {
                 break;
             }
@@ -626,40 +606,53 @@ client.on("interactionCreate", function (interaction) { return __awaiter(void 0,
     });
 }); });
 client.on("messageCreate", function (message) { return __awaiter(void 0, void 0, void 0, function () {
-    var bots, prefixes, newXP;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var translations, bots, prefixes, newXP, _a, xp, levelInfo, err_4;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 if (Util_1.default.beta)
                     return [2 /*return*/];
+                return [4 /*yield*/, new Translations_1.default("index_levels", Util_1.default.languages.get(message.guild.id)).init()];
+            case 1:
+                translations = _b.sent();
                 if (!(message.channel.type !== "DM"
                     && !message.author.bot
                     && !message.channel.name.includes("spam")
                     && message.channel.id !== "865997369745080341") // #tki
-                ) return [3 /*break*/, 2]; // #tki
+                ) return [3 /*break*/, 6]; // #tki
                 return [4 /*yield*/, message.guild.members.fetch().catch(console.error)];
-            case 1:
-                bots = _a.sent();
-                if (bots) {
-                    prefixes = bots.map(function (bot) {
-                        var _a;
-                        var _b = __read((_a = bot.displayName.match(/\[(.+)\]/)) !== null && _a !== void 0 ? _a : [], 2), prefix = _b[1];
-                        return prefix;
-                    }).filter(function (p) { return p; });
-                    if (!prefixes.some(function (p) { return message.content.toLowerCase().startsWith(p); })) {
-                        if (!Util_1.default.xpMessages.has(message.author.id)) {
-                            Util_1.default.xpMessages.set(message.author.id, 0);
-                            setTimeout(function () {
-                                Util_1.default.xpMessages.delete(message.author.id);
-                            }, 60000);
-                        }
-                        newXP = Math.round(Math.sqrt(message.content.length) * Util_1.default.config.XP_MULTIPLIER / Util_1.default.xpMessages.get(message.author.id));
-                        Util_1.default.xpMessages.set(message.author.id, Util_1.default.xpMessages.get(message.author.id) + 1);
-                        Util_1.default.chatXp(Util_1.default.database, message, newXP, Util_1.default.languages.get(message.guild.id));
-                    }
-                }
-                _a.label = 2;
             case 2:
+                bots = _b.sent();
+                if (!bots) return [3 /*break*/, 6];
+                prefixes = bots.map(function (bot) {
+                    var _a;
+                    var _b = __read((_a = bot.displayName.match(/\[(.+)\]/)) !== null && _a !== void 0 ? _a : [], 2), prefix = _b[1];
+                    return prefix;
+                }).filter(function (p) { return p; });
+                if (!!prefixes.some(function (p) { return message.content.toLowerCase().startsWith(p); })) return [3 /*break*/, 6];
+                if (!Util_1.default.xpMessages.has(message.author.id)) {
+                    Util_1.default.xpMessages.set(message.author.id, 0);
+                    setTimeout(function () {
+                        Util_1.default.xpMessages.delete(message.author.id);
+                    }, 60000);
+                }
+                newXP = Math.round(Math.sqrt(message.content.length) * Util_1.default.config.XP_MULTIPLIER / Util_1.default.xpMessages.get(message.author.id));
+                Util_1.default.xpMessages.set(message.author.id, Util_1.default.xpMessages.get(message.author.id) + 1);
+                _b.label = 3;
+            case 3:
+                _b.trys.push([3, 5, , 6]);
+                return [4 /*yield*/, Util_1.default.database.query("\n\t\t\t\t\t\tINSERT INTO levels (user_id, chat_xp) VALUES ($1, $2)\n\t\t\t\t\t\tON CONFLICT (user_id)\n\t\t\t\t\t\tDO UPDATE SET\n\t\t\t\t\t\t\tchat_xp = levels.chat_xp + $2 WHERE levels.user_id = $1\n\t\t\t\t\t\tRETURNING levels.chat_xp\n\t\t\t\t\t\t", [message.author.id, newXP])];
+            case 4:
+                _a = __read.apply(void 0, [(_b.sent()).rows, 1]), xp = _a[0].chat_xp;
+                levelInfo = (0, getLevel_1.default)(xp);
+                if (levelInfo.currentXP < newXP && message.guild.id === Util_1.default.config.MAIN_GUILD_ID)
+                    message.channel.send(translations.data.chat_level_up(translations.language, message.author.toString(), levelInfo.level.toString()));
+                return [3 /*break*/, 6];
+            case 5:
+                err_4 = _b.sent();
+                console.error(err_4);
+                return [3 /*break*/, 6];
+            case 6:
                 // Message responses
                 Util_1.default.messageResponses.forEach(function (messageResponse) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
                     return [2 /*return*/, messageResponse.run(message).catch(console.error)];
@@ -695,7 +688,7 @@ client.on("messageUpdate", function (message, newMessage) { return __awaiter(voi
     });
 }); });
 client.on("messageReactionAdd", function (reaction, user) { return __awaiter(void 0, void 0, void 0, function () {
-    var err_3, _a, _b, reactionCommand;
+    var err_5, _a, _b, reactionCommand;
     var e_11, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -714,8 +707,8 @@ client.on("messageReactionAdd", function (reaction, user) { return __awaiter(voi
                 _d.label = 4;
             case 4: return [3 /*break*/, 6];
             case 5:
-                err_3 = _d.sent();
-                console.error(err_3);
+                err_5 = _d.sent();
+                console.error(err_5);
                 return [3 /*break*/, 6];
             case 6:
                 if (reaction.partial || reaction.message.partial)
@@ -741,7 +734,7 @@ client.on("messageReactionAdd", function (reaction, user) { return __awaiter(voi
     });
 }); });
 client.on("messageReactionRemove", function (reaction, user) { return __awaiter(void 0, void 0, void 0, function () {
-    var err_4, _a, _b, reactionCommand;
+    var err_6, _a, _b, reactionCommand;
     var e_12, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -754,8 +747,8 @@ client.on("messageReactionRemove", function (reaction, user) { return __awaiter(
                 _d.label = 2;
             case 2: return [3 /*break*/, 4];
             case 3:
-                err_4 = _d.sent();
-                console.error(err_4);
+                err_6 = _d.sent();
+                console.error(err_6);
                 return [3 /*break*/, 4];
             case 4:
                 if (reaction.partial || reaction.message.partial)
@@ -788,23 +781,23 @@ client.on("messageReactionRemove", function (reaction, user) { return __awaiter(
     });
 }); });
 client.on("guildMemberAdd", function (member) { return __awaiter(void 0, void 0, void 0, function () {
-    var roleIds, rows, err_5;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var roleIds, _a, memberRoles, err_7;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 if (member.guild.id !== Util_1.default.config.MAIN_GUILD_ID)
                     return [2 /*return*/];
                 if (member.user.bot)
                     return [2 /*return*/];
                 roleIds = ["735809874205737020", "735810286719598634", "735810462872109156", "759694957132513300"];
-                _a.label = 1;
+                _b.label = 1;
             case 1:
-                _a.trys.push([1, 3, , 4]);
+                _b.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM member_roles WHERE user_id = $1", [member.user.id])];
             case 2:
-                rows = (_a.sent()).rows;
-                if (rows.length) {
-                    roleIds = roleIds.concat(rows[0].roles);
+                _a = __read.apply(void 0, [(_b.sent()).rows, 1]), memberRoles = _a[0];
+                if (memberRoles) {
+                    roleIds = roleIds.concat(memberRoles.roles);
                 }
                 else {
                     member.user.send({
@@ -829,8 +822,8 @@ client.on("guildMemberAdd", function (member) { return __awaiter(void 0, void 0,
                 }
                 return [3 /*break*/, 4];
             case 3:
-                err_5 = _a.sent();
-                console.error(err_5);
+                err_7 = _b.sent();
+                console.error(err_7);
                 return [3 /*break*/, 4];
             case 4:
                 member.roles.add(roleIds.map(function (roleId) { return member.guild.roles.cache.get(roleId); })).catch(console.error);
@@ -857,28 +850,18 @@ client.on("error", function (err) { return __awaiter(void 0, void 0, void 0, fun
     });
 }); });
 client.login(process.env.TOKEN);
-// Music module
-var player = new discord_music_player_1.Player(client, {
-    leaveOnEnd: true,
-    leaveOnStop: true,
-    leaveOnEmpty: true,
-    deafenOnJoin: true,
-    timeout: 900000,
-    quality: "high",
-    volume: 35
+// Music module 
+Util_1.default.musicPlayer = new MusicPlayer_1.default(client);
+client.on("voiceStateUpdate", function (oldState, newState) {
+    var queue = Util_1.default.musicPlayer.get(oldState.guild.id);
+    if (queue && oldState.channel.id === queue.voiceChannel.id) {
+        setTimeout(function () {
+            if (queue.voiceChannel.members.size <= 1)
+                queue.stop();
+        }, 900000);
+    }
 });
-Util_1.default.player = player;
-Util_1.default.songDisplays = new discord_js_1.default.Collection();
-// Overload buildBar method
-discord_music_player_1.Utils.buildBar = function (value, maxValue, size, loadedIcon, arrowIcon) {
-    var percentage = value / maxValue > 1 ? 0 : value / maxValue;
-    var progress = Math.round(size * percentage);
-    var emptyProgress = Math.round(size * (1 - percentage));
-    var progressText = loadedIcon.repeat(progress) + arrowIcon;
-    var emptyProgressText = loadedIcon.repeat(emptyProgress);
-    return "[" + progressText + "](https://mayze.herokuapp.com)" + emptyProgressText + "\n" + discord_music_player_1.Utils.MillisecondsToTime(value) + "/" + discord_music_player_1.Utils.MillisecondsToTime(maxValue);
-};
-player
+Util_1.default.musicPlayer
     .on("clientDisconnect", function (message, queue) {
     var language = Util_1.default.languages.get(message.guild.id);
     var translations = new Translations_1.default(__filename, language);
@@ -906,7 +889,7 @@ player
         songDisplay.edit({
             embeds: [
                 songDisplay.embeds[0]
-                    .setDescription(translations.data.song_display_description(lastSong.name.toString(), lastSong.url.toString(), discord_music_player_1.Utils.buildBar(discord_music_player_1.Utils.TimeToMilliseconds(lastSong.duration), discord_music_player_1.Utils.TimeToMilliseconds(lastSong.duration), 20, "━", "🔘"), lastSong.requestedBy, "Ø", "**0:00**"))
+                    .setDescription(translations.data.song_display_description(lastSong.name.toString(), lastSong.url.toString(), MusicUtil_1.default.buildBar(MusicUtil_1.default.timeToMilliseconds(lastSong.duration), MusicUtil_1.default.timeToMilliseconds(lastSong.duration), 20, "━", "🔘"), lastSong.requestedBy, "Ø", "**0:00**"))
                     .setFooter(translations.data.song_display_footer_end(language))
             ]
         }).catch(console.error);
@@ -915,7 +898,7 @@ player
     .on("songAdd", function (message, queue, song) {
     var language = Util_1.default.languages.get(message.guild.id);
     var translations = new Translations_1.default(__filename, language);
-    message.channel.send(translations.data.music_player_add_song((0, getQueueDuration_1.default)(queue) ? discord_music_player_1.Utils.MillisecondsToTime(discord_music_player_1.Utils.TimeToMilliseconds((0, getQueueDuration_1.default)(queue)) - discord_music_player_1.Utils.TimeToMilliseconds(song.duration)) : 0, song.name.toString())).catch(console.error);
+    message.channel.send(translations.data.music_player_add_song(((0, getQueueDuration_1.default)(queue) ? MusicUtil_1.default.millisecondsToTime(MusicUtil_1.default.timeToMilliseconds((0, getQueueDuration_1.default)(queue)) - MusicUtil_1.default.timeToMilliseconds(song.duration)) : 0).toString(), song.name)).catch(console.error);
 })
     .on("songChanged", function (message, newSong, OldSong) {
     var language = Util_1.default.languages.get(message.guild.id);
@@ -925,7 +908,7 @@ player
         songDisplay.edit({
             embeds: [
                 songDisplay.embeds[0]
-                    .setDescription(translations.data.song_display_description(newSong.name.toString(), newSong.url.toString(), discord_music_player_1.Utils.buildBar(0, discord_music_player_1.Utils.TimeToMilliseconds(newSong.duration), 20, "━", "🔘"), newSong.requestedBy, newSong.queue.repeatMode
+                    .setDescription(translations.data.song_display_description(newSong.name.toString(), newSong.url.toString(), MusicUtil_1.default.buildBar(0, MusicUtil_1.default.timeToMilliseconds(newSong.duration), 20, "━", "🔘"), newSong.requestedBy, newSong.queue.repeatMode
                     ? newSong.name.toString()
                     : (newSong.queue.songs[1]
                         ? newSong.queue.songs[1].name.toString()

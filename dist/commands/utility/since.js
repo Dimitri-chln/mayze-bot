@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -51,76 +50,59 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var Util_1 = __importDefault(require("../../Util"));
+var _this = this;
+var Message = require("discord.js").Message;
 var command = {
-    name: "balance",
+    name: "since",
     description: {
-        fr: "Vérifier l'argent que tu possèdes",
-        en: "Check how much money you have"
+        fr: "Obtenir le temps écoulé depuis une date",
+        en: "See how much time passed since a date"
     },
-    userPermissions: [],
-    botPermissions: ["EMBED_LINKS"],
-    options: {
-        fr: [
-            {
-                name: "user",
-                description: "Un utilisateur dont tu veux voir l'argent",
-                type: "USER",
-                required: false
-            }
-        ],
-        en: [
-            {
-                name: "user",
-                description: "A user whose balance you want to see",
-                type: "USER",
-                required: false
-            }
-        ]
-    },
-    run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var DAY_IN_MS, NOW, user, _a, userCurrency, _b, money, last_daily, nextDaily;
-        var _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
-                case 0:
-                    DAY_IN_MS = 1000 * 60 * 60 * 24;
-                    NOW = Date.now();
-                    user = (_c = interaction.options.getUser("user")) !== null && _c !== void 0 ? _c : interaction.user;
-                    return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM currency WHERE user_id = $1", [user.id])];
-                case 1:
-                    _a = __read.apply(void 0, [(_d.sent()).rows, 1]), userCurrency = _a[0];
-                    _b = userCurrency !== null && userCurrency !== void 0 ? userCurrency : {
-                        money: 0,
-                        last_daily: null
-                    }, money = _b.money, last_daily = _b.last_daily;
-                    nextDaily = last_daily
-                        ? Date.parse(last_daily) + DAY_IN_MS
-                        : NOW;
-                    interaction.reply({
-                        embeds: [
-                            {
-                                author: {
-                                    name: translations.data.title(user.tag),
-                                    iconURL: user.displayAvatarURL({ dynamic: true })
-                                },
-                                color: interaction.guild.me.displayColor,
-                                description: translations.data.description(money, nextDaily > NOW
-                                    ? Math.round(nextDaily / 1000).toString()
-                                    : null),
-                                footer: {
-                                    text: "✨ Mayze ✨"
-                                }
-                            }
-                        ]
-                    });
-                    return [2 /*return*/];
-            }
+    aliases: [],
+    args: 1,
+    usage: "<date>",
+    category: "utility",
+    newbiesAllowed: true,
+    options: [
+        {
+            name: "date",
+            description: "A date which is already passed",
+            type: 3,
+            required: true
+        }
+    ],
+    /**
+    * @param {Message} message
+    * @param {string[]} args
+    * @param {Object[]} options
+    */
+    run: function (message, args, options, language, languageCode) { return __awaiter(_this, void 0, void 0, function () {
+        var timeToString, now, date, timePassed, timePassedString, _a, month, day, year, dateTime, monthList, dateString;
+        return __generator(this, function (_b) {
+            timeToString = require("../utils/timeToString");
+            now = Date.now();
+            date = args
+                ? Date.parse(args.join(" "))
+                : Date.parse(options[0].value);
+            if (isNaN(date))
+                return [2 /*return*/, message.reply(language.invalid_date).catch(console.error)];
+            timePassed = (now - date) / 1000;
+            if (timePassed < 0)
+                return [2 /*return*/, message.reply(language.already_passed).catch(console.error)];
+            timePassedString = timeToString(timePassed, languageCode);
+            _a = __read(args
+                ? args[0].split(/\/|-/)
+                : options[0].value.split(" ")[0].split(/\/|-/), 3), month = _a[0], day = _a[1], year = _a[2];
+            if (!day || !month || !year)
+                return [2 /*return*/, message.reply(language.invalid_date).catch(console.error)];
+            dateTime = args
+                ? args[1]
+                : options[0].value.split(" ")[1];
+            monthList = language.months;
+            dateString = language.get(language.date_string, monthList[month - 1], day, year, dateTime || language.midnight, day.endsWith("1"), day.endsWith("2"), day.endsWith("3"), !day.endsWith("1") && !day.endsWith("2") && !day.endsWith("3"));
+            message.channel.send(language.get(language.response, timePassedString, dateString)).catch(console.error);
+            return [2 /*return*/];
         });
     }); }
 };
-exports.default = command;
+module.exports = command;

@@ -36,70 +36,42 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var cron_1 = require("cron");
 var command = {
-    name: "cron",
+    name: "say",
     description: {
-        fr: "Planifier une tâche cron",
-        en: "Start a cron task"
+        fr: "Faire dire n'importe quoi au bot",
+        en: "Make the bot say anything"
     },
     userPermissions: [],
-    botPermissions: ["ADMINISTRATOR"],
+    botPermissions: [],
     options: {
         fr: [
             {
-                name: "date",
-                description: "La paramètre cronTime de la tâche",
-                type: "STRING",
-                required: true
-            },
-            {
-                name: "task",
-                description: "La tâche à exécuter",
+                name: "text",
+                description: "Le texte que le bot doit envoyer",
                 type: "STRING",
                 required: true
             }
         ],
         en: [
             {
-                name: "date",
-                description: "The task's cronTime parameter",
-                type: "STRING",
-                required: true
-            },
-            {
-                name: "task",
-                description: "The task to execute",
+                name: "text",
+                description: "The text that the bot will send",
                 type: "STRING",
                 required: true
             }
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var date, taskString, task, job;
+        var text;
         return __generator(this, function (_a) {
-            date = new Date(interaction.options.getString("date"));
-            if (!date)
-                return [2 /*return*/, interaction.reply({
-                        content: translations.data.invalid_date(),
-                        ephemeral: true
-                    })];
-            taskString = interaction.options.getString("task");
-            task = eval("async () => { " + taskString + " }");
-            job = new cron_1.CronJob(date, task);
-            try {
-                job.start();
-            }
-            catch (err) {
-                console.error(err);
-                return [2 /*return*/, interaction.reply({
-                        content: translations.data.date_passed(),
-                        ephemeral: true
-                    })];
-            }
+            text = interaction.options.getString("text");
             interaction.reply({
-                content: translations.data.saved(),
+                content: "<a:blackCheck:803603780666523699>",
                 ephemeral: true
+            });
+            interaction.channel.send({
+                content: text
             });
             return [2 /*return*/];
         });

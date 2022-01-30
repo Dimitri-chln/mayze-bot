@@ -54,6 +54,7 @@ var discord_js_1 = require("discord.js");
 var jimp_1 = __importDefault(require("jimp"));
 var Util_1 = __importDefault(require("../../Util"));
 var Color_1 = __importDefault(require("./Color"));
+var Grid_1 = __importDefault(require("./Grid"));
 var ownerTypes = {
     0: "EVERYONE",
     1: "GUILD",
@@ -230,7 +231,7 @@ var Canvas = /** @class */ (function () {
                         for (yShift = -3; yShift <= 3; yShift++) {
                             _loop_1(yShift);
                         }
-                        return [2 /*return*/, grid];
+                        return [2 /*return*/, new Grid_1.default(this, x, y, grid)];
                 }
             });
         });

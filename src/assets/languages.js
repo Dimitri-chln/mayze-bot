@@ -79,62 +79,6 @@ module.exports = {
 				en: "Mudae isn't on this server"
 			}
 		},
-		"since": {
-			invalid_date: {
-				fr: "le format de la date est incorrect (mm-dd-yyyy [hh:mm:ss])",
-				en: "the date format is invalid (mm-dd-yy [hh:mm:ss])"
-			},
-			already_passed: {
-				fr: "la date doit déjà être dépassée",
-				en: "the date must be already passed"
-			},
-			months: {
-				fr: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
-				en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-			},
-			midnight: {
-				fr: "minuit",
-				en: "midnight"
-			},
-			date_string: {
-				fr: "{2} {1} {3} à {4}",
-				en: "{1}, {2}[5?st:][6?nd:][7?rd:][8?th:] {3} at {4}"
-			},
-			response: {
-				fr: "Il s'est écoulé {1} depuis le {2}",
-				en: "{1} have passed since {2}"
-			}
-		},
-		"slots": {
-			title: {
-				fr: "Partie de casino",
-				en: "Slots game"
-			},
-			kick: {
-				fr: "Tu as été kick pour avoir perdu au casino",
-				en: "You have been kicked for losing a slots game"
-			},
-			kick_reason: {
-				fr: "a perdu au casino",
-				en: "lost a slots game"
-			},
-			jail_in_jail: {
-				fr: "dommage <:sepince:750285894853984308>",
-				en: "nope <:sepince:750285894853984308>"
-			},
-			massping: {
-				fr: "mentionne une personne à spam ping",
-				en: "mention a user to spam ping"
-			},
-			mute: {
-				fr: "mentionne une personne à mute",
-				en: "mention a user to mute"
-			},
-			too_late: {
-				fr: "Le temps est écoulé 💤",
-				en: "Time is up 💤"
-			}
-		},
 		"snipe": {
 			no_snipe: {
 				fr: "il n'y a aucun message à snipe dans ce salon",
@@ -331,32 +275,6 @@ module.exports = {
 			no_correct_answer: {
 				fr: "__**Aucune bonne réponse**__\n{1}",
 				en: "__**No correct answer**__\n{1}"
-			}
-		},
-		"until": {
-			invalid_date: {
-				fr: "le format de la date est incorrect (mm-dd-yyyy [hh:mm:ss])",
-				en: "the date format is invalid (mm-dd-yy [hh:mm:ss])"
-			},
-			not_passed: {
-				fr: "la date ne doit pas être dépassée",
-				en: "the date must not be passed"
-			},
-			months: {
-				fr: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
-				en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-			},
-			midnight: {
-				fr: "minuit",
-				en: "midnight"
-			},
-			date_string: {
-				fr: "{2} {1} {3} à {4}",
-				en: "{1}, {2}[5?st:][6?nd:][7?rd:][8?th:] {3} at {4}"
-			},
-			response: {
-				fr: "Il reste {1} avant le {2}",
-				en: "{1} remaining until {2}"
 			}
 		},
 		"uptime": {

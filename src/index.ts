@@ -164,7 +164,7 @@ client.on("ready", async () => {
 					iconURL: client.user.displayAvatarURL()
 				},
 				color: 65793,
-				description: `• **Version:** \`${Util.version}\`\n• **Ping:** \`${client.ws.ping}\``,
+				description: `• **Ping:** \`${client.ws.ping}\``,
 				footer: {
 					text: "✨ Mayze ✨"
 				},

@@ -35,91 +35,51 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Util_1 = __importDefault(require("../../Util"));
+var formatTime_1 = __importDefault(require("../../utils/misc/formatTime"));
 var command = {
-    name: "balance",
+    name: "lapse-of-time",
     description: {
-        fr: "Vérifier l'argent que tu possèdes",
-        en: "Check how much money you have"
+        fr: "Obtenir le temps entre aujourd'hui et une autre date",
+        en: "See how much time there is between now and another date"
     },
     userPermissions: [],
-    botPermissions: ["EMBED_LINKS"],
+    botPermissions: [],
     options: {
         fr: [
             {
-                name: "user",
-                description: "Un utilisateur dont tu veux voir l'argent",
-                type: "USER",
-                required: false
+                name: "date",
+                description: "La date",
+                type: "STRING",
+                required: true
             }
         ],
         en: [
             {
-                name: "user",
-                description: "A user whose balance you want to see",
-                type: "USER",
-                required: false
+                name: "date",
+                description: "La date",
+                type: "STRING",
+                required: true
             }
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var DAY_IN_MS, NOW, user, _a, userCurrency, _b, money, last_daily, nextDaily;
-        var _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
-                case 0:
-                    DAY_IN_MS = 1000 * 60 * 60 * 24;
-                    NOW = Date.now();
-                    user = (_c = interaction.options.getUser("user")) !== null && _c !== void 0 ? _c : interaction.user;
-                    return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM currency WHERE user_id = $1", [user.id])];
-                case 1:
-                    _a = __read.apply(void 0, [(_d.sent()).rows, 1]), userCurrency = _a[0];
-                    _b = userCurrency !== null && userCurrency !== void 0 ? userCurrency : {
-                        money: 0,
-                        last_daily: null
-                    }, money = _b.money, last_daily = _b.last_daily;
-                    nextDaily = last_daily
-                        ? Date.parse(last_daily) + DAY_IN_MS
-                        : NOW;
-                    interaction.reply({
-                        embeds: [
-                            {
-                                author: {
-                                    name: translations.data.title(user.tag),
-                                    iconURL: user.displayAvatarURL({ dynamic: true })
-                                },
-                                color: interaction.guild.me.displayColor,
-                                description: translations.data.description(money, nextDaily > NOW
-                                    ? Math.round(nextDaily / 1000).toString()
-                                    : null),
-                                footer: {
-                                    text: "✨ Mayze ✨"
-                                }
-                            }
-                        ]
-                    });
-                    return [2 /*return*/];
-            }
+        var NOW, date, lapseOfTime, lapseOfTimeString;
+        return __generator(this, function (_a) {
+            NOW = Date.now();
+            date = new Date(interaction.options.getString("date"));
+            if (!date)
+                return [2 /*return*/, interaction.reply({
+                        content: translations.data.invalid_date(),
+                        ephemeral: true
+                    })];
+            lapseOfTime = NOW - date.valueOf();
+            lapseOfTimeString = (0, formatTime_1.default)(Math.abs(lapseOfTime), translations.language);
+            interaction.reply(translations.data.response(lapseOfTimeString, lapseOfTime > 0));
+            return [2 /*return*/];
         });
     }); }
 };

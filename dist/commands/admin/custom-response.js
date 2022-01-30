@@ -185,7 +185,7 @@ var command = {
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var subCommand, responses, _a, trigger, response, triggerType, res, n, response, res;
+        var subCommand, responses, _a, trigger, response, triggerType, number, response;
         var _b;
         return __generator(this, function (_c) {
             switch (_c.label) {
@@ -193,7 +193,7 @@ var command = {
                     subCommand = interaction.options.getSubcommand();
                     return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM responses")];
                 case 1:
-                    responses = (_c.sent())["rows"];
+                    responses = (_c.sent()).rows;
                     _a = subCommand;
                     switch (_a) {
                         case "add": return [3 /*break*/, 2];
@@ -204,53 +204,54 @@ var command = {
                 case 2:
                     trigger = interaction.options.getString("trigger");
                     response = interaction.options.getString("response");
-                    triggerType = TriggerType[(_b = interaction.options.getNumber("type")) !== null && _b !== void 0 ? _b : 0];
-                    return [4 /*yield*/, message.client.database.query("INSERT INTO responses (trigger, response, trigger_type) VALUES ('" + trigger.replace(/"/g, "") + "', '" + response.replace(/"/g, "") + "', " + triggerType + ")").catch(console.error)];
+                    triggerType = (_b = interaction.options.getNumber("type")) !== null && _b !== void 0 ? _b : 0;
+                    return [4 /*yield*/, Util_1.default.database.query("INSERT INTO responses (trigger, response, trigger_type) VALUES ($1, $2, $3)", [trigger, response, triggerType])];
                 case 3:
-                    res = _c.sent();
-                    if (!res)
-                        return [2 /*return*/, message.channel.send(language.errors.database).catch(console.error)];
-                    if (!message.isInteraction)
-                        message.react("✅").catch(console.error);
-                    else
-                        message.reply(language.response_added).catch(console.error);
-                    return [3 /*break*/, 8];
+                    _c.sent();
+                    interaction.reply({
+                        content: translations.data.response_added(),
+                        ephemeral: true
+                    });
+                    return [3 /*break*/, 7];
                 case 4:
-                    n = args
-                        ? parseInt(args[1])
-                        : options[0].options[0].value;
-                    if (!n || n < 1 || n > responses.length)
-                        return [2 /*return*/, message.reply(language.get(language.invalid_number, responses.length)).catch(console.error)];
-                    response = responses[n - 1];
-                    return [4 /*yield*/, message.client.database.query("DELETE FROM responses WHERE trigger='" + response.trigger + "' AND response='" + response.response + "'").catch(console.error)];
+                    number = interaction.options.getNumber("response");
+                    if (number < 1 || number > responses.length)
+                        return [2 /*return*/, interaction.reply({
+                                content: translations.data.invalid_number(responses.length.toString()),
+                                ephemeral: true
+                            })];
+                    response = responses[number - 1];
+                    return [4 /*yield*/, Util_1.default.database.query("DELETE FROM responses WHERE id = $1", [response.id])];
                 case 5:
-                    res = _c.sent();
-                    if (!res)
-                        return [2 /*return*/, message.channel.send(language.errors.database).catch(console.error)];
-                    if (!message.isInteraction)
-                        message.react("✅").catch(console.error);
-                    else
-                        message.reply(language.response_removed).catch(console.error);
-                    return [3 /*break*/, 8];
+                    _c.sent();
+                    interaction.reply({
+                        content: translations.data.response_removed(),
+                        ephemeral: true
+                    });
+                    return [3 /*break*/, 7];
                 case 6:
-                    message.channel.send({
-                        embed: {
-                            author: {
-                                name: language.embed_title,
-                                iconURL: message.client.user.displayAvatarURL()
-                            },
-                            color: message.guild.me.displayColor,
-                            description: responses.map(function (response, i) { return "`" + (i + 1) + ".` " + language.trigger_types[response.trigger_type] + " `" + response.trigger + "`\n\t\u2192 `" + response.response + "`"; }).join("\n"),
-                            footer: {
-                                text: "✨ Mayze ✨"
-                            }
-                        }
-                    }).catch(console.error);
-                    return [3 /*break*/, 8];
-                case 7:
-                    message.reply(language.errors.invalid_args).catch(console.error);
-                    _c.label = 8;
-                case 8: return [2 /*return*/];
+                    {
+                        interaction.reply({
+                            embeds: [
+                                {
+                                    author: {
+                                        name: translations.data.title(),
+                                        iconURL: interaction.client.user.displayAvatarURL()
+                                    },
+                                    color: interaction.guild.me.displayColor,
+                                    description: responses.map(function (response, i) {
+                                        return "`" + (i + 1) + ".` " + translations.data.trigger_types()[response.trigger_type] + " `" + response.trigger + "`\n\t\u2192 `" + response.response + "`";
+                                    }).join("\n"),
+                                    footer: {
+                                        text: "✨ Mayze ✨"
+                                    }
+                                }
+                            ]
+                        });
+                        return [3 /*break*/, 7];
+                    }
+                    _c.label = 7;
+                case 7: return [2 /*return*/];
             }
         });
     }); }
@@ -264,5 +265,4 @@ var TriggerType;
     TriggerType[TriggerType["ENDS_WITH"] = 4] = "ENDS_WITH";
 })(TriggerType || (TriggerType = {}));
 ;
-console.log(TriggerType[1]);
 exports.default = command;

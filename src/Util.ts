@@ -1,6 +1,6 @@
 import { Client, Collection, GuildMember, Message, MessageReaction, Snowflake, User } from "discord.js";
 import Pg from "pg";
-import { google as Google, Auth } from "googleapis";
+import { google as Google } from "googleapis";
 import { CronJob } from "cron";
 import MusicPlayer from "./utils/music/MusicPlayer";
 import SpotifyWebApi from "spotify-web-api-node";
@@ -16,19 +16,17 @@ import Pokedex from "./types/pokemon/Pokedex";
 import parseArgs from "./utils/misc/parseArgs";
 import findMember from "./utils/misc/findMember";
 import config from "./config.json";
-import { version } from "../package.json";
 
 
 
 export default class Util {
 	static readonly config = config;
-	static readonly version = version;
 	static client: Client;
 	static database: Pg.Client;
 	static readonly googleAuth = new Google.auth.JWT(
 		process.env.GOOGLE_CLIENT_EMAIL,
 		null,
-		process.env.GOOGLE_PRIVATE_KEY,
+		process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
 		[ "https://www.googleapis.com/auth/spreadsheets.readonly" ]
 	);
 	static languages: Collection<Snowflake, Language> = new Collection();

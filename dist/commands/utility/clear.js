@@ -51,7 +51,9 @@ var command = {
                 name: "number",
                 description: "Le nombre de messages à supprimer",
                 type: "INTEGER",
-                required: true
+                required: true,
+                minValue: 1,
+                maxValue: 100
             },
             {
                 name: "user",
@@ -77,7 +79,9 @@ var command = {
                 name: "number",
                 description: "The number of messages to delete",
                 type: "INTEGER",
-                required: true
+                required: true,
+                minValue: 1,
+                maxValue: 100
             },
             {
                 name: "user",
@@ -138,4 +142,4 @@ var command = {
         });
     }); }
 };
-module.exports = command;
+exports.default = command;

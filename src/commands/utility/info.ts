@@ -31,7 +31,6 @@ const command: Command = {
 					color: interaction.guild.me.displayColor,
 					description: translations.data.description(
 						Util.owner.tag,
-						Util.version,
 						Math.round(interaction.client.uptime / 1000).toString()
 					),
 					footer: {

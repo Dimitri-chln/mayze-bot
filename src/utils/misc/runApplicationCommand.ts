@@ -54,12 +54,12 @@ export default async function runApplicationCommand(command: Command, interactio
 	let cooldownReduction = 0;
 		
 	if (command.name === "catch") {
-		const { rows } = await Util.database.query(
+		const { rows: [ userUpgrades ] } = await Util.database.query(
 				"SELECT catch_cooldown_reduction FROM upgrades WHERE user_id = $1",
 				[ interaction.user.id ]
 		);
 
-		if (rows.length) cooldownReduction += 30 * rows[0].catch_cooldown_reduction;
+		if (userUpgrades) cooldownReduction += 30 * userUpgrades.catch_cooldown_reduction;
 	}
 
 	const cooldownAmount = ((command.cooldown ?? 2) - cooldownReduction) * 1000;
@@ -87,7 +87,7 @@ export default async function runApplicationCommand(command: Command, interactio
 		.catch(err => {
 			console.error(err);
 			if (interaction.replied)
-				interaction.channel.send(translations.data.error()).catch(console.error);
+				interaction.followUp(translations.data.error()).catch(console.error);
 			else
 				interaction.reply(translations.data.error()).catch(console.error);
 		});

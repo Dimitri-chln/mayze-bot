@@ -4,15 +4,15 @@ import Song, { SongData } from "./Song";
 import Queue from "./Queue";
 
 // External Packages
-import Discord, { User } from "discord.js";
+import { User } from "discord.js";
 import ystr from "ytsr";
-import YouTubeClient from "@sushibtw/youtubei";
+import { Client as YouTubeClient, Video } from "@sushibtw/youtubei";
 import Spotify from "spotify-url-info";
 import Deezer from "deezer-public-api";
 
 
 
-const youtube = new YouTubeClient.Client();
+const youtube = new YouTubeClient();
 const deezer = new Deezer();
 
 // RegExp Definitions
@@ -169,7 +169,7 @@ export default class MusicUtil {
 			if (!videoId) throw "InvalidYoutube";
 
 			youtube.options.localAddress = localAddress;
-			const videoResult = await youtube.getVideo(videoId) as YouTubeClient.Video;
+			const videoResult = await youtube.getVideo(videoId) as Video;
 			if (videoResult.isLiveContent) throw "InvalidYoutube";
 
 			const songData: SongData = {
