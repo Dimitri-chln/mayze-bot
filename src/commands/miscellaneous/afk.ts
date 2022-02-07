@@ -33,7 +33,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const message = interaction.options.getString("message")
 			?.replace(/^./, a => a.toUpperCase())
 			?? "";

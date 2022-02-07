@@ -35,7 +35,7 @@ const command: Command = {
 		]
 	},
 
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const color = hexToRGB(interaction.options.getString("color"));
 
 		const reply = await interaction.reply({

@@ -47,7 +47,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const date = new Date(
 			interaction.options.getString("date")
 		);

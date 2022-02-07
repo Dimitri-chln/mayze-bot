@@ -75,7 +75,7 @@ const command: Command = {
 		]
 	},
 
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const number = interaction.options.getInteger("number");
 
 		if (isNaN(number) || number <= 0 || number > 100)

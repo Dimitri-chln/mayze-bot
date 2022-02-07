@@ -52,7 +52,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		if (
 			!(interaction.member as GuildMember).roles.cache.has("696751852267765872") &&	// Chef
 			!(interaction.member as GuildMember).roles.cache.has("696751614177837056")	// Sous-chef

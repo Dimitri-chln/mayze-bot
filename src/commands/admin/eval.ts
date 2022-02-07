@@ -33,7 +33,7 @@ const command: Command = {
 		]
 	},
 
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const expression = interaction.options.getString("expression");
 		
 		try {

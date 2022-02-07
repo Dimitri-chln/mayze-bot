@@ -67,7 +67,7 @@ const command: Command = {
 		]
 	},
 
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const apiURL = "https://api.dictionaryapi.dev/api/v2/entries";
 
 		const word = interaction.options.getString("word").toLowerCase();

@@ -35,7 +35,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const barSize = 20, xpBar = {
 			full: "█",
 			empty: "▁"

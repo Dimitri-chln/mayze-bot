@@ -53,7 +53,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const newLanguage = interaction.options.getString("language") as "fr" | "en";
 
 		await Util.database.query(

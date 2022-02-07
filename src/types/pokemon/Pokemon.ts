@@ -181,16 +181,3 @@ export interface PokemonVariation {
 	types: PokemonType[];
 	abilities: PokemonAbility[];
 }
-
-export interface DatabasePokemon {
-	pokedex_id: number;
-	shiny: boolean;
-	variation: VariationType;
-	users: {
-		[K: Snowflake]: {
-			caught: number;
-			favorite: boolean;
-			nickname?: string;
-		}
-	}
-}

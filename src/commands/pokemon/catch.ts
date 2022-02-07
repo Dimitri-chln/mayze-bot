@@ -27,7 +27,7 @@ const command: Command = {
 		en: []
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const SHINY_FREQUENCY = 0.004, ALOLAN_FREQUENCY = 0.05, MEGA_GEM_FREQUENCY = 0.02;
 
 		const UPGRADES_BENEFITS = {
@@ -231,7 +231,7 @@ const command: Command = {
 						? 0xF3D508
 						: randomPokemon.legendary || randomPokemon.ultraBeast 
 							? 0xCE2F20
-							: 0x010101,
+							: Util.config.MAIN_COLOR,
 					description: translations.data.caught_title_en(
 						interaction.user.toString(),
 						!shiny && (variation === "alola" || /^[aeiou]/i.test(randomPokemon.names.en)),

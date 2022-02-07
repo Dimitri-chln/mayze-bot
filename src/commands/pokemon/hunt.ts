@@ -37,7 +37,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const input = interaction.options.getString("pokemon");
 		
 		if (!input) {

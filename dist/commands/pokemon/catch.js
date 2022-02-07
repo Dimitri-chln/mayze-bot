@@ -203,7 +203,7 @@ var command = {
                                     ? 0xF3D508
                                     : randomPokemon.legendary || randomPokemon.ultraBeast
                                         ? 0xCE2F20
-                                        : 0x010101,
+                                        : Util_1.default.config.MAIN_COLOR,
                                 description: translations.data.caught_title_en(interaction.user.toString(), !shiny && (variation === "alola" || /^[aeiou]/i.test(randomPokemon.names.en)), randomPokemon.formatName(shiny, variation, "en")),
                                 footer: {
                                     text: "✨ Mayze ✨",

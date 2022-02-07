@@ -24,7 +24,7 @@ const command: Command = {
 		en: []
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const serverIPs = process.env.MINECRAFT_SERVER_IPS.split(",");
 
 		const pages: Page[] = [];

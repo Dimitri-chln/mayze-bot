@@ -19,7 +19,7 @@ const command: Command = {
 		en: []
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const DAY_IN_MS = 1000 * 60 * 60 * 24;
 		const NOW = new Date();
 		const MIDNIGHT = new Date();

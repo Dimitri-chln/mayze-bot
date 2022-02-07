@@ -36,7 +36,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		if (interaction.channel.id !== SECRET_CHANNEL_ID) return;
 		
 		const table = interaction.options.getString("table");

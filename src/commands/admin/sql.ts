@@ -35,7 +35,7 @@ const command: Command = {
 		]
 	},
 
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const CHARACTERS_PER_PAGE = 2000;
 
 		const query = interaction.options.getString("query");

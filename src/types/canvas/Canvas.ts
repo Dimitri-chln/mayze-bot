@@ -170,17 +170,17 @@ export default class Canvas {
 	 * Display an image of the Canvas.
 	 */
 	async view(x: number, y: number, zoom: number | "default") {
-		if (zoom && zoom !== "default" && (zoom < 1 || zoom > this.size / 2)) throw new Error("InvalidZoom");
-		if (zoom === "default") zoom = Math.round(this.size / 10);
+		if (zoom && zoom !== "default" && (zoom < 1 || zoom > this.size)) throw new Error("InvalidZoom");
+		if (zoom === "default") zoom = this.size;
 		if (x < 0 || x >= this.size || y < 0 || y >= this.size) throw new Error("InvalidCoordinates");
 
 		let data = await this.data;
 		let newData = [];
 		
-		for (let yShift = -zoom; yShift <= zoom; yShift ++) {
+		for (let yShift = y; yShift <= zoom; yShift ++) {
 			let row = [];
 			
-			for (let xShift = -zoom; xShift <= zoom; xShift ++)
+			for (let xShift = x; xShift <= zoom; xShift ++)
 				row.push(data[y + yShift]
 					? data[y + yShift][x + xShift]
 					: null
@@ -193,7 +193,7 @@ export default class Canvas {
 
 		const pixelSize = Math.ceil(500 / data.length);
 		const size = data.length * pixelSize;
-		const borderSize = size / 17;
+		const borderSize = size / 16;
 		const fullSize = size + 2 * borderSize;
 
 		let image = new Jimp(fullSize, fullSize);

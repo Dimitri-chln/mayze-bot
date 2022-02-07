@@ -36,7 +36,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const user = interaction.options.getUser("user");
 		
 		interaction.reply(

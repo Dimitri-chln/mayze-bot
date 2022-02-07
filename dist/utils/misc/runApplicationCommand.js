@@ -35,6 +35,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -45,14 +61,14 @@ var Translations_1 = __importDefault(require("../../types/structures/Translation
 function runApplicationCommand(command, interaction) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var language, translations, commandTranslations, NOW, channelCooldown, userPermissions, missingUserPermissions, missingBotPermissions, cooldownReduction, rows, cooldownAmount, expirationTime, timeLeft, timeLeftHumanized;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var language, translations, commandTranslations, NOW, channelCooldown, userPermissions, missingUserPermissions, missingBotPermissions, cooldownReduction, _c, userUpgrades, cooldownAmount, expirationTime, timeLeft, timeLeftHumanized;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
                 case 0:
                     language = Util_1.default.languages.get(interaction.guild.id);
                     return [4 /*yield*/, new Translations_1.default("run", language).init()];
                 case 1:
-                    translations = _c.sent();
+                    translations = _d.sent();
                     commandTranslations = new Translations_1.default("cmd_" + command.name, language);
                     NOW = Date.now();
                     channelCooldown = (_a = Util_1.default.channelCooldowns.get(interaction.channel.id)) !== null && _a !== void 0 ? _a : {
@@ -90,10 +106,10 @@ function runApplicationCommand(command, interaction) {
                     if (!(command.name === "catch")) return [3 /*break*/, 3];
                     return [4 /*yield*/, Util_1.default.database.query("SELECT catch_cooldown_reduction FROM upgrades WHERE user_id = $1", [interaction.user.id])];
                 case 2:
-                    rows = (_c.sent()).rows;
-                    if (rows.length)
-                        cooldownReduction += 30 * rows[0].catch_cooldown_reduction;
-                    _c.label = 3;
+                    _c = __read.apply(void 0, [(_d.sent()).rows, 1]), userUpgrades = _c[0];
+                    if (userUpgrades)
+                        cooldownReduction += 30 * userUpgrades.catch_cooldown_reduction;
+                    _d.label = 3;
                 case 3:
                     cooldownAmount = (((_b = command.cooldown) !== null && _b !== void 0 ? _b : 2) - cooldownReduction) * 1000;
                     if (command.cooldowns.has(interaction.user.id)) {
@@ -116,7 +132,7 @@ function runApplicationCommand(command, interaction) {
                         .catch(function (err) {
                         console.error(err);
                         if (interaction.replied)
-                            interaction.channel.send(translations.data.error()).catch(console.error);
+                            interaction.followUp(translations.data.error()).catch(console.error);
                         else
                             interaction.reply(translations.data.error()).catch(console.error);
                     });

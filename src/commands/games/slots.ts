@@ -23,7 +23,7 @@ const command: Command = {
 		en: []
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const SPINNING = "<a:slots:845009613664288769>";
 		const SLOTS = ["🥊", "⛓️", "🔇", "🏓", "🔒"];
 		

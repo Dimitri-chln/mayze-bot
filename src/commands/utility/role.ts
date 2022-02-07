@@ -35,7 +35,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const role = interaction.options.getRole("role") as Role;
 		
 		const roleMembers = role.members.map(m => m.user.tag);

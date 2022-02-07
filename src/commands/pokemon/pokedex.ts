@@ -151,7 +151,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const { getPokemonVariation, getCleanName } = require("../utils/pokemonInfo");
 		
 		const subCommand = interaction.options.getSubcommand();

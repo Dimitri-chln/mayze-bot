@@ -245,19 +245,19 @@ var Canvas = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (zoom && zoom !== "default" && (zoom < 1 || zoom > this.size / 2))
+                        if (zoom && zoom !== "default" && (zoom < 1 || zoom > this.size))
                             throw new Error("InvalidZoom");
                         if (zoom === "default")
-                            zoom = Math.round(this.size / 10);
+                            zoom = this.size;
                         if (x < 0 || x >= this.size || y < 0 || y >= this.size)
                             throw new Error("InvalidCoordinates");
                         return [4 /*yield*/, this.data];
                     case 1:
                         data = _a.sent();
                         newData = [];
-                        for (yShift = -zoom; yShift <= zoom; yShift++) {
+                        for (yShift = y; yShift <= zoom; yShift++) {
                             row = [];
-                            for (xShift = -zoom; xShift <= zoom; xShift++)
+                            for (xShift = x; xShift <= zoom; xShift++)
                                 row.push(data[y + yShift]
                                     ? data[y + yShift][x + xShift]
                                     : null);
@@ -266,7 +266,7 @@ var Canvas = /** @class */ (function () {
                         data = newData;
                         pixelSize = Math.ceil(500 / data.length);
                         size = data.length * pixelSize;
-                        borderSize = size / 17;
+                        borderSize = size / 16;
                         fullSize = size + 2 * borderSize;
                         image = new jimp_1.default(fullSize, fullSize);
                         borderColor = jimp_1.default.rgbaToInt(114, 137, 218, 255);

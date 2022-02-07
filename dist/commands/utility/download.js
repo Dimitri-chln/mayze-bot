@@ -236,7 +236,7 @@ var command = {
                         embeds: [embed]
                     });
                     buffer = fs_1.default.readFileSync(result_1.path);
-                    return [4 /*yield*/, interaction.channel.send({
+                    return [4 /*yield*/, interaction.followUp({
                             files: [new discord_js_1.MessageAttachment(buffer, result_1.filename)]
                         })
                             .catch(function (err) {
@@ -315,7 +315,10 @@ var command = {
                     fs_1.default.rmSync(zipDir, { recursive: true });
                     return [3 /*break*/, 17];
                 case 16:
-                    interaction.channel.send(translations.data.invalid_url());
+                    interaction.followUp({
+                        content: translations.data.invalid_url(),
+                        ephemeral: true
+                    });
                     _h.label = 17;
                 case 17: return [2 /*return*/];
             }

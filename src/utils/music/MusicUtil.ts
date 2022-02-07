@@ -5,7 +5,7 @@ import Queue from "./Queue";
 
 // External Packages
 import { User } from "discord.js";
-import ystr from "ytsr";
+import ytsr from "ytsr";
 import { Client as YouTubeClient, Video } from "@sushibtw/youtubei";
 import Spotify from "spotify-url-info";
 import Deezer from "deezer-public-api";
@@ -64,13 +64,13 @@ export default class MusicUtil {
 	static async search(search: string, queue: Queue, requestedBy: User, limit: number = 1, searchOptions: Partial<PlayOptions> = {}) {
 		searchOptions = Object.assign({}, this.PlayOptions, searchOptions);
 		// Default Options - Type: Video
-		const filtersTypes = await ystr.getFilters(search);
+		const filtersTypes = await ytsr.getFilters(search);
 		let filters = filtersTypes.get("Type").get("Video");
 
 		// Custom Options - Upload date: null
 		if (searchOptions.uploadDate)
 			filters = Array.from(
-				(await ystr.getFilters(filters.url)).get("Upload date"),
+				(await ytsr.getFilters(filters.url)).get("Upload date"),
 				([ name, value ]) => ({ name, url: value.url, description: value.description, active: value.active })
 			)
 				.find(o => o.name.toLowerCase().includes(searchOptions.uploadDate))
@@ -79,7 +79,7 @@ export default class MusicUtil {
 		// Custom Options - Duration: null
 		if (searchOptions.duration)
 			filters = Array.from(
-				(await ystr.getFilters(filters.url)).get("Duration"),
+				(await ytsr.getFilters(filters.url)).get("Duration"),
 				([name, value]) => ({ name, url: value.url, description: value.description, active: value.active })
 			)
 				.find(o => o.name.toLowerCase().startsWith(searchOptions.duration))
@@ -88,14 +88,14 @@ export default class MusicUtil {
 		// Custom Options - Sort by: relevance
 		if (searchOptions.sortBy)
 			filters = Array.from(
-				(await ystr.getFilters(filters.url)).get("Sort By"),
+				(await ytsr.getFilters(filters.url)).get("Sort By"),
 				([name, value]) => ({ name, url: value.url, description: value.description, active: value.active })
 			)
 				.find(o => o.name.toLowerCase().startsWith(searchOptions.sortBy))
 			?? filters;
 
 		try {
-			const result = await ystr(
+			const result = await ytsr(
 				filters.url,
 				{ limit }
 			);

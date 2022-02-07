@@ -139,7 +139,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 		const role = interaction.options.getRole("role");
 		const option: "bot" | "human" | "all" = interaction.options.getString("option") as "bot" | "human" ?? "all";

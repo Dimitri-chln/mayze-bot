@@ -78,7 +78,7 @@ var command = {
                     })];
             lapseOfTime = NOW - date.valueOf();
             lapseOfTimeString = (0, formatTime_1.default)(Math.abs(lapseOfTime), translations.language);
-            interaction.reply(translations.data.response(lapseOfTimeString, lapseOfTime > 0));
+            interaction.reply(translations.data.response(lapseOfTime > 0, lapseOfTimeString, date.getDate().toString(), translations.data.month_list()[date.getMonth() - 1], date.getFullYear().toString(), date.getHours().toString(), date.getMinutes().toString(), date.getSeconds().toString()));
             return [2 /*return*/];
         });
     }); }

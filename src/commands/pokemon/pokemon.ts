@@ -4,7 +4,7 @@ import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Pokedex from "../../types/pokemon/Pokedex";
-import { DatabasePokemon } from "../../types/pokemon/Pokemon";
+import { DatabasePokemon } from "../../types/structures/Database";
 import pagination, { Page } from "../../utils/misc/pagination";
 import PokemonList from "../../types/pokemon/PokemonList";
 import escapeMarkdown from "../../utils/misc/espapeMarkdown";
@@ -289,7 +289,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 		
 		switch (subCommand) {

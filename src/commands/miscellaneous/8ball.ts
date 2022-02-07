@@ -33,7 +33,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const question = interaction.options.getString("question");
 
 		const randomReply = translations.data.answers()[Math.floor(Math.random() * translations.data.answers().length)];

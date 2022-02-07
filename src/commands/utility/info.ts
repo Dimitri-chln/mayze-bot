@@ -19,7 +19,7 @@ const command: Command = {
 		en: []
 	},
 
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		interaction.reply({
 			embeds: [
 				{

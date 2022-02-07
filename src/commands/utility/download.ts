@@ -72,7 +72,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const YouTube = new YouTubeClient.Client();
 
 		const REGEX_LIST = {

@@ -115,7 +115,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const UPGRADES_PRICES = {
 			catch_cooldown_reduction: (tier: number) => 5000 + 2000 * tier,
 			new_pokemon_probability: (tier: number) => 250 + 50 * tier,

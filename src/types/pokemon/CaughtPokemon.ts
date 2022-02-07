@@ -1,7 +1,8 @@
 import { Snowflake } from "discord.js";
 import { VariationType } from "../../utils/pokemon/pokemonInfo";
 import Pokedex from "./Pokedex";
-import Pokemon, { DatabasePokemon } from "./Pokemon";
+import Pokemon from "./Pokemon";
+import { DatabasePokemon } from "../../types/structures/Database";
 
 
 

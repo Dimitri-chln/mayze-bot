@@ -73,7 +73,7 @@ const command: Command = {
 		]
 	},
 
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const announcementChannel = interaction.client.channels.cache.get("817365433509740554") as TextChannel;
 		const logChannel = interaction.client.channels.cache.get("856901268445069322") as TextChannel;
 		

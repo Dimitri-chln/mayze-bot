@@ -126,7 +126,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 		
 		switch (subCommand) {

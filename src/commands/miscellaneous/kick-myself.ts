@@ -22,7 +22,7 @@ const command: Command = {
 		en: []
 	},
 
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		// Server booster
         if ((interaction.member as GuildMember).premiumSinceTimestamp)
 			return interaction.reply({

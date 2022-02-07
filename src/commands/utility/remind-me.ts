@@ -190,7 +190,7 @@ const command: Command = {
 		]
 	},
 	
-	run: async (interaction: CommandInteraction, translations: Translations) => {
+	run: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 		
 		const { rows: reminders } = await Util.database.query(
