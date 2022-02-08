@@ -310,6 +310,10 @@
                     "sp_atk": 130,
                     "sp_def": 85,
                     "speed": 100
+                },
+                "names": {
+                    "en": "Mega Charizard X",
+                    "fr": "Méga Dracaufeu X"
                 }
             },
             {
@@ -331,6 +335,10 @@
                     "sp_atk": 159,
                     "sp_def": 115,
                     "speed": 100
+                },
+                "names": {
+                    "en": "Mega Charizard Y",
+                    "fr": "Méga Dracaufeu Y"
                 }
             }
         ],
@@ -485,6 +493,10 @@
                     "sp_atk": 135,
                     "sp_def": 115,
                     "speed": 78
+                },
+                "names": {
+                    "en": "Mega Blastoise",
+                    "fr": "Méga Tortank"
                 }
             }
         ],
@@ -769,6 +781,10 @@
                     "sp_atk": 15,
                     "sp_def": 80,
                     "speed": 145
+                },
+                "names": {
+                    "en": "Mega Beedrill",
+                    "fr": "Méga Dardargnan"
                 }
             }
         ],
@@ -927,6 +943,10 @@
                     "sp_atk": 135,
                     "sp_def": 80,
                     "speed": 121
+                },
+                "names": {
+                    "en": "Mega Pidgeot",
+                    "fr": "Méga Roucarnage"
                 }
             }
         ],
@@ -986,7 +1006,7 @@
                     "Dark",
                     "Normal"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Gluttony"
                     },
@@ -1053,7 +1073,7 @@
                     "Dark",
                     "Normal"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Gluttony"
                     },
@@ -1289,19 +1309,7 @@
             "Raichu"
         ],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "names": {
-                    "fr": "Pikachu (Pokémon partenaire)",
-                    "de": "Pikachu (Partner-Pokémon)",
-                    "it": "Pikachu (Pokémon compagno)",
-                    "en": "Pikachu (Partner Pokémon)"
-                },
-                "types": [
-                    "Electric"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -1355,7 +1363,7 @@
                     "Electric",
                     "Psychic"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Surge Surfer"
                     }
@@ -1417,7 +1425,7 @@
                     "Ice",
                     "Steel"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Snow Cloak"
                     },
@@ -1481,7 +1489,7 @@
                     "Ice",
                     "Steel"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Snow Cloak"
                     },
@@ -1895,7 +1903,7 @@
                 "types": [
                     "Ice"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Snow Cloak"
                     },
@@ -1959,7 +1967,7 @@
                     "Ice",
                     "Fairy"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Snow Cloak"
                     },
@@ -2524,7 +2532,7 @@
                     "Ground",
                     "Steel"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Sand Veil"
                     },
@@ -2591,7 +2599,7 @@
                     "Ground",
                     "Steel"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Sand Veil"
                     },
@@ -2659,7 +2667,7 @@
                 "types": [
                     "Dark"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Pickup"
                     },
@@ -2725,7 +2733,7 @@
                 "types": [
                     "Dark"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Pickup"
                     },
@@ -3288,6 +3296,10 @@
                     "sp_atk": 175,
                     "sp_def": 105,
                     "speed": 150
+                },
+                "names": {
+                    "en": "Mega Alakazam",
+                    "fr": "Méga Alakazam"
                 }
             }
         ],
@@ -3707,7 +3719,7 @@
                     "Rock",
                     "Electric"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Magnet Pull"
                     },
@@ -3777,7 +3789,7 @@
                     "Rock",
                     "Electric"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Magnet Pull"
                     },
@@ -3845,7 +3857,7 @@
                     "Rock",
                     "Electric"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Magnet Pull"
                     },
@@ -4056,6 +4068,10 @@
                     "sp_atk": 130,
                     "sp_def": 80,
                     "speed": 30
+                },
+                "names": {
+                    "en": "Mega Slowbro",
+                    "fr": "Méga Flagadoss"
                 }
             }
         ],
@@ -4424,7 +4440,7 @@
                     "Poison",
                     "Dark"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Poison Touch"
                     },
@@ -4491,7 +4507,7 @@
                     "Poison",
                     "Dark"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Poison Touch"
                     },
@@ -4736,6 +4752,10 @@
                     "sp_atk": 170,
                     "sp_def": 95,
                     "speed": 130
+                },
+                "names": {
+                    "en": "Mega Gengar",
+                    "fr": "Méga Ectoplasma"
                 }
             }
         ],
@@ -5144,7 +5164,7 @@
                     "Grass",
                     "Dragon"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Frisk"
                     },
@@ -5253,7 +5273,7 @@
                     "Fire",
                     "Ghost"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Cursed Body"
                     },
@@ -5716,6 +5736,10 @@
                     "sp_atk": 60,
                     "sp_def": 100,
                     "speed": 100
+                },
+                "names": {
+                    "en": "Mega Kangaskhan",
+                    "fr": "Méga Kangourex"
                 }
             }
         ],
@@ -6265,6 +6289,10 @@
                     "sp_atk": 65,
                     "sp_def": 90,
                     "speed": 105
+                },
+                "names": {
+                    "en": "Mega Pinsir",
+                    "fr": "Méga Scarabrute"
                 }
             }
         ],
@@ -6418,6 +6446,10 @@
                     "sp_atk": 70,
                     "sp_def": 130,
                     "speed": 81
+                },
+                "names": {
+                    "en": "Mega Gyarados",
+                    "fr": "Méga Léviator"
                 }
             }
         ],
@@ -6557,19 +6589,7 @@
             "Sylveon"
         ],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "names": {
-                    "fr": "Évoli (Pokémon partenaire)",
-                    "de": "Evoli (Partner-Pokémon)",
-                    "it": "Eevee (Pokémon compagno)",
-                    "en": "Eevee (Partner Pokémon)"
-                },
-                "types": [
-                    "Normal"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -6983,6 +7003,10 @@
                     "sp_atk": 70,
                     "sp_def": 95,
                     "speed": 150
+                },
+                "names": {
+                    "en": "Mega Aerodactyl",
+                    "fr": "Méga Ptéra"
                 }
             }
         ],
@@ -7345,6 +7369,10 @@
                     "sp_atk": 154,
                     "sp_def": 100,
                     "speed": 130
+                },
+                "names": {
+                    "en": "Mega Mewtwo X",
+                    "fr": "Méga Mewtwo X"
                 }
             },
             {
@@ -7365,6 +7393,10 @@
                     "sp_atk": 194,
                     "sp_def": 120,
                     "speed": 140
+                },
+                "names": {
+                    "en": "Mega Mewtwo Y",
+                    "fr": "Méga Mewtwo Y"
                 }
             }
         ],
@@ -8764,6 +8796,10 @@
                     "sp_atk": 165,
                     "sp_def": 110,
                     "speed": 45
+                },
+                "names": {
+                    "en": "Mega Ampharos",
+                    "fr": "Méga Pharamp"
                 }
             }
         ],
@@ -9972,6 +10008,10 @@
                     "sp_atk": 55,
                     "sp_def": 95,
                     "speed": 30
+                },
+                "names": {
+                    "en": "Mega Steelix",
+                    "fr": "Méga Steelix"
                 }
             }
         ],
@@ -10170,6 +10210,10 @@
                     "sp_atk": 65,
                     "sp_def": 100,
                     "speed": 75
+                },
+                "names": {
+                    "en": "Mega Scizor",
+                    "fr": "Méga Cizayox"
                 }
             }
         ],
@@ -10280,6 +10324,10 @@
                     "sp_atk": 40,
                     "sp_def": 105,
                     "speed": 75
+                },
+                "names": {
+                    "en": "Mega Heracross",
+                    "fr": "Méga Scarhino"
                 }
             }
         ],
@@ -10971,6 +11019,10 @@
                     "sp_atk": 140,
                     "sp_def": 90,
                     "speed": 115
+                },
+                "names": {
+                    "en": "Mega Houndoom",
+                    "fr": "Méga Démolosse"
                 }
             }
         ],
@@ -11812,6 +11864,10 @@
                     "sp_atk": 95,
                     "sp_def": 120,
                     "speed": 71
+                },
+                "names": {
+                    "en": "Mega Tyranitar",
+                    "fr": "Méga Tyranocif"
                 }
             }
         ],
@@ -12086,6 +12142,10 @@
                     "sp_atk": 145,
                     "sp_def": 85,
                     "speed": 145
+                },
+                "names": {
+                    "en": "Mega Sceptile",
+                    "fr": "Méga Jungko"
                 }
             }
         ],
@@ -12243,6 +12303,10 @@
                     "sp_atk": 130,
                     "sp_def": 80,
                     "speed": 100
+                },
+                "names": {
+                    "en": "Mega Blaziken",
+                    "fr": "Méga Braségali"
                 }
             }
         ],
@@ -12400,6 +12464,10 @@
                     "sp_atk": 95,
                     "sp_def": 110,
                     "speed": 70
+                },
+                "names": {
+                    "en": "Mega Swampert",
+                    "fr": "Méga Laggron"
                 }
             }
         ],
@@ -13382,7 +13450,33 @@
         },
         "evolution_from": "Kirlia",
         "evolutions": [],
-        "mega_evolutions": [],
+        "mega_evolutions": [
+            {
+                "suffix": "mega",
+                "types": [
+                    "Psychic",
+                    "Fairy"
+                ],
+                "ability": "Pixilate",
+                "mega_stone": "Gardevoirite",
+                "height_eu": "1.6 m",
+                "height_us": "5'03\"",
+                "weight_eu": "48.4 kg",
+                "weight_us": "106.7 lbs.",
+                "base_stats": {
+                    "hp": 68,
+                    "atk": 85,
+                    "def": 65,
+                    "sp_atk": 165,
+                    "sp_def": 135,
+                    "speed": 100
+                },
+                "names": {
+                    "en": "Mega Gardevoir",
+                    "fr": "Méga Gardevoir"
+                }
+            }
+        ],
         "variations": [],
         "legendary": false,
         "ultra_beast": false
@@ -14274,6 +14368,10 @@
                     "sp_atk": 85,
                     "sp_def": 115,
                     "speed": 20
+                },
+                "names": {
+                    "en": "Mega Sableye",
+                    "fr": "Méga Ténéfix"
                 }
             }
         ],
@@ -14340,6 +14438,10 @@
                     "sp_atk": 55,
                     "sp_def": 95,
                     "speed": 50
+                },
+                "names": {
+                    "en": "Mega Mawile",
+                    "fr": "Méga Mysdibule"
                 }
             }
         ],
@@ -14497,6 +14599,10 @@
                     "sp_atk": 60,
                     "sp_def": 80,
                     "speed": 50
+                },
+                "names": {
+                    "en": "Mega Aggron",
+                    "fr": "Méga Galeking"
                 }
             }
         ],
@@ -14609,6 +14715,10 @@
                     "sp_atk": 80,
                     "sp_def": 85,
                     "speed": 100
+                },
+                "names": {
+                    "en": "Mega Medicham",
+                    "fr": "Méga Charmina"
                 }
             }
         ],
@@ -14718,6 +14828,10 @@
                     "sp_atk": 135,
                     "sp_def": 80,
                     "speed": 135
+                },
+                "names": {
+                    "en": "Mega Manectric",
+                    "fr": "Méga Élecsprint"
                 }
             }
         ],
@@ -15118,11 +15232,11 @@
             {
                 "suffix": "mega",
                 "types": [
-                    "Grass",
-                    "Poison"
+                    "Water",
+                    "Dark"
                 ],
-                "ability": "Thick Fat",
-                "mega_stone": "Venusaurite",
+                "ability": "Strong Jaw",
+                "mega_stone": "Sharpedonite",
                 "height_eu": "2.5 m",
                 "height_us": "8'02\"",
                 "weight_eu": "130.3 kg",
@@ -15134,6 +15248,10 @@
                     "sp_atk": 110,
                     "sp_def": 65,
                     "speed": 105
+                },
+                "names": {
+                    "en": "Mega Sharpedo",
+                    "fr": "Méga Sharpedo"
                 }
             }
         ],
@@ -15334,6 +15452,10 @@
                     "sp_atk": 145,
                     "sp_def": 105,
                     "speed": 20
+                },
+                "names": {
+                    "en": "Mega Camerupt",
+                    "fr": "Méga Camérupt"
                 }
             }
         ],
@@ -15836,6 +15958,10 @@
                     "sp_atk": 110,
                     "sp_def": 105,
                     "speed": 80
+                },
+                "names": {
+                    "en": "Mega Altaria",
+                    "fr": "Méga Altaria"
                 }
             }
         ],
@@ -16562,38 +16688,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "sunny",
-                "names": {
-                    "en": "Sunny Form",
-                    "de": "Sonnenform"
-                },
-                "types": [
-                    "Fire"
-                ]
-            },
-            {
-                "suffix": "rainy",
-                "names": {
-                    "en": "Rainy Form",
-                    "de": "Regenform"
-                },
-                "types": [
-                    "Water"
-                ]
-            },
-            {
-                "suffix": "snowy",
-                "names": {
-                    "en": "Snowy Form",
-                    "de": "Schneeform"
-                },
-                "types": [
-                    "Ice"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -16742,6 +16837,10 @@
                     "sp_atk": 93,
                     "sp_def": 83,
                     "speed": 75
+                },
+                "names": {
+                    "en": "Mega Banette",
+                    "fr": "Méga Branette"
                 }
             }
         ],
@@ -16979,6 +17078,10 @@
                     "sp_atk": 115,
                     "sp_def": 60,
                     "speed": 115
+                },
+                "names": {
+                    "en": "Mega Absol",
+                    "fr": "Méga Absol"
                 }
             }
         ],
@@ -17134,6 +17237,10 @@
                     "sp_atk": 120,
                     "sp_def": 80,
                     "speed": 100
+                },
+                "names": {
+                    "en": "Mega Glalie",
+                    "fr": "Méga Oniglali"
                 }
             }
         ],
@@ -17645,6 +17752,10 @@
                     "sp_atk": 120,
                     "sp_def": 90,
                     "speed": 120
+                },
+                "names": {
+                    "en": "Mega Salamence",
+                    "fr": "Méga Drattak"
                 }
             }
         ],
@@ -17794,6 +17905,10 @@
                     "sp_atk": 105,
                     "sp_def": 110,
                     "speed": 110
+                },
+                "names": {
+                    "en": "Mega Metagross",
+                    "fr": "Méga Métalosse"
                 }
             }
         ],
@@ -17959,11 +18074,11 @@
             {
                 "suffix": "mega",
                 "types": [
-                    "Grass",
-                    "Poison"
+                    "Dragon",
+                    "Psychic"
                 ],
-                "ability": "Thick Fat",
-                "mega_stone": "Venusaurite",
+                "ability": "Levitata",
+                "mega_stone": "Latiasite",
                 "height_eu": "1.8 m",
                 "height_us": "5'11\"",
                 "weight_eu": "52.0 kg",
@@ -17975,6 +18090,10 @@
                     "sp_atk": 140,
                     "sp_def": 150,
                     "speed": 110
+                },
+                "names": {
+                    "en": "Mega Latias",
+                    "fr": "Méga Latias"
                 }
             }
         ],
@@ -18020,11 +18139,11 @@
             {
                 "suffix": "mega",
                 "types": [
-                    "Grass",
-                    "Poison"
+                    "Dragon",
+                    "Psychic"
                 ],
-                "ability": "Thick Fat",
-                "mega_stone": "Venusaurite",
+                "ability": "Levitata",
+                "mega_stone": "Latiosite",
                 "height_eu": "2.3 m",
                 "height_us": "7'07\"",
                 "weight_eu": "70.0 kg",
@@ -18036,6 +18155,10 @@
                     "sp_atk": 160,
                     "sp_def": 120,
                     "speed": 110
+                },
+                "names": {
+                    "en": "Mega Latios",
+                    "fr": "Méga Latios"
                 }
             }
         ],
@@ -18077,7 +18200,32 @@
         },
         "evolution_from": null,
         "evolutions": [],
-        "mega_evolutions": [],
+        "mega_evolutions": [
+            {
+                "suffix": "primal",
+                "types": [
+                    "Water"
+                ],
+                "ability": "Primordial Sea",
+                "mega_stone": "Blue orb",
+                "height_eu": "4.5 m",
+                "height_us": "32'02\"",
+                "weight_eu": "352.0 kg",
+                "weight_us": "948.0 lbs.",
+                "base_stats": {
+                    "hp": 100,
+                    "atk": 150,
+                    "def": 90,
+                    "sp_atk": 180,
+                    "sp_def": 160,
+                    "speed": 90
+                },
+                "names": {
+                    "en": "Primal Kyogre",
+                    "fr": "Primo-Kyogre"
+                }
+            }
+        ],
         "variations": [],
         "legendary": true,
         "ultra_beast": false
@@ -18116,7 +18264,33 @@
         },
         "evolution_from": null,
         "evolutions": [],
-        "mega_evolutions": [],
+        "mega_evolutions": [
+            {
+                "suffix": "primal",
+                "types": [
+                    "Ground",
+                    "Fire"
+                ],
+                "ability": "Desolate Land",
+                "mega_stone": "Red orb",
+                "height_eu": "5.0 m",
+                "height_us": "16'05\"",
+                "weight_eu": "999.7 kg",
+                "weight_us": "2204.0 lbs.",
+                "base_stats": {
+                    "hp": 100,
+                    "atk": 180,
+                    "def": 160,
+                    "sp_atk": 150,
+                    "sp_def": 90,
+                    "speed": 90
+                },
+                "names": {
+                    "en": "Primal Groudon",
+                    "fr": "Primo-Groudon"
+                }
+            }
+        ],
         "variations": [],
         "legendary": true,
         "ultra_beast": false
@@ -18157,11 +18331,11 @@
             {
                 "suffix": "mega",
                 "types": [
-                    "Grass",
-                    "Poison"
+                    "Dragon",
+                    "Flying"
                 ],
-                "ability": "Thick Fat",
-                "mega_stone": "Venusaurite",
+                "ability": "Delta Stream",
+                "mega_stone": "Dragon Ascent",
                 "height_eu": "10.8 m",
                 "height_us": "35'05\"",
                 "weight_eu": "392.0 kg",
@@ -18173,6 +18347,10 @@
                     "sp_atk": 180,
                     "sp_def": 100,
                     "speed": 115
+                },
+                "names": {
+                    "en": "Mega Rayquaza",
+                    "fr": "Méga Rayquaza"
                 }
             }
         ],
@@ -18249,38 +18427,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "attack",
-                "names": {
-                    "en": "Attack Forme",
-                    "de": "Angriffsform"
-                },
-                "types": [
-                    "Psychic"
-                ]
-            },
-            {
-                "suffix": "defense",
-                "names": {
-                    "en": "Defense Forme",
-                    "de": "Verteidigungsform"
-                },
-                "types": [
-                    "Psychic"
-                ]
-            },
-            {
-                "suffix": "speed",
-                "names": {
-                    "en": "Speed Forme",
-                    "de": "Initiativeform"
-                },
-                "types": [
-                    "Psychic"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": true,
         "ultra_beast": false
     },
@@ -19440,33 +19587,10 @@
         "evolution_from": null,
         "evolutions": [
             "Mothim",
-            "Wormadam",
-            "Wormadam",
             "Wormadam"
         ],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "sandy",
-                "names": {
-                    "en": "Sandy Cloak",
-                    "de": "Sandumhang"
-                },
-                "types": [
-                    "Bug"
-                ]
-            },
-            {
-                "suffix": "trash",
-                "names": {
-                    "en": "Trash Cloak",
-                    "de": "Lumpenumhang"
-                },
-                "types": [
-                    "Bug"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -19509,30 +19633,7 @@
         "evolution_from": "Burmy",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "sandy",
-                "names": {
-                    "en": "Sandy Cloak",
-                    "de": "Sandumhang"
-                },
-                "types": [
-                    "Bug",
-                    "Ground"
-                ]
-            },
-            {
-                "suffix": "trash",
-                "names": {
-                    "en": "Trash Cloak",
-                    "de": "Lumpenumhang"
-                },
-                "types": [
-                    "Bug",
-                    "Steel"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -19875,18 +19976,7 @@
         "evolution_from": "Cherubi",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "sunshine",
-                "names": {
-                    "en": "Sunshine Form",
-                    "de": "Sonnenform"
-                },
-                "types": [
-                    "Grass"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -19931,18 +20021,7 @@
             "Gastrodon"
         ],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "east",
-                "names": {
-                    "en": "East Sea",
-                    "de": "Östliches Meer"
-                },
-                "types": [
-                    "Water"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -19986,18 +20065,7 @@
         "evolution_from": "Shellos",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "east",
-                "names": {
-                    "en": "East Sea",
-                    "de": "Östliches Meer"
-                },
-                "types": [
-                    "Water"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -20237,6 +20305,10 @@
                     "sp_atk": 54,
                     "sp_def": 96,
                     "speed": 135
+                },
+                "names": {
+                    "en": "Mega Lopunny",
+                    "fr": "Méga Lockpin"
                 }
             }
         ],
@@ -21004,6 +21076,10 @@
                     "sp_atk": 120,
                     "sp_def": 95,
                     "speed": 92
+                },
+                "names": {
+                    "en": "Mega Garchomp",
+                    "fr": "Méga Carchacrok"
                 }
             }
         ],
@@ -21144,11 +21220,11 @@
             {
                 "suffix": "mega",
                 "types": [
-                    "Grass",
-                    "Poison"
+                    "Fighting",
+                    "Steel"
                 ],
-                "ability": "Thick Fat",
-                "mega_stone": "Venusaurite",
+                "ability": "Adaptability",
+                "mega_stone": "Lucarionite",
                 "height_eu": "1.3 m",
                 "height_us": "4'03\"",
                 "weight_eu": "57.5 kg",
@@ -21160,6 +21236,10 @@
                     "sp_atk": 140,
                     "sp_def": 70,
                     "speed": 112
+                },
+                "names": {
+                    "en": "Mega Lucario",
+                    "fr": "Méga Lucario"
                 }
             }
         ],
@@ -21713,6 +21793,10 @@
                     "sp_atk": 132,
                     "sp_def": 105,
                     "speed": 30
+                },
+                "names": {
+                    "en": "Mega Abomasnow",
+                    "fr": "Méga Blizzaroi"
                 }
             }
         ],
@@ -22381,6 +22465,10 @@
                     "sp_atk": 65,
                     "sp_def": 115,
                     "speed": 110
+                },
+                "names": {
+                    "en": "Mega Gallade",
+                    "fr": "Méga Gallame"
                 }
             }
         ],
@@ -22551,63 +22639,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "heat",
-                "names": {
-                    "en": "Heat Rotom",
-                    "de": "Hitze-Rotom"
-                },
-                "types": [
-                    "Electric",
-                    "Fire"
-                ]
-            },
-            {
-                "suffix": "wash",
-                "names": {
-                    "en": "Wash Rotom",
-                    "de": "Wasch-Rotom"
-                },
-                "types": [
-                    "Electric",
-                    "Water"
-                ]
-            },
-            {
-                "suffix": "frost",
-                "names": {
-                    "en": "Frost Rotom",
-                    "de": "Frost-Rotom"
-                },
-                "types": [
-                    "Electric",
-                    "Ice"
-                ]
-            },
-            {
-                "suffix": "fan",
-                "names": {
-                    "en": "Fan Rotom",
-                    "de": " Wirbel-Rotom"
-                },
-                "types": [
-                    "Electric",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "mow",
-                "names": {
-                    "en": "Mow Rotom",
-                    "de": " Schneid-Rotom"
-                },
-                "types": [
-                    "Electric",
-                    "Grass"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -22929,7 +22961,7 @@
                     "Ghost",
                     "Dragon"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Levitate"
                     }
@@ -23128,7 +23160,7 @@
                     "Grass",
                     "Flying"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Serene Grace"
                     }
@@ -23170,161 +23202,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "names": {
-                    "en": "Grass",
-                    "de": "Pflanze"
-                },
-                "types": [
-                    "Grass"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Fire",
-                    "de": "Feuer"
-                },
-                "types": [
-                    "Fire"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Water",
-                    "de": "Wasser"
-                },
-                "types": [
-                    "Water"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Electric",
-                    "de": "Elektro"
-                },
-                "types": [
-                    "Electric"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Ice",
-                    "de": "Eis"
-                },
-                "types": [
-                    "Ice"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Fighting",
-                    "de": "Kampf"
-                },
-                "types": [
-                    "Fighting"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Poison",
-                    "de": "Gift"
-                },
-                "types": [
-                    "Poison"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Ground",
-                    "de": "Boden"
-                },
-                "types": [
-                    "Ground"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Flying",
-                    "de": "Flug"
-                },
-                "types": [
-                    "Flying"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Psychic",
-                    "de": "Psycho"
-                },
-                "types": [
-                    "Psychic"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Bug",
-                    "de": "Käfer"
-                },
-                "types": [
-                    "Bug"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Rock",
-                    "de": "Gestein"
-                },
-                "types": [
-                    "Rock"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Ghost",
-                    "de": "Geist"
-                },
-                "types": [
-                    "Ghost"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Dragon",
-                    "de": "Drache"
-                },
-                "types": [
-                    "Dragon"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Dark",
-                    "de": "Unlicht"
-                },
-                "types": [
-                    "Dark"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Steel",
-                    "de": "Stahl"
-                },
-                "types": [
-                    "Steel"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Fairy",
-                    "de": "Fee"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": true,
         "ultra_beast": false
     },
@@ -24559,19 +24437,7 @@
         "evolution_from": "Tranquill",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "female",
-                "names": {
-                    "en": "Female",
-                    "de": "Weiblich"
-                },
-                "types": [
-                    "Normal",
-                    "Flying"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -25033,6 +24899,10 @@
                     "sp_atk": 80,
                     "sp_def": 126,
                     "speed": 50
+                },
+                "names": {
+                    "en": "Mega Audino",
+                    "fr": "Méga Nanméouïe"
                 }
             }
         ],
@@ -25882,18 +25752,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "striped",
-                "names": {
-                    "en": "Blue-Striped Form",
-                    "de": "Blaulinige Form"
-                },
-                "types": [
-                    "Water"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -26117,19 +25976,7 @@
         "evolution_from": "Darumaka",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "zen",
-                "names": {
-                    "en": "Zen Mode",
-                    "de": "Trance-Modus"
-                },
-                "types": [
-                    "Fire",
-                    "Psychic"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -27439,41 +27286,7 @@
             "Sawsbuck"
         ],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "summer",
-                "names": {
-                    "en": "Summer Form",
-                    "de": "Sommerform"
-                },
-                "types": [
-                    "Normal",
-                    "Grass"
-                ]
-            },
-            {
-                "suffix": "autumn",
-                "names": {
-                    "en": "Autumn Form",
-                    "de": "Herbstform"
-                },
-                "types": [
-                    "Normal",
-                    "Grass"
-                ]
-            },
-            {
-                "suffix": "winter",
-                "names": {
-                    "en": "Winter Form",
-                    "de": "Winterform"
-                },
-                "types": [
-                    "Normal",
-                    "Grass"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -27517,38 +27330,7 @@
         "evolution_from": "Deerling",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "names": {
-                    "en": "Summer Form",
-                    "de": "Sommerform"
-                },
-                "types": [
-                    "Normal",
-                    "Grass"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Autumn Form",
-                    "de": "Herbstform"
-                },
-                "types": [
-                    "Normal",
-                    "Grass"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Winter Form",
-                    "de": "Winterform"
-                },
-                "types": [
-                    "Normal",
-                    "Grass"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -27817,19 +27599,7 @@
             "Jellicent"
         ],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "female",
-                "names": {
-                    "en": "Female",
-                    "de": "Weiblich"
-                },
-                "types": [
-                    "Water",
-                    "Ghost"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -27873,19 +27643,7 @@
         "evolution_from": "Frillish",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "female",
-                "names": {
-                    "en": "Female",
-                    "de": "Weiblich"
-                },
-                "types": [
-                    "Water",
-                    "Ghost"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -29950,7 +29708,7 @@
                 "types": [
                     "Flying"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Regenerator"
                     }
@@ -30010,7 +29768,7 @@
                     "Electric",
                     "Flying"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Volt Absorb"
                     }
@@ -30144,7 +29902,7 @@
                     "Ground",
                     "Flying"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Intimidate"
                     }
@@ -30198,7 +29956,7 @@
                     "Dragon",
                     "Ice"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Turboblaze"
                     }
@@ -30214,7 +29972,7 @@
                     "Dragon",
                     "Ice"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Teravolt"
                     }
@@ -30257,19 +30015,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "resolute",
-                "names": {
-                    "en": "Resolute Form",
-                    "de": "Resolutform"
-                },
-                "types": [
-                    "Water",
-                    "Fighting"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": true,
         "ultra_beast": false
     },
@@ -30306,19 +30052,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "pirouette",
-                "names": {
-                    "en": "Pirouette Forme",
-                    "de": "Tanzform"
-                },
-                "types": [
-                    "Normal",
-                    "Fighting"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": true,
         "ultra_beast": false
     },
@@ -30355,52 +30089,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "burn",
-                "names": {
-                    "en": "Fire",
-                    "de": "Feuer"
-                },
-                "types": [
-                    "Bug",
-                    "Steel"
-                ]
-            },
-            {
-                "suffix": "douse",
-                "names": {
-                    "en": "Water",
-                    "de": "Wasser"
-                },
-                "types": [
-                    "Bug",
-                    "Steel"
-                ]
-            },
-            {
-                "suffix": "shock",
-                "names": {
-                    "en": "Electric",
-                    "de": "Elektro"
-                },
-                "types": [
-                    "Bug",
-                    "Steel"
-                ]
-            },
-            {
-                "suffix": "chill",
-                "names": {
-                    "en": "Ice",
-                    "de": "Eis"
-                },
-                "types": [
-                    "Bug",
-                    "Steel"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": true,
         "ultra_beast": false
     },
@@ -30805,18 +30494,7 @@
         "evolution_from": "Frogadier",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "names": {
-                    "en": "Ash-Greninja",
-                    "de": "Ash-Quajutsu"
-                },
-                "types": [
-                    "Water",
-                    "Dark"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -31175,217 +30853,7 @@
         "evolution_from": "Spewpa",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "continental",
-                "names": {
-                    "en": "Continental",
-                    "de": "Kontinentalmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "elegant",
-                "names": {
-                    "en": "Elegant",
-                    "de": "Prunkmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "garden",
-                "names": {
-                    "en": "Garden",
-                    "de": "Ziergartenmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "plains",
-                "names": {
-                    "en": "High Plains",
-                    "de": "Dürremuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "snow",
-                "names": {
-                    "en": "Icy Snow",
-                    "de": "Frostmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "jungle",
-                "names": {
-                    "en": "Jungle",
-                    "de": "Dschungelmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "marine",
-                "names": {
-                    "en": "Marine",
-                    "de": "Aquamarinmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "meadow",
-                "names": {
-                    "en": "Meadow",
-                    "de": "Blumenmeermuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "modern",
-                "names": {
-                    "en": "Modern",
-                    "de": "Innovationsmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "monsoon",
-                "names": {
-                    "en": "Monsoon",
-                    "de": "Monsunmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "ocean",
-                "names": {
-                    "en": "Ocean",
-                    "de": "Ozeanmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "polar",
-                "names": {
-                    "en": "Polar",
-                    "de": "Schneefeldmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "river",
-                "names": {
-                    "en": "River",
-                    "de": "Flussdeltamuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "sandstorm",
-                "names": {
-                    "en": "Sandstorm",
-                    "de": "Sandmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "savanna",
-                "names": {
-                    "en": "Savanna",
-                    "de": "Savannenmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "sun",
-                "names": {
-                    "en": "Sun",
-                    "de": "Sonnenmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "tundra",
-                "names": {
-                    "en": "Tundra",
-                    "de": "Flockenmuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "ball",
-                "names": {
-                    "en": "Poké Ball",
-                    "de": "Pokéball-Muster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "fancy",
-                "names": {
-                    "en": "Fancy",
-                    "de": "Fantasiemuster"
-                },
-                "types": [
-                    "Bug",
-                    "Flying"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -31475,19 +30943,7 @@
         "evolution_from": "Litleo",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "female",
-                "names": {
-                    "en": "Female",
-                    "de": "Weiblich"
-                },
-                "types": [
-                    "Fire",
-                    "Normal"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -31531,48 +30987,7 @@
             "Floette"
         ],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "yellow",
-                "names": {
-                    "en": "Yellow Flower",
-                    "de": "Gelbblütler"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            },
-            {
-                "suffix": "orange",
-                "names": {
-                    "en": "Orange Flower",
-                    "de": "Orangeblütler"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            },
-            {
-                "suffix": "blue",
-                "names": {
-                    "en": "Blue Flower",
-                    "de": "Blaublütler"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            },
-            {
-                "suffix": "white",
-                "names": {
-                    "en": "White Flower",
-                    "de": "Weißblütler"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -31616,48 +31031,7 @@
             "Florges"
         ],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "yellow",
-                "names": {
-                    "en": "Yellow Flower",
-                    "de": "Gelbblütler"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            },
-            {
-                "suffix": "orange",
-                "names": {
-                    "en": "Orange Flower",
-                    "de": "Orangeblütler"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            },
-            {
-                "suffix": "blue",
-                "names": {
-                    "en": "Blue Flower",
-                    "de": "Blaublütler"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            },
-            {
-                "suffix": "white",
-                "names": {
-                    "en": "White Flower",
-                    "de": "Weißblütler"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -31699,48 +31073,7 @@
         "evolution_from": "Floette",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "yellow",
-                "names": {
-                    "en": "Yellow Flower",
-                    "de": "Gelbblütler"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            },
-            {
-                "suffix": "orange",
-                "names": {
-                    "en": "Orange Flower",
-                    "de": "Orangeblütler"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            },
-            {
-                "suffix": "blue",
-                "names": {
-                    "en": "Blue Flower",
-                    "de": "Blaublütler"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            },
-            {
-                "suffix": "white",
-                "names": {
-                    "en": "White Flower",
-                    "de": "Weißblütler"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -31956,98 +31289,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "heart",
-                "names": {
-                    "en": "Heart Trim",
-                    "de": "Herzchenschnitt"
-                },
-                "types": [
-                    "Normal"
-                ]
-            },
-            {
-                "suffix": "star",
-                "names": {
-                    "en": "Star Trim",
-                    "de": "Sternchenschnitt"
-                },
-                "types": [
-                    "Normal"
-                ]
-            },
-            {
-                "suffix": "diamond",
-                "names": {
-                    "en": "Diamond Trim",
-                    "de": "Diamantenschnitt"
-                },
-                "types": [
-                    "Normal"
-                ]
-            },
-            {
-                "suffix": "debutante",
-                "names": {
-                    "en": "Debutante Trim",
-                    "de": "Fräuleinschnitt"
-                },
-                "types": [
-                    "Normal"
-                ]
-            },
-            {
-                "suffix": "matron",
-                "names": {
-                    "en": "Matron Trim",
-                    "de": "Damenschnitt"
-                },
-                "types": [
-                    "Normal"
-                ]
-            },
-            {
-                "suffix": "dandy",
-                "names": {
-                    "en": "Dandy Trim",
-                    "de": "Kavaliersschnitt"
-                },
-                "types": [
-                    "Normal"
-                ]
-            },
-            {
-                "suffix": "reine",
-                "names": {
-                    "en": "La Reine Trim",
-                    "de": "Königinnenschnitt"
-                },
-                "types": [
-                    "Normal"
-                ]
-            },
-            {
-                "suffix": "kabuki",
-                "names": {
-                    "en": "Kabuki Trim",
-                    "de": "Kabuki-Schnitt"
-                },
-                "types": [
-                    "Normal"
-                ]
-            },
-            {
-                "suffix": "pharaoh",
-                "names": {
-                    "en": "Pharaoh Trim",
-                    "de": "Herrscherschnitt"
-                },
-                "types": [
-                    "Normal"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -32137,18 +31379,7 @@
         "evolution_from": "Espurr",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "female",
-                "names": {
-                    "en": "Female",
-                    "de": "Weiblich"
-                },
-                "types": [
-                    "Psychic"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -32272,19 +31503,7 @@
         "evolution_from": "Doublade",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "blade",
-                "names": {
-                    "en": "Blade Forme",
-                    "de": "Klingenform"
-                },
-                "types": [
-                    "Steel",
-                    "Ghost"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -33565,41 +32784,7 @@
             "Gourgeist"
         ],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "average",
-                "names": {
-                    "en": "Average Size",
-                    "de": "Größe M"
-                },
-                "types": [
-                    "Ghost",
-                    "Grass"
-                ]
-            },
-            {
-                "suffix": "large",
-                "names": {
-                    "en": "Large Size",
-                    "de": "Größe L"
-                },
-                "types": [
-                    "Ghost",
-                    "Grass"
-                ]
-            },
-            {
-                "suffix": "super",
-                "names": {
-                    "en": "Super Size",
-                    "de": "Größe XL"
-                },
-                "types": [
-                    "Ghost",
-                    "Grass"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -33643,41 +32828,7 @@
         "evolution_from": "Pumpkaboo",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "average",
-                "names": {
-                    "en": "Average Size",
-                    "de": "Größe M"
-                },
-                "types": [
-                    "Ghost",
-                    "Grass"
-                ]
-            },
-            {
-                "suffix": "large",
-                "names": {
-                    "en": "Large Size",
-                    "de": "Größe L"
-                },
-                "types": [
-                    "Ghost",
-                    "Grass"
-                ]
-            },
-            {
-                "suffix": "super",
-                "names": {
-                    "en": "Super Size",
-                    "de": "Größe XL"
-                },
-                "types": [
-                    "Ghost",
-                    "Grass"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -33891,18 +33042,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "active",
-                "names": {
-                    "en": "Active Mode",
-                    "de": "Aktive Form"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": true,
         "ultra_beast": false
     },
@@ -33989,7 +33129,7 @@
                     "Dragon",
                     "Ground"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Aura Break"
                     },
@@ -34007,7 +33147,7 @@
                     "Dragon",
                     "Ground"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Power Construct"
                     }
@@ -34069,6 +33209,10 @@
                     "sp_atk": 160,
                     "sp_def": 110,
                     "speed": 110
+                },
+                "names": {
+                    "en": "Mega Diancie",
+                    "fr": "Méga Diancie"
                 }
             }
         ],
@@ -34109,18 +33253,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "names": {
-                    "en": "Hoopa Unbound",
-                    "de": "Entfesseltes Hoopa"
-                },
-                "types": [
-                    "Psychic",
-                    "Dark"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": true,
         "ultra_beast": false
     },
@@ -35037,41 +34170,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "pompom",
-                "names": {
-                    "en": "Pom-Pom Style",
-                    "de": "Cheerleading-Stil"
-                },
-                "types": [
-                    "Electric",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "pau",
-                "names": {
-                    "en": "Pa'u Style",
-                    "de": "Hula-Stil"
-                },
-                "types": [
-                    "Psychic",
-                    "Flying"
-                ]
-            },
-            {
-                "suffix": "sensu",
-                "names": {
-                    "en": "Sensu Style",
-                    "de": "Buyo-Stil"
-                },
-                "types": [
-                    "Ghost",
-                    "Flying"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -35262,7 +34361,7 @@
                 "types": [
                     "Rock"
                 ],
-                "abilitites": [
+                "abilities": [
                     {
                         "name": "Keen Eye"
                     },
@@ -35314,18 +34413,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "school",
-                "names": {
-                    "en": "School Form",
-                    "de": "Schwarmform"
-                },
-                "types": [
-                    "Water"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -36499,161 +35587,7 @@
         "evolution_from": "Type: Null",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "names": {
-                    "en": "Grass",
-                    "de": "Pflanze"
-                },
-                "types": [
-                    "Grass"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Fire",
-                    "de": "Feuer"
-                },
-                "types": [
-                    "Fire"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Water",
-                    "de": "Wasser"
-                },
-                "types": [
-                    "Water"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Electric",
-                    "de": "Elektro"
-                },
-                "types": [
-                    "Electric"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Ice",
-                    "de": "Eis"
-                },
-                "types": [
-                    "Ice"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Fighting",
-                    "de": "Kampf"
-                },
-                "types": [
-                    "Fighting"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Poison",
-                    "de": "Gift"
-                },
-                "types": [
-                    "Poison"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Ground",
-                    "de": "Boden"
-                },
-                "types": [
-                    "Ground"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Flying",
-                    "de": "Flug"
-                },
-                "types": [
-                    "Flying"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Psychic",
-                    "de": "Psycho"
-                },
-                "types": [
-                    "Psychic"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Bug",
-                    "de": "Käfer"
-                },
-                "types": [
-                    "Bug"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Rock",
-                    "de": "Gestein"
-                },
-                "types": [
-                    "Rock"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Ghost",
-                    "de": "Geist"
-                },
-                "types": [
-                    "Ghost"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Dragon",
-                    "de": "Drache"
-                },
-                "types": [
-                    "Dragon"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Dark",
-                    "de": "Unlicht"
-                },
-                "types": [
-                    "Dark"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Steel",
-                    "de": "Stahl"
-                },
-                "types": [
-                    "Steel"
-                ]
-            },
-            {
-                "names": {
-                    "en": "Fairy",
-                    "de": "Fee"
-                },
-                "types": [
-                    "Fairy"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": true,
         "ultra_beast": false
     },
@@ -36690,19 +35624,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "suffix": "core",
-                "names": {
-                    "en": "Core",
-                    "de": "Farbige Kerne"
-                },
-                "types": [
-                    "Rock",
-                    "Flying"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -36865,18 +35787,7 @@
         "evolution_from": null,
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "names": {
-                    "en": "Busted Form",
-                    "de": "Entlarvte Form"
-                },
-                "types": [
-                    "Ghost",
-                    "Fairy"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": false,
         "ultra_beast": false
     },
@@ -37414,18 +36325,7 @@
         "evolution_from": "Cosmoem",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "names": {
-                    "en": "Radiant Sun",
-                    "de": "Sonnenaufgangsphase"
-                },
-                "types": [
-                    "Psychic",
-                    "Steel"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": true,
         "ultra_beast": false
     },
@@ -37462,18 +36362,7 @@
         "evolution_from": "Cosmoem",
         "evolutions": [],
         "mega_evolutions": [],
-        "variations": [
-            {
-                "names": {
-                    "en": "Full Moon",
-                    "de": "Vollmondphase"
-                },
-                "types": [
-                    "Psychic",
-                    "Ghost"
-                ]
-            }
-        ],
+        "variations": [],
         "legendary": true,
         "ultra_beast": false
     },

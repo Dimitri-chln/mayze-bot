@@ -76,9 +76,10 @@ var command = {
             return category + " " + getGift(item[category]);
         }
         var user;
-        return __generator(this, function (_a) {
+        var _a;
+        return __generator(this, function (_b) {
             user = interaction.options.getUser("user");
-            interaction.reply(translations.data.gift(user.toString(), getGift(gifts_json_1.default[translations.language]), interaction.user.username));
+            interaction.followUp(translations.data.gift(user.toString(), getGift((_a = gifts_json_1.default[translations.language]) !== null && _a !== void 0 ? _a : gifts_json_1.default.fr), interaction.user.username));
             return [2 /*return*/];
         });
     }); }

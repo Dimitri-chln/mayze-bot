@@ -191,7 +191,7 @@ var command = {
                     };
                     url = (_e = interaction.options.getString("url")) !== null && _e !== void 0 ? _e : (_g = (_f = Util_1.default.musicPlayer.get(interaction.guild.id)) === null || _f === void 0 ? void 0 : _f.nowPlaying) === null || _g === void 0 ? void 0 : _g.url;
                     if (!url)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.no_url(),
                                 ephemeral: true
                             })];
@@ -211,7 +211,7 @@ var command = {
                             text: "✨ Mayze ✨"
                         }
                     });
-                    return [4 /*yield*/, interaction.reply({
+                    return [4 /*yield*/, interaction.followUp({
                             embeds: [embed],
                             fetchReply: true
                         })];

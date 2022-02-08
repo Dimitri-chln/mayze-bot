@@ -131,7 +131,7 @@ var command = {
             switch (_a.label) {
                 case 0:
                     color = hexToRGB(interaction.options.getString("color"));
-                    return [4 /*yield*/, interaction.reply({
+                    return [4 /*yield*/, interaction.followUp({
                             embeds: [
                                 {
                                     author: {

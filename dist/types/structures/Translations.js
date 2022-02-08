@@ -53,7 +53,9 @@ var Translations = /** @class */ (function () {
                                 .replace(/:/g, "~d")
                                 .replace(/\?/g, "~q")
                             : a; });
-                        var text = _this._data.get(translationName);
+                        var text = _this._data.get(translationName)
+                            .replace(/\\n/g, "\n")
+                            .replace(/\\t/g, "\t");
                         try {
                             text = JSON.parse(text);
                         }

@@ -65,6 +65,12 @@ var command = {
                                 description: "L'utilisateur dont tu veux voir la liste de wish",
                                 type: "USER",
                                 required: false
+                            },
+                            {
+                                name: "regex",
+                                description: "Une option pour afficher le regex à côté du nom des séries",
+                                type: "BOOLEAN",
+                                required: false
                             }
                         ]
                     },
@@ -119,6 +125,12 @@ var command = {
                                 description: "The user whose wishlist you want to see",
                                 type: "USER",
                                 required: false
+                            },
+                            {
+                                name: "regex",
+                                description: "An option to display the regex next to the series' name",
+                                type: "BOOLEAN",
+                                required: false
                             }
                         ]
                     },
@@ -159,13 +171,13 @@ var command = {
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var subCommandGroup, _a, subCommand, _b, user, wishlist, series, regex, series, wishlist;
+        var subCommandGroup, _a, subCommand, _b, user, displayRegex_1, wishlist, series, regex, series, wishlist;
         var _c, _d;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
                     if (!interaction.guild.members.cache.has("432610292342587392"))
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.mudae_missing(),
                                 ephemeral: true
                             })];
@@ -186,10 +198,11 @@ var command = {
                     return [3 /*break*/, 9];
                 case 2:
                     user = (_c = interaction.options.getUser("user")) !== null && _c !== void 0 ? _c : interaction.user;
+                    displayRegex_1 = Boolean(interaction.options.getBoolean("regex"));
                     return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM wishes WHERE user_id = $1 ORDER BY id", [interaction.user.id])];
                 case 3:
                     wishlist = (_e.sent()).rows;
-                    interaction.reply({
+                    interaction.followUp({
                         embeds: [
                             {
                                 author: {
@@ -197,7 +210,7 @@ var command = {
                                     iconURL: user.displayAvatarURL({ dynamic: true })
                                 },
                                 color: interaction.guild.me.displayColor,
-                                description: (_d = wishlist.map(function (w, i) { return "`" + (i + 1) + ".` " + w.series + " - *" + (w.regex ? w.regex : w.series.toLowerCase()) + "*"; }).join("\n")) !== null && _d !== void 0 ? _d : translations.data.no_wish(),
+                                description: (_d = wishlist.map(function (w, i) { return "`" + (i + 1) + ".` " + w.series + (displayRegex_1 ? " - *" + (w.regex ? w.regex : w.series.toLowerCase()) + "*" : ""); }).join("\n")) !== null && _d !== void 0 ? _d : translations.data.no_wish(),
                                 footer: {
                                     text: "✨ Mayze ✨"
                                 }
@@ -211,10 +224,7 @@ var command = {
                     return [4 /*yield*/, Util_1.default.database.query("INSERT INTO wishes (user_id, series, regex) VALUES ($1, $2, $3)", [interaction.user.id, series, regex])];
                 case 5:
                     _e.sent();
-                    interaction.reply({
-                        content: translations.data.added(),
-                        ephemeral: true
-                    });
+                    interaction.followUp(translations.data.added());
                     return [3 /*break*/, 9];
                 case 6:
                     series = interaction.options.getInteger("series");
@@ -224,10 +234,7 @@ var command = {
                     return [4 /*yield*/, Util_1.default.database.query("DELETE FROM wishes WHERE id = $1", [wishlist[series - 1].id])];
                 case 8:
                     _e.sent();
-                    interaction.reply({
-                        content: translations.data.removed(),
-                        ephemeral: true
-                    });
+                    interaction.followUp(translations.data.removed());
                     return [3 /*break*/, 9];
                 case 9: return [3 /*break*/, 10];
                 case 10: return [2 /*return*/];

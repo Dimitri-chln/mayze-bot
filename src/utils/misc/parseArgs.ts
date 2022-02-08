@@ -8,11 +8,8 @@ export default function parseArgs(input: string) {
 	});
 
 	args = args
-		.map(a => a
-			.replace(/(?<!\\)"/g, '')
-			.replace(/\\"/g, '"')
-		)
-		.filter(a => a);
+		.map((a) => a.replace(/(?<!\\)"/g, "").replace(/\\"/g, '"'))
+		.filter((a) => a);
 
-	return [ ...args ];
+	return [...args];
 }

@@ -72,7 +72,7 @@ var command = {
         return __generator(this, function (_c) {
             message = (_b = (_a = interaction.options.getString("message")) === null || _a === void 0 ? void 0 : _a.replace(/^./, function (a) { return a.toUpperCase(); })) !== null && _b !== void 0 ? _b : "";
             Util_1.default.database.query("\n\t\t\tINSERT INTO afk VALUES ($1, $2, $3)\n\t\t\tON CONFLICT (user_id)\n\t\t\tDO UPDATE SET message = $3\n\t\t\tWHERE afk.user_id = EXCLUDED.user_id\n\t\t\t", [interaction.user.id, new Date().toISOString(), message]);
-            interaction.reply(translations.data.afk_message(interaction.user.toString(), message));
+            interaction.followUp(translations.data.afk_message(interaction.user.toString(), message));
             return [2 /*return*/];
         });
     }); }

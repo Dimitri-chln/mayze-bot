@@ -188,16 +188,14 @@ var command = {
                 case 1:
                     {
                         if (currentGame)
-                            return [2 /*return*/, interaction.reply({
-                                    content: translations.data.already_running(),
-                                    ephemeral: true
-                                })];
+                            return [2 /*return*/, interaction.followUp(translations.data.already_running())];
                         newGame = {
                             creator: interaction.member,
                             members: new discord_js_1.Collection()
                         };
+                        newGame.members.set(interaction.user.id, interaction.member);
                         Util_1.default.russianRouletteGames.set(interaction.channel.id, newGame);
-                        interaction.reply({
+                        interaction.followUp({
                             embeds: [
                                 {
                                     author: {
@@ -218,55 +216,34 @@ var command = {
                 case 2:
                     {
                         if (!currentGame)
-                            return [2 /*return*/, interaction.reply({
-                                    content: translations.data.no_game(),
-                                    ephemeral: true
-                                })];
+                            return [2 /*return*/, interaction.followUp(translations.data.no_game())];
                         if (currentGame.members.has(interaction.user.id))
-                            return [2 /*return*/, interaction.reply({
-                                    content: translations.data.already_joined(),
-                                    ephemeral: true
-                                })];
+                            return [2 /*return*/, interaction.followUp(translations.data.already_joined())];
                         currentGame.members.set(interaction.user.id, interaction.member);
-                        interaction.reply(translations.data.joined(interaction.user.toString()));
+                        interaction.followUp(translations.data.joined(interaction.user.toString()));
                         return [3 /*break*/, 7];
                     }
                     _b.label = 3;
                 case 3:
                     {
                         if (!currentGame)
-                            return [2 /*return*/, interaction.reply({
-                                    content: translations.data.no_game(),
-                                    ephemeral: true
-                                })];
+                            return [2 /*return*/, interaction.followUp(translations.data.no_game())];
                         if (currentGame.creator.id !== interaction.user.id &&
                             !interaction.member.permissions.has("KICK_MEMBERS"))
-                            return [2 /*return*/, interaction.reply({
-                                    content: translations.data.deletion_not_allowed(),
-                                    ephemeral: true
-                                })];
+                            return [2 /*return*/, interaction.followUp(translations.data.deletion_not_allowed())];
                         Util_1.default.russianRouletteGames.delete(interaction.channel.id);
-                        interaction.reply(translations.data.deleted());
+                        interaction.followUp(translations.data.deleted());
                         return [3 /*break*/, 7];
                     }
                     _b.label = 4;
                 case 4:
                     if (!currentGame)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.no_game(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.no_game())];
                     if (currentGame.creator.id !== interaction.user.id &&
                         !interaction.member.permissions.has("KICK_MEMBERS"))
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.starting_not_allowed(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.starting_not_allowed())];
                     if (currentGame.members.size < 2)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.not_enough_players(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.not_enough_players())];
                     embed = new discord_js_1.MessageEmbed()
                         .setAuthor({
                         name: "La partie de roulette russe a commencé!",
@@ -277,7 +254,7 @@ var command = {
                         .setFooter({
                         text: "✨ Mayze ✨"
                     });
-                    return [4 /*yield*/, interaction.reply({
+                    return [4 /*yield*/, interaction.followUp({
                             embeds: [embed],
                             fetchReply: true
                         })];

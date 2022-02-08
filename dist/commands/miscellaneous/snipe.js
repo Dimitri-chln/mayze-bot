@@ -92,16 +92,13 @@ var command = {
                 case "message": {
                     snipedMessage = Util_1.default.sniping.deletedMessages.get(interaction.channel.id);
                     if (!snipedMessage)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.no_message(),
-                                ephemeral: true
-                            })];
-                    interaction.reply({
+                        return [2 /*return*/, interaction.followUp(translations.data.no_message())];
+                    interaction.followUp({
                         embeds: [
                             {
                                 author: {
                                     name: snipedMessage.author.tag,
-                                    iconURL: snipedMessage.author.avatar
+                                    iconURL: snipedMessage.author.avatarURL({ dynamic: true })
                                 },
                                 color: interaction.guild.me.displayColor,
                                 description: snipedMessage.content,
@@ -120,16 +117,13 @@ var command = {
                 case "edit": {
                     snipedMessage = Util_1.default.sniping.editedMessages.get(interaction.channel.id);
                     if (!snipedMessage)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.no_message(),
-                                ephemeral: true
-                            })];
-                    interaction.reply({
+                        return [2 /*return*/, interaction.followUp(translations.data.no_message())];
+                    interaction.followUp({
                         embeds: [
                             {
                                 author: {
                                     name: snipedMessage.author.tag,
-                                    iconURL: snipedMessage.author.avatar
+                                    iconURL: snipedMessage.author.avatarURL({ dynamic: true })
                                 },
                                 color: interaction.guild.me.displayColor,
                                 description: snipedMessage.content,
@@ -144,11 +138,8 @@ var command = {
                 case "reaction": {
                     snipedReaction = Util_1.default.sniping.messageReactions.get(interaction.channel.id);
                     if (!snipedReaction)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.no_reaction(),
-                                ephemeral: true
-                            })];
-                    interaction.reply({
+                        return [2 /*return*/, interaction.followUp(translations.data.no_reaction())];
+                    interaction.followUp({
                         embeds: [
                             {
                                 author: {

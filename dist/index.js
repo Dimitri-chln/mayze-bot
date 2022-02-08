@@ -65,13 +65,15 @@ var __read = (this && this.__read) || function (o, n) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var e_1, _a, e_2, _b, e_3, _c, e_4, _d, e_5, _e;
+var e_1, _a, e_2, _b;
+var _c;
 Object.defineProperty(exports, "__esModule", { value: true });
+var dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 var Util_1 = __importDefault(require("./Util"));
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
 var cron_1 = __importDefault(require("cron"));
-var dotenv_1 = __importDefault(require("dotenv"));
 var discord_js_1 = __importDefault(require("discord.js"));
 var pg_1 = __importDefault(require("pg"));
 var spotify_web_api_node_1 = __importDefault(require("spotify-web-api-node"));
@@ -82,7 +84,6 @@ var Canvas_1 = __importDefault(require("./types/canvas/Canvas"));
 var runApplicationCommand_1 = __importDefault(require("./utils/misc/runApplicationCommand"));
 var getLevel_1 = __importDefault(require("./utils/misc/getLevel"));
 var MusicPlayer_1 = __importDefault(require("./utils/music/MusicPlayer"));
-dotenv_1.default.config();
 var intents = new discord_js_1.default.Intents([
     discord_js_1.default.Intents.FLAGS.DIRECT_MESSAGES,
     discord_js_1.default.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
@@ -131,19 +132,19 @@ Util_1.default.database = newDatabaseClient();
 Util_1.default.database.connect().then(function () {
     console.log("Connected to the database");
     Util_1.default.database.query("SELECT * FROM languages").then(function (res) {
-        var e_6, _a;
+        var e_3, _a;
         try {
             for (var _b = __values(res.rows), _c = _b.next(); !_c.done; _c = _b.next()) {
                 var row = _c.value;
                 Util_1.default.languages.set(row.guild_id, row.language_code);
             }
         }
-        catch (e_6_1) { e_6 = { error: e_6_1 }; }
+        catch (e_3_1) { e_3 = { error: e_3_1 }; }
         finally {
             try {
                 if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
             }
-            finally { if (e_6) throw e_6.error; }
+            finally { if (e_3) throw e_3.error; }
         }
     });
 });
@@ -160,7 +161,7 @@ try {
             for (var commandFiles_1 = (e_2 = void 0, __values(commandFiles)), commandFiles_1_1 = commandFiles_1.next(); !commandFiles_1_1.done; commandFiles_1_1 = commandFiles_1.next()) {
                 var file = commandFiles_1_1.value;
                 var path = path_1.default.resolve(__dirname, "commands", directory, file);
-                var command = require(path);
+                var command = (_c = require(path).default) !== null && _c !== void 0 ? _c : require(path);
                 command.category = directory;
                 command.path = path;
                 command.cooldowns = new discord_js_1.default.Collection();
@@ -183,51 +184,18 @@ finally {
     }
     finally { if (e_1) throw e_1.error; }
 }
-var messageResponseFiles = fs_1.default.readdirSync(path_1.default.resolve(__dirname, "responses"))
-    .filter(function (file) { return file.endsWith(".js"); });
-try {
-    for (var messageResponseFiles_1 = __values(messageResponseFiles), messageResponseFiles_1_1 = messageResponseFiles_1.next(); !messageResponseFiles_1_1.done; messageResponseFiles_1_1 = messageResponseFiles_1.next()) {
-        var file = messageResponseFiles_1_1.value;
-        var messageResponse = require(path_1.default.resolve(__dirname, "responses", file));
-        Util_1.default.messageResponses.push(messageResponse);
-    }
-}
-catch (e_3_1) { e_3 = { error: e_3_1 }; }
-finally {
-    try {
-        if (messageResponseFiles_1_1 && !messageResponseFiles_1_1.done && (_c = messageResponseFiles_1.return)) _c.call(messageResponseFiles_1);
-    }
-    finally { if (e_3) throw e_3.error; }
-}
-var reactionCommandsFiles = fs_1.default.readdirSync(path_1.default.resolve(__dirname, "reaction_commands"))
-    .filter(function (file) { return file.endsWith(".js"); });
-try {
-    for (var reactionCommandsFiles_1 = __values(reactionCommandsFiles), reactionCommandsFiles_1_1 = reactionCommandsFiles_1.next(); !reactionCommandsFiles_1_1.done; reactionCommandsFiles_1_1 = reactionCommandsFiles_1.next()) {
-        var file = reactionCommandsFiles_1_1.value;
-        var reactionCommand = require(path_1.default.resolve(__dirname, "reaction_commands", file));
-        Util_1.default.reactionCommands.push(reactionCommand);
-    }
-}
-catch (e_4_1) { e_4 = { error: e_4_1 }; }
-finally {
-    try {
-        if (reactionCommandsFiles_1_1 && !reactionCommandsFiles_1_1.done && (_d = reactionCommandsFiles_1.return)) _d.call(reactionCommandsFiles_1);
-    }
-    finally { if (e_4) throw e_4.error; }
-}
-try {
-    for (var _f = __values(Util_1.default.commands.keys()), _g = _f.next(); !_g.done; _g = _f.next()) {
-        var commandName = _g.value;
-        Util_1.default.commandCooldowns.set(commandName, new discord_js_1.default.Collection());
-    }
-}
-catch (e_5_1) { e_5 = { error: e_5_1 }; }
-finally {
-    try {
-        if (_g && !_g.done && (_e = _f.return)) _e.call(_f);
-    }
-    finally { if (e_5) throw e_5.error; }
-}
+// const messageResponseFiles = Fs.readdirSync(Path.resolve(__dirname, "responses"))
+// 	.filter(file => file.endsWith(".js"));
+// for (const file of messageResponseFiles) {
+// 	const messageResponse: MessageResponse = require(Path.resolve(__dirname, "responses", file));
+// 	Util.messageResponses.push(messageResponse);
+// }
+// const reactionCommandsFiles = Fs.readdirSync(Path.resolve(__dirname, "reaction_commands"))
+// 	.filter(file => file.endsWith(".js"));
+// for (const file of reactionCommandsFiles) {
+// 	const reactionCommand: reactionCommand = require(Path.resolve(__dirname, "reaction_commands", file));
+// 	Util.reactionCommands.push(reactionCommand);
+// }
 client.on("ready", function () { return __awaiter(void 0, void 0, void 0, function () {
     var logChannel, emojis, roseChannel, announcementChannel;
     return __generator(this, function (_a) {
@@ -254,12 +222,21 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
                     ]
                 }).catch(console.error);
                 client.users.fetch(Util_1.default.config.OWNER_ID).then(function (owner) { return Util_1.default.owner = owner; }).catch(console.error);
+                console.log("Fetching all global application commands");
+                return [4 /*yield*/, client.application.commands.fetch()];
+            case 1:
+                _a.sent();
+                console.log("Fetching all admin application commands");
+                return [4 /*yield*/, client.guilds.cache.get(Util_1.default.config.ADMIN_GUILD_ID).commands.fetch()];
+            case 2:
+                _a.sent();
                 // Slash commands
                 return [4 /*yield*/, Promise.all(Util_1.default.commands.map(function (command) { return __awaiter(void 0, void 0, void 0, function () {
-                        var applicationCommandData, applicationCommand, newApplicationCommand, err_1, _a, _b, guildId, _c, _d, guildId;
-                        var e_7, _e, e_8, _f;
-                        return __generator(this, function (_g) {
-                            switch (_g.label) {
+                        var applicationCommandData, applicationCommand, newApplicationCommand, err_1, _a, _b, guildId, applicationCommand, e_4_1, applicationCommand;
+                        var e_4, _c;
+                        var _d, _e, _f, _g;
+                        return __generator(this, function (_h) {
+                            switch (_h.label) {
                                 case 0:
                                     applicationCommandData = {
                                         type: "CHAT_INPUT",
@@ -267,25 +244,17 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
                                         description: command.description.en,
                                         options: command.options.en
                                     };
-                                    applicationCommand = client.application.commands.cache.find(function (cmd) { return cmd.name === applicationCommandData.name; });
-                                    if (!(command.category === "admin")) return [3 /*break*/, 7];
-                                    _g.label = 1;
+                                    if (!(command.category === "admin")) return [3 /*break*/, 8];
+                                    applicationCommand = client.guilds.cache.get(Util_1.default.config.ADMIN_GUILD_ID).commands.cache.find(function (cmd) { return cmd.name === applicationCommandData.name; });
+                                    _h.label = 1;
                                 case 1:
-                                    _g.trys.push([1, 6, , 7]);
+                                    _h.trys.push([1, 6, , 7]);
                                     newApplicationCommand = void 0;
                                     if (!(applicationCommand && !applicationCommand.equals(applicationCommandData))) return [3 /*break*/, 3];
                                     console.log("Editing the admin application command /" + applicationCommandData.name);
                                     return [4 /*yield*/, client.application.commands.edit(applicationCommand.id, applicationCommandData, Util_1.default.config.ADMIN_GUILD_ID)];
                                 case 2:
-                                    newApplicationCommand = _g.sent();
-                                    return [3 /*break*/, 5];
-                                case 3:
-                                    console.log("Creating the admin application command /" + applicationCommandData.name);
-                                    return [4 /*yield*/, client.application.commands.create(applicationCommandData, Util_1.default.config.ADMIN_GUILD_ID)];
-                                case 4:
-                                    newApplicationCommand = _g.sent();
-                                    _g.label = 5;
-                                case 5:
+                                    newApplicationCommand = _h.sent();
                                     newApplicationCommand.permissions.set({
                                         permissions: [
                                             {
@@ -300,75 +269,100 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
                                             }
                                         ]
                                     });
-                                    return [3 /*break*/, 7];
+                                    return [3 /*break*/, 5];
+                                case 3:
+                                    if (!!applicationCommand) return [3 /*break*/, 5];
+                                    console.log("Creating the admin application command /" + applicationCommandData.name);
+                                    return [4 /*yield*/, client.application.commands.create(applicationCommandData, Util_1.default.config.ADMIN_GUILD_ID)];
+                                case 4:
+                                    newApplicationCommand = _h.sent();
+                                    newApplicationCommand.permissions.set({
+                                        permissions: [
+                                            {
+                                                id: applicationCommand.guild.id,
+                                                type: "ROLE",
+                                                permission: false
+                                            },
+                                            {
+                                                id: Util_1.default.config.OWNER_ID,
+                                                type: "USER",
+                                                permission: true
+                                            }
+                                        ]
+                                    });
+                                    _h.label = 5;
+                                case 5: return [3 /*break*/, 7];
                                 case 6:
-                                    err_1 = _g.sent();
+                                    err_1 = _h.sent();
                                     console.error();
                                     return [3 /*break*/, 7];
-                                case 7:
-                                    // Guild commands
-                                    if (command.guildIds) {
-                                        if (applicationCommand && !applicationCommand.equals(applicationCommandData)) {
-                                            console.log("Editing the application command /" + applicationCommandData.name + " in the guilds: " + command.guildIds.join(", "));
-                                            try {
-                                                for (_a = __values(command.guildIds), _b = _a.next(); !_b.done; _b = _a.next()) {
-                                                    guildId = _b.value;
-                                                    applicationCommandData.description = command.description[Util_1.default.languages.get(guildId)];
-                                                    applicationCommandData.options = command.options[Util_1.default.languages.get(guildId)];
-                                                    client.application.commands.edit(applicationCommand.id, applicationCommandData, guildId).catch(console.error);
-                                                }
-                                            }
-                                            catch (e_7_1) { e_7 = { error: e_7_1 }; }
-                                            finally {
-                                                try {
-                                                    if (_b && !_b.done && (_e = _a.return)) _e.call(_a);
-                                                }
-                                                finally { if (e_7) throw e_7.error; }
-                                            }
-                                        }
-                                        else {
-                                            console.log("Creating the application command /" + applicationCommandData.name + " in the guilds: " + command.guildIds.join(", "));
-                                            try {
-                                                for (_c = __values(command.guildIds), _d = _c.next(); !_d.done; _d = _c.next()) {
-                                                    guildId = _d.value;
-                                                    applicationCommandData.description = command.description[Util_1.default.languages.get(guildId)];
-                                                    applicationCommandData.options = command.options[Util_1.default.languages.get(guildId)];
-                                                    client.application.commands.create(applicationCommandData, guildId).catch(console.error);
-                                                }
-                                            }
-                                            catch (e_8_1) { e_8 = { error: e_8_1 }; }
-                                            finally {
-                                                try {
-                                                    if (_d && !_d.done && (_f = _c.return)) _f.call(_c);
-                                                }
-                                                finally { if (e_8) throw e_8.error; }
-                                            }
-                                        }
-                                        // Global commands
+                                case 7: return [3 /*break*/, 18];
+                                case 8:
+                                    if (!command.guildIds) return [3 /*break*/, 17];
+                                    _h.label = 9;
+                                case 9:
+                                    _h.trys.push([9, 14, 15, 16]);
+                                    _a = __values(command.guildIds.filter(function (id) { return client.guilds.cache.has(id); })), _b = _a.next();
+                                    _h.label = 10;
+                                case 10:
+                                    if (!!_b.done) return [3 /*break*/, 13];
+                                    guildId = _b.value;
+                                    return [4 /*yield*/, client.guilds.cache.get(guildId).commands.fetch()];
+                                case 11:
+                                    _h.sent();
+                                    applicationCommand = client.guilds.cache.get(guildId).commands.cache.find(function (cmd) { return cmd.name === applicationCommandData.name; });
+                                    if (applicationCommand && !applicationCommand.equals(applicationCommandData)) {
+                                        console.log("Editing the application command /" + applicationCommandData.name + " in the guild: " + guildId);
+                                        applicationCommandData.description = (_d = command.description[Util_1.default.languages.get(guildId)]) !== null && _d !== void 0 ? _d : command.description.en;
+                                        applicationCommandData.options = (_e = command.options[Util_1.default.languages.get(guildId)]) !== null && _e !== void 0 ? _e : command.options.en;
+                                        client.application.commands.edit(applicationCommand.id, applicationCommandData, guildId).catch(console.error);
                                     }
-                                    else {
-                                        if (applicationCommand && !applicationCommand.equals(applicationCommandData)) {
-                                            console.log("Editing the global application command /" + applicationCommandData.name);
-                                            client.application.commands.edit(applicationCommand.id, applicationCommandData).catch(console.error);
-                                        }
-                                        else {
-                                            console.log("Creating the global application command /" + applicationCommandData.name);
-                                            client.application.commands.create(applicationCommandData).catch(console.error);
-                                        }
+                                    else if (!applicationCommand) {
+                                        console.log("Creating the application command /" + applicationCommandData.name + " in the guild: " + guildId);
+                                        applicationCommandData.description = (_f = command.description[Util_1.default.languages.get(guildId)]) !== null && _f !== void 0 ? _f : command.description.en;
+                                        applicationCommandData.options = (_g = command.options[Util_1.default.languages.get(guildId)]) !== null && _g !== void 0 ? _g : command.options.en;
+                                        client.application.commands.create(applicationCommandData, guildId).catch(console.error);
                                     }
-                                    return [2 /*return*/];
+                                    _h.label = 12;
+                                case 12:
+                                    _b = _a.next();
+                                    return [3 /*break*/, 10];
+                                case 13: return [3 /*break*/, 16];
+                                case 14:
+                                    e_4_1 = _h.sent();
+                                    e_4 = { error: e_4_1 };
+                                    return [3 /*break*/, 16];
+                                case 15:
+                                    try {
+                                        if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                                    }
+                                    finally { if (e_4) throw e_4.error; }
+                                    return [7 /*endfinally*/];
+                                case 16: return [3 /*break*/, 18];
+                                case 17:
+                                    applicationCommand = client.application.commands.cache.find(function (cmd) { return cmd.name === applicationCommandData.name; });
+                                    if (applicationCommand && !applicationCommand.equals(applicationCommandData)) {
+                                        console.log("Editing the global application command /" + applicationCommandData.name);
+                                        client.application.commands.edit(applicationCommand.id, applicationCommandData).catch(console.error);
+                                    }
+                                    else if (!applicationCommand) {
+                                        console.log("Creating the global application command /" + applicationCommandData.name);
+                                        client.application.commands.create(applicationCommandData).catch(console.error);
+                                    }
+                                    _h.label = 18;
+                                case 18: return [2 /*return*/];
                             }
                         });
                     }); })).catch(console.error)];
-            case 1:
+            case 3:
                 // Slash commands
                 _a.sent();
                 emojis = client.guilds.cache.get(Util_1.default.config.CANVAS_GUILD_ID).emojis;
                 Util_1.default.database.query("SELECT * FROM colors").then(function (_a) {
                     var colors = _a.rows;
                     return __awaiter(void 0, void 0, void 0, function () {
-                        var _loop_1, colors_1, colors_1_1, color, e_9_1;
-                        var e_9, _b;
+                        var _loop_1, colors_1, colors_1_1, color, e_5_1;
+                        var e_5, _b;
                         return __generator(this, function (_c) {
                             switch (_c.label) {
                                 case 0:
@@ -414,14 +408,14 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
                                     return [3 /*break*/, 2];
                                 case 5: return [3 /*break*/, 8];
                                 case 6:
-                                    e_9_1 = _c.sent();
-                                    e_9 = { error: e_9_1 };
+                                    e_5_1 = _c.sent();
+                                    e_5 = { error: e_5_1 };
                                     return [3 /*break*/, 8];
                                 case 7:
                                     try {
                                         if (colors_1_1 && !colors_1_1.done && (_b = colors_1.return)) _b.call(colors_1);
                                     }
-                                    finally { if (e_9) throw e_9.error; }
+                                    finally { if (e_5) throw e_5.error; }
                                     return [7 /*endfinally*/];
                                 case 8:
                                     emojis.cache.forEach(function (e) {
@@ -429,7 +423,7 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
                                             e.delete().catch(console.error);
                                     });
                                     Util_1.default.database.query("SELECT name FROM canvas").then(function (res) {
-                                        var e_10, _a;
+                                        var e_6, _a;
                                         try {
                                             for (var _b = __values(res.rows), _c = _b.next(); !_c.done; _c = _b.next()) {
                                                 var row = _c.value;
@@ -437,12 +431,12 @@ client.on("ready", function () { return __awaiter(void 0, void 0, void 0, functi
                                                 Util_1.default.canvas.set(canvas.name, canvas);
                                             }
                                         }
-                                        catch (e_10_1) { e_10 = { error: e_10_1 }; }
+                                        catch (e_6_1) { e_6 = { error: e_6_1 }; }
                                         finally {
                                             try {
                                                 if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
                                             }
-                                            finally { if (e_10) throw e_10.error; }
+                                            finally { if (e_6) throw e_6.error; }
                                         }
                                     });
                                     return [2 /*return*/];
@@ -567,9 +561,8 @@ client.on("interactionCreate", function (interaction) { return __awaiter(void 0,
             }
             case "APPLICATION_COMMAND": {
                 if (interaction.isCommand()) {
+                    interaction.deferReply();
                     command = Util_1.default.commands.get(interaction.commandName);
-                    if (Util_1.default.channelCooldowns.get(interaction.channel.id))
-                        return [2 /*return*/];
                     if (command)
                         (0, runApplicationCommand_1.default)(command, interaction).catch(console.error);
                 }
@@ -672,7 +665,7 @@ client.on("messageUpdate", function (message, newMessage) { return __awaiter(voi
 }); });
 client.on("messageReactionAdd", function (reaction, user) { return __awaiter(void 0, void 0, void 0, function () {
     var err_5, _a, _b, reactionCommand;
-    var e_11, _c;
+    var e_7, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
             case 0:
@@ -705,12 +698,12 @@ client.on("messageReactionAdd", function (reaction, user) { return __awaiter(voi
                             .catch(console.error);
                     }
                 }
-                catch (e_11_1) { e_11 = { error: e_11_1 }; }
+                catch (e_7_1) { e_7 = { error: e_7_1 }; }
                 finally {
                     try {
                         if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
                     }
-                    finally { if (e_11) throw e_11.error; }
+                    finally { if (e_7) throw e_7.error; }
                 }
                 return [2 /*return*/];
         }
@@ -718,7 +711,7 @@ client.on("messageReactionAdd", function (reaction, user) { return __awaiter(voi
 }); });
 client.on("messageReactionRemove", function (reaction, user) { return __awaiter(void 0, void 0, void 0, function () {
     var err_6, _a, _b, reactionCommand;
-    var e_12, _c;
+    var e_8, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
             case 0:
@@ -745,12 +738,12 @@ client.on("messageReactionRemove", function (reaction, user) { return __awaiter(
                             .catch(console.error);
                     }
                 }
-                catch (e_12_1) { e_12 = { error: e_12_1 }; }
+                catch (e_8_1) { e_8 = { error: e_8_1 }; }
                 finally {
                     try {
                         if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
                     }
-                    finally { if (e_12) throw e_12.error; }
+                    finally { if (e_8) throw e_8.error; }
                 }
                 Util_1.default.sniping.messageReactions.set(reaction.message.channel.id, {
                     reaction: reaction,
@@ -991,26 +984,26 @@ function testReminders() {
 // import legendaries from "./assets/legendaries.json";
 // import beasts from "./assets/ultra-beasts.json";
 // const pokemons = pokedex.allPokemon()
-//     .map(p => {
-//         return {
-//             names: {
+// 	.map(p => {
+// 		return {
+// 			names: {
 // 				en: p.names.en,
 // 				fr: p.names.fr
 // 			},
-//             national_id: p.national_id,
-//             types: p.types,
-//             abilities: p.abilities,
-//             gender_ratios: p.gender_ratios,
-//             catch_rate: p.catch_rate,
-//             height_eu: p.height_eu,
-//             height_us: p.height_us,
-//             weight_eu: p.weight_eu,
-//             weight_us: p.weight_us,
-//             color: p.color,
-//             base_stats: p.base_stats,
-//             evolution_from: p.evolution_from,
-//             evolutions: p.evolutions.map(evo => evo.to),
-//             mega_evolutions: p.mega_evolutions.map(mega_evolution => {
+// 			national_id: p.national_id,
+// 			types: p.types,
+// 			abilities: p.abilities,
+// 			gender_ratios: p.gender_ratios,
+// 			catch_rate: p.catch_rate,
+// 			height_eu: p.height_eu,
+// 			height_us: p.height_us,
+// 			weight_eu: p.weight_eu,
+// 			weight_us: p.weight_us,
+// 			color: p.color,
+// 			base_stats: p.base_stats,
+// 			evolution_from: p.evolution_from,
+// 			evolutions: p.evolutions.map(evo => evo.to),
+// 			mega_evolutions: p.mega_evolutions.map(mega_evolution => {
 // 				return {
 // 					suffix: mega_evolution.image_suffix ?? "mega",
 // 					types: mega_evolution.types,
@@ -1023,20 +1016,20 @@ function testReminders() {
 // 					base_stats: mega_evolution.base_stats
 // 				}
 // 			}),
-//             variations: p.variations.map(variation => {
+// 			variations: p.variations.map(variation => {
 // 				return {
 // 					suffix: variation.image_suffix,
 // 					names: variation.names,
 // 					types: variation.types,
-// 					abilitites: variation.abilities
+// 					abilities: variation.abilities
 // 				}
 // 			}),
-//             legendary: legendaries.includes(p.names.en),
-//             ultra_beast: beasts.includes(p.names.en)
-//         }
-//     })
-//     .sort((a, b) => a.national_id - b.national_id);
+// 			legendary: legendaries.includes(p.names.en),
+// 			ultra_beast: beasts.includes(p.names.en)
+// 		}
+// 	})
+// 	.sort((a, b) => a.national_id - b.national_id);
 // Fs.writeFileSync(
-//     Path.resolve(__dirname, "assets", "pokemons.json"),
-//     JSON.stringify(pokemons, null, 4)
+// 	Path.resolve(__dirname, "assets", "pokemons.json"),
+// 	JSON.stringify(pokemons, null, 4)
 // );

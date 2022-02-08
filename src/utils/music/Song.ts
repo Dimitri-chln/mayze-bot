@@ -2,8 +2,6 @@ import { AudioResource } from "@discordjs/voice";
 import { User } from "discord.js";
 import Queue from "./Queue";
 
-
-
 export default class Song {
 	readonly name: string;
 	readonly duration: number;

@@ -1,10 +1,8 @@
 import Pokemon from "../../types/pokemon/Pokemon";
 import { Language } from "../../types/structures/Translations";
 
-
-
 const imageSuffixes = {
-	"alola": {
+	alola: {
 		19: 10091,
 		20: 10092,
 		26: 10100,
@@ -22,9 +20,9 @@ const imageSuffixes = {
 		88: 10112,
 		89: 10113,
 		103: 10114,
-		105: 10115
+		105: 10115,
 	},
-	"galar": {
+	galar: {
 		52: 10158,
 		77: 10159,
 		78: 10160,
@@ -43,9 +41,9 @@ const imageSuffixes = {
 		554: 10173,
 		555: 10174,
 		562: 10176,
-		618: 10177
+		618: 10177,
 	},
-	"mega": {
+	mega: {
 		3: 10033,
 		9: 10036,
 		15: 10090,
@@ -89,21 +87,21 @@ const imageSuffixes = {
 		460: 10060,
 		475: 10068,
 		531: 10069,
-		719: 10075
+		719: 10075,
 	},
-	"megax": {
+	megax: {
 		6: 10034,
-		150: 10043
+		150: 10043,
 	},
-	"megay": {
+	megay: {
 		6: 10035,
-		150: 10044
+		150: 10044,
 	},
-	"primal": {
+	primal: {
 		382: 10077,
-		383: 10078
+		383: 10078,
 	},
-	"gigantamax": {
+	gigantamax: {
 		3: 10186,
 		6: 10187,
 		9: 10188,
@@ -136,14 +134,19 @@ const imageSuffixes = {
 		879: 10215,
 		884: 10216,
 		890: 10217,
-		892: [ 10218, 10219 ]
-	}
-}
+		892: [10218, 10219],
+	},
+};
 
-
-
-export function formatName(pokemon: Pokemon, shiny: boolean, variation: VariationType, language: Language, format: FormatType = "full") {
-	let name = "", badges = "";
+export function formatName(
+	pokemon: Pokemon,
+	shiny: boolean,
+	variation: VariationType,
+	language: Language,
+	format: FormatType = "full",
+) {
+	let name = "",
+		badges = "";
 
 	if (shiny) badges += "⭐";
 	if (pokemon.legendary) badges += "🎖️";
@@ -151,13 +154,15 @@ export function formatName(pokemon: Pokemon, shiny: boolean, variation: Variatio
 
 	if (variation === "default") {
 		name = pokemon.names[language];
-
 	} else if (["mega", "megax", "megay", "primal"].includes(variation)) {
-		const megaEvolution = pokemon.megaEvolutions.find(megaEvo => megaEvo.suffix === variation);
+		const megaEvolution = pokemon.megaEvolutions.find(
+			(megaEvo) => megaEvo.suffix === variation,
+		);
 		name = megaEvolution.names[language];
-	
 	} else {
-		const pokemonVariation = pokemon.variations.find(v => v.suffix === variation);
+		const pokemonVariation = pokemon.variations.find(
+			(v) => v.suffix === variation,
+		);
 		name = pokemonVariation.names[language];
 	}
 
@@ -171,17 +176,26 @@ export function formatName(pokemon: Pokemon, shiny: boolean, variation: Variatio
 	}
 }
 
-
-
-export function pokemonImage(pokemon: Pokemon, shiny: boolean, variation: VariationType) {
-	const url = (n: number) => `https://assets.poketwo.net/${shiny ? "shiny" : "images"}/${n}.png?v=26`;
+export function pokemonImage(
+	pokemon: Pokemon,
+	shiny: boolean,
+	variation: VariationType,
+) {
+	const url = (n: number) =>
+		`https://assets.poketwo.net/${
+			shiny ? "shiny" : "images"
+		}/${n}.png?v=26`;
 
 	if (variation === "default") return url(pokemon.nationalId);
 	else return url(imageSuffixes[variation][pokemon.nationalId]);
 }
 
-
-
-export type VariationType = "default" | "alola" | "mega" | "megax" | "megay" | "primal";
+export type VariationType =
+	| "default"
+	| "alola"
+	| "mega"
+	| "megax"
+	| "megay"
+	| "primal";
 
 export type FormatType = "full" | "badge" | "raw";

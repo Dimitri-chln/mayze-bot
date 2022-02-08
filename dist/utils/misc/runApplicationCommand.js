@@ -59,32 +59,20 @@ var discord_js_1 = require("discord.js");
 var Util_1 = __importDefault(require("../../Util"));
 var Translations_1 = __importDefault(require("../../types/structures/Translations"));
 function runApplicationCommand(command, interaction) {
-    var _a, _b;
+    var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var language, translations, commandTranslations, NOW, channelCooldown, userPermissions, missingUserPermissions, missingBotPermissions, cooldownReduction, _c, userUpgrades, cooldownAmount, expirationTime, timeLeft, timeLeftHumanized;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var language, translations, commandTranslations, NOW, userPermissions, missingUserPermissions, missingBotPermissions, cooldownReduction, _b, userUpgrades, cooldownAmount, expirationTime, timeLeft, timeLeftHumanized;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     language = Util_1.default.languages.get(interaction.guild.id);
                     return [4 /*yield*/, new Translations_1.default("run", language).init()];
                 case 1:
-                    translations = _d.sent();
-                    commandTranslations = new Translations_1.default("cmd_" + command.name, language);
+                    translations = _c.sent();
+                    return [4 /*yield*/, new Translations_1.default("cmd_" + command.name, language).init()];
+                case 2:
+                    commandTranslations = _c.sent();
                     NOW = Date.now();
-                    channelCooldown = (_a = Util_1.default.channelCooldowns.get(interaction.channel.id)) !== null && _a !== void 0 ? _a : {
-                        numberOfMessages: 0,
-                        lastMessageTimestamp: 0
-                    };
-                    if (channelCooldown.numberOfMessages === 0)
-                        setTimeout(function () { return Util_1.default.channelCooldowns.delete(interaction.channel.id); }, 10000);
-                    if (channelCooldown.numberOfMessages >= 5)
-                        return [2 /*return*/];
-                    if (NOW - channelCooldown.lastMessageTimestamp < 500)
-                        return [2 /*return*/];
-                    Util_1.default.channelCooldowns.set(interaction.channel.id, {
-                        numberOfMessages: channelCooldown.numberOfMessages + 1,
-                        lastMessageTimestamp: NOW
-                    });
                     if (command.category === "admin" && interaction.user.id !== Util_1.default.owner.id)
                         return [2 /*return*/];
                     userPermissions = interaction.member instanceof discord_js_1.GuildMember
@@ -92,26 +80,26 @@ function runApplicationCommand(command, interaction) {
                         : new discord_js_1.Permissions(BigInt(interaction.member.permissions));
                     missingUserPermissions = command.userPermissions.filter(function (permission) { return !userPermissions.has(permission); });
                     if (missingUserPermissions.length && interaction.user.id !== Util_1.default.owner.id)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.user_missing_permissions(missingUserPermissions.join("`, `")),
                                 ephemeral: true
                             }).catch(console.error)];
                     missingBotPermissions = command.botPermissions.filter(function (permission) { return !interaction.guild.me.permissionsIn(interaction.channel.id).has(permission); });
                     if (missingBotPermissions.length)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.bot_missing_perms(missingBotPermissions.join("`, `")),
                                 ephemeral: true
                             }).catch(console.error)];
                     cooldownReduction = 0;
-                    if (!(command.name === "catch")) return [3 /*break*/, 3];
+                    if (!(command.name === "catch")) return [3 /*break*/, 4];
                     return [4 /*yield*/, Util_1.default.database.query("SELECT catch_cooldown_reduction FROM upgrades WHERE user_id = $1", [interaction.user.id])];
-                case 2:
-                    _c = __read.apply(void 0, [(_d.sent()).rows, 1]), userUpgrades = _c[0];
+                case 3:
+                    _b = __read.apply(void 0, [(_c.sent()).rows, 1]), userUpgrades = _b[0];
                     if (userUpgrades)
                         cooldownReduction += 30 * userUpgrades.catch_cooldown_reduction;
-                    _d.label = 3;
-                case 3:
-                    cooldownAmount = (((_b = command.cooldown) !== null && _b !== void 0 ? _b : 2) - cooldownReduction) * 1000;
+                    _c.label = 4;
+                case 4:
+                    cooldownAmount = (((_a = command.cooldown) !== null && _a !== void 0 ? _a : 2) - cooldownReduction) * 1000;
                     if (command.cooldowns.has(interaction.user.id)) {
                         expirationTime = command.cooldowns.get(interaction.user.id) + cooldownAmount;
                         if (NOW < expirationTime) {
@@ -120,7 +108,7 @@ function runApplicationCommand(command, interaction) {
                                 .toUTCString()
                                 .replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
                                 .replace(/00h |00m /g, "");
-                            return [2 /*return*/, interaction.reply({
+                            return [2 /*return*/, interaction.followUp({
                                     content: translations.data.cooldown(timeLeftHumanized, command.name),
                                     ephemeral: true
                                 }).catch(console.error)];
@@ -131,10 +119,7 @@ function runApplicationCommand(command, interaction) {
                     command.run(interaction, commandTranslations)
                         .catch(function (err) {
                         console.error(err);
-                        if (interaction.replied)
-                            interaction.followUp(translations.data.error()).catch(console.error);
-                        else
-                            interaction.reply(translations.data.error()).catch(console.error);
+                        interaction.followUp(translations.data.error()).catch(console.error);
                     });
                     return [2 /*return*/];
             }

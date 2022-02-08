@@ -168,10 +168,10 @@ var command = {
                     try {
                         parsedExpression = mathjs_1.default.parse(expression);
                         result = parsedExpression.evaluate();
-                        interaction.reply("```\n" + parsedExpression.toString() + "\n= " + result.toString() + "\n```");
+                        interaction.followUp("```\n" + parsedExpression.toString() + "\n= " + result.toString() + "\n```");
                     }
                     catch (err) {
-                        interaction.reply({
+                        interaction.followUp({
                             content: translations.data.syntax_error(err.message),
                             ephemeral: true
                         });
@@ -187,10 +187,10 @@ var command = {
                         resultString = Array.isArray(result)
                             ? result.join(", ")
                             : result.toString();
-                        interaction.reply("```\n" + equation.toString() + "\n" + variable + " = " + ((_b = resultString.toString()) !== null && _b !== void 0 ? _b : translations.data.no_solution()) + "\n```");
+                        interaction.followUp("```\n" + equation.toString() + "\n" + variable + " = " + ((_b = resultString.toString()) !== null && _b !== void 0 ? _b : translations.data.no_solution()) + "\n```");
                     }
                     catch (err) {
-                        interaction.reply({
+                        interaction.followUp({
                             content: translations.data.syntax_error(err.message),
                             ephemeral: true
                         });
@@ -203,10 +203,10 @@ var command = {
                     try {
                         parsedExpression = mathjs_1.default.parse(expression);
                         derivative = mathjs_1.default.derivative(parsedExpression, variable);
-                        interaction.reply("```\nf(" + variable + ") = " + parsedExpression.toString() + "\nf'(" + variable + ") = " + derivative.toString() + "\n```");
+                        interaction.followUp("```\nf(" + variable + ") = " + parsedExpression.toString() + "\nf'(" + variable + ") = " + derivative.toString() + "\n```");
                     }
                     catch (err) {
-                        interaction.reply({
+                        interaction.followUp({
                             content: translations.data.syntax_error(err.message),
                             ephemeral: true
                         });

@@ -5,18 +5,16 @@ import Util from "../../Util";
 
 import { Client as UnbClient } from "unb-api";
 
-
-
 const command: Command = {
 	name: "unbelievaboat",
 	description: {
 		fr: "Intéragir avec UnbelievaBoat",
-		en: "Interact with UnbelievaBoat"
+		en: "Interact with UnbelievaBoat",
 	},
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 	guildIds: ["689164798264606784"],
-	
+
 	options: {
 		fr: [
 			{
@@ -28,10 +26,10 @@ const command: Command = {
 						name: "user",
 						description: "L'utilisateur dont tu veux voir l'argent",
 						type: "USER",
-						required: false
-					}
-				]
-			}
+						required: false,
+					},
+				],
+			},
 		],
 		en: [
 			{
@@ -43,47 +41,59 @@ const command: Command = {
 						name: "user",
 						description: "The user whose balance you want to see",
 						type: "USER",
-						required: false
-					}
-				]
-			}
-		]
+						required: false,
+					},
+				],
+			},
+		],
 	},
 
 	run: async (interaction, translations) => {
 		const unbClient = new UnbClient(process.env.UNB_TOKEN);
-		const user = await unbClient.getUserBalance(interaction.guild.id, interaction.user.id);
+		const user = interaction.options.getUser("user") ?? interaction.user;
+		const unbUser = await unbClient.getUserBalance(
+			interaction.guild.id,
+			user.id,
+		);
 
 		const subCommand = interaction.options.getSubcommand();
 
 		switch (subCommand) {
 			case "balance": {
-				interaction.reply({
+				interaction.followUp({
 					embeds: [
 						{
 							author: {
-								name: translations.data.balance_title(interaction.user.tag),
-								iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+								name: translations.data.balance_title(user.tag),
+								iconURL: user.displayAvatarURL({
+									dynamic: true,
+								}),
 							},
 							color: interaction.guild.me.displayColor,
 							description: translations.data.balance_description(
-								user.rank.toLocaleString(translations.language),
-								user.cash.toLocaleString(translations.language),
-								user.bank.toLocaleString(translations.language),
-								user.total.toLocaleString(translations.language)
+								unbUser.rank.toLocaleString(
+									translations.language,
+								),
+								unbUser.cash.toLocaleString(
+									translations.language,
+								),
+								unbUser.bank.toLocaleString(
+									translations.language,
+								),
+								unbUser.total.toLocaleString(
+									translations.language,
+								),
 							),
 							footer: {
-								text: "✨ Mayze ✨"
-							}
-						}
-					]
+								text: "✨ Mayze ✨",
+							},
+						},
+					],
 				});
 				break;
 			}
 		}
-	}
+	},
 };
-
-
 
 export default command;

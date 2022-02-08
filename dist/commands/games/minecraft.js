@@ -87,7 +87,11 @@ var command = {
                                             thumbnail: {
                                                 url: "attachment://favicon.png"
                                             },
-                                            description: translations.data.description(serverIP, isOnline(res_1), res_1.version.name, res_1.players.online.toString(), res_1.players.max.toString(), res_1.ping.toString())
+                                            color: interaction.guild.me.displayColor,
+                                            description: translations.data.description(serverIP, isOnline(res_1), res_1.version.name, res_1.players.online.toString(), res_1.players.max.toString(), res_1.ping.toString()),
+                                            footer: {
+                                                text: "✨ Mayze ✨"
+                                            }
                                         });
                                         page.attachments.push(new discord_js_1.MessageAttachment(Buffer.from(res_1.favicon.slice(22), "base64"), "favicon.png"));
                                         return [3 /*break*/, 4];
@@ -97,7 +101,11 @@ var command = {
                                             author: {
                                                 name: translations.data.title(),
                                             },
-                                            description: translations.data.failed_description(serverIP)
+                                            color: interaction.guild.me.displayColor,
+                                            description: translations.data.failed_description(serverIP),
+                                            footer: {
+                                                text: "✨ Mayze ✨"
+                                            }
                                         });
                                         return [3 /*break*/, 4];
                                     case 4:

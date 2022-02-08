@@ -110,7 +110,7 @@ var command = {
                 case 0:
                     number = interaction.options.getInteger("number");
                     if (isNaN(number) || number <= 0 || number > 100)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.invalid_number(),
                                 ephemeral: true
                             })];
@@ -130,7 +130,7 @@ var command = {
                     return [4 /*yield*/, interaction.channel.bulkDelete(messages, true)];
                 case 2:
                     _a.sent();
-                    return [4 /*yield*/, interaction.reply({
+                    return [4 /*yield*/, interaction.followUp({
                             content: translations.data.deleted(messages.size.toString(), messages.size > 1),
                             fetchReply: true
                         })];

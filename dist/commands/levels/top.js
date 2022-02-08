@@ -89,40 +89,43 @@ var command = {
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var leaderboard, top, pages, page, _loop_1, i;
+        var leaderboard, top, pages, _loop_1, i;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     leaderboard = interaction.options.getString("leaderboard");
-                    return [4 /*yield*/, Util_1.default.database.query("\n\t\t\tSELECT " + leaderboard + " FROM levels\n\t\t\tORDER BY " + leaderboard + " DESC\n\t\t\t")];
+                    return [4 /*yield*/, Util_1.default.database.query("\n\t\t\tSELECT * FROM levels\n\t\t\tORDER BY " + leaderboard + " DESC\n\t\t\t")];
                 case 1:
                     top = (_a.sent()).rows;
                     top = top.filter(function (user) { return interaction.guild.members.cache.has(user.user_id); });
                     pages = [];
-                    page = {
-                        embeds: [
-                            {
-                                author: {
-                                    name: translations.data.title(interaction.guild.name, leaderboard === "chat_xp"),
-                                    iconURL: interaction.guild.iconURL({ dynamic: true })
-                                },
-                                color: interaction.guild.me.displayColor,
-                                description: translations.data.no_member()
-                            }
-                        ]
-                    };
                     if (!top.length)
-                        pages.push(page);
+                        pages.push({
+                            embeds: [
+                                {
+                                    author: {
+                                        name: translations.data.title(interaction.guild.name, leaderboard === "chat_xp"),
+                                        iconURL: interaction.guild.iconURL({ dynamic: true })
+                                    },
+                                    color: interaction.guild.me.displayColor,
+                                    description: translations.data.no_member()
+                                }
+                            ]
+                        });
                     _loop_1 = function (i) {
-                        page.embeds[0] = {
-                            author: {
-                                name: translations.data.title(interaction.guild.name, leaderboard === "chat_xp"),
-                                iconURL: interaction.guild.iconURL({ dynamic: true })
-                            },
-                            color: interaction.guild.me.displayColor,
-                            description: top
-                                .slice(i, i + Util_1.default.config.ITEMS_PER_PAGE)
-                                .map(function (user, j) { return translations.data.description((i + j + 1).toString(), interaction.guild.members.cache.get(user.user_id).user.username, (0, getLevel_1.default)(user[leaderboard]).level.toString()); }).join("\n")
+                        var page = {
+                            embeds: [
+                                {
+                                    author: {
+                                        name: translations.data.title(interaction.guild.name, leaderboard === "chat_xp"),
+                                        iconURL: interaction.guild.iconURL({ dynamic: true })
+                                    },
+                                    color: interaction.guild.me.displayColor,
+                                    description: top
+                                        .slice(i, i + Util_1.default.config.ITEMS_PER_PAGE)
+                                        .map(function (user, j) { return translations.data.description((i + j + 1).toString(), interaction.guild.members.cache.get(user.user_id).user.username, (0, getLevel_1.default)(user[leaderboard]).level.toString()); }).join("\n")
+                                }
+                            ]
                         };
                         pages.push(page);
                     };

@@ -169,7 +169,7 @@ var command = {
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var subCommand, _a, gems, _b, pokemon_1, megaType_1, shiny_1, _c, pokemonData, megaEvolution_1, defaultData, defaultUserData, reply_1, gemList;
+        var subCommand, _a, gems, _b, pokemon_1, megaType_1, shiny_1, _c, pokemonData, megaEvolution_1, defaultUserData, defaultData, reply_1, gemList;
         var _d;
         return __generator(this, function (_e) {
             switch (_e.label) {
@@ -186,34 +186,31 @@ var command = {
                     return [3 /*break*/, 6];
                 case 2:
                     pokemon_1 = Pokedex_1.default.findByName(interaction.options.getString("pokemon"));
+                    if (!pokemon_1)
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_pokemon())];
                     megaType_1 = interaction.options.getString("type");
                     shiny_1 = (_d = interaction.options.getBoolean("shiny")) !== null && _d !== void 0 ? _d : false;
                     return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM pokemons WHERE pokedex_id = $1 AND shiny = $2 AND variation = 'default' AND users ? $3", [pokemon_1.nationalId, shiny_1, interaction.user.id])];
                 case 3:
                     _c = __read.apply(void 0, [(_e.sent()).rows, 1]), pokemonData = _c[0];
                     if (!pokemonData)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.pokemon_not_owned(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.pokemon_not_owned())];
                     megaEvolution_1 = pokemon_1.megaEvolutions.find(function (mega) { return mega.suffix === megaType_1; });
                     if (!megaEvolution_1)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_mega_evolution(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_mega_evolution())];
                     if (!gems[megaEvolution_1.megaStone])
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.no_mega_gem(megaEvolution_1.megaStone),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.no_mega_gem(megaEvolution_1.megaStone))];
                     Util_1.default.database.query("\n\t\t\t\t\tUPDATE mega_gems\n\t\t\t\t\tSET gems =\n\t\t\t\t\t\tCASE\n\t\t\t\t\t\t\tWHEN (gems -> $1)::int = 1 THEN gems - $1\n\t\t\t\t\t\t\tELSE jsonb_set(gems, '{" + megaEvolution_1.megaStone + "}', ((gems -> $1)::int - 1)::text::jsonb)\n\t\t\t\t\t\tEND\n\t\t\t\t\tWHERE user_id = $2\n\t\t\t\t\t", [megaEvolution_1.megaStone, interaction.user.id]);
+                    defaultUserData = {
+                        caught: 1,
+                        favorite: false,
+                        nickname: null
+                    };
                     defaultData = {};
-                    defaultData[interaction.user.id] = { caught: 1, favorite: false, nickname: null };
-                    defaultUserData = { caught: 1, favorite: false, nickname: null };
-                    Util_1.default.database.query("\n\t\t\t\t\tINSERT INTO pokemons VALUES ($1, $2, $3, $4, $5)\n\t\t\t\t\tON CONFLICT (pokedex_id, shiny, variation)\n\t\t\t\t\tDO UPDATE SET users =\n\t\t\t\t\t\tCASE\n\t\t\t\t\t\t\tWHEN pokemons.users -> $6 IS NULL THEN jsonb_set(pokemons.users, '{" + interaction.user.id + "}', $7)\n\t\t\t\t\t\t\tELSE jsonb_set(pokemons.users, '{" + interaction.user.id + ", caught}', ((pokemons.users -> $6 -> 'caught')::int + 1)::text::jsonb)\n\t\t\t\t\t\tEND\n\t\t\t\t\tWHERE pokemons.pokedex_id = EXCLUDED.pokedex_id AND pokemons.shiny = EXCLUDED.shiny AND pokemons.variation = EXCLUDED.variation\n\t\t\t\t\t", [pokemon_1.nationalId, pokemon_1.names.en, shiny_1, megaEvolution_1.suffix, defaultData, interaction.user.id, defaultUserData]);
+                    defaultData[interaction.user.id] = defaultUserData;
+                    Util_1.default.database.query("\n\t\t\t\t\tINSERT INTO pokemons VALUES ($1, $2, $3, $4)\n\t\t\t\t\tON CONFLICT (pokedex_id, shiny, variation)\n\t\t\t\t\tDO UPDATE SET users =\n\t\t\t\t\t\tCASE\n\t\t\t\t\t\t\tWHEN pokemons.users -> $5 IS NULL THEN jsonb_set(pokemons.users, '{" + interaction.user.id + "}', $6)\n\t\t\t\t\t\t\tELSE jsonb_set(pokemons.users, '{" + interaction.user.id + ", caught}', ((pokemons.users -> $5 -> 'caught')::int + 1)::text::jsonb)\n\t\t\t\t\t\tEND\n\t\t\t\t\tWHERE pokemons.pokedex_id = EXCLUDED.pokedex_id AND pokemons.shiny = EXCLUDED.shiny AND pokemons.variation = EXCLUDED.variation\n\t\t\t\t\t", [pokemon_1.nationalId, shiny_1, megaEvolution_1.suffix, defaultData, interaction.user.id, defaultUserData]);
                     Util_1.default.database.query("\n\t\t\t\t\tUPDATE pokemons\n\t\t\t\t\tSET users =\n\t\t\t\t\t\tCASE\n\t\t\t\t\t\t\tWHEN (users -> $1 -> 'caught')::int = 1 THEN users - $1\n\t\t\t\t\t\t\tELSE jsonb_set(users, '{" + interaction.user.id + ", caught}', ((users -> $1 -> 'caught')::int - 1)::text::jsonb)\n\t\t\t\t\t\tEND\n\t\t\t\t\tWHERE pokedex_id = $2 AND shiny = $3 AND variation = $4\n\t\t\t\t\t", [interaction.user.id, pokemon_1.nationalId, shiny_1, "default"]);
-                    return [4 /*yield*/, interaction.reply({
+                    return [4 /*yield*/, interaction.followUp({
                             embeds: [
                                 {
                                     author: {
@@ -244,7 +241,7 @@ var command = {
                 case 5:
                     {
                         gemList = (0, groupArrayBy_1.default)(Object.entries(gems), 2);
-                        interaction.reply({
+                        interaction.followUp({
                             embeds: [
                                 {
                                     author: {

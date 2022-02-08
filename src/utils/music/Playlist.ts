@@ -2,8 +2,6 @@ import { User } from "discord.js";
 import Queue from "./Queue";
 import Song from "./Song";
 
-
-
 export default class Playlist {
 	readonly name: string;
 	readonly author: string;
@@ -22,7 +20,7 @@ export interface PlaylistData {
 	title: string;
 	channel: {
 		name: string;
-	}
+	};
 	url: string;
 	videos: Song[];
 }

@@ -86,24 +86,24 @@ var command = {
             reason = interaction.options.getString("reason");
             if (member.roles.highest.position >= interaction.member.roles.highest.position
                 && interaction.user.id !== Util_1.default.owner.id)
-                return [2 /*return*/, interaction.reply({
+                return [2 /*return*/, interaction.followUp({
                         content: translations.data.not_allowed(),
                         ephemeral: true
                     })];
             // Server booster
             if (member.premiumSinceTimestamp)
-                return [2 /*return*/, interaction.reply({
+                return [2 /*return*/, interaction.followUp({
                         content: translations.data.boosting(),
                         ephemeral: true
                     })];
             if (member.roles.highest.position >= interaction.guild.me.roles.highest.position)
-                return [2 /*return*/, interaction.reply({
+                return [2 /*return*/, interaction.followUp({
                         content: translations.data.too_high_hierarchy(member.user.tag),
                         ephemeral: true
                     })];
             member.kick(translations.data.reason(interaction.user.tag, reason))
                 .then(function (m) {
-                interaction.reply(translations.data.kicked(m.user.tag));
+                interaction.followUp(translations.data.kicked(m.user.tag));
             });
             return [2 /*return*/];
         });

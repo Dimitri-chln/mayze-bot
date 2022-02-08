@@ -88,17 +88,17 @@ var command = {
                     if (!interaction.member.roles.cache.has("696751852267765872") && // Chef
                         !interaction.member.roles.cache.has("696751614177837056") // Sous-chef
                     )
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.not_allowed(),
                                 ephemeral: true
                             })];
                     if (!["707304882662801490", "689212233439641649"].includes(interaction.channel.id))
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.wrong_channel(),
                                 ephemeral: true
                             })];
                     questChannel = interaction.client.channels.cache.get("689385764219387905");
-                    interaction.reply(translations.data.await_image());
+                    interaction.followUp(translations.data.await_image());
                     filter = function (msg) { return msg.author.id === interaction.user.id && msg.attachments.size === 1; };
                     return [4 /*yield*/, interaction.channel.awaitMessages({ filter: filter, idle: 120000, max: 1 })];
                 case 1:

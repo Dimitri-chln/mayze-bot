@@ -94,7 +94,7 @@ var command = {
                     voiceXp = userVoiceData ? userVoiceData.voice_xp : 0;
                     voiceRank = voiceLeaderboard.indexOf(userVoiceData) + 1;
                     voiceLevel = (0, getLevel_1.default)(voiceXp);
-                    interaction.reply({
+                    interaction.followUp({
                         embeds: [
                             {
                                 author: {

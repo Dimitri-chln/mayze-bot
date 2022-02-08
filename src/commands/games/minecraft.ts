@@ -7,75 +7,84 @@ import pagination, { Page } from "../../utils/misc/pagination";
 import Minecraft from "minecraft-server-ping";
 import { MessageAttachment } from "discord.js";
 
-
-
 const command: Command = {
 	name: "minecraft",
 	description: {
 		fr: "Obtenir des informations sur les serveurs Minecraft de Mayze",
-		en: "Get information about Mayze's Minecraft servers"
+		en: "Get information about Mayze's Minecraft servers",
 	},
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
-	guildIds: [ Util.config.MAIN_GUILD_ID ],
+	guildIds: [Util.config.MAIN_GUILD_ID],
 
 	options: {
 		fr: [],
-		en: []
+		en: [],
 	},
-	
+
 	run: async (interaction, translations) => {
 		const serverIPs = process.env.MINECRAFT_SERVER_IPS.split(",");
 
 		const pages: Page[] = [];
 
 		await Promise.all(
-			serverIPs.map(async serverIP => {
+			serverIPs.map(async (serverIP) => {
 				const page: Page = {
 					embeds: [],
-					attachments: []
+					attachments: [],
 				};
-				
+
 				try {
 					const res = await Minecraft.ping(serverIP);
-					const isOnline = (pingResult: typeof res) => /^Bienvenue sur le serveur de .+!$/.test(pingResult.description?.text);
-				
+					const isOnline = (pingResult: typeof res) =>
+						/^Bienvenue sur le serveur de .+!$/.test(
+							pingResult.description?.text,
+						);
+
 					page.embeds.push({
 						author: {
 							name: translations.data.title(),
-							iconURL: interaction.client.user.displayAvatarURL()
+							iconURL: interaction.client.user.displayAvatarURL(),
 						},
 						thumbnail: {
-							url: "attachment://favicon.png"
+							url: "attachment://favicon.png",
 						},
+						color: interaction.guild.me.displayColor,
 						description: translations.data.description(
 							serverIP,
 							isOnline(res),
 							res.version.name,
 							res.players.online.toString(),
 							res.players.max.toString(),
-							res.ping.toString()
-						)
+							res.ping.toString(),
+						),
+						footer: {
+							text: "✨ Mayze ✨",
+						},
 					});
 
 					page.attachments.push(
 						new MessageAttachment(
 							Buffer.from(res.favicon.slice(22), "base64"),
-							"favicon.png"
-						)
+							"favicon.png",
+						),
 					);
-				
 				} catch (err) {
 					page.embeds.push({
 						author: {
 							name: translations.data.title(),
 						},
-						description: translations.data.failed_description(serverIP)
+						color: interaction.guild.me.displayColor,
+						description:
+							translations.data.failed_description(serverIP),
+						footer: {
+							text: "✨ Mayze ✨",
+						},
 					});
 				}
 
 				pages.push(page);
-			})
+			}),
 		);
 
 		// Sort online servers first
@@ -86,9 +95,7 @@ const command: Command = {
 		});
 
 		pagination(interaction, pages);
-	}
+	},
 };
-
-
 
 export default command;

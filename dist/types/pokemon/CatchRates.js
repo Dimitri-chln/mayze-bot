@@ -18,22 +18,23 @@ var Pokedex_1 = __importDefault(require("./Pokedex"));
 var CatchRates = /** @class */ (function () {
     function CatchRates(pokemonList, upgrades) {
         var e_1, _a;
-        var data = [];
+        var _b;
+        this.data = [];
         try {
-            for (var _b = __values(Pokedex_1.default.pokemons), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var pokemon = _c.value;
+            for (var _c = __values(Pokedex_1.default.pokemons), _d = _c.next(); !_d.done; _d = _c.next()) {
+                var pokemon = _d.value;
                 var probability = pokemon.catchRate;
                 if (pokemon.legendary || pokemon.ultraBeast)
-                    probability *= 1 + (upgrades.legendary_ultrabeast_tier * 2) / 100;
+                    probability *= 1 + (upgrades.legendary_ub_probability * 2) / 100;
                 if (!pokemonList.has(pokemon))
-                    probability *= 1 + (upgrades.new_pokemon_tier * 2) / 100;
-                data.push(data.slice(-1)[0] + probability);
+                    probability *= 1 + (upgrades.new_pokemon_probability * 2) / 100;
+                this.data.push(((_b = this.data.slice(-1)[0]) !== null && _b !== void 0 ? _b : 0) + probability);
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
             }
             finally { if (e_1) throw e_1.error; }
         }

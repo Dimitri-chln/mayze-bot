@@ -106,7 +106,8 @@ var command = {
                         name: "response",
                         description: "Le numéro de la réponse",
                         type: "INTEGER",
-                        required: true
+                        required: true,
+                        minValue: 0
                     }
                 ]
             },
@@ -173,12 +174,13 @@ var command = {
                         name: "response",
                         description: "The response's number",
                         type: "INTEGER",
-                        required: true
+                        required: true,
+                        minValue: 0
                     }
                 ]
             },
             {
-                name: "get",
+                name: "list",
                 description: "Get the list of all custom responses",
                 type: "SUB_COMMAND"
             }
@@ -191,47 +193,38 @@ var command = {
             switch (_c.label) {
                 case 0:
                     subCommand = interaction.options.getSubcommand();
-                    return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM responses")];
+                    return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM custom_responses")];
                 case 1:
                     responses = (_c.sent()).rows;
                     _a = subCommand;
                     switch (_a) {
                         case "add": return [3 /*break*/, 2];
                         case "remove": return [3 /*break*/, 4];
-                        case "get": return [3 /*break*/, 6];
+                        case "list": return [3 /*break*/, 6];
                     }
                     return [3 /*break*/, 7];
                 case 2:
                     trigger = interaction.options.getString("trigger");
                     response = interaction.options.getString("response");
-                    triggerType = (_b = interaction.options.getNumber("type")) !== null && _b !== void 0 ? _b : 0;
-                    return [4 /*yield*/, Util_1.default.database.query("INSERT INTO responses (trigger, response, trigger_type) VALUES ($1, $2, $3)", [trigger, response, triggerType])];
+                    triggerType = (_b = interaction.options.getInteger("type")) !== null && _b !== void 0 ? _b : 0;
+                    return [4 /*yield*/, Util_1.default.database.query("INSERT INTO custom_responses (trigger, response, trigger_type) VALUES ($1, $2, $3)", [trigger, response, triggerType])];
                 case 3:
                     _c.sent();
-                    interaction.reply({
-                        content: translations.data.response_added(),
-                        ephemeral: true
-                    });
+                    interaction.followUp(translations.data.response_added());
                     return [3 /*break*/, 7];
                 case 4:
-                    number = interaction.options.getNumber("response");
+                    number = interaction.options.getInteger("response");
                     if (number < 1 || number > responses.length)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_number(responses.length.toString()),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_number(responses.length.toString()))];
                     response = responses[number - 1];
-                    return [4 /*yield*/, Util_1.default.database.query("DELETE FROM responses WHERE id = $1", [response.id])];
+                    return [4 /*yield*/, Util_1.default.database.query("DELETE FROM custom_responses WHERE id = $1", [response.id])];
                 case 5:
                     _c.sent();
-                    interaction.reply({
-                        content: translations.data.response_removed(),
-                        ephemeral: true
-                    });
+                    interaction.followUp(translations.data.response_removed());
                     return [3 /*break*/, 7];
                 case 6:
                     {
-                        interaction.reply({
+                        interaction.followUp({
                             embeds: [
                                 {
                                     author: {
@@ -256,13 +249,4 @@ var command = {
         });
     }); }
 };
-var TriggerType;
-(function (TriggerType) {
-    TriggerType[TriggerType["CONTAINS"] = 0] = "CONTAINS";
-    TriggerType[TriggerType["EQUAL"] = 1] = "EQUAL";
-    TriggerType[TriggerType["REGEX"] = 2] = "REGEX";
-    TriggerType[TriggerType["STARTS_WITH"] = 3] = "STARTS_WITH";
-    TriggerType[TriggerType["ENDS_WITH"] = 4] = "ENDS_WITH";
-})(TriggerType || (TriggerType = {}));
-;
 exports.default = command;

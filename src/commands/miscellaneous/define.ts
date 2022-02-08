@@ -5,13 +5,11 @@ import Util from "../../Util";
 
 import Axios from "axios";
 
-
-
 const command: Command = {
 	name: "define",
 	description: {
 		fr: "Obtenir la définition d'un mot",
-		en: "Get the definition of a word"
+		en: "Get the definition of a word",
 	},
 	userPermissions: [],
 	botPermissions: [],
@@ -22,7 +20,7 @@ const command: Command = {
 				name: "word",
 				description: "Le mot à rechercher",
 				type: "STRING",
-				required: true
+				required: true,
 			},
 			{
 				name: "language",
@@ -32,21 +30,21 @@ const command: Command = {
 				choices: [
 					{
 						name: "Français",
-						value: "fr"
+						value: "fr",
 					},
 					{
 						name: "Anglais",
-						value: "en"
-					}
-				]
-			}
+						value: "en",
+					},
+				],
+			},
 		],
 		en: [
 			{
 				name: "word",
 				description: "The word to search",
 				type: "STRING",
-				required: true
+				required: true,
 			},
 			{
 				name: "language",
@@ -56,42 +54,63 @@ const command: Command = {
 				choices: [
 					{
 						name: "Français",
-						value: "fr"
+						value: "fr",
 					},
 					{
 						name: "Anglais",
-						value: "en"
-					}
-				]
-			}
-		]
+						value: "en",
+					},
+				],
+			},
+		],
 	},
 
 	run: async (interaction, translations) => {
 		const apiURL = "https://api.dictionaryapi.dev/api/v2/entries";
 
 		const word = interaction.options.getString("word").toLowerCase();
-		const searchLanguage = interaction.options.getString("language") ?? translations.language;
-		
+		const searchLanguage =
+			interaction.options.getString("language") ?? translations.language;
+
 		Axios.get(`${apiURL}/${searchLanguage}/${encodeURIComponent(word)}`)
 			.then(async ({ data }: { data: DictionaryResult[] }) => {
-				interaction.reply(
-					`__**${data[0].word.replace(/^./, (a: string) => a.toUpperCase())}**__: ${data[0].phonetics[0].text ? `(${data[0].phonetics[0].text})` : ""}\n${data[0].meanings.map(meaning => `> __${meaning.partOfSpeech.replace(/^./, a => a.toUpperCase())}:__ ${meaning.definitions[0].definition}${meaning.definitions[0].synonyms && meaning.definitions[0].synonyms.length ? `\n*${translations.data.synonyms()}: ${meaning.definitions[0].synonyms.join(", ")}*` : ""}`).join("\n\n")}`
+				interaction.followUp(
+					`__**${data[0].word.replace(/^./, (a: string) =>
+						a.toUpperCase(),
+					)}**__: ${
+						data[0].phonetics[0].text
+							? `(${data[0].phonetics[0].text})`
+							: ""
+					}\n${data[0].meanings
+						.map(
+							(meaning) =>
+								`> __${meaning.partOfSpeech.replace(/^./, (a) =>
+									a.toUpperCase(),
+								)}:__ ${meaning.definitions[0].definition}${
+									meaning.definitions[0].synonyms &&
+									meaning.definitions[0].synonyms.length
+										? `\n*${translations.data.synonyms()}: ${meaning.definitions[0].synonyms.join(
+												", ",
+										  )}*`
+										: ""
+								}`,
+						)
+						.join("\n\n")}`,
 				);
 			})
-			.catch(async err => {
-				if (err.response.data.title && err.response.data.title === "No Definitions Found")
-					return interaction.reply({
-						content: translations.data.invalid_word(),
-						ephemeral: true
-					});
-				
+			.catch(async (err) => {
+				if (
+					err.response.data.title &&
+					err.response.data.title === "No Definitions Found"
+				)
+					return interaction.followUp(
+						translations.data.invalid_word(),
+					);
+
 				console.error(err);
 			});
-	}
+	},
 };
-
-
 
 interface DictionaryResult {
 	word: string;
@@ -108,7 +127,5 @@ interface DictionaryResult {
 		}[];
 	}[];
 }
-
-
 
 export default command;

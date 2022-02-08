@@ -50,10 +50,7 @@ var command = {
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            interaction.reply({
-                content: "Pong! **" + interaction.client.ws.ping + "**ms",
-                ephemeral: true
-            });
+            interaction.followUp("Pong! **" + interaction.client.ws.ping + "**ms");
             return [2 /*return*/];
         });
     }); }

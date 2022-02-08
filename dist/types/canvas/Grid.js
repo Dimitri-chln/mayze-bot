@@ -24,7 +24,7 @@ var Grid = /** @class */ (function () {
                 content += " ⬇️";
             content += "\n";
         }
-        content += blank + " \u2B05\uFE0F **" + this.x + "** (x) \u27A1\uFE0F";
+        content += blank.toString() + " \u2B05\uFE0F **" + this.x + "** (x) \u27A1\uFE0F";
         return content;
     };
     return Grid;

@@ -67,13 +67,12 @@ var command = {
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var commands, commandName, publicCommands, categories, _loop_1, command_1;
+        var publicCommands, commandName, categories, _loop_1, command_1;
         var _a, _b;
         return __generator(this, function (_c) {
-            commands = Util_1.default.commands.filter(function (cmd) { var _a; return !((_a = cmd.guildIds) === null || _a === void 0 ? void 0 : _a.includes(interaction.guild.id)); });
-            commandName = interaction.options.getString("command").toLowerCase();
+            publicCommands = Util_1.default.commands.filter(function (cmd) { var _a; return !((_a = cmd.guildIds) === null || _a === void 0 ? void 0 : _a.includes(interaction.guild.id)) && cmd.category !== "admin"; });
+            commandName = (_a = interaction.options.getString("command")) === null || _a === void 0 ? void 0 : _a.toLowerCase();
             if (!commandName) {
-                publicCommands = Util_1.default.commands.filter(function (cmd) { return cmd.category !== "admin"; });
                 categories = [];
                 _loop_1 = function () {
                     var category = publicCommands.first().category;
@@ -83,11 +82,11 @@ var command = {
                 while (publicCommands.size) {
                     _loop_1();
                 }
-                interaction.reply({
+                interaction.followUp({
                     embeds: [
                         {
                             author: {
-                                name: translations.data.commands_list(),
+                                name: translations.data.command_list(),
                                 iconURL: interaction.client.user.displayAvatarURL()
                             },
                             color: interaction.guild.me.displayColor,
@@ -102,13 +101,10 @@ var command = {
                 });
             }
             else {
-                command_1 = commands.get(commandName);
+                command_1 = publicCommands.get(commandName);
                 if (!command_1)
-                    return [2 /*return*/, interaction.reply({
-                            content: translations.data.invalid_command(),
-                            ephemeral: true
-                        })];
-                interaction.reply({
+                    return [2 /*return*/, interaction.followUp(translations.data.invalid_command())];
+                interaction.followUp({
                     embeds: [
                         {
                             author: {
@@ -116,7 +112,7 @@ var command = {
                                 iconURL: interaction.client.user.displayAvatarURL()
                             },
                             color: interaction.guild.me.displayColor,
-                            description: translations.data.description(command_1.name, command_1.category.replace(/^./, function (a) { return a.toUpperCase(); }), command_1.description[translations.language], (_a = command_1.userPermissions.join("`, `")) !== null && _a !== void 0 ? _a : "∅", ((_b = command_1.cooldown) !== null && _b !== void 0 ? _b : 2).toString()),
+                            description: translations.data.description(command_1.name, command_1.category.replace(/^./, function (a) { return a.toUpperCase(); }), command_1.description[translations.language], command_1.userPermissions.length ? command_1.userPermissions.join("`, `") : "∅", ((_b = command_1.cooldown) !== null && _b !== void 0 ? _b : 2).toString()),
                             footer: {
                                 text: "✨ Mayze ✨"
                             }

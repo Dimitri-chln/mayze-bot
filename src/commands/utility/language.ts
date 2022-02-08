@@ -3,17 +3,15 @@ import Command from "../../types/structures/Command";
 import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
-
-
 const command: Command = {
 	name: "language",
 	description: {
 		fr: "Modifier la langue du bot sur le serverur",
-		en: "Change the server's bot language"
+		en: "Change the server's bot language",
 	},
 	userPermissions: ["ADMINISTRATOR"],
 	botPermissions: [],
-	
+
 	options: {
 		fr: [
 			{
@@ -28,10 +26,10 @@ const command: Command = {
 					},
 					{
 						name: "Anglais",
-						value: "en"
-					}
-				]
-			}
+						value: "en",
+					},
+				],
+			},
 		],
 		en: [
 			{
@@ -46,34 +44,32 @@ const command: Command = {
 					},
 					{
 						name: "English",
-						value: "en"
-					}
-				]
-			}
-		]
+						value: "en",
+					},
+				],
+			},
+		],
 	},
-	
+
 	run: async (interaction, translations) => {
-		const newLanguage = interaction.options.getString("language") as "fr" | "en";
+		const newLanguage = interaction.options.getString("language") as
+			| "fr"
+			| "en";
 
 		await Util.database.query(
 			`
 			INSERT INTO languages VALUES ($1, $2)
 			ON CONFLICT (guild_id)
-			DO UPDATE SET language = $2
+			DO UPDATE SET language_code = $2
 			WHERE languages.guild_id = EXCLUDED.guild_id
 			`,
-			[ interaction.guild.id, newLanguage ]
+			[interaction.guild.id, newLanguage],
 		);
 
 		Util.languages.set(interaction.guild.id, newLanguage);
-		
-		interaction.reply(
-			translations.data.language_updated()
-		);
-	}
+
+		interaction.followUp(translations.data.language_updated());
+	},
 };
-
-
 
 export default command;

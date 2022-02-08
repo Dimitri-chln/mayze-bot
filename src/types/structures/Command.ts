@@ -1,7 +1,12 @@
-import { ApplicationCommandOptionData, Collection, CommandInteraction, PermissionString, Snowflake } from "discord.js";
+import {
+	ApplicationCommandOptionData,
+	Collection,
+	CommandInteraction,
+	PermissionString,
+	Snowflake,
+} from "discord.js";
 import Util from "../../Util";
 import Translations from "./Translations";
-
 
 const t = Util.config.LANGUAGES;
 
@@ -26,5 +31,8 @@ export default interface Command {
 	path?: string;
 	category?: string;
 	cooldowns?: Collection<Snowflake, number>;
-	run(interaction: CommandInteraction, translations: Translations): Promise<void>;
+	run(
+		interaction: CommandInteraction,
+		translations: Translations,
+	): Promise<any>;
 }

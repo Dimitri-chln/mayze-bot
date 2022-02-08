@@ -1,7 +1,5 @@
 import { GuildEmoji, HexColorString } from "discord.js";
 
-
-
 type ColorCode = HexColorString | number | [number, number, number];
 
 export default class Color {
@@ -12,7 +10,12 @@ export default class Color {
 	green: number;
 	blue: number;
 
-	constructor(name: string, alias: string, color: ColorCode, emoji: GuildEmoji) {
+	constructor(
+		name: string,
+		alias: string,
+		color: ColorCode,
+		emoji: GuildEmoji,
+	) {
 		this.name = name;
 		this.alias = alias;
 		this.emoji = emoji;
@@ -23,7 +26,7 @@ export default class Color {
 				this.green = parseInt(color.substr(3, 2), 16);
 				this.blue = parseInt(color.substr(5, 2), 16);
 				break;
-			
+
 			case "number":
 				if (color < 0 || color > 16777215) color = 0;
 				this.red = Math.floor(color / (256 * 256));
@@ -43,10 +46,14 @@ export default class Color {
 	}
 
 	get hex() {
-		return `#${this.red.toString(16).padStart(2, "0") + this.green.toString(16).padStart(2, "0") + this.blue.toString(16).padStart(2, "0")}`;
+		return `#${
+			this.red.toString(16).padStart(2, "0") +
+			this.green.toString(16).padStart(2, "0") +
+			this.blue.toString(16).padStart(2, "0")
+		}`;
 	}
 
 	get rgb() {
-		return [ this.red, this.green, this.blue ];
+		return [this.red, this.green, this.blue];
 	}
 }

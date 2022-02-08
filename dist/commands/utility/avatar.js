@@ -48,7 +48,7 @@ var command = {
         fr: [
             {
                 name: "user",
-                description: "Un utilisateur dont tu veux voir la photo de profil",
+                description: "L'utilisateur dont tu veux voir la photo de profil",
                 type: "USER",
                 required: false
             }
@@ -56,7 +56,7 @@ var command = {
         en: [
             {
                 name: "user",
-                description: "A user whose profile picture you want to see",
+                description: "The user whose profile picture you want to see",
                 type: "USER",
                 required: false
             }
@@ -67,7 +67,7 @@ var command = {
         var _a;
         return __generator(this, function (_b) {
             user = (_a = interaction.options.getUser("user")) !== null && _a !== void 0 ? _a : interaction.user;
-            interaction.reply({
+            interaction.followUp({
                 embeds: [
                     {
                         author: {

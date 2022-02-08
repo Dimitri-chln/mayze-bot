@@ -80,27 +80,14 @@ var command = {
         return __generator(this, function (_a) {
             date = new Date(interaction.options.getString("date"));
             if (!date)
-                return [2 /*return*/, interaction.reply({
-                        content: translations.data.invalid_date(),
-                        ephemeral: true
-                    })];
+                return [2 /*return*/, interaction.followUp(translations.data.invalid_date())];
+            if (date.valueOf() < Date.now())
+                return [2 /*return*/, interaction.followUp(translations.data.date_passed())];
             taskString = interaction.options.getString("task");
             task = eval("async () => { " + taskString + " }");
             job = new cron_1.CronJob(date, task);
-            try {
-                job.start();
-            }
-            catch (err) {
-                console.error(err);
-                return [2 /*return*/, interaction.reply({
-                        content: translations.data.date_passed(),
-                        ephemeral: true
-                    })];
-            }
-            interaction.reply({
-                content: translations.data.saved(),
-                ephemeral: true
-            });
+            job.start();
+            interaction.followUp(translations.data.saved());
             return [2 /*return*/];
         });
     }); }

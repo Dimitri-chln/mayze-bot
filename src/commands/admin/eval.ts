@@ -3,13 +3,11 @@ import Command from "../../types/structures/Command";
 import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
-
-
 const command: Command = {
 	name: "eval",
 	description: {
 		fr: "Évaluer une expression",
-		en: "Evaluate an expression"
+		en: "Evaluate an expression",
 	},
 	userPermissions: [],
 	botPermissions: [],
@@ -20,34 +18,31 @@ const command: Command = {
 				name: "expression",
 				description: "L'expression à evaluer",
 				type: "STRING",
-				required: true
-			}
+				required: true,
+			},
 		],
 		en: [
 			{
 				name: "expression",
 				description: "The expression to evaluate",
 				type: "STRING",
-				required: true
-			}
-		]
+				required: true,
+			},
+		],
 	},
 
 	run: async (interaction, translations) => {
 		const expression = interaction.options.getString("expression");
-		
+
+		await interaction.followUp("...");
+
 		try {
 			eval(expression);
 		} catch (err) {
 			console.error(err);
-			interaction.reply({
-				content: `__**Error:**__\`\`\`\n${err}\n\`\`\``,
-				ephemeral: true
-			});
-		};
-	}
+			interaction.followUp(`__**Error:**__\`\`\`\n${err}\n\`\`\``);
+		}
+	},
 };
-
-
 
 export default command;

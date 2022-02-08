@@ -89,15 +89,12 @@ var command = {
                             .toUTCString()
                             .replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
                             .replace(/00h |00m /g, "");
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.cooldown(timeLeftHumanized),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.cooldown(timeLeftHumanized))];
                     }
                     return [4 /*yield*/, Util_1.default.database.query("\n\t\t\tINSERT INTO currency VALUES ($1, $2, $3)\n\t\t\tON CONFLICT (user_id)\n\t\t\tDO UPDATE SET\n\t\t\t\tmoney = currency.money + $2,\n\t\t\t\tlast_daily = $3\n\t\t\tWHERE currency.user_id = EXCLUDED.user_id\n\t\t\tRETURNING money\n\t\t\t", [interaction.user.id, Util_1.default.config.DAILY_REWARD, new Date(NOW).toISOString()])];
                 case 2:
                     _b = __read.apply(void 0, [(_c.sent()).rows, 1]), money = _b[0].money;
-                    interaction.reply({
+                    interaction.followUp({
                         embeds: [
                             {
                                 author: {

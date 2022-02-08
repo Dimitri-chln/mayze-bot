@@ -3,30 +3,23 @@ import Command from "../../types/structures/Command";
 import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
-
-
 const command: Command = {
 	name: "ping",
 	description: {
 		fr: "Pong !",
-		en: "Pong!"
+		en: "Pong!",
 	},
 	userPermissions: [],
 	botPermissions: [],
 
 	options: {
 		fr: [],
-		en: []
+		en: [],
 	},
-	
+
 	run: async (interaction, translations) => {
-		interaction.reply({
-			content: `Pong! **${interaction.client.ws.ping}**ms`,
-			ephemeral: true
-		});
-	}
+		interaction.followUp(`Pong! **${interaction.client.ws.ping}**ms`);
+	},
 };
-
-
 
 export default command;

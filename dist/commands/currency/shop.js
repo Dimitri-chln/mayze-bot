@@ -80,7 +80,7 @@ var command = {
                         name: "item",
                         description: "L'objet ou amélioration à acheter",
                         type: "STRING",
-                        required: false,
+                        required: true,
                         choices: [
                             {
                                 name: "Réduction du temps d'attente pour attraper un pokémon",
@@ -129,7 +129,7 @@ var command = {
                         name: "item",
                         description: "The item or upgrade to buy",
                         type: "STRING",
-                        required: false,
+                        required: true,
                         choices: [
                             {
                                 name: "Catch cooldown reduction",
@@ -208,7 +208,7 @@ var command = {
                     subCommand = interaction.options.getSubcommand();
                     switch (subCommand) {
                         case "list": {
-                            interaction.reply({
+                            interaction.followUp({
                                 embeds: [
                                     {
                                         author: {
@@ -220,23 +220,23 @@ var command = {
                                         fields: [
                                             {
                                                 name: translations.data.catch_cooldown_reduction(),
-                                                value: translations.data.field_cooldown(upgrades.catch_cooldown_reduction.toString(), UPGRADES_BENEFITS.catch_cooldown_reduction(upgrades.catch_cooldown_reduction).toString(), (Util_1.default.commands.get("catch").cooldown / 60).toString(), ((Util_1.default.commands.get("catch").cooldown / 60) - UPGRADES_BENEFITS.catch_cooldown_reduction(upgrades.catch_cooldown_reduction)).toString(), UPGRADES_PRICES.catch_cooldown_reduction(upgrades.catch_cooldown_reduction).toString(), upgrades.catch_cooldown_reduction === UPGRADES_MAX_TIER[upgrades.catch_cooldown_reduction]),
+                                                value: translations.data.field_cooldown(upgrades.catch_cooldown_reduction.toString(), UPGRADES_BENEFITS.catch_cooldown_reduction(upgrades.catch_cooldown_reduction).toString(), (Util_1.default.commands.get("catch").cooldown / 60).toString(), ((Util_1.default.commands.get("catch").cooldown / 60) - UPGRADES_BENEFITS.catch_cooldown_reduction(upgrades.catch_cooldown_reduction)).toString(), UPGRADES_PRICES.catch_cooldown_reduction(upgrades.catch_cooldown_reduction).toString(), upgrades.catch_cooldown_reduction >= UPGRADES_MAX_TIER.catch_cooldown_reduction),
                                             },
                                             {
                                                 name: translations.data.new_pokemon_probability(),
-                                                value: translations.data.field(upgrades.new_pokemon_probability.toString(), UPGRADES_BENEFITS.new_pokemon_probability(upgrades.new_pokemon_probability).toString(), UPGRADES_PRICES.new_pokemon_probability(upgrades.new_pokemon_probability).toString(), upgrades.new_pokemon_probability === UPGRADES_MAX_TIER[upgrades.new_pokemon_probability])
+                                                value: translations.data.field(upgrades.new_pokemon_probability.toString(), UPGRADES_BENEFITS.new_pokemon_probability(upgrades.new_pokemon_probability).toString(), UPGRADES_PRICES.new_pokemon_probability(upgrades.new_pokemon_probability).toString(), upgrades.new_pokemon_probability >= UPGRADES_MAX_TIER.new_pokemon_probability)
                                             },
                                             {
                                                 name: translations.data.legendary_ub_probability(),
-                                                value: translations.data.field(upgrades.legendary_ub_probability.toString(), UPGRADES_BENEFITS.legendary_ub_probability(upgrades.legendary_ub_probability).toString(), UPGRADES_PRICES.legendary_ub_probability(upgrades.legendary_ub_probability).toString(), upgrades.legendary_ub_probability === UPGRADES_MAX_TIER[upgrades.legendary_ub_probability])
+                                                value: translations.data.field(upgrades.legendary_ub_probability.toString(), UPGRADES_BENEFITS.legendary_ub_probability(upgrades.legendary_ub_probability).toString(), UPGRADES_PRICES.legendary_ub_probability(upgrades.legendary_ub_probability).toString(), upgrades.legendary_ub_probability >= UPGRADES_MAX_TIER.legendary_ub_probability)
                                             },
                                             {
                                                 name: translations.data.mega_gem_probability(),
-                                                value: translations.data.field(upgrades.mega_gem_probability.toString(), UPGRADES_BENEFITS.mega_gem_probability(upgrades.mega_gem_probability).toString(), UPGRADES_PRICES.mega_gem_probability(upgrades.mega_gem_probability).toString(), upgrades.mega_gem_probability === UPGRADES_MAX_TIER[upgrades.mega_gem_probability])
+                                                value: translations.data.field(upgrades.mega_gem_probability.toString(), UPGRADES_BENEFITS.mega_gem_probability(upgrades.mega_gem_probability).toString(), UPGRADES_PRICES.mega_gem_probability(upgrades.mega_gem_probability).toString(), upgrades.mega_gem_probability >= UPGRADES_MAX_TIER.mega_gem_probability)
                                             },
                                             {
                                                 name: translations.data.shiny_probability(),
-                                                value: translations.data.field(upgrades.shiny_probability.toString(), UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_probability).toString(), UPGRADES_PRICES.shiny_probability(upgrades.shiny_probability).toString(), upgrades.shiny_probability === UPGRADES_MAX_TIER[upgrades.shiny_probability])
+                                                value: translations.data.field(upgrades.shiny_probability.toString(), UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_probability).toString(), UPGRADES_PRICES.shiny_probability(upgrades.shiny_probability).toString(), upgrades.shiny_probability >= UPGRADES_MAX_TIER.shiny_probability)
                                             }
                                         ],
                                         footer: {
@@ -248,24 +248,18 @@ var command = {
                             break;
                         }
                         case "buy": {
-                            upgrade = interaction.options.getString("upgrade");
+                            upgrade = interaction.options.getString("item");
                             number = (_c = interaction.options.getInteger("number")) !== null && _c !== void 0 ? _c : 1;
                             upgradeCost = Math.round(number * (UPGRADES_PRICES[upgrade](upgrades[upgrade]) +
                                 UPGRADES_PRICES[upgrade](upgrades[upgrade] + number - 1)) / 2);
                             if (money.money < upgradeCost)
-                                return [2 /*return*/, interaction.reply({
-                                        content: translations.data.not_enough_money(),
-                                        ephemeral: true
-                                    })];
+                                return [2 /*return*/, interaction.followUp(translations.data.not_enough_money())];
                             if (upgrades[upgrade] + number > UPGRADES_MAX_TIER[upgrade])
-                                return [2 /*return*/, interaction.reply({
-                                        content: translations.data.max_tier_reached(),
-                                        ephemeral: true
-                                    })];
+                                return [2 /*return*/, interaction.followUp(translations.data.max_tier_reached())];
                             upgrades[upgrade] += number;
                             Util_1.default.database.query("UPDATE currency SET money = money - $2 WHERE user_id = $1", [interaction.user.id, upgradeCost]);
                             Util_1.default.database.query("\n\t\t\t\t\tINSERT INTO upgrades VALUES ($1, $2, $3, $4, $5, $6)\n\t\t\t\t\tON CONFLICT (user_id)\n\t\t\t\t\tDO UPDATE SET\n\t\t\t\t\t\tcatch_cooldown_reduction = $2,\n\t\t\t\t\t\tnew_pokemon_probability = $3,\n\t\t\t\t\t\tlegendary_ub_probability = $4,\n\t\t\t\t\t\tmega_gem_probability = $5,\n\t\t\t\t\t\tshiny_probability = $6\n\t\t\t\t\tWHERE upgrades.user_id = EXCLUDED.user_id\n\t\t\t\t\t", Object.values(upgrades));
-                            interaction.reply(translations.data.new_tier(upgrades[upgrade], upgradeCost.toString()));
+                            interaction.followUp(translations.data.new_tier(upgrades[upgrade], upgradeCost.toString()));
                             break;
                         }
                     }

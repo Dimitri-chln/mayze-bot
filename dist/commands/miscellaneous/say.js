@@ -66,10 +66,10 @@ var command = {
         var text;
         return __generator(this, function (_a) {
             text = interaction.options.getString("text");
-            interaction.reply({
-                content: "<a:blackCheck:803603780666523699>",
-                ephemeral: true
-            });
+            interaction.followUp(
+            // Invisible character "ㅤ"
+            "\u3164")
+                .then(interaction.deleteReply);
             interaction.channel.send({
                 content: text
             });

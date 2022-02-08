@@ -112,7 +112,7 @@ var command = {
                     announcementChannel = interaction.client.channels.cache.get("817365433509740554");
                     logChannel = interaction.client.channels.cache.get("856901268445069322");
                     if (interaction.channel.id !== announcementChannel.id)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.wrong_channel(),
                                 ephemeral: true
                             })];
@@ -129,19 +129,19 @@ var command = {
                 case 2:
                     announcement = _b.sent();
                     if (!announcement)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.invalid_message_id(),
                                 ephemeral: true
                             })];
                     announcement.react("833620353133707264");
                     date = new Date(parseInt(announcement.content.match(/<t:(\d+)(?::[tTdDfFR])?>/)[1]));
                     if (!date)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.no_date(),
                                 ephemeral: true
                             })];
                     if (Date.now() > date.valueOf())
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.date_passed(),
                                 ephemeral: true
                             })];
@@ -159,7 +159,7 @@ var command = {
                     logChannel.send("**Starting at:** `" + date.toUTCString() + "`\n**Password:** `" + password_1 + "`").catch(console.error);
                     return [3 /*break*/, 7];
                 case 3:
-                    interaction.reply(translations.data.ending());
+                    interaction.followUp(translations.data.ending());
                     return [4 /*yield*/, announcementChannel.messages.fetch({ limit: 100 })];
                 case 4:
                     annoucements = _b.sent();

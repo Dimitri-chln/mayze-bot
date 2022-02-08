@@ -79,13 +79,12 @@ var command = {
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var CHARACTERS_PER_PAGE, query, res, resString, regex, fallbackRegex, matches, pages, page, matches_1, matches_1_1, match;
+        var query, res, resString, regex, fallbackRegex, matches, pages, page, matches_1, matches_1_1, match, page_1;
         var e_1, _a;
         var _b;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    CHARACTERS_PER_PAGE = 2000;
                     query = interaction.options.getString("query");
                     return [4 /*yield*/, Util_1.default.database.query(query)];
                 case 1:
@@ -97,24 +96,38 @@ var command = {
                             fallbackRegex = /.{0,2000}/ygs;
                             matches = (_b = resString.match(regex)) !== null && _b !== void 0 ? _b : resString.match(fallbackRegex);
                             pages = [];
-                            page = {
-                                embeds: [
-                                    {
-                                        author: {
-                                            name: query,
-                                            iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-                                        },
-                                        title: translations.data.title(res.rowCount.toString(), res.rowCount > 1),
-                                        color: interaction.guild.me.displayColor,
-                                        description: "```json\n\u2205\n```"
-                                    }
-                                ]
+                            page = function (desc) {
+                                return {
+                                    embeds: [
+                                        {
+                                            author: {
+                                                name: query,
+                                                iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+                                            },
+                                            title: translations.data.title(res.rowCount.toString(), res.rowCount > 1),
+                                            color: interaction.guild.me.displayColor,
+                                            description: desc
+                                        }
+                                    ]
+                                };
                             };
                             try {
                                 for (matches_1 = __values(matches), matches_1_1 = matches_1.next(); !matches_1_1.done; matches_1_1 = matches_1.next()) {
                                     match = matches_1_1.value;
-                                    page.embeds[0].description = "```json\n" + match + "\n```";
-                                    pages.push(page);
+                                    page_1 = {
+                                        embeds: [
+                                            {
+                                                author: {
+                                                    name: query,
+                                                    iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+                                                },
+                                                title: translations.data.title(res.rowCount.toString(), res.rowCount > 1),
+                                                color: interaction.guild.me.displayColor,
+                                                description: "```json\n" + match + "\n```"
+                                            }
+                                        ]
+                                    };
+                                    pages.push(page_1);
                                 }
                             }
                             catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -129,11 +142,11 @@ var command = {
                             break;
                         }
                         default:
-                            interaction.reply(translations.data.completed());
+                            interaction.followUp(translations.data.completed());
                     }
                     return [2 /*return*/];
             }
         });
     }); }
 };
-module.exports = command;
+exports.default = command;

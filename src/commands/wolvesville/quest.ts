@@ -5,13 +5,11 @@ import Util from "../../Util";
 
 import { CollectorFilter, GuildMember, TextChannel } from "discord.js";
 
-
-
 const command: Command = {
 	name: "quest",
 	description: {
 		fr: "Afficher un message de vote pour les quêtes Wolvesville",
-		en: "Display a voting message for Wolvesville quests"
+		en: "Display a voting message for Wolvesville quests",
 	},
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS", "ADD_REACTIONS"],
@@ -25,14 +23,14 @@ const command: Command = {
 				type: "INTEGER",
 				required: false,
 				minValue: 0,
-				maxValue: 10
+				maxValue: 10,
 			},
 			{
 				name: "single",
 				description: "Si chaque membre dispose d'un seul vote ou non",
 				type: "BOOLEAN",
-				required: false
-			}
+				required: false,
+			},
 		],
 		en: [
 			{
@@ -41,47 +39,73 @@ const command: Command = {
 				type: "INTEGER",
 				required: false,
 				minValue: 0,
-				maxValue: 10
+				maxValue: 10,
 			},
 			{
 				name: "single",
 				description: "Whether each member only has one vote or not",
 				type: "BOOLEAN",
-				required: false
-			}
-		]
+				required: false,
+			},
+		],
 	},
-	
+
 	run: async (interaction, translations) => {
 		if (
-			!(interaction.member as GuildMember).roles.cache.has("696751852267765872") &&	// Chef
-			!(interaction.member as GuildMember).roles.cache.has("696751614177837056")	// Sous-chef
-		) return interaction.reply({
-			content: translations.data.not_allowed(),
-			ephemeral: true
-		});
-		
-		if (!["707304882662801490", "689212233439641649"].includes(interaction.channel.id))
-			return interaction.reply({
-				content: translations.data.wrong_channel(),
-				ephemeral: true
+			!(interaction.member as GuildMember).roles.cache.has(
+				"696751852267765872",
+			) && // Chef
+			!(interaction.member as GuildMember).roles.cache.has(
+				"696751614177837056",
+			) // Sous-chef
+		)
+			return interaction.followUp({
+				content: translations.data.not_allowed(),
+				ephemeral: true,
 			});
-	
-		const questChannel = interaction.client.channels.cache.get("689385764219387905") as TextChannel;
 
-		interaction.reply(
-			translations.data.await_image()
-		);
+		if (
+			!["707304882662801490", "689212233439641649"].includes(
+				interaction.channel.id,
+			)
+		)
+			return interaction.followUp({
+				content: translations.data.wrong_channel(),
+				ephemeral: true,
+			});
 
-		const filter: CollectorFilter<[Message]> = msg => msg.author.id === interaction.user.id && msg.attachments.size === 1;
-		const collected = await interaction.channel.awaitMessages({ filter, idle: 120_000, max: 1 });
+		const questChannel = interaction.client.channels.cache.get(
+			"689385764219387905",
+		) as TextChannel;
+
+		interaction.followUp(translations.data.await_image());
+
+		const filter: CollectorFilter<[Message]> = (msg) =>
+			msg.author.id === interaction.user.id && msg.attachments.size === 1;
+		const collected = await interaction.channel.awaitMessages({
+			filter,
+			idle: 120_000,
+			max: 1,
+		});
 		if (!collected.size) return;
-		
+
 		const imageURL = collected.first().attachments.first().url;
-		const votes = interaction.options.getBoolean("single") ? "Un seul vote" : "Plusieurs votes";
-		const reactions = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"]
-			.slice(0, interaction.options.getInteger("votes") ?? 3);
-		
+		const votes = interaction.options.getBoolean("single")
+			? "Un seul vote"
+			: "Plusieurs votes";
+		const reactions = [
+			"1️⃣",
+			"2️⃣",
+			"3️⃣",
+			"4️⃣",
+			"5️⃣",
+			"6️⃣",
+			"7️⃣",
+			"8️⃣",
+			"9️⃣",
+			"🔟",
+		].slice(0, interaction.options.getInteger("votes") ?? 3);
+
 		const msg = await questChannel.send({
 			content: "<@&689169027922526235>",
 			embeds: [
@@ -89,22 +113,20 @@ const command: Command = {
 					title: translations.data.title(),
 					color: interaction.guild.me.displayColor,
 					image: {
-						url: imageURL
+						url: imageURL,
 					},
 					footer: {
-						text: votes
-					}
-				}
-			]
+						text: votes,
+					},
+				},
+			],
 		});
-		
-		reactions.forEach(async e => await msg.react(e).catch(console.error));
+
+		reactions.forEach(async (e) => await msg.react(e).catch(console.error));
 		await msg.react("🔄").catch(console.error);
 
 		collected.first().react("✅").catch(console.error);
-	}
+	},
 };
-
-
 
 export default command;

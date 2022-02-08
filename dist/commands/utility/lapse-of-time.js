@@ -60,7 +60,7 @@ var command = {
         en: [
             {
                 name: "date",
-                description: "La date",
+                description: "The date",
                 type: "STRING",
                 required: true
             }
@@ -72,13 +72,13 @@ var command = {
             NOW = Date.now();
             date = new Date(interaction.options.getString("date"));
             if (!date)
-                return [2 /*return*/, interaction.reply({
+                return [2 /*return*/, interaction.followUp({
                         content: translations.data.invalid_date(),
                         ephemeral: true
                     })];
             lapseOfTime = NOW - date.valueOf();
             lapseOfTimeString = (0, formatTime_1.default)(Math.abs(lapseOfTime), translations.language);
-            interaction.reply(translations.data.response(lapseOfTime > 0, lapseOfTimeString, date.getDate().toString(), translations.data.month_list()[date.getMonth() - 1], date.getFullYear().toString(), date.getHours().toString(), date.getMinutes().toString(), date.getSeconds().toString()));
+            interaction.followUp(translations.data.response(lapseOfTime > 0, lapseOfTimeString, date.getDate().toString(), translations.data.month_list()[date.getMonth() - 1], date.getFullYear().toString(), date.getHours().toString(), date.getMinutes().toString(), date.getSeconds().toString()));
             return [2 /*return*/];
         });
     }); }

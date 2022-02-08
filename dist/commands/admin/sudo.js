@@ -100,10 +100,7 @@ var command = {
                         username: interaction.guild.members.cache.get(user.id).displayName,
                         content: message
                     });
-                    interaction.reply({
-                        content: translations.data.sent(),
-                        ephemeral: true
-                    });
+                    interaction.followUp(translations.data.sent());
                     return [2 /*return*/];
             }
         });

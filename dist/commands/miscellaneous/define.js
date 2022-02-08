@@ -110,7 +110,7 @@ var command = {
                 var data = _a.data;
                 return __awaiter(void 0, void 0, void 0, function () {
                     return __generator(this, function (_b) {
-                        interaction.reply("__**" + data[0].word.replace(/^./, function (a) { return a.toUpperCase(); }) + "**__: " + (data[0].phonetics[0].text ? "(" + data[0].phonetics[0].text + ")" : "") + "\n" + data[0].meanings.map(function (meaning) { return "> __" + meaning.partOfSpeech.replace(/^./, function (a) { return a.toUpperCase(); }) + ":__ " + meaning.definitions[0].definition + (meaning.definitions[0].synonyms && meaning.definitions[0].synonyms.length ? "\n*" + translations.data.synonyms() + ": " + meaning.definitions[0].synonyms.join(", ") + "*" : ""); }).join("\n\n"));
+                        interaction.followUp("__**" + data[0].word.replace(/^./, function (a) { return a.toUpperCase(); }) + "**__: " + (data[0].phonetics[0].text ? "(" + data[0].phonetics[0].text + ")" : "") + "\n" + data[0].meanings.map(function (meaning) { return "> __" + meaning.partOfSpeech.replace(/^./, function (a) { return a.toUpperCase(); }) + ":__ " + meaning.definitions[0].definition + (meaning.definitions[0].synonyms && meaning.definitions[0].synonyms.length ? "\n*" + translations.data.synonyms() + ": " + meaning.definitions[0].synonyms.join(", ") + "*" : ""); }).join("\n\n"));
                         return [2 /*return*/];
                     });
                 });
@@ -118,10 +118,7 @@ var command = {
                 .catch(function (err) { return __awaiter(void 0, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     if (err.response.data.title && err.response.data.title === "No Definitions Found")
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_word(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_word())];
                     console.error(err);
                     return [2 /*return*/];
                 });

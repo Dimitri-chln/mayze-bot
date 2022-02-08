@@ -3,17 +3,17 @@ import Command from "../../types/structures/Command";
 import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
-
+import { DatabaseCustomResponse } from "../../types/structures/Database";
 
 const command: Command = {
 	name: "custom-response",
 	description: {
 		fr: "Gérer les réponses personnalisées",
-		en: "Manage custom responses"
+		en: "Manage custom responses",
 	},
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
-	
+
 	options: {
 		fr: [
 			{
@@ -25,13 +25,13 @@ const command: Command = {
 						name: "trigger",
 						description: "Le texte qui déclenche la réponse",
 						type: "STRING",
-						required: true
+						required: true,
 					},
 					{
 						name: "response",
 						description: "La réponse à envoyer",
 						type: "STRING",
-						required: true
+						required: true,
 					},
 					{
 						name: "type",
@@ -41,27 +41,27 @@ const command: Command = {
 						choices: [
 							{
 								name: "Contient",
-								value: 0
+								value: 0,
 							},
 							{
 								name: "Égal à",
-								value: 1
+								value: 1,
 							},
 							{
 								name: "Regex",
-								value: 2
+								value: 2,
 							},
 							{
 								name: "Commence par",
-								value: 3
+								value: 3,
 							},
 							{
 								name: "Finit par",
-								value: 4
-							}
-						]
-					}
-				]
+								value: 4,
+							},
+						],
+					},
+				],
 			},
 			{
 				name: "remove",
@@ -72,15 +72,17 @@ const command: Command = {
 						name: "response",
 						description: "Le numéro de la réponse",
 						type: "INTEGER",
-						required: true
-					}
-				]
+						required: true,
+						minValue: 0,
+					},
+				],
 			},
 			{
 				name: "get",
-				description: "Obtenir la liste de toutes les réponses personnalisées",
-				type: "SUB_COMMAND"
-			}
+				description:
+					"Obtenir la liste de toutes les réponses personnalisées",
+				type: "SUB_COMMAND",
+			},
 		],
 		en: [
 			{
@@ -92,13 +94,13 @@ const command: Command = {
 						name: "trigger",
 						description: "The text that triggers the response",
 						type: "STRING",
-						required: true
+						required: true,
 					},
 					{
 						name: "response",
 						description: "The response to send",
 						type: "STRING",
-						required: true
+						required: true,
 					},
 					{
 						name: "type",
@@ -108,27 +110,27 @@ const command: Command = {
 						choices: [
 							{
 								name: "Contains",
-								value: 0
+								value: 0,
 							},
 							{
 								name: "Equal to",
-								value: 1
+								value: 1,
 							},
 							{
 								name: "Regex",
-								value: 2
+								value: 2,
 							},
 							{
 								name: "Starts with",
-								value: 3
+								value: 3,
 							},
 							{
 								name: "Ends with",
-								value: 4
-							}
-						]
-					}
-				]
+								value: 4,
+							},
+						],
+					},
+				],
 			},
 			{
 				name: "remove",
@@ -139,101 +141,93 @@ const command: Command = {
 						name: "response",
 						description: "The response's number",
 						type: "INTEGER",
-						required: true
-					}
-				]
+						required: true,
+						minValue: 0,
+					},
+				],
 			},
 			{
-				name: "get",
+				name: "list",
 				description: "Get the list of all custom responses",
-				type: "SUB_COMMAND"
-			}
-		]
+				type: "SUB_COMMAND",
+			},
+		],
 	},
-	
+
 	run: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
-		
-		const { rows: responses } = await Util.database.query(
-			"SELECT * FROM responses"
-		);
-		
+
+		const { rows: responses }: { rows: DatabaseCustomResponse[] } =
+			await Util.database.query("SELECT * FROM custom_responses");
+
 		switch (subCommand) {
 			case "add": {
 				const trigger = interaction.options.getString("trigger");
 				const response = interaction.options.getString("response");
-				const triggerType = interaction.options.getNumber("type") ?? 0;
+				const triggerType = interaction.options.getInteger("type") ?? 0;
 
 				await Util.database.query(
-					"INSERT INTO responses (trigger, response, trigger_type) VALUES ($1, $2, $3)",
-					[ trigger, response, triggerType ]
+					"INSERT INTO custom_responses (trigger, response, trigger_type) VALUES ($1, $2, $3)",
+					[trigger, response, triggerType],
 				);
 
-				interaction.reply({
-					content: translations.data.response_added(),
-					ephemeral: true
-				});
+				interaction.followUp(translations.data.response_added());
 				break;
 			}
 
 			case "remove": {
-				const number = interaction.options.getNumber("response");
-				
-				if (number < 1 || number > responses.length) return interaction.reply({
-					content: translations.data.invalid_number(
-						responses.length.toString()
-					),
-					ephemeral: true
-				});
+				const number = interaction.options.getInteger("response");
+
+				if (number < 1 || number > responses.length)
+					return interaction.followUp(
+						translations.data.invalid_number(
+							responses.length.toString(),
+						),
+					);
 
 				const response = responses[number - 1];
-				
+
 				await Util.database.query(
-					"DELETE FROM responses WHERE id = $1",
-					[ response.id ]
+					"DELETE FROM custom_responses WHERE id = $1",
+					[response.id],
 				);
-				
-				interaction.reply({
-					content: translations.data.response_removed(),
-					ephemeral: true
-				});
+
+				interaction.followUp(translations.data.response_removed());
 				break;
 			}
 
-			case "get": {
-				interaction.reply({
+			case "list": {
+				interaction.followUp({
 					embeds: [
 						{
 							author: {
 								name: translations.data.title(),
-								iconURL: interaction.client.user.displayAvatarURL()
+								iconURL:
+									interaction.client.user.displayAvatarURL(),
 							},
 							color: interaction.guild.me.displayColor,
-							description: responses.map((response, i) =>
-								`\`${i + 1}.\` ${translations.data.trigger_types()[response.trigger_type]} \`${response.trigger}\`\n\t→ \`${response.response}\``
-							).join("\n"),
+							description: responses
+								.map(
+									(response, i) =>
+										`\`${i + 1}.\` ${
+											translations.data.trigger_types()[
+												response.trigger_type
+											]
+										} \`${response.trigger}\`\n\t→ \`${
+											response.response
+										}\``,
+								)
+								.join("\n"),
 							footer: {
-								text: "✨ Mayze ✨"
-							}
-						}
-					]
+								text: "✨ Mayze ✨",
+							},
+						},
+					],
 				});
 				break;
 			}
 		}
-	}
+	},
 };
-
-
-
-enum TriggerType {
-	"CONTAINS",
-	"EQUAL",
-	"REGEX",
-	"STARTS_WITH",
-	"ENDS_WITH"
-};
-
-
 
 export default command;

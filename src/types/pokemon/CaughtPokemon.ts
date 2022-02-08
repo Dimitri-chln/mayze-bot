@@ -4,15 +4,13 @@ import Pokedex from "./Pokedex";
 import Pokemon from "./Pokemon";
 import { DatabasePokemon } from "../../types/structures/Database";
 
-
-
 export default class CaughtPokemon {
-	data: Pokemon;
-	shiny: boolean;
-	variation: VariationType;
-	caught: number;
-	favorite: boolean;
-	nickname?: string;
+	readonly data: Pokemon;
+	readonly shiny: boolean;
+	readonly variation: VariationType;
+	readonly caught: number;
+	readonly favorite: boolean;
+	readonly nickname?: string;
 
 	constructor(pokemonData: DatabasePokemon, userId: Snowflake) {
 		this.data = Pokedex.findById(pokemonData.pokedex_id);

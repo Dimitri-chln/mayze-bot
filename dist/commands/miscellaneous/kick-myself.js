@@ -57,18 +57,18 @@ var command = {
         return __generator(this, function (_a) {
             // Server booster
             if (interaction.member.premiumSinceTimestamp)
-                return [2 /*return*/, interaction.reply({
+                return [2 /*return*/, interaction.followUp({
                         content: translations.data.boosting(),
                         ephemeral: true
                     })];
             if (interaction.member.roles.highest.position >= interaction.guild.me.roles.highest.position)
-                return [2 /*return*/, interaction.reply({
+                return [2 /*return*/, interaction.followUp({
                         content: translations.data.too_high_hierarchy(),
                         ephemeral: true
                     })];
             interaction.member.kick(translations.data.reason())
                 .then(function () {
-                interaction.reply(translations.data.kick_message());
+                interaction.followUp(translations.data.kick_message());
             });
             return [2 /*return*/];
         });

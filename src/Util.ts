@@ -1,4 +1,12 @@
-import { Client, Collection, GuildMember, Message, MessageReaction, Snowflake, User } from "discord.js";
+import {
+	Client,
+	Collection,
+	GuildMember,
+	Message,
+	MessageReaction,
+	Snowflake,
+	User,
+} from "discord.js";
 import Pg from "pg";
 import { google as Google } from "googleapis";
 import { CronJob } from "cron";
@@ -17,8 +25,6 @@ import parseArgs from "./utils/misc/parseArgs";
 import findMember from "./utils/misc/findMember";
 import config from "./config.json";
 
-
-
 export default class Util {
 	static readonly config = config;
 	static client: Client;
@@ -27,14 +33,12 @@ export default class Util {
 		process.env.GOOGLE_CLIENT_EMAIL,
 		null,
 		process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
-		[ "https://www.googleapis.com/auth/spreadsheets.readonly" ]
+		["https://www.googleapis.com/auth/spreadsheets.readonly"],
 	);
 	static languages: Collection<Snowflake, Language> = new Collection();
 	static commands: Collection<string, Command> = new Collection();
 	static messageResponses: MessageResponse[] = [];
 	static reactionCommands: ReactionCommand[] = [];
-	static commandCooldowns: Collection<string, Collection<Snowflake, number>> = new Collection();
-	static channelCooldowns: Collection<Snowflake, ChannelCooldown> = new Collection();
 	static beta: boolean;
 	static owner: User;
 	static palettes: Collection<string, Palette> = new Collection();
@@ -45,7 +49,7 @@ export default class Util {
 	static sniping: SnipingData = {
 		deletedMessages: new Collection(),
 		editedMessages: new Collection(),
-		messageReactions: new Collection()
+		messageReactions: new Collection(),
 	};
 	static musicPlayer: MusicPlayer;
 	static songDisplays: Collection<Snowflake, Message> = new Collection();
@@ -54,14 +58,8 @@ export default class Util {
 	static findMember = findMember;
 
 	static amongUsGames: Collection<Snowflake, AmongUsGame> = new Collection();
-	static russianRouletteGames: Collection<Snowflake, RussianRouletteGame> = new Collection();
-}
-
-
-
-interface ChannelCooldown {
-	numberOfMessages: number;
-	lastMessageTimestamp: number;
+	static russianRouletteGames: Collection<Snowflake, RussianRouletteGame> =
+		new Collection();
 }
 
 interface MessageReactionSnipingData {

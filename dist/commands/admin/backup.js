@@ -41,7 +41,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Util_1 = __importDefault(require("../../Util"));
 var discord_js_1 = require("discord.js");
-var config_json_1 = require("../../config.json");
 var command = {
     name: "backup",
     description: {
@@ -73,14 +72,16 @@ var command = {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (interaction.channel.id !== config_json_1.SECRET_CHANNEL_ID)
+                    if (interaction.channel.id !== Util_1.default.config.SECRET_CHANNEL_ID)
                         return [2 /*return*/];
                     table = interaction.options.getString("table");
-                    return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM $1", [table])];
+                    return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM " + table)];
                 case 1:
                     rows = (_a.sent()).rows;
                     attachment = new discord_js_1.MessageAttachment(Buffer.from(JSON.stringify(rows, null, 4)), table + ".json");
-                    interaction.reply({ files: [attachment] });
+                    interaction.followUp({
+                        files: [attachment]
+                    });
                     return [2 /*return*/];
             }
         });

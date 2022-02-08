@@ -4,11 +4,8 @@
 	"BETA_CLIENT_ID": "740848584882126939",
 	"MAIN_COLOR": 1056290,
 	"MAIN_COLOR_HEX": "#101e22",
-	"LANGUAGES": [
-		"fr",
-		"en"
-	],
-	"LANUAGE_FLAGS": {
+	"LANGUAGES": ["fr", "en"],
+	"LANGUAGE_FLAGS": {
 		"fr": "🇫🇷",
 		"en": "🇬🇧"
 	},

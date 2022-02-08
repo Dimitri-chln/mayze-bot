@@ -4,18 +4,20 @@ import CaughtPokemon from "./CaughtPokemon";
 import Pokemon from "./Pokemon";
 import { DatabasePokemon } from "../../types/structures/Database";
 
-
-
 export default class PokemonList {
-	pokemons: CaughtPokemon[];
+	readonly pokemons: CaughtPokemon[];
 
 	constructor(pokemonList: DatabasePokemon[], userId: Snowflake) {
-		this.pokemons = pokemonList.map(pokemonData =>
-			new CaughtPokemon(pokemonData, userId)
+		this.pokemons = pokemonList.map(
+			(pokemonData) => new CaughtPokemon(pokemonData, userId),
 		);
 	}
 
 	has(pokemon: Pokemon, variation: VariationType = "default") {
-		return this.pokemons.some(pkm => pkm.data.nationalId === pokemon.nationalId && pkm.variation === variation);
+		return this.pokemons.some(
+			(pkm) =>
+				pkm.data.nationalId === pokemon.nationalId &&
+				pkm.variation === variation,
+		);
 	}
 }

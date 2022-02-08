@@ -100,19 +100,6 @@ var command = {
                 ]
             },
             {
-                name: "evoline",
-                description: "Obtenir la ligne d'évolutions d'un pokémon",
-                type: "SUB_COMMAND",
-                options: [
-                    {
-                        name: "pokemon",
-                        description: "Le pokémon dont tu veux obtenir la ligne d'évolutions",
-                        type: "STRING",
-                        required: true
-                    }
-                ]
-            },
-            {
                 name: "list",
                 description: "Obtenir la liste de tes pokémons",
                 type: "SUB_COMMAND",
@@ -233,19 +220,6 @@ var command = {
                 ]
             },
             {
-                name: "evoline",
-                description: "Get the evolution line of a pokémon",
-                type: "SUB_COMMAND",
-                options: [
-                    {
-                        name: "pokemon",
-                        description: "The pokémon whose evolution line to get",
-                        type: "STRING",
-                        required: true
-                    }
-                ]
-            },
-            {
                 name: "list",
                 description: "Get the list of your pokémons",
                 type: "SUB_COMMAND",
@@ -321,10 +295,10 @@ var command = {
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var subCommand, _a, _b, pokemon, shiny, variationType, pokemons, _c, pokemon, shiny, variationType, pokemons, _d, pokemon, shiny, variationType, nickname, pokemons, pokemon, stringEvolutionLine, user_1, pokemons, pokemonList, pages, page, total, i;
-        var _e, _f, _g, _h, _j;
-        return __generator(this, function (_k) {
-            switch (_k.label) {
+        var subCommand, _a, _b, pokemon, shiny, variationType, pokemons, _c, pokemon, shiny, variationType, pokemons, _d, pokemon, shiny, variationType, pokemons, nickname, user_1, pokemons, pokemonList, pages, total, i, page;
+        var _e, _f, _g, _h;
+        return __generator(this, function (_j) {
+            switch (_j.label) {
                 case 0:
                     subCommand = interaction.options.getSubcommand();
                     _a = subCommand;
@@ -332,119 +306,59 @@ var command = {
                         case "addfav": return [3 /*break*/, 1];
                         case "removefav": return [3 /*break*/, 4];
                         case "nick": return [3 /*break*/, 7];
-                        case "evoline": return [3 /*break*/, 10];
-                        case "list": return [3 /*break*/, 11];
+                        case "list": return [3 /*break*/, 10];
                     }
-                    return [3 /*break*/, 13];
+                    return [3 /*break*/, 12];
                 case 1:
                     _b = (_e = Pokedex_1.default.findByNameWithVariation(interaction.options.getString("pokemon"))) !== null && _e !== void 0 ? _e : {}, pokemon = _b.pokemon, shiny = _b.shiny, variationType = _b.variationType;
                     if (!pokemon)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_pokemon(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_pokemon())];
                     return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM pokemons WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3 AND users ? $4", [pokemon.nationalId, shiny, variationType, interaction.user.id])];
                 case 2:
-                    pokemons = (_k.sent()).rows;
+                    pokemons = (_j.sent()).rows;
                     if (!pokemons.length)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.pokemon_not_owned(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.pokemon_not_owned())];
                     return [4 /*yield*/, Util_1.default.database.query("\n\t\t\t\t\tUPDATE pokemons SET users = jsonb_set(users, '{" + interaction.user.id + ", favorite}', TRUE::text::jsonb)\n\t\t\t\t\tWHERE pokedex_id = $1 AND shiny = $2 AND variation = $3\n\t\t\t\t\t", [pokemon.nationalId, shiny, variationType])];
                 case 3:
-                    _k.sent();
-                    interaction.reply({
-                        content: translations.data.favorite_added(pokemon.formatName(shiny, variationType, translations.language)),
-                        ephemeral: true
-                    });
-                    return [3 /*break*/, 13];
+                    _j.sent();
+                    interaction.followUp(translations.data.favorite_added(pokemon.formatName(shiny, variationType, translations.language)));
+                    return [3 /*break*/, 12];
                 case 4:
                     _c = (_f = Pokedex_1.default.findByNameWithVariation(interaction.options.getString("pokemon"))) !== null && _f !== void 0 ? _f : {}, pokemon = _c.pokemon, shiny = _c.shiny, variationType = _c.variationType;
                     if (!pokemon)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_pokemon(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_pokemon())];
                     return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM pokemons WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3 AND users ? $4", [pokemon.nationalId, shiny, variationType, interaction.user.id])];
                 case 5:
-                    pokemons = (_k.sent()).rows;
+                    pokemons = (_j.sent()).rows;
                     if (!pokemons.length)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.pokemon_not_owned(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.pokemon_not_owned())];
                     return [4 /*yield*/, Util_1.default.database.query("\n\t\t\t\t\tUPDATE pokemons SET users = jsonb_set(users, '{" + interaction.user.id + ", favorite}', FALSE::text::jsonb)\n\t\t\t\t\tWHERE pokedex_id = $1 AND shiny = $2 AND variation = $3\n\t\t\t\t\t", [pokemon.nationalId, shiny, variationType])];
                 case 6:
-                    _k.sent();
-                    interaction.reply({
-                        content: translations.data.favorite_removed(pokemon.formatName(shiny, variationType, translations.language)),
-                        ephemeral: true
-                    });
-                    return [3 /*break*/, 13];
+                    _j.sent();
+                    interaction.followUp(translations.data.favorite_removed(pokemon.formatName(shiny, variationType, translations.language)));
+                    return [3 /*break*/, 12];
                 case 7:
                     _d = (_g = Pokedex_1.default.findByNameWithVariation(interaction.options.getString("pokemon"))) !== null && _g !== void 0 ? _g : {}, pokemon = _d.pokemon, shiny = _d.shiny, variationType = _d.variationType;
                     if (!pokemon)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_pokemon(),
-                                ephemeral: true
-                            })];
-                    nickname = interaction.options.getString("nickname");
-                    if (nickname && nickname.length > 30)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.nickname_too_long()
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_pokemon())];
                     return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM pokemons WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3 AND users ? $4", [pokemon.nationalId, shiny, variationType, interaction.user.id])];
                 case 8:
-                    pokemons = (_k.sent()).rows;
+                    pokemons = (_j.sent()).rows;
                     if (!pokemons.length)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.pokemon_not_owned(),
-                                ephemeral: true
-                            })];
-                    return [4 /*yield*/, Util_1.default.database.query("\n\t\t\t\t\tUPDATE pokemons SET users = jsonb_set(users, '{" + interaction.user.id + ", nickname}', $4::jsonb)\n\t\t\t\t\tWHERE pokedex_id = $1 AND shiny = $2 AND variation = $3\n\t\t\t\t\t", [pokemon.nationalId, shiny, variationType, nickname])];
+                        return [2 /*return*/, interaction.followUp(translations.data.pokemon_not_owned())];
+                    nickname = interaction.options.getString("nickname");
+                    if (nickname && nickname.length > 30)
+                        return [2 /*return*/, interaction.followUp(translations.data.nickname_too_long())];
+                    return [4 /*yield*/, Util_1.default.database.query("\n\t\t\t\t\tUPDATE pokemons SET users = jsonb_set(users, '{" + interaction.user.id + ", nickname}', '" + (nickname ? "\"" + nickname + "\"" : null) + "'::jsonb)\n\t\t\t\t\tWHERE pokedex_id = $1 AND shiny = $2 AND variation = $3\n\t\t\t\t\t", [pokemon.nationalId, shiny, variationType])];
                 case 9:
-                    _k.sent();
-                    interaction.reply({
-                        content: translations.data.nickname_updated(pokemon.formatName(shiny, variationType, translations.language), nickname),
-                        ephemeral: true
-                    });
-                    return [3 /*break*/, 13];
+                    _j.sent();
+                    interaction.followUp(translations.data.nickname_updated(pokemon.formatName(shiny, variationType, translations.language), nickname));
+                    return [3 /*break*/, 12];
                 case 10:
-                    {
-                        pokemon = Pokedex_1.default.findByName(interaction.options.getString("pokemon"));
-                        if (!pokemon)
-                            return [2 /*return*/, interaction.reply({
-                                    content: translations.data.invalid_pokemon(),
-                                    ephemeral: true
-                                })];
-                        stringEvolutionLine = pokemon.stringEvolutionLine(translations.language);
-                        interaction.reply({
-                            embeds: [
-                                {
-                                    author: {
-                                        name: translations.data.evoline_title((_h = pokemon.names[translations.language]) !== null && _h !== void 0 ? _h : pokemon.names.en),
-                                        iconURL: interaction.client.user.displayAvatarURL()
-                                    },
-                                    thumbnail: {
-                                        url: "https://assets.poketwo.net/images/" + pokemon.nationalId + ".png?v=26"
-                                    },
-                                    color: interaction.guild.me.displayColor,
-                                    description: "```\n" + stringEvolutionLine + "\n```",
-                                    footer: {
-                                        text: "✨ Mayze ✨"
-                                    }
-                                }
-                            ]
-                        });
-                        return [3 /*break*/, 13];
-                    }
-                    _k.label = 11;
+                    user_1 = (_h = interaction.options.getUser("user")) !== null && _h !== void 0 ? _h : interaction.user;
+                    return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM pokemons WHERE users ? $1", [user_1.id])];
                 case 11:
-                    user_1 = (_j = interaction.options.getUser("user")) !== null && _j !== void 0 ? _j : interaction.user;
-                    return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM pokemons WHERE users ? $1 ORDER BY legendary DESC, ultra_beast DESC, shiny DESC, (users -> $1 -> 'caught')::int DESC, pokedex_id ASC", [user_1.id])];
-                case 12:
-                    pokemons = (_k.sent()).rows;
+                    pokemons = (_j.sent()).rows;
                     pokemonList = new PokemonList_1.default(pokemons.filter(function (pkm) {
                         if (interaction.options.getBoolean("normal") && (pkm.shiny || pkm.variation !== "default"))
                             return false;
@@ -474,42 +388,54 @@ var command = {
                             return false;
                         return true;
                     }), user_1.id);
+                    pokemonList.pokemons.sort(function (a, b) {
+                        return Number(b.data.legendary) - Number(a.data.legendary) // legendary pokémons first
+                            || Number(b.data.ultraBeast) - Number(a.data.ultraBeast) // ultra beasts after
+                            || Number(b.shiny) - Number(a.shiny) // followed by shiny pokémons
+                            || b.caught - a.caught // sort by most caught pokémons
+                            || a.data.nationalId - b.data.nationalId; // and finally by pokédex ID
+                    });
                     pages = [];
-                    page = {
-                        embeds: [
-                            {
-                                author: {
-                                    name: translations.data.title(user_1.tag),
-                                    iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-                                },
-                                color: interaction.guild.me.displayColor,
-                                description: translations.data.no_pokemon()
-                            }
-                        ]
-                    };
                     if (!pokemonList.pokemons.length)
-                        pages.push(page);
+                        pages.push({
+                            embeds: [
+                                {
+                                    author: {
+                                        name: translations.data.title(user_1.tag),
+                                        iconURL: user_1.displayAvatarURL({ dynamic: true })
+                                    },
+                                    color: interaction.guild.me.displayColor,
+                                    description: translations.data.no_pokemon()
+                                }
+                            ]
+                        });
                     total = pokemons.reduce(function (sum, p) { return sum + p.users[user_1.id].caught; }, 0);
                     for (i = 0; i < pokemonList.pokemons.length; i += Util_1.default.config.ITEMS_PER_PAGE) {
-                        page.embeds[0] = {
-                            author: {
-                                name: translations.data.title(user_1.tag),
-                                iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-                            },
-                            title: translations.data.total(total.toString(), total > 1),
-                            color: interaction.guild.me.displayColor,
-                            description: pokemonList.pokemons
-                                .slice(i, i + Util_1.default.config.ITEMS_PER_PAGE)
-                                .map(function (p) { return translations.data.description(p.data.formatName(p.shiny, p.variation, translations.language, "badge"), p.data.formatName(p.shiny, p.variation, translations.language, "raw"), interaction.options.getInteger("id") === 0 ? "#" + p.data.nationalId.toString().padStart(3, "0") : "", (0, espapeMarkdown_1.default)(p.nickname), p.caught.toString(), p.caught > 1, p.favorite ? "https~d//www.pokemon.com/" + (translations.language === "en" ? "us" : translations.language) + "/pokedex/" + p.data.names[translations.language].toLowerCase().replace(/[:\.']/g, "").replace(/\s/g, "-").replace(/\u2642/, "-male").replace(/\u2640/, "-female") : ""); }).join("\n")
+                        page = {
+                            embeds: [
+                                {
+                                    author: {
+                                        name: translations.data.title(user_1.tag),
+                                        iconURL: user_1.displayAvatarURL({ dynamic: true })
+                                    },
+                                    title: translations.data.total(total.toString(), total > 1),
+                                    color: interaction.guild.me.displayColor,
+                                    description: pokemonList.pokemons
+                                        .slice(i, i + Util_1.default.config.ITEMS_PER_PAGE)
+                                        .map(function (p) { return translations.data.description(p.data.formatName(p.shiny, p.variation, translations.language, "badge"), p.data.formatName(p.shiny, p.variation, translations.language, "raw"), interaction.options.getInteger("id") === 0 ? "#" + p.data.nationalId.toString().padStart(3, "0") : "", (0, espapeMarkdown_1.default)(p.nickname), p.caught.toString(), p.caught > 1, p.favorite ? "https~d//www.pokemon.com/" + (translations.language === "en" ? "us" : translations.language) + "/pokedex/" + p.data.names[translations.language].toLowerCase().replace(/[:\.']/g, "").replace(/\s/g, "-").replace(/\u2642/, "-male").replace(/\u2640/, "-female") : ""); }).join("\n")
+                                }
+                            ]
                         };
                         if (pokemonList.pokemons.length === 1)
-                            page.embeds[0].thumbnail.url = pokemonList.pokemons[0].data.image(pokemonList.pokemons[0].shiny, pokemonList.pokemons[0].variation);
+                            page.embeds[0].thumbnail = {
+                                url: pokemonList.pokemons[0].data.image(pokemonList.pokemons[0].shiny, pokemonList.pokemons[0].variation)
+                            };
                         pages.push(page);
                     }
                     ;
                     (0, pagination_1.default)(interaction, pages);
-                    return [3 /*break*/, 13];
-                case 13: return [2 /*return*/];
+                    return [3 /*break*/, 12];
+                case 12: return [2 /*return*/];
             }
         });
     }); }

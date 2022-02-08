@@ -83,13 +83,15 @@ var command = {
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var DAY_IN_MS, NOW, user, _a, userCurrency, _b, money, last_daily, nextDaily;
+        var DAY_IN_MS, NOW, MIDNIGHT, user, _a, userCurrency, _b, money, last_daily, nextDaily;
         var _c;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
                     DAY_IN_MS = 1000 * 60 * 60 * 24;
                     NOW = Date.now();
+                    MIDNIGHT = new Date();
+                    MIDNIGHT.setHours(0, 0, 0, 0);
                     user = (_c = interaction.options.getUser("user")) !== null && _c !== void 0 ? _c : interaction.user;
                     return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM currency WHERE user_id = $1", [user.id])];
                 case 1:
@@ -99,9 +101,9 @@ var command = {
                         last_daily: null
                     }, money = _b.money, last_daily = _b.last_daily;
                     nextDaily = last_daily
-                        ? Date.parse(last_daily) + DAY_IN_MS
+                        ? MIDNIGHT.valueOf() + DAY_IN_MS.valueOf()
                         : NOW;
-                    interaction.reply({
+                    interaction.followUp({
                         embeds: [
                             {
                                 author: {

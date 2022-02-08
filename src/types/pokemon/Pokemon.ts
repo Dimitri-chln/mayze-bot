@@ -3,8 +3,6 @@ import { EvolutionLine } from "../../utils/pokemon/pokemonEvolutionLine";
 import { FormatType, VariationType } from "../../utils/pokemon/pokemonInfo";
 import { Language } from "../structures/Translations";
 
-
-
 export interface RawPokemon {
 	names: RawPokemonNames;
 	national_id: number;
@@ -48,7 +46,12 @@ export default interface Pokemon {
 	evolutionLine(): EvolutionLine;
 	flatEvolutionLine(): Pokemon[];
 	stringEvolutionLine(language: Language): string;
-	formatName(shiny: boolean, variation: VariationType, language: Language, format?: FormatType): string;
+	formatName(
+		shiny: boolean,
+		variation: VariationType,
+		language: Language,
+		format?: FormatType,
+	): string;
 	image(shiny: boolean, variation: VariationType): string;
 }
 
@@ -75,7 +78,7 @@ type RawPokemonType =
 	| "Ice"
 	| "Dragon"
 	| "Dark"
-	| "Fairy"
+	| "Fairy";
 
 interface RawPokemonAbility {
 	name: string;
@@ -116,8 +119,6 @@ interface RawPokemonVariation {
 	abilities: RawPokemonAbility[];
 }
 
-
-
 type PokemonNames = {
 	en: string;
 	fr: string;
@@ -141,7 +142,7 @@ export type PokemonType =
 	| "Ice"
 	| "Dragon"
 	| "Dark"
-	| "Fairy"
+	| "Fairy";
 
 interface PokemonAbility {
 	name: string;

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var pokemonEvolutionLine_1 = require("../../utils/pokemon/pokemonEvolutionLine");
 var pokemonInfo_1 = require("../../utils/pokemon/pokemonInfo");
+var discord_js_1 = require("discord.js");
 var Pokedex = /** @class */ (function () {
     function Pokedex() {
     }
@@ -16,32 +17,33 @@ var Pokedex = /** @class */ (function () {
         });
     };
     Pokedex.findByNameWithVariation = function (name) {
+        var _b;
         var shiny = /\bshiny\b/i.test(name);
-        if (shiny)
-            name = name.replace(/\bshiny\b/i, "").trim();
+        name = name.replace(/\bshiny\b/i, "").trim();
         var pokemon = this.findByName(name);
-        var variationType = "default";
         var variation;
+        // Mega evolutions
         if (!pokemon) {
-            // Mega evolutions
-            pokemon = this.pokemons.find(function (pokemon) {
-                return pokemon.megaEvolutions && pokemon.megaEvolutions.some(function (megaEvolution) {
-                    return Object.values(megaEvolution.names).includes(name);
+            pokemon = this.pokemons.find(function (pkm) {
+                return pkm.megaEvolutions.some(function (megaEvolution) {
+                    return Object.values(megaEvolution.names).some(function (n) { return n.toLowerCase() === (name === null || name === void 0 ? void 0 : name.toLowerCase()); });
                 });
             });
             if (pokemon)
                 variation = pokemon.megaEvolutions.find(function (megaEvolution) {
-                    return Object.values(megaEvolution.names).includes(name);
+                    return Object.values(megaEvolution.names).some(function (n) { return n.toLowerCase() === (name === null || name === void 0 ? void 0 : name.toLowerCase()); });
                 });
-            // Variations
-            pokemon = this.pokemons.find(function (pokemon) {
-                return pokemon.variations && pokemon.variations.some(function (variation) {
-                    return Object.values(variation.names).includes(name);
+        }
+        // Variations
+        if (!pokemon) {
+            pokemon = this.pokemons.find(function (pkm) {
+                return pkm.variations.some(function (variation) {
+                    return Object.values(variation.names).some(function (n) { return n.toLowerCase() === (name === null || name === void 0 ? void 0 : name.toLowerCase()); });
                 });
             });
             if (pokemon)
                 variation = pokemon.variations.find(function (variation) {
-                    return Object.values(variation.names).includes(name);
+                    return Object.values(variation.names).some(function (n) { return n.toLowerCase() === (name === null || name === void 0 ? void 0 : name.toLowerCase()); });
                 });
         }
         if (!pokemon)
@@ -49,7 +51,7 @@ var Pokedex = /** @class */ (function () {
         return {
             pokemon: pokemon,
             shiny: shiny,
-            variationType: variation.suffix,
+            variationType: (_b = variation === null || variation === void 0 ? void 0 : variation.suffix) !== null && _b !== void 0 ? _b : "default",
             variation: variation
         };
     };
@@ -111,10 +113,12 @@ var Pokedex = /** @class */ (function () {
         };
         return pokemon;
     });
-    Pokedex.megaEvolvablePokemons = _a.pokemons
-        .filter(function (pokemon) { return pokemon.megaEvolutions.length; });
-    Pokedex.alolanPokemons = _a.pokemons
-        .filter(function (pokemon) { return pokemon.variations.some(function (variation) { return variation.suffix === "alola"; }); });
+    Pokedex.megaEvolvablePokemons = new discord_js_1.Collection(_a.pokemons
+        .filter(function (pokemon) { return pokemon.megaEvolutions.length; })
+        .map(function (pokemon) { return [pokemon.nationalId, pokemon]; }));
+    Pokedex.alolaPokemons = new discord_js_1.Collection(_a.pokemons
+        .filter(function (pokemon) { return pokemon.variations.some(function (variation) { return variation.suffix === "alola"; }); })
+        .map(function (pokemon) { return [pokemon.nationalId, pokemon]; }));
     Pokedex.catchRates = _a.pokemons
         .map(function (pokemon, i, dex) {
         return pokemon.catchRate + dex.slice(0, i).reduce(function (sum, p) { return sum + p.catchRate; }, 0);

@@ -88,7 +88,7 @@ var command = {
                     member = interaction.guild.members.cache.get(interaction.options.getUser("user").id);
                     if (member.roles.highest.position >= interaction.member.roles.highest.position
                         && interaction.user.id !== Util_1.default.owner.id)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.not_allowed(),
                                 ephemeral: true
                             })];
@@ -96,7 +96,7 @@ var command = {
                     return [4 /*yield*/, member.timeout(duration !== null && duration !== void 0 ? duration : 365 * 24 * 60 * 60 * 1000, translations.data.reason(interaction.user.tag))];
                 case 1:
                     _a.sent();
-                    interaction.reply(translations.data.timed_out(member.user.tag, Boolean(duration), (0, formatTime_1.default)(duration, translations.language)));
+                    interaction.followUp(translations.data.timed_out(member.user.tag, Boolean(duration), (0, formatTime_1.default)(duration, translations.language)));
                     return [2 /*return*/];
             }
         });

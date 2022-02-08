@@ -1,52 +1,52 @@
 {
-  "name": "mayze",
-  "version": "6.0.0",
-  "description": "Le meilleur bot pour le meilleur clan",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "tsc",
-    "start": "node .",
-    "debug": "node debug"
-  },
-  "dependencies": {
-    "@discordjs/voice": "^0.6.0",
-    "@sushibtw/youtubei": "^0.0.1-rc.17",
-    "@types/algebra.js": "^0.2.1",
-    "@types/archiver": "^5.3.1",
-    "@types/cron": "^1.7.3",
-    "@types/node": "^16.11.6",
-    "@types/pg": "^8.6.1",
-    "@types/spotify-web-api-node": "^5.0.3",
-    "algebra.js": "^0.2.6",
-    "archiver": "^5.3.0",
-    "axios": "^0.21.2",
-    "cron": "^1.8.2",
-    "deezer-public-api": "^1.0.3",
-    "dhms": "^1.0.1",
-    "discord.js": "^13.6.0",
-    "dotenv": "^10.0.0",
-    "ffmpeg-static": "^4.4.1",
-    "googleapis": "^92.0.0",
-    "jimp": "^0.16.1",
-    "libsodium-wrappers": "^0.7.9",
-    "lyrics-finder": "^21.0.0",
-    "mathjs": "^9.5.2",
-    "minecraft-server-ping": "^0.0.4",
-    "oakdex-pokedex": "^0.4.5",
-    "pg": "^8.5.1",
-    "spotify-url-info": "^2.2.5",
-    "spotify-web-api-node": "^5.0.2",
-    "unb-api": "^1.2.3",
-    "ytdl-core": "^4.9.1",
-    "ytdl-core-discord": "^1.3.0",
-    "ytsr": "^3.6.0"
-  },
-  "engines": {
-    "node": "16.x"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Dimitri-chln/mayze.git"
-  },
-  "license": "MIT"
+	"name": "mayze",
+	"version": "6.0.0",
+	"description": "Le meilleur bot pour le meilleur clan",
+	"main": "dist/index.js",
+	"scripts": {
+		"build": "tsc",
+		"start": "node .",
+		"debug": "node debug"
+	},
+	"dependencies": {
+		"@discordjs/voice": "^0.6.0",
+		"@sushibtw/youtubei": "^0.0.1-rc.17",
+		"@types/algebra.js": "^0.2.1",
+		"@types/archiver": "^5.3.1",
+		"@types/cron": "^1.7.3",
+		"@types/node": "^16.11.6",
+		"@types/pg": "^8.6.1",
+		"@types/spotify-web-api-node": "^5.0.3",
+		"algebra.js": "^0.2.6",
+		"archiver": "^5.3.0",
+		"axios": "^0.21.2",
+		"cron": "^1.8.2",
+		"deezer-public-api": "^1.0.3",
+		"dhms": "^1.0.1",
+		"discord.js": "^13.6.0",
+		"dotenv": "^10.0.0",
+		"ffmpeg-static": "^4.4.1",
+		"googleapis": "^92.0.0",
+		"jimp": "^0.16.1",
+		"libsodium-wrappers": "^0.7.9",
+		"lyrics-finder": "^21.0.0",
+		"mathjs": "^9.5.2",
+		"minecraft-server-ping": "^0.0.4",
+		"oakdex-pokedex": "^0.4.5",
+		"pg": "^8.5.1",
+		"spotify-url-info": "^2.2.5",
+		"spotify-web-api-node": "^5.0.2",
+		"unb-api": "^1.2.3",
+		"ytdl-core": "^4.9.1",
+		"ytdl-core-discord": "^1.3.0",
+		"ytsr": "^3.6.0"
+	},
+	"engines": {
+		"node": "16.x"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Dimitri-chln/mayze.git"
+	},
+	"license": "MIT"
 }

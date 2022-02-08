@@ -79,26 +79,28 @@ var command = {
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var unbClient, user, subCommand;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var unbClient, user, unbUser, subCommand;
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     unbClient = new unb_api_1.Client(process.env.UNB_TOKEN);
-                    return [4 /*yield*/, unbClient.getUserBalance(interaction.guild.id, interaction.user.id)];
+                    user = (_a = interaction.options.getUser("user")) !== null && _a !== void 0 ? _a : interaction.user;
+                    return [4 /*yield*/, unbClient.getUserBalance(interaction.guild.id, user.id)];
                 case 1:
-                    user = _a.sent();
+                    unbUser = _b.sent();
                     subCommand = interaction.options.getSubcommand();
                     switch (subCommand) {
                         case "balance": {
-                            interaction.reply({
+                            interaction.followUp({
                                 embeds: [
                                     {
                                         author: {
-                                            name: translations.data.balance_title(interaction.user.tag),
-                                            iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+                                            name: translations.data.balance_title(user.tag),
+                                            iconURL: user.displayAvatarURL({ dynamic: true })
                                         },
                                         color: interaction.guild.me.displayColor,
-                                        description: translations.data.balance_description(user.rank.toLocaleString(translations.language), user.cash.toLocaleString(translations.language), user.bank.toLocaleString(translations.language), user.total.toLocaleString(translations.language)),
+                                        description: translations.data.balance_description(unbUser.rank.toLocaleString(translations.language), unbUser.cash.toLocaleString(translations.language), unbUser.bank.toLocaleString(translations.language), unbUser.total.toLocaleString(translations.language)),
                                         footer: {
                                             text: "✨ Mayze ✨"
                                         }

@@ -75,7 +75,7 @@ var command = {
                     member = interaction.guild.members.cache.get(interaction.options.getUser("user").id);
                     if (member.roles.highest.position >= interaction.member.roles.highest.position
                         && interaction.user.id !== Util_1.default.owner.id)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.not_allowed(),
                                 ephemeral: true
                             })];
@@ -90,7 +90,7 @@ var command = {
                     return [4 /*yield*/, member.roles.add(jailedRoles).catch(console.error)];
                 case 2:
                     _a.sent();
-                    return [2 /*return*/, interaction.reply(translations.data.jailed(member.user.tag))];
+                    return [2 /*return*/, interaction.followUp(translations.data.jailed(member.user.tag))];
                 case 3:
                     jailedRoles = member.roles.cache.filter(function (role) { return interaction.guild.roles.cache.some(function (r) { return role.name === r.name + " (Jailed)"; }); });
                     unJailedRoles = interaction.guild.roles.cache.filter(function (role) { return member.roles.cache.some(function (r) { return r.name === role.name + " (Jailed)"; }); });
@@ -101,7 +101,7 @@ var command = {
                     return [4 /*yield*/, member.roles.remove(jailedRoles).catch(console.error)];
                 case 5:
                     _a.sent();
-                    return [2 /*return*/, interaction.reply(translations.data.unjailed(member.user.tag))];
+                    return [2 /*return*/, interaction.followUp(translations.data.unjailed(member.user.tag))];
             }
         });
     }); }

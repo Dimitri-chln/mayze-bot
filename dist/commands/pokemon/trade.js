@@ -255,7 +255,7 @@ var command = {
                     subCommand = interaction.options.getSubcommand();
                     user = interaction.options.getUser("user");
                     if (user.id === interaction.user.id)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.same_user(),
                                 ephemeral: true
                             })];
@@ -269,7 +269,7 @@ var command = {
                 case 1:
                     {
                         Util_1.default.database.query("\n\t\t\t\t\tINSERT INTO trade_block (user_id, blocked_user_id) VALUES ($1, $2)\n\t\t\t\t\tON CONFLICT (user_id, blocked_user_id)\n\t\t\t\t\tDO NOTHING\n\t\t\t\t\t", [interaction.user.id, user.id]);
-                        interaction.reply({
+                        interaction.followUp({
                             content: translations.data.blocked(user.tag),
                             ephemeral: true
                         });
@@ -279,7 +279,7 @@ var command = {
                 case 2:
                     {
                         Util_1.default.database.query("DELETE FROM trade_block WHERE user_id = $1 AND blocked_user_id = $2", [interaction.user.id, user.id]);
-                        interaction.reply({
+                        interaction.followUp({
                             content: translations.data.unblocked(user.tag),
                             ephemeral: true
                         });
@@ -290,7 +290,7 @@ var command = {
                 case 4:
                     _b = __read.apply(void 0, [(_e.sent()).rows, 1]), blocked = _b[0];
                     if (blocked)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.not_allowed(user.tag),
                                 ephemeral: true
                             })];
@@ -332,12 +332,12 @@ var command = {
                         // Filter duplicates
                         .filter(function (p, i, a) { return i === a.findIndex(function (v) { return p.data.nationalId === v.data.nationalId && p.shiny === v.shiny && p.variation === v.variation; }); });
                     if (!offer_1.length && !demand_1.length)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.empty_trade(),
                                 ephemeral: true
                             })];
                     if (error_1)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: error_1,
                                 ephemeral: true
                             })];
@@ -345,8 +345,8 @@ var command = {
                 case 5:
                     errors = _e.sent();
                     if (errors)
-                        return [2 /*return*/, interaction.reply(errors)];
-                    return [4 /*yield*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp(errors)];
+                    return [4 /*yield*/, interaction.followUp({
                             content: user.toString(),
                             embeds: [
                                 {

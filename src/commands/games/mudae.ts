@@ -5,17 +5,15 @@ import Util from "../../Util";
 
 import { DatabaseWish } from "../../types/structures/Database";
 
-
-
 const command: Command = {
 	name: "mudae",
 	description: {
 		fr: "Utiliser une liste de commandes utilitaires pour Mudae",
-		en: "Use a list of utility commands for Mudae"
+		en: "Use a list of utility commands for Mudae",
 	},
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
-	
+
 	options: {
 		fr: [
 			{
@@ -30,11 +28,19 @@ const command: Command = {
 						options: [
 							{
 								name: "user",
-								description: "L'utilisateur dont tu veux voir la liste de wish",
+								description:
+									"L'utilisateur dont tu veux voir la liste de wish",
 								type: "USER",
-								required: false
-							}
-						]
+								required: false,
+							},
+							{
+								name: "regex",
+								description:
+									"Une option pour afficher le regex à côté du nom des séries",
+								type: "BOOLEAN",
+								required: false,
+							},
+						],
 					},
 					{
 						name: "add",
@@ -45,31 +51,33 @@ const command: Command = {
 								name: "series",
 								description: "Le nom de la série",
 								type: "STRING",
-								required: true
+								required: true,
 							},
 							{
 								name: "regex",
-								description: "Un regex pour faire aussi correspondre les noms alternatifs",
+								description:
+									"Un regex pour faire aussi correspondre les noms alternatifs",
 								type: "STRING",
-								required: false
-							}
-						]
+								required: false,
+							},
+						],
 					},
 					{
 						name: "remove",
-						description: "Retirer un wish de ta liste de wish Mudae",
+						description:
+							"Retirer un wish de ta liste de wish Mudae",
 						type: "SUB_COMMAND",
 						options: [
 							{
 								name: "series",
 								description: "Le numéro de la série à retirer",
 								type: "INTEGER",
-								required: true
-							}
-						]
-					}
-				]
-			}
+								required: true,
+							},
+						],
+					},
+				],
+			},
 		],
 		en: [
 			{
@@ -84,11 +92,19 @@ const command: Command = {
 						options: [
 							{
 								name: "user",
-								description: "The user whose wishlist you want to see",
+								description:
+									"The user whose wishlist you want to see",
 								type: "USER",
-								required: false
-							}
-						]
+								required: false,
+							},
+							{
+								name: "regex",
+								description:
+									"An option to display the regex next to the series' name",
+								type: "BOOLEAN",
+								required: false,
+							},
+						],
 					},
 					{
 						name: "add",
@@ -99,15 +115,16 @@ const command: Command = {
 								name: "series",
 								description: "The name of the series",
 								type: "STRING",
-								required: true
+								required: true,
 							},
 							{
 								name: "regex",
-								description: "A regex to match alternative names as well",
+								description:
+									"A regex to match alternative names as well",
 								type: "STRING",
-								required: false
-							}
-						]
+								required: false,
+							},
+						],
 					},
 					{
 						name: "remove",
@@ -116,24 +133,25 @@ const command: Command = {
 						options: [
 							{
 								name: "series",
-								description: "The number of the series to remove",
+								description:
+									"The number of the series to remove",
 								type: "INTEGER",
-								required: true
-							}
-						]
-					}
-				]
-			}
-		]
+								required: true,
+							},
+						],
+					},
+				],
+			},
+		],
 	},
-	
+
 	run: async (interaction, translations) => {
 		if (!interaction.guild.members.cache.has("432610292342587392"))
-			return interaction.reply({
+			return interaction.followUp({
 				content: translations.data.mudae_missing(),
-				ephemeral: true
+				ephemeral: true,
 			});
-		
+
 		const subCommandGroup = interaction.options.getSubcommandGroup();
 
 		switch (subCommandGroup) {
@@ -142,27 +160,50 @@ const command: Command = {
 
 				switch (subCommand) {
 					case "list": {
-						const user = interaction.options.getUser("user") ?? interaction.user;
-
-						const { rows: wishlist }: { rows: DatabaseWish[] } = await Util.database.query(
-							"SELECT * FROM wishes WHERE user_id = $1 ORDER BY id",
-							[ interaction.user.id ]
+						const user =
+							interaction.options.getUser("user") ??
+							interaction.user;
+						const displayRegex = Boolean(
+							interaction.options.getBoolean("regex"),
 						);
-						
-						interaction.reply({
+
+						const { rows: wishlist }: { rows: DatabaseWish[] } =
+							await Util.database.query(
+								"SELECT * FROM wishes WHERE user_id = $1 ORDER BY id",
+								[interaction.user.id],
+							);
+
+						interaction.followUp({
 							embeds: [
 								{
 									author: {
 										name: translations.data.title(user.tag),
-										iconURL: user.displayAvatarURL({ dynamic: true })
+										iconURL: user.displayAvatarURL({
+											dynamic: true,
+										}),
 									},
 									color: interaction.guild.me.displayColor,
-									description: wishlist.map((w, i) => `\`${i + 1}.\` ${w.series} - *${w.regex ? w.regex : w.series.toLowerCase()}*`).join("\n") ?? translations.data.no_wish(),
+									description:
+										wishlist
+											.map(
+												(w, i) =>
+													`\`${i + 1}.\` ${w.series}${
+														displayRegex
+															? ` - *${
+																	w.regex
+																		? w.regex
+																		: w.series.toLowerCase()
+															  }*`
+															: ""
+													}`,
+											)
+											.join("\n") ??
+										translations.data.no_wish(),
 									footer: {
-										text: "✨ Mayze ✨"
-									}
-								}
-							]
+										text: "✨ Mayze ✨",
+									},
+								},
+							],
 						});
 						break;
 					}
@@ -173,42 +214,35 @@ const command: Command = {
 
 						await Util.database.query(
 							"INSERT INTO wishes (user_id, series, regex) VALUES ($1, $2, $3)",
-							[ interaction.user.id, series, regex ]
+							[interaction.user.id, series, regex],
 						);
-						
-						interaction.reply({
-							content: translations.data.added(),
-							ephemeral: true
-						});
+
+						interaction.followUp(translations.data.added());
 						break;
 					}
 
 					case "remove": {
 						const series = interaction.options.getInteger("series");
-						
-						const { rows: wishlist }: { rows: DatabaseWish[] } = await Util.database.query(
-							"SELECT * FROM wishes WHERE user_id = $1 ORDER BY id",
-							[ interaction.user.id ]
-						);
+
+						const { rows: wishlist }: { rows: DatabaseWish[] } =
+							await Util.database.query(
+								"SELECT * FROM wishes WHERE user_id = $1 ORDER BY id",
+								[interaction.user.id],
+							);
 
 						await Util.database.query(
 							"DELETE FROM wishes WHERE id = $1",
-							[ wishlist[series - 1].id ]
+							[wishlist[series - 1].id],
 						);
-						
-						interaction.reply({
-							content: translations.data.removed(),
-							ephemeral: true
-						});
+
+						interaction.followUp(translations.data.removed());
 						break;
 					}
 				}
 				break;
 			}
 		}
-	}
+	},
 };
-
-
 
 export default command;

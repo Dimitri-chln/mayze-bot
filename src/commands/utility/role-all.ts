@@ -3,19 +3,17 @@ import Command from "../../types/structures/Command";
 import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
-
-
 const command: Command = {
 	name: "role-all",
 	description: {
 		fr: "Donner ou retirer un rôle à tous les membres",
-		en: "Give or remove a role to all members"
+		en: "Give or remove a role to all members",
 	},
 	cooldown: 10,
-	
+
 	userPermissions: ["MANAGE_ROLES"],
 	botPermissions: ["MANAGE_ROLES"],
-	
+
 	options: {
 		fr: [
 			{
@@ -27,7 +25,7 @@ const command: Command = {
 						name: "role",
 						description: "Le rôle à donner",
 						type: "ROLE",
-						required: true
+						required: true,
 					},
 					{
 						name: "option",
@@ -37,15 +35,15 @@ const command: Command = {
 						choices: [
 							{
 								name: "Bots uniquement",
-								value: "bot"
+								value: "bot",
 							},
 							{
 								name: "Utilisateurs humains uniquement",
-								value: "human"
-							}
-						]
-					}
-				]
+								value: "human",
+							},
+						],
+					},
+				],
 			},
 			{
 				name: "remove",
@@ -56,7 +54,7 @@ const command: Command = {
 						name: "role",
 						description: "Le rôle à retirer",
 						type: "ROLE",
-						required: true
+						required: true,
 					},
 					{
 						name: "option",
@@ -66,16 +64,16 @@ const command: Command = {
 						choices: [
 							{
 								name: "Bots uniquement",
-								value: "bot"
+								value: "bot",
 							},
 							{
 								name: "Utilisateurs humains uniquement",
-								value: "human"
-							}
-						]
-					}
-				]
-			}
+								value: "human",
+							},
+						],
+					},
+				],
+			},
 		],
 		en: [
 			{
@@ -87,7 +85,7 @@ const command: Command = {
 						name: "role",
 						description: "The role to give",
 						type: "ROLE",
-						required: true
+						required: true,
 					},
 					{
 						name: "option",
@@ -97,15 +95,15 @@ const command: Command = {
 						choices: [
 							{
 								name: "Bots only",
-								value: "bot"
+								value: "bot",
 							},
 							{
 								name: "Human users only",
-								value: "human"
-							}
-						]
-					}
-				]
+								value: "human",
+							},
+						],
+					},
+				],
 			},
 			{
 				name: "remove",
@@ -116,7 +114,7 @@ const command: Command = {
 						name: "role",
 						description: "The role to remove",
 						type: "ROLE",
-						required: true
+						required: true,
 					},
 					{
 						name: "option",
@@ -126,59 +124,65 @@ const command: Command = {
 						choices: [
 							{
 								name: "Bots only",
-								value: "bot"
+								value: "bot",
 							},
 							{
 								name: "Human users only",
-								value: "human"
-							}
-						]
-					}
-				]
-			}
-		]
+								value: "human",
+							},
+						],
+					},
+				],
+			},
+		],
 	},
-	
+
 	run: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 		const role = interaction.options.getRole("role");
-		const option: "bot" | "human" | "all" = interaction.options.getString("option") as "bot" | "human" ?? "all";
+		const option: "bot" | "human" | "all" =
+			(interaction.options.getString("option") as "bot" | "human") ??
+			"all";
 
 		let members = interaction.guild.members.cache;
 
-		if (option === "bot") members = members.filter(m => m.user.bot);
-		if (option === "human") members = members.filter(m => !m.user.bot);
+		if (option === "bot") members = members.filter((m) => m.user.bot);
+		if (option === "human") members = members.filter((m) => !m.user.bot);
 
 		let errors = 0;
-		
-		interaction.reply(
+
+		interaction.followUp(
 			translations.data.updating(
 				members.size.toString(),
-				members.size > 1
-			)
+				members.size > 1,
+			),
 		);
 
 		switch (subCommand) {
 			case "add":
-				members = members.filter(m => !m.roles.cache.has(role.id));
-				
-				await Promise.all(members.map(async member => {
-					await member.roles.add(role.id).catch(err => {
-						++errors;
-						console.error(err);
-					});
-				}));
+				members = members.filter((m) => !m.roles.cache.has(role.id));
+
+				await Promise.all(
+					members.map(async (member) => {
+						await member.roles.add(role.id).catch((err) => {
+							++errors;
+							console.error(err);
+						});
+					}),
+				);
 				break;
-			
+
 			case "remove":
-				members = members.filter(m => m.roles.cache.has(role.id));
-				
-				await Promise.all(members.map(async member => {
-					await member.roles.remove(role.id).catch(err => {
-						++errors;
-						console.error(err);
-					});
-				}));
+				members = members.filter((m) => m.roles.cache.has(role.id));
+
+				await Promise.all(
+					members.map(async (member) => {
+						await member.roles.remove(role.id).catch((err) => {
+							++errors;
+							console.error(err);
+						});
+					}),
+				);
 				break;
 		}
 
@@ -189,10 +193,10 @@ const command: Command = {
 				members.size - errors > 1,
 				(members.size - errors).toString(),
 				errors.toString(),
-				errors > 1
-			)
+				errors > 1,
+			),
 		);
-	}
+	},
 };
 
 module.exports = command;

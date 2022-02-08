@@ -92,11 +92,11 @@ var command = {
             switch (_a.label) {
                 case 0:
                     newLanguage = interaction.options.getString("language");
-                    return [4 /*yield*/, Util_1.default.database.query("\n\t\t\tINSERT INTO languages VALUES ($1, $2)\n\t\t\tON CONFLICT (guild_id)\n\t\t\tDO UPDATE SET language = $2\n\t\t\tWHERE languages.guild_id = EXCLUDED.guild_id\n\t\t\t", [interaction.guild.id, newLanguage])];
+                    return [4 /*yield*/, Util_1.default.database.query("\n\t\t\tINSERT INTO languages VALUES ($1, $2)\n\t\t\tON CONFLICT (guild_id)\n\t\t\tDO UPDATE SET language_code = $2\n\t\t\tWHERE languages.guild_id = EXCLUDED.guild_id\n\t\t\t", [interaction.guild.id, newLanguage])];
                 case 1:
                     _a.sent();
                     Util_1.default.languages.set(interaction.guild.id, newLanguage);
-                    interaction.reply(translations.data.language_updated());
+                    interaction.followUp(translations.data.language_updated());
                     return [2 /*return*/];
             }
         });

@@ -5,49 +5,51 @@ import Util from "../../Util";
 
 import formatTime from "../../utils/misc/formatTime";
 
-
-
 const command: Command = {
 	name: "lapse-of-time",
 	description: {
 		fr: "Obtenir le temps entre aujourd'hui et une autre date",
-		en: "See how much time there is between now and another date"
+		en: "See how much time there is between now and another date",
 	},
 	userPermissions: [],
 	botPermissions: [],
 
-	options:  {
+	options: {
 		fr: [
 			{
 				name: "date",
 				description: "La date",
 				type: "STRING",
-				required: true
-			}
+				required: true,
+			},
 		],
 		en: [
 			{
 				name: "date",
-				description: "La date",
+				description: "The date",
 				type: "STRING",
-				required: true
-			}
-		]
+				required: true,
+			},
+		],
 	},
-	
+
 	run: async (interaction, translations) => {
 		const NOW = Date.now();
-		
+
 		const date = new Date(interaction.options.getString("date"));
-		if (!date) return interaction.reply({
-			content: translations.data.invalid_date(),
-			ephemeral: true
-		});
+		if (!date)
+			return interaction.followUp({
+				content: translations.data.invalid_date(),
+				ephemeral: true,
+			});
 
 		const lapseOfTime = NOW - date.valueOf();
-		const lapseOfTimeString = formatTime(Math.abs(lapseOfTime), translations.language);
+		const lapseOfTimeString = formatTime(
+			Math.abs(lapseOfTime),
+			translations.language,
+		);
 
-		interaction.reply(
+		interaction.followUp(
 			translations.data.response(
 				lapseOfTime > 0,
 				lapseOfTimeString,
@@ -56,12 +58,10 @@ const command: Command = {
 				date.getFullYear().toString(),
 				date.getHours().toString(),
 				date.getMinutes().toString(),
-				date.getSeconds().toString()
-			)
+				date.getSeconds().toString(),
+			),
 		);
-	}
+	},
 };
-
-
 
 export default command;

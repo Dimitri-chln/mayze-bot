@@ -72,8 +72,8 @@ var discord_js_1 = require("discord.js");
 var command = {
     name: "canvas",
     description: {
-        fr: "Rejoindre un canevas",
-        en: "Join a canvas"
+        fr: "Rejoindre et dessiner sur un canevas",
+        en: "Join and draw on a canvas"
     },
     userPermissions: [],
     botPermissions: ["EMBED_LINKS"],
@@ -336,7 +336,7 @@ var command = {
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var subCommand, userCanvas, _a, canvasName_1, newCanvas, pages, _b, _c, _d, name_1, palette, page, canvas, x, y, colorName_1, color, grid, canvas_1, x_1, y_1, colorName_2, color_1, grid_1, reply_1, filter, collector_1, canvas, x, y, zoom, startLoad, image, endLoad, attachment, canvas_2, x_2, y_2, grid_2, reply_2, filter, collector_2;
+        var subCommand, userCanvas, _a, canvasName_1, newCanvas, canvas, pages, _b, _c, _d, name_1, palette, page, canvas, x, y, colorName_1, color, grid, canvas_1, x_1, y_1, colorName_2, color, grid_1, reply_1, filter, collector, canvas, x, y, zoom, startLoad, image, endLoad, attachment, canvas_2, x_2, y_2, grid_2, reply_2, filter, collector;
         var e_1, _e;
         var _f, _g, _h;
         return __generator(this, function (_j) {
@@ -345,24 +345,24 @@ var command = {
                     subCommand = interaction.options.getSubcommand();
                     userCanvas = Util_1.default.canvas.filter(function (canvas) {
                         return canvas.owner.type === "EVERYONE"
-                            || canvas.owner.type === "GUILD" && canvas.owner.id === interaction.guild.id
-                            || canvas.owner.type === "CHANNEL" && canvas.owner.id === interaction.channel.id
-                            || canvas.owner.type === "USER" && canvas.owner.id === interaction.user.id;
+                            || (canvas.owner.type === "GUILD" && canvas.owner.id === interaction.guild.id)
+                            || (canvas.owner.type === "CHANNEL" && canvas.owner.id === interaction.channel.id)
+                            || (canvas.owner.type === "USER" && canvas.owner.id === interaction.user.id);
                     });
                     _a = subCommand;
                     switch (_a) {
                         case "list": return [3 /*break*/, 1];
                         case "join": return [3 /*break*/, 2];
-                        case "palettes": return [3 /*break*/, 3];
-                        case "place": return [3 /*break*/, 4];
-                        case "place-chain": return [3 /*break*/, 7];
-                        case "view": return [3 /*break*/, 10];
-                        case "view-nav": return [3 /*break*/, 12];
+                        case "palettes": return [3 /*break*/, 4];
+                        case "place": return [3 /*break*/, 5];
+                        case "place-chain": return [3 /*break*/, 8];
+                        case "view": return [3 /*break*/, 11];
+                        case "view-nav": return [3 /*break*/, 13];
                     }
-                    return [3 /*break*/, 15];
+                    return [3 /*break*/, 16];
                 case 1:
                     {
-                        interaction.reply({
+                        interaction.followUp({
                             embeds: [
                                 {
                                     author: {
@@ -377,28 +377,27 @@ var command = {
                                 }
                             ]
                         });
-                        return [3 /*break*/, 15];
+                        return [3 /*break*/, 16];
                     }
                     _j.label = 2;
                 case 2:
-                    {
-                        canvasName_1 = interaction.options.getString("canvas").toLowerCase();
-                        newCanvas = userCanvas.find(function (canvas) { return canvas.name === canvasName_1; });
-                        if (!newCanvas)
-                            return [2 /*return*/, interaction.reply(translations.data.invalid_canvas())];
-                        newCanvas.addUser(interaction.user);
-                        interaction.reply({
-                            content: translations.data.joined(canvasName_1),
-                            ephemeral: true
-                        });
-                        return [3 /*break*/, 15];
-                    }
-                    _j.label = 3;
+                    canvasName_1 = interaction.options.getString("canvas").toLowerCase();
+                    newCanvas = userCanvas.find(function (canvas) { return canvas.name === canvasName_1; });
+                    if (!newCanvas)
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_canvas())];
+                    return [4 /*yield*/, newCanvas.addUser(interaction.user)];
                 case 3:
+                    _j.sent();
+                    interaction.followUp(translations.data.joined(canvasName_1));
+                    return [3 /*break*/, 16];
+                case 4:
                     {
+                        canvas = Util_1.default.canvas.find(function (c) { return c.users.has(interaction.user.id); });
+                        if (!canvas)
+                            return [2 /*return*/, interaction.followUp(translations.data.not_in_canvas())];
                         pages = [];
                         try {
-                            for (_b = __values(Util_1.default.palettes), _c = _b.next(); !_c.done; _c = _b.next()) {
+                            for (_b = __values(canvas.palettes), _c = _b.next(); !_c.done; _c = _b.next()) {
                                 _d = __read(_c.value, 2), name_1 = _d[0], palette = _d[1];
                                 page = {
                                     embeds: [
@@ -409,7 +408,7 @@ var command = {
                                             },
                                             title: translations.data.palette(name_1),
                                             color: interaction.guild.me.displayColor,
-                                            description: palette.all().map(function (color, alias) { return color.emoji + " `" + alias + "` - **" + color.name + "** `" + color.hex + "`"; }).join("\n")
+                                            description: palette.all().map(function (color, alias) { return color.emoji.toString() + " `" + alias + "` - **" + color.name + "** `" + color.hex + "`"; }).join("\n")
                                         }
                                     ]
                                 };
@@ -424,37 +423,28 @@ var command = {
                             finally { if (e_1) throw e_1.error; }
                         }
                         (0, pagination_1.default)(interaction, pages);
-                        return [3 /*break*/, 15];
+                        return [3 /*break*/, 16];
                     }
-                    _j.label = 4;
-                case 4:
+                    _j.label = 5;
+                case 5:
                     canvas = Util_1.default.canvas.find(function (c) { return c.users.has(interaction.user.id); });
                     if (!canvas)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.not_in_canvas(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.not_in_canvas())];
                     x = interaction.options.getInteger("x");
                     y = interaction.options.getInteger("y");
                     if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_coordinates(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_coordinates())];
                     colorName_1 = interaction.options.getString("color");
-                    if (!Util_1.default.palettes.some(function (palette) { return palette.has(colorName_1); }))
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_color(),
-                                ephemeral: true
-                            })];
-                    color = Util_1.default.palettes.find(function (palette) { return palette.has(colorName_1); }).get(colorName_1);
+                    if (!canvas.palettes.some(function (palette) { return palette.has(colorName_1); }))
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_color())];
+                    color = canvas.palettes.find(function (palette) { return palette.has(colorName_1); }).get(colorName_1);
                     return [4 /*yield*/, canvas.setPixel(x, y, color.alias)];
-                case 5:
+                case 6:
                     _j.sent();
                     return [4 /*yield*/, canvas.viewGrid(x, y)];
-                case 6:
+                case 7:
                     grid = _j.sent();
-                    interaction.reply({
+                    interaction.followUp({
                         content: grid.format(),
                         embeds: [
                             {
@@ -470,193 +460,23 @@ var command = {
                             }
                         ]
                     });
-                    return [3 /*break*/, 15];
-                case 7:
+                    return [3 /*break*/, 16];
+                case 8:
                     canvas_1 = Util_1.default.canvas.find(function (c) { return c.users.has(interaction.user.id); });
                     if (!canvas_1)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.not_in_canvas(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.not_in_canvas())];
                     x_1 = interaction.options.getInteger("x");
                     y_1 = interaction.options.getInteger("y");
                     if (x_1 < 0 || y_1 < 0 || x_1 >= canvas_1.size || y_1 >= canvas_1.size)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_coordinates(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_coordinates())];
                     colorName_2 = interaction.options.getString("color");
-                    if (!Util_1.default.palettes.some(function (palette) { return palette.has(colorName_2); }))
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_color(),
-                                ephemeral: true
-                            })];
-                    color_1 = Util_1.default.palettes.find(function (palette) { return palette.has(colorName_2); }).get(colorName_2);
+                    if (!canvas_1.palettes.some(function (palette) { return palette.has(colorName_2); }))
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_color())];
+                    color = canvas_1.palettes.find(function (palette) { return palette.has(colorName_2); }).get(colorName_2);
                     return [4 /*yield*/, canvas_1.viewGrid(x_1, y_1)];
-                case 8:
-                    grid_1 = _j.sent();
-                    return [4 /*yield*/, interaction.reply({
-                            content: grid_1.format(),
-                            embeds: [
-                                {
-                                    author: {
-                                        name: interaction.user.tag,
-                                        iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-                                    },
-                                    color: interaction.guild.me.displayColor,
-                                    description: translations.data.placing(color_1.emoji.toString(), color_1.alias),
-                                    footer: {
-                                        text: "✨ Mayze ✨"
-                                    }
-                                }
-                            ],
-                            components: [
-                                {
-                                    type: "ACTION_ROW",
-                                    components: [
-                                        {
-                                            type: "BUTTON",
-                                            customId: "left",
-                                            emoji: "⬅️"
-                                        },
-                                        {
-                                            type: "BUTTON",
-                                            customId: "up",
-                                            emoji: "⬆️"
-                                        },
-                                        {
-                                            type: "BUTTON",
-                                            customId: "down",
-                                            emoji: "⬇️"
-                                        },
-                                        {
-                                            type: "BUTTON",
-                                            customId: "right",
-                                            emoji: "➡️"
-                                        },
-                                        {
-                                            type: "BUTTON",
-                                            customId: "confirm",
-                                            emoji: "✅",
-                                            style: "SUCCESS"
-                                        },
-                                        {
-                                            type: "BUTTON",
-                                            customId: "stop",
-                                            emoji: "❌",
-                                            style: "DANGER"
-                                        }
-                                    ]
-                                }
-                            ],
-                            fetchReply: true
-                        })];
                 case 9:
-                    reply_1 = _j.sent();
-                    filter = function (buttonInteraction) { return buttonInteraction.user.id === interaction.user.id; };
-                    collector_1 = reply_1.createMessageComponentCollector({ componentType: "BUTTON", filter: filter, idle: 120000 });
-                    collector_1.on("collect", function (buttonInteraction) { return __awaiter(void 0, void 0, void 0, function () {
-                        var _a;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
-                                case 0:
-                                    _a = buttonInteraction.customId;
-                                    switch (_a) {
-                                        case "left": return [3 /*break*/, 1];
-                                        case "up": return [3 /*break*/, 2];
-                                        case "down": return [3 /*break*/, 3];
-                                        case "right": return [3 /*break*/, 4];
-                                        case "confirm": return [3 /*break*/, 5];
-                                        case "cancel": return [3 /*break*/, 7];
-                                    }
-                                    return [3 /*break*/, 8];
-                                case 1:
-                                    if (x_1 > 0)
-                                        x_1--;
-                                    return [3 /*break*/, 8];
-                                case 2:
-                                    if (y_1 > 0)
-                                        y_1--;
-                                    return [3 /*break*/, 8];
-                                case 3:
-                                    if (y_1 < canvas_1.size - 1)
-                                        y_1++;
-                                    return [3 /*break*/, 8];
-                                case 4:
-                                    if (x_1 < canvas_1.size - 1)
-                                        x_1++;
-                                    return [3 /*break*/, 8];
-                                case 5: return [4 /*yield*/, canvas_1.setPixel(x_1, y_1, colorName_2)];
-                                case 6:
-                                    _b.sent();
-                                    return [3 /*break*/, 8];
-                                case 7:
-                                    collector_1.stop();
-                                    return [3 /*break*/, 8];
-                                case 8: return [4 /*yield*/, canvas_1.viewGrid(x_1, y_1)];
-                                case 9:
-                                    grid_1 = _b.sent();
-                                    reply_1.edit({
-                                        content: grid_1.format(),
-                                        embeds: [
-                                            {
-                                                author: {
-                                                    name: interaction.user.tag,
-                                                    iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-                                                },
-                                                color: interaction.guild.me.displayColor,
-                                                description: translations.data.placing(color_1.emoji.toString(), color_1.alias),
-                                                footer: {
-                                                    text: "✨ Mayze ✨"
-                                                }
-                                            }
-                                        ],
-                                        components: [
-                                            {
-                                                type: "ACTION_ROW",
-                                                components: [
-                                                    {
-                                                        type: "BUTTON",
-                                                        customId: "left",
-                                                        emoji: "⬅️"
-                                                    },
-                                                    {
-                                                        type: "BUTTON",
-                                                        customId: "up",
-                                                        emoji: "⬆️"
-                                                    },
-                                                    {
-                                                        type: "BUTTON",
-                                                        customId: "down",
-                                                        emoji: "⬇️"
-                                                    },
-                                                    {
-                                                        type: "BUTTON",
-                                                        customId: "right",
-                                                        emoji: "➡️"
-                                                    },
-                                                    {
-                                                        type: "BUTTON",
-                                                        customId: "confirm",
-                                                        emoji: "✅",
-                                                        style: "SUCCESS"
-                                                    },
-                                                    {
-                                                        type: "BUTTON",
-                                                        customId: "stop",
-                                                        emoji: "❌",
-                                                        style: "DANGER"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    });
-                                    return [2 /*return*/];
-                            }
-                        });
-                    }); });
-                    collector_1.on("end", function () {
-                        reply_1.edit({
+                    grid_1 = _j.sent();
+                    return [4 /*yield*/, interaction.followUp({
                             content: grid_1.format(),
                             embeds: [
                                 {
@@ -665,7 +485,7 @@ var command = {
                                         iconURL: interaction.user.displayAvatarURL({ dynamic: true })
                                     },
                                     color: interaction.guild.me.displayColor,
-                                    description: translations.data.placing(color_1.emoji.toString(), color_1.alias),
+                                    description: translations.data.placing(color.emoji.toString(), color.alias),
                                     footer: {
                                         text: "✨ Mayze ✨"
                                     }
@@ -679,24 +499,121 @@ var command = {
                                             type: "BUTTON",
                                             customId: "left",
                                             emoji: "⬅️",
+                                            style: "SECONDARY"
+                                        },
+                                        {
+                                            type: "BUTTON",
+                                            customId: "up",
+                                            emoji: "⬆️",
+                                            style: "SECONDARY"
+                                        },
+                                        {
+                                            type: "BUTTON",
+                                            customId: "down",
+                                            emoji: "⬇️",
+                                            style: "SECONDARY"
+                                        },
+                                        {
+                                            type: "BUTTON",
+                                            customId: "right",
+                                            emoji: "➡️",
+                                            style: "SECONDARY"
+                                        },
+                                        {
+                                            type: "BUTTON",
+                                            customId: "confirm",
+                                            emoji: "✅",
+                                            style: "SUCCESS"
+                                        }
+                                    ]
+                                }
+                            ],
+                            fetchReply: true
+                        })];
+                case 10:
+                    reply_1 = _j.sent();
+                    filter = function (buttonInteraction) { return buttonInteraction.user.id === interaction.user.id; };
+                    collector = reply_1.createMessageComponentCollector({ componentType: "BUTTON", filter: filter, idle: 120000 });
+                    collector.on("collect", function (buttonInteraction) { return __awaiter(void 0, void 0, void 0, function () {
+                        var _a;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
+                                case 0:
+                                    _a = buttonInteraction.customId;
+                                    switch (_a) {
+                                        case "left": return [3 /*break*/, 1];
+                                        case "up": return [3 /*break*/, 2];
+                                        case "down": return [3 /*break*/, 3];
+                                        case "right": return [3 /*break*/, 4];
+                                        case "confirm": return [3 /*break*/, 5];
+                                    }
+                                    return [3 /*break*/, 7];
+                                case 1:
+                                    if (x_1 > 0)
+                                        x_1--;
+                                    return [3 /*break*/, 7];
+                                case 2:
+                                    if (y_1 > 0)
+                                        y_1--;
+                                    return [3 /*break*/, 7];
+                                case 3:
+                                    if (y_1 < canvas_1.size - 1)
+                                        y_1++;
+                                    return [3 /*break*/, 7];
+                                case 4:
+                                    if (x_1 < canvas_1.size - 1)
+                                        x_1++;
+                                    return [3 /*break*/, 7];
+                                case 5: return [4 /*yield*/, canvas_1.setPixel(x_1, y_1, colorName_2)];
+                                case 6:
+                                    _b.sent();
+                                    return [3 /*break*/, 7];
+                                case 7: return [4 /*yield*/, canvas_1.viewGrid(x_1, y_1)];
+                                case 8:
+                                    grid_1 = _b.sent();
+                                    buttonInteraction.update({
+                                        content: grid_1.format(),
+                                        embeds: reply_1.embeds,
+                                        components: reply_1.components
+                                    });
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); });
+                    collector.on("end", function () {
+                        reply_1.edit({
+                            content: grid_1.format(),
+                            embeds: reply_1.embeds,
+                            components: [
+                                {
+                                    type: "ACTION_ROW",
+                                    components: [
+                                        {
+                                            type: "BUTTON",
+                                            customId: "left",
+                                            emoji: "⬅️",
+                                            style: "SECONDARY",
                                             disabled: true
                                         },
                                         {
                                             type: "BUTTON",
                                             customId: "up",
                                             emoji: "⬆️",
+                                            style: "SECONDARY",
                                             disabled: true
                                         },
                                         {
                                             type: "BUTTON",
                                             customId: "down",
                                             emoji: "⬇️",
+                                            style: "SECONDARY",
                                             disabled: true
                                         },
                                         {
                                             type: "BUTTON",
                                             customId: "right",
                                             emoji: "➡️",
+                                            style: "SECONDARY",
                                             disabled: true
                                         },
                                         {
@@ -705,47 +622,31 @@ var command = {
                                             emoji: "✅",
                                             style: "SUCCESS",
                                             disabled: true
-                                        },
-                                        {
-                                            type: "BUTTON",
-                                            customId: "stop",
-                                            emoji: "❌",
-                                            style: "DANGER",
-                                            disabled: true
                                         }
                                     ]
                                 }
                             ]
                         });
                     });
-                    return [3 /*break*/, 15];
-                case 10:
+                    return [3 /*break*/, 16];
+                case 11:
                     canvas = Util_1.default.canvas.find(function (c) { return c.users.has(interaction.user.id); });
                     if (!canvas)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.not_in_canvas(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.not_in_canvas())];
                     x = (_f = interaction.options.getInteger("x")) !== null && _f !== void 0 ? _f : 0;
                     y = (_g = interaction.options.getInteger("y")) !== null && _g !== void 0 ? _g : 0;
                     if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_coordinates(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_coordinates())];
                     zoom = (_h = interaction.options.getInteger("zoom")) !== null && _h !== void 0 ? _h : "default";
                     if (zoom && zoom !== "default" && (zoom < 1 || zoom > canvas.size))
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_zoom(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_zoom())];
                     startLoad = Date.now();
                     return [4 /*yield*/, canvas.view(x, y, zoom)];
-                case 11:
+                case 12:
                     image = _j.sent();
                     endLoad = Date.now();
                     attachment = new discord_js_1.MessageAttachment(image, "canvas.png");
-                    interaction.reply({
+                    interaction.followUp({
                         embeds: [
                             {
                                 title: translations.data.view_title(canvas.name.replace(/^./, function (a) { return a.toUpperCase(); }), canvas.size.toString(), ((endLoad - startLoad) / 1000).toString()),
@@ -759,27 +660,21 @@ var command = {
                                 },
                             }
                         ],
-                        attachments: [attachment]
+                        files: [attachment]
                     });
-                    return [3 /*break*/, 15];
-                case 12:
+                    return [3 /*break*/, 16];
+                case 13:
                     canvas_2 = Util_1.default.canvas.find(function (c) { return c.users.has(interaction.user.id); });
                     if (!canvas_2)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.not_in_canvas(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.not_in_canvas())];
                     x_2 = interaction.options.getInteger("x");
                     y_2 = interaction.options.getInteger("y");
                     if (x_2 < 0 || y_2 < 0 || x_2 >= canvas_2.size || y_2 >= canvas_2.size)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_coordinates(),
-                                ephemeral: true
-                            })];
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_coordinates())];
                     return [4 /*yield*/, canvas_2.viewGrid(x_2, y_2)];
-                case 13:
+                case 14:
                     grid_2 = _j.sent();
-                    return [4 /*yield*/, interaction.reply({
+                    return [4 /*yield*/, interaction.followUp({
                             content: grid_2.format(),
                             embeds: [
                                 {
@@ -800,39 +695,37 @@ var command = {
                                         {
                                             type: "BUTTON",
                                             customId: "left",
-                                            emoji: "⬅️"
+                                            emoji: "⬅️",
+                                            style: "SECONDARY"
                                         },
                                         {
                                             type: "BUTTON",
                                             customId: "up",
-                                            emoji: "⬆️"
+                                            emoji: "⬆️",
+                                            style: "SECONDARY"
                                         },
                                         {
                                             type: "BUTTON",
                                             customId: "down",
-                                            emoji: "⬇️"
+                                            emoji: "⬇️",
+                                            style: "SECONDARY"
                                         },
                                         {
                                             type: "BUTTON",
                                             customId: "right",
-                                            emoji: "➡️"
-                                        },
-                                        {
-                                            type: "BUTTON",
-                                            customId: "stop",
-                                            emoji: "❌",
-                                            style: "DANGER"
+                                            emoji: "➡️",
+                                            style: "SECONDARY"
                                         }
                                     ]
                                 }
                             ],
                             fetchReply: true
                         })];
-                case 14:
+                case 15:
                     reply_2 = _j.sent();
                     filter = function (buttonInteraction) { return buttonInteraction.user.id === interaction.user.id; };
-                    collector_2 = reply_2.createMessageComponentCollector({ componentType: "BUTTON", filter: filter, idle: 120000 });
-                    collector_2.on("collect", function (buttonInteraction) { return __awaiter(void 0, void 0, void 0, function () {
+                    collector = reply_2.createMessageComponentCollector({ componentType: "BUTTON", filter: filter, idle: 120000 });
+                    collector.on("collect", function (buttonInteraction) { return __awaiter(void 0, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
@@ -853,80 +746,23 @@ var command = {
                                             if (x_2 < canvas_2.size - 1)
                                                 x_2++;
                                             break;
-                                        case "cancel":
-                                            collector_2.stop();
-                                            break;
                                     }
                                     return [4 /*yield*/, canvas_2.viewGrid(x_2, y_2)];
                                 case 1:
                                     grid_2 = _a.sent();
-                                    reply_2.edit({
+                                    buttonInteraction.update({
                                         content: grid_2.format(),
-                                        embeds: [
-                                            {
-                                                author: {
-                                                    name: interaction.user.tag,
-                                                    iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-                                                },
-                                                color: interaction.guild.me.displayColor,
-                                                footer: {
-                                                    text: "✨ Mayze ✨"
-                                                }
-                                            }
-                                        ],
-                                        components: [
-                                            {
-                                                type: "ACTION_ROW",
-                                                components: [
-                                                    {
-                                                        type: "BUTTON",
-                                                        customId: "left",
-                                                        emoji: "⬅️"
-                                                    },
-                                                    {
-                                                        type: "BUTTON",
-                                                        customId: "up",
-                                                        emoji: "⬆️"
-                                                    },
-                                                    {
-                                                        type: "BUTTON",
-                                                        customId: "down",
-                                                        emoji: "⬇️"
-                                                    },
-                                                    {
-                                                        type: "BUTTON",
-                                                        customId: "right",
-                                                        emoji: "➡️"
-                                                    },
-                                                    {
-                                                        type: "BUTTON",
-                                                        customId: "stop",
-                                                        emoji: "❌",
-                                                        style: "DANGER"
-                                                    }
-                                                ]
-                                            }
-                                        ]
+                                        embeds: reply_2.embeds,
+                                        components: reply_2.components
                                     });
                                     return [2 /*return*/];
                             }
                         });
                     }); });
-                    collector_2.on("end", function () {
+                    collector.on("end", function () {
                         reply_2.edit({
                             content: grid_2.format(),
-                            embeds: [
-                                {
-                                    author: {
-                                        name: interaction.user.tag,
-                                        iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-                                    },
-                                    color: interaction.guild.me.displayColor,
-                                    footer: {
-                                        text: "✨ Mayze ✨"
-                                    }
-                                }
-                            ],
+                            embeds: reply_2.embeds,
                             components: [
                                 {
                                     type: "ACTION_ROW",
@@ -935,31 +771,28 @@ var command = {
                                             type: "BUTTON",
                                             customId: "left",
                                             emoji: "⬅️",
+                                            style: "SECONDARY",
                                             disabled: true
                                         },
                                         {
                                             type: "BUTTON",
                                             customId: "up",
                                             emoji: "⬆️",
+                                            style: "SECONDARY",
                                             disabled: true
                                         },
                                         {
                                             type: "BUTTON",
                                             customId: "down",
                                             emoji: "⬇️",
+                                            style: "SECONDARY",
                                             disabled: true
                                         },
                                         {
                                             type: "BUTTON",
                                             customId: "right",
                                             emoji: "➡️",
-                                            disabled: true
-                                        },
-                                        {
-                                            type: "BUTTON",
-                                            customId: "stop",
-                                            emoji: "❌",
-                                            style: "DANGER",
+                                            style: "SECONDARY",
                                             disabled: true
                                         }
                                     ]
@@ -967,8 +800,8 @@ var command = {
                             ]
                         });
                     });
-                    return [3 /*break*/, 15];
-                case 15: return [2 /*return*/];
+                    return [3 /*break*/, 16];
+                case 16: return [2 /*return*/];
             }
         });
     }); }

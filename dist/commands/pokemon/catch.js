@@ -60,7 +60,6 @@ var Pokedex_1 = __importDefault(require("../../types/pokemon/Pokedex"));
 var CatchRates_1 = __importDefault(require("../../types/pokemon/CatchRates"));
 var PokemonList_1 = __importDefault(require("../../types/pokemon/PokemonList"));
 var image_urls_json_1 = require("../../assets/image-urls.json");
-var config_json_1 = require("../../config.json");
 var command = {
     name: "catch",
     description: {
@@ -69,12 +68,13 @@ var command = {
     },
     userPermissions: [],
     botPermissions: ["EMBED_LINKS"],
+    cooldown: 1200,
     options: {
         fr: [],
         en: []
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var SHINY_FREQUENCY, ALOLAN_FREQUENCY, MEGA_GEM_FREQUENCY, UPGRADES_BENEFITS, caughtPokemonsData, pokemonList, _a, userUpgrades, upgrades, catchRates, randomPokemon, huntFooterText, _b, userHunt, huntedPokemon, probability, megaGem, megaPokemon, defaultData_1, shiny, variation, catchReward, defaultData, defaultUserData, _c, caughtTotal, reply, logChannel;
+        var SHINY_FREQUENCY, ALOLAN_FREQUENCY, MEGA_GEM_FREQUENCY, UPGRADES_BENEFITS, caughtPokemonsData, pokemonList, _a, userUpgrades, upgrades, catchRates, randomPokemon, huntFooterText, _b, userHunt, huntedPokemon, probability, megaGem, megaPokemon, defaultData_1, shiny, variation, catchReward, defaultUserData, defaultData, _c, caughtTotal, reply, logChannel;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
@@ -84,7 +84,7 @@ var command = {
                         mega_gem_probability: function (tier) { return 2 * tier; },
                         shiny_probability: function (tier) { return 2 * tier; }
                     };
-                    return [4 /*yield*/, Util_1.default.database.query("SELECT pokedex_id FROM pokemons WHERE users ? $1 AND variation = 'default'", [interaction.user.id])];
+                    return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM pokemons WHERE users ? $1 AND variation = 'default'", [interaction.user.id])];
                 case 1:
                     caughtPokemonsData = (_d.sent()).rows;
                     pokemonList = new PokemonList_1.default(caughtPokemonsData, interaction.user.id);
@@ -93,11 +93,11 @@ var command = {
                     _a = __read.apply(void 0, [(_d.sent()).rows, 1]), userUpgrades = _a[0];
                     upgrades = userUpgrades !== null && userUpgrades !== void 0 ? userUpgrades : {
                         user_id: interaction.user.id,
-                        catch_cooldown_tier: 0,
-                        new_pokemon_tier: 0,
-                        legendary_ultrabeast_tier: 0,
-                        mega_gem_tier: 0,
-                        shiny_tier: 0
+                        catch_cooldown_reduction: 0,
+                        new_pokemon_probability: 0,
+                        legendary_ub_probability: 0,
+                        mega_gem_probability: 0,
+                        shiny_probability: 0
                     };
                     catchRates = new CatchRates_1.default(pokemonList, upgrades);
                     randomPokemon = catchRates.randomPokemon();
@@ -116,37 +116,33 @@ var command = {
                     randomPokemon = huntedPokemon;
                     return [3 /*break*/, 6];
                 case 5:
-                    huntFooterText = translations.data.hunt_probability(/^[aeiou]/i.test(huntedPokemon.names[translations.language]), huntedPokemon.names[translations.language], Math.round(probability * 100 * 10000 / 10000).toString());
+                    huntFooterText = translations.data.hunt_probability(/^[aeiou]/i.test(huntedPokemon.names[translations.language]), huntedPokemon.names[translations.language], (Math.round(probability * 100 * 10000) / 10000).toString());
                     _d.label = 6;
                 case 6:
                     {
                         // Mega Gems
-                        if (Math.random() < MEGA_GEM_FREQUENCY * (1 + UPGRADES_BENEFITS.mega_gem_probability(upgrades.mega_gem_tier) / 100)) {
-                            megaPokemon = Pokedex_1.default.megaEvolvablePokemons[Math.floor(Math.random() * Pokedex_1.default.megaEvolvablePokemons.length)];
+                        if (Math.random() < MEGA_GEM_FREQUENCY * (1 + UPGRADES_BENEFITS.mega_gem_probability(upgrades.mega_gem_probability) / 100)) {
+                            megaPokemon = Pokedex_1.default.megaEvolvablePokemons.random();
                             megaGem = megaPokemon.megaEvolutions[Math.floor(Math.random() * megaPokemon.megaEvolutions.length)].megaStone;
                             defaultData_1 = {};
                             defaultData_1[interaction.user.id] = 1;
                             Util_1.default.database.query("\n\t\t\t\t\tINSERT INTO mega_gems VALUES ($1, $2)\n\t\t\t\t\tON CONFLICT (user_id)\n\t\t\t\t\tDO UPDATE SET gems = \n\t\t\t\t\t\tCASE\n\t\t\t\t\t\t\tWHEN mega_gems.gems -> $3 IS NULL THEN mega_gems.gems || $2\n\t\t\t\t\t\t\tELSE jsonb_set(mega_gems.gems, '{" + megaGem + "}', ((mega_gems.gems -> $3)::int + 1)::text::jsonb)\n\t\t\t\t\t\tEND\n\t\t\t\t\tWHERE mega_gems.user_id = EXCLUDED.user_id\n\t\t\t\t\t", [interaction.user.id, defaultData_1, megaGem]);
                         }
                     }
-                    shiny = Math.random() < SHINY_FREQUENCY * (1 + (UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_tier) / 100));
-                    variation = randomPokemon.variations.some(function (variation) { return variation.suffix === "alola"; }) && Math.random() < ALOLAN_FREQUENCY
+                    shiny = Math.random() < SHINY_FREQUENCY * (1 + (UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_probability) / 100));
+                    variation = Pokedex_1.default.alolaPokemons.has(randomPokemon.nationalId) && Math.random() < ALOLAN_FREQUENCY
                         ? "alola"
                         : "default";
-                    catchReward = Math.round(config_json_1.CATCH_REWARD * (255 / randomPokemon.catchRate
-                        * (shiny ? config_json_1.SHINY_REWARD_MULTIPLIER : 1)
-                        * (variation === "alola" ? config_json_1.ALOLAN_REWARD_MULTIPLIER : 1)));
-                    defaultData = {};
-                    defaultData[interaction.user.id] = {
-                        caught: 1,
-                        favorite: false,
-                        nickname: null
-                    };
+                    catchReward = Math.round(Util_1.default.config.CATCH_REWARD * (255 / randomPokemon.catchRate
+                        * (shiny ? Util_1.default.config.SHINY_REWARD_MULTIPLIER : 1)
+                        * (variation === "alola" ? Util_1.default.config.ALOLAN_REWARD_MULTIPLIER : 1)));
                     defaultUserData = {
                         caught: 1,
                         favorite: false,
                         nickname: null
                     };
+                    defaultData = {};
+                    defaultData[interaction.user.id] = defaultUserData;
                     return [4 /*yield*/, Util_1.default.database.query("\n\t\t\tINSERT INTO pokemons VALUES ($1, $2, $3, $4)\n\t\t\tON CONFLICT (pokedex_id, shiny, variation)\n\t\t\tDO UPDATE SET users =\n\t\t\t\tCASE\n\t\t\t\t\tWHEN pokemons.users -> $5 IS NULL THEN jsonb_set(pokemons.users, '{" + interaction.user.id + "}', $6)\n\t\t\t\t\tELSE jsonb_set(pokemons.users, '{" + interaction.user.id + ", caught}', ((pokemons.users -> $5 -> 'caught')::int + 1)::text::jsonb)\n\t\t\t\tEND\n\t\t\tWHERE pokemons.pokedex_id = EXCLUDED.pokedex_id AND pokemons.shiny = EXCLUDED.shiny AND pokemons.variation = EXCLUDED.variation\n\t\t\tRETURNING (users -> $5 -> 'caught')::int AS caught\n\t\t\t", [
                             randomPokemon.nationalId,
                             shiny,
@@ -159,7 +155,7 @@ var command = {
                     _c = __read.apply(void 0, [(_d.sent()).rows, 1]), caughtTotal = _c[0].caught;
                     Util_1.default.database.query("UPDATE pokemon_hunting SET hunt_count = hunt_count + 1 WHERE user_id = $1", [interaction.user.id]).catch(console.error);
                     Util_1.default.database.query("\n\t\t\tINSERT INTO currency VALUES ($1, $2)\n\t\t\tON CONFLICT (user_id)\n\t\t\tDO UPDATE SET money = currency.money + $2\n\t\t\tWHERE currency.user_id = EXCLUDED.user_id\n\t\t\t", [interaction.user.id, catchReward]).catch(console.error);
-                    return [4 /*yield*/, interaction.reply({
+                    return [4 /*yield*/, interaction.followUp({
                             embeds: [
                                 {
                                     author: {
@@ -187,7 +183,7 @@ var command = {
                     reply = _d.sent();
                     if (Util_1.default.beta)
                         return [2 /*return*/];
-                    logChannel = interaction.client.channels.cache.get('839538540206882836');
+                    logChannel = interaction.client.channels.cache.get("839538540206882836");
                     logChannel.send({
                         embeds: [
                             {

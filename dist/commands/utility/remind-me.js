@@ -243,7 +243,7 @@ var command = {
                 case 2:
                     duration = (0, dhms_1.default)(interaction.options.getString("duration"));
                     if (!duration)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.invalid_duration(),
                                 ephemeral: true
                             })];
@@ -254,12 +254,12 @@ var command = {
                     return [4 /*yield*/, Util_1.default.database.query("INSERT INTO reminders (user_id, timestamp, content) VALUES ($1, $2, $3)", [interaction.user.id, date, content])];
                 case 3:
                     _b.sent();
-                    interaction.reply(translations.data.created((0, formatTime_1.default)(duration, translations.language), content));
+                    interaction.followUp(translations.data.created((0, formatTime_1.default)(duration, translations.language), content));
                     return [3 /*break*/, 11];
                 case 4:
                     date = new Date(interaction.options.getString("duration"));
                     if (!date)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.invalid_date(),
                                 ephemeral: true
                             })];
@@ -270,12 +270,12 @@ var command = {
                     return [4 /*yield*/, Util_1.default.database.query("INSERT INTO reminders (user_id, timestamp, content) VALUES ($1, $2, $3)", [interaction.user.id, date, content])];
                 case 5:
                     _b.sent();
-                    interaction.reply(translations.data.created((0, formatTime_1.default)(duration, translations.language), content));
+                    interaction.followUp(translations.data.created((0, formatTime_1.default)(duration, translations.language), content));
                     return [3 /*break*/, 11];
                 case 6:
                     duration = (0, dhms_1.default)(interaction.options.getString("duration"));
                     if (!duration)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.invalid_duration(),
                                 ephemeral: true
                             })];
@@ -286,23 +286,23 @@ var command = {
                     return [4 /*yield*/, Util_1.default.database.query("INSERT INTO reminders (user_id, timestamp, content, repeat) VALUES ($1, $2, $3, $4)", [interaction.user.id, date, content, duration])];
                 case 7:
                     _b.sent();
-                    interaction.reply(translations.data.created((0, formatTime_1.default)(duration, translations.language), content));
+                    interaction.followUp(translations.data.created((0, formatTime_1.default)(duration, translations.language), content));
                     return [3 /*break*/, 11];
                 case 8:
                     number = interaction.options.getInteger("reminder");
                     if (number < 1 || number > reminders.length)
-                        return [2 /*return*/, interaction.reply({
+                        return [2 /*return*/, interaction.followUp({
                                 content: translations.data.invalid_number(reminders.length.toString()),
                                 ephemeral: true
                             })];
                     return [4 /*yield*/, Util_1.default.database.query("DELETE FROM reminders WHERE id = $1", [reminders[number - 1].id])];
                 case 9:
                     _b.sent();
-                    interaction.reply(translations.data.removed());
+                    interaction.followUp(translations.data.removed());
                     return [3 /*break*/, 11];
                 case 10:
                     {
-                        interaction.reply({
+                        interaction.followUp({
                             embeds: [
                                 {
                                     author: {

@@ -182,7 +182,7 @@ var command = {
                     if (option === "human")
                         members = members.filter(function (m) { return !m.user.bot; });
                     errors = 0;
-                    interaction.reply(translations.data.updating(members.size.toString(), members.size > 1));
+                    interaction.followUp(translations.data.updating(members.size.toString(), members.size > 1));
                     _a = subCommand;
                     switch (_a) {
                         case "add": return [3 /*break*/, 1];

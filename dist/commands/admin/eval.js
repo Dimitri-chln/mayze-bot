@@ -65,19 +65,22 @@ var command = {
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
         var expression;
         return __generator(this, function (_a) {
-            expression = interaction.options.getString("expression");
-            try {
-                eval(expression);
+            switch (_a.label) {
+                case 0:
+                    expression = interaction.options.getString("expression");
+                    return [4 /*yield*/, interaction.followUp("...")];
+                case 1:
+                    _a.sent();
+                    try {
+                        eval(expression);
+                    }
+                    catch (err) {
+                        console.error(err);
+                        interaction.followUp("__**Error:**__```\n" + err + "\n```");
+                    }
+                    ;
+                    return [2 /*return*/];
             }
-            catch (err) {
-                console.error(err);
-                interaction.reply({
-                    content: "__**Error:**__```\n" + err + "\n```",
-                    ephemeral: true
-                });
-            }
-            ;
-            return [2 /*return*/];
         });
     }); }
 };

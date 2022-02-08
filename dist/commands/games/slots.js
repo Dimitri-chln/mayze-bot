@@ -61,10 +61,10 @@ var command = {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    SPINNING = "<a:slots:845009613664288769>";
+                    SPINNING = interaction.client.emojis.cache.get('845009613664288769').toString();
                     SLOTS = ["🥊", "⛓️", "🔇", "🏓", "🔒"];
                     result = [];
-                    return [4 /*yield*/, interaction.reply({
+                    return [4 /*yield*/, interaction.followUp({
                             embeds: [
                                 {
                                     author: {
@@ -112,14 +112,18 @@ var command = {
                                                 return [3 /*break*/, 11];
                                             case 1:
                                                 {
-                                                    if (interaction.member.roles.highest.position < interaction.guild.me.roles.highest.position &&
-                                                        !interaction.member.premiumSinceTimestamp)
-                                                        interaction.member.kick(translations.data.reason());
+                                                    if (interaction.member.roles.highest.position >= interaction.guild.me.roles.highest.position)
+                                                        return [2 /*return*/];
+                                                    if (interaction.member.premiumSinceTimestamp)
+                                                        return [2 /*return*/];
+                                                    interaction.member.kick(translations.data.reason());
                                                     return [3 /*break*/, 11];
                                                 }
                                                 _d.label = 2;
                                             case 2:
                                                 if (interaction.channel.id === "695934227140837386")
+                                                    return [2 /*return*/];
+                                                if (interaction.member.roles.highest.position >= interaction.guild.me.roles.highest.position)
                                                     return [2 /*return*/];
                                                 jailedRole = interaction.guild.roles.cache.get("695943648235487263");
                                                 unJailedRoles = interaction.member.roles.cache.filter(function (role) { return interaction.guild.roles.cache.some(function (r) { return r.name === role.name + " (Jailed)"; }); });
@@ -134,16 +138,15 @@ var command = {
                                                 return [3 /*break*/, 11];
                                             case 5:
                                                 {
+                                                    if (interaction.member.roles.highest.position >= interaction.guild.me.roles.highest.position)
+                                                        return [2 /*return*/];
                                                     duration = Math.ceil(Math.random() * 10) * 60 * 1000;
                                                     interaction.member.timeout(duration, translations.data.reason());
                                                     return [3 /*break*/, 11];
                                                 }
                                                 _d.label = 6;
                                             case 6:
-                                                interaction.followUp({
-                                                    content: translations.data.spam_ping(),
-                                                    ephemeral: true
-                                                });
+                                                interaction.followUp(translations.data.spam_ping());
                                                 filter = function (msg) { return msg.author.id === interaction.user.id && msg.mentions.users.size > 0; };
                                                 return [4 /*yield*/, interaction.channel.awaitMessages({ filter: filter, max: 1, time: 120000 })];
                                             case 7:
@@ -151,10 +154,7 @@ var command = {
                                                 if (!collected_1 || !collected_1.size)
                                                     return [2 /*return*/, interaction.followUp({
                                                             content: translations.data.too_late(),
-                                                            ephemeral: true,
-                                                            allowedMentions: {
-                                                                repliedUser: false
-                                                            }
+                                                            ephemeral: true
                                                         })];
                                                 messages = [];
                                                 for (i = 0; i < 25; i++) {
@@ -171,10 +171,7 @@ var command = {
                                                     true]);
                                                 return [3 /*break*/, 11];
                                             case 9:
-                                                interaction.followUp({
-                                                    content: translations.data.timeout(),
-                                                    ephemeral: true
-                                                });
+                                                interaction.followUp(translations.data.timeout());
                                                 filter = function (msg) { return msg.author.id === interaction.user.id && msg.mentions.users.size > 0; };
                                                 return [4 /*yield*/, interaction.channel.awaitMessages({ filter: filter, max: 1, time: 120000 })];
                                             case 10:
@@ -182,10 +179,7 @@ var command = {
                                                 if (!collected || !collected.size)
                                                     return [2 /*return*/, interaction.followUp({
                                                             content: translations.data.too_late(),
-                                                            ephemeral: true,
-                                                            allowedMentions: {
-                                                                repliedUser: false
-                                                            }
+                                                            ephemeral: true
                                                         })];
                                                 interaction.guild.members.cache.get(collected.first().mentions.users.first().id).timeout(120000);
                                                 return [3 /*break*/, 11];

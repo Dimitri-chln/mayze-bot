@@ -68,18 +68,20 @@ function pagination(interaction, pages, timeout) {
                                     {
                                         type: "BUTTON",
                                         customId: "back",
-                                        emoji: emojis[0]
+                                        emoji: emojis[0],
+                                        style: "SECONDARY"
                                     },
                                     {
                                         type: "BUTTON",
                                         customId: "next",
-                                        emoji: emojis[1]
+                                        emoji: emojis[1],
+                                        style: "SECONDARY"
                                     }
                                 ]
                             }
                         ];
                     });
-                    return [4 /*yield*/, interaction.reply(__assign(__assign({}, pages[page]), { fetchReply: true }))];
+                    return [4 /*yield*/, interaction.followUp(__assign(__assign({}, pages[page]), { fetchReply: true }))];
                 case 1:
                     currentPage = _a.sent();
                     filter = function (buttonInteraction) { return buttonInteraction.user.id === interaction.user.id; };
@@ -93,7 +95,7 @@ function pagination(interaction, pages, timeout) {
                                 page = page + 1 < pages.length ? ++page : 0;
                                 break;
                         }
-                        currentPage.edit(pages[page]).catch(console.error);
+                        buttonInteraction.update(pages[page]).catch(console.error);
                     });
                     componentCollector.on("end", function () {
                         currentPage.edit(__assign(__assign({}, pages[page]), { components: [
@@ -104,12 +106,14 @@ function pagination(interaction, pages, timeout) {
                                             type: "BUTTON",
                                             customId: "back",
                                             emoji: emojis[0],
+                                            style: "SECONDARY",
                                             disabled: true
                                         },
                                         {
                                             type: "BUTTON",
                                             customId: "next",
                                             emoji: emojis[1],
+                                            style: "SECONDARY",
                                             disabled: true
                                         }
                                     ]

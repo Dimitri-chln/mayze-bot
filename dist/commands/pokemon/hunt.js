@@ -69,7 +69,7 @@ var command = {
         fr: [
             {
                 name: "pokemon",
-                description: "Le pokémon à chasser (\"none\" pour réinitialiser)",
+                description: "Le pokémon à chasser (utilise \"none\" pour réinitialiser)",
                 type: "STRING",
                 required: false
             }
@@ -77,93 +77,116 @@ var command = {
         en: [
             {
                 name: "pokemon",
-                description: "The pokémon to hunt (\"none\" to reset)",
+                description: "The pokémon to hunt (use \"none\" to reset)",
                 type: "STRING",
                 required: false
             }
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var input, _a, huntedPokemonData, huntedPokemon, probability, pokemon, msg, filter, collected;
-        var _b, _c, _d;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
+        var input, _a, huntedPokemonData, huntedPokemon, probability, pokemon, reply, filter, collected, _b;
+        var _c, _d, _e;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0:
                     input = interaction.options.getString("pokemon");
                     if (!!input) return [3 /*break*/, 2];
                     return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM pokemon_hunting WHERE user_id = $1", [interaction.user.id])];
                 case 1:
-                    _a = __read.apply(void 0, [(_e.sent()).rows, 1]), huntedPokemonData = _a[0];
+                    _a = __read.apply(void 0, [(_f.sent()).rows, 1]), huntedPokemonData = _a[0];
                     if (huntedPokemonData) {
                         huntedPokemon = Pokedex_1.default.findById(huntedPokemonData.pokemon_id);
                         probability = huntedPokemonData.hunt_count < 100
                             ? (huntedPokemonData.hunt_count / 100) * (huntedPokemon.catchRate / 255)
                             : 1;
-                        interaction.reply({
-                            content: translations.data.hunt_info((_b = huntedPokemon.names[translations.language]) !== null && _b !== void 0 ? _b : huntedPokemon.names.en, (Math.round(probability * 100 * 10000) / 10000).toString()),
-                            ephemeral: true
-                        });
+                        return [2 /*return*/, interaction.followUp(translations.data.hunt_info((_c = huntedPokemon.names[translations.language]) !== null && _c !== void 0 ? _c : huntedPokemon.names.en, (Math.round(probability * 100 * 10000) / 10000).toString()))];
                     }
                     else {
-                        interaction.reply({
-                            content: translations.data.not_hunting(),
-                            ephemeral: true
-                        });
+                        return [2 /*return*/, interaction.followUp(translations.data.not_hunting())];
                     }
-                    return [2 /*return*/];
+                    _f.label = 2;
                 case 2:
                     if (input === "none") {
                         Util_1.default.database.query("DELETE FROM pokemon_hunting WHERE user_id = $1", [interaction.user.id])
                             .then(function () {
-                            interaction.reply({
-                                content: translations.data.deleted(),
-                                ephemeral: true
-                            });
+                            interaction.followUp(translations.data.deleted());
                         });
                         return [2 /*return*/];
                     }
                     pokemon = Pokedex_1.default.findByName(input);
                     if (!pokemon)
-                        return [2 /*return*/, interaction.reply({
-                                content: translations.data.invalid_pokemon(),
-                                ephemeral: true
-                            })];
-                    return [4 /*yield*/, interaction.reply({
-                            content: translations.data.confirmation((_c = pokemon.names[translations.language]) !== null && _c !== void 0 ? _c : pokemon.names.en),
-                            ephemeral: true,
+                        return [2 /*return*/, interaction.followUp(translations.data.invalid_pokemon())];
+                    return [4 /*yield*/, interaction.followUp({
+                            content: translations.data.confirmation((_d = pokemon.names[translations.language]) !== null && _d !== void 0 ? _d : pokemon.names.en),
+                            components: [
+                                {
+                                    type: "ACTION_ROW",
+                                    components: [
+                                        {
+                                            type: "BUTTON",
+                                            customId: "confirm",
+                                            emoji: "✅",
+                                            style: "SUCCESS"
+                                        },
+                                        {
+                                            type: "BUTTON",
+                                            customId: "cancel",
+                                            emoji: "❌",
+                                            style: "DANGER"
+                                        }
+                                    ]
+                                }
+                            ],
                             fetchReply: true
                         })];
                 case 3:
-                    msg = _e.sent();
-                    return [4 /*yield*/, msg.react("✅").catch(console.error)];
+                    reply = _f.sent();
+                    filter = function (buttonInteraction) { return buttonInteraction.user.id === interaction.user.id; };
+                    return [4 /*yield*/, reply.awaitMessageComponent({ filter: filter, componentType: "BUTTON", time: 60000 })];
                 case 4:
-                    _e.sent();
-                    return [4 /*yield*/, msg.react("❌").catch(console.error)];
-                case 5:
-                    _e.sent();
-                    filter = function (reaction, user) { return user.id === interaction.user.id && ["✅", "❌"].includes(reaction.emoji.name); };
-                    return [4 /*yield*/, msg.awaitReactions({ filter: filter, max: 1, time: 30000 })];
+                    collected = _f.sent();
+                    collected.update({
+                        content: reply.content,
+                        components: [
+                            {
+                                type: "ACTION_ROW",
+                                components: [
+                                    {
+                                        type: "BUTTON",
+                                        customId: "confirm",
+                                        emoji: "✅",
+                                        style: "SUCCESS",
+                                        disabled: true
+                                    },
+                                    {
+                                        type: "BUTTON",
+                                        customId: "cancel",
+                                        emoji: "❌",
+                                        style: "DANGER",
+                                        disabled: true
+                                    }
+                                ]
+                            }
+                        ]
+                    });
+                    _b = collected.customId;
+                    switch (_b) {
+                        case "confirm": return [3 /*break*/, 5];
+                        case "cancel": return [3 /*break*/, 7];
+                    }
+                    return [3 /*break*/, 8];
+                case 5: return [4 /*yield*/, Util_1.default.database.query("\n\t\t\t\t\tINSERT INTO pokemon_hunting VALUES ($1, $2)\n\t\t\t\t\tON CONFLICT (user_id)\n\t\t\t\t\tDO UPDATE SET pokemon_id = EXCLUDED.pokemon_id, hunt_count = 0\n\t\t\t\t\tWHERE pokemon_hunting.user_id = EXCLUDED.user_id\n\t\t\t\t\t", [interaction.user.id, pokemon.nationalId])];
                 case 6:
-                    collected = _e.sent();
-                    msg.reactions.removeAll().catch(console.error);
-                    if (!collected.size)
-                        return [2 /*return*/];
-                    if (!(collected.first().emoji.name === "✅")) return [3 /*break*/, 8];
-                    return [4 /*yield*/, Util_1.default.database.query("\n\t\t\t\tINSERT INTO pokemon_hunting VALUES ($1, $2)\n\t\t\t\tON CONFLICT (user_id)\n\t\t\t\tDO UPDATE SET pokemon_id = EXCLUDED.pokemon_id, hunt_count = 0\n\t\t\t\tWHERE pokemon_hunting.user_id = EXCLUDED.user_id\n\t\t\t\t", [interaction.user.id, pokemon.nationalId])];
+                    _f.sent();
+                    interaction.followUp(translations.data.hunting((_e = pokemon.names[translations.language]) !== null && _e !== void 0 ? _e : pokemon.names.en));
+                    return [3 /*break*/, 8];
                 case 7:
-                    _e.sent();
-                    interaction.reply({
-                        content: translations.data.hunting((_d = pokemon.names[translations.language]) !== null && _d !== void 0 ? _d : pokemon.names.en),
-                        ephemeral: true
-                    });
-                    return [3 /*break*/, 9];
-                case 8:
-                    interaction.reply({
-                        content: translations.data.cancelled(),
-                        ephemeral: true
-                    });
-                    _e.label = 9;
-                case 9: return [2 /*return*/];
+                    {
+                        interaction.followUp(translations.data.cancelled());
+                        return [3 /*break*/, 8];
+                    }
+                    _f.label = 8;
+                case 8: return [2 /*return*/];
             }
         });
     }); }

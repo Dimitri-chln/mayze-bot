@@ -68,7 +68,7 @@ var command = {
         return __generator(this, function (_b) {
             role = interaction.options.getRole("role");
             roleMembers = role.members.map(function (m) { return m.user.tag; });
-            interaction.reply({
+            interaction.followUp({
                 embeds: [
                     {
                         author: {

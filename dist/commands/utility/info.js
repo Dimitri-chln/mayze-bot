@@ -54,7 +54,7 @@ var command = {
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            interaction.reply({
+            interaction.followUp({
                 embeds: [
                     {
                         author: {

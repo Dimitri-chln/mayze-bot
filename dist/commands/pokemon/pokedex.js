@@ -114,6 +114,19 @@ var command = {
                         required: false
                     }
                 ]
+            },
+            {
+                name: "evoline",
+                description: "Obtenir la ligne d'évolutions d'un pokémon",
+                type: "SUB_COMMAND",
+                options: [
+                    {
+                        name: "pokemon",
+                        description: "Le pokémon dont tu veux obtenir la ligne d'évolutions",
+                        type: "STRING",
+                        required: true
+                    }
+                ]
             }
         ],
         en: [
@@ -178,53 +191,58 @@ var command = {
                         required: false
                     }
                 ]
+            },
+            {
+                name: "evoline",
+                description: "Get the evolution line of a pokémon",
+                type: "SUB_COMMAND",
+                options: [
+                    {
+                        name: "pokemon",
+                        description: "The pokémon whose evolution line to get",
+                        type: "STRING",
+                        required: true
+                    }
+                ]
             }
         ]
     },
     run: function (interaction, translations) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, getPokemonVariation, getCleanName, subCommand, _b, input, pokemonWithVariation, pokemon_1, shiny, variation, pokemons, pokemonList_1, userPokedex, shiny_1, pages, page, i;
-        var _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var subCommand, _a, input, _b, pokemon_1, shiny, variationType, pokemons, pokemonList_1, userPokedex, shiny_1, pages, page, i, pokemon, stringEvolutionLine;
+        var _c, _d, _e;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0:
-                    _a = require("../utils/pokemonInfo"), getPokemonVariation = _a.getPokemonVariation, getCleanName = _a.getCleanName;
                     subCommand = interaction.options.getSubcommand();
-                    _b = subCommand;
-                    switch (_b) {
+                    _a = subCommand;
+                    switch (_a) {
                         case "find": return [3 /*break*/, 1];
                         case "list": return [3 /*break*/, 2];
+                        case "evoline": return [3 /*break*/, 4];
                     }
-                    return [3 /*break*/, 4];
+                    return [3 /*break*/, 5];
                 case 1:
                     {
                         input = interaction.options.getString("pokemon");
-                        pokemonWithVariation = Pokedex_1.default.findByNameWithVariation(input);
-                        pokemon_1 = pokemonWithVariation
-                            ? pokemonWithVariation.pokemon
-                            : Pokedex_1.default.findById(parseInt(input));
-                        shiny = pokemonWithVariation
-                            ? pokemonWithVariation.shiny
-                            : false;
-                        variation = pokemonWithVariation
-                            ? pokemonWithVariation.variationType
-                            : "default";
+                        _b = (_c = Pokedex_1.default.findByNameWithVariation(input)) !== null && _c !== void 0 ? _c : {
+                            pokemon: Pokedex_1.default.findById(parseInt(input)),
+                            shiny: false,
+                            variationType: "default"
+                        }, pokemon_1 = _b.pokemon, shiny = _b.shiny, variationType = _b.variationType;
                         if (!pokemon_1)
-                            return [2 /*return*/, interaction.reply({
-                                    content: translations.data.invalid_pokemon(),
-                                    ephemeral: true
-                                })];
-                        interaction.reply({
+                            return [2 /*return*/, interaction.followUp(translations.data.invalid_pokemon())];
+                        interaction.followUp({
                             embeds: [
                                 {
-                                    title: pokemon_1.formatName(shiny, variation, translations.language) + " #" + pokemon_1.nationalId.toString().padStart(3, "0"),
+                                    title: pokemon_1.formatName(shiny, variationType, translations.language) + " #" + pokemon_1.nationalId.toString().padStart(3, "0"),
                                     color: interaction.guild.me.displayColor,
                                     image: {
-                                        url: pokemon_1.image(shiny, variation)
+                                        url: pokemon_1.image(shiny, variationType)
                                     },
                                     fields: [
                                         {
                                             name: translations.data.field_alternative_names(),
-                                            value: Object.keys(pokemon_1.names).filter(function (l) { return l !== translations.language; }).map(function (l) { return Util_1.default.config.LANUAGE_FLAGS[l] + " " + pokemon_1.names[l]; }).join("\n"),
+                                            value: Object.keys(pokemon_1.names).filter(function (l) { return l !== translations.language; }).map(function (l) { return Util_1.default.config.LANGUAGE_FLAGS[l] + " " + pokemon_1.names[l]; }).join("\n"),
                                             inline: true
                                         },
                                         {
@@ -244,8 +262,10 @@ var command = {
                                         },
                                         {
                                             name: translations.data.field_forms(),
-                                            value: pokemon_1.variations.map(function (variation) { return "\u2022 " + variation.names[translations.language]; }).join("\n") + "\n" +
-                                                pokemon_1.megaEvolutions.map(function (megaEvolution) { return "\u2022 " + megaEvolution.names[translations.language]; }).join("\n"),
+                                            value: pokemon_1.variations.length || pokemon_1.megaEvolutions.length
+                                                ? pokemon_1.variations.map(function (variation) { return "\u2022 " + variation.names[translations.language]; }).join("\n") + "\n"
+                                                    + pokemon_1.megaEvolutions.map(function (megaEvolution) { return "\u2022 " + megaEvolution.names[translations.language]; }).join("\n")
+                                                : "∅",
                                             inline: true
                                         },
                                         {
@@ -260,12 +280,12 @@ var command = {
                                 }
                             ]
                         });
-                        return [3 /*break*/, 4];
+                        return [3 /*break*/, 5];
                     }
-                    _d.label = 2;
+                    _f.label = 2;
                 case 2: return [4 /*yield*/, Util_1.default.database.query("SELECT * FROM pokemons WHERE users ? $1", [interaction.user.id])];
                 case 3:
-                    pokemons = (_d.sent()).rows;
+                    pokemons = (_f.sent()).rows;
                     pokemonList_1 = new PokemonList_1.default(pokemons, interaction.user.id);
                     userPokedex = Pokedex_1.default.pokemons.filter(function (pokemon) {
                         if (interaction.options.getBoolean("caught") && !pokemonList_1.has(pokemon))
@@ -276,30 +296,32 @@ var command = {
                             return false;
                         if (interaction.options.getBoolean("ultra-beast") && !pokemon.ultraBeast)
                             return false;
-                        if (interaction.options.getBoolean("alola") && !pokemon.variations.some(function (variation) { return variation.suffix === "alola"; }))
+                        if (interaction.options.getBoolean("alola") && !Pokedex_1.default.alolaPokemons.has(pokemon.nationalId))
                             return false;
-                        if (interaction.options.getBoolean("mega") && !pokemon.megaEvolutions.length)
+                        if (interaction.options.getBoolean("mega") && !Pokedex_1.default.megaEvolvablePokemons.has(pokemon.nationalId))
                             return false;
                         return true;
                     });
-                    shiny_1 = (_c = interaction.options.getBoolean("shiny")) !== null && _c !== void 0 ? _c : false;
+                    shiny_1 = (_d = interaction.options.getBoolean("shiny")) !== null && _d !== void 0 ? _d : false;
                     pages = [];
-                    page = {
-                        embeds: [
-                            {
-                                author: {
-                                    name: translations.data.title(interaction.user.tag),
-                                    iconURL: interaction.user.displayAvatarURL({ dynamic: true })
-                                },
-                                color: interaction.guild.me.displayColor,
-                                description: translations.data.no_pokemon()
-                            }
-                        ]
+                    page = function (desc) {
+                        return {
+                            embeds: [
+                                {
+                                    author: {
+                                        name: translations.data.title(interaction.user.tag),
+                                        iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+                                    },
+                                    color: interaction.guild.me.displayColor,
+                                    description: desc
+                                }
+                            ]
+                        };
                     };
                     if (!userPokedex.length)
-                        pages.push(page);
+                        pages.push(page(translations.data.no_pokemon()));
                     for (i = 0; i < userPokedex.length; i += Util_1.default.config.ITEMS_PER_PAGE) {
-                        page.embeds[0].description = userPokedex
+                        pages.push(page(userPokedex
                             .slice(i, i + Util_1.default.config.ITEMS_PER_PAGE)
                             .map(function (pkm) {
                             if (interaction.options.getBoolean("mega")) {
@@ -311,13 +333,40 @@ var command = {
                                     : "default";
                                 return translations.data.description(pokemonList_1.has(pkm), pkm.formatName(shiny_1, variationType, translations.language), pkm.nationalId.toString().padStart(3, "0"));
                             }
-                        }).join("\n");
-                        pages.push(page);
+                        })
+                            .join("\n")));
                     }
                     ;
                     (0, pagination_1.default)(interaction, pages);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 5];
+                case 4:
+                    {
+                        pokemon = Pokedex_1.default.findByName(interaction.options.getString("pokemon"));
+                        if (!pokemon)
+                            return [2 /*return*/, interaction.followUp(translations.data.invalid_pokemon())];
+                        stringEvolutionLine = pokemon.stringEvolutionLine(translations.language);
+                        interaction.followUp({
+                            embeds: [
+                                {
+                                    author: {
+                                        name: translations.data.evoline_title((_e = pokemon.names[translations.language]) !== null && _e !== void 0 ? _e : pokemon.names.en),
+                                        iconURL: interaction.client.user.displayAvatarURL()
+                                    },
+                                    thumbnail: {
+                                        url: "https://assets.poketwo.net/images/" + pokemon.nationalId + ".png?v=26"
+                                    },
+                                    color: interaction.guild.me.displayColor,
+                                    description: "```\n" + stringEvolutionLine + "\n```",
+                                    footer: {
+                                        text: "✨ Mayze ✨"
+                                    }
+                                }
+                            ]
+                        });
+                        return [3 /*break*/, 5];
+                    }
+                    _f.label = 5;
+                case 5: return [2 /*return*/];
             }
         });
     }); }

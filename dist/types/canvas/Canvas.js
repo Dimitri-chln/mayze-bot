@@ -155,25 +155,34 @@ var Canvas = /** @class */ (function () {
             var _a, _b, canvas;
             var e_1, _c;
             return __generator(this, function (_d) {
-                // Remove users from all other canvas
-                this.database.query("UPDATE canvas SET users = array_diff(users, $1)", [[user.id], this.name]);
-                // Add user to the new canvas
-                this.database.query("UPDATE canvas SET users = users || $1 WHERE name = $2", [user.id, this.name]);
-                try {
-                    for (_a = __values(Util_1.default.canvas.values()), _b = _a.next(); !_b.done; _b = _a.next()) {
-                        canvas = _b.value;
-                        canvas._users.delete(user.id);
-                    }
+                switch (_d.label) {
+                    case 0: 
+                    // Remove users from all other canvas
+                    return [4 /*yield*/, this.database.query("UPDATE canvas SET users = array_diff(users, $1)", [[user.id]])];
+                    case 1:
+                        // Remove users from all other canvas
+                        _d.sent();
+                        // Add user to the new canvas
+                        return [4 /*yield*/, this.database.query("UPDATE canvas SET users = users || $1 WHERE name = $2", [[user.id], this.name])];
+                    case 2:
+                        // Add user to the new canvas
+                        _d.sent();
+                        try {
+                            for (_a = __values(Util_1.default.canvas.values()), _b = _a.next(); !_b.done; _b = _a.next()) {
+                                canvas = _b.value;
+                                canvas._users.delete(user.id);
+                            }
+                        }
+                        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                        finally {
+                            try {
+                                if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                            }
+                            finally { if (e_1) throw e_1.error; }
+                        }
+                        this._users.set(user.id, user);
+                        return [2 /*return*/];
                 }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                finally {
-                    try {
-                        if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
-                    }
-                    finally { if (e_1) throw e_1.error; }
-                }
-                this._users.set(user.id, user);
-                return [2 /*return*/];
             });
         });
     };
@@ -255,9 +264,9 @@ var Canvas = /** @class */ (function () {
                     case 1:
                         data = _a.sent();
                         newData = [];
-                        for (yShift = y; yShift <= zoom; yShift++) {
+                        for (yShift = y; yShift < zoom; yShift++) {
                             row = [];
-                            for (xShift = x; xShift <= zoom; xShift++)
+                            for (xShift = x; xShift < zoom; xShift++)
                                 row.push(data[y + yShift]
                                     ? data[y + yShift][x + xShift]
                                     : null);

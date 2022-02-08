@@ -67,7 +67,7 @@ var command = {
         return __generator(this, function (_a) {
             question = interaction.options.getString("question");
             randomReply = translations.data.answers()[Math.floor(Math.random() * translations.data.answers().length)];
-            interaction.reply(translations.data.reply(question, randomReply));
+            interaction.followUp(translations.data.reply(question, randomReply));
             return [2 /*return*/];
         });
     }); }

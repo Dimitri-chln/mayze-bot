@@ -68,7 +68,6 @@
 			]
 		},
 		"un câlin",
-		"un nude",
 		"une gifle",
 		"une milayette",
 		"des lego",
@@ -92,11 +91,7 @@
 			]
 		},
 		{
-			"un téléphone": [
-				"portable",
-				"fixe",
-				"à clapet"
-			]
+			"un téléphone": ["portable", "fixe", "à clapet"]
 		},
 		"un iPhone",
 		"un chargeur",
@@ -105,11 +100,7 @@
 		"un mp3",
 		"une tablette",
 		{
-			"un ordinateur": [
-				"portable",
-				"de la NASA",
-				"défectueux"
-			]
+			"un ordinateur": ["portable", "de la NASA", "défectueux"]
 		},
 		{
 			"une télévision": [
