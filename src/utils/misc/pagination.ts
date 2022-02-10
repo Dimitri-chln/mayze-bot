@@ -24,12 +24,6 @@ export default function pagination(
 	options?: PaginationOptions,
 ): Promise<Message>;
 
-export default function pagination(
-	message: Message,
-	pages: Page[],
-	options?: PaginationOptions,
-): Promise<Message>;
-
 export default async function pagination(
 	interactionOrMessage: CommandInteraction | Message,
 	pages: Page[],
