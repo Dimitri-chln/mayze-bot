@@ -204,6 +204,8 @@ client.on("ready", async () => {
 
 			// Admin commands
 			if (command.category === "admin") {
+				applicationCommandData.defaultPermission = false;
+
 				const applicationCommand = client.guilds.cache
 					.get(Util.config.ADMIN_GUILD_ID)
 					.commands.cache.find(
@@ -220,11 +222,6 @@ client.on("ready", async () => {
 							newApplicationCommand.permissions.set({
 								guild: Util.config.ADMIN_GUILD_ID,
 								permissions: [
-									{
-										id: Util.config.ADMIN_GUILD_ID,
-										type: "ROLE",
-										permission: false,
-									},
 									{
 										id: Util.config.OWNER_ID,
 										type: "USER",
@@ -252,11 +249,6 @@ client.on("ready", async () => {
 						.then((newApplicationCommand) =>
 							newApplicationCommand.permissions.set({
 								permissions: [
-									{
-										id: Util.config.ADMIN_GUILD_ID,
-										type: "ROLE",
-										permission: false,
-									},
 									{
 										id: Util.config.OWNER_ID,
 										type: "USER",
@@ -636,8 +628,6 @@ client.on("messageCreate", async (message) => {
 			}
 		}
 	}
-
-	if (Util.beta) return;
 
 	// Message responses
 	const language = Util.guildConfigs.get(message.guild?.id)?.language ?? "fr";
