@@ -100,7 +100,9 @@ export default async function pagination(
 			buttonInteraction.update(pages[page]).catch(console.error);
 	});
 
-	componentCollector.on("end", () => {
+	componentCollector.on("end", (collected, reason) => {
+		console.log(reason);
+		return;
 		if (currentPage.editable)
 			currentPage.edit({
 				...pages[page],
