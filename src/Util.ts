@@ -24,8 +24,10 @@ import Pokedex from "./types/pokemon/Pokedex";
 import parseArgs from "./utils/misc/parseArgs";
 import findMember from "./utils/misc/findMember";
 import config from "./config.json";
+import MessageCommand from "./types/structures/MessageCommand";
 
 export default class Util {
+	static readonly prefix = config.PREFIX;
 	static readonly config = config;
 	static client: Client;
 	static database: Pg.Client;
@@ -38,6 +40,7 @@ export default class Util {
 	static readonly availableLanguages: Language[] = ["fr", "en"];
 	static guildConfigs: Collection<Snowflake, GuildConfig> = new Collection();
 	static commands: Collection<string, Command> = new Collection();
+	static messageCommands: Collection<string, MessageCommand> = new Collection();
 	static messageResponses: MessageResponse[] = [];
 	static reactionCommands: ReactionCommand[] = [];
 	static beta: boolean;

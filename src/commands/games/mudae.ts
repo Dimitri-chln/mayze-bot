@@ -141,10 +141,9 @@ const command: Command = {
 
 	run: async (interaction, translations) => {
 		if (!interaction.guild.members.cache.has("432610292342587392"))
-			return interaction.followUp({
-				content: translations.strings.mudae_missing(),
-				ephemeral: true,
-			});
+			return interaction.followUp(
+				translations.strings.mudae_missing()
+			);
 
 		const subCommandGroup = interaction.options.getSubcommandGroup();
 

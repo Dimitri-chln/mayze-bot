@@ -1,38 +1,40 @@
-import { CommandInteraction, GuildMember, Permissions } from "discord.js";
+import {
+	CommandInteraction,
+	GuildMember,
+	Message,
+	Permissions,
+} from "discord.js";
 import Util from "../../Util";
 import Command from "../../types/structures/Command";
 import Translations from "../../types/structures/Translations";
+import MessageCommand from "../../types/structures/MessageCommand";
 import { DatabaseUpgrades } from "../../types/structures/Database";
 
-export default async function runCommand(
-	command: Command,
-	interaction: CommandInteraction,
+export default async function runMessageCommand(
+	command: MessageCommand,
+	message: Message,
+	args: string[],
 ) {
-	const language = Util.guildConfigs.get(interaction.guild.id).language;
+	const language = Util.guildConfigs.get(message.guild.id).language;
 	const translations = (await new Translations("run-command").init()).data[
 		language
 	];
 	const NOW = Date.now();
 
 	const available = await command.available;
-	if (!available)
-		return interaction.followUp(translations.strings.not_available());
+	if (!available) return message.reply(translations.strings.not_available());
 
-	if (command.category === "admin" && interaction.user.id !== Util.owner.id)
+	if (command.category === "admin" && message.author.id !== Util.owner.id)
 		return;
 
-	const userPermissions =
-		interaction.member instanceof GuildMember
-			? interaction.member.permissionsIn(interaction.channel.id)
-			: new Permissions(BigInt(interaction.member.permissions));
-
 	const missingUserPermissions = command.userPermissions.filter(
-		(permission) => !userPermissions.has(permission),
+		(permission) =>
+			!message.member.permissionsIn(message.channel.id).has(permission),
 	);
 
-	if (missingUserPermissions.length && interaction.user.id !== Util.owner.id)
-		return interaction
-			.followUp(
+	if (missingUserPermissions.length && message.author.id !== Util.owner.id)
+		return message
+			.reply(
 				translations.strings.user_missing_permissions(
 					missingUserPermissions.join("`, `"),
 				),
@@ -41,14 +43,12 @@ export default async function runCommand(
 
 	const missingBotPermissions = command.botPermissions.filter(
 		(permission) =>
-			!interaction.guild.me
-				.permissionsIn(interaction.channel.id)
-				.has(permission),
+			!message.guild.me.permissionsIn(message.channel.id).has(permission),
 	);
 
 	if (missingBotPermissions.length)
-		return interaction
-			.followUp(
+		return message
+			.reply(
 				translations.strings.bot_missing_perms(
 					missingBotPermissions.join("`, `"),
 				),
@@ -62,7 +62,7 @@ export default async function runCommand(
 			rows: [userUpgrades],
 		}: { rows: DatabaseUpgrades[] } = await Util.database.query(
 			"SELECT catch_cooldown_reduction FROM upgrades WHERE user_id = $1",
-			[interaction.user.id],
+			[message.author.id],
 		);
 
 		if (userUpgrades)
@@ -70,9 +70,9 @@ export default async function runCommand(
 	}
 
 	const cooldownAmount = ((command.cooldown ?? 2) - cooldownReduction) * 1000;
-	if (command.cooldowns.has(interaction.user.id)) {
+	if (command.cooldowns.has(message.author.id)) {
 		const expirationTime =
-			command.cooldowns.get(interaction.user.id) + cooldownAmount;
+			command.cooldowns.get(message.author.id) + cooldownAmount;
 
 		if (NOW < expirationTime) {
 			const timeLeft = Math.ceil((expirationTime - NOW) / 1000);
@@ -81,22 +81,19 @@ export default async function runCommand(
 				.replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
 				.replace(/00h |00m /g, "");
 
-			return interaction
-				.followUp(
-					translations.strings.cooldown(timeLeftHumanized, command.name),
-				)
+			return message
+				.reply(translations.strings.cooldown(timeLeftHumanized, command.name))
 				.catch(console.error);
 		}
 	}
 
-	command.cooldowns.set(interaction.user.id, NOW);
-	setTimeout(
-		() => command.cooldowns.delete(interaction.user.id),
-		cooldownAmount,
-	);
+	command.cooldowns.set(message.author.id, NOW);
+	setTimeout(() => command.cooldowns.delete(message.author.id), cooldownAmount);
 
-	command.run(interaction, command.translations.data[language]).catch((err) => {
-		console.error(err);
-		interaction.followUp(translations.strings.error()).catch(console.error);
-	});
+	command
+		.run(message, args, command.translations.data[language])
+		.catch((err) => {
+			console.error(err);
+			message.reply(translations.strings.error()).catch(console.error);
+		});
 }

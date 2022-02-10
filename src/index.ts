@@ -28,6 +28,9 @@ import {
 	DatabaseLevel,
 	DatabaseReminder,
 } from "./types/structures/Database";
+import parseArgs from "./utils/misc/parseArgs";
+import MessageCommand from "./types/structures/MessageCommand";
+import runMessageCommand from "./utils/misc/runMessageCommand";
 
 const intents = new Discord.Intents([
 	Discord.Intents.FLAGS.DIRECT_MESSAGES,
@@ -78,13 +81,13 @@ const client = new Discord.Client({
 	}, 3_600_000); // 1 hour
 })();
 
-const directories = Fs.readdirSync(Path.resolve(__dirname, "commands"), {
+const commandDirectories = Fs.readdirSync(Path.resolve(__dirname, "commands"), {
 	withFileTypes: true,
 })
 	.filter((dirent) => dirent.isDirectory() && dirent.name !== "disabled")
 	.map((dirent) => dirent.name);
 
-for (const directory of directories) {
+for (const directory of commandDirectories) {
 	const commandFiles = Fs.readdirSync(
 		Path.resolve(__dirname, "commands", directory),
 	).filter((file) => file.endsWith(".js"));
@@ -113,6 +116,45 @@ for (const directory of directories) {
 	});
 }
 
+const messageCommandDirectories = Fs.readdirSync(
+	Path.resolve(__dirname, "message-commands"),
+	{
+		withFileTypes: true,
+	},
+)
+	.filter((dirent) => dirent.isDirectory() && dirent.name !== "disabled")
+	.map((dirent) => dirent.name);
+
+for (const directory of messageCommandDirectories) {
+	const messageCommandFiles = Fs.readdirSync(
+		Path.resolve(__dirname, "message-commands", directory),
+	).filter((file) => file.endsWith(".js"));
+
+	messageCommandFiles.forEach(async (file) => {
+		const path = Path.resolve(__dirname, "message-commands", directory, file);
+		const messageCommand: MessageCommand =
+			require(path).default ?? require(path);
+
+		messageCommand.category = directory;
+		messageCommand.path = path;
+		messageCommand.cooldowns = new Discord.Collection();
+		messageCommand.available = new Promise((resolve, reject) => {
+			new Translations(`cmd_${messageCommand.name}`)
+				.init()
+				.then((translations) => {
+					messageCommand.translations = translations;
+					resolve(true);
+				})
+				.catch((err) => {
+					console.error(err);
+					resolve(false);
+				});
+		});
+
+		Util.messageCommands.set(messageCommand.name, messageCommand);
+	});
+}
+
 const messageResponseFiles = Fs.readdirSync(
 	Path.resolve(__dirname, "responses"),
 ).filter((file) => file.endsWith(".js"));
@@ -130,13 +172,13 @@ messageResponseFiles.forEach(async (file) => {
 });
 
 const reactionCommandsFiles = Fs.readdirSync(
-	Path.resolve(__dirname, "reaction_commands"),
+	Path.resolve(__dirname, "reaction-commands"),
 ).filter((file) => file.endsWith(".js"));
 
 reactionCommandsFiles.forEach(async (file) => {
 	const reactionCommand: ReactionCommand =
-		require(Path.resolve(__dirname, "reaction_commands", file)).default ??
-		require(Path.resolve(__dirname, "reaction_commands", file));
+		require(Path.resolve(__dirname, "reaction-commands", file)).default ??
+		require(Path.resolve(__dirname, "reaction-commands", file));
 
 	reactionCommand.translations = await new Translations(
 		`reac_${reactionCommand.name}`,
@@ -647,22 +689,16 @@ client.on("messageCreate", async (message) => {
 	}
 
 	// TEMP: Warn users that message commands are deprecated
-	const prefix = "*";
-	if (
-		message.channel.type !== "DM" &&
-		!message.author.bot &&
-		message.content.startsWith(prefix)
-	) {
-		const translations = (
-			await new Translations("index_message-commands-deprecated").init()
-		).data[Util.guildConfigs.get(message.guild.id).language];
+	const input = message.content.slice(Util.prefix.length).trim().split(/ +/g);
+	const messageCommandName = input.shift().toLowerCase();
+	const args = parseArgs(input.join(" "));
 
-		const input = message.content.slice(prefix.length).split(/ +/g);
-		const commandName = input.shift();
-		const command = Util.commands.find((cmd) => cmd.name === commandName);
-
-		if (command) message.reply(translations.strings.deprecated(command.name));
-	}
+	const messageCommand =
+		Util.messageCommands.get(messageCommandName) ??
+		Util.messageCommands.find(
+			(cmd) => cmd.aliases && cmd.aliases.includes(messageCommandName),
+		);
+	if (messageCommand) runMessageCommand(messageCommand, message, args);
 });
 
 client.on("messageDelete", async (message) => {

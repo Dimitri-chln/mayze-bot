@@ -22,19 +22,17 @@ const command: Command = {
 	run: async (interaction, translations) => {
 		// Server booster
 		if ((interaction.member as GuildMember).premiumSinceTimestamp)
-			return interaction.followUp({
-				content: translations.strings.boosting(),
-				ephemeral: true,
-			});
+			return interaction.followUp(
+				translations.strings.boosting()
+			);
 
 		if (
 			(interaction.member as GuildMember).roles.highest.position >=
 			interaction.guild.me.roles.highest.position
 		)
-			return interaction.followUp({
-				content: translations.strings.too_high_hierarchy(),
-				ephemeral: true,
-			});
+			return interaction.followUp(
+				translations.strings.too_high_hierarchy()
+			);
 
 		(interaction.member as GuildMember)
 			.kick(translations.strings.reason())

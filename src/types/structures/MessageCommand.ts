@@ -1,29 +1,20 @@
-import {
-	ApplicationCommandOptionData,
-	Collection,
-	CommandInteraction,
-	PermissionString,
-	Snowflake,
-} from "discord.js";
+import { Collection, Message, PermissionString, Snowflake } from "discord.js";
 import Util from "../../Util";
 import Translations, { LanguageTranslationsData } from "./Translations";
+
 
 interface CommandDescription {
 	fr: string;
 	en: string;
 }
 
-interface CommandOptions {
-	fr: ApplicationCommandOptionData[];
-	en: ApplicationCommandOptionData[];
-}
-
-export default interface Command {
+export default interface MessageCommand {
 	readonly name: string;
+	readonly aliases: string[];
 	readonly description: CommandDescription;
 	readonly userPermissions: PermissionString[];
 	readonly botPermissions: PermissionString[];
-	readonly options: CommandOptions;
+	readonly usage: string;
 	readonly cooldown?: number;
 	readonly guildIds?: Snowflake[];
 	path?: string;
@@ -32,7 +23,8 @@ export default interface Command {
 	translations?: Translations;
 	available?: Promise<boolean>;
 	run(
-		interaction: CommandInteraction,
+		message: Message,
+		args: string[],
 		translations: LanguageTranslationsData,
 	): Promise<any>;
 }
