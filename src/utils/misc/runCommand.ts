@@ -4,13 +4,19 @@ import Util from "../../Util";
 import Command from "../../types/structures/Command";
 import Translations from "../../types/structures/Translations";
 
-export default async function runApplicationCommand(
+export default async function runCommand(
 	command: Command,
 	interaction: CommandInteraction,
 ) {
 	const language = Util.guildConfigs.get(interaction.guild.id).language;
-	const translations = (await new Translations("run").init()).data[language];
+	const translations = (await new Translations("run-command").init()).data[
+		language
+	];
 	const NOW = Date.now();
+
+	const available = await command.available;
+	if (!available)
+		return interaction.reply(translations.strings.not_available());
 
 	if (command.category === "admin" && interaction.user.id !== Util.owner.id)
 		return;

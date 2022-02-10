@@ -32,6 +32,7 @@ export default interface Command {
 	category?: string;
 	cooldowns?: Collection<Snowflake, number>;
 	translations?: Translations;
+	available?: Promise<boolean>;
 	run(
 		interaction: CommandInteraction,
 		translations: LanguageTranslationsData,

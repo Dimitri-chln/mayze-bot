@@ -18,7 +18,7 @@ import ReactionCommand from "./types/structures/ReactionCommand";
 import Color from "./types/canvas/Color";
 import Palette from "./types/canvas/Palette";
 import Canvas from "./types/canvas/Canvas";
-import runApplicationCommand from "./utils/misc/runApplicationCommand";
+import runCommand from "./utils/misc/runCommand";
 import getLevel from "./utils/misc/getLevel";
 import MusicPlayer from "./utils/music/MusicPlayer";
 import MusicUtil from "./utils/music/MusicUtil";
@@ -96,7 +96,18 @@ for (const directory of directories) {
 		command.category = directory;
 		command.path = path;
 		command.cooldowns = new Discord.Collection();
-		command.translations = await new Translations(`cmd_${command.name}`).init();
+		command.available = new Promise((resolve, reject) => {
+			new Translations(`cmd_${command.name}`)
+				.init()
+				.then((translations) => {
+					command.translations = translations;
+					resolve(true);
+				})
+				.catch((err) => {
+					console.error(err);
+					resolve(false);
+				});
+		});
 
 		Util.commands.set(command.name, command);
 	});
@@ -533,8 +544,7 @@ client.on("interactionCreate", async (interaction) => {
 				await interaction.deferReply();
 
 				const command = Util.commands.get(interaction.commandName);
-				if (command)
-					runApplicationCommand(command, interaction).catch(console.error);
+				if (command) runCommand(command, interaction).catch(console.error);
 			}
 
 			if (interaction.isContextMenu()) {
