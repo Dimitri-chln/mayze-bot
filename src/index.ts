@@ -468,10 +468,7 @@ client.on("ready", async () => {
 							member.guild.id === Util.config.MAIN_GUILD_ID
 						)
 							member.user.send(
-								translations.strings.voice_level_up(
-									translations.language,
-									levelInfo.level.toString(),
-								),
+								translations.strings.voice_level_up(levelInfo.level.toString()),
 							);
 					} catch (err) {
 						console.error(err);
