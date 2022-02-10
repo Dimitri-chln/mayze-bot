@@ -4,10 +4,12 @@ import Util from "../../Util";
 
 const command: Command = {
 	name: "ping",
+	aliases: [],
 	description: {
 		fr: "Pong !",
 		en: "Pong!",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: [],
 
@@ -16,7 +18,7 @@ const command: Command = {
 		en: [],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		interaction.followUp(`Pong! **${interaction.client.ws.ping}**ms`);
 	},
 };

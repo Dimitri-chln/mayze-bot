@@ -4,10 +4,12 @@ import Util from "../../Util";
 
 const command: Command = {
 	name: "eval",
+	aliases: [],
 	description: {
 		fr: "Évaluer une expression",
 		en: "Evaluate an expression",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: [],
 
@@ -30,7 +32,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const expression = interaction.options.getString("expression");
 
 		await interaction.followUp("...");

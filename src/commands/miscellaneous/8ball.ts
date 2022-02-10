@@ -4,10 +4,12 @@ import Util from "../../Util";
 
 const command: Command = {
 	name: "8ball",
+	aliases: [],
 	description: {
 		fr: "Demander quelque chose à Mayze",
 		en: "Ask Mayze about something",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: [],
 
@@ -30,7 +32,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const question = interaction.options.getString("question");
 
 		const randomReply =

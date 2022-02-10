@@ -6,10 +6,12 @@ import { Collection, GuildMember, MessageEmbed } from "discord.js";
 
 const command: Command = {
 	name: "russian-roulette",
+	aliases: [],
 	description: {
 		fr: "Jouer à la roulette russe",
 		en: "Play the russian roulette",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -96,7 +98,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
 		const currentGame = Util.russianRouletteGames.get(interaction.channel.id);

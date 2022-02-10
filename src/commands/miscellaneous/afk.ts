@@ -4,10 +4,12 @@ import Util from "../../Util";
 
 const command: Command = {
 	name: "afk",
+	aliases: [],
 	description: {
 		fr: "Ajouter un statut AFK",
 		en: "Set an AFK status",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: [],
 
@@ -30,7 +32,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const message =
 			interaction.options
 				.getString("message")

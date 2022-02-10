@@ -9,10 +9,12 @@ import { VariationType } from "../../utils/pokemon/pokemonInfo";
 
 const command: Command = {
 	name: "stats",
+	aliases: [],
 	description: {
 		fr: "Obtenir des statistiques sur le bot",
 		en: "Get statistics about the bot",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -156,7 +158,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const subCommandGroup = interaction.options.getSubcommandGroup();
 
 		switch (subCommandGroup) {

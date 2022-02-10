@@ -10,10 +10,12 @@ import escapeMarkdown from "../../utils/misc/espapeMarkdown";
 
 const command: Command = {
 	name: "pokemon",
+	aliases: [],
 	description: {
 		fr: "Obtenir la liste des pokémons que tu as attrapés",
 		en: "Get the list of all the pokémons you caught",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -268,7 +270,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
 		switch (subCommand) {

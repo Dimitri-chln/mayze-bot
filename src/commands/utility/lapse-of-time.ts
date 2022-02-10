@@ -6,10 +6,12 @@ import formatTime from "../../utils/misc/formatTime";
 
 const command: Command = {
 	name: "lapse-of-time",
+	aliases: [],
 	description: {
 		fr: "Obtenir le temps entre aujourd'hui et une autre date",
 		en: "See how much time there is between now and another date",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: [],
 
@@ -32,7 +34,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const NOW = Date.now();
 
 		const input = interaction.options.getString("date").trim();

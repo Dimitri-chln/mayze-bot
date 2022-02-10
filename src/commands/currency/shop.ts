@@ -6,10 +6,12 @@ import { DatabaseUpgrades } from "../../types/structures/Database";
 
 const command: Command = {
 	name: "shop",
+	aliases: [],
 	description: {
 		fr: "Acheter des améliorations pour Mayze",
 		en: "Buy upgrades for Mayze",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -114,7 +116,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const UPGRADES_PRICES: UpgradeInfo<(tier: number) => number> = {
 			catch_cooldown_reduction: (tier) => 5000 + 2000 * tier,
 			new_pokemon_probability: (tier) => 250 + 50 * tier,

@@ -7,10 +7,12 @@ import { ButtonInteraction, CollectorFilter } from "discord.js";
 
 const command: Command = {
 	name: "hunt",
+	aliases: [],
 	description: {
 		fr: "Chasse un pokémon en particulier",
 		en: "Hunt a specific pokémon",
 	},
+	usage: "",
 
 	userPermissions: [],
 	botPermissions: ["ADD_REACTIONS"],
@@ -34,7 +36,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const input = interaction.options.getString("pokemon");
 
 		if (!input) {

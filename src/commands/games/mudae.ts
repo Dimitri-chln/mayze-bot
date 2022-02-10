@@ -6,10 +6,12 @@ import { DatabaseWish } from "../../types/structures/Database";
 
 const command: Command = {
 	name: "mudae",
+	aliases: [],
 	description: {
 		fr: "Utiliser une liste de commandes utilitaires pour Mudae",
 		en: "Use a list of utility commands for Mudae",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -139,11 +141,9 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		if (!interaction.guild.members.cache.has("432610292342587392"))
-			return interaction.followUp(
-				translations.strings.mudae_missing()
-			);
+			return interaction.followUp(translations.strings.mudae_missing());
 
 		const subCommandGroup = interaction.options.getSubcommandGroup();
 

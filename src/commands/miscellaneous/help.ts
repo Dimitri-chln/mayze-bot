@@ -7,10 +7,12 @@ import { Collection } from "discord.js";
 
 const command: Command = {
 	name: "help",
+	aliases: [],
 	description: {
 		fr: "Obtenir la liste des commandes ou des informations sur une commande spécifique",
 		en: "Get all commands or help on one specific command",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -33,7 +35,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const publicCommands = Util.commands.filter(
 			(cmd) =>
 				(!cmd.guildIds || cmd.guildIds.includes(interaction.guild.id)) &&

@@ -8,10 +8,12 @@ import { MessageAttachment } from "discord.js";
 
 const command: Command = {
 	name: "minecraft",
+	aliases: [],
 	description: {
 		fr: "Obtenir des informations sur les serveurs Minecraft de Mayze",
 		en: "Get information about Mayze's Minecraft servers",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 	guildIds: [Util.config.MAIN_GUILD_ID],
@@ -21,7 +23,7 @@ const command: Command = {
 		en: [],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const serverIPs = process.env.MINECRAFT_SERVER_IPS.split(",");
 
 		const pages: Page[] = [];

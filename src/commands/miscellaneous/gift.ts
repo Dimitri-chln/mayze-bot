@@ -6,10 +6,12 @@ import gifts from "../../assets/gifts.json";
 
 const command: Command = {
 	name: "gift",
+	aliases: [],
 	description: {
 		fr: "Donner un cadeau aléatoire à quelqu'un",
 		en: "Give someone a random gift",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: [],
 	guildIds: ["689164798264606784"],
@@ -33,7 +35,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const user = interaction.options.getUser("user");
 
 		interaction.followUp(

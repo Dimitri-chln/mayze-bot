@@ -4,10 +4,12 @@ import Util from "../../Util";
 
 const command: Command = {
 	name: "balance",
+	aliases: [],
 	description: {
 		fr: "Vérifier l'argent que tu possèdes",
 		en: "Check how much money you have",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -30,7 +32,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const DAY_IN_MS = 1000 * 60 * 60 * 24;
 		const NOW = Date.now();
 		const MIDNIGHT = new Date();

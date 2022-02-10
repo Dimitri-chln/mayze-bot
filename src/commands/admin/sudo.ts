@@ -4,10 +4,12 @@ import Util from "../../Util";
 
 const command: Command = {
 	name: "sudo",
+	aliases: [],
 	description: {
 		fr: "Envoyer un message sous l'identité de quelqu'un d'autre",
 		en: "Send a message as someone else",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["MANAGE_MESSAGES", "MANAGE_WEBHOOKS"],
 	guildIds: [Util.config.MAIN_GUILD_ID],
@@ -43,7 +45,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const user = interaction.options.getUser("user");
 		const message = interaction.options.getString("message");
 

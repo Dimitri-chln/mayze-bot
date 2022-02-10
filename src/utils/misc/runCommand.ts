@@ -95,7 +95,7 @@ export default async function runCommand(
 		cooldownAmount,
 	);
 
-	command.run(interaction, command.translations.data[language]).catch((err) => {
+	command.runInteraction(interaction, command.translations.data[language]).catch((err) => {
 		console.error(err);
 		interaction.followUp(translations.strings.error()).catch(console.error);
 	});

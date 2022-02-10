@@ -8,10 +8,12 @@ import PokemonList from "../../types/pokemon/PokemonList";
 
 const command: Command = {
 	name: "pokedex",
+	aliases: [],
 	description: {
 		fr: "Obtenir des informations sur un pokémon ou sur ton pokédex",
 		en: "Get information about a pokémon or your pokédex",
 	},
+	usage: "",
 
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
@@ -174,7 +176,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
 		switch (subCommand) {

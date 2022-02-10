@@ -7,10 +7,12 @@ import { DatabaseLevel } from "../../types/structures/Database";
 
 const command: Command = {
 	name: "level",
+	aliases: [],
 	description: {
 		fr: "Obtenir ton niveau sur Mayze",
 		en: "Get your chat level with Mayze",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -33,7 +35,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const barSize = 20,
 			xpBar = {
 				full: "█",

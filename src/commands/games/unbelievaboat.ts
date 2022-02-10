@@ -6,10 +6,12 @@ import { Client as UnbClient } from "unb-api";
 
 const command: Command = {
 	name: "unbelievaboat",
+	aliases: [],
 	description: {
 		fr: "Intéragir avec UnbelievaBoat",
 		en: "Interact with UnbelievaBoat",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 	guildIds: ["689164798264606784"],
@@ -47,7 +49,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const unbClient = new UnbClient(process.env.UNB_TOKEN);
 		const user = interaction.options.getUser("user") ?? interaction.user;
 		const unbUser = await unbClient.getUserBalance(

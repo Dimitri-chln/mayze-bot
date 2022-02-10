@@ -8,10 +8,12 @@ import { DatabaseLevel } from "../../types/structures/Database";
 
 const command: Command = {
 	name: "top",
+	aliases: [],
 	description: {
 		fr: "Obtenir le classement d'xp des membres",
 		en: "Get the xp leaderboard of the members ",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -54,7 +56,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const leaderboard = interaction.options.getString("leaderboard") as
 			| "chat_xp"
 			| "voice_xp";

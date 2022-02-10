@@ -6,10 +6,12 @@ import { Role } from "discord.js";
 
 const command: Command = {
 	name: "role",
+	aliases: [],
 	description: {
 		fr: "Obtenir des informations sur un rôle",
 		en: "Get some information about a role",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -32,7 +34,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const role = interaction.options.getRole("role") as Role;
 
 		const roleMembers = role.members.map((m) => m.user.tag);

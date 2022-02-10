@@ -6,10 +6,12 @@ import Axios from "axios";
 
 const command: Command = {
 	name: "define",
+	aliases: [],
 	description: {
 		fr: "Obtenir la définition d'un mot",
 		en: "Get the definition of a word",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: [],
 
@@ -64,7 +66,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const apiURL = "https://api.dictionaryapi.dev/api/v2/entries";
 
 		const word = interaction.options.getString("word").toLowerCase();

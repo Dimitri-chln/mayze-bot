@@ -4,10 +4,12 @@ import Util from "../../Util";
 
 const command: Command = {
 	name: "say",
+	aliases: [],
 	description: {
 		fr: "Faire dire n'importe quoi au bot",
 		en: "Make the bot say anything",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: [],
 
@@ -30,7 +32,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const text = interaction.options.getString("text");
 
 		interaction

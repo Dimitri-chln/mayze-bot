@@ -11,10 +11,12 @@ import {
 
 const command: Command = {
 	name: "canvas",
+	aliases: [],
 	description: {
 		fr: "Rejoindre et dessiner sur un canevas",
 		en: "Join and draw on a canvas",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -279,7 +281,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
 		const userCanvas = Util.canvas.filter(

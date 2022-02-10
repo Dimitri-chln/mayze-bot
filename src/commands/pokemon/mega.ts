@@ -8,10 +8,12 @@ import { DatabasePokemon } from "../../types/structures/Database";
 
 const command: Command = {
 	name: "mega",
+	aliases: [],
 	description: {
 		fr: "Gérer tes méga gemmes",
 		en: "Manage your mega gems",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["ADD_REACTIONS"],
 
@@ -118,7 +120,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
 		const {

@@ -29,7 +29,6 @@ import {
 	DatabaseReminder,
 } from "./types/structures/Database";
 import parseArgs from "./utils/misc/parseArgs";
-import MessageCommand from "./types/structures/MessageCommand";
 import runMessageCommand from "./utils/misc/runMessageCommand";
 
 const intents = new Discord.Intents([
@@ -113,45 +112,6 @@ for (const directory of commandDirectories) {
 		});
 
 		Util.commands.set(command.name, command);
-	});
-}
-
-const messageCommandDirectories = Fs.readdirSync(
-	Path.resolve(__dirname, "message-commands"),
-	{
-		withFileTypes: true,
-	},
-)
-	.filter((dirent) => dirent.isDirectory() && dirent.name !== "disabled")
-	.map((dirent) => dirent.name);
-
-for (const directory of messageCommandDirectories) {
-	const messageCommandFiles = Fs.readdirSync(
-		Path.resolve(__dirname, "message-commands", directory),
-	).filter((file) => file.endsWith(".js"));
-
-	messageCommandFiles.forEach(async (file) => {
-		const path = Path.resolve(__dirname, "message-commands", directory, file);
-		const messageCommand: MessageCommand =
-			require(path).default ?? require(path);
-
-		messageCommand.category = directory;
-		messageCommand.path = path;
-		messageCommand.cooldowns = new Discord.Collection();
-		messageCommand.available = new Promise((resolve, reject) => {
-			new Translations(`cmd_${messageCommand.name}`)
-				.init()
-				.then((translations) => {
-					messageCommand.translations = translations;
-					resolve(true);
-				})
-				.catch((err) => {
-					console.error(err);
-					resolve(false);
-				});
-		});
-
-		Util.messageCommands.set(messageCommand.name, messageCommand);
 	});
 }
 
@@ -696,15 +656,15 @@ client.on("messageCreate", async (message) => {
 		message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
 	) {
 		const input = message.content.slice(Util.prefix.length).trim().split(/ +/g);
-		const messageCommandName = input.shift().toLowerCase();
+		const commandName = input.shift().toLowerCase();
 		const args = parseArgs(input.join(" "));
 
-		const messageCommand =
-			Util.messageCommands.get(messageCommandName) ??
-			Util.messageCommands.find(
-				(cmd) => cmd.aliases && cmd.aliases.includes(messageCommandName),
+		const command =
+			Util.commands.get(commandName) ??
+			Util.commands.find(
+				(cmd) => cmd.aliases && cmd.aliases.includes(commandName),
 			);
-		if (messageCommand) runMessageCommand(messageCommand, message, args);
+		if (command && command.runMessage) runMessageCommand(command, message, args);
 	}
 });
 

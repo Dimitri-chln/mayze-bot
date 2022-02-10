@@ -8,10 +8,12 @@ import { GuildMember } from "discord.js";
 
 const command: Command = {
 	name: "timeout",
+	aliases: [],
 	description: {
 		fr: "Timeout un utilisateur sur le serveur",
 		en: "Timeout a user on this server",
 	},
+	usage: "",
 	userPermissions: ["MODERATE_MEMBERS"],
 	botPermissions: ["MODERATE_MEMBERS"],
 
@@ -46,7 +48,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const member = interaction.guild.members.cache.get(
 			interaction.options.getUser("user").id,
 		);

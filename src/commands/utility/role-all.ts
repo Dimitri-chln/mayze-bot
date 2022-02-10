@@ -6,10 +6,12 @@ import { ButtonInteraction, CollectorFilter } from "discord.js";
 
 const command: Command = {
 	name: "role-all",
+	aliases: [],
 	description: {
 		fr: "Donner ou retirer un rôle à tous les membres",
 		en: "Give or remove a role to all members",
 	},
+	usage: "",
 	cooldown: 10,
 
 	userPermissions: ["MANAGE_ROLES"],
@@ -138,7 +140,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 		const role = interaction.options.getRole("role");
 		const option: "bot" | "human" | "all" =

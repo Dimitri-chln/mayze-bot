@@ -10,10 +10,12 @@ import MusicUtil from "../../utils/music/MusicUtil";
 
 const command: Command = {
 	name: "download",
+	aliases: [],
 	description: {
 		fr: "Télécharger une musique depuis YouTube",
 		en: "Download a song from YouTube",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS", "ATTACH_FILES"],
 
@@ -36,7 +38,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const YOUTUBE_VIDEO_REGEX =
 			/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
 		const DOWNLOAD_OPTIONS: downloadOptions = {

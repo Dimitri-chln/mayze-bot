@@ -4,10 +4,12 @@ import Util from "../../Util";
 
 const command: Command = {
 	name: "avatar",
+	aliases: [],
 	description: {
 		fr: "Obtenir la photo de profil d'un utilisateur",
 		en: "Get a user's profile picture",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -30,7 +32,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const user = interaction.options.getUser("user") ?? interaction.user;
 
 		interaction.followUp({

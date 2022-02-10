@@ -6,10 +6,12 @@ import { GuildMember } from "discord.js";
 
 const command: Command = {
 	name: "jail",
+	aliases: [],
 	description: {
 		fr: "Mettre un membre en prison ou le libérer",
 		en: "Jail or unjail a member",
 	},
+	usage: "",
 	userPermissions: ["MANAGE_ROLES"],
 	botPermissions: ["ADD_REACTIONS", "MANAGE_ROLES"],
 	guildIds: [Util.config.MAIN_GUILD_ID],
@@ -33,7 +35,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const member = interaction.guild.members.cache.get(
 			interaction.options.getUser("user").id,
 		);

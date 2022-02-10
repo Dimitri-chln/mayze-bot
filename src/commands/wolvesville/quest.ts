@@ -6,10 +6,12 @@ import { CollectorFilter, GuildMember, TextChannel } from "discord.js";
 
 const command: Command = {
 	name: "quest",
+	aliases: [],
 	description: {
 		fr: "Afficher un message de vote pour les quêtes Wolvesville",
 		en: "Display a voting message for Wolvesville quests",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS", "ADD_REACTIONS"],
 	guildIds: ["689164798264606784"],
@@ -49,7 +51,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		if (
 			!(interaction.member as GuildMember).roles.cache.has(
 				"696751852267765872" /* Chef */,

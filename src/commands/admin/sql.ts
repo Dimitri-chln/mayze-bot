@@ -6,10 +6,12 @@ import pagination, { Page } from "../../utils/misc/pagination";
 
 const command: Command = {
 	name: "sql",
+	aliases: [],
 	description: {
 		fr: "Effectuer une requête SQL sur la base de données",
 		en: "Run a SQL query on the database",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -32,7 +34,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const query = interaction.options.getString("query");
 		const res = await Util.database.query(query);
 

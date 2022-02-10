@@ -1,17 +1,11 @@
-import {
-	CommandInteraction,
-	GuildMember,
-	Message,
-	Permissions,
-} from "discord.js";
+import { Message } from "discord.js";
 import Util from "../../Util";
 import Command from "../../types/structures/Command";
 import Translations from "../../types/structures/Translations";
-import MessageCommand from "../../types/structures/MessageCommand";
 import { DatabaseUpgrades } from "../../types/structures/Database";
 
 export default async function runMessageCommand(
-	command: MessageCommand,
+	command: Command,
 	message: Message,
 	args: string[],
 ) {
@@ -91,7 +85,7 @@ export default async function runMessageCommand(
 	setTimeout(() => command.cooldowns.delete(message.author.id), cooldownAmount);
 
 	command
-		.run(message, args, command.translations.data[language])
+		.runMessage(message, args, command.translations.data[language])
 		.catch((err) => {
 			console.error(err);
 			message.reply(translations.strings.error()).catch(console.error);

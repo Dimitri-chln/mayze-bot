@@ -11,10 +11,12 @@ import {
 
 const command: Command = {
 	name: "slots",
+	aliases: [],
 	description: {
 		fr: "Joue à une partie de casino",
 		en: "Play a slots game",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS", "MANAGE_ROLES", "KICK_MEMBERS"],
 	cooldown: 5,
@@ -25,7 +27,7 @@ const command: Command = {
 		en: [],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const SPINNING = interaction.client.emojis.cache
 			.get("845009613664288769")
 			.toString();

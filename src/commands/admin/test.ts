@@ -4,10 +4,12 @@ import Util from "../../Util";
 
 const command: Command = {
 	name: "test",
+	aliases: [],
 	description: {
 		fr: "Une commande de test",
 		en: "A test command",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: [],
 
@@ -16,7 +18,7 @@ const command: Command = {
 		en: [],
 	},
 
-	run: async (interaction, translations) => {},
+	runInteraction: async (interaction, translations) => {},
 };
 
 export default command;

@@ -4,10 +4,12 @@ import Util from "../../Util";
 
 const command: Command = {
 	name: "language",
+	aliases: [],
 	description: {
 		fr: "Modifier la langue du bot sur le serverur",
 		en: "Change the server's bot language",
 	},
+	usage: "",
 	userPermissions: ["ADMINISTRATOR"],
 	botPermissions: [],
 
@@ -50,7 +52,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const newLanguage = interaction.options.getString("language") as
 			| "fr"
 			| "en";
@@ -67,7 +69,7 @@ const command: Command = {
 
 		Util.guildConfigs.set(interaction.guild.id, {
 			...Util.guildConfigs.get(interaction.guild.id),
-			language: newLanguage
+			language: newLanguage,
 		});
 
 		interaction.followUp(translations.strings.language_updated());

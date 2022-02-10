@@ -7,10 +7,12 @@ import Algebra from "algebra.js";
 
 const command: Command = {
 	name: "math",
+	aliases: [],
 	description: {
 		fr: "Effectuer des calculs mathématiques",
 		en: "Perform mathematical calculations",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: [],
 
@@ -123,7 +125,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
 		switch (subCommand) {

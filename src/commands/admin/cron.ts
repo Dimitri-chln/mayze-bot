@@ -6,10 +6,12 @@ import { CronJob } from "cron";
 
 const command: Command = {
 	name: "cron",
+	aliases: [],
 	description: {
 		fr: "Planifier une tâche cron",
 		en: "Start a cron task",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["ADMINISTRATOR"],
 
@@ -44,7 +46,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const date = new Date(interaction.options.getString("date"));
 
 		if (!date) return interaction.followUp(translations.strings.invalid_date());

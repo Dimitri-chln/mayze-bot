@@ -6,10 +6,12 @@ import { ButtonInteraction, CollectorFilter } from "discord.js";
 
 const command: Command = {
 	name: "color",
+	aliases: [],
 	description: {
 		fr: "Tester et visualiser des codes couleurs hexadécimaux",
 		en: "Test and visualize hexadecimal color codes",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -32,7 +34,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const color = hexToRGB(interaction.options.getString("color"));
 
 		const reply = (await interaction.followUp({

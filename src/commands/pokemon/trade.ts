@@ -15,10 +15,12 @@ import { VariationType } from "../../utils/pokemon/pokemonInfo";
 
 const command: Command = {
 	name: "trade",
+	aliases: [],
 	description: {
 		fr: "Echanger des pokémons avec d'autres utilisateurs",
 		en: "Trade pokémons with other users",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -132,7 +134,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const logChannel = interaction.client.channels.cache.get(
 			Util.config.TRADE_LOG_CHANNEL_ID,
 		) as TextChannel;

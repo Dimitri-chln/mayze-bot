@@ -6,10 +6,12 @@ import { DatabaseCustomResponse } from "../../types/structures/Database";
 
 const command: Command = {
 	name: "custom-response",
+	aliases: [],
 	description: {
 		fr: "Gérer les réponses personnalisées",
 		en: "Manage custom responses",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -152,7 +154,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
 		const { rows: responses }: { rows: DatabaseCustomResponse[] } =

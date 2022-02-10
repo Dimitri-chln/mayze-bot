@@ -7,10 +7,12 @@ import formatTime from "../../utils/misc/formatTime";
 
 const command: Command = {
 	name: "reminder",
+	aliases: [],
 	description: {
 		fr: "Gérer tes rappels",
 		en: "Manage your reminders",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -189,7 +191,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
 		const { rows: reminders } = await Util.database.query(

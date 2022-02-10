@@ -7,10 +7,12 @@ import { TextChannel } from "discord.js";
 
 const command: Command = {
 	name: "rose-lobby",
+	aliases: [],
 	description: {
 		fr: "Créer et gérer les games de roses",
 		en: "Create and manage rose lobbies",
 	},
+	usage: "",
 	userPermissions: ["ADMINISTRATOR"],
 	botPermissions: ["ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_ROLES"],
 	guildIds: [Util.config.MAIN_GUILD_ID],
@@ -72,7 +74,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const announcementChannel = interaction.client.channels.cache.get(
 			"817365433509740554",
 		) as TextChannel;

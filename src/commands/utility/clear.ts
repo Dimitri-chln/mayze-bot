@@ -6,10 +6,12 @@ import { Collection, TextChannel } from "discord.js";
 
 const command: Command = {
 	name: "clear",
+	aliases: [],
 	description: {
 		fr: "Supprimer des messages du salon actuel",
 		en: "Delete messages from the current channel",
 	},
+	usage: "",
 	userPermissions: ["MANAGE_MESSAGES"],
 	botPermissions: ["MANAGE_MESSAGES"],
 
@@ -73,7 +75,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const number = interaction.options.getInteger("number");
 		if (isNaN(number) || number <= 0 || number > 100)
 			return interaction.followUp(translations.strings.invalid_number());

@@ -4,10 +4,12 @@ import Util from "../../Util";
 
 const command: Command = {
 	name: "info",
+	aliases: [],
 	description: {
 		fr: "Obtenir quelques informations sur le bot",
 		en: "Get some information about the bot",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -16,7 +18,7 @@ const command: Command = {
 		en: [],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		interaction.followUp({
 			embeds: [
 				{

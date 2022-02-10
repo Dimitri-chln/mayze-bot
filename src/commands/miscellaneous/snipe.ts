@@ -4,10 +4,12 @@ import Util from "../../Util";
 
 const command: Command = {
 	name: "snipe",
+	aliases: [],
 	description: {
 		fr: "Exposer un message supprimé, une modification ou une réaction retirée sur le salon",
 		en: "Expose a deleted message, an edit or a removed reaction in the channel",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS", "ATTACH_FILES"],
 
@@ -48,7 +50,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
 		switch (subCommand) {

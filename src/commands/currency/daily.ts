@@ -4,10 +4,12 @@ import Util from "../../Util";
 
 const command: Command = {
 	name: "daily",
+	aliases: [],
 	description: {
 		fr: "Récupérer tes récompenses quotidiennes",
 		en: "Claim your daily rewards",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 
@@ -16,7 +18,7 @@ const command: Command = {
 		en: [],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const DAY_IN_MS = 1000 * 60 * 60 * 24;
 		const NOW = new Date();
 		const MIDNIGHT = new Date();

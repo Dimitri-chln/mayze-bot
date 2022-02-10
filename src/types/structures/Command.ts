@@ -2,6 +2,7 @@ import {
 	ApplicationCommandOptionData,
 	Collection,
 	CommandInteraction,
+	Message,
 	PermissionString,
 	Snowflake,
 } from "discord.js";
@@ -20,10 +21,12 @@ interface CommandOptions {
 
 export default interface Command {
 	readonly name: string;
+	readonly aliases?: string[];
 	readonly description: CommandDescription;
 	readonly userPermissions: PermissionString[];
 	readonly botPermissions: PermissionString[];
 	readonly options: CommandOptions;
+	readonly usage?: string;
 	readonly cooldown?: number;
 	readonly guildIds?: Snowflake[];
 	path?: string;
@@ -31,8 +34,13 @@ export default interface Command {
 	cooldowns?: Collection<Snowflake, number>;
 	translations?: Translations;
 	available?: Promise<boolean>;
-	run(
+	runInteraction(
 		interaction: CommandInteraction,
+		translations: LanguageTranslationsData,
+	): Promise<any>;
+	runMessage?(
+		message: Message,
+		args: string[],
 		translations: LanguageTranslationsData,
 	): Promise<any>;
 }

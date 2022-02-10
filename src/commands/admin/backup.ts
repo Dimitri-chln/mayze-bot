@@ -6,10 +6,12 @@ import { MessageAttachment } from "discord.js";
 
 const command: Command = {
 	name: "backup",
+	aliases: [],
 	description: {
 		fr: "Sauvegarder des données en cas de perte",
 		en: "Save data locally in case of a loss",
 	},
+	usage: "",
 	userPermissions: [],
 	botPermissions: ["ATTACH_FILES"],
 
@@ -32,7 +34,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		if (interaction.channel.id !== Util.config.SECRET_CHANNEL_ID) return;
 
 		const table = interaction.options.getString("table");

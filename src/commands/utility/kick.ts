@@ -6,10 +6,12 @@ import { GuildMember } from "discord.js";
 
 const command: Command = {
 	name: "kick",
+	aliases: [],
 	description: {
 		fr: "Expulser un membre du serveur",
 		en: "Kick a member from the server",
 	},
+	usage: "",
 	userPermissions: ["KICK_MEMBERS"],
 	botPermissions: ["KICK_MEMBERS"],
 	guildIds: ["689164798264606784"],
@@ -45,7 +47,7 @@ const command: Command = {
 		],
 	},
 
-	run: async (interaction, translations) => {
+	runInteraction: async (interaction, translations) => {
 		const member = interaction.guild.members.cache.get(
 			interaction.options.getUser("user").id,
 		);
