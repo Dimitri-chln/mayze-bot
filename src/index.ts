@@ -267,6 +267,13 @@ client.on("ready", async () => {
 					for (const guildId of command.guildIds.filter((id) =>
 						client.guilds.cache.has(id),
 					)) {
+						applicationCommandData.description =
+							command.description[Util.guildConfigs.get(guildId).language] ??
+							command.description.en;
+						applicationCommandData.options =
+							command.options[Util.guildConfigs.get(guildId).language] ??
+							command.options.en;
+
 						await client.guilds.cache.get(guildId).commands.fetch();
 						const applicationCommand = client.guilds.cache
 							.get(guildId)
@@ -278,12 +285,6 @@ client.on("ready", async () => {
 							console.log(
 								`Creating the application command /${applicationCommandData.name} in the guild: ${guildId}`,
 							);
-							applicationCommandData.description =
-								command.description[Util.guildConfigs.get(guildId).language] ??
-								command.description.en;
-							applicationCommandData.options =
-								command.options[Util.guildConfigs.get(guildId).language] ??
-								command.options.en;
 							client.application.commands
 								.create(applicationCommandData, guildId)
 								.catch(console.error);
@@ -296,12 +297,6 @@ client.on("ready", async () => {
 							console.log(
 								`Editing the application command /${applicationCommandData.name} in the guild: ${guildId}`,
 							);
-							applicationCommandData.description =
-								command.description[Util.guildConfigs.get(guildId).language] ??
-								command.description.en;
-							applicationCommandData.options =
-								command.options[Util.guildConfigs.get(guildId).language] ??
-								command.options.en;
 							client.application.commands
 								.edit(applicationCommand.id, applicationCommandData, guildId)
 								.catch(console.error);
@@ -664,7 +659,8 @@ client.on("messageCreate", async (message) => {
 			Util.commands.find(
 				(cmd) => cmd.aliases && cmd.aliases.includes(commandName),
 			);
-		if (command && command.runMessage) runMessageCommand(command, message, args);
+		if (command && command.runMessage)
+			runMessageCommand(command, message, args);
 	}
 });
 
