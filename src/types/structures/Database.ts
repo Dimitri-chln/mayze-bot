@@ -1,5 +1,13 @@
 import { Snowflake } from "discord.js";
 import { VariationType } from "../../utils/pokemon/pokemonInfo";
+import { Language } from "./Translations";
+
+
+export interface DatabaseAfkUser {
+	user_id: Snowflake;
+	timestamp: string;
+	message?: string;
+}
 
 export interface DatabaseColor {
 	alias: string;
@@ -8,7 +16,7 @@ export interface DatabaseColor {
 	palette: string;
 }
 
-enum TriggerType {
+export enum TriggerType {
 	"CONTAINS",
 	"EQUAL",
 	"REGEX",
@@ -21,6 +29,12 @@ export interface DatabaseCustomResponse {
 	trigger: string;
 	response: string;
 	trigger_type: TriggerType;
+}
+
+export interface DatabaseGuildConfig {
+	guild_id: Snowflake;
+	language: Language;
+	webhook_id?: Snowflake;
 }
 
 export interface DatabaseLevel {
@@ -47,6 +61,7 @@ export interface DatabaseReminder {
 	user_id: Snowflake;
 	timestamp: string;
 	content: string;
+	repeat?: number;
 }
 
 export interface DatabaseUpgrades {
@@ -62,5 +77,5 @@ export interface DatabaseWish {
 	id: number;
 	user_id: Snowflake;
 	series: string;
-	regex: string;
+	regex?: string;
 }

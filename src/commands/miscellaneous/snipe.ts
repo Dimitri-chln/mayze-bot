@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 const command: Command = {
@@ -58,14 +57,14 @@ const command: Command = {
 					interaction.channel.id,
 				);
 				if (!snipedMessage)
-					return interaction.followUp(translations.data.no_message());
+					return interaction.followUp(translations.strings.no_message());
 
 				interaction.followUp({
 					embeds: [
 						{
 							author: {
 								name: snipedMessage.author.tag,
-								iconURL: snipedMessage.author.avatarURL({
+								iconURL: snipedMessage.author.displayAvatarURL({
 									dynamic: true,
 								}),
 							},
@@ -73,10 +72,7 @@ const command: Command = {
 							description: snipedMessage.content,
 							image: {
 								url: snipedMessage.attachments.size
-									? `attachment://${
-											snipedMessage.attachments.first()
-												.name
-									  }`
+									? `attachment://${snipedMessage.attachments.first().name}`
 									: null,
 							},
 							footer: {
@@ -84,7 +80,7 @@ const command: Command = {
 							},
 						},
 					],
-					attachments: Array.from(snipedMessage.attachments).map(
+					files: Array.from(snipedMessage.attachments).map(
 						(attachment) => attachment[1],
 					),
 				});
@@ -96,14 +92,14 @@ const command: Command = {
 					interaction.channel.id,
 				);
 				if (!snipedMessage)
-					return interaction.followUp(translations.data.no_message());
+					return interaction.followUp(translations.strings.no_message());
 
 				interaction.followUp({
 					embeds: [
 						{
 							author: {
 								name: snipedMessage.author.tag,
-								iconURL: snipedMessage.author.avatarURL({
+								iconURL: snipedMessage.author.displayAvatarURL({
 									dynamic: true,
 								}),
 							},
@@ -123,31 +119,27 @@ const command: Command = {
 					interaction.channel.id,
 				);
 				if (!snipedReaction)
-					return interaction.followUp(
-						translations.data.no_reaction(),
-					);
+					return interaction.followUp(translations.strings.no_reaction());
 
 				interaction.followUp({
 					embeds: [
 						{
 							author: {
-								name: snipedReaction.reaction.message.author
-									.tag,
+								name: snipedReaction.reaction.message.author.tag,
 								iconURL:
-									snipedReaction.reaction.message.author.displayAvatarURL(
-										{ dynamic: true },
-									),
+									snipedReaction.reaction.message.author.displayAvatarURL({
+										dynamic: true,
+									}),
 							},
 							thumbnail: {
 								url: snipedReaction.reaction.emoji.url,
 							},
 							color: interaction.guild.me.displayColor,
-							description:
-								snipedReaction.reaction.message.content,
+							description: snipedReaction.reaction.message.content,
 							fields: [
 								{
 									name: "\u200b",
-									value: translations.data.description(
+									value: translations.strings.description(
 										snipedReaction.user.tag,
 										snipedReaction.reaction.message.url,
 										snipedReaction.reaction.emoji.toString(),

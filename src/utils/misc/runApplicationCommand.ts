@@ -8,12 +8,8 @@ export default async function runApplicationCommand(
 	command: Command,
 	interaction: CommandInteraction,
 ) {
-	const language = Util.languages.get(interaction.guild.id);
-	const translations = await new Translations("run", language).init();
-	const commandTranslations = await new Translations(
-		`cmd_${command.name}`,
-		language,
-	).init();
+	const language = Util.guildConfigs.get(interaction.guild.id).language;
+	const translations = (await new Translations("run").init()).data[language];
 	const NOW = Date.now();
 
 	if (command.category === "admin" && interaction.user.id !== Util.owner.id)
@@ -30,12 +26,11 @@ export default async function runApplicationCommand(
 
 	if (missingUserPermissions.length && interaction.user.id !== Util.owner.id)
 		return interaction
-			.followUp({
-				content: translations.data.user_missing_permissions(
+			.followUp(
+				translations.strings.user_missing_permissions(
 					missingUserPermissions.join("`, `"),
 				),
-				ephemeral: true,
-			})
+			)
 			.catch(console.error);
 
 	const missingBotPermissions = command.botPermissions.filter(
@@ -47,12 +42,11 @@ export default async function runApplicationCommand(
 
 	if (missingBotPermissions.length)
 		return interaction
-			.followUp({
-				content: translations.data.bot_missing_perms(
+			.followUp(
+				translations.strings.bot_missing_perms(
 					missingBotPermissions.join("`, `"),
 				),
-				ephemeral: true,
-			})
+			)
 			.catch(console.error);
 
 	let cooldownReduction = 0;
@@ -82,13 +76,9 @@ export default async function runApplicationCommand(
 				.replace(/00h |00m /g, "");
 
 			return interaction
-				.followUp({
-					content: translations.data.cooldown(
-						timeLeftHumanized,
-						command.name,
-					),
-					ephemeral: true,
-				})
+				.followUp(
+					translations.strings.cooldown(timeLeftHumanized, command.name),
+				)
 				.catch(console.error);
 		}
 	}
@@ -99,8 +89,8 @@ export default async function runApplicationCommand(
 		cooldownAmount,
 	);
 
-	command.run(interaction, commandTranslations).catch((err) => {
+	command.run(interaction, command.translations.data[language]).catch((err) => {
 		console.error(err);
-		interaction.followUp(translations.data.error()).catch(console.error);
+		interaction.followUp(translations.strings.error()).catch(console.error);
 	});
 }

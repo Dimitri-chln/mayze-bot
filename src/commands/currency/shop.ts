@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { DatabaseUpgrades } from "../../types/structures/Database";
@@ -18,14 +17,12 @@ const command: Command = {
 		fr: [
 			{
 				name: "list",
-				description:
-					"Voir la liste des objets et améliorations disponibles",
+				description: "Voir la liste des objets et améliorations disponibles",
 				type: "SUB_COMMAND",
 			},
 			{
 				name: "buy",
-				description:
-					"Acheter un objet ou une amélioration dans le magasin",
+				description: "Acheter un objet ou une amélioration dans le magasin",
 				type: "SUB_COMMAND",
 				options: [
 					{
@@ -58,8 +55,7 @@ const command: Command = {
 					},
 					{
 						name: "number",
-						description:
-							"Le nombre d'objets ou d'améliorations à acheter",
+						description: "Le nombre d'objets ou d'améliorations à acheter",
 						type: "INTEGER",
 						required: false,
 						minValue: 1,
@@ -144,17 +140,15 @@ const command: Command = {
 		};
 
 		const { rows: upgradesData }: { rows: DatabaseUpgrades[] } =
-			await Util.database.query(
-				"SELECT * FROM upgrades WHERE user_id = $1",
-				[interaction.user.id],
-			);
+			await Util.database.query("SELECT * FROM upgrades WHERE user_id = $1", [
+				interaction.user.id,
+			]);
 
 		const {
 			rows: [money],
-		} = await Util.database.query(
-			"SELECT * FROM currency WHERE user_id = $1",
-			[interaction.user.id],
-		);
+		} = await Util.database.query("SELECT * FROM currency WHERE user_id = $1", [
+			interaction.user.id,
+		]);
 
 		const upgrades = upgradesData[0] ?? {
 			user_id: interaction.user.id,
@@ -173,28 +167,22 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.data.title(),
-								iconURL:
-									interaction.client.user.displayAvatarURL(),
+								name: translations.strings.title(),
+								iconURL: interaction.client.user.displayAvatarURL(),
 							},
 							color: interaction.guild.me.displayColor,
-							title: translations.data.balance(money.money),
+							title: translations.strings.balance(money.money),
 							fields: [
 								{
-									name: translations.data.catch_cooldown_reduction(),
-									value: translations.data.field_cooldown(
+									name: translations.strings.catch_cooldown_reduction(),
+									value: translations.strings.field_cooldown(
 										upgrades.catch_cooldown_reduction.toString(),
 										UPGRADES_BENEFITS.catch_cooldown_reduction(
 											upgrades.catch_cooldown_reduction,
 										).toString(),
+										(Util.commands.get("catch").cooldown / 60).toString(),
 										(
-											Util.commands.get("catch")
-												.cooldown / 60
-										).toString(),
-										(
-											Util.commands.get("catch")
-												.cooldown /
-												60 -
+											Util.commands.get("catch").cooldown / 60 -
 											UPGRADES_BENEFITS.catch_cooldown_reduction(
 												upgrades.catch_cooldown_reduction,
 											)
@@ -207,8 +195,8 @@ const command: Command = {
 									),
 								},
 								{
-									name: translations.data.new_pokemon_probability(),
-									value: translations.data.field(
+									name: translations.strings.new_pokemon_probability(),
+									value: translations.strings.field(
 										upgrades.new_pokemon_probability.toString(),
 										UPGRADES_BENEFITS.new_pokemon_probability(
 											upgrades.new_pokemon_probability,
@@ -221,8 +209,8 @@ const command: Command = {
 									),
 								},
 								{
-									name: translations.data.legendary_ub_probability(),
-									value: translations.data.field(
+									name: translations.strings.legendary_ub_probability(),
+									value: translations.strings.field(
 										upgrades.legendary_ub_probability.toString(),
 										UPGRADES_BENEFITS.legendary_ub_probability(
 											upgrades.legendary_ub_probability,
@@ -235,8 +223,8 @@ const command: Command = {
 									),
 								},
 								{
-									name: translations.data.mega_gem_probability(),
-									value: translations.data.field(
+									name: translations.strings.mega_gem_probability(),
+									value: translations.strings.field(
 										upgrades.mega_gem_probability.toString(),
 										UPGRADES_BENEFITS.mega_gem_probability(
 											upgrades.mega_gem_probability,
@@ -249,8 +237,8 @@ const command: Command = {
 									),
 								},
 								{
-									name: translations.data.shiny_probability(),
-									value: translations.data.field(
+									name: translations.strings.shiny_probability(),
+									value: translations.strings.field(
 										upgrades.shiny_probability.toString(),
 										UPGRADES_BENEFITS.shiny_probability(
 											upgrades.shiny_probability,
@@ -279,21 +267,15 @@ const command: Command = {
 				const upgradeCost = Math.round(
 					(number *
 						(UPGRADES_PRICES[upgrade](upgrades[upgrade]) +
-							UPGRADES_PRICES[upgrade](
-								upgrades[upgrade] + number - 1,
-							))) /
+							UPGRADES_PRICES[upgrade](upgrades[upgrade] + number - 1))) /
 						2,
 				);
 
 				if (money.money < upgradeCost)
-					return interaction.followUp(
-						translations.data.not_enough_money(),
-					);
+					return interaction.followUp(translations.strings.not_enough_money());
 
 				if (upgrades[upgrade] + number > UPGRADES_MAX_TIER[upgrade])
-					return interaction.followUp(
-						translations.data.max_tier_reached(),
-					);
+					return interaction.followUp(translations.strings.max_tier_reached());
 
 				upgrades[upgrade] += number;
 
@@ -318,7 +300,7 @@ const command: Command = {
 				);
 
 				interaction.followUp(
-					translations.data.new_tier(
+					translations.strings.new_tier(
 						upgrades[upgrade],
 						upgradeCost.toString(),
 					),

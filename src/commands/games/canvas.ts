@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import pagination, { Page } from "../../utils/misc/pagination";
@@ -65,8 +64,7 @@ const command: Command = {
 					},
 					{
 						name: "color",
-						description:
-							"La couleur du pixel. Voir /canvas palettes",
+						description: "La couleur du pixel. Voir /canvas palettes",
 						type: "STRING",
 						required: true,
 					},
@@ -93,8 +91,7 @@ const command: Command = {
 					},
 					{
 						name: "color",
-						description:
-							"La couleur du pixel. Voir /canvas palettes",
+						description: "La couleur du pixel. Voir /canvas palettes",
 						type: "STRING",
 						required: true,
 					},
@@ -107,16 +104,14 @@ const command: Command = {
 				options: [
 					{
 						name: "x",
-						description:
-							"L'abscisse du pixel en haut à gauche de l'image",
+						description: "L'abscisse du pixel en haut à gauche de l'image",
 						type: "INTEGER",
 						required: false,
 						minValue: 0,
 					},
 					{
 						name: "y",
-						description:
-							"L'ordonnées du pixel en haut à gauche de l'image",
+						description: "L'ordonnées du pixel en haut à gauche de l'image",
 						type: "INTEGER",
 						required: false,
 						minValue: 0,
@@ -197,8 +192,7 @@ const command: Command = {
 					},
 					{
 						name: "color",
-						description:
-							"The color of the pixel. See /canvas palettes",
+						description: "The color of the pixel. See /canvas palettes",
 						type: "STRING",
 						required: true,
 					},
@@ -225,8 +219,7 @@ const command: Command = {
 					},
 					{
 						name: "color",
-						description:
-							"The color of the pixel. See /canvas palettes",
+						description: "The color of the pixel. See /canvas palettes",
 						type: "STRING",
 						required: true,
 					},
@@ -306,20 +299,16 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.data.title(),
-								iconURL:
-									interaction.client.user.displayAvatarURL(),
+								name: translations.strings.title(),
+								iconURL: interaction.client.user.displayAvatarURL(),
 							},
 							color: interaction.guild.me.displayColor,
 							description: userCanvas
 								.map(
 									(canvas) =>
-										`\`${canvas.name.replace(
-											/-\d{18}/,
-											"",
-										)}\` - **${canvas.size}x${
+										`\`${canvas.name.replace(/-\d{18}/, "")}\` - **${
 											canvas.size
-										}**`,
+										}x${canvas.size}**`,
 								)
 								.join("\n"),
 							footer: {
@@ -340,13 +329,11 @@ const command: Command = {
 				);
 
 				if (!newCanvas)
-					return interaction.followUp(
-						translations.data.invalid_canvas(),
-					);
+					return interaction.followUp(translations.strings.invalid_canvas());
 
 				await newCanvas.addUser(interaction.user);
 
-				interaction.followUp(translations.data.joined(canvasName));
+				interaction.followUp(translations.strings.joined(canvasName));
 				break;
 			}
 
@@ -355,9 +342,7 @@ const command: Command = {
 					c.users.has(interaction.user.id),
 				);
 				if (!canvas)
-					return interaction.followUp(
-						translations.data.not_in_canvas(),
-					);
+					return interaction.followUp(translations.strings.not_in_canvas());
 
 				const pages: Page[] = [];
 
@@ -366,11 +351,10 @@ const command: Command = {
 						embeds: [
 							{
 								author: {
-									name: translations.data.palette_title(),
-									iconURL:
-										interaction.client.user.displayAvatarURL(),
+									name: translations.strings.palette_title(),
+									iconURL: interaction.client.user.displayAvatarURL(),
 								},
-								title: translations.data.palette(name),
+								title: translations.strings.palette(name),
 								color: interaction.guild.me.displayColor,
 								description: palette
 									.all()
@@ -397,24 +381,20 @@ const command: Command = {
 					c.users.has(interaction.user.id),
 				);
 				if (!canvas)
-					return interaction.followUp(
-						translations.data.not_in_canvas(),
-					);
+					return interaction.followUp(translations.strings.not_in_canvas());
 
 				let x = interaction.options.getInteger("x");
 				let y = interaction.options.getInteger("y");
 
 				if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
 					return interaction.followUp(
-						translations.data.invalid_coordinates(),
+						translations.strings.invalid_coordinates(),
 					);
 
 				const colorName = interaction.options.getString("color");
 
 				if (!canvas.palettes.some((palette) => palette.has(colorName)))
-					return interaction.followUp(
-						translations.data.invalid_color(),
-					);
+					return interaction.followUp(translations.strings.invalid_color());
 
 				const color = canvas.palettes
 					.find((palette) => palette.has(colorName))
@@ -435,7 +415,7 @@ const command: Command = {
 								}),
 							},
 							color: interaction.guild.me.displayColor,
-							description: translations.data.pixel_placed(
+							description: translations.strings.pixel_placed(
 								color.emoji.toString(),
 								color.alias,
 							),
@@ -453,23 +433,19 @@ const command: Command = {
 					c.users.has(interaction.user.id),
 				);
 				if (!canvas)
-					return interaction.followUp(
-						translations.data.not_in_canvas(),
-					);
+					return interaction.followUp(translations.strings.not_in_canvas());
 
 				let x = interaction.options.getInteger("x");
 				let y = interaction.options.getInteger("y");
 
 				if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
 					return interaction.followUp(
-						translations.data.invalid_coordinates(),
+						translations.strings.invalid_coordinates(),
 					);
 
 				const colorName = interaction.options.getString("color");
 				if (!canvas.palettes.some((palette) => palette.has(colorName)))
-					return interaction.followUp(
-						translations.data.invalid_color(),
-					);
+					return interaction.followUp(translations.strings.invalid_color());
 				const color = canvas.palettes
 					.find((palette) => palette.has(colorName))
 					.get(colorName);
@@ -487,7 +463,7 @@ const command: Command = {
 								}),
 							},
 							color: interaction.guild.me.displayColor,
-							description: translations.data.placing(
+							description: translations.strings.placing(
 								color.emoji.toString(),
 								color.alias,
 							),
@@ -502,33 +478,71 @@ const command: Command = {
 							components: [
 								{
 									type: "BUTTON",
-									customId: "left",
-									emoji: "⬅️",
+									customId: "top_left",
+									emoji: { id: "829352737946730576", name: "blank" },
 									style: "SECONDARY",
+									disabled: true,
 								},
 								{
 									type: "BUTTON",
 									customId: "up",
 									emoji: "⬆️",
-									style: "SECONDARY",
+									style: "PRIMARY",
 								},
 								{
 									type: "BUTTON",
-									customId: "down",
-									emoji: "⬇️",
+									customId: "top_right",
+									emoji: { id: "829352737946730576", name: "blank" },
 									style: "SECONDARY",
+									disabled: true,
+								},
+							],
+						},
+						{
+							type: "ACTION_ROW",
+							components: [
+								{
+									type: "BUTTON",
+									customId: "left",
+									emoji: "⬅️",
+									style: "PRIMARY",
+								},
+								{
+									type: "BUTTON",
+									customId: "confirm",
+									emoji: Util.config.EMOJIS.check.data,
+									style: "SUCCESS",
 								},
 								{
 									type: "BUTTON",
 									customId: "right",
 									emoji: "➡️",
+									style: "PRIMARY",
+								},
+							],
+						},
+						{
+							type: "ACTION_ROW",
+							components: [
+								{
+									type: "BUTTON",
+									customId: "bottom_right",
+									emoji: { id: "829352737946730576", name: "blank" },
 									style: "SECONDARY",
+									disabled: true,
 								},
 								{
 									type: "BUTTON",
-									customId: "confirm",
-									emoji: "✅",
-									style: "SUCCESS",
+									customId: "down",
+									emoji: "⬇️",
+									style: "PRIMARY",
+								},
+								{
+									type: "BUTTON",
+									customId: "bottom_left",
+									emoji: { id: "829352737946730576", name: "blank" },
+									style: "SECONDARY",
+									disabled: true,
 								},
 							],
 						},
@@ -583,8 +597,8 @@ const command: Command = {
 								components: [
 									{
 										type: "BUTTON",
-										customId: "left",
-										emoji: "⬅️",
+										customId: "top_left",
+										emoji: { id: "829352737946730576", name: "blank" },
 										style: "SECONDARY",
 										disabled: true,
 									},
@@ -592,6 +606,51 @@ const command: Command = {
 										type: "BUTTON",
 										customId: "up",
 										emoji: "⬆️",
+										style: "PRIMARY",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "top_right",
+										emoji: { id: "829352737946730576", name: "blank" },
+										style: "SECONDARY",
+										disabled: true,
+									},
+								],
+							},
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "left",
+										emoji: "⬅️",
+										style: "PRIMARY",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "confirm",
+										emoji: Util.config.EMOJIS.check.data,
+										style: "SUCCESS",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "right",
+										emoji: "➡️",
+										style: "PRIMARY",
+										disabled: true,
+									},
+								],
+							},
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "bottom_right",
+										emoji: { id: "829352737946730576", name: "blank" },
 										style: "SECONDARY",
 										disabled: true,
 									},
@@ -599,21 +658,14 @@ const command: Command = {
 										type: "BUTTON",
 										customId: "down",
 										emoji: "⬇️",
-										style: "SECONDARY",
+										style: "PRIMARY",
 										disabled: true,
 									},
 									{
 										type: "BUTTON",
-										customId: "right",
-										emoji: "➡️",
+										customId: "bottom_left",
+										emoji: { id: "829352737946730576", name: "blank" },
 										style: "SECONDARY",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "confirm",
-										emoji: "✅",
-										style: "SUCCESS",
 										disabled: true,
 									},
 								],
@@ -629,28 +681,19 @@ const command: Command = {
 					c.users.has(interaction.user.id),
 				);
 				if (!canvas)
-					return interaction.followUp(
-						translations.data.not_in_canvas(),
-					);
+					return interaction.followUp(translations.strings.not_in_canvas());
 
 				let x = interaction.options.getInteger("x") ?? 0;
 				let y = interaction.options.getInteger("y") ?? 0;
 
 				if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
 					return interaction.followUp(
-						translations.data.invalid_coordinates(),
+						translations.strings.invalid_coordinates(),
 					);
 
-				const zoom =
-					interaction.options.getInteger("zoom") ?? "default";
-				if (
-					zoom &&
-					zoom !== "default" &&
-					(zoom < 1 || zoom > canvas.size)
-				)
-					return interaction.followUp(
-						translations.data.invalid_zoom(),
-					);
+				const zoom = interaction.options.getInteger("zoom") ?? "default";
+				if (zoom && zoom !== "default" && (zoom < 1 || zoom > canvas.size))
+					return interaction.followUp(translations.strings.invalid_zoom());
 
 				const startLoad = Date.now();
 				const image = await canvas.view(x, y, zoom);
@@ -661,10 +704,8 @@ const command: Command = {
 				interaction.followUp({
 					embeds: [
 						{
-							title: translations.data.view_title(
-								canvas.name.replace(/^./, (a) =>
-									a.toUpperCase(),
-								),
+							title: translations.strings.view_title(
+								canvas.name.replace(/^./, (a) => a.toUpperCase()),
 								canvas.size.toString(),
 								((endLoad - startLoad) / 1000).toString(),
 							),
@@ -690,16 +731,14 @@ const command: Command = {
 					c.users.has(interaction.user.id),
 				);
 				if (!canvas)
-					return interaction.followUp(
-						translations.data.not_in_canvas(),
-					);
+					return interaction.followUp(translations.strings.not_in_canvas());
 
 				let x = interaction.options.getInteger("x");
 				let y = interaction.options.getInteger("y");
 
 				if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
 					return interaction.followUp(
-						translations.data.invalid_coordinates(),
+						translations.strings.invalid_coordinates(),
 					);
 
 				let grid = await canvas.viewGrid(x, y);
@@ -726,27 +765,72 @@ const command: Command = {
 							components: [
 								{
 									type: "BUTTON",
-									customId: "left",
-									emoji: "⬅️",
+									customId: "top_left",
+									emoji: { id: "829352737946730576", name: "blank" },
 									style: "SECONDARY",
+									disabled: true,
 								},
 								{
 									type: "BUTTON",
 									customId: "up",
 									emoji: "⬆️",
-									style: "SECONDARY",
+									style: "PRIMARY",
 								},
 								{
 									type: "BUTTON",
-									customId: "down",
-									emoji: "⬇️",
+									customId: "top_right",
+									emoji: { id: "829352737946730576", name: "blank" },
 									style: "SECONDARY",
+									disabled: true,
+								},
+							],
+						},
+						{
+							type: "ACTION_ROW",
+							components: [
+								{
+									type: "BUTTON",
+									customId: "left",
+									emoji: "⬅️",
+									style: "PRIMARY",
+								},
+								{
+									type: "BUTTON",
+									customId: "middle",
+									emoji: { id: "829352737946730576", name: "blank" },
+									style: "SECONDARY",
+									disabled: true,
 								},
 								{
 									type: "BUTTON",
 									customId: "right",
 									emoji: "➡️",
+									style: "PRIMARY",
+								},
+							],
+						},
+						{
+							type: "ACTION_ROW",
+							components: [
+								{
+									type: "BUTTON",
+									customId: "bottom_right",
+									emoji: { id: "829352737946730576", name: "blank" },
 									style: "SECONDARY",
+									disabled: true,
+								},
+								{
+									type: "BUTTON",
+									customId: "down",
+									emoji: "⬇️",
+									style: "PRIMARY",
+								},
+								{
+									type: "BUTTON",
+									customId: "bottom_left",
+									emoji: { id: "829352737946730576", name: "blank" },
+									style: "SECONDARY",
+									disabled: true,
 								},
 							],
 						},
@@ -798,8 +882,8 @@ const command: Command = {
 								components: [
 									{
 										type: "BUTTON",
-										customId: "left",
-										emoji: "⬅️",
+										customId: "top_left",
+										emoji: { id: "829352737946730576", name: "blank" },
 										style: "SECONDARY",
 										disabled: true,
 									},
@@ -807,13 +891,32 @@ const command: Command = {
 										type: "BUTTON",
 										customId: "up",
 										emoji: "⬆️",
-										style: "SECONDARY",
+										style: "PRIMARY",
 										disabled: true,
 									},
 									{
 										type: "BUTTON",
-										customId: "down",
-										emoji: "⬇️",
+										customId: "top_right",
+										emoji: { id: "829352737946730576", name: "blank" },
+										style: "SECONDARY",
+										disabled: true,
+									},
+								],
+							},
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "left",
+										emoji: "⬅️",
+										style: "PRIMARY",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "middle",
+										emoji: { id: "829352737946730576", name: "blank" },
 										style: "SECONDARY",
 										disabled: true,
 									},
@@ -821,6 +924,32 @@ const command: Command = {
 										type: "BUTTON",
 										customId: "right",
 										emoji: "➡️",
+										style: "PRIMARY",
+										disabled: true,
+									},
+								],
+							},
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "bottom_right",
+										emoji: { id: "829352737946730576", name: "blank" },
+										style: "SECONDARY",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "down",
+										emoji: "⬇️",
+										style: "PRIMARY",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "bottom_left",
+										emoji: { id: "829352737946730576", name: "blank" },
 										style: "SECONDARY",
 										disabled: true,
 									},

@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { Role } from "discord.js";
@@ -43,16 +42,19 @@ const command: Command = {
 				{
 					author: {
 						name: role.name,
-						iconURL: `https://dummyimage.com/50/${role.hexColor}/${role.hexColor}.png?text=+`,
+						iconURL: `https://dummyimage.com/50/${role.hexColor.replace(
+							"#",
+							"",
+						)}/${role.hexColor.replace("#", "")}.png?text=%20`,
 					},
 					color: interaction.guild.me.displayColor,
-					description: translations.data.description(
+					description: translations.strings.description(
 						role.id,
 						role.color.toString(),
 						role.hexColor,
 						role.position.toString(),
 						roleMembers.length.toString(),
-						roleMembers.join(", ") ?? " ",
+						roleMembers.length ? roleMembers.join(", ") : "∅",
 					),
 					footer: {
 						text: "✨ Mayze ✨",

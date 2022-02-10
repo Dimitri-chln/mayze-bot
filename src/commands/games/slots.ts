@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import {
@@ -38,7 +37,7 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name: translations.data.title(),
+						name: translations.strings.title(),
 						iconURL: interaction.user.displayAvatarURL({
 							dynamic: true,
 						}),
@@ -56,18 +55,14 @@ const command: Command = {
 		setTimeout(() => {
 			interaction.editReply({
 				embeds: [
-					reply.embeds[0].setDescription(
-						randomSlot() + SPINNING + SPINNING,
-					),
+					reply.embeds[0].setDescription(randomSlot() + SPINNING + SPINNING),
 				],
 			});
 
 			setTimeout(() => {
 				interaction.editReply({
 					embeds: [
-						reply.embeds[0].setDescription(
-							result[0] + randomSlot() + SPINNING,
-						),
+						reply.embeds[0].setDescription(result[0] + randomSlot() + SPINNING),
 					],
 				});
 
@@ -81,65 +76,47 @@ const command: Command = {
 					});
 
 					setTimeout(async () => {
-						if (result[0] !== result[1] || result[1] !== result[2])
-							return;
+						if (result[0] !== result[1] || result[1] !== result[2]) return;
 
 						switch (result[0]) {
 							case "🥊": {
 								if (
-									(interaction.member as GuildMember).roles
-										.highest.position >=
+									(interaction.member as GuildMember).roles.highest.position >=
 									interaction.guild.me.roles.highest.position
 								)
 									return;
-								if (
-									(interaction.member as GuildMember)
-										.premiumSinceTimestamp
-								)
+								if ((interaction.member as GuildMember).premiumSinceTimestamp)
 									return;
 
 								(interaction.member as GuildMember).kick(
-									translations.data.reason(),
+									translations.strings.reason(),
 								);
 								break;
 							}
 
 							case "⛓️": {
+								if (interaction.channel.id === "695934227140837386") return;
 								if (
-									interaction.channel.id ===
-									"695934227140837386"
-								)
-									return;
-								if (
-									(interaction.member as GuildMember).roles
-										.highest.position >=
+									(interaction.member as GuildMember).roles.highest.position >=
 									interaction.guild.me.roles.highest.position
 								)
 									return;
 
 								const jailedRole =
-									interaction.guild.roles.cache.get(
-										"695943648235487263",
-									);
+									interaction.guild.roles.cache.get("695943648235487263");
 								const unJailedRoles = (
 									interaction.member as GuildMember
 								).roles.cache.filter((role) =>
 									interaction.guild.roles.cache.some(
-										(r) =>
-											r.name === role.name + " (Jailed)",
+										(r) => r.name === role.name + " (Jailed)",
 									),
 								);
-								const jailedRoles =
-									interaction.guild.roles.cache.filter(
-										(role) =>
-											(
-												interaction.member as GuildMember
-											).roles.cache.some(
-												(r) =>
-													role.name ===
-													r.name + " (Jailed)",
-											),
-									);
+								const jailedRoles = interaction.guild.roles.cache.filter(
+									(role) =>
+										(interaction.member as GuildMember).roles.cache.some(
+											(r) => role.name === r.name + " (Jailed)",
+										),
+								);
 								jailedRoles.set(jailedRole.id, jailedRole);
 
 								await (interaction.member as GuildMember).roles
@@ -153,41 +130,34 @@ const command: Command = {
 
 							case "🔇": {
 								if (
-									(interaction.member as GuildMember).roles
-										.highest.position >=
+									(interaction.member as GuildMember).roles.highest.position >=
 									interaction.guild.me.roles.highest.position
 								)
 									return;
 
-								const duration =
-									Math.ceil(Math.random() * 10) * 60 * 1000;
+								const duration = Math.ceil(Math.random() * 10) * 60 * 1000;
 								(interaction.member as GuildMember).timeout(
 									duration,
-									translations.data.reason(),
+									translations.strings.reason(),
 								);
 								break;
 							}
 
 							case "🏓": {
-								interaction.followUp(
-									translations.data.spam_ping(),
-								);
+								interaction.followUp(translations.strings.spam_ping());
 
-								const filter: CollectorFilter<[Message]> = (
-									msg,
-								) =>
+								const filter: CollectorFilter<[Message]> = (msg) =>
 									msg.author.id === interaction.user.id &&
 									msg.mentions.users.size > 0;
-								const collected =
-									await interaction.channel.awaitMessages({
-										filter,
-										max: 1,
-										time: 120_000,
-									});
+								const collected = await interaction.channel.awaitMessages({
+									filter,
+									max: 1,
+									time: 120_000,
+								});
 
 								if (!collected || !collected.size)
 									return interaction.followUp({
-										content: translations.data.too_late(),
+										content: translations.strings.too_late(),
 										ephemeral: true,
 									});
 
@@ -198,10 +168,7 @@ const command: Command = {
 										new Promise((resolve, reject) => {
 											interaction.channel
 												.send(
-													collected
-														.first()
-														.mentions.users.first()
-														.toString(),
+													collected.first().mentions.users.first().toString(),
 												)
 												.then((msg) => resolve(msg))
 												.catch(() => resolve(null));
@@ -210,50 +177,40 @@ const command: Command = {
 								}
 
 								(interaction.channel as TextChannel).bulkDelete(
-									(await Promise.all(messages)).filter(
-										(msg) => msg,
-									),
+									(await Promise.all(messages)).filter((msg) => msg),
 									true,
 								);
 								break;
 							}
 
 							case "🔒": {
-								interaction.followUp(
-									translations.data.timeout(),
-								);
+								interaction.followUp(translations.strings.timeout());
 
-								const filter: CollectorFilter<[Message]> = (
-									msg,
-								) =>
+								const filter: CollectorFilter<[Message]> = (msg) =>
 									msg.author.id === interaction.user.id &&
 									msg.mentions.users.size > 0;
-								const collected =
-									await interaction.channel.awaitMessages({
-										filter,
-										max: 1,
-										time: 120_000,
-									});
+								const collected = await interaction.channel.awaitMessages({
+									filter,
+									max: 1,
+									time: 120_000,
+								});
 
 								if (!collected || !collected.size)
 									return interaction.followUp({
-										content: translations.data.too_late(),
+										content: translations.strings.too_late(),
 										ephemeral: true,
 									});
 
 								interaction.guild.members.cache
-									.get(
-										collected.first().mentions.users.first()
-											.id,
-									)
+									.get(collected.first().mentions.users.first().id)
 									.timeout(120_000);
 								break;
 							}
 						}
-					}, 2000);
-				}, 2000);
-			}, 2000);
-		}, 2000);
+					}, 2_000);
+				}, 2_000);
+			}, 2_000);
+		}, 2_000);
 
 		function randomSlot() {
 			const random = SLOTS[Math.floor(Math.random() * SLOTS.length)];

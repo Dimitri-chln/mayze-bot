@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { GuildMember } from "discord.js";
@@ -58,31 +57,26 @@ const command: Command = {
 				(interaction.member as GuildMember).roles.highest.position &&
 			interaction.user.id !== Util.owner.id
 		)
-			return interaction.followUp({
-				content: translations.data.not_allowed(),
-				ephemeral: true,
-			});
+			return interaction.followUp(translations.strings.not_allowed());
 
 		// Server booster
 		if (member.premiumSinceTimestamp)
-			return interaction.followUp({
-				content: translations.data.boosting(),
-				ephemeral: true,
-			});
+			return interaction.followUp(
+				translations.strings.boosting(member.user.tag),
+			);
 
 		if (
 			member.roles.highest.position >=
 			interaction.guild.me.roles.highest.position
 		)
-			return interaction.followUp({
-				content: translations.data.too_high_hierarchy(member.user.tag),
-				ephemeral: true,
-			});
+			return interaction.followUp(
+				translations.strings.too_high_hierarchy(member.user.tag),
+			);
 
 		member
-			.kick(translations.data.reason(interaction.user.tag, reason))
+			.kick(translations.strings.reason(interaction.user.tag, reason))
 			.then((m) => {
-				interaction.followUp(translations.data.kicked(m.user.tag));
+				interaction.followUp(translations.strings.kicked(m.user.tag));
 			});
 	},
 };

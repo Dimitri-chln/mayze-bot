@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 const command: Command = {
@@ -66,9 +65,12 @@ const command: Command = {
 			[interaction.guild.id, newLanguage],
 		);
 
-		Util.languages.set(interaction.guild.id, newLanguage);
+		Util.guildConfigs.set(interaction.guild.id, {
+			...Util.guildConfigs.get(interaction.guild.id),
+			language: newLanguage
+		});
 
-		interaction.followUp(translations.data.language_updated());
+		interaction.followUp(translations.strings.language_updated());
 	},
 };
 

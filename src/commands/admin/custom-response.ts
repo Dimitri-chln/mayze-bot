@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { DatabaseCustomResponse } from "../../types/structures/Database";
@@ -79,8 +78,7 @@ const command: Command = {
 			},
 			{
 				name: "get",
-				description:
-					"Obtenir la liste de toutes les réponses personnalisées",
+				description: "Obtenir la liste de toutes les réponses personnalisées",
 				type: "SUB_COMMAND",
 			},
 		],
@@ -158,7 +156,7 @@ const command: Command = {
 		const subCommand = interaction.options.getSubcommand();
 
 		const { rows: responses }: { rows: DatabaseCustomResponse[] } =
-			await Util.database.query("SELECT * FROM custom_responses");
+			await Util.database.query("SELECT * FROM custom_response");
 
 		switch (subCommand) {
 			case "add": {
@@ -167,11 +165,11 @@ const command: Command = {
 				const triggerType = interaction.options.getInteger("type") ?? 0;
 
 				await Util.database.query(
-					"INSERT INTO custom_responses (trigger, response, trigger_type) VALUES ($1, $2, $3)",
+					"INSERT INTO custom_response (trigger, response, trigger_type) VALUES ($1, $2, $3)",
 					[trigger, response, triggerType],
 				);
 
-				interaction.followUp(translations.data.response_added());
+				interaction.followUp(translations.strings.response_added());
 				break;
 			}
 
@@ -180,19 +178,16 @@ const command: Command = {
 
 				if (number < 1 || number > responses.length)
 					return interaction.followUp(
-						translations.data.invalid_number(
-							responses.length.toString(),
-						),
+						translations.strings.invalid_number(responses.length.toString()),
 					);
 
 				const response = responses[number - 1];
 
-				await Util.database.query(
-					"DELETE FROM custom_responses WHERE id = $1",
-					[response.id],
-				);
+				await Util.database.query("DELETE FROM custom_response WHERE id = $1", [
+					response.id,
+				]);
 
-				interaction.followUp(translations.data.response_removed());
+				interaction.followUp(translations.strings.response_removed());
 				break;
 			}
 
@@ -201,21 +196,18 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.data.title(),
-								iconURL:
-									interaction.client.user.displayAvatarURL(),
+								name: translations.strings.title(),
+								iconURL: interaction.client.user.displayAvatarURL(),
 							},
 							color: interaction.guild.me.displayColor,
 							description: responses
 								.map(
 									(response, i) =>
 										`\`${i + 1}.\` ${
-											translations.data.trigger_types()[
+											translations.strings.trigger_types()[
 												response.trigger_type
 											]
-										} \`${response.trigger}\`\n\t→ \`${
-											response.response
-										}\``,
+										} \`${response.trigger}\`\n\t→ \`${response.response}\``,
 								)
 								.join("\n"),
 							footer: {

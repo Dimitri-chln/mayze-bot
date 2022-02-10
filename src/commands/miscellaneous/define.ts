@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Axios from "axios";
@@ -78,9 +77,7 @@ const command: Command = {
 					`__**${data[0].word.replace(/^./, (a: string) =>
 						a.toUpperCase(),
 					)}**__: ${
-						data[0].phonetics[0].text
-							? `(${data[0].phonetics[0].text})`
-							: ""
+						data[0].phonetics[0].text ? `(${data[0].phonetics[0].text})` : ""
 					}\n${data[0].meanings
 						.map(
 							(meaning) =>
@@ -89,7 +86,7 @@ const command: Command = {
 								)}:__ ${meaning.definitions[0].definition}${
 									meaning.definitions[0].synonyms &&
 									meaning.definitions[0].synonyms.length
-										? `\n*${translations.data.synonyms()}: ${meaning.definitions[0].synonyms.join(
+										? `\n*${translations.strings.synonyms()}: ${meaning.definitions[0].synonyms.join(
 												", ",
 										  )}*`
 										: ""
@@ -103,9 +100,7 @@ const command: Command = {
 					err.response.data.title &&
 					err.response.data.title === "No Definitions Found"
 				)
-					return interaction.followUp(
-						translations.data.invalid_word(),
-					);
+					return interaction.followUp(translations.strings.invalid_word());
 
 				console.error(err);
 			});

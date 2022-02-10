@@ -2,7 +2,7 @@ import { Language } from "../../types/structures/Translations";
 
 export default function formatTime(
 	milliseconds: number,
-	language: Language = "en",
+	language: Language = "fr",
 ) {
 	const MS_IN_SECOND = 1000;
 	const MS_IN_MINUTE = 1000 * 60;

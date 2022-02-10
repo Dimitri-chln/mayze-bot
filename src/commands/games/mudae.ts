@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { DatabaseWish } from "../../types/structures/Database";
@@ -28,8 +27,7 @@ const command: Command = {
 						options: [
 							{
 								name: "user",
-								description:
-									"L'utilisateur dont tu veux voir la liste de wish",
+								description: "L'utilisateur dont tu veux voir la liste de wish",
 								type: "USER",
 								required: false,
 							},
@@ -64,8 +62,7 @@ const command: Command = {
 					},
 					{
 						name: "remove",
-						description:
-							"Retirer un wish de ta liste de wish Mudae",
+						description: "Retirer un wish de ta liste de wish Mudae",
 						type: "SUB_COMMAND",
 						options: [
 							{
@@ -92,8 +89,7 @@ const command: Command = {
 						options: [
 							{
 								name: "user",
-								description:
-									"The user whose wishlist you want to see",
+								description: "The user whose wishlist you want to see",
 								type: "USER",
 								required: false,
 							},
@@ -119,8 +115,7 @@ const command: Command = {
 							},
 							{
 								name: "regex",
-								description:
-									"A regex to match alternative names as well",
+								description: "A regex to match alternative names as well",
 								type: "STRING",
 								required: false,
 							},
@@ -133,8 +128,7 @@ const command: Command = {
 						options: [
 							{
 								name: "series",
-								description:
-									"The number of the series to remove",
+								description: "The number of the series to remove",
 								type: "INTEGER",
 								required: true,
 							},
@@ -148,7 +142,7 @@ const command: Command = {
 	run: async (interaction, translations) => {
 		if (!interaction.guild.members.cache.has("432610292342587392"))
 			return interaction.followUp({
-				content: translations.data.mudae_missing(),
+				content: translations.strings.mudae_missing(),
 				ephemeral: true,
 			});
 
@@ -161,15 +155,14 @@ const command: Command = {
 				switch (subCommand) {
 					case "list": {
 						const user =
-							interaction.options.getUser("user") ??
-							interaction.user;
+							interaction.options.getUser("user") ?? interaction.user;
 						const displayRegex = Boolean(
 							interaction.options.getBoolean("regex"),
 						);
 
 						const { rows: wishlist }: { rows: DatabaseWish[] } =
 							await Util.database.query(
-								"SELECT * FROM wishes WHERE user_id = $1 ORDER BY id",
+								"SELECT * FROM mudae_wish WHERE user_id = $1 ORDER BY id",
 								[interaction.user.id],
 							);
 
@@ -177,7 +170,7 @@ const command: Command = {
 							embeds: [
 								{
 									author: {
-										name: translations.data.title(user.tag),
+										name: translations.strings.title(user.tag),
 										iconURL: user.displayAvatarURL({
 											dynamic: true,
 										}),
@@ -190,15 +183,12 @@ const command: Command = {
 													`\`${i + 1}.\` ${w.series}${
 														displayRegex
 															? ` - *${
-																	w.regex
-																		? w.regex
-																		: w.series.toLowerCase()
+																	w.regex ? w.regex : w.series.toLowerCase()
 															  }*`
 															: ""
 													}`,
 											)
-											.join("\n") ??
-										translations.data.no_wish(),
+											.join("\n") ?? translations.strings.no_wish(),
 									footer: {
 										text: "✨ Mayze ✨",
 									},
@@ -213,11 +203,11 @@ const command: Command = {
 						const regex = interaction.options.getString("regex");
 
 						await Util.database.query(
-							"INSERT INTO wishes (user_id, series, regex) VALUES ($1, $2, $3)",
+							"INSERT INTO mudae_wish (user_id, series, regex) VALUES ($1, $2, $3)",
 							[interaction.user.id, series, regex],
 						);
 
-						interaction.followUp(translations.data.added());
+						interaction.followUp(translations.strings.added());
 						break;
 					}
 
@@ -226,16 +216,15 @@ const command: Command = {
 
 						const { rows: wishlist }: { rows: DatabaseWish[] } =
 							await Util.database.query(
-								"SELECT * FROM wishes WHERE user_id = $1 ORDER BY id",
+								"SELECT * FROM mudae_wish WHERE user_id = $1 ORDER BY id",
 								[interaction.user.id],
 							);
 
-						await Util.database.query(
-							"DELETE FROM wishes WHERE id = $1",
-							[wishlist[series - 1].id],
-						);
+						await Util.database.query("DELETE FROM mudae_wish WHERE id = $1", [
+							wishlist[series - 1].id,
+						]);
 
-						interaction.followUp(translations.data.removed());
+						interaction.followUp(translations.strings.removed());
 						break;
 					}
 				}

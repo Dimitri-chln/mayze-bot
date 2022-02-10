@@ -97,7 +97,7 @@ const command = {
 			? args[1]
 			: options[0].options ? options[0].options[0].value : null;
 		
-		const { "rows": playlists } = (await message.client.database.query(`SELECT * FROM playlists WHERE NOT private OR user_id = '${message.author.id}'`).catch(console.error)) || {};
+		const { "rows": playlists } = (await message.client.database.query(`SELECT * FROM playlist WHERE NOT private OR user_id = '${message.author.id}'`).catch(console.error)) || {};
 		if (!playlists) return message.channel.send(language.errors.database).catch(console.error);
 		
 		switch (subCommand) {
@@ -144,7 +144,7 @@ const command = {
 				break;
 			}
 			case "add": {
-				const { rows } = (await message.client.database.query(`SELECT * FROM playlists WHERE name = '${playlistName}'`).catch(console.error)) || {};
+				const { rows } = (await message.client.database.query(`SELECT * FROM playlist WHERE name = '${playlistName}'`).catch(console.error)) || {};
 				if (!rows) return message.channel.send(language.errors.database).catch(console.error);
 				if (rows.length) return message.reply(language.playlist_already_exists).catch(console.error);
 
@@ -176,7 +176,7 @@ const command = {
 					? args.includes("-private")
 					:  options[0].options[2] ? options[0].options[2].value : false;
 
-				const res = await message.client.database.query(`INSERT INTO playlists VALUES ('${playlistName}', '${url}', '${message.author.id}', ${private})`).catch(console.error);
+				const res = await message.client.database.query(`INSERT INTO playlist VALUES ('${playlistName}', '${url}', '${message.author.id}', ${private})`).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 
 				message.channel.send(language.playlist_created).catch(console.error);
@@ -185,7 +185,7 @@ const command = {
 			case "remove": {
 				if (!playlistName) return message.reply(language.missing_name).catch(console.error);
 
-				const res = await message.client.database.query(`DELETE FROM playlists WHERE user_id = '${message.author.id}' AND name = '${playlistName}'`).catch(console.error);
+				const res = await message.client.database.query(`DELETE FROM playlist WHERE user_id = '${message.author.id}' AND name = '${playlistName}'`).catch(console.error);
 				if (!res) return message.channel.send(language.errors.database).catch(console.error);
 
 				message.channel.send(language.playlist_deleted).catch(console.error);

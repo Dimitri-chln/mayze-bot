@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import pagination, { Page } from "../../utils/misc/pagination";
@@ -31,7 +30,7 @@ const command: Command = {
 			serverIPs.map(async (serverIP) => {
 				const page: Page = {
 					embeds: [],
-					attachments: [],
+					files: [],
 				};
 
 				try {
@@ -43,14 +42,14 @@ const command: Command = {
 
 					page.embeds.push({
 						author: {
-							name: translations.data.title(),
+							name: translations.strings.title(),
 							iconURL: interaction.client.user.displayAvatarURL(),
 						},
 						thumbnail: {
 							url: "attachment://favicon.png",
 						},
 						color: interaction.guild.me.displayColor,
-						description: translations.data.description(
+						description: translations.strings.description(
 							serverIP,
 							isOnline(res),
 							res.version.name,
@@ -63,7 +62,7 @@ const command: Command = {
 						},
 					});
 
-					page.attachments.push(
+					page.files.push(
 						new MessageAttachment(
 							Buffer.from(res.favicon.slice(22), "base64"),
 							"favicon.png",
@@ -72,11 +71,10 @@ const command: Command = {
 				} catch (err) {
 					page.embeds.push({
 						author: {
-							name: translations.data.title(),
+							name: translations.strings.title(),
 						},
 						color: interaction.guild.me.displayColor,
-						description:
-							translations.data.failed_description(serverIP),
+						description: translations.strings.failed_description(serverIP),
 						footer: {
 							text: "✨ Mayze ✨",
 						},

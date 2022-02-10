@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 const command: Command = {
@@ -16,8 +15,7 @@ const command: Command = {
 		fr: [
 			{
 				name: "user",
-				description:
-					"L'utilisateur dont tu veux voir la photo de profil",
+				description: "L'utilisateur dont tu veux voir la photo de profil",
 				type: "USER",
 				required: false,
 			},
@@ -39,7 +37,7 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name: translations.data.title(user.tag),
+						name: translations.strings.title(user.tag),
 						iconURL: interaction.client.user.displayAvatarURL(),
 					},
 					color: interaction.guild.me.displayColor,

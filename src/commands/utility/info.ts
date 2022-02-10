@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 const command: Command = {
@@ -25,11 +24,13 @@ const command: Command = {
 						name: interaction.client.user.username,
 						iconURL: interaction.client.user.displayAvatarURL(),
 					},
-					title: translations.data.title(),
+					title: translations.strings.title(),
 					color: interaction.guild.me.displayColor,
-					description: translations.data.description(
+					description: translations.strings.description(
 						Util.owner.tag,
-						Math.round(interaction.client.uptime / 1000).toString(),
+						Math.round(
+							(Date.now() - interaction.client.uptime) / 1000,
+						).toString(),
 					),
 					footer: {
 						text: "✨ Mayze ✨",

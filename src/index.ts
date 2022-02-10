@@ -14,7 +14,7 @@ import Translations from "./types/structures/Translations";
 
 import Command from "./types/structures/Command";
 import MessageResponse from "./types/structures/MessageResponse";
-import reactionCommand from "./types/structures/ReactionCommand";
+import ReactionCommand from "./types/structures/ReactionCommand";
 import Color from "./types/canvas/Color";
 import Palette from "./types/canvas/Palette";
 import Canvas from "./types/canvas/Canvas";
@@ -22,7 +22,12 @@ import runApplicationCommand from "./utils/misc/runApplicationCommand";
 import getLevel from "./utils/misc/getLevel";
 import MusicPlayer from "./utils/music/MusicPlayer";
 import MusicUtil from "./utils/music/MusicUtil";
-import { DatabaseColor, DatabaseReminder } from "./types/structures/Database";
+import {
+	DatabaseColor,
+	DatabaseGuildConfig,
+	DatabaseLevel,
+	DatabaseReminder,
+} from "./types/structures/Database";
 
 const intents = new Discord.Intents([
 	Discord.Intents.FLAGS.DIRECT_MESSAGES,
@@ -50,47 +55,28 @@ const client = new Discord.Client({
 	partials: ["MESSAGE", "CHANNEL", "REACTION"],
 });
 
-function newDatabaseClient(): Pg.Client {
-	const connectionString = {
+(async function connectDatabase() {
+	const connectionString: Pg.ClientConfig = {
 		connectionString: process.env.DATABASE_URL,
 		ssl: process.env.ENVIRONMENT === "PRODUCTION",
 	};
 
-	const database = new Pg.Client(connectionString);
+	Util.database = new Pg.Client(connectionString);
 
-	database.on("error", (err) => {
+	Util.database.on("error", (err) => {
 		console.error(err);
-		database.end().catch(console.error);
-		newDatabaseClient();
+		Util.database.end().then(connectDatabase).catch(console.error);
 	});
 
-	return database;
-}
-
-function reconnectDatabase(database: Pg.Client) {
-	database.end().catch(console.error);
-	database = newDatabaseClient();
-	database
+	Util.database
 		.connect()
-		.then(() => {
-			console.log("Connected to the database");
-		})
+		.then(() => console.log("Connected to the database"))
 		.catch(console.error);
-}
 
-Util.database = newDatabaseClient();
-
-Util.database.connect().then(() => {
-	console.log("Connected to the database");
-
-	Util.database.query("SELECT * FROM languages").then((res) => {
-		for (const row of res.rows) {
-			Util.languages.set(row.guild_id, row.language_code);
-		}
-	});
-});
-
-setInterval(() => reconnectDatabase(Util.database), 3600000);
+	setTimeout(() => {
+		Util.database.end().then(connectDatabase).catch(console.error);
+	}, 3_600_000); // 1 hour
+})();
 
 const directories = Fs.readdirSync(Path.resolve(__dirname, "commands"), {
 	withFileTypes: true,
@@ -103,31 +89,50 @@ for (const directory of directories) {
 		Path.resolve(__dirname, "commands", directory),
 	).filter((file) => file.endsWith(".js"));
 
-	for (const file of commandFiles) {
+	commandFiles.forEach(async (file) => {
 		const path = Path.resolve(__dirname, "commands", directory, file);
 		const command: Command = require(path).default ?? require(path);
+
 		command.category = directory;
 		command.path = path;
 		command.cooldowns = new Discord.Collection();
+		command.translations = await new Translations(`cmd_${command.name}`).init();
+
 		Util.commands.set(command.name, command);
-	}
+	});
 }
 
-// const messageResponseFiles = Fs.readdirSync(Path.resolve(__dirname, "responses"))
-// 	.filter(file => file.endsWith(".js"));
+const messageResponseFiles = Fs.readdirSync(
+	Path.resolve(__dirname, "responses"),
+).filter((file) => file.endsWith(".js"));
 
-// for (const file of messageResponseFiles) {
-// 	const messageResponse: MessageResponse = require(Path.resolve(__dirname, "responses", file));
-// 	Util.messageResponses.push(messageResponse);
-// }
+messageResponseFiles.forEach(async (file) => {
+	const messageResponse: MessageResponse =
+		require(Path.resolve(__dirname, "responses", file)).default ??
+		require(Path.resolve(__dirname, "responses", file));
 
-// const reactionCommandsFiles = Fs.readdirSync(Path.resolve(__dirname, "reaction_commands"))
-// 	.filter(file => file.endsWith(".js"));
+	messageResponse.translations = await new Translations(
+		`resp_${messageResponse.name}`,
+	).init();
 
-// for (const file of reactionCommandsFiles) {
-// 	const reactionCommand: reactionCommand = require(Path.resolve(__dirname, "reaction_commands", file));
-// 	Util.reactionCommands.push(reactionCommand);
-// }
+	Util.messageResponses.push(messageResponse);
+});
+
+const reactionCommandsFiles = Fs.readdirSync(
+	Path.resolve(__dirname, "reaction_commands"),
+).filter((file) => file.endsWith(".js"));
+
+reactionCommandsFiles.forEach(async (file) => {
+	const reactionCommand: ReactionCommand =
+		require(Path.resolve(__dirname, "reaction_commands", file)).default ??
+		require(Path.resolve(__dirname, "reaction_commands", file));
+
+	reactionCommand.translations = await new Translations(
+		`reac_${reactionCommand.name}`,
+	).init();
+
+	Util.reactionCommands.push(reactionCommand);
+});
 
 client.on("ready", async () => {
 	console.log("Connected to Discord");
@@ -145,8 +150,8 @@ client.on("ready", async () => {
 						name: "Mayze is starting...",
 						iconURL: client.user.displayAvatarURL(),
 					},
-					color: 65793,
-					description: `• **Ping:** \`${client.ws.ping}\``,
+					color: 0x010101,
+					description: `• **Ping:** \`${client.ws.ping}\`ms`,
 					footer: {
 						text: "✨ Mayze ✨",
 					},
@@ -161,21 +166,30 @@ client.on("ready", async () => {
 		.then((owner: Discord.User) => (Util.owner = owner))
 		.catch(console.error);
 
-	console.log("Fetching all global application commands");
+	// Guild configs
+	const { rows: guildConfigs }: { rows: DatabaseGuildConfig[] } =
+		await Util.database.query("SELECT * FROM guild_config");
+	for (const guildConfig of guildConfigs) {
+		Util.guildConfigs.set(guildConfig.guild_id, {
+			language: guildConfig.language,
+			webhookId: guildConfig.webhook_id,
+		});
+	}
+
+	console.log("Fetching global and admin application commands");
 	await client.application.commands.fetch();
-	console.log("Fetching all admin application commands");
 	await client.guilds.cache.get(Util.config.ADMIN_GUILD_ID).commands.fetch();
+	console.log("Fetched all global and admin application commands successfully");
 
 	// Slash commands
 	await Promise.all(
 		Util.commands.map(async (command) => {
-			const applicationCommandData: Discord.ChatInputApplicationCommandData =
-				{
-					type: "CHAT_INPUT",
-					name: command.name,
-					description: command.description.en,
-					options: command.options.en,
-				};
+			const applicationCommandData: Discord.ChatInputApplicationCommandData = {
+				type: "CHAT_INPUT",
+				name: command.name,
+				description: command.description.en,
+				options: command.options.en,
+			};
 
 			// Admin commands
 			if (command.category === "admin") {
@@ -195,12 +209,11 @@ client.on("ready", async () => {
 						console.log(
 							`Editing the admin application command /${applicationCommandData.name}`,
 						);
-						newApplicationCommand =
-							await client.application.commands.edit(
-								applicationCommand.id,
-								applicationCommandData,
-								Util.config.ADMIN_GUILD_ID,
-							);
+						newApplicationCommand = await client.application.commands.edit(
+							applicationCommand.id,
+							applicationCommandData,
+							Util.config.ADMIN_GUILD_ID,
+						);
 						newApplicationCommand.permissions.set({
 							permissions: [
 								{
@@ -219,11 +232,10 @@ client.on("ready", async () => {
 						console.log(
 							`Creating the admin application command /${applicationCommandData.name}`,
 						);
-						newApplicationCommand =
-							await client.application.commands.create(
-								applicationCommandData,
-								Util.config.ADMIN_GUILD_ID,
-							);
+						newApplicationCommand = await client.application.commands.create(
+							applicationCommandData,
+							Util.config.ADMIN_GUILD_ID,
+						);
 						newApplicationCommand.permissions.set({
 							permissions: [
 								{
@@ -252,8 +264,7 @@ client.on("ready", async () => {
 						const applicationCommand = client.guilds.cache
 							.get(guildId)
 							.commands.cache.find(
-								(cmd) =>
-									cmd.name === applicationCommandData.name,
+								(cmd) => cmd.name === applicationCommandData.name,
 							);
 
 						if (
@@ -264,29 +275,23 @@ client.on("ready", async () => {
 								`Editing the application command /${applicationCommandData.name} in the guild: ${guildId}`,
 							);
 							applicationCommandData.description =
-								command.description[
-									Util.languages.get(guildId)
-								] ?? command.description.en;
+								command.description[Util.guildConfigs.get(guildId).language] ??
+								command.description.en;
 							applicationCommandData.options =
-								command.options[Util.languages.get(guildId)] ??
+								command.options[Util.guildConfigs.get(guildId).language] ??
 								command.options.en;
 							client.application.commands
-								.edit(
-									applicationCommand.id,
-									applicationCommandData,
-									guildId,
-								)
+								.edit(applicationCommand.id, applicationCommandData, guildId)
 								.catch(console.error);
 						} else if (!applicationCommand) {
 							console.log(
 								`Creating the application command /${applicationCommandData.name} in the guild: ${guildId}`,
 							);
 							applicationCommandData.description =
-								command.description[
-									Util.languages.get(guildId)
-								] ?? command.description.en;
+								command.description[Util.guildConfigs.get(guildId).language] ??
+								command.description.en;
 							applicationCommandData.options =
-								command.options[Util.languages.get(guildId)] ??
+								command.options[Util.guildConfigs.get(guildId).language] ??
 								command.options.en;
 							client.application.commands
 								.create(applicationCommandData, guildId)
@@ -296,10 +301,9 @@ client.on("ready", async () => {
 
 					// Global commands
 				} else {
-					const applicationCommand =
-						client.application.commands.cache.find(
-							(cmd) => cmd.name === applicationCommandData.name,
-						);
+					const applicationCommand = client.application.commands.cache.find(
+						(cmd) => cmd.name === applicationCommandData.name,
+					);
 
 					if (
 						applicationCommand &&
@@ -328,12 +332,10 @@ client.on("ready", async () => {
 	const { emojis } = client.guilds.cache.get(Util.config.CANVAS_GUILD_ID);
 
 	Util.database
-		.query("SELECT * FROM colors")
+		.query("SELECT * FROM color")
 		.then(async ({ rows: colors }: { rows: DatabaseColor[] }) => {
 			for (const color of colors) {
-				let emoji = emojis.cache.find(
-					(e) => e.name === `pl_${color.alias}`,
-				);
+				let emoji = emojis.cache.find((e) => e.name === `pl_${color.alias}`);
 
 				if (!emoji) {
 					let red = Math.floor(color.code / (256 * 256));
@@ -344,16 +346,13 @@ client.on("ready", async () => {
 						green.toString(16).padStart(2, "0") +
 						blue.toString(16).padStart(2, "0");
 					emoji = await emojis.create(
-						`https://dummyimage.com/256/${hex}?text=+`,
+						`https://dummyimage.com/256/${hex}?text=%20`,
 						`pl_${color.alias}`,
 					);
 				}
 
 				if (!Util.palettes.has(color.palette))
-					Util.palettes.set(
-						color.palette,
-						new Palette(color.palette),
-					);
+					Util.palettes.set(color.palette, new Palette(color.palette));
 
 				Util.palettes
 					.get(color.palette)
@@ -378,6 +377,103 @@ client.on("ready", async () => {
 			});
 		});
 
+	// Reminders
+	setInterval(async () => {
+		try {
+			const { rows: reminders }: { rows: DatabaseReminder[] } =
+				await Util.database.query("SELECT * FROM reminder");
+
+			reminders.forEach(async (reminder) => {
+				const timestamp = new Date(reminder.timestamp);
+
+				try {
+					if (Date.now() > timestamp.valueOf()) {
+						client.users.fetch(reminder.user_id).then((user) => {
+							user.send(`⏰ | ${reminder.content}`);
+						});
+
+						if (reminder.repeat) {
+							Util.database.query(
+								"UPDATE reminder SET timestamp = $1 WHERE id = $2",
+								[new Date(timestamp.valueOf() + reminder.repeat), reminder.id],
+							);
+						} else {
+							Util.database.query("DELETE FROM reminder WHERE id = $1", [
+								reminder.id,
+							]);
+						}
+					}
+				} catch (err) {
+					console.error(err);
+				}
+			});
+		} catch (err) {
+			console.error(err);
+		}
+	}, 10_000);
+
+	// Voice xp
+	setInterval(() => {
+		client.guilds.cache.forEach(async (guild) => {
+			const translations = (await new Translations("index_level").init()).data[
+				Util.guildConfigs.get(guild.id).language
+			];
+
+			guild.members.cache
+				.filter((m) => m.voice.channelId && !m.user.bot)
+				.forEach(async (member) => {
+					if (member.voice.channel.members.size < 2) return;
+
+					let newXP =
+						Util.config.BASE_VOICE_XP *
+						member.voice.channel.members.filter((m) => !m.user.bot).size;
+
+					if (member.voice.deaf) newXP *= 0;
+					if (member.voice.mute) newXP *= 0.5;
+					if (
+						member.voice.streaming &&
+						member.voice.channel.members.filter((m) => !m.user.bot).size > 1
+					)
+						newXP *= 3;
+					if (
+						member.voice.selfVideo &&
+						member.voice.channel.members.filter((m) => !m.user.bot).size > 1
+					)
+						newXP *= 5;
+
+					try {
+						const {
+							rows: [{ voice_xp: xp }],
+						}: { rows: DatabaseLevel[] } = await Util.database.query(
+							`
+						INSERT INTO level (user_id, voice_xp) VALUES ($1, $2)
+						ON CONFLICT (user_id)
+						DO UPDATE SET
+							voice_xp = level.voice_xp + $2 WHERE level.user_id = $1
+						RETURNING level.voice_xp
+						`,
+							[member.user.id, newXP],
+						);
+
+						const levelInfo = getLevel(xp);
+
+						if (
+							levelInfo.currentXP < newXP &&
+							member.guild.id === Util.config.MAIN_GUILD_ID
+						)
+							member.user.send(
+								translations.strings.voice_level_up(
+									translations.language,
+									levelInfo.level.toString(),
+								),
+							);
+					} catch (err) {
+						console.error(err);
+					}
+				});
+		});
+	}, 60_000);
+
 	if (Util.beta) return;
 
 	// Predefined reminders
@@ -394,11 +490,9 @@ client.on("ready", async () => {
 	(roseChannel as Discord.TextChannel).messages
 		.fetch({ limit: 1 })
 		.then(([[, logMessage]]) => {
-			const regex =
-				/^\*\*Starting at:\*\* `(.*)`\n\*\*Password:\*\* `(.*)`$/;
+			const regex = /^\*\*Starting at:\*\* `(.*)`\n\*\*Password:\*\* `(.*)`$/;
 
-			const [, dateString, password] =
-				logMessage.content.match(regex) ?? [];
+			const [, dateString, password] = logMessage.content.match(regex) ?? [];
 			const date = new Date(dateString);
 			if (!date || !password) return;
 
@@ -410,9 +504,7 @@ client.on("ready", async () => {
 						`<@&${Util.config.ROSE_LOBBY_ROLE_ID}>\nLa game de roses va démarrer, le mot de passe est \`${password}\``,
 					)
 					.catch(console.error);
-				logMessage
-					.edit(`~~${logMessage.content}~~`)
-					.catch(console.error);
+				logMessage.edit(`~~${logMessage.content}~~`).catch(console.error);
 			});
 
 			Util.roseLobby.start();
@@ -422,103 +514,6 @@ client.on("ready", async () => {
 			);
 		})
 		.catch(console.error);
-
-	// Reminders
-	setInterval(async () => {
-		try {
-			const { rows: reminders }: { rows: DatabaseReminder[] } =
-				await Util.database.query("SELECT * FROM reminders");
-
-			reminders.forEach(async (reminder) => {
-				const timestamp = new Date(reminder.timestamp).valueOf();
-
-				if (Date.now() > timestamp) {
-					client.users
-						.fetch(reminder.user_id)
-						.then((user) => {
-							user.send(`⏰ | ${reminder.content}`).catch(
-								console.error,
-							);
-						})
-						.catch(console.error);
-
-					Util.database
-						.query("DELETE FROM reminders WHERE id = $1", [
-							reminder.id,
-						])
-						.catch(console.error);
-				}
-			});
-		} catch (err) {
-			console.error(err);
-		}
-	}, 10000);
-
-	// Voice xp
-	setInterval(() => {
-		client.guilds.cache.forEach(async (guild) => {
-			const translations = await new Translations(
-				"index_levels",
-				Util.languages.get(guild.id),
-			).init();
-
-			guild.members.cache
-				.filter((m) => m.voice.channelId && !m.user.bot)
-				.forEach(async (member) => {
-					if (member.voice.channel.members.size < 2) return;
-
-					let newXp =
-						Util.config.BASE_VOICE_XP *
-						member.voice.channel.members.filter((m) => !m.user.bot)
-							.size;
-
-					if (member.voice.deaf) newXp *= 0;
-					if (member.voice.mute) newXp *= 0.5;
-					if (
-						member.voice.streaming &&
-						member.voice.channel.members.filter((m) => !m.user.bot)
-							.size > 1
-					)
-						newXp *= 3;
-					if (
-						member.voice.selfVideo &&
-						member.voice.channel.members.filter((m) => !m.user.bot)
-							.size > 1
-					)
-						newXp *= 5;
-
-					try {
-						const {
-							rows: [{ voice_xp: xp }],
-						} = await Util.database.query(
-							`
-						INSERT INTO levels (user_id, voice_xp) VALUES ($1, $2)
-						ON CONFLICT (user_id)
-						DO UPDATE SET
-							voice_xp = levels.voice_xp + $2 WHERE levels.user_id = $1
-						RETURNING levels.voice_xp
-						`,
-							[member.user.id, newXp],
-						);
-
-						const levelInfo = getLevel(xp);
-
-						if (
-							levelInfo.currentXP < newXp &&
-							member.guild.id === Util.config.MAIN_GUILD_ID
-						)
-							member.user.send(
-								translations.data.voice_level_up(
-									translations.language,
-									levelInfo.level.toString(),
-								),
-							);
-					} catch (err) {
-						console.error(err);
-					}
-				});
-		});
-	}, 60000);
 });
 
 client.on("interactionCreate", async (interaction) => {
@@ -529,13 +524,11 @@ client.on("interactionCreate", async (interaction) => {
 
 		case "APPLICATION_COMMAND": {
 			if (interaction.isCommand()) {
-				interaction.deferReply();
+				await interaction.deferReply();
 
 				const command = Util.commands.get(interaction.commandName);
 				if (command)
-					runApplicationCommand(command, interaction).catch(
-						console.error,
-					);
+					runApplicationCommand(command, interaction).catch(console.error);
 			}
 
 			if (interaction.isContextMenu()) {
@@ -555,20 +548,17 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 client.on("messageCreate", async (message) => {
-	if (Util.beta) return;
-
-	const translations = await new Translations(
-		"index_levels",
-		Util.languages.get(message.guild.id),
-	).init();
-
 	// Chat xp
 	if (
 		message.channel.type !== "DM" &&
 		!message.author.bot &&
 		!message.channel.name.includes("spam") &&
-		message.channel.id !== "865997369745080341" // #tki
+		message.channel.id !== "865997369745080341" /* #tki */
 	) {
+		const translations = (await new Translations("index_level").init()).data[
+			Util.guildConfigs.get(message.guild.id).language
+		];
+
 		const bots = await message.guild.members.fetch().catch(console.error);
 
 		if (bots) {
@@ -579,39 +569,34 @@ client.on("messageCreate", async (message) => {
 				})
 				.filter((p) => p);
 
-			if (
-				!prefixes.some((p) =>
-					message.content.toLowerCase().startsWith(p),
-				)
-			) {
-				if (!Util.xpMessages.has(message.author.id)) {
-					Util.xpMessages.set(message.author.id, 0);
+			if (!prefixes.some((p) => message.content.toLowerCase().startsWith(p))) {
+				if (Util.xpMessages.has(message.author.id)) {
+					Util.xpMessages.set(
+						message.author.id,
+						Util.xpMessages.get(message.author.id) + 1,
+					);
+				} else {
+					Util.xpMessages.set(message.author.id, 1);
 					setTimeout(() => {
 						Util.xpMessages.delete(message.author.id);
-					}, 60000);
+					}, 60_000);
 				}
 
 				const newXP = Math.round(
-					(Math.sqrt(message.content.length) *
-						Util.config.XP_MULTIPLIER) /
+					(Math.sqrt(message.content.length) * Util.config.XP_MULTIPLIER) /
 						Util.xpMessages.get(message.author.id),
-				);
-
-				Util.xpMessages.set(
-					message.author.id,
-					Util.xpMessages.get(message.author.id) + 1,
 				);
 
 				try {
 					const {
 						rows: [{ chat_xp: xp }],
-					} = await Util.database.query(
+					}: { rows: DatabaseLevel[] } = await Util.database.query(
 						`
-						INSERT INTO levels (user_id, chat_xp) VALUES ($1, $2)
+						INSERT INTO level (user_id, chat_xp) VALUES ($1, $2)
 						ON CONFLICT (user_id)
 						DO UPDATE SET
-							chat_xp = levels.chat_xp + $2 WHERE levels.user_id = $1
-						RETURNING levels.chat_xp
+							chat_xp = level.chat_xp + $2 WHERE level.user_id = $1
+						RETURNING level.chat_xp
 						`,
 						[message.author.id, newXP],
 					);
@@ -623,7 +608,7 @@ client.on("messageCreate", async (message) => {
 						message.guild.id === Util.config.MAIN_GUILD_ID
 					)
 						message.channel.send(
-							translations.data.chat_level_up(
+							translations.strings.chat_level_up(
 								translations.language,
 								message.author.toString(),
 								levelInfo.level.toString(),
@@ -636,10 +621,42 @@ client.on("messageCreate", async (message) => {
 		}
 	}
 
+	if (Util.beta) return;
+
 	// Message responses
-	Util.messageResponses.forEach(async (messageResponse) =>
-		messageResponse.run(message).catch(console.error),
-	);
+	const language = Util.guildConfigs.get(message.guild?.id)?.language ?? "fr";
+
+	for (const messageResponse of Util.messageResponses) {
+		if (messageResponse.noBot && message.author.bot) continue;
+		if (messageResponse.noDM && message.channel.type === "DM") continue;
+		if (
+			messageResponse.guildIds &&
+			!messageResponse.guildIds.includes(message.guild?.id)
+		)
+			continue;
+
+		messageResponse
+			.run(message, messageResponse.translations.data[language])
+			.catch(console.error);
+	}
+
+	// TEMP: Warn users that message commands are deprecated
+	const prefix = "*";
+	if (
+		message.channel.type !== "DM" &&
+		!message.author.bot &&
+		message.content.startsWith(prefix)
+	) {
+		const translations = (
+			await new Translations("index_message-commands-deprecated").init()
+		).data[Util.guildConfigs.get(message.guild.id).language];
+
+		const input = message.content.slice(prefix.length).split(/ +/g);
+		const commandName = input.shift();
+		const command = Util.commands.find((cmd) => cmd.name === commandName);
+
+		if (command) message.reply(translations.strings.deprecated(command.name));
+	}
 });
 
 client.on("messageDelete", async (message) => {
@@ -653,7 +670,7 @@ client.on("messageDelete", async (message) => {
 
 	setTimeout(() => {
 		Util.sniping.deletedMessages.delete(message.channel.id);
-	}, 600000);
+	}, 600_000);
 });
 
 client.on("messageUpdate", async (message, newMessage) => {
@@ -667,7 +684,7 @@ client.on("messageUpdate", async (message, newMessage) => {
 
 	setTimeout(() => {
 		Util.sniping.editedMessages.delete(message.channel.id);
-	}, 600000);
+	}, 600_000);
 });
 
 client.on("messageReactionAdd", async (reaction, user) => {
@@ -680,6 +697,11 @@ client.on("messageReactionAdd", async (reaction, user) => {
 
 	if (reaction.partial || reaction.message.partial) return;
 	if (user.bot) return;
+	if (reaction.message.channel.type === "DM") return;
+
+	// Reaction commands
+	const language =
+		Util.guildConfigs.get(reaction.message.guild?.id)?.language ?? "fr";
 
 	for (const reactionCommand of Util.reactionCommands) {
 		reactionCommand
@@ -687,6 +709,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
 				reaction as Discord.MessageReaction,
 				user as Discord.User,
 				true,
+				reactionCommand.translations[language],
 			)
 			.catch(console.error);
 	}
@@ -701,6 +724,11 @@ client.on("messageReactionRemove", async (reaction, user) => {
 
 	if (reaction.partial || reaction.message.partial) return;
 	if (user.bot) return;
+	if (reaction.message.channel.type === "DM") return;
+
+	// Reaction commands
+	const language =
+		Util.guildConfigs.get(reaction.message.guild?.id)?.language ?? "fr";
 
 	for (const reactionCommand of Util.reactionCommands) {
 		reactionCommand
@@ -708,10 +736,12 @@ client.on("messageReactionRemove", async (reaction, user) => {
 				reaction as Discord.MessageReaction,
 				user as Discord.User,
 				false,
+				reactionCommand.translations[language],
 			)
 			.catch(console.error);
 	}
 
+	// Sniping
 	Util.sniping.messageReactions.set(reaction.message.channel.id, {
 		reaction: reaction as Discord.MessageReaction,
 		user: user as Discord.User,
@@ -719,7 +749,18 @@ client.on("messageReactionRemove", async (reaction, user) => {
 
 	setTimeout(() => {
 		Util.sniping.messageReactions.delete(reaction.message.channel.id);
-	}, 60000);
+	}, 60_000);
+});
+
+client.on("guildCreate", async (guild) => {
+	Util.database.query(
+		`
+		INSERT INTO guild_config VALUES ($1)
+		ON CONFLICT (guild_id)
+		DO NOTHING
+		`,
+		[guild.id],
+	);
 });
 
 client.on("guildMemberAdd", async (member) => {
@@ -825,7 +866,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 // 		const language = Util.languages.get(message.guild.id);
 // 		const translations = new Translations(__filename, language);
 
-// 		message.channel.send(translations.data.music_player_disconnect(queue.connection.channel.toString())).catch(console.error);
+// 		message.channel.send(translations.strings.music_player_disconnect(queue.connection.channel.toString())).catch(console.error);
 // 	})
 
 // 	.on("error", (error, message) => {
@@ -833,14 +874,14 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 // 		const translations = new Translations(__filename, language);
 
 // 		console.error(error);
-// 		message.channel.send(translations.data.music_player_error(error.toString())).catch(console.error);
+// 		message.channel.send(translations.strings.music_player_error(error.toString())).catch(console.error);
 // 	})
 
 // 	.on("playlistAdd", (message, queue, playlist) => {
 // 		const language = Util.languages.get(message.guild.id);
 // 		const translations = new Translations(__filename, language);
 
-// 		message.channel.send(translations.data.music_player_add_playlist(playlist.videoCount.toString())).catch(console.error);
+// 		message.channel.send(translations.strings.music_player_add_playlist(playlist.videoCount.toString())).catch(console.error);
 // 	})
 
 // 	.on("queueEnd", (message, queue) => {
@@ -856,7 +897,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 // 			songDisplay.edit({
 // 				embeds: [
 // 					songDisplay.embeds[0]
-// 						.setDescription(translations.data.song_display_description(
+// 						.setDescription(translations.strings.song_display_description(
 // 							lastSong.name.toString(),
 // 							lastSong.url.toString(),
 // 							MusicUtil.buildBar(MusicUtil.timeToMilliseconds(lastSong.duration),
@@ -865,7 +906,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 // 							"Ø",
 // 							"**0:00**"
 // 						))
-// 						.setFooter(translations.data.song_display_footer_end(language))
+// 						.setFooter(translations.strings.song_display_footer_end(language))
 // 				]
 // 			}).catch(console.error);
 // 		});
@@ -875,7 +916,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 // 		const language = Util.languages.get(message.guild.id);
 // 		const translations = new Translations(__filename, language);
 
-// 		message.channel.send(translations.data.music_player_add_song(
+// 		message.channel.send(translations.strings.music_player_add_song(
 // 			(getQueueDuration(queue) ? MusicUtil.millisecondsToTime(MusicUtil.timeToMilliseconds(getQueueDuration(queue)) - MusicUtil.timeToMilliseconds(song.duration)) : 0).toString(),
 // 			song.name
 // 		)).catch(console.error);
@@ -891,7 +932,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 // 			songDisplay.edit({
 // 				embeds: [
 // 					songDisplay.embeds[0]
-// 						.setDescription(translations.data.song_display_description(
+// 						.setDescription(translations.strings.song_display_description(
 // 							newSong.name.toString(),
 // 							newSong.url.toString(),
 // 							MusicUtil.buildBar(0, MusicUtil.timeToMilliseconds(newSong.duration), 20, "━", "🔘"),
@@ -903,7 +944,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 // 									: (newSong.queue.repeatQueue ? newSong.queue.songs[0].name.toString() : "Ø")),
 // 							newSong.queue.repeatMode || newSong.queue.repeatQueue ? "♾️" : getQueueDuration(newSong.queue).toString()
 // 						))
-// 						.setFooter(translations.data.song_display_footer(language,
+// 						.setFooter(translations.strings.song_display_footer(language,
 // 							Boolean(newSong.queue.repeatMode),
 // 							Boolean(newSong.queue.repeatQueue)
 // 						))
@@ -916,7 +957,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 // 		const language = Util.languages.get(message.guild.id);
 // 		const translations = new Translations(__filename, language);
 
-// 		message.channel.send(translations.data.music_player_playing(song.name.toString())).catch(console.error);
+// 		message.channel.send(translations.strings.music_player_playing(song.name.toString())).catch(console.error);
 // 	})
 
 // setInterval(() => {
@@ -931,7 +972,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 // 		songDisplay.edit({
 // 			embeds: [
 // 				songDisplay.embeds[0]
-// 					.setDescription(translations.data.song_display_description(
+// 					.setDescription(translations.strings.song_display_description(
 // 						song.name.toString(),
 // 						song.url.toString(),
 // 						Util.player.createProgressBar(songDisplay, { size: 20, arrow: "🔘", block: "━" }).toString(),
@@ -943,14 +984,14 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 // 								: (song.queue.repeatQueue ? song.queue.songs[0].name.toString() : "Ø")),
 // 						song.queue.repeatMode || song.queue.repeatQueue ? "♾️" : getQueueDuration(song.queue).toString()
 // 					))
-// 					.setFooter(translations.data.song_display_footer(language,
+// 					.setFooter(translations.strings.song_display_footer(language,
 // 						Boolean(song.queue.repeatMode),
 // 						Boolean(song.queue.repeatQueue)
 // 					))
 // 			]
 // 		}).catch(console.error);
 // 	});
-// }, 10000);
+// }, 10_000);
 
 // Spotify API
 const spotify = new SpotifyWebApi({
@@ -992,7 +1033,7 @@ function testReminders() {
 							.send(getMessage(5))
 							.catch(console.error),
 					),
-				600000,
+				600_000,
 			);
 			setTimeout(
 				() =>
@@ -1002,7 +1043,7 @@ function testReminders() {
 							.send(getMessage(2))
 							.catch(console.error),
 					),
-				780000,
+				780_000,
 			);
 		},
 		null,
@@ -1019,9 +1060,7 @@ function testReminders() {
 			userIds.forEach((userId) =>
 				client.users
 					.fetch(userId)
-					.then((userId) =>
-						userId.send(getMessage(15)).catch(console.error),
-					),
+					.then((userId) => userId.send(getMessage(15)).catch(console.error)),
 			);
 			setTimeout(
 				() =>
@@ -1031,7 +1070,7 @@ function testReminders() {
 							.send(getMessage(5))
 							.catch(console.error),
 					),
-				600000,
+				600_000,
 			);
 			setTimeout(
 				() =>
@@ -1041,7 +1080,7 @@ function testReminders() {
 							.send(getMessage(2))
 							.catch(console.error),
 					),
-				780000,
+				780_000,
 			);
 		},
 		null,

@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import pagination, { Page } from "../../utils/misc/pagination";
@@ -57,7 +56,7 @@ const command: Command = {
 										dynamic: true,
 									}),
 								},
-								title: translations.data.title(
+								title: translations.strings.title(
 									res.rowCount.toString(),
 									res.rowCount > 1,
 								),
@@ -78,7 +77,7 @@ const command: Command = {
 										dynamic: true,
 									}),
 								},
-								title: translations.data.title(
+								title: translations.strings.title(
 									res.rowCount.toString(),
 									res.rowCount > 1,
 								),
@@ -96,7 +95,7 @@ const command: Command = {
 			}
 
 			default:
-				interaction.followUp(translations.data.completed());
+				interaction.followUp(translations.strings.completed());
 		}
 	},
 };

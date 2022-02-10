@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 const command: Command = {
@@ -41,10 +40,9 @@ const command: Command = {
 
 		const {
 			rows: [userCurrency],
-		} = await Util.database.query(
-			"SELECT * FROM currency WHERE user_id = $1",
-			[user.id],
-		);
+		} = await Util.database.query("SELECT * FROM currency WHERE user_id = $1", [
+			user.id,
+		]);
 
 		const { money, last_daily } = userCurrency ?? {
 			money: 0,
@@ -59,15 +57,13 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name: translations.data.title(user.tag),
+						name: translations.strings.title(user.tag),
 						iconURL: user.displayAvatarURL({ dynamic: true }),
 					},
 					color: interaction.guild.me.displayColor,
-					description: translations.data.description(
+					description: translations.strings.description(
 						money,
-						nextDaily > NOW
-							? Math.round(nextDaily / 1000).toString()
-							: null,
+						nextDaily > NOW ? Math.round(nextDaily / 1000).toString() : null,
 					),
 					footer: {
 						text: "✨ Mayze ✨",

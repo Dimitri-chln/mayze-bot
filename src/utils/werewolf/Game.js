@@ -303,7 +303,7 @@ class Game {
 		}).catch(console.error);
 
 		const filter = message => !message.author.bot;
-		const messageCollector = this.werewolvesChannel.createMessageCollector(filter, { time: 90000 });
+		const messageCollector = this.werewolvesChannel.createMessageCollector(filter, { time: 90_000 });
 		const littleGirl = this.players.find(player => player.role === roles.little_girl[this.languageCode]);
 		if (littleGirl) {
 			messageCollector.on("collect", async message => {
@@ -320,9 +320,9 @@ class Game {
 		setTimeout(() => {
 			if (readyForDay && !this.ended) this.setDay();
 			else immediateDay = true;
-		}, this.night === 1 ? 60000 : 30000);
+		}, this.night === 1 ? 60_000 : 30_000);
 
-		const attackedPlayer = await selectPlayer(this.werewolvesChannel, this.alivePlayers.filter(player => player.role !== roles.werewolf[this.languageCode]), language.werewolvesTitle[this.languageCode], 60000, this.languageCode).catch(console.error);
+		const attackedPlayer = await selectPlayer(this.werewolvesChannel, this.alivePlayers.filter(player => player.role !== roles.werewolf[this.languageCode]), language.werewolvesTitle[this.languageCode], 60_000, this.languageCode).catch(console.error);
 		
 		const witch = this.players.find(player => player.role === roles.witch[this.languageCode]);
 		
@@ -346,7 +346,7 @@ class Game {
 					await msg.react("❌").catch(console.error);
 
 					const filter = (reaction, user) => ["✅", "❌"].includes(reaction.emoji.name) && !user.bot;
-					const collected = await msg.awaitReactions(filter, { max: 1, time: 30000 }).catch(console.error);
+					const collected = await msg.awaitReactions(filter, { max: 1, time: 30_000 }).catch(console.error);
 					
 					if (collected.size && collected.first().emoji.name === "✅") {
 						attackedPlayer.deleteOption("isAttacked");
@@ -402,7 +402,7 @@ class Game {
 		}).catch(console.error);
 		if (this.ended) return;
 		const ended = this.endCheck();
-		if (!ended) setTimeout(() => this.setVote(), 90000);
+		if (!ended) setTimeout(() => this.setVote(), 90_000);
 	}
 
 	/**
@@ -424,7 +424,7 @@ class Game {
 		emojis.forEach(async e => await msg.react(e).catch(console.error));
 		
 		const filter = (reaction, user) => emojis.includes(reaction.emoji.name) && this.alivePlayers.some(player => player.member.user.id === user.id) && !user.bot;
-		const reactionCollector = msg.createReactionCollector(filter, { time: 30000 });
+		const reactionCollector = msg.createReactionCollector(filter, { time: 30_000 });
 		const votes = {};
 
 		reactionCollector.on("collect", async (reaction, user) => {
@@ -470,8 +470,8 @@ class Game {
 				}
 				if (this.ended) return;
 				const ended = this.endCheck();
-				if (!ended) setTimeout(() => this.setNight(), 3000);
-			}, 3000);
+				if (!ended) setTimeout(() => this.setNight(), 3_000);
+			}, 3_000);
 		});
 	}
 

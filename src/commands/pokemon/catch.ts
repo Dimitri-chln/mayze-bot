@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { TextChannel } from "discord.js";
@@ -42,7 +41,7 @@ const command: Command = {
 
 		const { rows: caughtPokemonsData }: { rows: DatabasePokemon[] } =
 			await Util.database.query(
-				"SELECT * FROM pokemons WHERE users ? $1 AND variation = 'default'",
+				"SELECT * FROM pokemon WHERE users ? $1 AND variation = 'default'",
 				[interaction.user.id],
 			);
 
@@ -84,10 +83,10 @@ const command: Command = {
 			if (userHunt) {
 				const huntedPokemon = Pokedex.findById(userHunt.pokemon_id);
 
-				let probability =
-					((userHunt.hunt_count + 1) / 100) *
-					(huntedPokemon.catchRate / 255);
-				if (probability > 1) probability = 1;
+				let probability = Math.min(
+					((userHunt.hunt_count + 1) / 100) * (huntedPokemon.catchRate / 255),
+					1,
+				);
 
 				if (Math.random() < probability) {
 					await Util.database.query(
@@ -97,14 +96,10 @@ const command: Command = {
 
 					randomPokemon = huntedPokemon;
 				} else {
-					huntFooterText = translations.data.hunt_probability(
-						/^[aeiou]/i.test(
-							huntedPokemon.names[translations.language],
-						),
+					huntFooterText = translations.strings.hunt_probability(
+						/^[aeiou]/i.test(huntedPokemon.names[translations.language]),
 						huntedPokemon.names[translations.language],
-						(
-							Math.round(probability * 100 * 10000) / 10000
-						).toString(),
+						(Math.round(probability * 100 * 10000) / 10000).toString(),
 					);
 				}
 			}
@@ -126,9 +121,7 @@ const command: Command = {
 
 				megaGem =
 					megaPokemon.megaEvolutions[
-						Math.floor(
-							Math.random() * megaPokemon.megaEvolutions.length,
-						)
+						Math.floor(Math.random() * megaPokemon.megaEvolutions.length)
 					].megaStone;
 
 				const defaultData = {};
@@ -154,9 +147,7 @@ const command: Command = {
 			Math.random() <
 			SHINY_FREQUENCY *
 				(1 +
-					UPGRADES_BENEFITS.shiny_probability(
-						upgrades.shiny_probability,
-					) /
+					UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_probability) /
 						100);
 
 		const variation: VariationType =
@@ -169,9 +160,7 @@ const command: Command = {
 			Util.config.CATCH_REWARD *
 				((255 / randomPokemon.catchRate) *
 					(shiny ? Util.config.SHINY_REWARD_MULTIPLIER : 1) *
-					(variation === "alola"
-						? Util.config.ALOLAN_REWARD_MULTIPLIER
-						: 1)),
+					(variation === "alola" ? Util.config.ALOLAN_REWARD_MULTIPLIER : 1)),
 		);
 
 		const defaultUserData = {
@@ -186,14 +175,14 @@ const command: Command = {
 			rows: [{ caught: caughtTotal }],
 		} = await Util.database.query(
 			`
-			INSERT INTO pokemons VALUES ($1, $2, $3, $4)
+			INSERT INTO pokemon VALUES ($1, $2, $3, $4)
 			ON CONFLICT (pokedex_id, shiny, variation)
 			DO UPDATE SET users =
 				CASE
-					WHEN pokemons.users -> $5 IS NULL THEN jsonb_set(pokemons.users, '{${interaction.user.id}}', $6)
-					ELSE jsonb_set(pokemons.users, '{${interaction.user.id}, caught}', ((pokemons.users -> $5 -> 'caught')::int + 1)::text::jsonb)
+					WHEN pokemon.users -> $5 IS NULL THEN jsonb_set(pokemon.users, '{${interaction.user.id}}', $6)
+					ELSE jsonb_set(pokemon.users, '{${interaction.user.id}, caught}', ((pokemon.users -> $5 -> 'caught')::int + 1)::text::jsonb)
 				END
-			WHERE pokemons.pokedex_id = EXCLUDED.pokedex_id AND pokemons.shiny = EXCLUDED.shiny AND pokemons.variation = EXCLUDED.variation
+			WHERE pokemon.pokedex_id = EXCLUDED.pokedex_id AND pokemon.shiny = EXCLUDED.shiny AND pokemon.variation = EXCLUDED.variation
 			RETURNING (users -> $5 -> 'caught')::int AS caught
 			`,
 			[
@@ -231,8 +220,8 @@ const command: Command = {
 					author: {
 						name:
 							caughtTotal > 1
-								? translations.data.caught()
-								: translations.data.caught_new(),
+								? translations.strings.caught()
+								: translations.strings.caught_new(),
 						iconURL: pokeball,
 					},
 					image: {
@@ -244,23 +233,14 @@ const command: Command = {
 						? 0xce2f20
 						: interaction.guild.me.displayColor,
 					description:
-						translations.data.caught_title(
+						translations.strings.caught_title(
 							interaction.user.toString(),
 							!shiny &&
 								(variation === "alola" ||
-									/^[aeiou]/i.test(
-										randomPokemon.names[
-											translations.language
-										],
-									)),
-							randomPokemon.formatName(
-								shiny,
-								variation,
-								translations.language,
-							),
+									/^[aeiou]/i.test(randomPokemon.names[translations.language])),
+							randomPokemon.formatName(shiny, variation, translations.language),
 							catchReward.toString(),
-						) +
-						(megaGem ? translations.data.mega_gem(megaGem) : ""),
+						) + (megaGem ? translations.strings.mega_gem(megaGem) : ""),
 					footer: {
 						text: "✨ Mayze ✨" + (huntFooterText || ""),
 						iconURL: interaction.user.displayAvatarURL({
@@ -296,7 +276,7 @@ const command: Command = {
 						: randomPokemon.legendary || randomPokemon.ultraBeast
 						? 0xce2f20
 						: Util.config.MAIN_COLOR,
-					description: translations.data.caught_title_en(
+					description: translations.strings.caught_title_en(
 						interaction.user.toString(),
 						!shiny &&
 							(variation === "alola" ||

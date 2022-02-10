@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { Collection, GuildMember, MessageEmbed } from "discord.js";
@@ -100,16 +99,12 @@ const command: Command = {
 	run: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
-		const currentGame = Util.russianRouletteGames.get(
-			interaction.channel.id,
-		);
+		const currentGame = Util.russianRouletteGames.get(interaction.channel.id);
 
 		switch (subCommand) {
 			case "create": {
 				if (currentGame)
-					return interaction.followUp(
-						translations.data.already_running(),
-					);
+					return interaction.followUp(translations.strings.already_running());
 
 				const newGame: typeof currentGame = {
 					creator: interaction.member as GuildMember,
@@ -127,14 +122,13 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.data.created_title(),
+								name: translations.strings.created_title(),
 								iconURL: interaction.user.displayAvatarURL({
 									dynamic: true,
 								}),
 							},
 							color: interaction.guild.me.displayColor,
-							description:
-								translations.data.created_description(),
+							description: translations.strings.created_description(),
 							footer: {
 								text: "✨ Mayze ✨",
 							},
@@ -146,12 +140,10 @@ const command: Command = {
 
 			case "join": {
 				if (!currentGame)
-					return interaction.followUp(translations.data.no_game());
+					return interaction.followUp(translations.strings.no_game());
 
 				if (currentGame.members.has(interaction.user.id))
-					return interaction.followUp(
-						translations.data.already_joined(),
-					);
+					return interaction.followUp(translations.strings.already_joined());
 
 				currentGame.members.set(
 					interaction.user.id,
@@ -159,48 +151,44 @@ const command: Command = {
 				);
 
 				interaction.followUp(
-					translations.data.joined(interaction.user.toString()),
+					translations.strings.joined(interaction.user.toString()),
 				);
 				break;
 			}
 
 			case "delete": {
 				if (!currentGame)
-					return interaction.followUp(translations.data.no_game());
+					return interaction.followUp(translations.strings.no_game());
 
 				if (
 					currentGame.creator.id !== interaction.user.id &&
-					!(interaction.member as GuildMember).permissions.has(
-						"KICK_MEMBERS",
-					)
+					!(interaction.member as GuildMember).permissions.has("KICK_MEMBERS")
 				)
 					return interaction.followUp(
-						translations.data.deletion_not_allowed(),
+						translations.strings.deletion_not_allowed(),
 					);
 
 				Util.russianRouletteGames.delete(interaction.channel.id);
 
-				interaction.followUp(translations.data.deleted());
+				interaction.followUp(translations.strings.deleted());
 				break;
 			}
 
 			case "start": {
 				if (!currentGame)
-					return interaction.followUp(translations.data.no_game());
+					return interaction.followUp(translations.strings.no_game());
 
 				if (
 					currentGame.creator.id !== interaction.user.id &&
-					!(interaction.member as GuildMember).permissions.has(
-						"KICK_MEMBERS",
-					)
+					!(interaction.member as GuildMember).permissions.has("KICK_MEMBERS")
 				)
 					return interaction.followUp(
-						translations.data.starting_not_allowed(),
+						translations.strings.starting_not_allowed(),
 					);
 
 				if (currentGame.members.size < 2)
 					return interaction.followUp(
-						translations.data.not_enough_players(),
+						translations.strings.not_enough_players(),
 					);
 
 				const embed = new MessageEmbed()
@@ -241,16 +229,12 @@ const command: Command = {
 
 					message
 						.edit({
-							embeds: [
-								embed.setDescription(
-									`**${savedPlayer.user.tag}** ...`,
-								),
-							],
+							embeds: [embed.setDescription(`**${savedPlayer.user.tag}** ...`)],
 						})
 						.catch(console.error);
 
 					roulette(message, embed, game, i + 1);
-				}, 2000);
+				}, 2_000);
 			} else {
 				setTimeout(() => {
 					const deadPlayer = game.members.random();
@@ -259,37 +243,33 @@ const command: Command = {
 						.edit({
 							embeds: [
 								embed.setDescription(
-									translations.data.dead(deadPlayer.user.tag),
+									translations.strings.dead(deadPlayer.user.tag),
 								),
 							],
 						})
 						.catch(console.error);
 
-					const gameOption = interaction.options.getString(
-						"options",
-					) as "kick" | "timeout";
+					const gameOption = interaction.options.getString("options") as
+						| "kick"
+						| "timeout";
 
 					switch (gameOption) {
 						case "kick": {
 							if (
 								deadPlayer.roles.highest.position <
-									interaction.guild.me.roles.highest
-										.position &&
+									interaction.guild.me.roles.highest.position &&
 								!deadPlayer.premiumSinceTimestamp
 							)
-								deadPlayer.kick(translations.data.reason());
+								deadPlayer.kick(translations.strings.reason());
 							break;
 						}
 
 						case "timeout": {
-							deadPlayer.timeout(
-								5 * 60 * 1000,
-								translations.data.reason(),
-							);
+							deadPlayer.timeout(5 * 60 * 1000, translations.strings.reason());
 							break;
 						}
 					}
-				}, 2000);
+				}, 2_000);
 			}
 		}
 	},

@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import pagination, { Page } from "../../utils/misc/pagination";
@@ -60,13 +59,12 @@ const command: Command = {
 			| "chat_xp"
 			| "voice_xp";
 
-		let { rows: top }: { rows: DatabaseLevel[] } =
-			await Util.database.query(
-				`
-			SELECT * FROM levels
+		let { rows: top }: { rows: DatabaseLevel[] } = await Util.database.query(
+			`
+			SELECT * FROM level
 			ORDER BY ${leaderboard} DESC
 			`,
-			);
+		);
 
 		top = top.filter((user) =>
 			interaction.guild.members.cache.has(user.user_id),
@@ -79,7 +77,7 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: translations.data.title(
+							name: translations.strings.title(
 								interaction.guild.name,
 								leaderboard === "chat_xp",
 							),
@@ -88,7 +86,7 @@ const command: Command = {
 							}),
 						},
 						color: interaction.guild.me.displayColor,
-						description: translations.data.no_member(),
+						description: translations.strings.no_member(),
 					},
 				],
 			});
@@ -98,7 +96,7 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: translations.data.title(
+							name: translations.strings.title(
 								interaction.guild.name,
 								leaderboard === "chat_xp",
 							),
@@ -110,14 +108,11 @@ const command: Command = {
 						description: top
 							.slice(i, i + Util.config.ITEMS_PER_PAGE)
 							.map((user, j) =>
-								translations.data.description(
+								translations.strings.description(
 									(i + j + 1).toString(),
-									interaction.guild.members.cache.get(
-										user.user_id,
-									).user.username,
-									getLevel(
-										user[leaderboard],
-									).level.toString(),
+									interaction.guild.members.cache.get(user.user_id).user
+										.username,
+									getLevel(user[leaderboard]).level.toString(),
 								),
 							)
 							.join("\n"),

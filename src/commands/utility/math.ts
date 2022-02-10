@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Math from "mathjs";
@@ -62,7 +61,7 @@ const command: Command = {
 					},
 					{
 						name: "variable",
-						description: "La varibale selon laquelle dériver",
+						description: "La variable selon laquelle dériver",
 						type: "STRING",
 						required: false,
 					},
@@ -115,8 +114,7 @@ const command: Command = {
 					},
 					{
 						name: "variable",
-						description:
-							"The variable for which to find the derivative",
+						description: "The variable for which to find the derivative",
 						type: "STRING",
 						required: false,
 					},
@@ -140,23 +138,18 @@ const command: Command = {
 						`\`\`\`\n${parsedExpression.toString()}\n= ${result.toString()}\n\`\`\``,
 					);
 				} catch (err) {
-					interaction.followUp({
-						content: translations.data.syntax_error(err.message),
-						ephemeral: true,
-					});
+					console.error(err);
+					interaction.followUp(translations.strings.syntax_error(err.message));
 				}
 				break;
 			}
 
 			case "solve": {
 				const expression = interaction.options.getString("expression");
-				const variable =
-					interaction.options.getString("variable") ?? "x";
+				const variable = interaction.options.getString("variable") ?? "x";
 
 				try {
-					const equation = Algebra.parse(
-						expression,
-					) as Algebra.Equation;
+					const equation = Algebra.parse(expression) as Algebra.Equation;
 					const result = equation.solveFor(variable);
 
 					const resultString = Array.isArray(result)
@@ -165,39 +158,29 @@ const command: Command = {
 
 					interaction.followUp(
 						`\`\`\`\n${equation.toString()}\n${variable} = ${
-							resultString.toString() ??
-							translations.data.no_solution()
+							resultString.toString() ?? translations.strings.no_solution()
 						}\n\`\`\``,
 					);
 				} catch (err) {
-					interaction.followUp({
-						content: translations.data.syntax_error(err.message),
-						ephemeral: true,
-					});
+					console.error(err);
+					interaction.followUp(translations.strings.syntax_error(err.message));
 				}
 				break;
 			}
 
 			case "derivative": {
 				const expression = interaction.options.getString("expression");
-				const variable =
-					interaction.options.getString("variable") ?? "x";
+				const variable = interaction.options.getString("variable") ?? "x";
 
 				try {
 					const parsedExpression = Math.parse(expression);
-					const derivative = Math.derivative(
-						parsedExpression,
-						variable,
-					);
+					const derivative = Math.derivative(parsedExpression, variable);
 
 					interaction.followUp(
 						`\`\`\`\nf(${variable}) = ${parsedExpression.toString()}\nf'(${variable}) = ${derivative.toString()}\n\`\`\``,
 					);
 				} catch (err) {
-					interaction.followUp({
-						content: translations.data.syntax_error(err.message),
-						ephemeral: true,
-					});
+					interaction.followUp(translations.strings.syntax_error(err.message));
 				}
 				break;
 			}

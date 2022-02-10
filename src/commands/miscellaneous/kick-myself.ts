@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { GuildMember } from "discord.js";
@@ -24,7 +23,7 @@ const command: Command = {
 		// Server booster
 		if ((interaction.member as GuildMember).premiumSinceTimestamp)
 			return interaction.followUp({
-				content: translations.data.boosting(),
+				content: translations.strings.boosting(),
 				ephemeral: true,
 			});
 
@@ -33,14 +32,14 @@ const command: Command = {
 			interaction.guild.me.roles.highest.position
 		)
 			return interaction.followUp({
-				content: translations.data.too_high_hierarchy(),
+				content: translations.strings.too_high_hierarchy(),
 				ephemeral: true,
 			});
 
 		(interaction.member as GuildMember)
-			.kick(translations.data.reason())
+			.kick(translations.strings.reason())
 			.then(() => {
-				interaction.followUp(translations.data.kick_message());
+				interaction.followUp(translations.strings.kick_message());
 			});
 	},
 };

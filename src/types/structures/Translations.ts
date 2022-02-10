@@ -1,4 +1,3 @@
-import Path from "path";
 import { Collection } from "discord.js";
 import { google as Google } from "googleapis";
 import Util from "../../Util";
@@ -6,104 +5,120 @@ import Util from "../../Util";
 export type Language = "fr" | "en";
 
 export default class Translations {
-	readonly id: string;
-	readonly language: Language;
-	private _data: Collection<string, string>;
-	data: {
-		[K: string]: (...args: (string | boolean)[]) => string;
-	};
+	static readonly cache: Collection<string, TranslationsData> =
+		new Collection();
 
-	constructor(id: string, language: Language) {
+	readonly id: string;
+	readonly data: TranslationsData;
+
+	constructor(id: string) {
 		this.id = id;
-		this.language = language;
+		this.data =
+			Translations.cache.get(this.id) ??
+			Util.config.LANGUAGES.reduce(
+				(data: TranslationsData, language: Language) => {
+					data[language] = { language, strings: {} };
+					return data;
+				},
+				{},
+			);
 	}
 
-	init(): Promise<this> {
+	init(n: number = 0): Promise<this> {
 		const sheets = Google.sheets({ version: "v4", auth: Util.googleAuth });
 
 		return new Promise((resolve, reject) => {
-			sheets.spreadsheets.values.get(
-				{
-					spreadsheetId: process.env.TRANSLATIONS_SHEET_ID,
-					range: `${this.id}!A1:E25`,
-				},
-				(err, res) => {
-					if (err) return reject("The API returned an error: " + err);
+			if (Translations.cache.has(this.id)) return resolve(this);
 
-					const rows = res.data.values;
-					const columnIndex =
-						rows[0].indexOf(this.language.toUpperCase()) ?? 1;
+			// Retry backoff
+			setTimeout(() => {
+				sheets.spreadsheets.values.get(
+					{
+						spreadsheetId: process.env.TRANSLATIONS_SHEET_ID,
+						range: `${this.id}!A1:Z100`,
+					},
+					(err, res) => {
+						if (err) return n > 10 ? reject(err) : this.init(n + 1);
 
-					this._data = new Collection(
-						rows.map((row) => [row[0], row[columnIndex]]),
-					);
-					this.data = {};
+						const data = res.data.values;
 
-					for (const translationName of this._data.keys()) {
-						this.data[translationName] = (
-							...args: (string | boolean)[]
-						) => {
-							args = args.map((a) =>
-								a
-									? a
-											.toString()
-											.replace(/{/g, "~c")
-											.replace(/}/g, "~b")
-											.replace(/\[/g, "~s")
-											.replace(/\]/g, "~t")
-											.replace(/:/g, "~d")
-											.replace(/\?/g, "~q")
-									: a,
-							);
+						for (let column = 1; column < data[0].length; column++) {
+							const language = data[0][column].toLowerCase() as Language;
+							if (!Util.config.LANGUAGES.includes(language)) continue;
 
-							let text = this._data
-								.get(translationName)
-								.replace(/\\n/g, "\n")
-								.replace(/\\t/g, "\t");
+							for (let row = 1; row < data.length; row++) {
+								this.data[language].strings[data[row][0]] = (
+									...args: (string | boolean)[]
+								) => {
+									args = args.map((a) =>
+										a
+											? a
+													.toString()
+													.replace(/{/g, "~c")
+													.replace(/}/g, "~b")
+													.replace(/\[/g, "~s")
+													.replace(/\]/g, "~t")
+													.replace(/:/g, "~d")
+													.replace(/\?/g, "~q")
+											: a,
+									);
 
-							try {
-								text = JSON.parse(text);
-							} catch (err) {}
+									let text = data[row][column]
+										.replace(/\\n/g, "\n")
+										.replace(/\\t/g, "\t");
 
-							if (typeof text !== "string") return text;
+									try {
+										text = JSON.parse(text);
+									} catch (err) {}
 
-							text = text.replace(
-								/\{\d+?\}/g,
-								(a) =>
-									args[
-										parseInt(a.replace(/[{}]/g, "")) - 1
-									] as string,
-							);
+									if (typeof text !== "string") return text;
 
-							while (/\[\d+?\?[^\[\]]*?:.*?\]/gs.test(text)) {
-								text = text.replace(
-									/\[\d+?\?[^\[\]]*?:.*?\]/gs,
-									(a) => {
-										let m = a.match(
-											/\[(\d+?)\?([^\[\]]*?):(.*?)\]/s,
+									text = text.replace(
+										/\{\d+?\}/g,
+										(a) => args[parseInt(a.replace(/[{}]/g, "")) - 1] as string,
+									);
+
+									while (/\[\d+?\?[^\[\]]*?:[^\[\]]*?\]/gs.test(text)) {
+										text = text.replace(
+											/\[\d+?\?[^\[\]]*?:[^\[\]]*?\]/gs,
+											(a) => {
+												let m = a.match(/\[(\d+?)\?([^\[\]]*?):([^\[\]]*?)\]/s);
+												if (args[parseInt(m[1]) - 1]) return m[2];
+												else return m[3];
+											},
 										);
-										if (args[parseInt(m[1]) - 1])
-											return m[2];
-										else return m[3];
-									},
-								);
+									}
+
+									text = text
+										.replace(/~c/g, "{")
+										.replace(/~b/g, "}")
+										.replace(/~s/g, "[")
+										.replace(/~t/g, "]")
+										.replace(/~d/g, ":")
+										.replace(/~q/g, "?");
+
+									return text;
+								};
 							}
+						}
 
-							text = text
-								.replace(/~c/g, "{")
-								.replace(/~b/g, "}")
-								.replace(/~s/g, "[")
-								.replace(/~t/g, "]")
-								.replace(/~d/g, ":")
-								.replace(/~q/g, "?");
+						Translations.cache.set(this.id, this.data);
 
-							return text;
-						};
-					}
-
-					resolve(this);
-				},
-			);
+						return resolve(this);
+					},
+				);
+			}, 16_000);
 		});
 	}
+}
+
+export type TranslationsData = {
+	[L in Language]?: LanguageTranslationsData;
+};
+
+export interface LanguageTranslationsData {
+	readonly language: Language;
+	readonly strings: {
+		[K: string]: (...args: (string | boolean)[]) => string;
+	};
 }

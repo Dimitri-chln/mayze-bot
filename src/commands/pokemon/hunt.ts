@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Pokedex from "../../types/pokemon/Pokedex";
@@ -20,8 +19,7 @@ const command: Command = {
 		fr: [
 			{
 				name: "pokemon",
-				description:
-					'Le pokémon à chasser (utilise "none" pour réinitialiser)',
+				description: 'Le pokémon à chasser (utilise "none" pour réinitialiser)',
 				type: "STRING",
 				required: false,
 			},
@@ -48,9 +46,7 @@ const command: Command = {
 			);
 
 			if (huntedPokemonData) {
-				const huntedPokemon = Pokedex.findById(
-					huntedPokemonData.pokemon_id,
-				);
+				const huntedPokemon = Pokedex.findById(huntedPokemonData.pokemon_id);
 
 				const probability =
 					huntedPokemonData.hunt_count < 100
@@ -59,16 +55,14 @@ const command: Command = {
 						: 1;
 
 				return interaction.followUp(
-					translations.data.hunt_info(
+					translations.strings.hunt_info(
 						huntedPokemon.names[translations.language] ??
 							huntedPokemon.names.en,
-						(
-							Math.round(probability * 100 * 10_000) / 10_000
-						).toString(),
+						(Math.round(probability * 100 * 10_000) / 10_000).toString(),
 					),
 				);
 			} else {
-				return interaction.followUp(translations.data.not_hunting());
+				return interaction.followUp(translations.strings.not_hunting());
 			}
 		}
 
@@ -78,7 +72,7 @@ const command: Command = {
 					interaction.user.id,
 				])
 				.then(() => {
-					interaction.followUp(translations.data.deleted());
+					interaction.followUp(translations.strings.deleted());
 				});
 
 			return;
@@ -86,10 +80,10 @@ const command: Command = {
 
 		const pokemon = Pokedex.findByName(input);
 		if (!pokemon)
-			return interaction.followUp(translations.data.invalid_pokemon());
+			return interaction.followUp(translations.strings.invalid_pokemon());
 
 		const reply = (await interaction.followUp({
-			content: translations.data.confirmation(
+			content: translations.strings.confirmation(
 				pokemon.names[translations.language] ?? pokemon.names.en,
 			),
 			components: [
@@ -99,13 +93,13 @@ const command: Command = {
 						{
 							type: "BUTTON",
 							customId: "confirm",
-							emoji: "✅",
+							emoji: Util.config.EMOJIS.check.data,
 							style: "SUCCESS",
 						},
 						{
 							type: "BUTTON",
 							customId: "cancel",
-							emoji: "❌",
+							emoji: Util.config.EMOJIS.cross.data,
 							style: "DANGER",
 						},
 					],
@@ -114,9 +108,8 @@ const command: Command = {
 			fetchReply: true,
 		})) as Message;
 
-		const filter: CollectorFilter<[ButtonInteraction]> = (
-			buttonInteraction,
-		) => buttonInteraction.user.id === interaction.user.id;
+		const filter: CollectorFilter<[ButtonInteraction]> = (buttonInteraction) =>
+			buttonInteraction.user.id === interaction.user.id;
 		const collected = await reply.awaitMessageComponent({
 			filter,
 			componentType: "BUTTON",
@@ -132,14 +125,14 @@ const command: Command = {
 						{
 							type: "BUTTON",
 							customId: "confirm",
-							emoji: "✅",
+							emoji: Util.config.EMOJIS.check.data,
 							style: "SUCCESS",
 							disabled: true,
 						},
 						{
 							type: "BUTTON",
 							customId: "cancel",
-							emoji: "❌",
+							emoji: Util.config.EMOJIS.cross.data,
 							style: "DANGER",
 							disabled: true,
 						},
@@ -161,16 +154,15 @@ const command: Command = {
 				);
 
 				interaction.followUp(
-					translations.data.hunting(
-						pokemon.names[translations.language] ??
-							pokemon.names.en,
+					translations.strings.hunting(
+						pokemon.names[translations.language] ?? pokemon.names.en,
 					),
 				);
 				break;
 			}
 
 			case "cancel": {
-				interaction.followUp(translations.data.cancelled());
+				interaction.followUp(translations.strings.cancelled());
 				break;
 			}
 		}

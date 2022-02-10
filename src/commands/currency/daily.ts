@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 const command: Command = {
@@ -25,10 +24,9 @@ const command: Command = {
 
 		const {
 			rows: [userCurrency],
-		} = await Util.database.query(
-			"SELECT * FROM currency WHERE user_id = $1",
-			[interaction.user.id],
-		);
+		} = await Util.database.query("SELECT * FROM currency WHERE user_id = $1", [
+			interaction.user.id,
+		]);
 
 		const lastDaily = userCurrency
 			? new Date(userCurrency.last_daily)
@@ -36,16 +34,15 @@ const command: Command = {
 
 		if (lastDaily.valueOf() > MIDNIGHT.valueOf()) {
 			const timeLeft = Math.ceil(
-				(MIDNIGHT.valueOf() + DAY_IN_MS.valueOf() - NOW.valueOf()) /
-					1000,
+				(MIDNIGHT.valueOf() + DAY_IN_MS.valueOf() - NOW.valueOf()) / 1000,
 			);
-			const timeLeftHumanized = new Date((timeLeft % 86400) * 1000)
+			const timeLeftHumanized = new Date((timeLeft % 86_400) * 1000)
 				.toUTCString()
 				.replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
 				.replace(/00h |00m /g, "");
 
 			return interaction.followUp(
-				translations.data.cooldown(timeLeftHumanized),
+				translations.strings.cooldown(timeLeftHumanized),
 			);
 		}
 
@@ -72,13 +69,13 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name: translations.data.title(),
+						name: translations.strings.title(),
 						iconURL: interaction.user.displayAvatarURL({
 							dynamic: true,
 						}),
 					},
 					color: interaction.guild.me.displayColor,
-					description: translations.data.description(
+					description: translations.strings.description(
 						Util.config.DAILY_REWARD.toString(),
 						money.toString(),
 					),

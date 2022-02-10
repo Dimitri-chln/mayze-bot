@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { CollectorFilter, GuildMember, TextChannel } from "discord.js";
@@ -53,46 +52,34 @@ const command: Command = {
 	run: async (interaction, translations) => {
 		if (
 			!(interaction.member as GuildMember).roles.cache.has(
-				"696751852267765872",
-			) && // Chef
+				"696751852267765872" /* Chef */,
+			) &&
 			!(interaction.member as GuildMember).roles.cache.has(
-				"696751614177837056",
-			) // Sous-chef
-		)
-			return interaction.followUp({
-				content: translations.data.not_allowed(),
-				ephemeral: true,
-			});
-
-		if (
-			!["707304882662801490", "689212233439641649"].includes(
-				interaction.channel.id,
+				"696751614177837056" /* Sous-chef */,
 			)
 		)
-			return interaction.followUp({
-				content: translations.data.wrong_channel(),
-				ephemeral: true,
-			});
+			return interaction.followUp(translations.strings.not_allowed());
+
+		if (interaction.channel.id !== "707304882662801490" /* Bureau */)
+			return interaction.followUp(translations.strings.wrong_channel());
 
 		const questChannel = interaction.client.channels.cache.get(
 			"689385764219387905",
 		) as TextChannel;
 
-		interaction.followUp(translations.data.await_image());
+		interaction.followUp(translations.strings.await_image());
 
 		const filter: CollectorFilter<[Message]> = (msg) =>
 			msg.author.id === interaction.user.id && msg.attachments.size === 1;
 		const collected = await interaction.channel.awaitMessages({
 			filter,
-			idle: 120_000,
+			time: 120_000,
 			max: 1,
 		});
 		if (!collected.size) return;
 
 		const imageURL = collected.first().attachments.first().url;
-		const votes = interaction.options.getBoolean("single")
-			? "Un seul vote"
-			: "Plusieurs votes";
+		const votes = interaction.options.getBoolean("single") ? "⋅" : "∴";
 		const reactions = [
 			"1️⃣",
 			"2️⃣",
@@ -110,7 +97,7 @@ const command: Command = {
 			content: "<@&689169027922526235>",
 			embeds: [
 				{
-					title: translations.data.title(),
+					title: translations.strings.title(),
 					color: interaction.guild.me.displayColor,
 					image: {
 						url: imageURL,
@@ -125,7 +112,10 @@ const command: Command = {
 		reactions.forEach(async (e) => await msg.react(e).catch(console.error));
 		await msg.react("🔄").catch(console.error);
 
-		collected.first().react("✅").catch(console.error);
+		collected
+			.first()
+			.react(Util.config.EMOJIS.check.data.id)
+			.catch(console.error);
 	},
 };
 

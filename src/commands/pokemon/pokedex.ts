@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Pokedex from "../../types/pokemon/Pokedex";
@@ -21,8 +20,7 @@ const command: Command = {
 		fr: [
 			{
 				name: "find",
-				description:
-					"Trouver un pokémon en particulier dans le pokédex",
+				description: "Trouver un pokémon en particulier dans le pokédex",
 				type: "SUB_COMMAND",
 				options: [
 					{
@@ -46,8 +44,7 @@ const command: Command = {
 					},
 					{
 						name: "uncaught",
-						description:
-							"Pokémons que tu n'as pas attrapés uniquement",
+						description: "Pokémons que tu n'as pas attrapés uniquement",
 						type: "BOOLEAN",
 						required: false,
 					},
@@ -191,9 +188,7 @@ const command: Command = {
 					};
 
 				if (!pokemon)
-					return interaction.followUp(
-						translations.data.invalid_pokemon(),
-					);
+					return interaction.followUp(translations.strings.invalid_pokemon());
 
 				interaction.followUp({
 					embeds: [
@@ -202,20 +197,16 @@ const command: Command = {
 								shiny,
 								variationType,
 								translations.language,
-							)} #${pokemon.nationalId
-								.toString()
-								.padStart(3, "0")}`,
+							)} #${pokemon.nationalId.toString().padStart(3, "0")}`,
 							color: interaction.guild.me.displayColor,
 							image: {
 								url: pokemon.image(shiny, variationType),
 							},
 							fields: [
 								{
-									name: translations.data.field_alternative_names(),
+									name: translations.strings.field_alternative_names(),
 									value: Object.keys(pokemon.names)
-										.filter(
-											(l) => l !== translations.language,
-										)
+										.filter((l) => l !== translations.language)
 										.map(
 											(l) =>
 												`${Util.config.LANGUAGE_FLAGS[l]} ${pokemon.names[l]}`,
@@ -224,18 +215,18 @@ const command: Command = {
 									inline: true,
 								},
 								{
-									name: translations.data.field_height(),
+									name: translations.strings.field_height(),
 									value: pokemon.heightEu,
 									inline: true,
 								},
 								{
-									name: translations.data.field_weight(),
+									name: translations.strings.field_weight(),
 									value: pokemon.weightEu,
 									inline: true,
 								},
 								{
-									name: translations.data.field_base_stats(),
-									value: translations.data.base_stats(
+									name: translations.strings.field_base_stats(),
+									value: translations.strings.base_stats(
 										pokemon.baseStats.hp.toString(),
 										pokemon.baseStats.atk.toString(),
 										pokemon.baseStats.def.toString(),
@@ -246,42 +237,28 @@ const command: Command = {
 									inline: true,
 								},
 								{
-									name: translations.data.field_forms(),
+									name: translations.strings.field_forms(),
 									value:
-										pokemon.variations.length ||
-										pokemon.megaEvolutions.length
+										pokemon.variations.length || pokemon.megaEvolutions.length
 											? pokemon.variations
 													.map(
 														(variation) =>
-															`• ${
-																variation.names[
-																	translations
-																		.language
-																]
-															}`,
+															`• ${variation.names[translations.language]}`,
 													)
 													.join("\n") +
 											  "\n" +
 											  pokemon.megaEvolutions
 													.map(
 														(megaEvolution) =>
-															`• ${
-																megaEvolution
-																	.names[
-																	translations
-																		.language
-																]
-															}`,
+															`• ${megaEvolution.names[translations.language]}`,
 													)
 													.join("\n")
 											: "∅",
 									inline: true,
 								},
 								{
-									name: translations.data.field_types(),
-									value: pokemon.types
-										.map((type) => `• ${type}`)
-										.join("\n"),
+									name: translations.strings.field_types(),
+									value: pokemon.types.map((type) => `• ${type}`).join("\n"),
 									inline: true,
 								},
 							],
@@ -296,14 +273,11 @@ const command: Command = {
 
 			case "list": {
 				const { rows: pokemons } = await Util.database.query(
-					"SELECT * FROM pokemons WHERE users ? $1",
+					"SELECT * FROM pokemon WHERE users ? $1",
 					[interaction.user.id],
 				);
 
-				const pokemonList = new PokemonList(
-					pokemons,
-					interaction.user.id,
-				);
+				const pokemonList = new PokemonList(pokemons, interaction.user.id);
 
 				const userPokedex = Pokedex.pokemons.filter((pokemon) => {
 					if (
@@ -316,10 +290,7 @@ const command: Command = {
 						pokemonList.has(pokemon)
 					)
 						return false;
-					if (
-						interaction.options.getBoolean("legendary") &&
-						!pokemon.legendary
-					)
+					if (interaction.options.getBoolean("legendary") && !pokemon.legendary)
 						return false;
 					if (
 						interaction.options.getBoolean("ultra-beast") &&
@@ -348,9 +319,7 @@ const command: Command = {
 						embeds: [
 							{
 								author: {
-									name: translations.data.title(
-										interaction.user.tag,
-									),
+									name: translations.strings.title(interaction.user.tag),
 									iconURL: interaction.user.displayAvatarURL({
 										dynamic: true,
 									}),
@@ -362,7 +331,7 @@ const command: Command = {
 					};
 				};
 				if (!userPokedex.length)
-					pages.push(page(translations.data.no_pokemon()));
+					pages.push(page(translations.strings.no_pokemon()));
 
 				for (
 					let i = 0;
@@ -374,42 +343,35 @@ const command: Command = {
 							userPokedex
 								.slice(i, i + Util.config.ITEMS_PER_PAGE)
 								.map((pkm) => {
-									if (
-										interaction.options.getBoolean("mega")
-									) {
+									if (interaction.options.getBoolean("mega")) {
 										return pkm.megaEvolutions
 											.map((megaEvolution) =>
-												translations.data.description(
+												translations.strings.description(
 													pokemonList.has(pkm),
 													pkm.formatName(
 														shiny,
 														megaEvolution.suffix,
 														translations.language,
 													),
-													pkm.nationalId
-														.toString()
-														.padStart(3, "0"),
+													pkm.nationalId.toString().padStart(3, "0"),
 												),
 											)
 											.join("\n");
 									} else {
-										const variationType =
-											interaction.options.getBoolean(
-												"alola",
-											)
-												? "alola"
-												: "default";
+										const variationType = interaction.options.getBoolean(
+											"alola",
+										)
+											? "alola"
+											: "default";
 
-										return translations.data.description(
+										return translations.strings.description(
 											pokemonList.has(pkm),
 											pkm.formatName(
 												shiny,
 												variationType,
 												translations.language,
 											),
-											pkm.nationalId
-												.toString()
-												.padStart(3, "0"),
+											pkm.nationalId.toString().padStart(3, "0"),
 										);
 									}
 								})
@@ -428,9 +390,7 @@ const command: Command = {
 				);
 
 				if (!pokemon)
-					return interaction.followUp(
-						translations.data.invalid_pokemon(),
-					);
+					return interaction.followUp(translations.strings.invalid_pokemon());
 
 				const stringEvolutionLine = pokemon.stringEvolutionLine(
 					translations.language,
@@ -440,12 +400,10 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.data.evoline_title(
-									pokemon.names[translations.language] ??
-										pokemon.names.en,
+								name: translations.strings.evoline_title(
+									pokemon.names[translations.language] ?? pokemon.names.en,
 								),
-								iconURL:
-									interaction.client.user.displayAvatarURL(),
+								iconURL: interaction.client.user.displayAvatarURL(),
 							},
 							thumbnail: {
 								url: `https://assets.poketwo.net/images/${pokemon.nationalId}.png?v=26`,

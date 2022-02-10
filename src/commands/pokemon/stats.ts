@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Pokedex from "../../types/pokemon/Pokedex";
@@ -37,8 +36,7 @@ const command: Command = {
 						options: [
 							{
 								name: "pokemon",
-								description:
-									"Le pokémon dont tu veux voir les statistiques",
+								description: "Le pokémon dont tu veux voir les statistiques",
 								type: "STRING",
 								required: true,
 							},
@@ -46,21 +44,18 @@ const command: Command = {
 					},
 					{
 						name: "caught",
-						description:
-							"Voir le classement des pokémons les plus attrapés",
+						description: "Voir le classement des pokémons les plus attrapés",
 						type: "SUB_COMMAND",
 						options: [
 							{
 								name: "shiny",
-								description:
-									"Ne montrer que les pokémons shiny",
+								description: "Ne montrer que les pokémons shiny",
 								type: "BOOLEAN",
 								required: false,
 							},
 							{
 								name: "legendary",
-								description:
-									"Ne montrer que les pokémons légendaires",
+								description: "Ne montrer que les pokémons légendaires",
 								type: "BOOLEAN",
 								required: false,
 							},
@@ -72,8 +67,7 @@ const command: Command = {
 							},
 							{
 								name: "variation",
-								description:
-									"Ne montrer qu'un type de variation",
+								description: "Ne montrer qu'un type de variation",
 								type: "STRING",
 								required: false,
 								choices: [
@@ -100,8 +94,7 @@ const command: Command = {
 				options: [
 					{
 						name: "global",
-						description:
-							"Get global statistics about Mayze's pokémons",
+						description: "Get global statistics about Mayze's pokémons",
 						type: "SUB_COMMAND",
 					},
 					{
@@ -111,8 +104,7 @@ const command: Command = {
 						options: [
 							{
 								name: "pokemon",
-								description:
-									"The pokémon whose statistics to get",
+								description: "The pokémon whose statistics to get",
 								type: "STRING",
 								required: true,
 							},
@@ -120,8 +112,7 @@ const command: Command = {
 					},
 					{
 						name: "caught",
-						description:
-							"See the ranking of the most caught pokémons",
+						description: "See the ranking of the most caught pokémons",
 						type: "SUB_COMMAND",
 						options: [
 							{
@@ -187,11 +178,11 @@ const command: Command = {
 						} = await Util.database.query(
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
-							FROM pokemons, jsonb_each(users)
+							FROM pokemon, jsonb_each(users)
 							WHERE shiny = false AND variation = 'default'
 							`,
 						);
-						description += translations.data.normal(
+						description += translations.strings.normal(
 							(normal.total ?? 0).toString(),
 						);
 						total += normal.total ?? 0;
@@ -206,11 +197,11 @@ const command: Command = {
 						} = await Util.database.query(
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
-							FROM pokemons, jsonb_each(users)
+							FROM pokemon, jsonb_each(users)
 							WHERE shiny AND variation = 'default'
 							`,
 						);
-						description += translations.data.shiny(
+						description += translations.strings.shiny(
 							(shiny.total ?? 0).toString(),
 						);
 						total += shiny.total ?? 0;
@@ -219,14 +210,13 @@ const command: Command = {
 							await Util.database.query(
 								`
 							SELECT pokedex_id, users
-							FROM pokemons
+							FROM pokemon
 							WHERE shiny = false AND variation = 'default'
 							`,
 							);
 
 						const legendary = allNormal.filter(
-							(pokemon) =>
-								Pokedex.findById(pokemon.pokedex_id).legendary,
+							(pokemon) => Pokedex.findById(pokemon.pokedex_id).legendary,
 						);
 						const legendaryTotal = legendary.reduce(
 							(total, pkm) =>
@@ -237,14 +227,13 @@ const command: Command = {
 								),
 							0,
 						);
-						description += translations.data.legendary(
+						description += translations.strings.legendary(
 							legendaryTotal.toString(),
 						);
 						total += legendaryTotal;
 
 						const ultraBeast = allNormal.filter(
-							(pokemon) =>
-								Pokedex.findById(pokemon.pokedex_id).ultraBeast,
+							(pokemon) => Pokedex.findById(pokemon.pokedex_id).ultraBeast,
 						);
 						const ultraBeastTotal = ultraBeast.reduce(
 							(total, pkm) =>
@@ -255,7 +244,7 @@ const command: Command = {
 								),
 							0,
 						);
-						description += translations.data.ultra_beast(
+						description += translations.strings.ultra_beast(
 							ultraBeastTotal.toString(),
 						);
 						total += ultraBeastTotal;
@@ -264,14 +253,13 @@ const command: Command = {
 							await Util.database.query(
 								`
 							SELECT pokedex_id, users
-							FROM pokemons
+							FROM pokemon
 							WHERE shiny AND variation = 'default'
 							`,
 							);
 
 						const legendaryShiny = allShiny.filter(
-							(pokemon) =>
-								Pokedex.findById(pokemon.pokedex_id).legendary,
+							(pokemon) => Pokedex.findById(pokemon.pokedex_id).legendary,
 						);
 						const legendaryShinyTotal = legendaryShiny.reduce(
 							(total, pkm) =>
@@ -282,14 +270,13 @@ const command: Command = {
 								),
 							0,
 						);
-						description += translations.data.legendary_shiny(
+						description += translations.strings.legendary_shiny(
 							legendaryShinyTotal.toString(),
 						);
 						total += legendaryShinyTotal;
 
 						const ultraBeastShiny = allShiny.filter(
-							(pokemon) =>
-								Pokedex.findById(pokemon.pokedex_id).ultraBeast,
+							(pokemon) => Pokedex.findById(pokemon.pokedex_id).ultraBeast,
 						);
 						const ultraBeastShinyTotal = ultraBeastShiny.reduce(
 							(total, pkm) =>
@@ -300,7 +287,7 @@ const command: Command = {
 								),
 							0,
 						);
-						description += translations.data.ultra_beast_shiny(
+						description += translations.strings.ultra_beast_shiny(
 							ultraBeastShinyTotal.toString(),
 						);
 						total += ultraBeastShinyTotal;
@@ -315,11 +302,11 @@ const command: Command = {
 						} = await Util.database.query(
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
-							FROM pokemons, jsonb_each(users)
+							FROM pokemon, jsonb_each(users)
 							WHERE shiny = false AND variation = 'alola'
 							`,
 						);
-						description += translations.data.alola(
+						description += translations.strings.alola(
 							(alola.total ?? 0).toString(),
 						);
 						total += alola.total ?? 0;
@@ -334,11 +321,11 @@ const command: Command = {
 						} = await Util.database.query(
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
-							FROM pokemons, jsonb_each(users)
+							FROM pokemon, jsonb_each(users)
 							WHERE shiny AND variation = 'alola'
 							`,
 						);
-						description += translations.data.alola_shiny(
+						description += translations.strings.alola_shiny(
 							(alolaShiny.total ?? 0).toString(),
 						);
 						total += alolaShiny.total ?? 0;
@@ -353,11 +340,11 @@ const command: Command = {
 						} = await Util.database.query(
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
-							FROM pokemons, jsonb_each(users)
+							FROM pokemon, jsonb_each(users)
 							WHERE shiny = false AND variation = ANY('{ "mega", "megax", "megay", "primal" }')
 							`,
 						);
-						description += translations.data.mega(
+						description += translations.strings.mega(
 							(mega.total ?? 0).toString(),
 						);
 						total += mega.total ?? 0;
@@ -372,26 +359,23 @@ const command: Command = {
 						} = await Util.database.query(
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
-							FROM pokemons, jsonb_each(users)
+							FROM pokemon, jsonb_each(users)
 							WHERE shiny AND variation = ANY('{ "mega", "megax", "megay", "primal" }')
 							`,
 						);
-						description += translations.data.mega_shiny(
+						description += translations.strings.mega_shiny(
 							(megaShiny.total ?? 0).toString(),
 						);
 						total += megaShiny.total ?? 0;
 
-						description += translations.data.total(
-							total.toString(),
-						);
+						description += translations.strings.total(total.toString());
 
 						interaction.followUp({
 							embeds: [
 								{
 									author: {
-										name: translations.data.title(),
-										iconURL:
-											interaction.client.user.displayAvatarURL(),
+										name: translations.strings.title(),
+										iconURL: interaction.client.user.displayAvatarURL(),
 									},
 									color: interaction.guild.me.displayColor,
 									description,
@@ -410,7 +394,7 @@ const command: Command = {
 						);
 						if (!pokemon)
 							return interaction.followUp(
-								translations.data.invalid_pokemon(),
+								translations.strings.invalid_pokemon(),
 							);
 
 						let description = "",
@@ -426,12 +410,12 @@ const command: Command = {
 						} = await Util.database.query(
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
-							FROM pokemons, jsonb_each(users)
+							FROM pokemon, jsonb_each(users)
 							WHERE pokedex_id = $1 AND shiny = false AND variation = 'default'
 							`,
 							[pokemon.nationalId],
 						);
-						description += translations.data.normal(
+						description += translations.strings.normal(
 							(normal.total ?? 0).toString(),
 						);
 						total += normal.total ?? 0;
@@ -446,12 +430,12 @@ const command: Command = {
 						} = await Util.database.query(
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
-							FROM pokemons, jsonb_each(users)
+							FROM pokemon, jsonb_each(users)
 							WHERE pokedex_id = $1 AND shiny = true AND variation = 'default'
 							`,
 							[pokemon.nationalId],
 						);
-						description += translations.data.shiny(
+						description += translations.strings.shiny(
 							(shiny.total ?? 0).toString(),
 						);
 						total += shiny.total ?? 0;
@@ -467,12 +451,12 @@ const command: Command = {
 							} = await Util.database.query(
 								`
 								SELECT SUM((value -> 'caught')::int)::int AS total
-								FROM pokemons, jsonb_each(users)
+								FROM pokemon, jsonb_each(users)
 								WHERE pokedex_id = $1 AND shiny = false AND variation = 'alola'
 								`,
 								[pokemon.nationalId],
 							);
-							description += translations.data.alola(
+							description += translations.strings.alola(
 								(alola.total ?? 0).toString(),
 							);
 							total += alola.total ?? 0;
@@ -487,12 +471,12 @@ const command: Command = {
 							} = await Util.database.query(
 								`
 								SELECT SUM((value -> 'caught')::int)::int AS total
-								FROM pokemons, jsonb_each(users)
+								FROM pokemon, jsonb_each(users)
 								WHERE pokedex_id = $1 AND shiny = true AND variation = 'alola'
 								`,
 								[pokemon.nationalId],
 							);
-							description += translations.data.alola_shiny(
+							description += translations.strings.alola_shiny(
 								(alolaShiny.total ?? 0).toString(),
 							);
 							total += alolaShiny.total ?? 0;
@@ -509,12 +493,12 @@ const command: Command = {
 							} = await Util.database.query(
 								`
 								SELECT SUM((value -> 'caught')::int)::int AS total
-								FROM pokemons, jsonb_each(users)
+								FROM pokemon, jsonb_each(users)
 								WHERE pokedex_id = $1 AND shiny = false AND variation = ANY('{ "mega", "megax", "megay", "primal" }')
 								`,
 								[pokemon.nationalId],
 							);
-							description += translations.data.mega(
+							description += translations.strings.mega(
 								(mega.total ?? 0).toString(),
 							);
 							total += mega.total ?? 0;
@@ -529,34 +513,29 @@ const command: Command = {
 							} = await Util.database.query(
 								`
 								SELECT SUM((value -> 'caught')::int)::int AS total
-								FROM pokemons, jsonb_each(users)
+								FROM pokemon, jsonb_each(users)
 								WHERE pokedex_id = $1 AND shiny = false AND variation = ANY('{ "mega", "megax", "megay", "primal" }')
 								`,
 								[pokemon.nationalId],
 							);
-							description += translations.data.mega_shiny(
+							description += translations.strings.mega_shiny(
 								(megaShiny.total ?? 0).toString(),
 							);
 							total += megaShiny.total ?? 0;
 						}
 
-						description += translations.data.total(
-							total.toString(),
-						);
+						description += translations.strings.total(total.toString());
 
 						interaction.followUp({
 							embeds: [
 								{
 									author: {
-										name: translations.data.title(),
-										iconURL:
-											interaction.client.user.displayAvatarURL(),
+										name: translations.strings.title(),
+										iconURL: interaction.client.user.displayAvatarURL(),
 									},
 									title: `${
 										pokemon.names[translations.language]
-									}#${pokemon.nationalId
-										.toString()
-										.padStart(3, "0")}`,
+									}#${pokemon.nationalId.toString().padStart(3, "0")}`,
 									color: interaction.guild.me.displayColor,
 									description,
 									footer: {
@@ -569,21 +548,17 @@ const command: Command = {
 					}
 
 					case "caught": {
-						const shiny = Boolean(
-							interaction.options.getBoolean("shiny"),
-						);
+						const shiny = Boolean(interaction.options.getBoolean("shiny"));
 						const variation: VariationType =
 							(interaction.options.getString("variation") as
 								| "mega"
 								| "alola") ?? "default";
 
-						let {
-							rows: pokemons,
-						}: { rows: DatabasePokemonWithCaughtStats[] } =
+						let { rows: pokemons }: { rows: DatabasePokemonWithCaughtStats[] } =
 							await Util.database.query(
 								`
 							SELECT pokedex_id, shiny, variation, SUM((value -> 'caught')::int)::int AS total
-							FROM pokemons, jsonb_each(users)
+							FROM pokemon, jsonb_each(users)
 							WHERE shiny = $1 AND variation = $2
 							GROUP BY pokedex_id, shiny, variation
 							ORDER BY total DESC, pokedex_id ASC
@@ -613,15 +588,12 @@ const command: Command = {
 								embeds: [
 									{
 										author: {
-											name: translations.data.title(),
-											iconURL:
-												interaction.client.user.displayAvatarURL(),
+											name: translations.strings.title(),
+											iconURL: interaction.client.user.displayAvatarURL(),
 										},
-										title: translations.data.most_caught_title(),
-										color: interaction.guild.me
-											.displayColor,
-										description:
-											translations.data.no_caught(),
+										title: translations.strings.most_caught_title(),
+										color: interaction.guild.me.displayColor,
+										description: translations.strings.no_caught(),
 									},
 								],
 							});
@@ -635,24 +607,17 @@ const command: Command = {
 								embeds: [
 									{
 										author: {
-											name: translations.data.title(),
-											iconURL:
-												interaction.client.user.displayAvatarURL(),
+											name: translations.strings.title(),
+											iconURL: interaction.client.user.displayAvatarURL(),
 										},
-										title: translations.data.most_caught_title(),
-										color: interaction.guild.me
-											.displayColor,
+										title: translations.strings.most_caught_title(),
+										color: interaction.guild.me.displayColor,
 										description: pokemons
-											.slice(
-												i,
-												i + Util.config.ITEMS_PER_PAGE,
-											)
+											.slice(i, i + Util.config.ITEMS_PER_PAGE)
 											.map((pokemon, j) =>
-												translations.data.most_caught_description(
+												translations.strings.most_caught_description(
 													(i + j + 1).toString(),
-													Pokedex.findById(
-														pokemon.pokedex_id,
-													).formatName(
+													Pokedex.findById(pokemon.pokedex_id).formatName(
 														shiny,
 														variation,
 														translations.language,

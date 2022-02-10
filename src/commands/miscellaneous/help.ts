@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import formatTime from "../../utils/misc/formatTime";
@@ -40,9 +39,7 @@ const command: Command = {
 				!cmd.guildIds?.includes(interaction.guild.id) &&
 				cmd.category !== "admin",
 		);
-		const commandName = interaction.options
-			.getString("command")
-			?.toLowerCase();
+		const commandName = interaction.options.getString("command")?.toLowerCase();
 
 		if (!commandName) {
 			const categories: {
@@ -54,9 +51,7 @@ const command: Command = {
 				const category = publicCommands.first().category;
 				categories.push({
 					name: category,
-					commands: publicCommands.filter(
-						(cmd) => cmd.category === category,
-					),
+					commands: publicCommands.filter((cmd) => cmd.category === category),
 				});
 				publicCommands.sweep((cmd) => cmd.category === category);
 			}
@@ -65,18 +60,14 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: translations.data.command_list(),
+							name: translations.strings.command_list(),
 							iconURL: interaction.client.user.displayAvatarURL(),
 						},
 						color: interaction.guild.me.displayColor,
 						fields: categories.map((category) => {
 							return {
-								name: category.name.replace(/^./, (a) =>
-									a.toUpperCase(),
-								),
-								value: category.commands
-									.map((cmd) => cmd.name)
-									.join(", "),
+								name: category.name.replace(/^./, (a) => a.toUpperCase()),
+								value: category.commands.map((cmd) => cmd.name).join(", "),
 								inline: true,
 							};
 						}),
@@ -89,23 +80,19 @@ const command: Command = {
 		} else {
 			const command = publicCommands.get(commandName);
 			if (!command)
-				return interaction.followUp(
-					translations.data.invalid_command(),
-				);
+				return interaction.followUp(translations.strings.invalid_command());
 
 			interaction.followUp({
 				embeds: [
 					{
 						author: {
-							name: translations.data.title(command.name),
+							name: translations.strings.title(command.name),
 							iconURL: interaction.client.user.displayAvatarURL(),
 						},
 						color: interaction.guild.me.displayColor,
-						description: translations.data.description(
+						description: translations.strings.description(
 							command.name,
-							command.category.replace(/^./, (a) =>
-								a.toUpperCase(),
-							),
+							command.category.replace(/^./, (a) => a.toUpperCase()),
 							command.description[translations.language],
 							command.userPermissions.length
 								? command.userPermissions.join("`, `")

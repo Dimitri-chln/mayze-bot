@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 const command: Command = {
@@ -48,9 +47,7 @@ const command: Command = {
 		const user = interaction.options.getUser("user");
 		const message = interaction.options.getString("message");
 
-		const webhook = await interaction.client.fetchWebhook(
-			"800803785949577266",
-		);
+		const webhook = await interaction.client.fetchWebhook("800803785949577266");
 
 		if (webhook.channelId !== interaction.channel.id)
 			await webhook.edit({ channel: interaction.channel.id });
@@ -61,7 +58,7 @@ const command: Command = {
 			content: message,
 		});
 
-		interaction.followUp(translations.data.sent());
+		interaction.followUp(translations.strings.sent());
 	},
 };
 

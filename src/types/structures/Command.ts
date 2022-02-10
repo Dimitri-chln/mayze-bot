@@ -6,7 +6,7 @@ import {
 	Snowflake,
 } from "discord.js";
 import Util from "../../Util";
-import Translations from "./Translations";
+import Translations, { LanguageTranslationsData } from "./Translations";
 
 const t = Util.config.LANGUAGES;
 
@@ -31,8 +31,9 @@ export default interface Command {
 	path?: string;
 	category?: string;
 	cooldowns?: Collection<Snowflake, number>;
+	translations?: Translations;
 	run(
 		interaction: CommandInteraction,
-		translations: Translations,
+		translations: LanguageTranslationsData,
 	): Promise<any>;
 }

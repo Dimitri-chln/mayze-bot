@@ -35,7 +35,8 @@ export default class Util {
 		process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
 		["https://www.googleapis.com/auth/spreadsheets.readonly"],
 	);
-	static languages: Collection<Snowflake, Language> = new Collection();
+	static readonly availableLanguages: Language[] = ["fr", "en"];
+	static guildConfigs: Collection<Snowflake, GuildConfig> = new Collection();
 	static commands: Collection<string, Command> = new Collection();
 	static messageResponses: MessageResponse[] = [];
 	static reactionCommands: ReactionCommand[] = [];
@@ -60,6 +61,11 @@ export default class Util {
 	static amongUsGames: Collection<Snowflake, AmongUsGame> = new Collection();
 	static russianRouletteGames: Collection<Snowflake, RussianRouletteGame> =
 		new Collection();
+}
+
+interface GuildConfig {
+	language: Language;
+	webhookId: Snowflake;
 }
 
 interface MessageReactionSnipingData {

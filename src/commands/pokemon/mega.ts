@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Pokedex from "../../types/pokemon/Pokedex";
@@ -55,8 +54,7 @@ const command: Command = {
 					},
 					{
 						name: "shiny",
-						description:
-							"Si le pokémon à méga évoluer est shiny ou non",
+						description: "Si le pokémon à méga évoluer est shiny ou non",
 						type: "BOOLEAN",
 						required: false,
 					},
@@ -106,8 +104,7 @@ const command: Command = {
 					},
 					{
 						name: "shiny",
-						description:
-							"Whether to mega evolve a shiny pokémon or not",
+						description: "Whether to mega evolve a shiny pokémon or not",
 						type: "BOOLEAN",
 						required: false,
 					},
@@ -137,9 +134,7 @@ const command: Command = {
 					interaction.options.getString("pokemon"),
 				);
 				if (!pokemon)
-					return interaction.followUp(
-						translations.data.invalid_pokemon(),
-					);
+					return interaction.followUp(translations.strings.invalid_pokemon());
 
 				const megaType = interaction.options.getString("type");
 				const shiny = interaction.options.getBoolean("shiny") ?? false;
@@ -147,14 +142,12 @@ const command: Command = {
 				const {
 					rows: [pokemonData],
 				}: { rows: DatabasePokemon[] } = await Util.database.query(
-					"SELECT * FROM pokemons WHERE pokedex_id = $1 AND shiny = $2 AND variation = 'default' AND users ? $3",
+					"SELECT * FROM pokemon WHERE pokedex_id = $1 AND shiny = $2 AND variation = 'default' AND users ? $3",
 					[pokemon.nationalId, shiny, interaction.user.id],
 				);
 
 				if (!pokemonData)
-					return interaction.followUp(
-						translations.data.pokemon_not_owned(),
-					);
+					return interaction.followUp(translations.strings.pokemon_not_owned());
 
 				const megaEvolution = pokemon.megaEvolutions.find(
 					(mega) => mega.suffix === megaType,
@@ -162,12 +155,12 @@ const command: Command = {
 
 				if (!megaEvolution)
 					return interaction.followUp(
-						translations.data.invalid_mega_evolution(),
+						translations.strings.invalid_mega_evolution(),
 					);
 
 				if (!gems[megaEvolution.megaStone])
 					return interaction.followUp(
-						translations.data.no_mega_gem(megaEvolution.megaStone),
+						translations.strings.no_mega_gem(megaEvolution.megaStone),
 					);
 
 				Util.database.query(
@@ -193,14 +186,14 @@ const command: Command = {
 
 				Util.database.query(
 					`
-					INSERT INTO pokemons VALUES ($1, $2, $3, $4)
+					INSERT INTO pokemon VALUES ($1, $2, $3, $4)
 					ON CONFLICT (pokedex_id, shiny, variation)
 					DO UPDATE SET users =
 						CASE
-							WHEN pokemons.users -> $5 IS NULL THEN jsonb_set(pokemons.users, '{${interaction.user.id}}', $6)
-							ELSE jsonb_set(pokemons.users, '{${interaction.user.id}, caught}', ((pokemons.users -> $5 -> 'caught')::int + 1)::text::jsonb)
+							WHEN pokemon.users -> $5 IS NULL THEN jsonb_set(pokemon.users, '{${interaction.user.id}}', $6)
+							ELSE jsonb_set(pokemon.users, '{${interaction.user.id}, caught}', ((pokemon.users -> $5 -> 'caught')::int + 1)::text::jsonb)
 						END
-					WHERE pokemons.pokedex_id = EXCLUDED.pokedex_id AND pokemons.shiny = EXCLUDED.shiny AND pokemons.variation = EXCLUDED.variation
+					WHERE pokemon.pokedex_id = EXCLUDED.pokedex_id AND pokemon.shiny = EXCLUDED.shiny AND pokemon.variation = EXCLUDED.variation
 					`,
 					[
 						pokemon.nationalId,
@@ -214,7 +207,7 @@ const command: Command = {
 
 				Util.database.query(
 					`
-					UPDATE pokemons
+					UPDATE pokemon
 					SET users =
 						CASE
 							WHEN (users -> $1 -> 'caught')::int = 1 THEN users - $1
@@ -229,9 +222,7 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.data.evolving_title(
-									interaction.user.tag,
-								),
+								name: translations.strings.evolving_title(interaction.user.tag),
 								iconURL: interaction.user.displayAvatarURL({
 									dynamic: true,
 								}),
@@ -240,12 +231,8 @@ const command: Command = {
 							thumbnail: {
 								url: pokemon.image(shiny, "default"),
 							},
-							description: translations.data.evolving(
-								pokemon.formatName(
-									shiny,
-									"default",
-									translations.language,
-								),
+							description: translations.strings.evolving(
+								pokemon.formatName(shiny, "default", translations.language),
 							),
 						},
 					],
@@ -256,16 +243,10 @@ const command: Command = {
 					reply.edit({
 						embeds: [
 							reply.embeds[0]
-								.setThumbnail(
-									pokemon.image(shiny, megaEvolution.suffix),
-								)
+								.setThumbnail(pokemon.image(shiny, megaEvolution.suffix))
 								.setDescription(
-									translations.data.evolved(
-										pokemon.formatName(
-											shiny,
-											"default",
-											translations.language,
-										),
+									translations.strings.evolved(
+										pokemon.formatName(shiny, "default", translations.language),
 										pokemon.formatName(
 											shiny,
 											megaEvolution.suffix,
@@ -286,9 +267,7 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.data.title(
-									interaction.user.tag,
-								),
+								name: translations.strings.title(interaction.user.tag),
 								iconURL: interaction.user.displayAvatarURL({
 									dynamic: true,
 								}),
@@ -299,10 +278,7 @@ const command: Command = {
 								.map((group) =>
 									group
 										.map(([gem, number]) =>
-											`${gem} \u00d7${number}`.padEnd(
-												20,
-												" ",
-											),
+											`${gem} \u00d7${number}`.padEnd(20, " "),
 										)
 										.join(" "),
 								)

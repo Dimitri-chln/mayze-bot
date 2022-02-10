@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import Pokedex from "../../types/pokemon/Pokedex";
@@ -73,22 +72,19 @@ const command: Command = {
 				options: [
 					{
 						name: "user",
-						description:
-							"L'utilisateur dont tu veux obtenir la liste",
+						description: "L'utilisateur dont tu veux obtenir la liste",
 						type: "USER",
 						required: false,
 					},
 					{
 						name: "normal",
-						description:
-							"Une option pour n'afficher que les pokémons normaux",
+						description: "Une option pour n'afficher que les pokémons normaux",
 						type: "BOOLEAN",
 						required: false,
 					},
 					{
 						name: "favorite",
-						description:
-							"Une option pour n'afficher que tes pokémons favoris",
+						description: "Une option pour n'afficher que tes pokémons favoris",
 						type: "BOOLEAN",
 						required: false,
 					},
@@ -101,29 +97,25 @@ const command: Command = {
 					},
 					{
 						name: "ultra-beast",
-						description:
-							"Une option pour n'afficher que les chimères",
+						description: "Une option pour n'afficher que les chimères",
 						type: "BOOLEAN",
 						required: false,
 					},
 					{
 						name: "shiny",
-						description:
-							"Une option pour n'afficher que les pokémons shiny",
+						description: "Une option pour n'afficher que les pokémons shiny",
 						type: "BOOLEAN",
 						required: false,
 					},
 					{
 						name: "alola",
-						description:
-							"Une option pour n'afficher que les pokémons d'Alola",
+						description: "Une option pour n'afficher que les pokémons d'Alola",
 						type: "BOOLEAN",
 						required: false,
 					},
 					{
 						name: "mega",
-						description:
-							"Une option pour n'afficher que les méga pokémons",
+						description: "Une option pour n'afficher que les méga pokémons",
 						type: "BOOLEAN",
 						required: false,
 					},
@@ -211,22 +203,19 @@ const command: Command = {
 					},
 					{
 						name: "normal",
-						description:
-							"An option to display normal pokémons only",
+						description: "An option to display normal pokémons only",
 						type: "BOOLEAN",
 						required: false,
 					},
 					{
 						name: "favorite",
-						description:
-							"An option to display your favorite pokémons only",
+						description: "An option to display your favorite pokémons only",
 						type: "BOOLEAN",
 						required: false,
 					},
 					{
 						name: "legendary",
-						description:
-							"An option to display legendary pokémons only",
+						description: "An option to display legendary pokémons only",
 						type: "BOOLEAN",
 						required: false,
 					},
@@ -244,8 +233,7 @@ const command: Command = {
 					},
 					{
 						name: "alola",
-						description:
-							"An option to display alolan pokémons only",
+						description: "An option to display alolan pokémons only",
 						type: "BOOLEAN",
 						required: false,
 					},
@@ -264,8 +252,7 @@ const command: Command = {
 					},
 					{
 						name: "name",
-						description:
-							"An option to find a pokémon by its name or nickname",
+						description: "An option to find a pokémon by its name or nickname",
 						type: "STRING",
 						required: false,
 					},
@@ -292,40 +279,27 @@ const command: Command = {
 					) ?? {};
 
 				if (!pokemon)
-					return interaction.followUp(
-						translations.data.invalid_pokemon(),
-					);
+					return interaction.followUp(translations.strings.invalid_pokemon());
 
 				const { rows: pokemons } = await Util.database.query(
-					"SELECT * FROM pokemons WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3 AND users ? $4",
-					[
-						pokemon.nationalId,
-						shiny,
-						variationType,
-						interaction.user.id,
-					],
+					"SELECT * FROM pokemon WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3 AND users ? $4",
+					[pokemon.nationalId, shiny, variationType, interaction.user.id],
 				);
 
 				if (!pokemons.length)
-					return interaction.followUp(
-						translations.data.pokemon_not_owned(),
-					);
+					return interaction.followUp(translations.strings.pokemon_not_owned());
 
 				await Util.database.query(
 					`
-					UPDATE pokemons SET users = jsonb_set(users, '{${interaction.user.id}, favorite}', TRUE::text::jsonb)
+					UPDATE pokemon SET users = jsonb_set(users, '{${interaction.user.id}, favorite}', TRUE::text::jsonb)
 					WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3
 					`,
 					[pokemon.nationalId, shiny, variationType],
 				);
 
 				interaction.followUp(
-					translations.data.favorite_added(
-						pokemon.formatName(
-							shiny,
-							variationType,
-							translations.language,
-						),
+					translations.strings.favorite_added(
+						pokemon.formatName(shiny, variationType, translations.language),
 					),
 				);
 				break;
@@ -338,40 +312,27 @@ const command: Command = {
 					) ?? {};
 
 				if (!pokemon)
-					return interaction.followUp(
-						translations.data.invalid_pokemon(),
-					);
+					return interaction.followUp(translations.strings.invalid_pokemon());
 
 				const { rows: pokemons } = await Util.database.query(
-					"SELECT * FROM pokemons WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3 AND users ? $4",
-					[
-						pokemon.nationalId,
-						shiny,
-						variationType,
-						interaction.user.id,
-					],
+					"SELECT * FROM pokemon WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3 AND users ? $4",
+					[pokemon.nationalId, shiny, variationType, interaction.user.id],
 				);
 
 				if (!pokemons.length)
-					return interaction.followUp(
-						translations.data.pokemon_not_owned(),
-					);
+					return interaction.followUp(translations.strings.pokemon_not_owned());
 
 				await Util.database.query(
 					`
-					UPDATE pokemons SET users = jsonb_set(users, '{${interaction.user.id}, favorite}', FALSE::text::jsonb)
+					UPDATE pokemon SET users = jsonb_set(users, '{${interaction.user.id}, favorite}', FALSE::text::jsonb)
 					WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3
 					`,
 					[pokemon.nationalId, shiny, variationType],
 				);
 
 				interaction.followUp(
-					translations.data.favorite_removed(
-						pokemon.formatName(
-							shiny,
-							variationType,
-							translations.language,
-						),
+					translations.strings.favorite_removed(
+						pokemon.formatName(shiny, variationType, translations.language),
 					),
 				);
 				break;
@@ -384,50 +345,33 @@ const command: Command = {
 					) ?? {};
 
 				if (!pokemon)
-					return interaction.followUp(
-						translations.data.invalid_pokemon(),
-					);
+					return interaction.followUp(translations.strings.invalid_pokemon());
 
 				const { rows: pokemons } = await Util.database.query(
-					"SELECT * FROM pokemons WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3 AND users ? $4",
-					[
-						pokemon.nationalId,
-						shiny,
-						variationType,
-						interaction.user.id,
-					],
+					"SELECT * FROM pokemon WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3 AND users ? $4",
+					[pokemon.nationalId, shiny, variationType, interaction.user.id],
 				);
 
 				if (!pokemons.length)
-					return interaction.followUp(
-						translations.data.pokemon_not_owned(),
-					);
+					return interaction.followUp(translations.strings.pokemon_not_owned());
 
 				const nickname = interaction.options.getString("nickname");
 				if (nickname && nickname.length > 30)
-					return interaction.followUp(
-						translations.data.nickname_too_long(),
-					);
+					return interaction.followUp(translations.strings.nickname_too_long());
 
 				await Util.database.query(
 					`
-					UPDATE pokemons SET users = jsonb_set(users, '{${
+					UPDATE pokemon SET users = jsonb_set(users, '{${
 						interaction.user.id
-					}, nickname}', '${
-						nickname ? `"${nickname}"` : null
-					}'::jsonb)
+					}, nickname}', '${nickname ? `"${nickname}"` : null}'::jsonb)
 					WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3
 					`,
 					[pokemon.nationalId, shiny, variationType],
 				);
 
 				interaction.followUp(
-					translations.data.nickname_updated(
-						pokemon.formatName(
-							shiny,
-							variationType,
-							translations.language,
-						),
+					translations.strings.nickname_updated(
+						pokemon.formatName(shiny, variationType, translations.language),
 						nickname,
 					),
 				);
@@ -435,14 +379,12 @@ const command: Command = {
 			}
 
 			case "list": {
-				const user =
-					interaction.options.getUser("user") ?? interaction.user;
+				const user = interaction.options.getUser("user") ?? interaction.user;
 
 				const { rows: pokemons }: { rows: DatabasePokemon[] } =
-					await Util.database.query(
-						"SELECT * FROM pokemons WHERE users ? $1",
-						[user.id],
-					);
+					await Util.database.query("SELECT * FROM pokemon WHERE users ? $1", [
+						user.id,
+					]);
 
 				const pokemonList = new PokemonList(
 					pokemons.filter((pkm) => {
@@ -466,10 +408,7 @@ const command: Command = {
 							!Pokedex.findById(pkm.pokedex_id).ultraBeast
 						)
 							return false;
-						if (
-							interaction.options.getBoolean("shiny") &&
-							!pkm.shiny
-						)
+						if (interaction.options.getBoolean("shiny") && !pkm.shiny)
 							return false;
 						if (
 							interaction.options.getBoolean("alola") &&
@@ -478,45 +417,32 @@ const command: Command = {
 							return false;
 						if (
 							interaction.options.getBoolean("mega") &&
-							!["mega", "megax", "megay", "primal"].includes(
-								pkm.variation,
-							)
+							!["mega", "megax", "megay", "primal"].includes(pkm.variation)
 						)
 							return false;
 
 						if (
 							interaction.options.getInteger("id") &&
 							interaction.options.getInteger("id") !== 0 &&
-							pkm.pokedex_id !==
-								interaction.options.getInteger("id")
+							pkm.pokedex_id !== interaction.options.getInteger("id")
 						)
 							return false;
 
 						if (
 							interaction.options.getString("name") &&
-							!new RegExp(
-								interaction.options.getString("name"),
-								"i",
-							).test(
-								Pokedex.findById(pkm.pokedex_id).names[
-									translations.language
-								],
+							!new RegExp(interaction.options.getString("name"), "i").test(
+								Pokedex.findById(pkm.pokedex_id).names[translations.language],
 							) &&
-							!new RegExp(
-								interaction.options.getString("name"),
-								"i",
-							).test(pkm.users[user.id].nickname)
+							!new RegExp(interaction.options.getString("name"), "i").test(
+								pkm.users[user.id].nickname,
+							)
 						)
 							return false;
 
 						if (
 							interaction.options.getString("evolution") &&
-							Pokedex.findByName(
-								interaction.options.getString("evolution"),
-							) &&
-							!Pokedex.findByName(
-								interaction.options.getString("evolution"),
-							)
+							Pokedex.findByName(interaction.options.getString("evolution")) &&
+							!Pokedex.findByName(interaction.options.getString("evolution"))
 								.flatEvolutionLine()
 								.some((p) => p.nationalId === pkm.pokedex_id)
 						)
@@ -544,19 +470,19 @@ const command: Command = {
 						embeds: [
 							{
 								author: {
-									name: translations.data.title(user.tag),
+									name: translations.strings.title(user.tag),
 									iconURL: user.displayAvatarURL({
 										dynamic: true,
 									}),
 								},
 								color: interaction.guild.me.displayColor,
-								description: translations.data.no_pokemon(),
+								description: translations.strings.no_pokemon(),
 							},
 						],
 					});
 
-				const total = pokemons.reduce(
-					(sum, p) => sum + p.users[user.id].caught,
+				const total = pokemonList.pokemons.reduce(
+					(sum, p) => sum + p.caught,
 					0,
 				);
 
@@ -569,20 +495,17 @@ const command: Command = {
 						embeds: [
 							{
 								author: {
-									name: translations.data.title(user.tag),
+									name: translations.strings.title(user.tag),
 									iconURL: user.displayAvatarURL({
 										dynamic: true,
 									}),
 								},
-								title: translations.data.total(
-									total.toString(),
-									total > 1,
-								),
+								title: translations.strings.total(total.toString(), total > 1),
 								color: interaction.guild.me.displayColor,
 								description: pokemonList.pokemons
 									.slice(i, i + Util.config.ITEMS_PER_PAGE)
 									.map((p) =>
-										translations.data.description(
+										translations.strings.description(
 											p.data.formatName(
 												p.shiny,
 												p.variation,
@@ -595,36 +518,23 @@ const command: Command = {
 												translations.language,
 												"raw",
 											),
-											interaction.options.getInteger(
-												"id",
-											) === 0
-												? `#${p.data.nationalId
-														.toString()
-														.padStart(3, "0")}`
+											interaction.options.getInteger("id") === 0
+												? `#${p.data.nationalId.toString().padStart(3, "0")}`
 												: "",
 											escapeMarkdown(p.nickname),
 											p.caught.toString(),
 											p.caught > 1,
 											p.favorite
 												? `https~d//www.pokemon.com/${
-														translations.language ===
-														"en"
+														translations.language === "en"
 															? "us"
 															: translations.language
-												  }/pokedex/${p.data.names[
-														translations.language
-												  ]
+												  }/pokedex/${p.data.names[translations.language]
 														.toLowerCase()
 														.replace(/[:\.']/g, "")
 														.replace(/\s/g, "-")
-														.replace(
-															/\u2642/,
-															"-male",
-														)
-														.replace(
-															/\u2640/,
-															"-female",
-														)}`
+														.replace(/\u2642/, "-male")
+														.replace(/\u2640/, "-female")}`
 												: "",
 										),
 									)

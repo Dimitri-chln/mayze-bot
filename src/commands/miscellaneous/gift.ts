@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import gifts from "../../assets/gifts.json";
@@ -38,7 +37,7 @@ const command: Command = {
 		const user = interaction.options.getUser("user");
 
 		interaction.followUp(
-			translations.data.gift(
+			translations.strings.gift(
 				user.toString(),
 				getGift(gifts[translations.language] ?? gifts.fr),
 				interaction.user.username,

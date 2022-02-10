@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 const command: Command = {
@@ -35,11 +34,11 @@ const command: Command = {
 		const question = interaction.options.getString("question");
 
 		const randomReply =
-			translations.data.answers()[
-				Math.floor(Math.random() * translations.data.answers().length)
+			translations.strings.answers()[
+				Math.floor(Math.random() * translations.strings.answers().length)
 			];
 
-		interaction.followUp(translations.data.reply(question, randomReply));
+		interaction.followUp(translations.strings.reply(question, randomReply));
 	},
 };
 

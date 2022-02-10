@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { CronJob } from "cron";
@@ -48,11 +47,10 @@ const command: Command = {
 	run: async (interaction, translations) => {
 		const date = new Date(interaction.options.getString("date"));
 
-		if (!date)
-			return interaction.followUp(translations.data.invalid_date());
+		if (!date) return interaction.followUp(translations.strings.invalid_date());
 
 		if (date.valueOf() < Date.now())
-			return interaction.followUp(translations.data.date_passed());
+			return interaction.followUp(translations.strings.date_passed());
 
 		const taskString = interaction.options.getString("task");
 		const task = eval(`async () => { ${taskString} }`);
@@ -60,7 +58,7 @@ const command: Command = {
 
 		job.start();
 
-		interaction.followUp(translations.data.saved());
+		interaction.followUp(translations.strings.saved());
 	},
 };
 

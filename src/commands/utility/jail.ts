@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { GuildMember } from "discord.js";
@@ -44,13 +43,9 @@ const command: Command = {
 				(interaction.member as GuildMember).roles.highest.position &&
 			interaction.user.id !== Util.owner.id
 		)
-			return interaction.followUp({
-				content: translations.data.not_allowed(),
-				ephemeral: true,
-			});
+			return interaction.followUp(translations.strings.not_allowed());
 
-		const jailedRole =
-			interaction.guild.roles.cache.get("695943648235487263");
+		const jailedRole = interaction.guild.roles.cache.get("695943648235487263");
 
 		if (!member.roles.cache.has(jailedRole.id)) {
 			const unJailedRoles = member.roles.cache.filter((role) =>
@@ -59,18 +54,14 @@ const command: Command = {
 				),
 			);
 			const jailedRoles = interaction.guild.roles.cache.filter((role) =>
-				member.roles.cache.some(
-					(r) => role.name === r.name + " (Jailed)",
-				),
+				member.roles.cache.some((r) => role.name === r.name + " (Jailed)"),
 			);
 			jailedRoles.set(jailedRole.id, jailedRole);
 
 			await member.roles.remove(unJailedRoles).catch(console.error);
 			await member.roles.add(jailedRoles).catch(console.error);
 
-			return interaction.followUp(
-				translations.data.jailed(member.user.tag),
-			);
+			return interaction.followUp(translations.strings.jailed(member.user.tag));
 		} else {
 			const jailedRoles = member.roles.cache.filter((role) =>
 				interaction.guild.roles.cache.some(
@@ -78,9 +69,7 @@ const command: Command = {
 				),
 			);
 			const unJailedRoles = interaction.guild.roles.cache.filter((role) =>
-				member.roles.cache.some(
-					(r) => r.name === role.name + " (Jailed)",
-				),
+				member.roles.cache.some((r) => r.name === role.name + " (Jailed)"),
 			);
 			jailedRoles.set(jailedRole.id, jailedRole);
 
@@ -88,7 +77,7 @@ const command: Command = {
 			await member.roles.remove(jailedRoles).catch(console.error);
 
 			return interaction.followUp(
-				translations.data.unjailed(member.user.tag),
+				translations.strings.unjailed(member.user.tag),
 			);
 		}
 	},

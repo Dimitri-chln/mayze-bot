@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import dhms from "dhms";
@@ -57,22 +56,17 @@ const command: Command = {
 				(interaction.member as GuildMember).roles.highest.position &&
 			interaction.user.id !== Util.owner.id
 		)
-			return interaction.followUp({
-				content: translations.data.not_allowed(),
-				ephemeral: true,
-			});
+			return interaction.followUp(translations.strings.not_allowed());
 
-		const duration: number = dhms(
-			interaction.options.getString("duration"),
-		);
+		const duration: number = dhms(interaction.options.getString("duration"));
 
 		await member.timeout(
 			duration ?? 365 * 24 * 60 * 60 * 1000,
-			translations.data.reason(interaction.user.tag),
+			translations.strings.reason(interaction.user.tag),
 		);
 
 		interaction.followUp(
-			translations.data.timed_out(
+			translations.strings.timed_out(
 				member.user.tag,
 				Boolean(duration),
 				formatTime(duration, translations.language),

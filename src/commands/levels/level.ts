@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import getLevel from "../../utils/misc/getLevel";
@@ -44,13 +43,9 @@ const command: Command = {
 		const user = interaction.options.getUser("user") ?? interaction.user;
 
 		let { rows: chatLeaderboard }: { rows: DatabaseLevel[] } =
-			await Util.database.query(
-				"SELECT * FROM levels ORDER BY chat_xp DESC",
-			);
+			await Util.database.query("SELECT * FROM level ORDER BY chat_xp DESC");
 		let { rows: voiceLeaderboard }: { rows: DatabaseLevel[] } =
-			await Util.database.query(
-				"SELECT * FROM levels ORDER BY voice_xp DESC",
-			);
+			await Util.database.query("SELECT * FROM level ORDER BY voice_xp DESC");
 
 		chatLeaderboard = chatLeaderboard.filter((u) =>
 			interaction.guild.members.cache.has(u.user_id),
@@ -64,9 +59,7 @@ const command: Command = {
 		const chatRank = chatLeaderboard.indexOf(userChatData) + 1;
 		const chatLevel = getLevel(chatXp);
 
-		const userVoiceData = voiceLeaderboard.find(
-			(u) => u.user_id === user.id,
-		);
+		const userVoiceData = voiceLeaderboard.find((u) => u.user_id === user.id);
 		const voiceXp = userVoiceData ? userVoiceData.voice_xp : 0;
 		const voiceRank = voiceLeaderboard.indexOf(userVoiceData) + 1;
 		const voiceLevel = getLevel(voiceXp);
@@ -81,23 +74,19 @@ const command: Command = {
 					color: interaction.guild.me.displayColor,
 					fields: [
 						{
-							name: translations.data.chat_title(),
-							value: translations.data.description(
+							name: translations.strings.chat_title(),
+							value: translations.strings.description(
 								chatLevel.level.toString(),
 								chatRank.toString(),
 								xpBar.full.repeat(
 									Math.round(
-										(chatLevel.currentXP /
-											chatLevel.neededXP) *
-											barSize,
+										(chatLevel.currentXP / chatLevel.neededXP) * barSize,
 									),
 								) +
 									xpBar.empty.repeat(
 										barSize -
 											Math.round(
-												(chatLevel.currentXP /
-													chatLevel.neededXP) *
-													barSize,
+												(chatLevel.currentXP / chatLevel.neededXP) * barSize,
 											),
 									),
 								chatLevel.currentXP.toString(),
@@ -106,23 +95,19 @@ const command: Command = {
 							inline: true,
 						},
 						{
-							name: translations.data.voice_title(),
-							value: translations.data.description(
+							name: translations.strings.voice_title(),
+							value: translations.strings.description(
 								voiceLevel.level.toString(),
 								voiceRank.toString(),
 								xpBar.full.repeat(
 									Math.round(
-										(voiceLevel.currentXP /
-											voiceLevel.neededXP) *
-											barSize,
+										(voiceLevel.currentXP / voiceLevel.neededXP) * barSize,
 									),
 								) +
 									xpBar.empty.repeat(
 										barSize -
 											Math.round(
-												(voiceLevel.currentXP /
-													voiceLevel.neededXP) *
-													barSize,
+												(voiceLevel.currentXP / voiceLevel.neededXP) * barSize,
 											),
 									),
 								voiceLevel.currentXP.toString(),

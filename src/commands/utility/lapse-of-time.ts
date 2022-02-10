@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import formatTime from "../../utils/misc/formatTime";
@@ -36,12 +35,26 @@ const command: Command = {
 	run: async (interaction, translations) => {
 		const NOW = Date.now();
 
-		const date = new Date(interaction.options.getString("date"));
-		if (!date)
-			return interaction.followUp({
-				content: translations.data.invalid_date(),
-				ephemeral: true,
-			});
+		const input = interaction.options.getString("date").trim();
+		const match =
+			input.match(
+				/^(\d{1,2})-(\d{1,2})-(\d+)(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/,
+			) ??
+			input.match(
+				/^(\d{1,2})\/(\d{1,2})\/(\d+)(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/,
+			);
+
+		const date = match
+			? new Date(
+					`${match[2]}-${match[1]}-${match[3]}${
+						match[4] && match[5]
+							? ` ${match[4]}:${match[5]}${match[6] ? `:${match[6]}` : ""}`
+							: ""
+					}`,
+			  )
+			: new Date(input);
+		if (!date.valueOf())
+			return interaction.followUp(translations.strings.invalid_date());
 
 		const lapseOfTime = NOW - date.valueOf();
 		const lapseOfTimeString = formatTime(
@@ -50,15 +63,18 @@ const command: Command = {
 		);
 
 		interaction.followUp(
-			translations.data.response(
+			translations.strings.response(
 				lapseOfTime > 0,
 				lapseOfTimeString,
 				date.getDate().toString(),
-				translations.data.month_list()[date.getMonth() - 1],
+				translations.strings.month_list()[date.getMonth()],
 				date.getFullYear().toString(),
-				date.getHours().toString(),
-				date.getMinutes().toString(),
-				date.getSeconds().toString(),
+				date.getHours().toString().padStart(2, "0"),
+				date.getMinutes().toString().padStart(2, "0"),
+				date.getSeconds().toString().padStart(2, "0"),
+				date.getDate().toString().endsWith("1"),
+				date.getDate().toString().endsWith("2"),
+				date.getDate().toString().endsWith("3"),
 			),
 		);
 	},

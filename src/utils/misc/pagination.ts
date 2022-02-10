@@ -4,12 +4,36 @@ import {
 	CollectorFilter,
 	Message,
 	ButtonInteraction,
+	User,
 } from "discord.js";
 
-export default async function pagination(
+interface PaginationOptions {
+	timeout?: number;
+	user?: User;
+}
+
+export default function pagination(
 	interaction: CommandInteraction,
 	pages: Page[],
-	timeout: number = 120_000,
+	options?: PaginationOptions,
+): Promise<Message>;
+
+export default function pagination(
+	message: Message,
+	pages: Page[],
+	options?: PaginationOptions,
+): Promise<Message>;
+
+export default function pagination(
+	message: Message,
+	pages: Page[],
+	options?: PaginationOptions,
+): Promise<Message>;
+
+export default async function pagination(
+	interactionOrMessage: CommandInteraction | Message,
+	pages: Page[],
+	options: PaginationOptions = { timeout: 120_000 },
 ) {
 	const emojis = ["⏪", "⏩"];
 	let page = 0;
@@ -41,17 +65,26 @@ export default async function pagination(
 		];
 	});
 
-	const currentPage = (await interaction.followUp({
-		...pages[page],
-		fetchReply: true,
-	})) as Message;
+	const currentPage =
+		interactionOrMessage instanceof CommandInteraction
+			? ((await interactionOrMessage.followUp({
+					...pages[page],
+					fetchReply: true,
+			  })) as Message)
+			: await interactionOrMessage.reply(pages[page]);
+
+	const user =
+		interactionOrMessage instanceof CommandInteraction
+			? interactionOrMessage.user
+			: options.user ?? interactionOrMessage.author;
 
 	const filter: CollectorFilter<[ButtonInteraction]> = (buttonInteraction) =>
-		buttonInteraction.user.id === interaction.user.id;
+		buttonInteraction.user.id === user.id;
+
 	const componentCollector = currentPage.createMessageComponentCollector({
 		componentType: "BUTTON",
 		filter,
-		idle: timeout,
+		idle: options.timeout,
 	});
 
 	componentCollector.on("collect", (buttonInteraction) => {

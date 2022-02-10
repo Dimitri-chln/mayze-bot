@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { Client as UnbClient } from "unb-api";
@@ -64,25 +63,17 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.data.balance_title(user.tag),
+								name: translations.strings.balance_title(user.tag),
 								iconURL: user.displayAvatarURL({
 									dynamic: true,
 								}),
 							},
 							color: interaction.guild.me.displayColor,
-							description: translations.data.balance_description(
-								unbUser.rank.toLocaleString(
-									translations.language,
-								),
-								unbUser.cash.toLocaleString(
-									translations.language,
-								),
-								unbUser.bank.toLocaleString(
-									translations.language,
-								),
-								unbUser.total.toLocaleString(
-									translations.language,
-								),
+							description: translations.strings.balance_description(
+								unbUser.rank.toLocaleString(translations.language),
+								unbUser.cash.toLocaleString(translations.language),
+								unbUser.bank.toLocaleString(translations.language),
+								unbUser.total.toLocaleString(translations.language),
 							),
 							footer: {
 								text: "✨ Mayze ✨",

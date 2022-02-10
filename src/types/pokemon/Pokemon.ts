@@ -119,7 +119,7 @@ interface RawPokemonVariation {
 	abilities: RawPokemonAbility[];
 }
 
-type PokemonNames = {
+interface PokemonNames {
 	en: string;
 	fr: string;
 };

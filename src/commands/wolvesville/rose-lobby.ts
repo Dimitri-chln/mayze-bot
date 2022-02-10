@@ -1,6 +1,5 @@
-import { CommandInteraction, Message } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
 import Util from "../../Util";
 
 import { CronJob } from "cron";
@@ -81,46 +80,36 @@ const command: Command = {
 			"856901268445069322",
 		) as TextChannel;
 
-		if (interaction.channel.id !== announcementChannel.id)
-			return interaction.followUp({
-				content: translations.data.wrong_channel(),
-				ephemeral: true,
-			});
+		if (interaction.channel.id !== "707304882662801490" /* Bureau */)
+			return interaction.followUp(translations.strings.wrong_channel());
 
 		const subCommand = interaction.options.getSubcommand();
 
 		switch (subCommand) {
 			case "create": {
 				const announcementId = interaction.options.getString("message");
-				const announcement = await interaction.channel.messages.fetch(
-					announcementId,
-				);
+				const announcement = announcementId
+					? await announcementChannel.messages.fetch(announcementId)
+					: (await announcementChannel.messages.fetch({ limit: 1 })).first();
 
 				if (!announcement)
-					return interaction.followUp({
-						content: translations.data.invalid_message_id(),
-						ephemeral: true,
-					});
-
-				announcement.react("833620353133707264");
+					return interaction.followUp(
+						translations.strings.invalid_message_id(),
+					);
 
 				const date = new Date(
 					parseInt(
-						announcement.content.match(
-							/<t:(\d+)(?::[tTdDfFR])?>/,
-						)[1],
-					),
+						(announcement.content.match(/<t:(\d+)(?::[tTdDfFR])?>/) ?? [])[1],
+					) * 1000,
 				);
-				if (!date)
-					return interaction.followUp({
-						content: translations.data.no_date(),
-						ephemeral: true,
-					});
+
+				if (!date.valueOf())
+					return interaction.followUp(translations.strings.no_date());
+
 				if (Date.now() > date.valueOf())
-					return interaction.followUp({
-						content: translations.data.date_passed(),
-						ephemeral: true,
-					});
+					return interaction.followUp(translations.strings.date_passed());
+
+				announcement.react("833620353133707264");
 
 				const password = interaction.options
 					.getString("password")
@@ -130,43 +119,37 @@ const command: Command = {
 
 				Util.roseLobby = new CronJob(date, () => {
 					announcementChannel
-						.send(translations.data.annoucement(password))
+						.send(translations.strings.annoucement(password))
 						.catch(console.error);
 
 					logChannel.messages.fetch({ limit: 1 }).then((messages) => {
 						const logMessage = messages.first();
-						logMessage
-							.edit(`~~${logMessage.content}~~`)
-							.catch(console.error);
+						logMessage.edit(`~~${logMessage.content}~~`).catch(console.error);
 					});
 				});
 
 				Util.roseLobby.start();
 
-				logChannel
-					.send(
-						`**Starting at:** \`${date.toUTCString()}\`\n**Password:** \`${password}\``,
-					)
-					.catch(console.error);
+				await logChannel.send(
+					`**Starting at:** \`${date.toUTCString()}\`\n**Password:** \`${password}\``,
+				);
+
+				interaction.followUp(translations.strings.created());
 				break;
 			}
 
 			case "end": {
-				interaction.followUp(translations.data.ending());
+				await interaction.followUp(translations.strings.ending());
 
 				const annoucements = await announcementChannel.messages.fetch({
 					limit: 100,
 				});
 				await Promise.all(
 					annoucements
-						.filter((m) =>
-							m.reactions.cache.has("833620353133707264"),
-						)
+						.filter((m) => m.reactions.cache.has("833620353133707264"))
 						.map(
 							async (m) =>
-								await m.reactions.cache
-									.get("833620353133707264")
-									.remove(),
+								await m.reactions.cache.get("833620353133707264").remove(),
 						),
 				);
 
@@ -174,12 +157,11 @@ const command: Command = {
 					interaction.guild.members.cache
 						.filter((m) => m.roles.cache.has("833620668066693140"))
 						.map(
-							async (member) =>
-								await member.roles.remove("833620668066693140"),
+							async (member) => await member.roles.remove("833620668066693140"),
 						),
 				);
 
-				interaction.editReply(translations.data.ended());
+				interaction.editReply(translations.strings.ended());
 				break;
 			}
 		}
