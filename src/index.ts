@@ -57,7 +57,7 @@ const client = new Discord.Client({
 	partials: ["MESSAGE", "CHANNEL", "REACTION"],
 });
 
-(async function connectDatabase() {
+(function connectDatabase() {
 	const connectionString: Pg.ClientConfig = {
 		connectionString: process.env.DATABASE_URL,
 		ssl: process.env.ENVIRONMENT === "PRODUCTION",
