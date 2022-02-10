@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"outDir": "dist",
+		"module": "commonjs",
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"target": "es2021",
+		"downlevelIteration": true
+	},
+	"include": ["src/**/*", "src/assets/**/*.json", "src/downloads/.ts"],
+	"exclude": ["node_modules/**/*"]
+}

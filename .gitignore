@@ -1,5 +1,4 @@
 .env
 .vscode/
-tsconfig.json
 dist/
 node_modules/
