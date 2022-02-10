@@ -582,16 +582,15 @@ const command: Command = {
 
 					grid = await canvas.viewGrid(x, y);
 
-					if (reply.editable)
-						buttonInteraction.update({
-							content: grid.format(),
-							embeds: reply.embeds,
-							components: reply.components,
-						});
+					buttonInteraction.update({
+						content: grid.format(),
+						embeds: reply.embeds,
+						components: reply.components,
+					});
 				});
 
-				collector.on("end", () => {
-					if (reply.editable)
+				collector.on("end", (collected, reason) => {
+					if (reason !== "messageDelete")
 						reply.edit({
 							content: grid.format(),
 							embeds: reply.embeds,
@@ -869,16 +868,15 @@ const command: Command = {
 
 					grid = await canvas.viewGrid(x, y);
 
-					if (reply.editable)
-						buttonInteraction.update({
-							content: grid.format(),
-							embeds: reply.embeds,
-							components: reply.components,
-						});
+					buttonInteraction.update({
+						content: grid.format(),
+						embeds: reply.embeds,
+						components: reply.components,
+					});
 				});
 
-				collector.on("end", () => {
-					if (reply.editable)
+				collector.on("end", (collected, reason) => {
+					if (reason !== "messageDelete")
 						reply.edit({
 							content: grid.format(),
 							embeds: reply.embeds,

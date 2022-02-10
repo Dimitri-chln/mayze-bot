@@ -81,13 +81,13 @@ export default async function pagination(
 	const filter: CollectorFilter<[ButtonInteraction]> = (buttonInteraction) =>
 		buttonInteraction.user.id === user.id;
 
-	const componentCollector = currentPage.createMessageComponentCollector({
+	const collector = currentPage.createMessageComponentCollector({
 		componentType: "BUTTON",
 		filter,
 		idle: options.timeout,
 	});
 
-	componentCollector.on("collect", (buttonInteraction) => {
+	collector.on("collect", (buttonInteraction) => {
 		switch (buttonInteraction.customId) {
 			case "back":
 				page = page > 0 ? --page : pages.length - 1;
@@ -96,14 +96,12 @@ export default async function pagination(
 				page = page + 1 < pages.length ? ++page : 0;
 				break;
 		}
-		if (currentPage.editable)
-			buttonInteraction.update(pages[page]).catch(console.error);
+
+		buttonInteraction.update(pages[page]).catch(console.error);
 	});
 
-	componentCollector.on("end", (collected, reason) => {
-		console.log(reason);
-		return;
-		if (currentPage.editable)
+	collector.on("end", (collected, reason) => {
+		if (reason !== "messageDelete")
 			currentPage.edit({
 				...pages[page],
 				components: [

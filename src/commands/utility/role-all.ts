@@ -192,34 +192,33 @@ const command: Command = {
 
 		switch (buttonInteraction.customId) {
 			case "confirm": {
-				if (reply.editable)
-					buttonInteraction.update({
-						content: translations.strings.updating(
-							members.size.toString(),
-							members.size > 1,
-						),
-						components: [
-							{
-								type: "ACTION_ROW",
-								components: [
-									{
-										type: "BUTTON",
-										customId: "confirm",
-										emoji: Util.config.EMOJIS.check.data,
-										style: "SUCCESS",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "cancel",
-										emoji: Util.config.EMOJIS.cross.data,
-										style: "DANGER",
-										disabled: true,
-									},
-								],
-							},
-						],
-					});
+				buttonInteraction.update({
+					content: translations.strings.updating(
+						members.size.toString(),
+						members.size > 1,
+					),
+					components: [
+						{
+							type: "ACTION_ROW",
+							components: [
+								{
+									type: "BUTTON",
+									customId: "confirm",
+									emoji: Util.config.EMOJIS.check.data,
+									style: "SUCCESS",
+									disabled: true,
+								},
+								{
+									type: "BUTTON",
+									customId: "cancel",
+									emoji: Util.config.EMOJIS.cross.data,
+									style: "DANGER",
+									disabled: true,
+								},
+							],
+						},
+					],
+				});
 
 				switch (subCommand) {
 					case "give":
@@ -263,31 +262,30 @@ const command: Command = {
 			}
 
 			case "cancel": {
-				if (reply.editable)
-					buttonInteraction.update({
-						content: translations.strings.cancelled(),
-						components: [
-							{
-								type: "ACTION_ROW",
-								components: [
-									{
-										type: "BUTTON",
-										customId: "confirm",
-										emoji: Util.config.EMOJIS.check.data,
-										style: "SUCCESS",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "cancel",
-										emoji: Util.config.EMOJIS.cross.data,
-										style: "DANGER",
-										disabled: true,
-									},
-								],
-							},
-						],
-					});
+				buttonInteraction.update({
+					content: translations.strings.cancelled(),
+					components: [
+						{
+							type: "ACTION_ROW",
+							components: [
+								{
+									type: "BUTTON",
+									customId: "confirm",
+									emoji: Util.config.EMOJIS.check.data,
+									style: "SUCCESS",
+									disabled: true,
+								},
+								{
+									type: "BUTTON",
+									customId: "cancel",
+									emoji: Util.config.EMOJIS.cross.data,
+									style: "DANGER",
+									disabled: true,
+								},
+							],
+						},
+					],
+				});
 				break;
 			}
 		}

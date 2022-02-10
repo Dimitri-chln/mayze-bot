@@ -1,5 +1,6 @@
 import {
 	ApplicationCommandOptionData,
+	Awaitable,
 	Collection,
 	CommandInteraction,
 	Message,
@@ -33,7 +34,7 @@ export default interface Command {
 	category?: string;
 	cooldowns?: Collection<Snowflake, number>;
 	translations?: Translations;
-	available?: Promise<boolean>;
+	available?: Awaitable<boolean>;
 	runInteraction(
 		interaction: CommandInteraction,
 		translations: LanguageTranslationsData,

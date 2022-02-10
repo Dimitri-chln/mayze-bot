@@ -370,12 +370,11 @@ const command: Command = {
 				collector.on("collect", async (buttonInteraction) => {
 					switch (buttonInteraction.customId) {
 						case "deny": {
-							if (trade.editable)
-								buttonInteraction.update({
-									content: trade.content,
-									embeds: trade.embeds,
-									components: trade.components,
-								});
+							buttonInteraction.update({
+								content: trade.content,
+								embeds: trade.embeds,
+								components: trade.components,
+							});
 							cancelledBy = buttonInteraction.user;
 							collector.stop();
 							break;
@@ -386,77 +385,72 @@ const command: Command = {
 								buttonInteraction.user.id === interaction.user.id ? 0 : 1;
 							accepted[index] = true;
 
-							if (trade.editable)
-								await buttonInteraction.update({
-									content: trade.content,
-									embeds: [
-										{
-											author: {
-												name: translations.strings.title(
-													interaction.user.tag,
-													user.tag,
-												),
-												iconURL: interaction.user.displayAvatarURL({
-													dynamic: true,
-												}),
-											},
-											color: interaction.guild.me.displayColor,
-											// U+00d7 : ×
-											fields: [
-												{
-													name: translations.strings.offer(
-														interaction.user.username,
-														accepted[0],
-													),
-													value: `\`\`\`\n${
-														offer.length
-															? offer
-																	.map(
-																		(pkm) =>
-																			`\u00d7${
-																				pkm.number
-																			} ${pkm.data.formatName(
-																				pkm.shiny,
-																				pkm.variation,
-																				translations.language,
-																			)}`,
-																	)
-																	.join("\n")
-															: "Ø"
-													}\n\`\`\``,
-													inline: true,
-												},
-												{
-													name: translations.strings.demand(
-														user.username,
-														accepted[1],
-													),
-													value: `\`\`\`\n${
-														demand.length
-															? demand
-																	.map(
-																		(pkm) =>
-																			`\u00d7${
-																				pkm.number
-																			} ${pkm.data.formatName(
-																				pkm.shiny,
-																				pkm.variation,
-																				translations.language,
-																			)}`,
-																	)
-																	.join("\n")
-															: "Ø"
-													}\n\`\`\``,
-													inline: true,
-												},
-											],
-											footer: {
-												text: `✨ Mayze ✨ | ${translations.strings.footer()}`,
-											},
+							await buttonInteraction.update({
+								content: trade.content,
+								embeds: [
+									{
+										author: {
+											name: translations.strings.title(
+												interaction.user.tag,
+												user.tag,
+											),
+											iconURL: interaction.user.displayAvatarURL({
+												dynamic: true,
+											}),
 										},
-									],
-									components: trade.components,
-								});
+										color: interaction.guild.me.displayColor,
+										// U+00d7 : ×
+										fields: [
+											{
+												name: translations.strings.offer(
+													interaction.user.username,
+													accepted[0],
+												),
+												value: `\`\`\`\n${
+													offer.length
+														? offer
+																.map(
+																	(pkm) =>
+																		`\u00d7${pkm.number} ${pkm.data.formatName(
+																			pkm.shiny,
+																			pkm.variation,
+																			translations.language,
+																		)}`,
+																)
+																.join("\n")
+														: "Ø"
+												}\n\`\`\``,
+												inline: true,
+											},
+											{
+												name: translations.strings.demand(
+													user.username,
+													accepted[1],
+												),
+												value: `\`\`\`\n${
+													demand.length
+														? demand
+																.map(
+																	(pkm) =>
+																		`\u00d7${pkm.number} ${pkm.data.formatName(
+																			pkm.shiny,
+																			pkm.variation,
+																			translations.language,
+																		)}`,
+																)
+																.join("\n")
+														: "Ø"
+												}\n\`\`\``,
+												inline: true,
+											},
+										],
+										footer: {
+											text: `✨ Mayze ✨ | ${translations.strings.footer()}`,
+										},
+									},
+								],
+								components: trade.components,
+							});
 
 							if (accepted.every((v) => v)) collector.stop();
 							break;
@@ -464,8 +458,8 @@ const command: Command = {
 					}
 				});
 
-				collector.on("end", async () => {
-					if (trade.editable)
+				collector.on("end", async (collected, reason) => {
+					if (reason !== "messageDelete")
 						trade.edit({
 							content: trade.content,
 							embeds: trade.embeds,

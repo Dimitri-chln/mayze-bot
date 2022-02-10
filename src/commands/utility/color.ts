@@ -158,39 +158,38 @@ const command: Command = {
 					break;
 			}
 
-			if (reply.editable)
-				buttonInteraction.update({
-					embeds: [
-						{
-							author: {
-								name: translations.strings.title(),
-								iconURL: interaction.client.user.displayAvatarURL(),
-							},
-							color: interaction.guild.me.displayColor,
-							description: translations.strings.description(
-								RGBToHex(color),
-								color[0].toString(),
-								color[1].toString(),
-								color[2].toString(),
-								RGBToDec(color).toString(),
-							),
-							thumbnail: {
-								url: `https://dummyimage.com/100/${RGBToHex(color).replace(
-									"#",
-									"",
-								)}/00.png?text=%20`,
-							},
-							footer: {
-								text: "✨ Mayze ✨",
-							},
+			buttonInteraction.update({
+				embeds: [
+					{
+						author: {
+							name: translations.strings.title(),
+							iconURL: interaction.client.user.displayAvatarURL(),
 						},
-					],
-					components: reply.components,
-				});
+						color: interaction.guild.me.displayColor,
+						description: translations.strings.description(
+							RGBToHex(color),
+							color[0].toString(),
+							color[1].toString(),
+							color[2].toString(),
+							RGBToDec(color).toString(),
+						),
+						thumbnail: {
+							url: `https://dummyimage.com/100/${RGBToHex(color).replace(
+								"#",
+								"",
+							)}/00.png?text=%20`,
+						},
+						footer: {
+							text: "✨ Mayze ✨",
+						},
+					},
+				],
+				components: reply.components,
+			});
 		});
 
-		collector.on("end", () => {
-			if (reply.editable)
+		collector.on("end", (collected, reason) => {
+			if (reason !== "messageDelete")
 				reply.edit({
 					embeds: reply.embeds,
 					components: [
@@ -290,35 +289,34 @@ const command: Command = {
 					break;
 			}
 
-			if (reply.editable)
-				reply.edit({
-					embeds: [
-						{
-							author: {
-								name: translations.strings.title(),
-								iconURL: interaction.client.user.displayAvatarURL(),
-							},
-							color: interaction.guild.me.displayColor,
-							description: translations.strings.description(
-								RGBToHex(color),
-								color[0].toString(),
-								color[1].toString(),
-								color[2].toString(),
-								RGBToDec(color).toString(),
-							),
-							thumbnail: {
-								url: `https://dummyimage.com/100/${RGBToHex(color).replace(
-									"#",
-									"",
-								)}/00.png?text=%20`,
-							},
-							footer: {
-								text: "✨ Mayze ✨",
-							},
+			reply.edit({
+				embeds: [
+					{
+						author: {
+							name: translations.strings.title(),
+							iconURL: interaction.client.user.displayAvatarURL(),
 						},
-					],
-					components: reply.components,
-				});
+						color: interaction.guild.me.displayColor,
+						description: translations.strings.description(
+							RGBToHex(color),
+							color[0].toString(),
+							color[1].toString(),
+							color[2].toString(),
+							RGBToDec(color).toString(),
+						),
+						thumbnail: {
+							url: `https://dummyimage.com/100/${RGBToHex(color).replace(
+								"#",
+								"",
+							)}/00.png?text=%20`,
+						},
+						footer: {
+							text: "✨ Mayze ✨",
+						},
+					},
+				],
+				components: reply.components,
+			});
 		});
 
 		function hexToRGB(hexColor: string) {
