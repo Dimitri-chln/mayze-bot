@@ -3,10 +3,9 @@ import Util from "../../Util";
 
 const messageCommand: MessageCommand = {
 	...Util.commands.get("kick-myself"),
-	name: "kick-myself",
-	aliases: ["kms", "4-4-2", "442"],
+	aliases: ["kickmyself", "kms", "4-4-2", "442"],
 	usage: "",
-	
+
 	run: async (message, args, translations) => {
 		// Server booster
 		if (message.member.premiumSinceTimestamp)
@@ -19,7 +18,7 @@ const messageCommand: MessageCommand = {
 			return message.reply(translations.strings.too_high_hierarchy());
 
 		message.member.kick(translations.strings.reason()).then(() => {
-			message.reply(translations.strings.kick_message());
+			message.reply(translations.strings.kick_message(message.author.tag));
 		});
 	},
 };

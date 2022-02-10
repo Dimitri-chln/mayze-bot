@@ -22,22 +22,20 @@ const command: Command = {
 	run: async (interaction, translations) => {
 		// Server booster
 		if ((interaction.member as GuildMember).premiumSinceTimestamp)
-			return interaction.followUp(
-				translations.strings.boosting()
-			);
+			return interaction.followUp(translations.strings.boosting());
 
 		if (
 			(interaction.member as GuildMember).roles.highest.position >=
 			interaction.guild.me.roles.highest.position
 		)
-			return interaction.followUp(
-				translations.strings.too_high_hierarchy()
-			);
+			return interaction.followUp(translations.strings.too_high_hierarchy());
 
 		(interaction.member as GuildMember)
 			.kick(translations.strings.reason())
 			.then(() => {
-				interaction.followUp(translations.strings.kick_message());
+				interaction.followUp(
+					translations.strings.kick_message(interaction.user.tag),
+				);
 			});
 	},
 };

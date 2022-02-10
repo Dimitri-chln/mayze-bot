@@ -1,5 +1,4 @@
-import { Message } from "discord.js";
-import Command from "../../types/structures/Command";
+import MessageCommand from "../../types/structures/MessageCommand";
 import Util from "../../Util";
 
 import { TextChannel } from "discord.js";
@@ -13,22 +12,12 @@ import {
 	DatabaseUpgrades,
 } from "../../types/structures/Database";
 
-const command: Command = {
-	name: "catch",
-	description: {
-		fr: "Attrape un pokémon !",
-		en: "Catch a pokémon!",
-	},
-	userPermissions: [],
-	botPermissions: ["EMBED_LINKS"],
-	cooldown: 1_200,
+const messageCommand: MessageCommand = {
+	...Util.commands.get("catch"),
+	aliases: ["c"],
+	usage: "",
 
-	options: {
-		fr: [],
-		en: [],
-	},
-
-	run: async (interaction, translations) => {
+	run: async (message, args, translations) => {
 		const SHINY_FREQUENCY = 0.004,
 			ALOLAN_FREQUENCY = 0.05,
 			MEGA_GEM_FREQUENCY = 0.02;
@@ -42,23 +31,20 @@ const command: Command = {
 		const { rows: caughtPokemonsData }: { rows: DatabasePokemon[] } =
 			await Util.database.query(
 				"SELECT * FROM pokemon WHERE users ? $1 AND variation = 'default'",
-				[interaction.user.id],
+				[message.author.id],
 			);
 
-		const pokemonList = new PokemonList(
-			caughtPokemonsData,
-			interaction.user.id,
-		);
+		const pokemonList = new PokemonList(caughtPokemonsData, message.author.id);
 
 		const {
 			rows: [userUpgrades],
 		}: { rows: DatabaseUpgrades[] } = await Util.database.query(
 			"SELECT * FROM upgrades WHERE user_id = $1",
-			[interaction.user.id],
+			[message.author.id],
 		);
 
 		const upgrades = userUpgrades ?? {
-			user_id: interaction.user.id,
+			user_id: message.author.id,
 			catch_cooldown_reduction: 0,
 			new_pokemon_probability: 0,
 			legendary_ub_probability: 0,
@@ -77,7 +63,7 @@ const command: Command = {
 				rows: [userHunt],
 			} = await Util.database.query(
 				"SELECT * FROM pokemon_hunting WHERE user_id = $1",
-				[interaction.user.id],
+				[message.author.id],
 			);
 
 			if (userHunt) {
@@ -91,7 +77,7 @@ const command: Command = {
 				if (Math.random() < probability) {
 					await Util.database.query(
 						"UPDATE pokemon_hunting SET hunt_count = 0 WHERE user_id = $1",
-						[interaction.user.id],
+						[message.author.id],
 					);
 
 					randomPokemon = huntedPokemon;
@@ -125,7 +111,7 @@ const command: Command = {
 					].megaStone;
 
 				const defaultData = {};
-				defaultData[interaction.user.id] = 1;
+				defaultData[message.author.id] = 1;
 
 				Util.database.query(
 					`
@@ -138,7 +124,7 @@ const command: Command = {
 						END
 					WHERE mega_gems.user_id = EXCLUDED.user_id
 					`,
-					[interaction.user.id, defaultData, megaGem],
+					[message.author.id, defaultData, megaGem],
 				);
 			}
 		}
@@ -169,7 +155,7 @@ const command: Command = {
 			nickname: null,
 		};
 		const defaultData = {};
-		defaultData[interaction.user.id] = defaultUserData;
+		defaultData[message.author.id] = defaultUserData;
 
 		const {
 			rows: [{ caught: caughtTotal }],
@@ -179,8 +165,8 @@ const command: Command = {
 			ON CONFLICT (pokedex_id, shiny, variation)
 			DO UPDATE SET users =
 				CASE
-					WHEN pokemon.users -> $5 IS NULL THEN jsonb_set(pokemon.users, '{${interaction.user.id}}', $6)
-					ELSE jsonb_set(pokemon.users, '{${interaction.user.id}, caught}', ((pokemon.users -> $5 -> 'caught')::int + 1)::text::jsonb)
+					WHEN pokemon.users -> $5 IS NULL THEN jsonb_set(pokemon.users, '{${message.author.id}}', $6)
+					ELSE jsonb_set(pokemon.users, '{${message.author.id}, caught}', ((pokemon.users -> $5 -> 'caught')::int + 1)::text::jsonb)
 				END
 			WHERE pokemon.pokedex_id = EXCLUDED.pokedex_id AND pokemon.shiny = EXCLUDED.shiny AND pokemon.variation = EXCLUDED.variation
 			RETURNING (users -> $5 -> 'caught')::int AS caught
@@ -190,7 +176,7 @@ const command: Command = {
 				shiny,
 				variation,
 				defaultData,
-				interaction.user.id,
+				message.author.id,
 				defaultUserData,
 			],
 		);
@@ -198,7 +184,7 @@ const command: Command = {
 		Util.database
 			.query(
 				"UPDATE pokemon_hunting SET hunt_count = hunt_count + 1 WHERE user_id = $1",
-				[interaction.user.id],
+				[message.author.id],
 			)
 			.catch(console.error);
 
@@ -210,11 +196,11 @@ const command: Command = {
 			DO UPDATE SET money = currency.money + $2
 			WHERE currency.user_id = EXCLUDED.user_id
 			`,
-				[interaction.user.id, catchReward],
+				[message.author.id, catchReward],
 			)
 			.catch(console.error);
 
-		const reply = await interaction.followUp({
+		const reply = await message.reply({
 			embeds: [
 				{
 					author: {
@@ -231,10 +217,10 @@ const command: Command = {
 						? 0xf3d508
 						: randomPokemon.legendary || randomPokemon.ultraBeast
 						? 0xce2f20
-						: interaction.guild.me.displayColor,
+						: message.guild.me.displayColor,
 					description:
 						translations.strings.caught_title(
-							interaction.user.toString(),
+							message.author.toString(),
 							!shiny &&
 								(variation === "alola" ||
 									/^[aeiou]/i.test(randomPokemon.names[translations.language])),
@@ -243,18 +229,17 @@ const command: Command = {
 						) + (megaGem ? translations.strings.mega_gem(megaGem) : ""),
 					footer: {
 						text: "✨ Mayze ✨" + (huntFooterText || ""),
-						iconURL: interaction.user.displayAvatarURL({
+						iconURL: message.author.displayAvatarURL({
 							dynamic: true,
 						}),
 					},
 				},
 			],
-			fetchReply: true,
-		}) as Message;
+		});
 
 		if (Util.beta) return;
 
-		const logChannel = interaction.client.channels.cache.get(
+		const logChannel = message.client.channels.cache.get(
 			"839538540206882836",
 		) as TextChannel;
 
@@ -262,11 +247,11 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name: `#${(interaction.channel as TextChannel).name} (${
-							interaction.guild.name
+						name: `#${(message.channel as TextChannel).name} (${
+							message.guild.name
 						})`,
 						url: reply.url,
-						iconURL: interaction.guild.iconURL(),
+						iconURL: message.guild.iconURL(),
 					},
 					thumbnail: {
 						url: randomPokemon.image(shiny, variation),
@@ -277,7 +262,7 @@ const command: Command = {
 						? 0xce2f20
 						: Util.config.MAIN_COLOR,
 					description: translations.strings.caught_title_en(
-						interaction.user.toString(),
+						message.author.toString(),
 						!shiny &&
 							(variation === "alola" ||
 								/^[aeiou]/i.test(randomPokemon.names.en)),
@@ -285,7 +270,7 @@ const command: Command = {
 					),
 					footer: {
 						text: "✨ Mayze ✨",
-						iconURL: interaction.user.displayAvatarURL({
+						iconURL: message.author.displayAvatarURL({
 							dynamic: true,
 						}),
 					},
@@ -295,4 +280,4 @@ const command: Command = {
 	},
 };
 
-export default command;
+export default messageCommand;
