@@ -36,7 +36,7 @@ const command: Command = {
 	run: async (interaction, translations) => {
 		const publicCommands = Util.commands.filter(
 			(cmd) =>
-				!cmd.guildIds?.includes(interaction.guild.id) &&
+				(!cmd.guildIds || cmd.guildIds.includes(interaction.guild.id)) &&
 				cmd.category !== "admin",
 		);
 		const commandName = interaction.options.getString("command")?.toLowerCase();
