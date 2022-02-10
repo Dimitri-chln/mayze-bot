@@ -158,99 +158,101 @@ const command: Command = {
 					break;
 			}
 
-			buttonInteraction.update({
-				embeds: [
-					{
-						author: {
-							name: translations.strings.title(),
-							iconURL: interaction.client.user.displayAvatarURL(),
+			if (reply.editable)
+				buttonInteraction.update({
+					embeds: [
+						{
+							author: {
+								name: translations.strings.title(),
+								iconURL: interaction.client.user.displayAvatarURL(),
+							},
+							color: interaction.guild.me.displayColor,
+							description: translations.strings.description(
+								RGBToHex(color),
+								color[0].toString(),
+								color[1].toString(),
+								color[2].toString(),
+								RGBToDec(color).toString(),
+							),
+							thumbnail: {
+								url: `https://dummyimage.com/100/${RGBToHex(color).replace(
+									"#",
+									"",
+								)}/00.png?text=%20`,
+							},
+							footer: {
+								text: "✨ Mayze ✨",
+							},
 						},
-						color: interaction.guild.me.displayColor,
-						description: translations.strings.description(
-							RGBToHex(color),
-							color[0].toString(),
-							color[1].toString(),
-							color[2].toString(),
-							RGBToDec(color).toString(),
-						),
-						thumbnail: {
-							url: `https://dummyimage.com/100/${RGBToHex(color).replace(
-								"#",
-								"",
-							)}/00.png?text=%20`,
-						},
-						footer: {
-							text: "✨ Mayze ✨",
-						},
-					},
-				],
-				components: reply.components,
-			});
+					],
+					components: reply.components,
+				});
 		});
 
 		collector.on("end", () => {
-			reply.edit({
-				embeds: reply.embeds,
-				components: [
-					{
-						type: "ACTION_ROW",
-						components: [
-							{
-								type: "BUTTON",
-								customId: "more_red",
-								emoji: "\u2795",
-								style: "DANGER",
-								disabled: true,
-							},
-							{
-								type: "BUTTON",
-								customId: "less_red",
-								emoji: "\u2796",
-								style: "DANGER",
-								disabled: true,
-							},
-						],
-					},
-					{
-						type: "ACTION_ROW",
-						components: [
-							{
-								type: "BUTTON",
-								customId: "more_green",
-								emoji: "\u2795",
-								style: "SUCCESS",
-								disabled: true,
-							},
-							{
-								type: "BUTTON",
-								customId: "less_green",
-								emoji: "\u2796",
-								style: "SUCCESS",
-								disabled: true,
-							},
-						],
-					},
-					{
-						type: "ACTION_ROW",
-						components: [
-							{
-								type: "BUTTON",
-								customId: "more_blue",
-								emoji: "\u2795",
-								style: "PRIMARY",
-								disabled: true,
-							},
-							{
-								type: "BUTTON",
-								customId: "less_blue",
-								emoji: "\u2796",
-								style: "PRIMARY",
-								disabled: true,
-							},
-						],
-					},
-				],
-			});
+			if (reply.editable)
+				reply.edit({
+					embeds: reply.embeds,
+					components: [
+						{
+							type: "ACTION_ROW",
+							components: [
+								{
+									type: "BUTTON",
+									customId: "more_red",
+									emoji: "\u2795",
+									style: "DANGER",
+									disabled: true,
+								},
+								{
+									type: "BUTTON",
+									customId: "less_red",
+									emoji: "\u2796",
+									style: "DANGER",
+									disabled: true,
+								},
+							],
+						},
+						{
+							type: "ACTION_ROW",
+							components: [
+								{
+									type: "BUTTON",
+									customId: "more_green",
+									emoji: "\u2795",
+									style: "SUCCESS",
+									disabled: true,
+								},
+								{
+									type: "BUTTON",
+									customId: "less_green",
+									emoji: "\u2796",
+									style: "SUCCESS",
+									disabled: true,
+								},
+							],
+						},
+						{
+							type: "ACTION_ROW",
+							components: [
+								{
+									type: "BUTTON",
+									customId: "more_blue",
+									emoji: "\u2795",
+									style: "PRIMARY",
+									disabled: true,
+								},
+								{
+									type: "BUTTON",
+									customId: "less_blue",
+									emoji: "\u2796",
+									style: "PRIMARY",
+									disabled: true,
+								},
+							],
+						},
+					],
+				});
 
 			messageCollector.stop();
 		});
@@ -288,34 +290,35 @@ const command: Command = {
 					break;
 			}
 
-			reply.edit({
-				embeds: [
-					{
-						author: {
-							name: translations.strings.title(),
-							iconURL: interaction.client.user.displayAvatarURL(),
+			if (reply.editable)
+				reply.edit({
+					embeds: [
+						{
+							author: {
+								name: translations.strings.title(),
+								iconURL: interaction.client.user.displayAvatarURL(),
+							},
+							color: interaction.guild.me.displayColor,
+							description: translations.strings.description(
+								RGBToHex(color),
+								color[0].toString(),
+								color[1].toString(),
+								color[2].toString(),
+								RGBToDec(color).toString(),
+							),
+							thumbnail: {
+								url: `https://dummyimage.com/100/${RGBToHex(color).replace(
+									"#",
+									"",
+								)}/00.png?text=%20`,
+							},
+							footer: {
+								text: "✨ Mayze ✨",
+							},
 						},
-						color: interaction.guild.me.displayColor,
-						description: translations.strings.description(
-							RGBToHex(color),
-							color[0].toString(),
-							color[1].toString(),
-							color[2].toString(),
-							RGBToDec(color).toString(),
-						),
-						thumbnail: {
-							url: `https://dummyimage.com/100/${RGBToHex(color).replace(
-								"#",
-								"",
-							)}/00.png?text=%20`,
-						},
-						footer: {
-							text: "✨ Mayze ✨",
-						},
-					},
-				],
-				components: reply.components,
-			});
+					],
+					components: reply.components,
+				});
 		});
 
 		function hexToRGB(hexColor: string) {

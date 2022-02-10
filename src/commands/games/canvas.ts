@@ -582,98 +582,100 @@ const command: Command = {
 
 					grid = await canvas.viewGrid(x, y);
 
-					buttonInteraction.update({
-						content: grid.format(),
-						embeds: reply.embeds,
-						components: reply.components,
-					});
+					if (reply.editable)
+						buttonInteraction.update({
+							content: grid.format(),
+							embeds: reply.embeds,
+							components: reply.components,
+						});
 				});
 
 				collector.on("end", () => {
-					reply.edit({
-						content: grid.format(),
-						embeds: reply.embeds,
-						components: [
-							{
-								type: "ACTION_ROW",
-								components: [
-									{
-										type: "BUTTON",
-										customId: "top_left",
-										emoji: { id: "829352737946730576", name: "blank" },
-										style: "SECONDARY",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "up",
-										emoji: "⬆️",
-										style: "PRIMARY",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "top_right",
-										emoji: { id: "829352737946730576", name: "blank" },
-										style: "SECONDARY",
-										disabled: true,
-									},
-								],
-							},
-							{
-								type: "ACTION_ROW",
-								components: [
-									{
-										type: "BUTTON",
-										customId: "left",
-										emoji: "⬅️",
-										style: "PRIMARY",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "confirm",
-										emoji: Util.config.EMOJIS.check.data,
-										style: "SUCCESS",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "right",
-										emoji: "➡️",
-										style: "PRIMARY",
-										disabled: true,
-									},
-								],
-							},
-							{
-								type: "ACTION_ROW",
-								components: [
-									{
-										type: "BUTTON",
-										customId: "bottom_right",
-										emoji: { id: "829352737946730576", name: "blank" },
-										style: "SECONDARY",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "down",
-										emoji: "⬇️",
-										style: "PRIMARY",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "bottom_left",
-										emoji: { id: "829352737946730576", name: "blank" },
-										style: "SECONDARY",
-										disabled: true,
-									},
-								],
-							},
-						],
-					});
+					if (reply.editable)
+						reply.edit({
+							content: grid.format(),
+							embeds: reply.embeds,
+							components: [
+								{
+									type: "ACTION_ROW",
+									components: [
+										{
+											type: "BUTTON",
+											customId: "top_left",
+											emoji: { id: "829352737946730576", name: "blank" },
+											style: "SECONDARY",
+											disabled: true,
+										},
+										{
+											type: "BUTTON",
+											customId: "up",
+											emoji: "⬆️",
+											style: "PRIMARY",
+											disabled: true,
+										},
+										{
+											type: "BUTTON",
+											customId: "top_right",
+											emoji: { id: "829352737946730576", name: "blank" },
+											style: "SECONDARY",
+											disabled: true,
+										},
+									],
+								},
+								{
+									type: "ACTION_ROW",
+									components: [
+										{
+											type: "BUTTON",
+											customId: "left",
+											emoji: "⬅️",
+											style: "PRIMARY",
+											disabled: true,
+										},
+										{
+											type: "BUTTON",
+											customId: "confirm",
+											emoji: Util.config.EMOJIS.check.data,
+											style: "SUCCESS",
+											disabled: true,
+										},
+										{
+											type: "BUTTON",
+											customId: "right",
+											emoji: "➡️",
+											style: "PRIMARY",
+											disabled: true,
+										},
+									],
+								},
+								{
+									type: "ACTION_ROW",
+									components: [
+										{
+											type: "BUTTON",
+											customId: "bottom_right",
+											emoji: { id: "829352737946730576", name: "blank" },
+											style: "SECONDARY",
+											disabled: true,
+										},
+										{
+											type: "BUTTON",
+											customId: "down",
+											emoji: "⬇️",
+											style: "PRIMARY",
+											disabled: true,
+										},
+										{
+											type: "BUTTON",
+											customId: "bottom_left",
+											emoji: { id: "829352737946730576", name: "blank" },
+											style: "SECONDARY",
+											disabled: true,
+										},
+									],
+								},
+							],
+						});
 				});
 				break;
 			}
@@ -867,98 +869,100 @@ const command: Command = {
 
 					grid = await canvas.viewGrid(x, y);
 
-					buttonInteraction.update({
-						content: grid.format(),
-						embeds: reply.embeds,
-						components: reply.components,
-					});
+					if (reply.editable)
+						buttonInteraction.update({
+							content: grid.format(),
+							embeds: reply.embeds,
+							components: reply.components,
+						});
 				});
 
 				collector.on("end", () => {
-					reply.edit({
-						content: grid.format(),
-						embeds: reply.embeds,
-						components: [
-							{
-								type: "ACTION_ROW",
-								components: [
-									{
-										type: "BUTTON",
-										customId: "top_left",
-										emoji: { id: "829352737946730576", name: "blank" },
-										style: "SECONDARY",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "up",
-										emoji: "⬆️",
-										style: "PRIMARY",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "top_right",
-										emoji: { id: "829352737946730576", name: "blank" },
-										style: "SECONDARY",
-										disabled: true,
-									},
-								],
-							},
-							{
-								type: "ACTION_ROW",
-								components: [
-									{
-										type: "BUTTON",
-										customId: "left",
-										emoji: "⬅️",
-										style: "PRIMARY",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "middle",
-										emoji: { id: "829352737946730576", name: "blank" },
-										style: "SECONDARY",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "right",
-										emoji: "➡️",
-										style: "PRIMARY",
-										disabled: true,
-									},
-								],
-							},
-							{
-								type: "ACTION_ROW",
-								components: [
-									{
-										type: "BUTTON",
-										customId: "bottom_right",
-										emoji: { id: "829352737946730576", name: "blank" },
-										style: "SECONDARY",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "down",
-										emoji: "⬇️",
-										style: "PRIMARY",
-										disabled: true,
-									},
-									{
-										type: "BUTTON",
-										customId: "bottom_left",
-										emoji: { id: "829352737946730576", name: "blank" },
-										style: "SECONDARY",
-										disabled: true,
-									},
-								],
-							},
-						],
-					});
+					if (reply.editable)
+						reply.edit({
+							content: grid.format(),
+							embeds: reply.embeds,
+							components: [
+								{
+									type: "ACTION_ROW",
+									components: [
+										{
+											type: "BUTTON",
+											customId: "top_left",
+											emoji: { id: "829352737946730576", name: "blank" },
+											style: "SECONDARY",
+											disabled: true,
+										},
+										{
+											type: "BUTTON",
+											customId: "up",
+											emoji: "⬆️",
+											style: "PRIMARY",
+											disabled: true,
+										},
+										{
+											type: "BUTTON",
+											customId: "top_right",
+											emoji: { id: "829352737946730576", name: "blank" },
+											style: "SECONDARY",
+											disabled: true,
+										},
+									],
+								},
+								{
+									type: "ACTION_ROW",
+									components: [
+										{
+											type: "BUTTON",
+											customId: "left",
+											emoji: "⬅️",
+											style: "PRIMARY",
+											disabled: true,
+										},
+										{
+											type: "BUTTON",
+											customId: "middle",
+											emoji: { id: "829352737946730576", name: "blank" },
+											style: "SECONDARY",
+											disabled: true,
+										},
+										{
+											type: "BUTTON",
+											customId: "right",
+											emoji: "➡️",
+											style: "PRIMARY",
+											disabled: true,
+										},
+									],
+								},
+								{
+									type: "ACTION_ROW",
+									components: [
+										{
+											type: "BUTTON",
+											customId: "bottom_right",
+											emoji: { id: "829352737946730576", name: "blank" },
+											style: "SECONDARY",
+											disabled: true,
+										},
+										{
+											type: "BUTTON",
+											customId: "down",
+											emoji: "⬇️",
+											style: "PRIMARY",
+											disabled: true,
+										},
+										{
+											type: "BUTTON",
+											customId: "bottom_left",
+											emoji: { id: "829352737946730576", name: "blank" },
+											style: "SECONDARY",
+											disabled: true,
+										},
+									],
+								},
+							],
+						});
 				});
 				break;
 			}
