@@ -199,60 +199,62 @@ client.on("ready", async () => {
 						(cmd) => cmd.name === applicationCommandData.name,
 					);
 
-				try {
-					let newApplicationCommand: Discord.ApplicationCommand;
+				if (!applicationCommand) {
+					console.log(
+						`Creating the admin application command /${applicationCommandData.name}`,
+					);
+					client.application.commands
+						.create(applicationCommandData, Util.config.ADMIN_GUILD_ID)
+						.then((newApplicationCommand) =>
+							newApplicationCommand.permissions.set({
+								guild: Util.config.ADMIN_GUILD_ID,
+								permissions: [
+									{
+										id: applicationCommand.guild.id,
+										type: "ROLE",
+										permission: false,
+									},
+									{
+										id: Util.config.OWNER_ID,
+										type: "USER",
+										permission: true,
+									},
+								],
+							}),
+						)
+						.catch(console.error);
+				}
 
-					if (
-						applicationCommand &&
-						!applicationCommand.equals(applicationCommandData)
-					) {
-						console.log(
-							`Editing the admin application command /${applicationCommandData.name}`,
-						);
-						newApplicationCommand = await client.application.commands.edit(
+				if (
+					applicationCommand &&
+					!applicationCommand.equals(applicationCommandData)
+				) {
+					console.log(
+						`Editing the admin application command /${applicationCommandData.name}`,
+					);
+					client.application.commands
+						.edit(
 							applicationCommand.id,
 							applicationCommandData,
 							Util.config.ADMIN_GUILD_ID,
-						);
-						newApplicationCommand.permissions.set({
-							permissions: [
-								{
-									id: applicationCommand.guild.id,
-									type: "ROLE",
-									permission: false,
-								},
-								{
-									id: Util.config.OWNER_ID,
-									type: "USER",
-									permission: true,
-								},
-							],
-						});
-					} else if (!applicationCommand) {
-						console.log(
-							`Creating the admin application command /${applicationCommandData.name}`,
-						);
-						newApplicationCommand = await client.application.commands.create(
-							applicationCommandData,
-							Util.config.ADMIN_GUILD_ID,
-						);
-						newApplicationCommand.permissions.set({
-							permissions: [
-								{
-									id: applicationCommand.guild.id,
-									type: "ROLE",
-									permission: false,
-								},
-								{
-									id: Util.config.OWNER_ID,
-									type: "USER",
-									permission: true,
-								},
-							],
-						});
-					}
-				} catch (err) {
-					console.error();
+						)
+						.then((newApplicationCommand) =>
+							newApplicationCommand.permissions.set({
+								permissions: [
+									{
+										id: applicationCommand.guild.id,
+										type: "ROLE",
+										permission: false,
+									},
+									{
+										id: Util.config.OWNER_ID,
+										type: "USER",
+										permission: true,
+									},
+								],
+							}),
+						)
+						.catch(console.error);
 				}
 			} else {
 				// Guild commands
@@ -266,6 +268,21 @@ client.on("ready", async () => {
 							.commands.cache.find(
 								(cmd) => cmd.name === applicationCommandData.name,
 							);
+
+						if (!applicationCommand) {
+							console.log(
+								`Creating the application command /${applicationCommandData.name} in the guild: ${guildId}`,
+							);
+							applicationCommandData.description =
+								command.description[Util.guildConfigs.get(guildId).language] ??
+								command.description.en;
+							applicationCommandData.options =
+								command.options[Util.guildConfigs.get(guildId).language] ??
+								command.options.en;
+							client.application.commands
+								.create(applicationCommandData, guildId)
+								.catch(console.error);
+						}
 
 						if (
 							applicationCommand &&
@@ -283,19 +300,6 @@ client.on("ready", async () => {
 							client.application.commands
 								.edit(applicationCommand.id, applicationCommandData, guildId)
 								.catch(console.error);
-						} else if (!applicationCommand) {
-							console.log(
-								`Creating the application command /${applicationCommandData.name} in the guild: ${guildId}`,
-							);
-							applicationCommandData.description =
-								command.description[Util.guildConfigs.get(guildId).language] ??
-								command.description.en;
-							applicationCommandData.options =
-								command.options[Util.guildConfigs.get(guildId).language] ??
-								command.options.en;
-							client.application.commands
-								.create(applicationCommandData, guildId)
-								.catch(console.error);
 						}
 					}
 
@@ -304,6 +308,15 @@ client.on("ready", async () => {
 					const applicationCommand = client.application.commands.cache.find(
 						(cmd) => cmd.name === applicationCommandData.name,
 					);
+
+					if (!applicationCommand) {
+						console.log(
+							`Creating the global application command /${applicationCommandData.name}`,
+						);
+						client.application.commands
+							.create(applicationCommandData)
+							.catch(console.error);
+					}
 
 					if (
 						applicationCommand &&
@@ -314,13 +327,6 @@ client.on("ready", async () => {
 						);
 						client.application.commands
 							.edit(applicationCommand.id, applicationCommandData)
-							.catch(console.error);
-					} else if (!applicationCommand) {
-						console.log(
-							`Creating the global application command /${applicationCommandData.name}`,
-						);
-						client.application.commands
-							.create(applicationCommandData)
 							.catch(console.error);
 					}
 				}

@@ -24,7 +24,7 @@ const messageResponse: MessageResponse = {
 		);
 
 		const { rows: wishes }: { rows: DatabaseWish[] } =
-			await Util.database.query(`SELECT * FROM wishes`);
+			await Util.database.query(`SELECT * FROM mudae_wish`);
 
 		wishes.forEach(async (wish) => {
 			const regex = wish.regex
