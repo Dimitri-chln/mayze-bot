@@ -7,6 +7,7 @@ import {
 	joinVoiceChannel,
 	createAudioResource,
 	StreamType,
+	DiscordGatewayAdapterCreator,
 } from "@discordjs/voice";
 import { GuildMember, TextChannel, VoiceChannel } from "discord.js";
 import MusicUtil, { PlaylistOptions, PlayOptions } from "./MusicUtil";
@@ -69,22 +70,17 @@ export default class Queue {
 		options: Partial<PlayOptions>,
 	) {
 		// Search the song
-		const song = await MusicUtil.best(
-			search,
-			this,
-			member.user,
-			1,
-			options,
-		);
+		const song = await MusicUtil.best(search, this, member.user, 1, options);
 		this.songs.push(song);
 
-		const isAlreadyPlaying = !!getVoiceConnection(member.guild.id);
+		const isAlreadyPlaying = Boolean(getVoiceConnection(member.guild.id));
 
 		if (!isAlreadyPlaying) {
 			const connection = joinVoiceChannel({
 				guildId: this.voiceChannel.guild.id,
 				channelId: member.voice.channel.id,
-				adapterCreator: member.voice.guild.voiceAdapterCreator,
+				adapterCreator: member.voice.guild
+					.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator,
 				selfDeaf: true,
 			});
 
@@ -113,13 +109,14 @@ export default class Queue {
 		);
 		this.songs.push(...playlist.videos);
 
-		const isAlreadyPlaying = !!getVoiceConnection(member.guild.id);
+		const isAlreadyPlaying = Boolean(getVoiceConnection(member.guild.id));
 
 		if (!isAlreadyPlaying) {
 			const connection = joinVoiceChannel({
 				guildId: this.voiceChannel.guild.id,
 				channelId: member.voice.channel.id,
-				adapterCreator: member.voice.guild.voiceAdapterCreator,
+				adapterCreator: member.guild
+					.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator,
 				selfDeaf: true,
 			});
 
@@ -202,8 +199,7 @@ export default class Queue {
 	}
 
 	createProgressBar() {
-		const timePassed =
-			this.resource?.playbackDuration + this.songs[0].seekTime;
+		const timePassed = this.resource?.playbackDuration + this.songs[0].seekTime;
 		const timeEnd = this.songs[0].duration;
 		return MusicUtil.buildBar(timePassed, timeEnd);
 	}
@@ -228,11 +224,7 @@ export default class Queue {
 				this.audioPlayer.stop();
 			} else {
 				setTimeout(() => {
-					if (
-						this.songs.length <= 1 &&
-						!this.repeatSong &&
-						!this.repeatQueue
-					) {
+					if (this.songs.length <= 1 && !this.repeatSong && !this.repeatQueue) {
 						this.voiceConnection.destroy();
 						this.audioPlayer.stop();
 					}
