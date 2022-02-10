@@ -1,4 +1,5 @@
 .env
 .vscode/
+debug.js
 dist/
 node_modules/
