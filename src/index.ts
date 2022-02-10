@@ -221,7 +221,7 @@ client.on("ready", async () => {
 								guild: Util.config.ADMIN_GUILD_ID,
 								permissions: [
 									{
-										id: applicationCommand.guild.id,
+										id: Util.config.ADMIN_GUILD_ID,
 										type: "ROLE",
 										permission: false,
 									},
@@ -253,7 +253,7 @@ client.on("ready", async () => {
 							newApplicationCommand.permissions.set({
 								permissions: [
 									{
-										id: applicationCommand.guild.id,
+										id: Util.config.ADMIN_GUILD_ID,
 										type: "ROLE",
 										permission: false,
 									},
