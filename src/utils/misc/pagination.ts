@@ -96,35 +96,36 @@ export default async function pagination(
 				page = page + 1 < pages.length ? ++page : 0;
 				break;
 		}
-
-		buttonInteraction.update(pages[page]).catch(console.error);
+		if (currentPage.editable)
+			buttonInteraction.update(pages[page]).catch(console.error);
 	});
 
 	componentCollector.on("end", () => {
-		currentPage.edit({
-			...pages[page],
-			components: [
-				{
-					type: "ACTION_ROW",
-					components: [
-						{
-							type: "BUTTON",
-							customId: "back",
-							emoji: emojis[0],
-							style: "SECONDARY",
-							disabled: true,
-						},
-						{
-							type: "BUTTON",
-							customId: "next",
-							emoji: emojis[1],
-							style: "SECONDARY",
-							disabled: true,
-						},
-					],
-				},
-			],
-		});
+		if (currentPage.editable)
+			currentPage.edit({
+				...pages[page],
+				components: [
+					{
+						type: "ACTION_ROW",
+						components: [
+							{
+								type: "BUTTON",
+								customId: "back",
+								emoji: emojis[0],
+								style: "SECONDARY",
+								disabled: true,
+							},
+							{
+								type: "BUTTON",
+								customId: "next",
+								emoji: emojis[1],
+								style: "SECONDARY",
+								disabled: true,
+							},
+						],
+					},
+				],
+			});
 	});
 
 	return currentPage;
