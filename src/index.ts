@@ -688,17 +688,24 @@ client.on("messageCreate", async (message) => {
 			.catch(console.error);
 	}
 
-	// TEMP: Warn users that message commands are deprecated
-	const input = message.content.slice(Util.prefix.length).trim().split(/ +/g);
-	const messageCommandName = input.shift().toLowerCase();
-	const args = parseArgs(input.join(" "));
+	// Message commands
+	if (
+		message.channel.type !== "DM" &&
+		message.content.toLowerCase().startsWith(Util.prefix) &&
+		!message.author.bot &&
+		message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+	) {
+		const input = message.content.slice(Util.prefix.length).trim().split(/ +/g);
+		const messageCommandName = input.shift().toLowerCase();
+		const args = parseArgs(input.join(" "));
 
-	const messageCommand =
-		Util.messageCommands.get(messageCommandName) ??
-		Util.messageCommands.find(
-			(cmd) => cmd.aliases && cmd.aliases.includes(messageCommandName),
-		);
-	if (messageCommand) runMessageCommand(messageCommand, message, args);
+		const messageCommand =
+			Util.messageCommands.get(messageCommandName) ??
+			Util.messageCommands.find(
+				(cmd) => cmd.aliases && cmd.aliases.includes(messageCommandName),
+			);
+		if (messageCommand) runMessageCommand(messageCommand, message, args);
+	}
 });
 
 client.on("messageDelete", async (message) => {
