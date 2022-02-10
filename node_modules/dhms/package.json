@@ -1,6 +1,6 @@
 {
   "name": "dhms",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Parses `dhms` string to number of milliseconds",
   "main": "index.js",
   "author": "astur <astur@yandex.ru> (http://kozlov.am/)",

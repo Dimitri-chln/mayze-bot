@@ -1,9 +1,3 @@
-# Environment variables
 .env
-
-# Others
-assets/pokemons/
-backups/
 .vscode/
-commands/temp/
-utils/music_old/
+tsconfig.json
