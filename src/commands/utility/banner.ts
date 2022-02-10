@@ -32,6 +32,7 @@ const command: Command = {
 
 	run: async (interaction, translations) => {
 		const user = interaction.options.getUser("user") ?? interaction.user;
+		await user.fetch(true);
 
 		interaction.followUp({
 			embeds: [
