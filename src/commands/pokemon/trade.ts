@@ -175,7 +175,7 @@ const command: Command = {
 					rows: [blocked],
 				} = await Util.database.query(
 					"SELECT * FROM trade_block WHERE user_id = $1 AND blocked_user_id = $2",
-					[interaction.user.id, user.id],
+					[user.id, interaction.user.id],
 				);
 
 				if (blocked)
