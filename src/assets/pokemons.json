@@ -6794,7 +6794,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 45,
+		"catch_rate": 3,
 		"height_eu": "0.4 m",
 		"height_us": "1'04\"",
 		"weight_eu": "4.0 kg",
@@ -10987,7 +10987,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 45,
+		"catch_rate": 25,
 		"height_eu": "0.6 m",
 		"height_us": "2'00\"",
 		"weight_eu": "5.0 kg",
@@ -16807,7 +16807,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 45,
+		"catch_rate": 3,
 		"height_eu": "7.0 m",
 		"height_us": "23'00\"",
 		"weight_eu": "206.5 kg",
@@ -21156,7 +21156,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 30,
+		"catch_rate": 25,
 		"height_eu": "0.4 m",
 		"height_us": "1'04\"",
 		"weight_eu": "3.1 kg",
@@ -21258,7 +21258,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 45,
+		"catch_rate": 25,
 		"height_eu": "0.2 m",
 		"height_us": "0'08\"",
 		"weight_eu": "2.1 kg",
@@ -30357,7 +30357,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 45,
+		"catch_rate": 3,
 		"height_eu": "3.0 m",
 		"height_us": "9'10\"",
 		"weight_eu": "215.0 kg",
@@ -30391,7 +30391,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 45,
+		"catch_rate": 3,
 		"height_eu": "5.8 m",
 		"height_us": "19'00\"",
 		"weight_eu": "203.0 kg",
@@ -33302,7 +33302,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 45,
+		"catch_rate": 3,
 		"height_eu": "0.2 m",
 		"height_us": "0'08\"",
 		"weight_eu": "0.1 kg",
@@ -33336,7 +33336,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 45,
+		"catch_rate": 3,
 		"height_eu": "0.1 m",
 		"height_us": "0'04\"",
 		"weight_eu": "999.9 kg",
@@ -33370,7 +33370,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 45,
+		"catch_rate": 3,
 		"height_eu": "3.4 m",
 		"height_us": "11'02\"",
 		"weight_eu": "230.0 kg",
@@ -33404,7 +33404,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 45,
+		"catch_rate": 3,
 		"height_eu": "4.0 m",
 		"height_us": "13'01\"",
 		"weight_eu": "120.0 kg",
@@ -33438,7 +33438,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 45,
+		"catch_rate": 3,
 		"height_eu": "1.2 m",
 		"height_us": "3'11\"",
 		"weight_eu": "55.5 kg",
@@ -33472,7 +33472,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 25,
+		"catch_rate": 3,
 		"height_eu": "2.4 m",
 		"height_us": "7'10\"",
 		"weight_eu": "333.6 kg",
@@ -33506,7 +33506,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 255,
+		"catch_rate": 3,
 		"height_eu": "1.8 m",
 		"height_us": "5'11\"",
 		"weight_eu": "25.0 kg",
@@ -33540,7 +33540,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 30,
+		"catch_rate": 3,
 		"height_eu": "3.8 m",
 		"height_us": "12'06\"",
 		"weight_eu": "100.0 kg",
@@ -33574,7 +33574,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 25,
+		"catch_rate": 3,
 		"height_eu": "9.2 m",
 		"height_us": "30'02\"",
 		"weight_eu": "999.9 kg",
@@ -33608,7 +33608,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 255,
+		"catch_rate": 3,
 		"height_eu": "0.3 m",
 		"height_us": "1'00\"",
 		"weight_eu": "0.1 kg",
@@ -33642,7 +33642,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 15,
+		"catch_rate": 3,
 		"height_eu": "5.5 m",
 		"height_us": "18'01\"",
 		"weight_eu": "888.0 kg",
@@ -33778,7 +33778,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 0,
+		"catch_rate": 3,
 		"height_eu": "0.6 m",
 		"height_us": "2'0\"",
 		"weight_eu": "1.8 kg",
@@ -33812,7 +33812,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 0,
+		"catch_rate": 3,
 		"height_eu": "3.6 m",
 		"height_us": "11'10\"",
 		"weight_eu": "150.0 kg",
@@ -33846,7 +33846,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 0,
+		"catch_rate": 3,
 		"height_eu": "5.5 m",
 		"height_us": "18'1\"",
 		"weight_eu": "820.0 kg",
@@ -33880,7 +33880,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 0,
+		"catch_rate": 3,
 		"height_eu": "1.8 m",
 		"height_us": "5'11\"",
 		"weight_eu": "13.0 kg",
@@ -33914,7 +33914,7 @@
 			}
 		],
 		"gender_ratios": null,
-		"catch_rate": 0,
+		"catch_rate": 3,
 		"height_eu": "1.5 m",
 		"height_us": "4'11\"",
 		"weight_eu": "44.5 kg",
