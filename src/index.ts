@@ -116,13 +116,13 @@ for (const directory of commandDirectories) {
 }
 
 const messageResponseFiles = Fs.readdirSync(
-	Path.resolve(__dirname, "responses"),
+	Path.resolve(__dirname, "message-responses"),
 ).filter((file) => file.endsWith(".js"));
 
 messageResponseFiles.forEach(async (file) => {
 	const messageResponse: MessageResponse =
-		require(Path.resolve(__dirname, "responses", file)).default ??
-		require(Path.resolve(__dirname, "responses", file));
+		require(Path.resolve(__dirname, "message-responses", file)).default ??
+		require(Path.resolve(__dirname, "message-responses", file));
 
 	messageResponse.translations = await new Translations(
 		`resp_${messageResponse.name}`,
