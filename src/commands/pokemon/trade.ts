@@ -370,7 +370,7 @@ const command: Command = {
 				collector.on("collect", async (buttonInteraction) => {
 					switch (buttonInteraction.customId) {
 						case "deny": {
-							buttonInteraction.update({
+							await buttonInteraction.update({
 								content: trade.content,
 								embeds: trade.embeds,
 								components: trade.components,
