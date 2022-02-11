@@ -370,7 +370,7 @@ client.on("ready", async () => {
 					e.delete().catch(console.error);
 			});
 
-			Util.database.query("SELECT name FROM canvas").then((res) => {
+			Util.database.query("SELECT name FROM canvas WHERE NOT archived").then((res) => {
 				for (const row of res.rows) {
 					const canvas = new Canvas(
 						row.name,
