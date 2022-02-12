@@ -99,7 +99,7 @@ const command: Command = {
 							command.userPermissions.length
 								? command.userPermissions.join("`, `")
 								: "∅",
-							(command.cooldown ?? 2).toString(),
+							formatTime((command.cooldown ?? 2) * 1000),
 						),
 						footer: {
 							text: "✨ Mayze ✨",
