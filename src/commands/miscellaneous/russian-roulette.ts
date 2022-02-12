@@ -3,6 +3,7 @@ import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
 import { Collection, GuildMember, MessageEmbed } from "discord.js";
+import { sleep } from "../../utils/misc/sleep";
 
 const command: Command = {
 	name: "russian-roulette",
@@ -211,67 +212,60 @@ const command: Command = {
 					fetchReply: true,
 				})) as Message;
 
-				await roulette(reply, embed, currentGame);
+				for (let i = 0; i < 5; i++) {
+					if (currentGame.members.size === 1) break;
 
-				Util.russianRouletteGames.delete(interaction.channel.id);
-				break;
-			}
-		}
+					await sleep(2_000);
 
-		async function roulette(
-			message: Message,
-			embed: MessageEmbed,
-			game: typeof currentGame,
-			i: number = 0,
-		) {
-			if (game.members.size > 1 && i < 5) {
-				setTimeout(() => {
-					const savedPlayer = game.members.random();
-					game.members.delete(savedPlayer.user.id);
+					const savedPlayer = currentGame.members.random();
+					currentGame.members.delete(savedPlayer.user.id);
 
-					message
+					reply
 						.edit({
 							embeds: [embed.setDescription(`**${savedPlayer.user.tag}** ...`)],
 						})
 						.catch(console.error);
+				}
 
-					roulette(message, embed, game, i + 1);
-				}, 2_000);
-			} else {
-				setTimeout(() => {
-					const deadPlayer = game.members.random();
+				await sleep(2_000);
 
-					message
-						.edit({
-							embeds: [
-								embed.setDescription(
-									translations.strings.dead(deadPlayer.user.tag),
-								),
-							],
-						})
-						.catch(console.error);
+				const deadPlayer = currentGame.members.random();
 
-					const gameOption = interaction.options.getString("options") as
-						| "kick"
-						| "timeout";
+				reply.edit({
+					embeds: [
+						embed.setDescription(
+							translations.strings.dead(deadPlayer.user.tag),
+						),
+					],
+				});
 
-					switch (gameOption) {
-						case "kick": {
-							if (
-								deadPlayer.roles.highest.position <
-									interaction.guild.me.roles.highest.position &&
-								!deadPlayer.premiumSinceTimestamp
-							)
-								deadPlayer.kick(translations.strings.reason());
-							break;
-						}
+				const gameOption = interaction.options.getString("option") as
+					| "kick"
+					| "timeout";
 
-						case "timeout": {
-							deadPlayer.timeout(5 * 60 * 1000, translations.strings.reason());
-							break;
-						}
+				switch (gameOption) {
+					case "kick": {
+						if (
+							deadPlayer.roles.highest.position <
+								interaction.guild.me.roles.highest.position &&
+							!deadPlayer.premiumSinceTimestamp
+						)
+							deadPlayer.kick(translations.strings.reason());
+						break;
 					}
-				}, 2_000);
+
+					case "timeout": {
+						if (
+							deadPlayer.roles.highest.position <
+							interaction.guild.me.roles.highest.position
+						)
+							deadPlayer.timeout(5 * 60 * 1000, translations.strings.reason());
+						break;
+					}
+				}
+
+				Util.russianRouletteGames.delete(interaction.channel.id);
+				break;
 			}
 		}
 	},
