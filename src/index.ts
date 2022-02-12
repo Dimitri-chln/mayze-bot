@@ -611,7 +611,6 @@ client.on("messageCreate", async (message) => {
 					)
 						message.channel.send(
 							translations.strings.chat_level_up(
-								translations.language,
 								message.author.toString(),
 								levelInfo.level.toString(),
 							),
