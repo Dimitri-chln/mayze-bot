@@ -73,15 +73,21 @@ const command: Command = {
 				translations.strings.invalid_number(Boolean(message)),
 			);
 
+		interaction.followUp(translations.strings.sending());
+
 		const messages: Promise<Message>[] = [];
 
 		for (let i = 0; i < number; i++) {
-			messages.push(interaction.channel.send(`${user.toString()} ${message}`));
+			messages.push(
+				interaction.channel.send(`${user.toString()} ${message ?? ""}`),
+			);
 		}
 
-		(interaction.channel as TextChannel).bulkDelete(
+		await (interaction.channel as TextChannel).bulkDelete(
 			await Promise.all(messages),
 		);
+
+		interaction.editReply(translations.strings.done());
 	},
 };
 

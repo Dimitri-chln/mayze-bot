@@ -35,13 +35,13 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const expression = interaction.options.getString("expression");
 
-		await interaction.followUp("...");
+		await interaction.followUp(translations.strings.executing());
 
 		try {
 			eval(expression);
 		} catch (err) {
 			console.error(err);
-			interaction.followUp(`__**Error:**__\`\`\`\n${err}\n\`\`\``);
+			interaction.followUp(translations.strings.error(err));
 		}
 	},
 };
