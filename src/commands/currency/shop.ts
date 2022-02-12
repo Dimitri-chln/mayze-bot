@@ -273,11 +273,11 @@ const command: Command = {
 						2,
 				);
 
-				if (money.money < upgradeCost)
-					return interaction.followUp(translations.strings.not_enough_money());
-
 				if (upgrades[upgrade] + number > UPGRADES_MAX_TIER[upgrade])
 					return interaction.followUp(translations.strings.max_tier_reached());
+
+				if (money.money < upgradeCost)
+					return interaction.followUp(translations.strings.not_enough_money());
 
 				upgrades[upgrade] += number;
 
