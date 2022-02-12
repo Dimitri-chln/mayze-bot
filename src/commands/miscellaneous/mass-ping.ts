@@ -83,9 +83,10 @@ const command: Command = {
 			);
 		}
 
-		await (interaction.channel as TextChannel).bulkDelete(
-			await Promise.all(messages),
-		);
+		if (!message)
+			await (interaction.channel as TextChannel).bulkDelete(
+				await Promise.all(messages),
+			);
 
 		interaction.editReply(translations.strings.done());
 	},
