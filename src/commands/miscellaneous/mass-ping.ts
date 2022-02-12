@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
-import { Awaitable, TextChannel } from "discord.js";
+import { TextChannel } from "discord.js";
 
 const command: Command = {
 	name: "mass-ping",
@@ -72,7 +72,7 @@ const command: Command = {
 				translations.strings.invalid_number(Boolean(message)),
 			);
 
-		const messages: Awaitable<Message>[] = [];
+		const messages: Promise<Message>[] = [];
 
 		for (let i = 0; i < number; i++) {
 			messages.push(interaction.channel.send(`${user.toString()} ${message}`));
