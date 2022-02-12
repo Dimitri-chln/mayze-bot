@@ -14,7 +14,7 @@ const command: Command = {
 	usage: "",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS", "ADD_REACTIONS"],
-	guildIds: ["689164798264606784"],
+	guildIds: [Util.config.MAIN_GUILD_ID],
 
 	options: {
 		fr: [

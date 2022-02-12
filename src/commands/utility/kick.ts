@@ -14,7 +14,7 @@ const command: Command = {
 	usage: "",
 	userPermissions: ["KICK_MEMBERS"],
 	botPermissions: ["KICK_MEMBERS"],
-	guildIds: ["689164798264606784"],
+	guildIds: [Util.config.MAIN_GUILD_ID],
 
 	options: {
 		fr: [

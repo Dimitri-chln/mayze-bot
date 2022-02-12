@@ -20,7 +20,7 @@ const command: Command = {
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS", "MANAGE_ROLES", "KICK_MEMBERS"],
 	cooldown: 5,
-	guildIds: ["689164798264606784"],
+	guildIds: [Util.config.MAIN_GUILD_ID],
 
 	options: {
 		fr: [],
