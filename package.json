@@ -6,6 +6,7 @@
 	"scripts": {
 		"postinstall": "tsc",
 		"start": "node .",
+		"build": "tsc",
 		"debug": "node debug"
 	},
 	"dependencies": {
