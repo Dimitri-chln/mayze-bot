@@ -1,5 +1,6 @@
 import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
+import { DatabaseUserMoney } from "../../types/structures/Database";
 import Util from "../../Util";
 
 const command: Command = {
@@ -42,18 +43,20 @@ const command: Command = {
 
 		const {
 			rows: [userCurrency],
-		} = await Util.database.query("SELECT * FROM currency WHERE user_id = $1", [
-			user.id,
-		]);
+		}: { rows: DatabaseUserMoney[] } = await Util.database.query(
+			"SELECT * FROM currency WHERE user_id = $1",
+			[user.id],
+		);
 
 		const { money, last_daily } = userCurrency ?? {
 			money: 0,
 			last_daily: null,
 		};
 
-		const nextDaily = last_daily
-			? MIDNIGHT.valueOf() + DAY_IN_MS.valueOf()
-			: NOW;
+		const nextDaily =
+			last_daily && Date.parse(last_daily) > MIDNIGHT.valueOf()
+				? MIDNIGHT.valueOf() + DAY_IN_MS.valueOf()
+				: NOW;
 
 		interaction.followUp({
 			embeds: [
@@ -64,7 +67,7 @@ const command: Command = {
 					},
 					color: interaction.guild.me.displayColor,
 					description: translations.strings.description(
-						money,
+						money.toString(),
 						nextDaily > NOW ? Math.round(nextDaily / 1000).toString() : null,
 					),
 					footer: {

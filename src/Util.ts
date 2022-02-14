@@ -66,7 +66,7 @@ export default class Util {
 
 interface GuildConfig {
 	language: Language;
-	webhookId: Snowflake;
+	webhookId?: Snowflake;
 }
 
 interface MessageReactionSnipingData {

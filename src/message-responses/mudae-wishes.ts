@@ -1,7 +1,7 @@
 import MessageResponse from "../types/structures/MessageResponse";
 import Util from "../Util";
 
-import { DatabaseWish } from "../types/structures/Database";
+import { DatabaseMudaeWish } from "../types/structures/Database";
 
 const messageResponse: MessageResponse = {
 	name: "mudae-wishes",
@@ -23,7 +23,7 @@ const messageResponse: MessageResponse = {
 			/\*\*(\d+)\*\*<:kakera:469835869059153940>/m,
 		);
 
-		const { rows: wishes }: { rows: DatabaseWish[] } =
+		const { rows: wishes }: { rows: DatabaseMudaeWish[] } =
 			await Util.database.query(`SELECT * FROM mudae_wish`);
 
 		wishes.forEach(async (wish) => {

@@ -8,6 +8,7 @@ import {
 	CollectorFilter,
 	MessageAttachment,
 } from "discord.js";
+import { CanvasOwnerType } from "../../types/structures/Database";
 
 const command: Command = {
 	name: "canvas",
@@ -286,12 +287,12 @@ const command: Command = {
 
 		const userCanvas = Util.canvas.filter(
 			(canvas) =>
-				canvas.owner.type === "EVERYONE" ||
-				(canvas.owner.type === "GUILD" &&
+				canvas.owner.type === CanvasOwnerType.EVERYONE ||
+				(canvas.owner.type === CanvasOwnerType.GUILD &&
 					canvas.owner.id === interaction.guild.id) ||
-				(canvas.owner.type === "CHANNEL" &&
+				(canvas.owner.type === CanvasOwnerType.CHANNEL &&
 					canvas.owner.id === interaction.channel.id) ||
-				(canvas.owner.type === "USER" &&
+				(canvas.owner.type === CanvasOwnerType.USER &&
 					canvas.owner.id === interaction.user.id),
 		);
 

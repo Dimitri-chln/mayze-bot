@@ -6,17 +6,10 @@ import Util from "../../Util";
 import Palette from "./Palette";
 import Color from "./Color";
 import Grid from "./Grid";
-
-const ownerTypes = {
-	0: "EVERYONE",
-	1: "GUILD",
-	2: "CHANNEL",
-	3: "USER",
-};
+import { DatabaseCanvas, CanvasOwnerType } from "../structures/Database";
 
 export default class Canvas {
 	name: string;
-	database: Pg.Client;
 	palettes: Collection<string, Palette>;
 	private _size: number;
 	private _owner: CanvasOwner;
@@ -25,26 +18,23 @@ export default class Canvas {
 	constructor(
 		name: string,
 		client: Client,
-		database: Pg.Client,
 		palettes: Collection<string, Palette>,
 	) {
 		this.name = name;
-		this.database = database;
 		this.palettes = palettes;
-		database
+		Util.database
 			.query("SELECT * FROM canvas WHERE name = $1", [name])
-			.then(async (res) => {
-				this._size = res.rows[0].size;
+			.then(async ({ rows: [canvas] }: { rows: DatabaseCanvas[] }) => {
+				this._size = canvas.size;
 				this._owner = {
-					type: ownerTypes[res.rows[0].owner_type],
-					id: res.rows[0].owner_id,
+					type: canvas.owner_type,
+					id: canvas.owner_id,
 				};
 				this._users = new Collection(
 					await Promise.all(
-						res.rows[0].users.map(async (userId: Snowflake) => [
-							userId,
-							await client.users.fetch(userId),
-						]),
+						canvas.users.map((userId) =>
+							Promise.all([userId, client.users.fetch(userId)]),
+						),
 					),
 				);
 			});
@@ -64,17 +54,13 @@ export default class Canvas {
 			data.push(row);
 		}
 
-		try {
-			database.query("INSERT INTO canvas VALUES ($1, $2, $3)", [
-				name,
-				size,
-				JSON.stringify(data),
-			]);
+		database.query("INSERT INTO canvas VALUES ($1, $2, $3)", [
+			name,
+			size,
+			JSON.stringify(data),
+		]);
 
-			return new Canvas(name, client, database, palettes);
-		} catch (err) {
-			throw err;
-		}
+		return new Canvas(name, client, palettes);
 	}
 
 	get size() {
@@ -91,7 +77,7 @@ export default class Canvas {
 
 	get data(): Promise<string[][]> {
 		return new Promise((resolve, reject) => {
-			this.database
+			Util.database
 				.query("SELECT * FROM canvas WHERE name = $1", [this.name])
 				.then((res) => {
 					resolve(res.rows[0].data);
@@ -108,19 +94,18 @@ export default class Canvas {
 	 */
 	async addUser(user: User) {
 		// Remove users from all other canvas
-		await this.database.query(
+		await Util.database.query(
 			"UPDATE canvas SET users = array_diff(users, $1)",
 			[[user.id]],
 		);
 
 		// Add user to the new canvas
-		await this.database.query(
+		await Util.database.query(
 			"UPDATE canvas SET users = users || $1 WHERE name = $2",
 			[[user.id], this.name],
 		);
 
-		for (const canvas of Util.canvas.values())
-			canvas._users.delete(user.id);
+		for (const canvas of Util.canvas.values()) canvas._users.delete(user.id);
 
 		this._users.set(user.id, user);
 	}
@@ -137,7 +122,7 @@ export default class Canvas {
 		let data = await this.data;
 		data[y][x] = color;
 
-		this.database.query("UPDATE canvas SET data = $1 WHERE name = $2", [
+		Util.database.query("UPDATE canvas SET data = $1 WHERE name = $2", [
 			JSON.stringify(data),
 			this.name,
 		]);
@@ -160,9 +145,7 @@ export default class Canvas {
 				row.push(
 					data[y + yShift] && data[y + yShift][x + xShift]
 						? this.palettes
-								.find((palette) =>
-									palette.has(data[y + yShift][x + xShift]),
-								)
+								.find((palette) => palette.has(data[y + yShift][x + xShift]))
 								.get(data[y + yShift][x + xShift])
 						: null,
 				);
@@ -191,9 +174,7 @@ export default class Canvas {
 			let row = [];
 
 			for (let xShift = x; xShift < zoom; xShift++)
-				row.push(
-					data[y + yShift] ? data[y + yShift][x + xShift] : null,
-				);
+				row.push(data[y + yShift] ? data[y + yShift][x + xShift] : null);
 
 			newData.push(row);
 		}
@@ -214,34 +195,18 @@ export default class Canvas {
 				image.setPixelColor(borderColor, xBorder, yBorder);
 		}
 
-		for (
-			let yBorder = fullSize - borderSize;
-			yBorder < fullSize;
-			yBorder++
-		) {
+		for (let yBorder = fullSize - borderSize; yBorder < fullSize; yBorder++) {
 			for (let xBorder = 0; xBorder < fullSize; xBorder++)
 				image.setPixelColor(borderColor, xBorder, yBorder);
 		}
 
-		for (
-			let yBorder = borderSize;
-			yBorder < fullSize - borderSize;
-			yBorder++
-		) {
+		for (let yBorder = borderSize; yBorder < fullSize - borderSize; yBorder++) {
 			for (let xBorder = 0; xBorder < borderSize; xBorder++)
 				image.setPixelColor(borderColor, xBorder, yBorder);
 		}
 
-		for (
-			let yBorder = borderSize;
-			yBorder < fullSize - borderSize;
-			yBorder++
-		) {
-			for (
-				let xBorder = fullSize - borderSize;
-				xBorder < fullSize;
-				xBorder++
-			)
+		for (let yBorder = borderSize; yBorder < fullSize - borderSize; yBorder++) {
+			for (let xBorder = fullSize - borderSize; xBorder < fullSize; xBorder++)
 				image.setPixelColor(borderColor, xBorder, yBorder);
 		}
 
@@ -251,9 +216,7 @@ export default class Canvas {
 				let color =
 					data[yPixel] && data[yPixel][xPixel]
 						? this.palettes
-								.find((palette) =>
-									palette.has(data[yPixel][xPixel]),
-								)
+								.find((palette) => palette.has(data[yPixel][xPixel]))
 								.get(data[yPixel][xPixel])
 						: 0x000000;
 				if (color instanceof Color)
@@ -284,6 +247,6 @@ export default class Canvas {
 }
 
 interface CanvasOwner {
-	type: "EVERYONE" | "GUILD" | "CHANNEL" | "USER";
+	type: CanvasOwnerType;
 	id?: Snowflake;
 }

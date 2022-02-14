@@ -59,10 +59,10 @@ const command: Command = {
 
 		await Util.database.query(
 			`
-			INSERT INTO languages VALUES ($1, $2)
+			INSERT INTO guild_config VALUES ($1, $2)
 			ON CONFLICT (guild_id)
-			DO UPDATE SET language_code = $2
-			WHERE languages.guild_id = EXCLUDED.guild_id
+			DO UPDATE SET language = $2
+			WHERE guild_config.guild_id = EXCLUDED.guild_id
 			`,
 			[interaction.guild.id, newLanguage],
 		);

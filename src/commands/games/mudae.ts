@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
-import { DatabaseWish } from "../../types/structures/Database";
+import { DatabaseMudaeWish } from "../../types/structures/Database";
 
 const command: Command = {
 	name: "mudae",
@@ -159,7 +159,7 @@ const command: Command = {
 							interaction.options.getBoolean("regex"),
 						);
 
-						const { rows: wishlist }: { rows: DatabaseWish[] } =
+						const { rows: wishlist }: { rows: DatabaseMudaeWish[] } =
 							await Util.database.query(
 								"SELECT * FROM mudae_wish WHERE user_id = $1 ORDER BY id",
 								[interaction.user.id],
@@ -213,7 +213,7 @@ const command: Command = {
 					case "remove": {
 						const series = interaction.options.getInteger("series");
 
-						const { rows: wishlist }: { rows: DatabaseWish[] } =
+						const { rows: wishlist }: { rows: DatabaseMudaeWish[] } =
 							await Util.database.query(
 								"SELECT * FROM mudae_wish WHERE user_id = $1 ORDER BY id",
 								[interaction.user.id],
