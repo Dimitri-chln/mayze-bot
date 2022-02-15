@@ -71,35 +71,40 @@ const command: Command = {
 			fetchReply: true,
 		})) as Message;
 
-		const result = await downloadVideo(url);
+		try {
+			const result = await downloadVideo(url);
 
-		embed
-			.setDescription(MusicUtil.buildBar(result.duration, result.duration))
-			.setFooter({
-				text: `✨ Mayze ✨ | ${translations.strings.complete()}`,
+			embed
+				.setDescription(MusicUtil.buildBar(result.duration, result.duration))
+				.setFooter({
+					text: `✨ Mayze ✨ | ${translations.strings.complete()}`,
+				});
+
+			reply.edit({
+				embeds: [embed],
 			});
 
-		reply.edit({
-			embeds: [embed],
-		});
+			const buffer = Fs.readFileSync(result.path);
 
-		const buffer = Fs.readFileSync(result.path);
+			await interaction
+				.followUp({
+					content: interaction.user.toString(),
+					files: [new MessageAttachment(buffer, result.filename)],
+				})
+				.catch((err) => {
+					if (err.code === 40005) {
+						embed.setDescription(translations.strings.file_too_big());
 
-		await interaction
-			.followUp({
-				content: interaction.user.toString(),
-				files: [new MessageAttachment(buffer, result.filename)],
-			})
-			.catch((err) => {
-				if (err.code === 40005) {
-					embed.setDescription(translations.strings.file_too_big());
-
-					reply.edit({
-						embeds: [embed],
-					});
-				} else console.error(err);
-			})
-			.finally(() => Fs.unlinkSync(result.path));
+						reply.edit({
+							embeds: [embed],
+						});
+					} else console.error(err);
+				})
+				.finally(() => Fs.unlinkSync(result.path));
+		} catch (err) {
+			console.error(err);
+			return interaction.followUp(translations.strings.download_error());
+		}
 
 		function downloadVideo(url: string): Promise<VideoDownloadDetails> {
 			return new Promise(async (resolve, reject) => {
