@@ -2,7 +2,6 @@ import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
-import Pokedex from "../../types/pokemon/Pokedex";
 import {
 	ButtonInteraction,
 	CollectorFilter,
@@ -191,7 +190,7 @@ const command: Command = {
 						?.split(/,(?: *)?/)
 						?.map((input) => {
 							const number = parseInt((input.match(/^(\d+) */) ?? [])[1]) || 1;
-							const pokemon = Pokedex.findByNameWithVariation(
+							const pokemon = Util.pokedex.findByNameWithVariation(
 								input.replace(/^(\d+) */, ""),
 							);
 
@@ -226,7 +225,7 @@ const command: Command = {
 						?.split(/,(?: *)?/)
 						?.map((input) => {
 							const number = parseInt((input.match(/^(\d+) */) ?? [])[1]) || 1;
-							const pokemon = Pokedex.findByNameWithVariation(
+							const pokemon = Util.pokedex.findByNameWithVariation(
 								input.replace(/^(\d+) */, ""),
 							);
 
