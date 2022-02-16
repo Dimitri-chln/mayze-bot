@@ -2,16 +2,16 @@ import {
 	Client,
 	Collection,
 	GuildMember,
+	Intents,
 	Message,
 	MessageReaction,
 	Snowflake,
 	User,
 } from "discord.js";
+
 import Pg from "pg";
 import { google as Google } from "googleapis";
 import { CronJob } from "cron";
-import MusicPlayer from "./utils/music/MusicPlayer";
-import SpotifyWebApi from "spotify-web-api-node";
 
 import { Language } from "./types/structures/Translations";
 import Command from "./types/structures/Command";
@@ -21,47 +21,100 @@ import Palette from "./types/canvas/Palette";
 import Canvas from "./types/canvas/Canvas";
 import Pokedex from "./types/pokemon/Pokedex";
 
+import MusicPlayer from "./utils/music/MusicPlayer";
 import parseArgs from "./utils/misc/parseArgs";
 import findMember from "./utils/misc/findMember";
+
 import config from "./config.json";
 
 export default class Util {
 	static readonly prefix = config.PREFIX;
 	static readonly config = config;
-	static client: Client;
+
+	static readonly client = new Client({
+		intents: new Intents([
+			Intents.FLAGS.DIRECT_MESSAGES,
+			Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+			Intents.FLAGS.GUILDS,
+			Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+			Intents.FLAGS.GUILD_MEMBERS,
+			Intents.FLAGS.GUILD_MESSAGES,
+			Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+			Intents.FLAGS.GUILD_PRESENCES,
+			Intents.FLAGS.GUILD_VOICE_STATES,
+			Intents.FLAGS.GUILD_WEBHOOKS,
+		]),
+		presence: {
+			activities: [
+				{
+					type: "WATCHING",
+					name: "le meilleur clan",
+				},
+			],
+		},
+		partials: ["MESSAGE", "CHANNEL", "REACTION"],
+	});
+
 	static database: Pg.Client;
+
 	static readonly googleAuth = new Google.auth.JWT(
 		process.env.GOOGLE_CLIENT_EMAIL,
 		null,
 		process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
 		["https://www.googleapis.com/auth/spreadsheets.readonly"],
 	);
+
 	static readonly availableLanguages: Language[] = ["fr", "en"];
-	static guildConfigs: Collection<Snowflake, GuildConfig> = new Collection();
-	static commands: Collection<string, Command> = new Collection();
-	static messageResponses: MessageResponse[] = [];
-	static reactionCommands: ReactionCommand[] = [];
+	static readonly guildConfigs: Collection<Snowflake, GuildConfig> =
+		new Collection();
+	static readonly commands: Collection<string, Command> = new Collection();
+	static readonly messageResponses: MessageResponse[] = [];
+	static readonly reactionCommands: ReactionCommand[] = [];
 	static beta: boolean;
 	static owner: User;
-	static palettes: Collection<string, Palette> = new Collection();
-	static canvas: Collection<string, Canvas> = new Collection();
+	static readonly palettes: Collection<string, Palette> = new Collection();
+	static readonly canvas: Collection<string, Canvas> = new Collection();
 	static roseLobby: CronJob;
 	static parseArgs = parseArgs;
-	static xpMessages: Collection<Snowflake, number> = new Collection();
-	static sniping: SnipingData = {
+	static findMember = findMember;
+	static readonly xpMessages: Collection<Snowflake, number> = new Collection();
+	static readonly sniping: SnipingData = {
 		deletedMessages: new Collection(),
 		editedMessages: new Collection(),
 		messageReactions: new Collection(),
 	};
-	static musicPlayer: MusicPlayer;
-	static songDisplays: Collection<Snowflake, Message> = new Collection();
-	static spotify: SpotifyWebApi;
-	static pokedex = Pokedex;
-	static findMember = findMember;
 
-	static amongUsGames: Collection<Snowflake, AmongUsGame> = new Collection();
-	static russianRouletteGames: Collection<Snowflake, RussianRouletteGame> =
+	static readonly musicPlayer = new MusicPlayer(this.client);
+	static readonly songDisplays: Collection<Snowflake, Message> =
 		new Collection();
+	static readonly regexList = Object.entries(config.REGEX_LIST)
+		.map(
+			([key, regex]: [keyof typeof config.REGEX_LIST, string]): [
+				keyof typeof config.REGEX_LIST,
+				RegExp,
+			] => [key, new RegExp(regex)],
+		)
+		.reduce(
+			(
+				regexList: {
+					[P in keyof typeof config.REGEX_LIST]?: RegExp;
+				},
+				[key, regex]: [keyof typeof config.REGEX_LIST, RegExp],
+			) => {
+				regexList[key] = regex;
+				return regexList;
+			},
+			{},
+		);
+
+	static pokedex = Pokedex;
+
+	static readonly amongUsGames: Collection<Snowflake, AmongUsGame> =
+		new Collection();
+	static readonly russianRouletteGames: Collection<
+		Snowflake,
+		RussianRouletteGame
+	> = new Collection();
 }
 
 interface GuildConfig {

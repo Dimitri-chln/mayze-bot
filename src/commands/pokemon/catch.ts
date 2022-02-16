@@ -3,7 +3,6 @@ import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
 import { TextChannel } from "discord.js";
-import Pokedex from "../../types/pokemon/Pokedex";
 import CatchRates from "../../types/pokemon/CatchRates";
 import PokemonList from "../../types/pokemon/PokemonList";
 import { pokeball } from "../../assets/image-urls.json";
@@ -83,7 +82,7 @@ const command: Command = {
 			);
 
 			if (userHunt) {
-				const huntedPokemon = Pokedex.findById(userHunt.pokemon_id);
+				const huntedPokemon = Util.pokedex.findById(userHunt.pokemon_id);
 
 				let probability = Math.min(
 					((userHunt.hunt_count + 1) / 100) * (huntedPokemon.catchRate / 255),
@@ -119,7 +118,7 @@ const command: Command = {
 						) /
 							100)
 			) {
-				const megaPokemon = Pokedex.megaEvolvablePokemons.random();
+				const megaPokemon = Util.pokedex.megaEvolvablePokemons.random();
 
 				megaGem =
 					megaPokemon.megaEvolutions[
@@ -153,7 +152,7 @@ const command: Command = {
 						100);
 
 		const variation: VariationType =
-			Pokedex.alolaPokemons.has(randomPokemon.nationalId) &&
+			Util.pokedex.alolaPokemons.has(randomPokemon.nationalId) &&
 			Math.random() < ALOLAN_FREQUENCY
 				? "alola"
 				: "default";
@@ -346,7 +345,7 @@ const command: Command = {
 			);
 
 			if (userHunt) {
-				const huntedPokemon = Pokedex.findById(userHunt.pokemon_id);
+				const huntedPokemon = Util.pokedex.findById(userHunt.pokemon_id);
 
 				let probability = Math.min(
 					((userHunt.hunt_count + 1) / 100) * (huntedPokemon.catchRate / 255),
@@ -382,7 +381,7 @@ const command: Command = {
 						) /
 							100)
 			) {
-				const megaPokemon = Pokedex.megaEvolvablePokemons.random();
+				const megaPokemon = Util.pokedex.megaEvolvablePokemons.random();
 
 				megaGem =
 					megaPokemon.megaEvolutions[
@@ -416,7 +415,7 @@ const command: Command = {
 						100);
 
 		const variation: VariationType =
-			Pokedex.alolaPokemons.has(randomPokemon.nationalId) &&
+			Util.pokedex.alolaPokemons.has(randomPokemon.nationalId) &&
 			Math.random() < ALOLAN_FREQUENCY
 				? "alola"
 				: "default";

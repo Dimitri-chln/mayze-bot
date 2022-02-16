@@ -2,7 +2,6 @@ import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
-import Pokedex from "../../types/pokemon/Pokedex";
 import { ButtonInteraction, CollectorFilter } from "discord.js";
 
 const command: Command = {
@@ -48,7 +47,7 @@ const command: Command = {
 			);
 
 			if (huntedPokemonData) {
-				const huntedPokemon = Pokedex.findById(huntedPokemonData.pokemon_id);
+				const huntedPokemon = Util.pokedex.findById(huntedPokemonData.pokemon_id);
 
 				const probability =
 					huntedPokemonData.hunt_count < 100
@@ -80,7 +79,7 @@ const command: Command = {
 			return;
 		}
 
-		const pokemon = Pokedex.findByName(input);
+		const pokemon = Util.pokedex.findByName(input);
 		if (!pokemon)
 			return interaction.followUp(translations.strings.invalid_pokemon());
 

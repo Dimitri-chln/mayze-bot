@@ -2,7 +2,6 @@ import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
-import Pokedex from "../../types/pokemon/Pokedex";
 import pagination, { Page } from "../../utils/misc/pagination";
 import PokemonList from "../../types/pokemon/PokemonList";
 
@@ -183,8 +182,8 @@ const command: Command = {
 			case "find": {
 				const input = interaction.options.getString("pokemon");
 				const { pokemon, shiny, variationType } =
-					Pokedex.findByNameWithVariation(input) ?? {
-						pokemon: Pokedex.findById(parseInt(input)),
+					Util.pokedex.findByNameWithVariation(input) ?? {
+						pokemon: Util.pokedex.findById(parseInt(input)),
 						shiny: false,
 						variationType: "default",
 					};
@@ -281,7 +280,7 @@ const command: Command = {
 
 				const pokemonList = new PokemonList(pokemons, interaction.user.id);
 
-				const userPokedex = Pokedex.pokemons.filter((pokemon) => {
+				const userPokedex = Util.pokedex.pokemons.filter((pokemon) => {
 					if (
 						interaction.options.getBoolean("caught") &&
 						!pokemonList.has(pokemon)
@@ -301,12 +300,12 @@ const command: Command = {
 						return false;
 					if (
 						interaction.options.getBoolean("alola") &&
-						!Pokedex.alolaPokemons.has(pokemon.nationalId)
+						!Util.pokedex.alolaPokemons.has(pokemon.nationalId)
 					)
 						return false;
 					if (
 						interaction.options.getBoolean("mega") &&
-						!Pokedex.megaEvolvablePokemons.has(pokemon.nationalId)
+						!Util.pokedex.megaEvolvablePokemons.has(pokemon.nationalId)
 					)
 						return false;
 
@@ -387,7 +386,7 @@ const command: Command = {
 			}
 
 			case "evoline": {
-				const pokemon = Pokedex.findByName(
+				const pokemon = Util.pokedex.findByName(
 					interaction.options.getString("pokemon"),
 				);
 

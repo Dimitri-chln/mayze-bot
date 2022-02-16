@@ -2,7 +2,6 @@ import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
-import Pokedex from "../../types/pokemon/Pokedex";
 import { DatabasePokemon } from "../../types/structures/Database";
 import pagination, { Page } from "../../utils/misc/pagination";
 import { VariationType } from "../../utils/pokemon/pokemonInfo";
@@ -218,7 +217,7 @@ const command: Command = {
 							);
 
 						const legendary = allNormal.filter(
-							(pokemon) => Pokedex.findById(pokemon.pokedex_id).legendary,
+							(pokemon) => Util.pokedex.findById(pokemon.pokedex_id).legendary,
 						);
 						const legendaryTotal = legendary.reduce(
 							(total, pkm) =>
@@ -235,7 +234,7 @@ const command: Command = {
 						total += legendaryTotal;
 
 						const ultraBeast = allNormal.filter(
-							(pokemon) => Pokedex.findById(pokemon.pokedex_id).ultraBeast,
+							(pokemon) => Util.pokedex.findById(pokemon.pokedex_id).ultraBeast,
 						);
 						const ultraBeastTotal = ultraBeast.reduce(
 							(total, pkm) =>
@@ -261,7 +260,7 @@ const command: Command = {
 							);
 
 						const legendaryShiny = allShiny.filter(
-							(pokemon) => Pokedex.findById(pokemon.pokedex_id).legendary,
+							(pokemon) => Util.pokedex.findById(pokemon.pokedex_id).legendary,
 						);
 						const legendaryShinyTotal = legendaryShiny.reduce(
 							(total, pkm) =>
@@ -278,7 +277,7 @@ const command: Command = {
 						total += legendaryShinyTotal;
 
 						const ultraBeastShiny = allShiny.filter(
-							(pokemon) => Pokedex.findById(pokemon.pokedex_id).ultraBeast,
+							(pokemon) => Util.pokedex.findById(pokemon.pokedex_id).ultraBeast,
 						);
 						const ultraBeastShinyTotal = ultraBeastShiny.reduce(
 							(total, pkm) =>
@@ -391,7 +390,7 @@ const command: Command = {
 					}
 
 					case "about": {
-						const pokemon = Pokedex.findByName(
+						const pokemon = Util.pokedex.findByName(
 							interaction.options.getString("pokemon"),
 						);
 						if (!pokemon)
@@ -442,7 +441,7 @@ const command: Command = {
 						);
 						total += shiny.total ?? 0;
 
-						if (Pokedex.alolaPokemons.has(pokemon.nationalId)) {
+						if (Util.pokedex.alolaPokemons.has(pokemon.nationalId)) {
 							const {
 								rows: [alola],
 							}: {
@@ -571,12 +570,12 @@ const command: Command = {
 						pokemons = pokemons.filter((pkm) => {
 							if (
 								interaction.options.getBoolean("legendary") &&
-								!Pokedex.findById(pkm.pokedex_id).legendary
+								!Util.pokedex.findById(pkm.pokedex_id).legendary
 							)
 								return false;
 							if (
 								interaction.options.getBoolean("ultra-beast") &&
-								!Pokedex.findById(pkm.pokedex_id).ultraBeast
+								!Util.pokedex.findById(pkm.pokedex_id).ultraBeast
 							)
 								return false;
 
@@ -619,11 +618,13 @@ const command: Command = {
 											.map((pokemon, j) =>
 												translations.strings.most_caught_description(
 													(i + j + 1).toString(),
-													Pokedex.findById(pokemon.pokedex_id).formatName(
-														shiny,
-														variation,
-														translations.language,
-													),
+													Util.pokedex
+														.findById(pokemon.pokedex_id)
+														.formatName(
+															shiny,
+															variation,
+															translations.language,
+														),
 													pokemon.total.toString(),
 												),
 											)

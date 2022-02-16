@@ -2,7 +2,6 @@ import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
-import Pokedex from "../../types/pokemon/Pokedex";
 import { DatabasePokemon } from "../../types/structures/Database";
 import pagination, { Page } from "../../utils/misc/pagination";
 import PokemonList from "../../types/pokemon/PokemonList";
@@ -276,7 +275,7 @@ const command: Command = {
 		switch (subCommand) {
 			case "addfav": {
 				const { pokemon, shiny, variationType } =
-					Pokedex.findByNameWithVariation(
+					Util.pokedex.findByNameWithVariation(
 						interaction.options.getString("pokemon"),
 					) ?? {};
 
@@ -309,7 +308,7 @@ const command: Command = {
 
 			case "removefav": {
 				const { pokemon, shiny, variationType } =
-					Pokedex.findByNameWithVariation(
+					Util.pokedex.findByNameWithVariation(
 						interaction.options.getString("pokemon"),
 					) ?? {};
 
@@ -342,7 +341,7 @@ const command: Command = {
 
 			case "nick": {
 				const { pokemon, shiny, variationType } =
-					Pokedex.findByNameWithVariation(
+					Util.pokedex.findByNameWithVariation(
 						interaction.options.getString("pokemon"),
 					) ?? {};
 
@@ -402,12 +401,12 @@ const command: Command = {
 							return false;
 						if (
 							interaction.options.getBoolean("legendary") &&
-							!Pokedex.findById(pkm.pokedex_id).legendary
+							!Util.pokedex.findById(pkm.pokedex_id).legendary
 						)
 							return false;
 						if (
 							interaction.options.getBoolean("ultra-beast") &&
-							!Pokedex.findById(pkm.pokedex_id).ultraBeast
+							!Util.pokedex.findById(pkm.pokedex_id).ultraBeast
 						)
 							return false;
 						if (interaction.options.getBoolean("shiny") && !pkm.shiny)
@@ -433,7 +432,9 @@ const command: Command = {
 						if (
 							interaction.options.getString("name") &&
 							!new RegExp(interaction.options.getString("name"), "i").test(
-								Pokedex.findById(pkm.pokedex_id).names[translations.language],
+								Util.pokedex.findById(pkm.pokedex_id).names[
+									translations.language
+								],
 							) &&
 							!new RegExp(interaction.options.getString("name"), "i").test(
 								pkm.users[user.id].nickname,
@@ -443,8 +444,11 @@ const command: Command = {
 
 						if (
 							interaction.options.getString("evolution") &&
-							Pokedex.findByName(interaction.options.getString("evolution")) &&
-							!Pokedex.findByName(interaction.options.getString("evolution"))
+							Util.pokedex.findByName(
+								interaction.options.getString("evolution"),
+							) &&
+							!Util.pokedex
+								.findByName(interaction.options.getString("evolution"))
 								.flatEvolutionLine()
 								.some((p) => p.nationalId === pkm.pokedex_id)
 						)

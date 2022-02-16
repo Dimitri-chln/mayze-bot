@@ -2,7 +2,6 @@ import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
-import Pokedex from "../../types/pokemon/Pokedex";
 import groupArrayBy from "../../utils/misc/groupArrayBy";
 import { DatabasePokemon } from "../../types/structures/Database";
 
@@ -132,7 +131,7 @@ const command: Command = {
 
 		switch (subCommand) {
 			case "evolve": {
-				const pokemon = Pokedex.findByName(
+				const pokemon = Util.pokedex.findByName(
 					interaction.options.getString("pokemon"),
 				);
 				if (!pokemon)
