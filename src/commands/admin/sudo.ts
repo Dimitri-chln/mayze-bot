@@ -49,7 +49,9 @@ const command: Command = {
 		const user = interaction.options.getUser("user");
 		const message = interaction.options.getString("message");
 
-		const webhook = await interaction.client.fetchWebhook("800803785949577266");
+		const webhook = await interaction.client.fetchWebhook(
+			Util.guildConfigs.get(interaction.guild.id).webhookId,
+		);
 
 		if (webhook.channelId !== interaction.channel.id)
 			await webhook.edit({ channel: interaction.channel.id });
