@@ -1,45 +1,175 @@
 import {
 	getVoiceConnection,
 	AudioPlayer,
-	AudioResource,
 	createAudioPlayer,
 	AudioPlayerStatus,
 	joinVoiceChannel,
 	createAudioResource,
-	StreamType,
 	DiscordGatewayAdapterCreator,
+	VoiceConnectionStatus,
+	VoiceConnection,
+	entersState,
+	NoSubscriberBehavior,
 } from "@discordjs/voice";
-import { GuildMember, TextChannel, VoiceChannel } from "discord.js";
-import MusicUtil, { PlaylistOptions, PlayOptions } from "./MusicUtil";
+import {
+	Collection,
+	GuildMember,
+	Message,
+	Snowflake,
+	TextChannel,
+	VoiceChannel,
+} from "discord.js";
 import Song from "./Song";
 import Util from "../../Util";
-import ytdl from "ytdl-core";
+import { PlaylistOptions } from "./MusicUtil";
+import PlayDl from "play-dl";
+import { LanguageTranslationsData } from "../../types/structures/Translations";
 
 export default class Queue {
 	readonly voiceChannel: VoiceChannel;
 	readonly textChannel: TextChannel;
-	songs: Song[];
+	private readonly _translations: LanguageTranslationsData;
 	readonly audioPlayer: AudioPlayer;
-	resource?: AudioResource;
+	songs: Song[];
+	private _running: boolean;
+	private _seek: number;
 	stopped: boolean;
-	skipped: boolean;
 	repeatSong: boolean;
 	repeatQueue: boolean;
+	private _idleTimeout?: NodeJS.Timeout;
+	private _emptyTimeout?: NodeJS.Timeout;
+	private _volume: number;
+	readonly _idleTime: number;
+	private readonly _songDisplays: Collection<Snowflake, Message>;
+	private readonly _songDisplaysTimeout: NodeJS.Timeout;
 
-	constructor(voiceChannel: VoiceChannel, textChannel: TextChannel) {
+	constructor(
+		voiceChannel: VoiceChannel,
+		textChannel: TextChannel,
+		translations: LanguageTranslationsData,
+	) {
 		this.voiceChannel = voiceChannel;
 		this.textChannel = textChannel;
+		this._translations = translations;
+		this.audioPlayer = createAudioPlayer({
+			behaviors: {
+				noSubscriber: NoSubscriberBehavior.Pause,
+			},
+		});
 		this.songs = [];
-		this.audioPlayer = createAudioPlayer();
-		this.resource = null;
+		this._running = false;
+		this._seek = null;
 		this.stopped = false;
-		this.skipped = false;
 		this.repeatSong = false;
 		this.repeatQueue = false;
+		this._volume = 0.25;
+		this._idleTime = 900_000;
+		this._songDisplays = new Collection();
+		this._songDisplaysTimeout = setInterval(
+			() => this._editSongDisplays(),
+			10_000,
+		);
+
+		joinVoiceChannel({
+			guildId: voiceChannel.guild.id,
+			channelId: voiceChannel.id,
+			adapterCreator: voiceChannel.guild
+				.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator,
+			selfDeaf: true,
+		});
+
+		this.voiceConnection.subscribe(this.audioPlayer);
+
+		this.voiceConnection.on("stateChange", async (oldState, newState) => {
+			switch (newState.status) {
+				case VoiceConnectionStatus.Signalling: {
+					break;
+				}
+
+				case VoiceConnectionStatus.Connecting: {
+					break;
+				}
+
+				case VoiceConnectionStatus.Ready: {
+					break;
+				}
+
+				case VoiceConnectionStatus.Disconnected: {
+					try {
+						await Promise.race([
+							entersState(
+								this.voiceConnection,
+								VoiceConnectionStatus.Signalling,
+								5_000,
+							),
+							entersState(
+								this.voiceConnection,
+								VoiceConnectionStatus.Connecting,
+								5_000,
+							),
+						]);
+						// Seems to be reconnecting to a new channel - ignore disconnect
+						this.voiceConnection.subscribe(this.audioPlayer);
+					} catch (error) {
+						// Seems to be a real disconnect which SHOULDN'T be recovered from
+						this.stop();
+					}
+					break;
+				}
+
+				case VoiceConnectionStatus.Destroyed: {
+					break;
+				}
+			}
+		});
 
 		this.audioPlayer.on("stateChange", (oldState, newState) => {
-			if (newState.status === AudioPlayerStatus.Idle) {
-				this._playSong();
+			switch (newState.status) {
+				case AudioPlayerStatus.Playing: {
+					this._editSongDisplays();
+					break;
+				}
+
+				case AudioPlayerStatus.Idle: {
+					this._playSong();
+					break;
+				}
+
+				case AudioPlayerStatus.Buffering: {
+					break;
+				}
+
+				case AudioPlayerStatus.Paused: {
+					break;
+				}
+
+				case AudioPlayerStatus.AutoPaused: {
+					break;
+				}
+			}
+		});
+
+		this.voiceChannel.client.on("voiceStateUpdate", (oldState, newState) => {
+			if (
+				oldState?.channel?.id === this.voiceChannel.id ||
+				newState?.channel?.id === this.voiceChannel.id
+			) {
+				if (this.voiceChannel.members.size > 1) {
+					// Resume when more users join the voice channel
+					if (this.audioPlayer.state.status === AudioPlayerStatus.Paused)
+						this.resume();
+
+					clearTimeout(this._emptyTimeout);
+					delete this._emptyTimeout;
+				} else {
+					// Auto pause if the voice channel is empty
+					if (this.audioPlayer.state.status === AudioPlayerStatus.Playing)
+						this.pause();
+
+					this._emptyTimeout = setTimeout(() => {
+						if (this.voiceChannel.members.size <= 1) this.stop();
+					}, this._idleTime);
+				}
 			}
 		});
 	}
@@ -53,42 +183,29 @@ export default class Queue {
 	}
 
 	get volume() {
-		return this.resource?.volume?.volumeDecibels;
+		return this.audioPlayer.state.status === AudioPlayerStatus.Playing
+			? this._volume * 100
+			: null;
 	}
 
 	get duration() {
 		return this.audioPlayer
 			? this.songs.reduce((sum, song) => sum + song.duration, 0) -
-					this.resource?.playbackDuration -
-					this.songs[0]?.seekTime
+					(this.audioPlayer.state.status === AudioPlayerStatus.Playing
+						? this.audioPlayer.state.resource.playbackDuration
+						: 0) -
+					this.nowPlaying?.seek
 			: 0;
 	}
 
-	async play(
-		search: string,
-		member: GuildMember,
-		options: Partial<PlayOptions>,
-	) {
-		// Search the song
-		const song = await MusicUtil.best(search, this, member.user, 1, options);
+	async play(search: string, member: GuildMember) {
+		const song = await Util.music.search(search, this, member.user);
 		this.songs.push(song);
 
-		const isAlreadyPlaying = Boolean(getVoiceConnection(member.guild.id));
-
-		if (!isAlreadyPlaying) {
-			const connection = joinVoiceChannel({
-				guildId: this.voiceChannel.guild.id,
-				channelId: member.voice.channel.id,
-				adapterCreator: member.voice.guild
-					.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator,
-				selfDeaf: true,
-			});
-
-			connection.subscribe(this.audioPlayer);
+		if (!this._running) {
+			await this._playSong();
+			this._running = true;
 		}
-
-		// Play the song
-		if (!isAlreadyPlaying) await this._playSong(true);
 
 		return song;
 	}
@@ -96,41 +213,28 @@ export default class Queue {
 	async playlist(
 		search: string,
 		member: GuildMember,
-		options: Partial<PlaylistOptions>,
+		options?: Partial<PlaylistOptions>,
 	) {
 		// Search the playlist
-		const playlist = await MusicUtil.playlist(
+		const playlist = await Util.music.playlist(
 			search,
 			this,
 			member.user,
-			options.maxSongs,
-			options.shuffle,
-			options.localAddress,
+			options?.maxSongs,
+			options?.shuffle,
 		);
 		this.songs.push(...playlist.videos);
 
-		const isAlreadyPlaying = Boolean(getVoiceConnection(member.guild.id));
-
-		if (!isAlreadyPlaying) {
-			const connection = joinVoiceChannel({
-				guildId: this.voiceChannel.guild.id,
-				channelId: member.voice.channel.id,
-				adapterCreator: member.guild
-					.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator,
-				selfDeaf: true,
-			});
-
-			connection.subscribe(this.audioPlayer);
+		if (!this._running) {
+			await this._playSong();
+			this._running = true;
 		}
-
-		// Play the first song
-		if (!isAlreadyPlaying) await this._playSong(true);
 
 		return playlist;
 	}
 
 	pause() {
-		this.audioPlayer.pause();
+		this.audioPlayer.pause(true);
 	}
 
 	resume() {
@@ -138,20 +242,22 @@ export default class Queue {
 	}
 
 	stop() {
-		this.audioPlayer.stop();
-		this.voiceConnection.destroy();
-		this.songs = [];
 		this.stopped = true;
+		this.audioPlayer.stop();
 	}
 
-	setVolume(decibels: number) {
-		this.resource?.volume?.setVolumeDecibels(decibels);
+	setVolume(percentage: number) {
+		this._volume = Math.max(percentage / 100, 0);
+
+		if (this.audioPlayer.state.status === AudioPlayerStatus.Playing)
+			this.audioPlayer.state.resource.volume.setVolumeLogarithmic(this._volume);
 	}
 
-	async seek(seek: number) {
-		this.songs[0].seekTime = seek;
-		await this._playSong(true, seek);
-		return this.songs[0];
+	seek(seconds: number) {
+		const currentSong = this.nowPlaying;
+		this._seek = seconds;
+		this.audioPlayer.stop();
+		return currentSong;
 	}
 
 	clear() {
@@ -159,10 +265,18 @@ export default class Queue {
 	}
 
 	skip() {
-		const currentSong = this.songs[0];
-		this.skipped = true;
+		const currentSong = this.nowPlaying;
+		this.repeatSong = false;
 		this.audioPlayer.stop();
 		return currentSong;
+	}
+
+	skipTo(songIndex: number) {
+		const song = this.songs[songIndex];
+		this.repeatSong = false;
+		this.songs.splice(1, songIndex - 1);
+		this.audioPlayer.stop();
+		return song;
 	}
 
 	toggleRepeatSong() {
@@ -177,98 +291,204 @@ export default class Queue {
 		return this.repeatQueue;
 	}
 
-	move(oldIndex: number, newIndex: number) {
-		const song = this.songs[oldIndex];
-
-		this.songs.splice(newIndex, 0, this.songs.splice(oldIndex, 1)[0]);
-
-		return song;
+	move(oldSongIndex: number, newSongIndex: number) {
+		const movedSong = this.songs[oldSongIndex];
+		this.songs.splice(newSongIndex, 0, this.songs.splice(oldSongIndex, 1)[0]);
+		return movedSong;
 	}
 
-	remove(index: number) {
-		const song = this.songs[index];
-		this.songs.splice(index, 1);
-		return song;
+	remove(songIndexes: number[]) {
+		const removedSongs: Song[] = [];
+		const songs = [...this.songs];
+
+		for (const songIndex of songIndexes) {
+			const song = songs[songIndex];
+			if (song) removedSongs.push(song);
+			songs[songIndex] = null;
+		}
+
+		this.songs = songs.filter((s) => s);
+		return removedSongs;
 	}
 
 	shuffle() {
-		const currentSong = this.songs.shift();
-		this.songs = MusicUtil.shuffle(this.songs);
-		this.songs.unshift(currentSong);
+		const currentSong = this.nowPlaying;
+		this.songs = [currentSong, ...Util.music.shuffle(this.songs.slice(1))];
 		return this.songs;
 	}
 
-	createProgressBar() {
-		const timePassed = this.resource?.playbackDuration + this.songs[0].seekTime;
-		const timeEnd = this.songs[0].duration;
-		return MusicUtil.buildBar(timePassed, timeEnd);
+	cleanDuplicates() {
+		const removedSongs: Song[] = [];
+		const songs = [...this.songs];
+
+		songs.forEach((song, i) => {
+			if (songs.findIndex((s) => s.url === song.url) !== i) {
+				removedSongs.push(song);
+				songs[i] = null;
+			}
+		});
+
+		this.songs = songs.filter((s) => s);
+		return removedSongs;
 	}
 
-	private async _playSong(
-		startPlay: boolean = false,
-		seek: number = 0,
-	): Promise<void> {
-		// If there isn't any music in the queue
-		if (
-			this.stopped ||
-			(this.songs.length <= 1 &&
-				!startPlay &&
-				!this.repeatSong &&
-				!this.repeatQueue)
-		) {
-			// Stop playing
-			Util.musicPlayer.queues.delete(this.voiceChannel.guild.id);
+	createProgressBar() {
+		const timePassed =
+			this.audioPlayer.state.status === AudioPlayerStatus.Playing
+				? this.audioPlayer.state.resource.playbackDuration +
+				  (this.nowPlaying.seek ?? 0) * 1000
+				: 0;
+		const timeEnd = this.nowPlaying.duration;
 
-			if (this.stopped) {
-				this.voiceConnection.destroy();
-				this.audioPlayer.stop();
-			} else {
-				setTimeout(() => {
-					if (this.songs.length <= 1 && !this.repeatSong && !this.repeatQueue) {
-						this.voiceConnection.destroy();
-						this.audioPlayer.stop();
-					}
-				}, 900_000);
-			}
+		return Util.music.buildBar(timePassed, timeEnd);
+	}
+
+	createSongDisplay(message: Message) {
+		this._songDisplays.set(message.channel.id, message);
+		this._editSongDisplays();
+	}
+
+	private async _editSongDisplays(
+		options: { song?: Song; end?: boolean } = {},
+	) {
+		if (!this._running) return;
+		if (
+			this.audioPlayer.state.status !== AudioPlayerStatus.Playing &&
+			!options.end
+		)
+			return;
+
+		const song = options.song ?? this.nowPlaying;
+
+		await Promise.all(
+			this._songDisplays.map(async (message) => {
+				await message
+					.edit({
+						content: null,
+						embeds: [
+							{
+								author: {
+									name: this._translations.strings.author(),
+									iconURL: this.voiceChannel.guild.iconURL({ dynamic: true }),
+								},
+								thumbnail: {
+									url: song.thumbnail,
+								},
+								color: this.voiceChannel.guild.me.displayColor,
+								description: this._translations.strings.description(
+									song.name,
+									song.url,
+									options.end
+										? Util.music.buildBar(song.duration, song.duration)
+										: this.createProgressBar(),
+									song.requestedBy.tag,
+									this.repeatSong
+										? song.name
+										: this.songs[1]
+										? this.songs[1].name
+										: this.repeatQueue
+										? song.name
+										: "Ø",
+									this.repeatSong || this.repeatQueue
+										? "♾️"
+										: options.end
+										? Util.music.millisecondsToTime(0)
+										: Util.music.millisecondsToTime(this.duration),
+								),
+								footer: {
+									text:
+										"✨ Mayze ✨" +
+										(options.end
+											? this._translations.strings.footer_end()
+											: this._translations.strings.footer(
+													this.repeatSong,
+													this.repeatQueue,
+											  )),
+								},
+							},
+						],
+					})
+					.catch((err) => {
+						// Unknown message
+						if (err.code === 10008)
+							this._songDisplays.delete(message.channel.id);
+						else console.error(err);
+					});
+			}),
+		);
+	}
+
+	private async _playSong(): Promise<void> {
+		if (this._idleTimeout) {
+			clearTimeout(this._idleTimeout);
+			delete this._idleTimeout;
+		}
+
+		// If the queue has been stopped
+		if (this.stopped) {
+			this.voiceConnection.destroy();
+			this.audioPlayer.stop();
+			await this._editSongDisplays({ song: this.nowPlaying, end: true });
+			Util.musicPlayer.delete(this.voiceChannel.guild.id);
 			return;
 		}
 
-		// Add to the end if repeatQueue is enabled
-		if (this.repeatQueue && !this.repeatSong && !seek) {
-			this.songs.push(this.songs[0]);
+		// Clear the previous song
+		if (this._running && this._seek === null && !this.repeatSong) {
+			const previousSong = this.songs.shift();
+			if (this.repeatQueue) this.songs.push(previousSong);
+
+			// If there isn't any music in the queue
+			if (this.songs.length === 0) {
+				await this._editSongDisplays({ song: previousSong, end: true });
+				this._running = false;
+
+				this._idleTimeout = setTimeout(() => {
+					if (this.songs.length > 0) return;
+
+					this.voiceConnection.destroy();
+					this.audioPlayer.stop();
+					Util.musicPlayer.delete(this.voiceChannel.guild.id);
+				}, this._idleTime);
+				return;
+			}
 		}
 
-		this.skipped = false;
-		const song = this.songs[0];
-
 		// Live Video is unsupported
-		if (song.isLive) {
+		if (this.nowPlaying.live) {
 			this.repeatSong = false;
 			return this._playSong();
 		}
 
-		// Download the song
-		const stream = ytdl(song.url, {
-			filter: "audioonly",
-			quality: "highestaudio",
-			begin: seek,
-			dlChunkSize: 0,
-			highWaterMark: 1 << 25,
+		this.nowPlaying.seek = this._seek;
+		this._seek = null;
+
+		const streamOptions = {
+			seek: this.nowPlaying.seek,
+		};
+
+		// Stream the song
+		const source = await PlayDl.stream(this.nowPlaying.url, streamOptions);
+
+		const resource = createAudioResource(source.stream, {
+			inputType: source.type,
+			inlineVolume: true,
 		});
 
-		stream
-			.on("readable", () => {
-				const resource = createAudioResource(stream, {
-					inputType: StreamType.WebmOpus,
-					inlineVolume: true,
-				});
+		resource.playStream.once("error", (err) => {
+			this.textChannel.send(
+				this._translations.strings.stream_error(
+					this.nowPlaying.name,
+					err.name,
+					err.message,
+				),
+			);
 
-				this.resource = resource;
-				this.audioPlayer.play(resource);
-			})
-			.on("error", (err) => {
-				this.repeatSong = false;
-				this._playSong();
-			});
+			this.repeatSong = false;
+		});
+
+		resource.volume.setVolumeLogarithmic(this._volume);
+
+		this.audioPlayer.play(resource);
 	}
 }

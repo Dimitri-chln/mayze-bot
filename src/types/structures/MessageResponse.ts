@@ -6,6 +6,5 @@ export default interface MessageResponse {
 	readonly noBot?: boolean;
 	readonly noDM?: boolean;
 	readonly guildIds?: Snowflake[];
-	translations?: Translations;
 	run(message: Message, translations: LanguageTranslationsData): Promise<any>;
 }

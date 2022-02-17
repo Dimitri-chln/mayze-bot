@@ -14,13 +14,15 @@ export default async function runCommand(
 	];
 	const NOW = Date.now();
 
-	const available = await command.available;
-	if (!available)
-		return interaction.followUp(translations.strings.not_available());
+	const commandTranslations = await new Translations(
+		`cmd_${command.name}`,
+	).init();
 
+	// Check admin permissions
 	if (command.category === "admin" && interaction.user.id !== Util.owner.id)
 		return;
 
+	// Check user permissions
 	const userPermissions =
 		interaction.member instanceof GuildMember
 			? interaction.member.permissionsIn(interaction.channel.id)
@@ -39,6 +41,7 @@ export default async function runCommand(
 			)
 			.catch(console.error);
 
+	// Check bot permissions
 	const missingBotPermissions = command.botPermissions.filter(
 		(permission) =>
 			!interaction.guild.me
@@ -54,6 +57,20 @@ export default async function runCommand(
 				),
 			)
 			.catch(console.error);
+
+	// Check if the user is in the same voice channel as the bot
+	if (
+		command.voice &&
+		(!(interaction.member as GuildMember).voice.channelId ||
+			(Util.musicPlayer.get(interaction.guild.id) &&
+				(interaction.member as GuildMember).voice.channelId !==
+					Util.musicPlayer.get(interaction.guild.id).voiceChannel.id))
+	)
+		return interaction.followUp(translations.strings.not_in_vc());
+
+	// Check if the bot is currently playing music
+	if (command.voicePlaying && !Util.musicPlayer.isPlaying(interaction.guild.id))
+		return interaction.followUp(translations.strings.no_music());
 
 	let cooldownReduction = 0;
 
@@ -95,8 +112,10 @@ export default async function runCommand(
 		cooldownAmount,
 	);
 
-	command.runInteraction(interaction, command.translations.data[language]).catch((err) => {
-		console.error(err);
-		interaction.followUp(translations.strings.error()).catch(console.error);
-	});
+	command
+		.runInteraction(interaction, commandTranslations.data[language])
+		.catch((err) => {
+			console.error(err);
+			interaction.followUp(translations.strings.error()).catch(console.error);
+		});
 }

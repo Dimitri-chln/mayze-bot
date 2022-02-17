@@ -1,5 +1,6 @@
 import Event from "../types/structures/Event";
 import Util from "../Util";
+import Translations from "../types/structures/Translations";
 
 import {
 	MessageReaction,
@@ -31,12 +32,16 @@ const event: Event = {
 			Util.guildConfigs.get(reaction.message.guild?.id)?.language ?? "fr";
 
 		for (const reactionCommand of Util.reactionCommands) {
+			const reactionCommandTranslations = await new Translations(
+				`reac_${reactionCommand.name}`,
+			).init();
+
 			reactionCommand
 				.run(
 					reaction as MessageReaction,
 					user as User,
 					false,
-					reactionCommand.translations[language],
+					reactionCommandTranslations[language],
 				)
 				.catch(console.error);
 		}

@@ -9,7 +9,7 @@ export default function connectDatabase() {
 
 	Util.database = new Client(connectionString);
 
-	Util.database.on("error", (err) => {
+	Util.database.once("error", (err) => {
 		console.error(err);
 		Util.database.end().then(connectDatabase).catch(console.error);
 	});

@@ -1,6 +1,7 @@
 import { Collection } from "discord.js";
 import { google as Google } from "googleapis";
 import Util from "../../Util";
+import { sleep } from "../../utils/misc/sleep";
 
 export type Language = "fr" | "en";
 
@@ -27,87 +28,87 @@ export default class Translations {
 	init(n: number = 0): Promise<this> {
 		const sheets = Google.sheets({ version: "v4", auth: Util.googleAuth });
 
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
 			if (Translations.cache.has(this.id)) return resolve(this);
 
 			// Retry backoff
-			setTimeout(() => {
-				sheets.spreadsheets.values.get(
-					{
-						spreadsheetId: process.env.TRANSLATIONS_SHEET_ID,
-						range: `${this.id}!A1:Z100`,
-					},
-					(err, res) => {
-						if (err) return n > 10 ? reject(err) : this.init(n + 1);
+			if (n > 0) await sleep(Math.min(Math.pow(2, n) * 1000, 64_000));
 
-						const data = res.data.values;
+			sheets.spreadsheets.values.get(
+				{
+					spreadsheetId: process.env.TRANSLATIONS_SHEET_ID,
+					range: `${this.id}!A1:Z100`,
+				},
+				(err, res) => {
+					if (err) return n > 16 ? reject(err) : this.init(n + 1);
 
-						for (let column = 1; column < data[0].length; column++) {
-							const language = data[0][column].toLowerCase() as Language;
-							if (!Util.config.LANGUAGES.includes(language)) continue;
+					const data = res.data.values;
 
-							for (let row = 1; row < data.length; row++) {
-								this.data[language].strings[data[row][0]] = (
-									...args: (string | boolean)[]
-								) => {
-									args = args.map((a) =>
-										a
-											? a
-													.toString()
-													.replace(/{/g, "~c")
-													.replace(/}/g, "~b")
-													.replace(/\[/g, "~s")
-													.replace(/\]/g, "~t")
-													.replace(/:/g, "~d")
-													.replace(/\?/g, "~q")
-											: a,
-									);
+					for (let column = 1; column < data[0].length; column++) {
+						const language = data[0][column].toLowerCase() as Language;
+						if (!Util.config.LANGUAGES.includes(language)) continue;
 
-									let text = data[row][column]
-										.replace(/\\n/g, "\n")
-										.replace(/\\t/g, "\t");
+						for (let row = 1; row < data.length; row++) {
+							this.data[language].strings[data[row][0]] = (
+								...args: (string | boolean)[]
+							) => {
+								args = args.map((a) =>
+									a
+										? a
+												.toString()
+												.replace(/{/g, "~c")
+												.replace(/}/g, "~b")
+												.replace(/\[/g, "~s")
+												.replace(/\]/g, "~t")
+												.replace(/:/g, "~d")
+												.replace(/\?/g, "~q")
+										: a,
+								);
 
-									try {
-										text = JSON.parse(text);
-									} catch (err) {}
+								let text = data[row][column]
+									.replace(/\\n/g, "\n")
+									.replace(/\\t/g, "\t");
 
-									if (typeof text !== "string") return text;
+								try {
+									text = JSON.parse(text);
+								} catch (err) {}
 
+								if (typeof text !== "string") return text;
+
+								text = text.replace(
+									/\{\d+?\}/g,
+									(a) => args[parseInt(a.replace(/[{}]/g, "")) - 1] as string,
+								);
+
+								while (/\[\d+?\?[^\[\]]*?:[^\[\]]*?\]/gs.test(text)) {
 									text = text.replace(
-										/\{\d+?\}/g,
-										(a) => args[parseInt(a.replace(/[{}]/g, "")) - 1] as string,
+										/\[\d+?\?[^\[\]]*?:[^\[\]]*?\]/gs,
+										(a) => {
+											let m = a.match(/\[(\d+?)\?([^\[\]]*?):([^\[\]]*?)\]/s);
+											if (args[parseInt(m[1]) - 1]) return m[2];
+											else return m[3];
+										},
 									);
+								}
 
-									while (/\[\d+?\?[^\[\]]*?:[^\[\]]*?\]/gs.test(text)) {
-										text = text.replace(
-											/\[\d+?\?[^\[\]]*?:[^\[\]]*?\]/gs,
-											(a) => {
-												let m = a.match(/\[(\d+?)\?([^\[\]]*?):([^\[\]]*?)\]/s);
-												if (args[parseInt(m[1]) - 1]) return m[2];
-												else return m[3];
-											},
-										);
-									}
+								text = text
+									.replace(/~c/g, "{")
+									.replace(/~b/g, "}")
+									.replace(/~s/g, "[")
+									.replace(/~t/g, "]")
+									.replace(/~d/g, ":")
+									.replace(/~q/g, "?");
 
-									text = text
-										.replace(/~c/g, "{")
-										.replace(/~b/g, "}")
-										.replace(/~s/g, "[")
-										.replace(/~t/g, "]")
-										.replace(/~d/g, ":")
-										.replace(/~q/g, "?");
-
-									return text;
-								};
-							}
+								return text;
+							};
 						}
+					}
 
-						Translations.cache.set(this.id, this.data);
+					Translations.cache.set(this.id, this.data);
 
-						return resolve(this);
-					},
-				);
-			}, 16_000);
+					return resolve(this);
+				},
+			);
 		});
 	}
 }

@@ -15,12 +15,15 @@ export default async function runMessageCommand(
 	];
 	const NOW = Date.now();
 
-	const available = await command.available;
-	if (!available) return message.reply(translations.strings.not_available());
+	const commandTranslations = await new Translations(
+		`cmd_${command.name}`,
+	).init();
 
+	// Check admin permissions
 	if (command.category === "admin" && message.author.id !== Util.owner.id)
 		return;
 
+	// Check user permissions
 	const missingUserPermissions = command.userPermissions.filter(
 		(permission) =>
 			!message.member.permissionsIn(message.channel.id).has(permission),
@@ -35,6 +38,7 @@ export default async function runMessageCommand(
 			)
 			.catch(console.error);
 
+	// Check bot permissions
 	const missingBotPermissions = command.botPermissions.filter(
 		(permission) =>
 			!message.guild.me.permissionsIn(message.channel.id).has(permission),
@@ -48,6 +52,20 @@ export default async function runMessageCommand(
 				),
 			)
 			.catch(console.error);
+
+	// Check if the user is in the same voice channel as the bot
+	if (
+		command.voice &&
+		(!message.member.voice.channelId ||
+			(Util.musicPlayer.get(message.guild.id) &&
+				message.member.voice.channelId !==
+					Util.musicPlayer.get(message.guild.id).voiceChannel.id))
+	)
+		return message.reply(translations.strings.not_in_vc());
+
+	// Check if the bot is currently playing music
+	if (command.voicePlaying && !Util.musicPlayer.isPlaying(message.guild.id))
+		return message.reply(translations.strings.no_music());
 
 	let cooldownReduction = 0;
 
@@ -85,7 +103,7 @@ export default async function runMessageCommand(
 	setTimeout(() => command.cooldowns.delete(message.author.id), cooldownAmount);
 
 	command
-		.runMessage(message, args, command.translations.data[language])
+		.runMessage(message, args, commandTranslations.data[language])
 		.catch((err) => {
 			console.error(err);
 			message.reply(translations.strings.error()).catch(console.error);

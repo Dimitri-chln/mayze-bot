@@ -27,14 +27,14 @@ export default interface Command {
 	readonly userPermissions: PermissionString[];
 	readonly botPermissions: PermissionString[];
 	readonly options: CommandOptions;
+	readonly voice?: boolean;
+	readonly voicePlaying?: boolean;
 	readonly usage?: string;
 	readonly cooldown?: number;
 	readonly guildIds?: Snowflake[];
 	path?: string;
 	category?: string;
 	cooldowns?: Collection<Snowflake, number>;
-	translations?: Translations;
-	available?: Awaitable<boolean>;
 	runInteraction(
 		interaction: CommandInteraction,
 		translations: LanguageTranslationsData,

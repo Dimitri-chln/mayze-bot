@@ -99,8 +99,12 @@ const event: Event = {
 			)
 				continue;
 
+			const messageResponseTranslations = await new Translations(
+				`resp_${messageResponse.name}`,
+			).init();
+
 			messageResponse
-				.run(message, messageResponse.translations.data[language])
+				.run(message, messageResponseTranslations.data[language])
 				.catch(console.error);
 		}
 

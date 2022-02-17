@@ -26,6 +26,7 @@ import parseArgs from "./utils/misc/parseArgs";
 import findMember from "./utils/misc/findMember";
 
 import config from "./config.json";
+import MusicUtil from "./utils/music/MusicUtil";
 
 export default class Util {
 	static readonly prefix = config.PREFIX;
@@ -53,6 +54,9 @@ export default class Util {
 			],
 		},
 		partials: ["MESSAGE", "CHANNEL", "REACTION"],
+		allowedMentions: {
+			repliedUser: true,
+		},
 	});
 
 	static database: Pg.Client;
@@ -84,28 +88,8 @@ export default class Util {
 		messageReactions: new Collection(),
 	};
 
+	static readonly music = MusicUtil;
 	static readonly musicPlayer = new MusicPlayer(this.client);
-	static readonly songDisplays: Collection<Snowflake, Message> =
-		new Collection();
-	static readonly regexList = Object.entries(config.REGEX_LIST)
-		.map(
-			([key, regex]: [keyof typeof config.REGEX_LIST, string]): [
-				keyof typeof config.REGEX_LIST,
-				RegExp,
-			] => [key, new RegExp(regex)],
-		)
-		.reduce(
-			(
-				regexList: {
-					[P in keyof typeof config.REGEX_LIST]?: RegExp;
-				},
-				[key, regex]: [keyof typeof config.REGEX_LIST, RegExp],
-			) => {
-				regexList[key] = regex;
-				return regexList;
-			},
-			{},
-		);
 
 	static pokedex = Pokedex;
 

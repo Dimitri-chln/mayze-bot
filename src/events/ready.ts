@@ -27,7 +27,6 @@ const event: Event = {
 	run: async (client: Client) => {
 		console.log("Connected to Discord");
 
-		Util.client = client;
 		Util.beta = client.user.id === Util.config.BETA_CLIENT_ID;
 
 		const logChannel = client.channels.cache.get(Util.config.LOG_CHANNEL_ID);
@@ -100,12 +99,12 @@ const event: Event = {
 
 				if (Util.beta) {
 					const guild = client.guilds.cache.get(Util.config.TEST_GUILD_ID);
-
-					applicationCommandData.defaultPermission = false;
-
+					await guild.commands.fetch();
 					const applicationCommand = guild.commands.cache.find(
 						(cmd) => cmd.name === applicationCommandData.name,
 					);
+
+					applicationCommandData.defaultPermission = false;
 
 					if (!applicationCommand) {
 						console.log(
@@ -153,12 +152,11 @@ const event: Event = {
 					// Admin commands
 					if (command.category === "admin") {
 						const guild = client.guilds.cache.get(Util.config.ADMIN_GUILD_ID);
-
-						applicationCommandData.defaultPermission = false;
-
 						const applicationCommand = guild.commands.cache.find(
 							(cmd) => cmd.name === applicationCommandData.name,
 						);
+
+						applicationCommandData.defaultPermission = false;
 
 						if (!applicationCommand) {
 							console.log(
@@ -209,6 +207,10 @@ const event: Event = {
 								client.guilds.cache.has(id),
 							)) {
 								const guild = client.guilds.cache.get(guildId);
+								await guild.commands.fetch();
+								const applicationCommand = guild.commands.cache.find(
+									(cmd) => cmd.name === applicationCommandData.name,
+								);
 
 								applicationCommandData.description =
 									command.description[
@@ -217,13 +219,6 @@ const event: Event = {
 								applicationCommandData.options =
 									command.options[Util.guildConfigs.get(guildId).language] ??
 									command.options.en;
-
-								await guild.commands.fetch();
-								const applicationCommand = client.guilds.cache
-									.get(guildId)
-									.commands.cache.find(
-										(cmd) => cmd.name === applicationCommandData.name,
-									);
 
 								if (!applicationCommand) {
 									console.log(

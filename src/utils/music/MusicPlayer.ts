@@ -1,26 +1,52 @@
-import { Client, Collection, Snowflake } from "discord.js";
+import {
+	Client,
+	Collection,
+	Snowflake,
+	TextChannel,
+	VoiceChannel,
+} from "discord.js";
+import Translations from "../../types/structures/Translations";
+import Util from "../../Util";
 import Queue from "./Queue";
 
 export default class MusicPlayer {
 	readonly client: Client;
-	readonly queues: Collection<Snowflake, Queue>;
+	private readonly _queues: Collection<Snowflake, Queue>;
 
 	constructor(client: Client) {
 		this.client = client;
-		this.queues = new Collection();
+		this._queues = new Collection();
 	}
 
 	isPlaying(guildId: Snowflake) {
-		return this.queues.some(
+		return this._queues.some(
 			(queue) =>
-				queue.voiceChannel.guild.id === guildId && !queue.stopped,
+				queue.voiceChannel.guild.id === guildId &&
+				!queue.stopped &&
+				queue.songs.length > 0,
 		);
 	}
 
 	get(guildId: Snowflake) {
-		return this.queues.find(
-			(queue) =>
-				queue.voiceChannel.guild.id === guildId && !queue.stopped,
+		return this._queues.find(
+			(queue) => queue.voiceChannel.guild.id === guildId && !queue.stopped,
 		);
+	}
+
+	delete(guildId: Snowflake) {
+		this._queues.delete(guildId);
+	}
+
+	async create(voiceChannel: VoiceChannel, textChannel: TextChannel) {
+		const translationsData = await new Translations("music_queue").init();
+		const translations =
+			translationsData.data[
+				Util.guildConfigs.get(voiceChannel.guild.id).language
+			];
+
+		const queue = new Queue(voiceChannel, textChannel, translations);
+		this._queues.set(voiceChannel.guild.id, queue);
+
+		return queue;
 	}
 }
