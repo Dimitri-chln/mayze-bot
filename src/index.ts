@@ -90,6 +90,9 @@ eventFiles.forEach(async (file) => {
 
 PlayDl.getFreeClientID().then((soundCloudClientId) => {
 	PlayDl.setToken({
+		youtube: {
+			cookie: process.env.YOUTUBE_COOKIE,
+		},
 		spotify: {
 			client_id: process.env.SPOTIFY_CLIENT_ID,
 			client_secret: process.env.SPOTIFY_CLIENT_SECRET,
