@@ -71,7 +71,7 @@ const command: Command = {
 					text: `✨ Mayze ✨ | ${translations.strings.complete()}`,
 				});
 
-			reply.edit({
+			interaction.editReply({
 				embeds: [embed],
 			});
 
@@ -86,7 +86,7 @@ const command: Command = {
 					if (err.code === 40005) {
 						embed.setDescription(translations.strings.file_too_big());
 
-						reply.edit({
+						interaction.editReply({
 							embeds: [embed],
 						});
 					} else console.error(err);
@@ -112,7 +112,7 @@ const command: Command = {
 					.setDescription(MusicUtil.buildBar(0, duration))
 					.setThumbnail(info.video_details.thumbnails[0].url);
 
-				await reply.edit({
+				await interaction.editReply({
 					embeds: [embed],
 				});
 
@@ -132,7 +132,7 @@ const command: Command = {
 										),
 									);
 
-									reply.edit({
+									interaction.editReply({
 										embeds: [embed],
 									});
 

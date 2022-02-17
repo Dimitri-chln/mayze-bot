@@ -4,6 +4,7 @@ import Util from "../../Util";
 
 import groupArrayBy from "../../utils/misc/groupArrayBy";
 import { DatabasePokemon } from "../../types/structures/Database";
+import { sleep } from "../../utils/misc/sleep";
 
 const command: Command = {
 	name: "mega",
@@ -240,24 +241,24 @@ const command: Command = {
 					fetchReply: true,
 				})) as Message;
 
-				setTimeout(() => {
-					reply.edit({
-						embeds: [
-							reply.embeds[0]
-								.setThumbnail(pokemon.image(shiny, megaEvolution.suffix))
-								.setDescription(
-									translations.strings.evolved(
-										pokemon.formatName(shiny, "default", translations.language),
-										pokemon.formatName(
-											shiny,
-											megaEvolution.suffix,
-											translations.language,
-										),
+				await sleep(3_000);
+
+				interaction.editReply({
+					embeds: [
+						reply.embeds[0]
+							.setThumbnail(pokemon.image(shiny, megaEvolution.suffix))
+							.setDescription(
+								translations.strings.evolved(
+									pokemon.formatName(shiny, "default", translations.language),
+									pokemon.formatName(
+										shiny,
+										megaEvolution.suffix,
+										translations.language,
 									),
 								),
-						],
-					});
-				}, 3_000);
+							),
+					],
+				});
 				break;
 			}
 

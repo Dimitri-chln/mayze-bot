@@ -231,7 +231,7 @@ const command: Command = {
 
 				const deadPlayer = currentGame.members.random();
 
-				reply.edit({
+				interaction.editReply({
 					embeds: [
 						embed.setDescription(
 							translations.strings.dead(deadPlayer.user.tag),

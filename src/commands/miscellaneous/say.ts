@@ -40,7 +40,7 @@ const command: Command = {
 				// Invisible character "ㅤ"
 				"\u3164",
 			)
-			.then(interaction.deleteReply);
+			.then(() => interaction.deleteReply());
 
 		interaction.channel.send({
 			content: text,

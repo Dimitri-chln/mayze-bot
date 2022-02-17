@@ -190,7 +190,7 @@ const command: Command = {
 
 		collector.on("end", (collected, reason) => {
 			if (reason !== "messageDelete")
-				reply.edit({
+				interaction.editReply({
 					embeds: reply.embeds,
 					components: [
 						{
@@ -289,7 +289,7 @@ const command: Command = {
 					break;
 			}
 
-			reply.edit({
+			interaction.editReply({
 				embeds: [
 					{
 						author: {

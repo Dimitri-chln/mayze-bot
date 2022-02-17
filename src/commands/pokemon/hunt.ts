@@ -47,7 +47,9 @@ const command: Command = {
 			);
 
 			if (huntedPokemonData) {
-				const huntedPokemon = Util.pokedex.findById(huntedPokemonData.pokemon_id);
+				const huntedPokemon = Util.pokedex.findById(
+					huntedPokemonData.pokemon_id,
+				);
 
 				const probability =
 					huntedPokemonData.hunt_count < 100
@@ -111,61 +113,108 @@ const command: Command = {
 
 		const filter: CollectorFilter<[ButtonInteraction]> = (buttonInteraction) =>
 			buttonInteraction.user.id === interaction.user.id;
-		const collected = await reply.awaitMessageComponent({
-			filter,
-			componentType: "BUTTON",
-			time: 60_000,
-		});
 
-		collected.update({
-			content: reply.content,
-			components: [
-				{
-					type: "ACTION_ROW",
-					components: [
-						{
-							type: "BUTTON",
-							customId: "confirm",
-							emoji: Util.config.EMOJIS.check.data,
-							style: "SUCCESS",
-							disabled: true,
-						},
-						{
-							type: "BUTTON",
-							customId: "cancel",
-							emoji: Util.config.EMOJIS.cross.data,
-							style: "DANGER",
-							disabled: true,
-						},
-					],
-				},
-			],
-		});
+		try {
+			const buttonInteraction = await reply.awaitMessageComponent({
+				filter,
+				componentType: "BUTTON",
+				time: 60_000,
+			});
 
-		switch (collected.customId) {
-			case "confirm": {
-				await Util.database.query(
-					`
+			switch (buttonInteraction.customId) {
+				case "confirm": {
+					await Util.database.query(
+						`
 					INSERT INTO pokemon_hunting VALUES ($1, $2)
 					ON CONFLICT (user_id)
 					DO UPDATE SET pokemon_id = EXCLUDED.pokemon_id, hunt_count = 0
 					WHERE pokemon_hunting.user_id = EXCLUDED.user_id
 					`,
-					[interaction.user.id, pokemon.nationalId],
-				);
+						[interaction.user.id, pokemon.nationalId],
+					);
 
-				interaction.followUp(
-					translations.strings.hunting(
-						pokemon.names[translations.language] ?? pokemon.names.en,
-					),
-				);
-				break;
-			}
+					buttonInteraction.update({
+						content: translations.strings.hunting(
+							pokemon.names[translations.language] ?? pokemon.names.en,
+						),
+						components: [
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "confirm",
+										emoji: Util.config.EMOJIS.check.data,
+										style: "SUCCESS",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "cancel",
+										emoji: Util.config.EMOJIS.cross.data,
+										style: "DANGER",
+										disabled: true,
+									},
+								],
+							},
+						],
+					});
+					break;
+				}
 
-			case "cancel": {
-				interaction.followUp(translations.strings.cancelled());
-				break;
+				case "cancel": {
+					buttonInteraction.update({
+						content: translations.strings.cancelled(),
+						components: [
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "confirm",
+										emoji: Util.config.EMOJIS.check.data,
+										style: "SUCCESS",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "cancel",
+										emoji: Util.config.EMOJIS.cross.data,
+										style: "DANGER",
+										disabled: true,
+									},
+								],
+							},
+						],
+					});
+					break;
+				}
 			}
+		} catch (err) {
+			interaction.editReply({
+				content: translations.strings.cancelled(),
+				components: [
+					{
+						type: "ACTION_ROW",
+						components: [
+							{
+								type: "BUTTON",
+								customId: "confirm",
+								emoji: Util.config.EMOJIS.check.data,
+								style: "SUCCESS",
+								disabled: true,
+							},
+							{
+								type: "BUTTON",
+								customId: "cancel",
+								emoji: Util.config.EMOJIS.cross.data,
+								style: "DANGER",
+								disabled: true,
+							},
+						],
+					},
+				],
+			});
 		}
 	},
 };

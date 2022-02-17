@@ -592,7 +592,7 @@ const command: Command = {
 
 				collector.on("end", (collected, reason) => {
 					if (reason !== "messageDelete")
-						reply.edit({
+						interaction.editReply({
 							content: grid.format(),
 							embeds: reply.embeds,
 							components: [
@@ -878,7 +878,7 @@ const command: Command = {
 
 				collector.on("end", (collected, reason) => {
 					if (reason !== "messageDelete")
-						reply.edit({
+						interaction.editReply({
 							content: grid.format(),
 							embeds: reply.embeds,
 							components: [

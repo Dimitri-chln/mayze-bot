@@ -184,110 +184,137 @@ const command: Command = {
 		const filter: CollectorFilter<[ButtonInteraction]> = (buttonInteraction) =>
 			buttonInteraction.user.id === interaction.user.id;
 
-		const buttonInteraction = await reply.awaitMessageComponent({
-			filter,
-			componentType: "BUTTON",
-			time: 120_000,
-		});
+		try {
+			const buttonInteraction = await reply.awaitMessageComponent({
+				filter,
+				componentType: "BUTTON",
+				time: 120_000,
+			});
 
-		switch (buttonInteraction.customId) {
-			case "confirm": {
-				buttonInteraction.update({
-					content: translations.strings.updating(
-						members.size.toString(),
-						members.size > 1,
-					),
-					components: [
-						{
-							type: "ACTION_ROW",
-							components: [
-								{
-									type: "BUTTON",
-									customId: "confirm",
-									emoji: Util.config.EMOJIS.check.data,
-									style: "SUCCESS",
-									disabled: true,
-								},
-								{
-									type: "BUTTON",
-									customId: "cancel",
-									emoji: Util.config.EMOJIS.cross.data,
-									style: "DANGER",
-									disabled: true,
-								},
-							],
-						},
-					],
-				});
+			switch (buttonInteraction.customId) {
+				case "confirm": {
+					buttonInteraction.update({
+						content: translations.strings.updating(
+							members.size.toString(),
+							members.size > 1,
+						),
+						components: [
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "confirm",
+										emoji: Util.config.EMOJIS.check.data,
+										style: "SUCCESS",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "cancel",
+										emoji: Util.config.EMOJIS.cross.data,
+										style: "DANGER",
+										disabled: true,
+									},
+								],
+							},
+						],
+					});
 
-				switch (subCommand) {
-					case "give":
-						members = members.filter((m) => !m.roles.cache.has(role.id));
+					switch (subCommand) {
+						case "give":
+							members = members.filter((m) => !m.roles.cache.has(role.id));
 
-						await Promise.all(
-							members.map(async (member) => {
-								await member.roles.add(role.id).catch((err) => {
-									++errors;
-									console.error(err);
-								});
-							}),
-						);
-						break;
+							await Promise.all(
+								members.map(async (member) => {
+									await member.roles.add(role.id).catch((err) => {
+										++errors;
+										console.error(err);
+									});
+								}),
+							);
+							break;
 
-					case "remove":
-						members = members.filter((m) => m.roles.cache.has(role.id));
+						case "remove":
+							members = members.filter((m) => m.roles.cache.has(role.id));
 
-						await Promise.all(
-							members.map(async (member) => {
-								await member.roles.remove(role.id).catch((err) => {
-									++errors;
-									console.error(err);
-								});
-							}),
-						);
-						break;
+							await Promise.all(
+								members.map(async (member) => {
+									await member.roles.remove(role.id).catch((err) => {
+										++errors;
+										console.error(err);
+									});
+								}),
+							);
+							break;
+					}
+
+					interaction.editReply(
+						translations.strings.updated(
+							members.size - errors === 0,
+							members.size - errors === 1,
+							members.size - errors > 1,
+							(members.size - errors).toString(),
+							errors.toString(),
+							errors > 1,
+						),
+					);
+					break;
 				}
 
-				interaction.editReply(
-					translations.strings.updated(
-						members.size - errors === 0,
-						members.size - errors === 1,
-						members.size - errors > 1,
-						(members.size - errors).toString(),
-						errors.toString(),
-						errors > 1,
-					),
-				);
-				break;
+				case "cancel": {
+					buttonInteraction.update({
+						content: translations.strings.cancelled(),
+						components: [
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "confirm",
+										emoji: Util.config.EMOJIS.check.data,
+										style: "SUCCESS",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "cancel",
+										emoji: Util.config.EMOJIS.cross.data,
+										style: "DANGER",
+										disabled: true,
+									},
+								],
+							},
+						],
+					});
+					break;
+				}
 			}
-
-			case "cancel": {
-				buttonInteraction.update({
-					content: translations.strings.cancelled(),
-					components: [
-						{
-							type: "ACTION_ROW",
-							components: [
-								{
-									type: "BUTTON",
-									customId: "confirm",
-									emoji: Util.config.EMOJIS.check.data,
-									style: "SUCCESS",
-									disabled: true,
-								},
-								{
-									type: "BUTTON",
-									customId: "cancel",
-									emoji: Util.config.EMOJIS.cross.data,
-									style: "DANGER",
-									disabled: true,
-								},
-							],
-						},
-					],
-				});
-				break;
-			}
+		} catch (err) {
+			interaction.editReply({
+				content: translations.strings.cancelled(),
+				components: [
+					{
+						type: "ACTION_ROW",
+						components: [
+							{
+								type: "BUTTON",
+								customId: "confirm",
+								emoji: Util.config.EMOJIS.check.data,
+								style: "SUCCESS",
+								disabled: true,
+							},
+							{
+								type: "BUTTON",
+								customId: "cancel",
+								emoji: Util.config.EMOJIS.cross.data,
+								style: "DANGER",
+								disabled: true,
+							},
+						],
+					},
+				],
+			});
 		}
 	},
 };
