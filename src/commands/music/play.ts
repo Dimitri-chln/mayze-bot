@@ -63,15 +63,6 @@ const command: Command = {
 		let search = interaction.options.getString("song");
 		const shuffle = Boolean(interaction.options.getBoolean("shuffle"));
 
-		// if (/https?:\/\/deezer\.page\.link\/\w+/.test(search)) {
-		// 	const res = await Axios.get(search);
-		// 	let [, scrap] = res.data.match(/property="og:url" content="(.*)"/) ?? [];
-		// 	search = scrap;
-
-		// 	if (!search)
-		// 		return interaction.followUp(translations.strings.error_deezer());
-		// }
-
 		switch (await PlayDl.validate(search)) {
 			case "yt_playlist":
 			case "sp_playlist":
