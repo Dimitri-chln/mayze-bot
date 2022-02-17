@@ -334,7 +334,7 @@ const command: Command = {
 					).reduce((sum, price) => sum + price, 0);
 				}
 
-				const refundCost = Util.config.SHOP_RESET_COST * invested;
+				const refundCost = Math.round(Util.config.SHOP_RESET_COST * invested);
 				const refund = invested - refundCost;
 
 				const reply = (await interaction.followUp({
