@@ -1,7 +1,7 @@
 import Event from "../types/structures/Event";
 import Util from "../Util";
 
-import { GuildMember } from "discord.js";
+import { Collection, GuildMember } from "discord.js";
 import { DatabaseMemberRoles } from "../types/structures/Database";
 
 const event: Event = {
@@ -28,7 +28,11 @@ const event: Event = {
 
 		if (memberRoles) roleIds = roleIds.concat(memberRoles.roles);
 
-		member.roles.add(roleIds);
+		const roles = new Collection(
+			roleIds.map((roleId) => [roleId, member.guild.roles.cache.get(roleId)]),
+		);
+
+		member.roles.add(roles);
 	},
 };
 
