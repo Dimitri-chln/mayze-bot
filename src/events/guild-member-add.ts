@@ -5,7 +5,7 @@ import { Collection, GuildMember } from "discord.js";
 import { DatabaseMemberRoles } from "../types/structures/Database";
 
 const event: Event = {
-	name: "",
+	name: "guildMemberAdd",
 	once: false,
 
 	run: async (member: GuildMember) => {
