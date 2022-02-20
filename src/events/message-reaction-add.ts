@@ -10,7 +10,7 @@ import {
 } from "discord.js";
 
 const event: Event = {
-	name: "",
+	name: "messageReactionAdd",
 	once: false,
 
 	run: async (

@@ -476,6 +476,8 @@ export default class Queue {
 		});
 
 		resource.playStream.once("error", (err) => {
+			this.repeatSong = false;
+
 			this.textChannel.send(
 				this._translations.strings.stream_error(
 					this.nowPlaying.name,
@@ -483,8 +485,6 @@ export default class Queue {
 					err.message,
 				),
 			);
-
-			this.repeatSong = false;
 		});
 
 		resource.volume.setVolumeLogarithmic(this._volume);
