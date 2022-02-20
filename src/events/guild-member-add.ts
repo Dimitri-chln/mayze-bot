@@ -28,11 +28,7 @@ const event: Event = {
 
 		if (memberRoles) roleIds = roleIds.concat(memberRoles.roles);
 
-		const roles = new Collection(
-			roleIds.map((roleId) => [roleId, member.guild.roles.cache.get(roleId)]),
-		);
-
-		member.roles.add(roles);
+		member.roles.add(roleIds);
 	},
 };
 
