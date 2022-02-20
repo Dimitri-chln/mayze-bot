@@ -528,9 +528,12 @@ const event: Event = {
 
 				Util.roseLobby = new CronJob(date, () => {
 					(announcementChannel as TextChannel)
-						.send(
-							`<@&${Util.config.ROSE_LOBBY_ROLE_ID}>\nLa game de roses va démarrer, le mot de passe est \`${password}\``,
-						)
+						.send({
+							content: `<@&${Util.config.ROSE_LOBBY_ROLE_ID}>\nLa game de roses va démarrer, le mot de passe est \`${password}\``,
+							allowedMentions: {
+								roles: [Util.config.ROSE_LOBBY_ROLE_ID],
+							},
+						})
 						.catch(console.error);
 					logMessage.edit(`~~${logMessage.content}~~`).catch(console.error);
 				});

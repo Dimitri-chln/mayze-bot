@@ -348,6 +348,9 @@ const command: Command = {
 							],
 						},
 					],
+					allowedMentions: {
+						users: [user.id],
+					},
 					fetchReply: true,
 				})) as Message;
 
