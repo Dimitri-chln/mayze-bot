@@ -12,7 +12,7 @@ const command: Command = {
 		en: "Ping a user repeatedly",
 	},
 	usage: "",
-	userPermissions: ["MANAGE_MESSAGES"],
+	userPermissions: ["SEND_MESSAGES", "MANAGE_MESSAGES"],
 	botPermissions: ["EMBED_LINKS"],
 	guildIds: [Util.config.MAIN_GUILD_ID, "724530039781326869"],
 
@@ -79,9 +79,7 @@ const command: Command = {
 
 		for (let i = 0; i < number; i++) {
 			messages.push(
-				interaction.channel.send(
-					`${user.toString()} ${message ?? ""}`,
-				),
+				interaction.channel.send(`${user.toString()} ${message ?? ""}`),
 			);
 		}
 
