@@ -153,7 +153,7 @@ export function formatName(
 	if (pokemon.ultraBeast) badges += "🎗️";
 
 	if (variation === "default") {
-		name = pokemon.names[language];
+		name = pokemon.names[language] ?? pokemon.names.fr;
 	} else if (["mega", "megax", "megay", "primal"].includes(variation)) {
 		const megaEvolution = pokemon.megaEvolutions.find(
 			(megaEvo) => megaEvo.suffix === variation,
@@ -168,7 +168,7 @@ export function formatName(
 
 	switch (format) {
 		case "full":
-			return `${badges} ${name}`;
+			return `${badges} ${name}`.trim();
 		case "badge":
 			return badges;
 		case "raw":
@@ -182,9 +182,7 @@ export function pokemonImage(
 	variation: VariationType,
 ) {
 	const url = (n: number) =>
-		`https://assets.poketwo.net/${
-			shiny ? "shiny" : "images"
-		}/${n}.png?v=26`;
+		`https://assets.poketwo.net/${shiny ? "shiny" : "images"}/${n}.png?v=26`;
 
 	if (variation === "default") return url(pokemon.nationalId);
 	else return url(imageSuffixes[variation][pokemon.nationalId]);
