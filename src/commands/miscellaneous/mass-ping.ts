@@ -79,7 +79,12 @@ const command: Command = {
 
 		for (let i = 0; i < number; i++) {
 			messages.push(
-				interaction.channel.send(`${user.toString()} ${message ?? ""}`),
+				interaction.channel.send({
+					content: `${user.toString()} ${message ?? ""}`,
+					allowedMentions: {
+						users: [user.id],
+					},
+				}),
 			);
 		}
 
