@@ -182,7 +182,7 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.strings.title(),
+								name: translations.strings.list_author(),
 								iconURL: interaction.client.user.displayAvatarURL(),
 							},
 							color: interaction.guild.me.displayColor,
@@ -341,10 +341,10 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.strings.author(),
+								name: translations.strings.refund_author(),
 								iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
 							},
-							title: translations.strings.title(),
+							title: translations.strings.refund_title(),
 							color: interaction.guild.me.displayColor,
 							description: `\`\`\`\n${
 								translations.strings.invested().padEnd(30, " ") +
