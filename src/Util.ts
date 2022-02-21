@@ -56,6 +56,7 @@ export default class Util {
 		partials: ["MESSAGE", "CHANNEL", "REACTION"],
 		allowedMentions: {
 			repliedUser: true,
+			parse: ["users"],
 		},
 	});
 

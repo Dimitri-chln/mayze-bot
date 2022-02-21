@@ -38,16 +38,13 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const user = interaction.options.getUser("user");
 
-		interaction.followUp({
-			content: translations.strings.gift(
+		interaction.followUp(
+			translations.strings.gift(
 				user.toString(),
 				getGift(gifts[translations.language] ?? gifts.fr),
 				interaction.user.username,
 			),
-			allowedMentions: {
-				users: [user.id],
-			},
-		});
+		);
 
 		function getGift(giftList: Gift[]): string {
 			const item = giftList[Math.floor(Math.random() * giftList.length)];

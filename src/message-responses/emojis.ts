@@ -62,9 +62,6 @@ const messageResponse: MessageResponse = {
 				content: newMsg,
 				avatarURL: message.author.displayAvatarURL(),
 				username: message.member.displayName,
-				allowedMentions: {
-					users: [message.author.id],
-				},
 			});
 		}
 	},
