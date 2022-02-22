@@ -7,7 +7,6 @@ import {
 	createAudioResource,
 	DiscordGatewayAdapterCreator,
 	VoiceConnectionStatus,
-	VoiceConnection,
 	entersState,
 	NoSubscriberBehavior,
 } from "@discordjs/voice";
@@ -33,13 +32,13 @@ export default class Queue {
 	songs: Song[];
 	private _running: boolean;
 	private _seek: number;
-	stopped: boolean;
+	private _stopped: boolean;
 	repeatSong: boolean;
 	repeatQueue: boolean;
 	private _idleTimeout?: NodeJS.Timeout;
 	private _emptyTimeout?: NodeJS.Timeout;
 	private _volume: number;
-	readonly _idleTime: number;
+	private readonly _idleTime: number;
 	private readonly _songDisplays: Collection<Snowflake, Message>;
 	private readonly _songDisplaysTimeout: NodeJS.Timeout;
 
@@ -59,7 +58,7 @@ export default class Queue {
 		this.songs = [];
 		this._running = false;
 		this._seek = null;
-		this.stopped = false;
+		this._stopped = false;
 		this.repeatSong = false;
 		this.repeatQueue = false;
 		this._volume = 0.25;
@@ -242,7 +241,7 @@ export default class Queue {
 	}
 
 	stop() {
-		this.stopped = true;
+		this._stopped = true;
 		this.audioPlayer.stop();
 	}
 
@@ -289,6 +288,17 @@ export default class Queue {
 		this.repeatQueue = !this.repeatQueue;
 		if (this.repeatQueue) this.repeatSong = false;
 		return this.repeatQueue;
+	}
+
+	async fillQueue(number: number) {
+		const relatedSongs = await Util.music.relatedSongs(
+			this.songs,
+			Math.max(number - this.songs.length, 0),
+			this,
+		);
+
+		this.songs.push(...relatedSongs);
+		return relatedSongs;
 	}
 
 	move(oldSongIndex: number, newSongIndex: number) {
@@ -425,7 +435,7 @@ export default class Queue {
 		}
 
 		// If the queue has been stopped
-		if (this.stopped) {
+		if (this._stopped) {
 			this.voiceConnection.destroy();
 			this.audioPlayer.stop();
 			await this._editSongDisplays({ song: this.nowPlaying, end: true });
@@ -433,25 +443,26 @@ export default class Queue {
 			return;
 		}
 
+		let previousSong: Song;
 		// Clear the previous song
 		if (this._running && this._seek === null && !this.repeatSong) {
-			const previousSong = this.songs.shift();
+			previousSong = this.songs.shift();
 			if (this.repeatQueue) this.songs.push(previousSong);
+		}
 
-			// If there isn't any music in the queue
-			if (this.songs.length === 0) {
-				await this._editSongDisplays({ song: previousSong, end: true });
-				this._running = false;
+		// If there isn't any song in the queue
+		if (this.songs.length === 0) {
+			await this._editSongDisplays({ song: previousSong, end: true });
+			this._running = false;
 
-				this._idleTimeout = setTimeout(() => {
-					if (this.songs.length > 0) return;
+			this._idleTimeout = setTimeout(() => {
+				if (this.songs.length > 0) return;
 
-					this.voiceConnection.destroy();
-					this.audioPlayer.stop();
-					Util.musicPlayer.delete(this.voiceChannel.guild.id);
-				}, this._idleTime);
-				return;
-			}
+				this.voiceConnection.destroy();
+				this.audioPlayer.stop();
+				Util.musicPlayer.delete(this.voiceChannel.guild.id);
+			}, this._idleTime);
+			return;
 		}
 
 		// Live Video is unsupported

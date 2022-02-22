@@ -1,5 +1,3 @@
-import Util from "../../Util";
-
 // Self Definitions
 import Playlist, { PlaylistData } from "./Playlist";
 import Song, { SongData } from "./Song";
@@ -17,6 +15,7 @@ import PlayDl, {
 	SpotifyPlaylist,
 	SpotifyTrack,
 } from "play-dl";
+import Util from "../../Util";
 
 function isSpotifyTrack(result: Spotify): result is SpotifyTrack {
 	return result.type === "track";
@@ -73,13 +72,11 @@ export default class MusicUtil {
 				if (!spotifyResult || !isSpotifyTrack(spotifyResult))
 					throw "InvalidSpotify";
 
-				const searchResult = await this.search(
+				return this.search(
 					`${spotifyResult.artists[0].name} - ${spotifyResult.name}`,
 					queue,
 					requestedBy,
 				);
-
-				return searchResult;
 			}
 
 			case "dz_track": {
@@ -87,13 +84,11 @@ export default class MusicUtil {
 				if (!deezerResult || !isDeezerTrack(deezerResult))
 					throw "InvalidDeezer";
 
-				const searchResult = await this.search(
+				return this.search(
 					`${deezerResult.artist.name} - ${deezerResult.title}`,
 					queue,
 					requestedBy,
 				);
-
-				return searchResult;
 			}
 
 			case "search": {
@@ -263,6 +258,54 @@ export default class MusicUtil {
 			default:
 				throw "InvalidPlaylist";
 		}
+	}
+
+	static async relatedSongs(songs: Song[], number: number = 1, queue: Queue) {
+		const relatedSongs: Song[] = [];
+
+		const breakIntoParts = (num: number, parts: number) =>
+			[...Array(parts)].map(
+				(_, i) => 0 | (num / parts + Number(i < num % parts)),
+			);
+
+		const numberOfRelatedVideos = breakIntoParts(number, songs.length);
+
+		for (let i = 0; i < songs.length; i++) {
+			const videoInfo = await PlayDl.video_info(songs[i].url);
+
+			const newSongs = (
+				await Promise.all(
+					videoInfo.related_videos
+						.slice(0, numberOfRelatedVideos[i])
+						.map(
+							async (relatedVideo) =>
+								(
+									await PlayDl.video_info(relatedVideo)
+								).video_details,
+						),
+				)
+			).map(
+				(relatedVideo) =>
+					new Song(
+						{
+							title: relatedVideo.title,
+							duration: relatedVideo.durationInSec * 1000,
+							channel: {
+								name: relatedVideo.channel.name,
+							},
+							thumbnail: relatedVideo.thumbnails[0].url,
+							url: relatedVideo.url,
+							live: relatedVideo.live,
+						},
+						queue,
+						Util.client.user,
+					),
+			);
+
+			relatedSongs.push(...newSongs);
+		}
+
+		return relatedSongs;
 	}
 
 	static millisecondsToTime(ms: number) {

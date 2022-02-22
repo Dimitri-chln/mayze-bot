@@ -21,15 +21,13 @@ export default class MusicPlayer {
 	isPlaying(guildId: Snowflake) {
 		return this._queues.some(
 			(queue) =>
-				queue.voiceChannel.guild.id === guildId &&
-				!queue.stopped &&
-				queue.songs.length > 0,
+				queue.voiceChannel.guild.id === guildId && queue.songs.length > 0,
 		);
 	}
 
 	get(guildId: Snowflake) {
 		return this._queues.find(
-			(queue) => queue.voiceChannel.guild.id === guildId && !queue.stopped,
+			(queue) => queue.voiceChannel.guild.id === guildId,
 		);
 	}
 

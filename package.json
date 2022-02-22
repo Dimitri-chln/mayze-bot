@@ -33,7 +33,8 @@
 		"pg": "^8.5.1",
 		"play-dl": "^1.8.8",
 		"typescript": "^4.4.4",
-		"unb-api": "^1.2.3"
+		"unb-api": "^1.2.3",
+		"ytdl-core": "^4.10.1"
 	},
 	"engines": {
 		"node": "16.x"
