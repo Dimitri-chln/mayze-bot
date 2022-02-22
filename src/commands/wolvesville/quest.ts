@@ -73,6 +73,7 @@ const command: Command = {
 
 		const filter: CollectorFilter<[Message]> = (msg) =>
 			msg.author.id === interaction.user.id && msg.attachments.size === 1;
+
 		const collected = await interaction.channel.awaitMessages({
 			filter,
 			time: 120_000,
@@ -95,8 +96,10 @@ const command: Command = {
 			"🔟",
 		].slice(0, interaction.options.getInteger("votes") ?? 3);
 
+		const memberRole = interaction.guild.roles.cache.get("689169027922526235");
+
 		const msg = await questChannel.send({
-			content: "<@&689169027922526235>",
+			content: memberRole.toString(),
 			embeds: [
 				{
 					title: translations.strings.title(),
@@ -109,6 +112,9 @@ const command: Command = {
 					},
 				},
 			],
+			allowedMentions: {
+				roles: [memberRole.id],
+			},
 		});
 
 		reactions.forEach(async (e) => await msg.react(e).catch(console.error));
