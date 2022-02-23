@@ -169,7 +169,7 @@ const command: Command = {
 							embeds: [
 								{
 									author: {
-										name: translations.strings.title(user.tag),
+										name: translations.strings.author(user.tag),
 										iconURL: user.displayAvatarURL({
 											dynamic: true,
 										}),

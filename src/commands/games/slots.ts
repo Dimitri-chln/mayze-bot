@@ -35,7 +35,7 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name: translations.strings.title(),
+						name: translations.strings.author(),
 						iconURL: interaction.user.displayAvatarURL({
 							dynamic: true,
 						}),

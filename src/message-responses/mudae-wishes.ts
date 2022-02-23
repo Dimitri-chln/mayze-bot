@@ -46,7 +46,7 @@ const messageResponse: MessageResponse = {
 						embeds: [
 							{
 								author: {
-									name: translations.strings.title(),
+									name: translations.strings.author(),
 									iconURL: user.displayAvatarURL({ dynamic: true }),
 								},
 								color: message.guild.me.displayColor,

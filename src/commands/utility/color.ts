@@ -41,7 +41,7 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name: translations.strings.title(),
+						name: translations.strings.author(),
 						iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
 					},
 					color: interaction.guild.me.displayColor,
@@ -162,7 +162,7 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: translations.strings.title(),
+							name: translations.strings.author(),
 							iconURL: interaction.client.user.displayAvatarURL(),
 						},
 						color: interaction.guild.me.displayColor,
@@ -293,7 +293,7 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: translations.strings.title(),
+							name: translations.strings.author(),
 							iconURL: interaction.client.user.displayAvatarURL(),
 						},
 						color: interaction.guild.me.displayColor,

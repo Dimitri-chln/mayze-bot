@@ -47,7 +47,7 @@ const command: Command = {
 
 		const embed = new MessageEmbed({
 			author: {
-				name: translations.strings.title(),
+				name: translations.strings.author(),
 				iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
 			},
 			color: interaction.guild.me.displayColor,

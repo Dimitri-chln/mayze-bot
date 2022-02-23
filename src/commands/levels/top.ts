@@ -79,7 +79,7 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: translations.strings.title(
+							name: translations.strings.author(
 								interaction.guild.name,
 								leaderboard === "chat_xp",
 							),
@@ -98,7 +98,7 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: translations.strings.title(
+							name: translations.strings.author(
 								interaction.guild.name,
 								leaderboard === "chat_xp",
 							),

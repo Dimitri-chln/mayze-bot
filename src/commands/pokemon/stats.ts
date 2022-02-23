@@ -375,7 +375,7 @@ const command: Command = {
 							embeds: [
 								{
 									author: {
-										name: translations.strings.title(),
+										name: translations.strings.author(),
 										iconURL: interaction.client.user.displayAvatarURL(),
 									},
 									color: interaction.guild.me.displayColor,
@@ -531,7 +531,7 @@ const command: Command = {
 							embeds: [
 								{
 									author: {
-										name: translations.strings.title(),
+										name: translations.strings.author(),
 										iconURL: interaction.client.user.displayAvatarURL(),
 									},
 									title: `${
@@ -589,7 +589,7 @@ const command: Command = {
 								embeds: [
 									{
 										author: {
-											name: translations.strings.title(),
+											name: translations.strings.author(),
 											iconURL: interaction.client.user.displayAvatarURL(),
 										},
 										title: translations.strings.most_caught_title(),
@@ -608,7 +608,7 @@ const command: Command = {
 								embeds: [
 									{
 										author: {
-											name: translations.strings.title(),
+											name: translations.strings.author(),
 											iconURL: interaction.client.user.displayAvatarURL(),
 										},
 										title: translations.strings.most_caught_title(),

@@ -39,7 +39,7 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name: translations.strings.title(user.tag),
+						name: translations.strings.author(user.tag),
 						iconURL: interaction.client.user.displayAvatarURL(),
 					},
 					color: interaction.guild.me.displayColor,

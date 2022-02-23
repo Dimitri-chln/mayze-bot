@@ -273,7 +273,7 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.strings.title(
+								name: translations.strings.author(
 									interaction.user.tag,
 									user.tag,
 								),
@@ -389,7 +389,7 @@ const command: Command = {
 								embeds: [
 									{
 										author: {
-											name: translations.strings.title(
+											name: translations.strings.author(
 												interaction.user.tag,
 												user.tag,
 											),

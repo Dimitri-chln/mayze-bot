@@ -44,7 +44,7 @@ const command: Command = {
 
 					page.embeds.push({
 						author: {
-							name: translations.strings.title(),
+							name: translations.strings.author(),
 							iconURL: interaction.client.user.displayAvatarURL(),
 						},
 						thumbnail: {
@@ -73,7 +73,8 @@ const command: Command = {
 				} catch (err) {
 					page.embeds.push({
 						author: {
-							name: translations.strings.title(),
+							name: translations.strings.author(),
+							iconURL: interaction.client.user.displayAvatarURL(),
 						},
 						color: interaction.guild.me.displayColor,
 						description: translations.strings.failed_description(serverIP),
