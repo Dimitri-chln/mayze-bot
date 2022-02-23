@@ -94,7 +94,7 @@ export default async function pagination(
 		buttonInteraction.update(pages[page]).catch(console.error);
 	});
 
-	collector.on("end", (collected, reason) => {
+	collector.once("end", (collected, reason) => {
 		if (reason !== "messageDelete")
 			currentPage.edit({
 				...pages[page],

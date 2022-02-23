@@ -275,11 +275,13 @@ const event: Event = {
 		).catch(console.error);
 
 		// Canvas
-		const { emojis } = client.guilds.cache.get(Util.config.CANVAS_GUILD_ID);
-
 		Util.database
-			.query("SELECT * FROM color")
-			.then(async ({ rows: colors }: { rows: DatabaseColor[] }) => {
+			.query(
+				"SELECT alias, color.name, code, palette.name AS palette FROM color JOIN palette ON color.palette = palette.id",
+			)
+			.then(async ({ rows: colors }: { rows: DatabaseColorWithPalette[] }) => {
+				const { emojis } = client.guilds.cache.get(Util.config.CANVAS_GUILD_ID);
+
 				for (const color of colors) {
 					let emoji = emojis.cache.find((e) => e.name === `pl_${color.alias}`);
 
@@ -549,3 +551,10 @@ const event: Event = {
 };
 
 export default event;
+
+interface DatabaseColorWithPalette {
+	alias: string;
+	name: string;
+	code: number;
+	palette: string;
+}

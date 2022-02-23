@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, SelectMenuInteraction } from "discord.js";
 import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
@@ -91,12 +91,6 @@ const command: Command = {
 						type: "INTEGER",
 						required: true,
 						minValue: 0,
-					},
-					{
-						name: "color",
-						description: "La couleur du pixel. Voir /canvas palettes",
-						type: "STRING",
-						required: true,
 					},
 				],
 			},
@@ -219,12 +213,6 @@ const command: Command = {
 						type: "INTEGER",
 						required: true,
 						minValue: 0,
-					},
-					{
-						name: "color",
-						description: "The color of the pixel. See /canvas palettes",
-						type: "STRING",
-						required: true,
 					},
 				],
 			},
@@ -403,7 +391,7 @@ const command: Command = {
 					.find((palette) => palette.has(colorName))
 					.get(colorName);
 
-				await canvas.setPixel(x, y, color.alias);
+				await canvas.setPixel(x, y, color);
 
 				const grid = await canvas.viewGrid(x, y);
 
@@ -446,36 +434,50 @@ const command: Command = {
 						translations.strings.invalid_coordinates(),
 					);
 
-				const colorName = interaction.options.getString("color", true);
-				if (!canvas.palettes.some((palette) => palette.has(colorName)))
-					return interaction.followUp(translations.strings.invalid_color());
-				const color = canvas.palettes
-					.find((palette) => palette.has(colorName))
-					.get(colorName);
+				let palette = Util.palettes.get("default");
+				let color = palette.get("blnk");
 
 				let grid = await canvas.viewGrid(x, y);
 
 				const reply = (await interaction.followUp({
 					content: grid.format(),
-					embeds: [
-						{
-							author: {
-								name: interaction.user.tag,
-								iconURL: interaction.user.displayAvatarURL({
-									dynamic: true,
-								}),
-							},
-							color: interaction.guild.me.displayColor,
-							description: translations.strings.placing(
-								color.emoji.toString(),
-								color.alias,
-							),
-							footer: {
-								text: "✨ Mayze ✨",
-							},
-						},
-					],
 					components: [
+						{
+							type: "ACTION_ROW",
+							components: [
+								{
+									type: "SELECT_MENU",
+									customId: "palette_picker",
+									placeholder: translations.strings.palette_placeholder(),
+									options: Util.palettes.map((p) => {
+										return {
+											label: p.name.replace(/^./, (a) => a.toUpperCase()),
+											value: p.name,
+											default: p.name === palette.name,
+										};
+									}),
+								},
+							],
+						},
+						{
+							type: "ACTION_ROW",
+							components: [
+								{
+									type: "SELECT_MENU",
+									customId: "color_picker",
+									placeholder: translations.strings.color_placeholder(),
+									options: palette.all().map((c) => {
+										return {
+											label: c.name,
+											value: c.alias,
+											description: c.hex,
+											emoji: c.emoji,
+											default: c.alias === color.alias,
+										};
+									}),
+								},
+							],
+						},
 						{
 							type: "ACTION_ROW",
 							components: [
@@ -577,7 +579,7 @@ const command: Command = {
 							if (x < canvas.size - 1) x++;
 							break;
 						case "confirm":
-							await canvas.setPixel(x, y, colorName);
+							await canvas.setPixel(x, y, color);
 							break;
 					}
 
@@ -585,17 +587,163 @@ const command: Command = {
 
 					buttonInteraction.update({
 						content: grid.format(),
-						embeds: reply.embeds,
-						components: reply.components,
+						components: [
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "SELECT_MENU",
+										customId: "palette_picker",
+										placeholder: translations.strings.palette_placeholder(),
+										options: Util.palettes.map((p) => {
+											return {
+												label: p.name.replace(/^./, (a) => a.toUpperCase()),
+												value: p.name,
+												default: p.name === palette.name,
+											};
+										}),
+									},
+								],
+							},
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "SELECT_MENU",
+										customId: "color_picker",
+										placeholder: translations.strings.color_placeholder(),
+										options: palette.all().map((c) => {
+											return {
+												label: c.name,
+												value: c.alias,
+												description: c.hex,
+												emoji: c.emoji,
+												default: c.alias === color.alias,
+											};
+										}),
+									},
+								],
+							},
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "top_left",
+										emoji: { id: "829352737946730576", name: "blank" },
+										style: "SECONDARY",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "up",
+										emoji: "⬆️",
+										style: "PRIMARY",
+									},
+									{
+										type: "BUTTON",
+										customId: "top_right",
+										emoji: { id: "829352737946730576", name: "blank" },
+										style: "SECONDARY",
+										disabled: true,
+									},
+								],
+							},
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "left",
+										emoji: "⬅️",
+										style: "PRIMARY",
+									},
+									{
+										type: "BUTTON",
+										customId: "confirm",
+										emoji: Util.config.EMOJIS.check.data,
+										style: "SUCCESS",
+									},
+									{
+										type: "BUTTON",
+										customId: "right",
+										emoji: "➡️",
+										style: "PRIMARY",
+									},
+								],
+							},
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "bottom_right",
+										emoji: { id: "829352737946730576", name: "blank" },
+										style: "SECONDARY",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "down",
+										emoji: "⬇️",
+										style: "PRIMARY",
+									},
+									{
+										type: "BUTTON",
+										customId: "bottom_left",
+										emoji: { id: "829352737946730576", name: "blank" },
+										style: "SECONDARY",
+										disabled: true,
+									},
+								],
+							},
+						],
 					});
 				});
 
-				collector.on("end", (collected, reason) => {
+				collector.once("end", (collected, reason) => {
 					if (reason !== "messageDelete")
 						interaction.editReply({
 							content: grid.format(),
-							embeds: reply.embeds,
 							components: [
+								{
+									type: "ACTION_ROW",
+									components: [
+										{
+											type: "SELECT_MENU",
+											customId: "palette_picker",
+											placeholder: translations.strings.palette_placeholder(),
+											options: Util.palettes.map((p) => {
+												return {
+													label: p.name.replace(/^./, (a) => a.toUpperCase()),
+													value: p.name,
+													default: p.name === palette.name,
+												};
+											}),
+											disabled: true,
+										},
+									],
+								},
+								{
+									type: "ACTION_ROW",
+									components: [
+										{
+											type: "SELECT_MENU",
+											customId: "color_picker",
+											placeholder: translations.strings.color_placeholder(),
+											options: palette.all().map((c) => {
+												return {
+													label: c.name,
+													value: c.alias,
+													description: c.hex,
+													emoji: c.emoji,
+													default: c.alias === color.alias,
+												};
+											}),
+											disabled: true,
+										},
+									],
+								},
 								{
 									type: "ACTION_ROW",
 									components: [
@@ -676,6 +824,145 @@ const command: Command = {
 								},
 							],
 						});
+				});
+
+				const selectMenuFilter: CollectorFilter<[SelectMenuInteraction]> = (
+					selectMenuInteraction,
+				) => selectMenuInteraction.user.id === interaction.user.id;
+
+				const selectMenuCollector = reply.createMessageComponentCollector({
+					componentType: "SELECT_MENU",
+					filter: selectMenuFilter,
+				});
+
+				selectMenuCollector.on("collect", (selectMenuInteraction) => {
+					switch (selectMenuInteraction.customId) {
+						case "palette_picker": {
+							palette = Util.palettes.get(selectMenuInteraction.values[0]);
+							color = palette.all().first();
+							break;
+						}
+
+						case "color_picker": {
+							color = palette.get(selectMenuInteraction.values[0]);
+							break;
+						}
+					}
+
+					selectMenuInteraction.update({
+						content: grid.format(),
+						components: [
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "SELECT_MENU",
+										customId: "palette_picker",
+										placeholder: translations.strings.palette_placeholder(),
+										options: Util.palettes.map((p) => {
+											return {
+												label: p.name.replace(/^./, (a) => a.toUpperCase()),
+												value: p.name,
+												default: p.name === palette.name,
+											};
+										}),
+									},
+								],
+							},
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "SELECT_MENU",
+										customId: "color_picker",
+										placeholder: translations.strings.color_placeholder(),
+										options: palette.all().map((c) => {
+											return {
+												label: c.name,
+												value: c.alias,
+												description: c.hex,
+												emoji: c.emoji,
+												default: c.alias === color.alias,
+											};
+										}),
+									},
+								],
+							},
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "top_left",
+										emoji: { id: "829352737946730576", name: "blank" },
+										style: "SECONDARY",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "up",
+										emoji: "⬆️",
+										style: "PRIMARY",
+									},
+									{
+										type: "BUTTON",
+										customId: "top_right",
+										emoji: { id: "829352737946730576", name: "blank" },
+										style: "SECONDARY",
+										disabled: true,
+									},
+								],
+							},
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "left",
+										emoji: "⬅️",
+										style: "PRIMARY",
+									},
+									{
+										type: "BUTTON",
+										customId: "confirm",
+										emoji: Util.config.EMOJIS.check.data,
+										style: "SUCCESS",
+									},
+									{
+										type: "BUTTON",
+										customId: "right",
+										emoji: "➡️",
+										style: "PRIMARY",
+									},
+								],
+							},
+							{
+								type: "ACTION_ROW",
+								components: [
+									{
+										type: "BUTTON",
+										customId: "bottom_right",
+										emoji: { id: "829352737946730576", name: "blank" },
+										style: "SECONDARY",
+										disabled: true,
+									},
+									{
+										type: "BUTTON",
+										customId: "down",
+										emoji: "⬇️",
+										style: "PRIMARY",
+									},
+									{
+										type: "BUTTON",
+										customId: "bottom_left",
+										emoji: { id: "829352737946730576", name: "blank" },
+										style: "SECONDARY",
+										disabled: true,
+									},
+								],
+							},
+						],
+					});
 				});
 				break;
 			}
@@ -876,7 +1163,7 @@ const command: Command = {
 					});
 				});
 
-				collector.on("end", (collected, reason) => {
+				collector.once("end", (collected, reason) => {
 					if (reason !== "messageDelete")
 						interaction.editReply({
 							content: grid.format(),

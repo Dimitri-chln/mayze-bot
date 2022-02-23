@@ -188,7 +188,7 @@ const command: Command = {
 			});
 		});
 
-		collector.on("end", (collected, reason) => {
+		collector.once("end", (collected, reason) => {
 			if (reason !== "messageDelete")
 				interaction.editReply({
 					embeds: reply.embeds,

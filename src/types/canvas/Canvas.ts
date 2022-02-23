@@ -113,14 +113,12 @@ export default class Canvas {
 	/**
 	 * Modify a pixel in the canvas.
 	 */
-	async setPixel(x: number, y: number, color: string) {
-		if (this.palettes.every((palette) => !palette.has(color)))
-			throw new Error("InvalidColor");
+	async setPixel(x: number, y: number, color: Color) {
 		if (x < 0 || x >= this.size || y < 0 || y >= this.size)
 			throw new Error("InvalidCoordinates");
 
 		let data = await this.data;
-		data[y][x] = color;
+		data[y][x] = color.alias;
 
 		Util.database.query("UPDATE canvas SET data = $1 WHERE name = $2", [
 			JSON.stringify(data),

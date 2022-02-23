@@ -457,7 +457,7 @@ const command: Command = {
 					}
 				});
 
-				collector.on("end", async (collected, reason) => {
+				collector.once("end", async (collected, reason) => {
 					if (reason !== "messageDelete")
 						trade.edit({
 							content: trade.content,

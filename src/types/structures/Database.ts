@@ -42,7 +42,7 @@ export interface DatabaseColor {
 	alias: string;
 	name: string;
 	code: number;
-	palette: string;
+	palette: number;
 }
 
 export interface DatabaseUserMoney {
@@ -95,6 +95,11 @@ export interface DatabaseMudaeWish {
 	user_id: Snowflake;
 	series: string;
 	regex?: string;
+}
+
+export interface DatabasePalette {
+	id: number;
+	name: string;
 }
 
 export interface DatabasePlaylist {
