@@ -37,7 +37,7 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const checkRegex = /^(?:\d+(?:-\d+)?(?:\s|$))+/;
 
-		const input = interaction.options.getString("songs");
+		const input = interaction.options.getString("songs", false);
 
 		if (input && !checkRegex.test(input))
 			return interaction.followUp(translations.strings.invalid_input());

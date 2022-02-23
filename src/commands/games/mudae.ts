@@ -154,9 +154,9 @@ const command: Command = {
 				switch (subCommand) {
 					case "list": {
 						const user =
-							interaction.options.getUser("user") ?? interaction.user;
+							interaction.options.getUser("user", false) ?? interaction.user;
 						const displayRegex = Boolean(
-							interaction.options.getBoolean("regex"),
+							interaction.options.getBoolean("regex", false),
 						);
 
 						const { rows: wishlist }: { rows: DatabaseMudaeWish[] } =
@@ -198,8 +198,8 @@ const command: Command = {
 					}
 
 					case "add": {
-						const series = interaction.options.getString("series");
-						const regex = interaction.options.getString("regex");
+						const series = interaction.options.getString("series", true);
+						const regex = interaction.options.getString("regex", false);
 
 						await Util.database.query(
 							"INSERT INTO mudae_wish (user_id, series, regex) VALUES ($1, $2, $3)",
@@ -211,7 +211,7 @@ const command: Command = {
 					}
 
 					case "remove": {
-						const series = interaction.options.getInteger("series");
+						const series = interaction.options.getInteger("series", true);
 
 						const { rows: wishlist }: { rows: DatabaseMudaeWish[] } =
 							await Util.database.query(

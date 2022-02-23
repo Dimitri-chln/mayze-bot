@@ -50,7 +50,7 @@ const command: Command = {
 
 	runInteraction: async (interaction, translations) => {
 		const member = interaction.guild.members.cache.get(
-			interaction.options.getUser("user").id,
+			interaction.options.getUser("user", true).id,
 		);
 
 		if (
@@ -60,10 +60,12 @@ const command: Command = {
 		)
 			return interaction.followUp(translations.strings.not_allowed());
 
-		const duration: number = dhms(interaction.options.getString("duration"));
+		const duration: number = dhms(
+			interaction.options.getString("duration", false),
+		);
 
 		await member.timeout(
-			duration ?? 365 * 24 * 60 * 60 * 1000,
+			duration ?? 365 * 24 * 60 * 60 * 1000, // Defaults to 1 year
 			translations.strings.reason(interaction.user.tag),
 		);
 

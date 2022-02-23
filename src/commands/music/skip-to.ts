@@ -39,7 +39,7 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const queue = Util.musicPlayer.get(interaction.guild.id);
 
-		const songIndex = interaction.options.getInteger("song");
+		const songIndex = interaction.options.getInteger("song", true);
 
 		if (songIndex < 1 || songIndex > queue.songs.length)
 			return interaction.followUp(

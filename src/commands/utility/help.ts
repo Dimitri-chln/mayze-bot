@@ -41,7 +41,7 @@ const command: Command = {
 				(!cmd.guildIds || cmd.guildIds.includes(interaction.guild.id)) &&
 				cmd.category !== "admin",
 		);
-		const commandName = interaction.options.getString("command")?.toLowerCase();
+		const commandName = interaction.options.getString("command", false)?.toLowerCase();
 
 		if (!commandName) {
 			const categories: {

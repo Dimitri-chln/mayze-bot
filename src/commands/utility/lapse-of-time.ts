@@ -37,7 +37,7 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const NOW = Date.now();
 
-		const input = interaction.options.getString("date").trim();
+		const input = interaction.options.getString("date", true).trim();
 		const match =
 			input.match(
 				/^(\d{1,2})-(\d{1,2})-(\d+)(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/,

@@ -168,7 +168,7 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
-		const playlistName = interaction.options.getString("name");
+		const playlistName = interaction.options.getString("name", true);
 		if (!/^[\w-_]+$/.test(playlistName))
 			return interaction.followUp(translations.strings.invalid_name());
 
@@ -180,7 +180,7 @@ const command: Command = {
 
 		switch (subCommand) {
 			case "list": {
-				const me = Boolean(interaction.options.getBoolean("me"));
+				const me = Boolean(interaction.options.getBoolean("me", false));
 
 				interaction.followUp({
 					embeds: [
@@ -245,7 +245,7 @@ const command: Command = {
 							interaction.channel as TextChannel,
 					  );
 
-				const shuffle = Boolean(interaction.options.getBoolean("shuffle"));
+				const shuffle = Boolean(interaction.options.getBoolean("shuffle", false));
 				const playlist = playlists.find((p) => p.name === playlistName);
 
 				if (!playlist)
@@ -281,8 +281,8 @@ const command: Command = {
 						translations.strings.playlist_already_exists(),
 					);
 
-				const url = interaction.options.getString("url");
-				const isPrivate = Boolean(interaction.options.getBoolean("private"));
+				const url = interaction.options.getString("url", true);
+				const isPrivate = Boolean(interaction.options.getBoolean("private", false));
 
 				switch (await PlayDl.validate(url)) {
 					case "yt_playlist":

@@ -53,7 +53,7 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const newLanguage = interaction.options.getString("language") as
+		const newLanguage = interaction.options.getString("language", true) as
 			| "fr"
 			| "en";
 

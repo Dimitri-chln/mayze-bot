@@ -39,7 +39,7 @@ const command: Command = {
 		const MIDNIGHT = new Date();
 		MIDNIGHT.setHours(0, 0, 0, 0);
 
-		const user = interaction.options.getUser("user") ?? interaction.user;
+		const user = interaction.options.getUser("user", false) ?? interaction.user;
 
 		const {
 			rows: [userCurrency],

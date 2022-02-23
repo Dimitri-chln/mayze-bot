@@ -5,7 +5,7 @@ import {
 	TextChannel,
 	VoiceChannel,
 } from "discord.js";
-import Translations from "../../types/structures/Translations";
+import Translations from "../structures/Translations";
 import Util from "../../Util";
 import Queue from "./Queue";
 

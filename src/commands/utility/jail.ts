@@ -37,7 +37,7 @@ const command: Command = {
 
 	runInteraction: async (interaction, translations) => {
 		const member = interaction.guild.members.cache.get(
-			interaction.options.getUser("user").id,
+			interaction.options.getUser("user", true).id,
 		);
 
 		if (

@@ -33,7 +33,7 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const user = interaction.options.getUser("user") ?? interaction.user;
+		const user = interaction.options.getUser("user", false) ?? interaction.user;
 		await user.fetch(true);
 
 		interaction.followUp({

@@ -57,7 +57,7 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const leaderboard = interaction.options.getString("leaderboard") as
+		const leaderboard = interaction.options.getString("leaderboard", true) as
 			| "chat_xp"
 			| "voice_xp";
 

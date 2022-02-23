@@ -76,19 +76,19 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const number = interaction.options.getInteger("number");
+		const number = interaction.options.getInteger("number", true);
 		if (isNaN(number) || number <= 0 || number > 100)
 			return interaction.followUp(translations.strings.invalid_number());
 
 		let messages = await interaction.channel.messages.fetch({ limit: 100 });
 
-		const user = interaction.options.getUser("user");
+		const user = interaction.options.getUser("user", false);
 		if (user) messages = messages.filter((msg) => msg.author.id === user.id);
 
-		const bot = interaction.options.getBoolean("bot");
+		const bot = interaction.options.getBoolean("bot", false);
 		if (bot) messages = messages.filter((msg) => msg.author.bot);
 
-		const regex = interaction.options.getString("regex");
+		const regex = interaction.options.getString("regex", false);
 		if (regex)
 			messages = messages.filter((msg) =>
 				new RegExp(regex, "i").test(msg.content),

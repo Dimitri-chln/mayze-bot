@@ -130,7 +130,7 @@ const command: Command = {
 
 		switch (subCommand) {
 			case "evaluate": {
-				const expression = interaction.options.getString("expression");
+				const expression = interaction.options.getString("expression", true);
 
 				try {
 					const parsedExpression = Math.parse(expression);
@@ -147,8 +147,9 @@ const command: Command = {
 			}
 
 			case "solve": {
-				const expression = interaction.options.getString("expression");
-				const variable = interaction.options.getString("variable") ?? "x";
+				const expression = interaction.options.getString("expression", true);
+				const variable =
+					interaction.options.getString("variable", false) ?? "x";
 
 				try {
 					const equation = Algebra.parse(expression) as Algebra.Equation;
@@ -171,8 +172,9 @@ const command: Command = {
 			}
 
 			case "derivative": {
-				const expression = interaction.options.getString("expression");
-				const variable = interaction.options.getString("variable") ?? "x";
+				const expression = interaction.options.getString("expression", true);
+				const variable =
+					interaction.options.getString("variable", false) ?? "x";
 
 				try {
 					const parsedExpression = Math.parse(expression);

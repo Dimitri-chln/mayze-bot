@@ -64,9 +64,9 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const user = interaction.options.getUser("user");
-		const number = interaction.options.getInteger("number");
-		const message = interaction.options.getString("message");
+		const user = interaction.options.getUser("user", true);
+		const number = interaction.options.getInteger("number", true);
+		const message = interaction.options.getString("message", false);
 
 		if (number < 1 || (!message && number > 1000) || (message && number > 100))
 			return interaction.followUp(

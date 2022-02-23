@@ -42,7 +42,7 @@ const command: Command = {
 				empty: "▁",
 			};
 
-		const user = interaction.options.getUser("user") ?? interaction.user;
+		const user = interaction.options.getUser("user", false) ?? interaction.user;
 
 		let { rows: chatLeaderboard }: { rows: DatabaseLevel[] } =
 			await Util.database.query("SELECT * FROM level ORDER BY chat_xp DESC");

@@ -37,7 +37,7 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		if (interaction.channel.id !== Util.config.SECRET_CHANNEL_ID) return;
 
-		const table = interaction.options.getString("table");
+		const table = interaction.options.getString("table", true);
 
 		const { rows } = await Util.database.query(`SELECT * FROM ${table}`);
 

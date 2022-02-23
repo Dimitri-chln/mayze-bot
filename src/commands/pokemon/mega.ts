@@ -133,13 +133,13 @@ const command: Command = {
 		switch (subCommand) {
 			case "evolve": {
 				const pokemon = Util.pokedex.findByName(
-					interaction.options.getString("pokemon"),
+					interaction.options.getString("pokemon", true),
 				);
 				if (!pokemon)
 					return interaction.followUp(translations.strings.invalid_pokemon());
 
-				const megaType = interaction.options.getString("type");
-				const shiny = interaction.options.getBoolean("shiny") ?? false;
+				const megaType = interaction.options.getString("type", true);
+				const shiny = interaction.options.getBoolean("shiny", false) ?? false;
 
 				const {
 					rows: [pokemonData],

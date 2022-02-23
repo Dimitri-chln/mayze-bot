@@ -69,9 +69,9 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const apiURL = "https://api.dictionaryapi.dev/api/v2/entries";
 
-		const word = interaction.options.getString("word").toLowerCase();
+		const word = interaction.options.getString("word", true).toLowerCase();
 		const searchLanguage =
-			interaction.options.getString("language") ?? translations.language;
+			interaction.options.getString("language", false) ?? translations.language;
 
 		Axios.get(`${apiURL}/${searchLanguage}/${encodeURIComponent(word)}`)
 			.then(async ({ data }: { data: DictionaryResult[] }) => {

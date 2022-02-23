@@ -53,13 +53,13 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const queue = Util.musicPlayer.get(interaction.guild.id);
 
-		const songIndex = interaction.options.getInteger("song");
+		const songIndex = interaction.options.getInteger("song", true);
 		if (songIndex < 1 || songIndex > queue.songs.length)
 			return interaction.followUp(
 				translations.strings.invalid_song(queue.songs.length.toString()),
 			);
 
-		const position = interaction.options.getInteger("position");
+		const position = interaction.options.getInteger("position", true);
 		if (position < 1 || position > queue.songs.length)
 			return interaction.followUp(
 				translations.strings.invalid_position(queue.songs.length.toString()),

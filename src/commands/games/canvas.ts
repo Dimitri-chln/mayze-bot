@@ -386,15 +386,15 @@ const command: Command = {
 				if (!canvas)
 					return interaction.followUp(translations.strings.not_in_canvas());
 
-				let x = interaction.options.getInteger("x");
-				let y = interaction.options.getInteger("y");
+				let x = interaction.options.getInteger("x", true);
+				let y = interaction.options.getInteger("y", true);
 
 				if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
 					return interaction.followUp(
 						translations.strings.invalid_coordinates(),
 					);
 
-				const colorName = interaction.options.getString("color");
+				const colorName = interaction.options.getString("color", true);
 
 				if (!canvas.palettes.some((palette) => palette.has(colorName)))
 					return interaction.followUp(translations.strings.invalid_color());
@@ -438,15 +438,15 @@ const command: Command = {
 				if (!canvas)
 					return interaction.followUp(translations.strings.not_in_canvas());
 
-				let x = interaction.options.getInteger("x");
-				let y = interaction.options.getInteger("y");
+				let x = interaction.options.getInteger("x", true);
+				let y = interaction.options.getInteger("y", true);
 
 				if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
 					return interaction.followUp(
 						translations.strings.invalid_coordinates(),
 					);
 
-				const colorName = interaction.options.getString("color");
+				const colorName = interaction.options.getString("color", true);
 				if (!canvas.palettes.some((palette) => palette.has(colorName)))
 					return interaction.followUp(translations.strings.invalid_color());
 				const color = canvas.palettes
@@ -687,15 +687,15 @@ const command: Command = {
 				if (!canvas)
 					return interaction.followUp(translations.strings.not_in_canvas());
 
-				let x = interaction.options.getInteger("x") ?? 0;
-				let y = interaction.options.getInteger("y") ?? 0;
+				let x = interaction.options.getInteger("x", false) ?? 0;
+				let y = interaction.options.getInteger("y", false) ?? 0;
 
 				if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
 					return interaction.followUp(
 						translations.strings.invalid_coordinates(),
 					);
 
-				const zoom = interaction.options.getInteger("zoom") ?? "default";
+				const zoom = interaction.options.getInteger("zoom", false) ?? "default";
 				if (zoom && zoom !== "default" && (zoom < 1 || zoom > canvas.size))
 					return interaction.followUp(translations.strings.invalid_zoom());
 
@@ -737,8 +737,8 @@ const command: Command = {
 				if (!canvas)
 					return interaction.followUp(translations.strings.not_in_canvas());
 
-				let x = interaction.options.getInteger("x");
-				let y = interaction.options.getInteger("y");
+				let x = interaction.options.getInteger("x", true);
+				let y = interaction.options.getInteger("y", true);
 
 				if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
 					return interaction.followUp(

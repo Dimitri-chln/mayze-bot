@@ -276,8 +276,8 @@ const command: Command = {
 			}
 
 			case "buy": {
-				const upgrade = interaction.options.getString("item");
-				const number = interaction.options.getInteger("number") ?? 1;
+				const upgrade = interaction.options.getString("item", true);
+				const number = interaction.options.getInteger("number", false) ?? 1;
 
 				const upgradeCost = Math.round(
 					(number *

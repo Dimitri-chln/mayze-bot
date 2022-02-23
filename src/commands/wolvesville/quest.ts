@@ -82,7 +82,7 @@ const command: Command = {
 		if (!collected.size) return;
 
 		const imageURL = collected.first().attachments.first().url;
-		const votes = interaction.options.getBoolean("single") ? "⋅" : "∴";
+		const votes = interaction.options.getBoolean("single", false) ? "⋅" : "∴";
 		const reactions = [
 			"1️⃣",
 			"2️⃣",
@@ -94,7 +94,7 @@ const command: Command = {
 			"8️⃣",
 			"9️⃣",
 			"🔟",
-		].slice(0, interaction.options.getInteger("votes") ?? 3);
+		].slice(0, interaction.options.getInteger("votes", false) ?? 3);
 
 		const memberRole = interaction.guild.roles.cache.get("689169027922526235");
 

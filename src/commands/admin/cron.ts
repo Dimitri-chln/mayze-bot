@@ -47,14 +47,14 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const date = new Date(interaction.options.getString("date"));
+		const date = new Date(interaction.options.getString("date", true));
 
 		if (!date) return interaction.followUp(translations.strings.invalid_date());
 
 		if (date.valueOf() < Date.now())
 			return interaction.followUp(translations.strings.date_passed());
 
-		const taskString = interaction.options.getString("task");
+		const taskString = interaction.options.getString("task", true);
 		const task = eval(`async () => { ${taskString} }`);
 		const job = new CronJob(date, task);
 

@@ -22,7 +22,7 @@ import Song from "./Song";
 import Util from "../../Util";
 import { PlaylistOptions } from "./MusicUtil";
 import PlayDl from "play-dl";
-import { LanguageTranslationsData } from "../../types/structures/Translations";
+import { LanguageTranslationsData } from "../structures/Translations";
 
 export default class Queue {
 	readonly voiceChannel: VoiceChannel;

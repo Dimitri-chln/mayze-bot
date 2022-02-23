@@ -48,10 +48,10 @@ const command: Command = {
 
 	runInteraction: async (interaction, translations) => {
 		const song =
-			interaction.options.getString("song") ??
+			interaction.options.getString("song", false) ??
 			Util.musicPlayer.get(interaction.guild.id)?.nowPlaying?.name;
 		const artist =
-			interaction.options.getString("artist") ??
+			interaction.options.getString("artist", false) ??
 			Util.musicPlayer.get(interaction.guild.id)?.nowPlaying?.author;
 
 		if (!song || !artist)

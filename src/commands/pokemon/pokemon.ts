@@ -276,7 +276,7 @@ const command: Command = {
 			case "addfav": {
 				const { pokemon, shiny, variationType } =
 					Util.pokedex.findByNameWithVariation(
-						interaction.options.getString("pokemon"),
+						interaction.options.getString("pokemon", true),
 					) ?? {};
 
 				if (!pokemon)
@@ -309,7 +309,7 @@ const command: Command = {
 			case "removefav": {
 				const { pokemon, shiny, variationType } =
 					Util.pokedex.findByNameWithVariation(
-						interaction.options.getString("pokemon"),
+						interaction.options.getString("pokemon", true),
 					) ?? {};
 
 				if (!pokemon)
@@ -342,7 +342,7 @@ const command: Command = {
 			case "nick": {
 				const { pokemon, shiny, variationType } =
 					Util.pokedex.findByNameWithVariation(
-						interaction.options.getString("pokemon"),
+						interaction.options.getString("pokemon", true),
 					) ?? {};
 
 				if (!pokemon)
@@ -356,7 +356,7 @@ const command: Command = {
 				if (!pokemons.length)
 					return interaction.followUp(translations.strings.pokemon_not_owned());
 
-				const nickname = interaction.options.getString("nickname");
+				const nickname = interaction.options.getString("nickname", false);
 				if (nickname && nickname.length > 30)
 					return interaction.followUp(translations.strings.nickname_too_long());
 
@@ -380,7 +380,8 @@ const command: Command = {
 			}
 
 			case "list": {
-				const user = interaction.options.getUser("user") ?? interaction.user;
+				const user =
+					interaction.options.getUser("user", false) ?? interaction.user;
 
 				const { rows: pokemons }: { rows: DatabasePokemon[] } =
 					await Util.database.query("SELECT * FROM pokemon WHERE users ? $1", [
@@ -390,65 +391,65 @@ const command: Command = {
 				const pokemonList = new PokemonList(
 					pokemons.filter((pkm) => {
 						if (
-							interaction.options.getBoolean("normal") &&
+							interaction.options.getBoolean("normal", false) &&
 							(pkm.shiny || pkm.variation !== "default")
 						)
 							return false;
 						if (
-							interaction.options.getBoolean("favorite") &&
+							interaction.options.getBoolean("favorite", false) &&
 							!pkm.users[user.id].favorite
 						)
 							return false;
 						if (
-							interaction.options.getBoolean("legendary") &&
+							interaction.options.getBoolean("legendary", false) &&
 							!Util.pokedex.findById(pkm.pokedex_id).legendary
 						)
 							return false;
 						if (
-							interaction.options.getBoolean("ultra-beast") &&
+							interaction.options.getBoolean("ultra-beast", false) &&
 							!Util.pokedex.findById(pkm.pokedex_id).ultraBeast
 						)
 							return false;
-						if (interaction.options.getBoolean("shiny") && !pkm.shiny)
+						if (interaction.options.getBoolean("shiny", false) && !pkm.shiny)
 							return false;
 						if (
-							interaction.options.getBoolean("alola") &&
+							interaction.options.getBoolean("alola", false) &&
 							pkm.variation !== "alola"
 						)
 							return false;
 						if (
-							interaction.options.getBoolean("mega") &&
+							interaction.options.getBoolean("mega", false) &&
 							!["mega", "megax", "megay", "primal"].includes(pkm.variation)
 						)
 							return false;
 
 						if (
-							interaction.options.getInteger("id") &&
-							interaction.options.getInteger("id") !== 0 &&
-							pkm.pokedex_id !== interaction.options.getInteger("id")
+							interaction.options.getInteger("id", false) &&
+							interaction.options.getInteger("id", false) !== 0 &&
+							pkm.pokedex_id !== interaction.options.getInteger("id", false)
 						)
 							return false;
 
 						if (
-							interaction.options.getString("name") &&
-							!new RegExp(interaction.options.getString("name"), "i").test(
+							interaction.options.getString("name", false) &&
+							!new RegExp(interaction.options.getString("name", false), "i").test(
 								Util.pokedex.findById(pkm.pokedex_id).names[
 									translations.language
 								],
 							) &&
-							!new RegExp(interaction.options.getString("name"), "i").test(
+							!new RegExp(interaction.options.getString("name", false), "i").test(
 								pkm.users[user.id].nickname,
 							)
 						)
 							return false;
 
 						if (
-							interaction.options.getString("evolution") &&
+							interaction.options.getString("evolution", false) &&
 							Util.pokedex.findByName(
-								interaction.options.getString("evolution"),
+								interaction.options.getString("evolution", false),
 							) &&
 							!Util.pokedex
-								.findByName(interaction.options.getString("evolution"))
+								.findByName(interaction.options.getString("evolution", false))
 								.flatEvolutionLine()
 								.some((p) => p.nationalId === pkm.pokedex_id)
 						)
@@ -524,7 +525,7 @@ const command: Command = {
 												translations.language,
 												"raw",
 											),
-											interaction.options.getInteger("id") === 0
+											interaction.options.getInteger("id", false) === 0
 												? `#${p.data.nationalId.toString().padStart(3, "0")}`
 												: "",
 											escapeMarkdown(p.nickname),

@@ -35,7 +35,7 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const timestamp = interaction.options.getString("timestamp");
+		const timestamp = interaction.options.getString("timestamp", true);
 
 		if (!/(?:(\d+):)?([0-5]?\d):([0-5]\d)/.test(timestamp))
 			return interaction.followUp(translations.strings.invalid_timestamp());

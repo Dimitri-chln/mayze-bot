@@ -202,7 +202,7 @@ const command: Command = {
 		switch (subCommand) {
 			case "in": {
 				const duration: number = dhms(
-					interaction.options.getString("duration"),
+					interaction.options.getString("duration", true),
 				);
 
 				if (!duration)
@@ -210,7 +210,7 @@ const command: Command = {
 
 				const date = new Date(Date.now() + duration);
 
-				let content = interaction.options.getString("reminder");
+				let content = interaction.options.getString("reminder", true);
 				if (!/^https?:\/\//.test(content))
 					content = content.replace(/^./, (a) => a.toUpperCase());
 
@@ -229,7 +229,7 @@ const command: Command = {
 			}
 
 			case "on": {
-				const input = interaction.options.getString("date").trim();
+				const input = interaction.options.getString("date", true).trim();
 				const match =
 					input.match(
 						/^(\d{1,2})-(\d{1,2})-(\d+)(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/,
@@ -256,7 +256,7 @@ const command: Command = {
 				if (duration < 0)
 					return interaction.reply(translations.strings.date_passed());
 
-				let content = interaction.options.getString("reminder");
+				let content = interaction.options.getString("reminder", true);
 				if (!/^https?:\/\//.test(content))
 					content = content.replace(/^./, (a) => a.toUpperCase());
 
@@ -276,7 +276,7 @@ const command: Command = {
 
 			case "each": {
 				const duration: number = dhms(
-					interaction.options.getString("duration"),
+					interaction.options.getString("duration", true),
 				);
 
 				if (!duration)
@@ -284,7 +284,7 @@ const command: Command = {
 
 				const date = new Date(Date.now() + duration);
 
-				let content = interaction.options.getString("reminder");
+				let content = interaction.options.getString("reminder", true);
 				if (!/^https?:\/\//.test(content))
 					content = content.replace(/^./, (a) => a.toUpperCase());
 
@@ -303,7 +303,7 @@ const command: Command = {
 			}
 
 			case "remove": {
-				const number = interaction.options.getInteger("reminder");
+				const number = interaction.options.getInteger("reminder", true);
 				if (number < 1 || number > reminders.length)
 					return interaction.followUp(
 						translations.strings.invalid_number(reminders.length.toString()),

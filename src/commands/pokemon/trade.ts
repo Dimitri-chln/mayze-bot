@@ -140,7 +140,7 @@ const command: Command = {
 
 		const subCommand = interaction.options.getSubcommand();
 
-		const user = interaction.options.getUser("user");
+		const user = interaction.options.getUser("user", true);
 		if (user.id === interaction.user.id)
 			return interaction.followUp(translations.strings.same_user());
 

@@ -21,12 +21,12 @@ import Palette from "./types/canvas/Palette";
 import Canvas from "./types/canvas/Canvas";
 import Pokedex from "./types/pokemon/Pokedex";
 
-import MusicPlayer from "./utils/music/MusicPlayer";
+import MusicPlayer from "./types/music/MusicPlayer";
 import parseArgs from "./utils/misc/parseArgs";
 import findMember from "./utils/misc/findMember";
 
 import config from "./config.json";
-import MusicUtil from "./utils/music/MusicUtil";
+import MusicUtil from "./types/music/MusicUtil";
 
 export default class Util {
 	static readonly prefix = config.PREFIX;

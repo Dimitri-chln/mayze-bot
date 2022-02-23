@@ -35,7 +35,7 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const query = interaction.options.getString("query");
+		const query = interaction.options.getString("query", true);
 		const res = await Util.database.query(query);
 
 		switch (res.command) {

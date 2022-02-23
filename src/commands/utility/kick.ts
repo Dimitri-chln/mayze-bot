@@ -49,10 +49,10 @@ const command: Command = {
 
 	runInteraction: async (interaction, translations) => {
 		const member = interaction.guild.members.cache.get(
-			interaction.options.getUser("user").id,
+			interaction.options.getUser("user", true).id,
 		);
 
-		const reason = interaction.options.getString("reason");
+		const reason = interaction.options.getString("reason", false);
 
 		if (
 			member.roles.highest.position >=

@@ -391,7 +391,7 @@ const command: Command = {
 
 					case "about": {
 						const pokemon = Util.pokedex.findByName(
-							interaction.options.getString("pokemon"),
+							interaction.options.getString("pokemon", true),
 						);
 						if (!pokemon)
 							return interaction.followUp(
@@ -549,9 +549,9 @@ const command: Command = {
 					}
 
 					case "caught": {
-						const shiny = Boolean(interaction.options.getBoolean("shiny"));
+						const shiny = Boolean(interaction.options.getBoolean("shiny", false));
 						const variation: VariationType =
-							(interaction.options.getString("variation") as
+							(interaction.options.getString("variation", false) as
 								| "mega"
 								| "alola") ?? "default";
 
@@ -569,12 +569,12 @@ const command: Command = {
 
 						pokemons = pokemons.filter((pkm) => {
 							if (
-								interaction.options.getBoolean("legendary") &&
+								interaction.options.getBoolean("legendary", false) &&
 								!Util.pokedex.findById(pkm.pokedex_id).legendary
 							)
 								return false;
 							if (
-								interaction.options.getBoolean("ultra-beast") &&
+								interaction.options.getBoolean("ultra-beast", false) &&
 								!Util.pokedex.findById(pkm.pokedex_id).ultraBeast
 							)
 								return false;

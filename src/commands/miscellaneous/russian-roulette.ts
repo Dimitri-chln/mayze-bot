@@ -239,7 +239,7 @@ const command: Command = {
 					],
 				});
 
-				const gameOption = interaction.options.getString("option") as
+				const gameOption = interaction.options.getString("option", false) as
 					| "kick"
 					| "timeout";
 

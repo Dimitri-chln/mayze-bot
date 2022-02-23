@@ -6,7 +6,7 @@ import Fs from "fs";
 import Path from "path";
 import PlayDl from "play-dl";
 import { MessageEmbed, MessageAttachment } from "discord.js";
-import MusicUtil from "../../utils/music/MusicUtil";
+import MusicUtil from "../../types/music/MusicUtil";
 
 const command: Command = {
 	name: "download",
@@ -40,7 +40,7 @@ const command: Command = {
 
 	runInteraction: async (interaction, translations) => {
 		const url =
-			interaction.options.getString("url") ??
+			interaction.options.getString("url", false) ??
 			Util.musicPlayer.get(interaction.guild.id)?.nowPlaying?.url;
 
 		if (!url) return interaction.followUp(translations.strings.no_url());

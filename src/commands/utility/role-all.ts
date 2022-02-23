@@ -142,9 +142,9 @@ const command: Command = {
 
 	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
-		const role = interaction.options.getRole("role");
+		const role = interaction.options.getRole("role", true);
 		const option: "bot" | "human" | "all" =
-			(interaction.options.getString("option") as "bot" | "human") ?? "all";
+			(interaction.options.getString("option", false) as "bot" | "human") ?? "all";
 
 		let members = interaction.guild.members.cache;
 

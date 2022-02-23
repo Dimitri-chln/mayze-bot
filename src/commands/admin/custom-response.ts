@@ -162,9 +162,9 @@ const command: Command = {
 
 		switch (subCommand) {
 			case "add": {
-				const trigger = interaction.options.getString("trigger");
-				const response = interaction.options.getString("response");
-				const triggerType = interaction.options.getInteger("type") ?? 0;
+				const trigger = interaction.options.getString("trigger", true);
+				const response = interaction.options.getString("response", true);
+				const triggerType = interaction.options.getInteger("type", false) ?? 0;
 
 				await Util.database.query(
 					"INSERT INTO custom_response (trigger, response, trigger_type) VALUES ($1, $2, $3)",
@@ -176,7 +176,7 @@ const command: Command = {
 			}
 
 			case "remove": {
-				const number = interaction.options.getInteger("response");
+				const number = interaction.options.getInteger("response", true);
 
 				if (number < 1 || number > responses.length)
 					return interaction.followUp(

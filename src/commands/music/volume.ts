@@ -39,7 +39,7 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const volume = interaction.options.getInteger("volume");
+		const volume = interaction.options.getInteger("volume", false);
 
 		const queue = Util.musicPlayer.get(interaction.guild.id);
 

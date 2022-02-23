@@ -5,7 +5,7 @@ import Util from "../../Util";
 import { GuildMember, TextChannel, VoiceChannel } from "discord.js";
 import Axios from "axios";
 import PlayDl from "play-dl";
-import MusicUtil from "../../utils/music/MusicUtil";
+import MusicUtil from "../../types/music/MusicUtil";
 
 const command: Command = {
 	name: "play",
@@ -60,8 +60,8 @@ const command: Command = {
 					interaction.channel as TextChannel,
 			  );
 
-		let search = interaction.options.getString("song");
-		const shuffle = Boolean(interaction.options.getBoolean("shuffle"));
+		let search = interaction.options.getString("song", true);
+		const shuffle = Boolean(interaction.options.getBoolean("shuffle", false));
 
 		switch (await PlayDl.validate(search)) {
 			case "yt_playlist":

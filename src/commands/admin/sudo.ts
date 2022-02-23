@@ -46,8 +46,8 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const user = interaction.options.getUser("user");
-		const message = interaction.options.getString("message");
+		const user = interaction.options.getUser("user", true);
+		const message = interaction.options.getString("message", true);
 
 		const webhook = await interaction.client.fetchWebhook(
 			Util.guildConfigs.get(interaction.guild.id).webhookId,

@@ -89,7 +89,7 @@ const command: Command = {
 
 		switch (subCommand) {
 			case "create": {
-				const announcementId = interaction.options.getString("message");
+				const announcementId = interaction.options.getString("message", false);
 				const announcement = announcementId
 					? await announcementChannel.messages.fetch(announcementId)
 					: (await announcementChannel.messages.fetch({ limit: 1 })).first();

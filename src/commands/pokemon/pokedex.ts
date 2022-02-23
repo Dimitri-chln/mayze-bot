@@ -180,7 +180,7 @@ const command: Command = {
 
 		switch (subCommand) {
 			case "find": {
-				const input = interaction.options.getString("pokemon");
+				const input = interaction.options.getString("pokemon", true);
 				const { pokemon, shiny, variationType } =
 					Util.pokedex.findByNameWithVariation(input) ?? {
 						pokemon: Util.pokedex.findById(parseInt(input)),
@@ -282,29 +282,32 @@ const command: Command = {
 
 				const userPokedex = Util.pokedex.pokemons.filter((pokemon) => {
 					if (
-						interaction.options.getBoolean("caught") &&
+						interaction.options.getBoolean("caught", false) &&
 						!pokemonList.has(pokemon)
 					)
 						return false;
 					if (
-						interaction.options.getBoolean("uncaught") &&
+						interaction.options.getBoolean("uncaught", false) &&
 						pokemonList.has(pokemon)
 					)
 						return false;
-					if (interaction.options.getBoolean("legendary") && !pokemon.legendary)
+					if (
+						interaction.options.getBoolean("legendary", false) &&
+						!pokemon.legendary
+					)
 						return false;
 					if (
-						interaction.options.getBoolean("ultra-beast") &&
+						interaction.options.getBoolean("ultra-beast", false) &&
 						!pokemon.ultraBeast
 					)
 						return false;
 					if (
-						interaction.options.getBoolean("alola") &&
+						interaction.options.getBoolean("alola", false) &&
 						!Util.pokedex.alolaPokemons.has(pokemon.nationalId)
 					)
 						return false;
 					if (
-						interaction.options.getBoolean("mega") &&
+						interaction.options.getBoolean("mega", false) &&
 						!Util.pokedex.megaEvolvablePokemons.has(pokemon.nationalId)
 					)
 						return false;
@@ -312,7 +315,7 @@ const command: Command = {
 					return true;
 				});
 
-				const shiny = interaction.options.getBoolean("shiny") ?? false;
+				const shiny = Boolean(interaction.options.getBoolean("shiny", false));
 
 				const pages: Page[] = [];
 				const page: (desc: string) => Page = (desc) => {
@@ -344,7 +347,7 @@ const command: Command = {
 							userPokedex
 								.slice(i, i + Util.config.ITEMS_PER_PAGE)
 								.map((pkm) => {
-									if (interaction.options.getBoolean("mega")) {
+									if (interaction.options.getBoolean("mega", false)) {
 										return pkm.megaEvolutions
 											.map((megaEvolution) =>
 												translations.strings.description(
@@ -387,7 +390,7 @@ const command: Command = {
 
 			case "evoline": {
 				const pokemon = Util.pokedex.findByName(
-					interaction.options.getString("pokemon"),
+					interaction.options.getString("pokemon", true),
 				);
 
 				if (!pokemon)
