@@ -19,48 +19,73 @@ const command: Command = {
 	options: {
 		fr: [
 			{
-				name: "type",
-				description: "Le type d'image à générer",
-				type: "STRING",
-				required: true,
-				autocomplete: true,
+				name: "overlay",
+				description: "Ajouter un overlay à ta photo de profil",
+				type: "SUB_COMMAND",
+				options: [
+					{
+						name: "type",
+						description: "Le type d'image à générer",
+						type: "STRING",
+						required: true,
+						autocomplete: true,
+					},
+				],
 			},
 		],
 		en: [
 			{
-				name: "type",
-				description: "The type of image to generate",
-				type: "STRING",
-				required: true,
-				autocomplete: true,
+				name: "overlay",
+				description: "Add an overlay to your profile picture",
+				type: "SUB_COMMAND",
+				options: [
+					{
+						name: "type",
+						description: "The type of image to generate",
+						type: "STRING",
+						required: true,
+						autocomplete: true,
+					},
+				],
 			},
 		],
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const type = interaction.options.getString("type", true).toLowerCase();
+		const subCommand = interaction.options.getSubcommand();
 
-		if (!Util.config.IMAGE_GENERATION_TYPES.includes(type))
-			return interaction.followUp(translations.strings.invalid_type());
+		switch (subCommand) {
+			case "overlay": {
+				const type = interaction.options.getString("type", true).toLowerCase();
 
-		const image = await Jimp.read(
-			interaction.user.displayAvatarURL({ format: "png", size: 4096 }),
-		);
+				if (!Util.config.IMAGE_GENERATION_TYPES.includes(type))
+					return interaction.followUp(translations.strings.invalid_type());
 
-		switch (type) {
-			case "ukraine": {
-				const overlay = await Jimp.read(ukraineOverlay);
+				const image = await Jimp.read(
+					interaction.user.displayAvatarURL({ format: "png", size: 4096 }),
+				);
 
-				overlay.resize(image.getWidth(), image.getHeight(), (err, overlay) => {
-					image
-						.composite(overlay, 0, 0)
-						.getBufferAsync(Jimp.MIME_PNG)
-						.then((result) => {
-							interaction.followUp({
-								files: [result],
-							});
-						});
-				});
+				switch (type) {
+					case "ukraine": {
+						const overlay = await Jimp.read(ukraineOverlay);
+
+						overlay.resize(
+							image.getWidth(),
+							image.getHeight(),
+							(err, overlay) => {
+								image
+									.composite(overlay, 0, 0)
+									.getBufferAsync(Jimp.MIME_PNG)
+									.then((result) => {
+										interaction.followUp({
+											files: [result],
+										});
+									});
+							},
+						);
+						break;
+					}
+				}
 				break;
 			}
 		}

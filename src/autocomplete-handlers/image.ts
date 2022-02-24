@@ -6,7 +6,7 @@ const autocompleteHandler: AutocompleteHandler = {
 	options: [
 		{
 			subCommandGroup: null,
-			subCommand: null,
+			subCommand: "overlay",
 			name: "type",
 			type: "STRING",
 			filterType: "CONTAINS",
