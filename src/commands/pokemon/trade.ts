@@ -187,7 +187,7 @@ const command: Command = {
 				const offer: OfferOrDemand[] =
 					interaction.options
 						.getString("offer")
-						?.split(/,(?: *)?/)
+						?.split(/, */)
 						?.map((input) => {
 							const number = parseInt((input.match(/^(\d+) */) ?? [])[1]) || 1;
 							const pokemon = Util.pokedex.findByNameWithVariation(
@@ -222,7 +222,7 @@ const command: Command = {
 				const demand: OfferOrDemand[] =
 					interaction.options
 						.getString("demand")
-						?.split(/,(?: *)?/)
+						?.split(/, */)
 						?.map((input) => {
 							const number = parseInt((input.match(/^(\d+) */) ?? [])[1]) || 1;
 							const pokemon = Util.pokedex.findByNameWithVariation(
