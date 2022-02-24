@@ -1,5 +1,6 @@
 .env
 .vscode/
+.data/
 debug.js
 dist/
 node_modules/
