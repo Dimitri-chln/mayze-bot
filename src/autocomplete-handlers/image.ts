@@ -1,0 +1,27 @@
+import AutocompleteHandler from "../types/structures/AutocompleteHandler";
+import Util from "../Util";
+
+const autocompleteHandler: AutocompleteHandler = {
+	name: "image",
+	options: [
+		{
+			subCommandGroup: null,
+			subCommand: null,
+			name: "type",
+			type: "STRING",
+			filterType: "CONTAINS",
+			run: async (interaction, value) => {
+				const types = Util.config.IMAGE_GENERATION_TYPES;
+
+				return types.map((type) => {
+					return {
+						name: type,
+						value: type,
+					};
+				});
+			},
+		},
+	],
+};
+
+export default autocompleteHandler;

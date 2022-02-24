@@ -83,26 +83,5 @@ module.exports = {
 				en: "*No player*",
 			},
 		},
-
-		// MUSIC COMMANDS
-
-		"auto-play": {
-			toggled: {
-				fr: "<a:blackCheck:803603780666523699> | **Autoplay [1?activé:désactivé]**",
-				en: "<a:blackCheck:803603780666523699> | **Autoplay [1?enabled:disabled]**",
-			},
-		},
-		"play-skip": {
-			playlists_unsupported: {
-				fr: "les playlists ne sont pas supportées pour cette commande",
-				en: "playlists aren't supported for this command",
-			},
-		},
-		"play-top": {
-			playlists_unsupported: {
-				fr: "les playlists ne sont pas supportées pour cette commande",
-				en: "playlists aren't supported for this command",
-			},
-		},
 	},
 };
