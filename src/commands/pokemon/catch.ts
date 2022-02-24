@@ -239,7 +239,7 @@ const command: Command = {
 							!shiny &&
 								(variation === "alola" ||
 									/^[aeiou]/i.test(randomPokemon.names[translations.language])),
-							randomPokemon.formatName(shiny, variation, translations.language),
+							randomPokemon.formatName(translations.language, shiny, variation),
 							catchReward.toString(),
 						) + (megaGem ? translations.strings.mega_gem(megaGem) : ""),
 					footer: {
@@ -282,7 +282,7 @@ const command: Command = {
 						!shiny &&
 							(variation === "alola" ||
 								/^[aeiou]/i.test(randomPokemon.names.en)),
-						randomPokemon.formatName(shiny, variation, "en"),
+						randomPokemon.formatName("en", shiny, variation),
 					),
 					footer: {
 						text: "✨ Mayze ✨",
@@ -502,7 +502,7 @@ const command: Command = {
 							!shiny &&
 								(variation === "alola" ||
 									/^[aeiou]/i.test(randomPokemon.names[translations.language])),
-							randomPokemon.formatName(shiny, variation, translations.language),
+							randomPokemon.formatName(translations.language, shiny, variation),
 							catchReward.toString(),
 						) + (megaGem ? translations.strings.mega_gem(megaGem) : ""),
 					footer: {
@@ -544,7 +544,7 @@ const command: Command = {
 						!shiny &&
 							(variation === "alola" ||
 								/^[aeiou]/i.test(randomPokemon.names.en)),
-						randomPokemon.formatName(shiny, variation, "en"),
+						randomPokemon.formatName("en", shiny, variation),
 					),
 					footer: {
 						text: "✨ Mayze ✨",

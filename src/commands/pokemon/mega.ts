@@ -29,6 +29,7 @@ const command: Command = {
 						description: "Le pokémon à faire méga évoluer",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 					{
 						name: "type",
@@ -54,12 +55,6 @@ const command: Command = {
 							},
 						],
 					},
-					{
-						name: "shiny",
-						description: "Si le pokémon à méga évoluer est shiny ou non",
-						type: "BOOLEAN",
-						required: false,
-					},
 				],
 			},
 			{
@@ -79,6 +74,7 @@ const command: Command = {
 						description: "The pokémon to mega evolve",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 					{
 						name: "type",
@@ -104,12 +100,6 @@ const command: Command = {
 							},
 						],
 					},
-					{
-						name: "shiny",
-						description: "Whether to mega evolve a shiny pokémon or not",
-						type: "BOOLEAN",
-						required: false,
-					},
 				],
 			},
 			{
@@ -132,14 +122,15 @@ const command: Command = {
 
 		switch (subCommand) {
 			case "evolve": {
-				const pokemon = Util.pokedex.findByName(
-					interaction.options.getString("pokemon", true),
-				);
+				const { pokemon, shiny } =
+					Util.pokedex.findByNameWithVariation(
+						interaction.options.getString("pokemon", true),
+					) ?? {};
+
 				if (!pokemon)
 					return interaction.followUp(translations.strings.invalid_pokemon());
 
 				const megaType = interaction.options.getString("type", true);
-				const shiny = interaction.options.getBoolean("shiny", false) ?? false;
 
 				const {
 					rows: [pokemonData],
@@ -234,7 +225,7 @@ const command: Command = {
 								url: pokemon.image(shiny, "default"),
 							},
 							description: translations.strings.evolving(
-								pokemon.formatName(shiny, "default", translations.language),
+								pokemon.formatName(translations.language, shiny, "default"),
 							),
 						},
 					],
@@ -249,11 +240,11 @@ const command: Command = {
 							.setThumbnail(pokemon.image(shiny, megaEvolution.suffix))
 							.setDescription(
 								translations.strings.evolved(
-									pokemon.formatName(shiny, "default", translations.language),
+									pokemon.formatName(translations.language, shiny, "default"),
 									pokemon.formatName(
+										translations.language,
 										shiny,
 										megaEvolution.suffix,
-										translations.language,
 									),
 								),
 							),

@@ -22,6 +22,7 @@ const command: Command = {
 				description: "La table de la base de donnée à sauvegarder",
 				type: "STRING",
 				required: true,
+				autocomplete: true,
 			},
 		],
 		en: [
@@ -30,13 +31,12 @@ const command: Command = {
 				description: "The database table to save",
 				type: "STRING",
 				required: true,
+				autocomplete: true,
 			},
 		],
 	},
 
 	runInteraction: async (interaction, translations) => {
-		if (interaction.channel.id !== Util.config.SECRET_CHANNEL_ID) return;
-
 		const table = interaction.options.getString("table", true);
 
 		const { rows } = await Util.database.query(`SELECT * FROM ${table}`);

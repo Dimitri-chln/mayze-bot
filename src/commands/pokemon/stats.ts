@@ -40,6 +40,7 @@ const command: Command = {
 								description: "Le pokémon dont tu veux voir les statistiques",
 								type: "STRING",
 								required: true,
+								autocomplete: true,
 							},
 						],
 					},
@@ -108,6 +109,7 @@ const command: Command = {
 								description: "The pokémon whose statistics to get",
 								type: "STRING",
 								required: true,
+								autocomplete: true,
 							},
 						],
 					},
@@ -549,7 +551,9 @@ const command: Command = {
 					}
 
 					case "caught": {
-						const shiny = Boolean(interaction.options.getBoolean("shiny", false));
+						const shiny = Boolean(
+							interaction.options.getBoolean("shiny", false),
+						);
 						const variation: VariationType =
 							(interaction.options.getString("variation", false) as
 								| "mega"
@@ -621,9 +625,9 @@ const command: Command = {
 													Util.pokedex
 														.findById(pokemon.pokedex_id)
 														.formatName(
+															translations.language,
 															shiny,
 															variation,
-															translations.language,
 														),
 													pokemon.total.toString(),
 												),

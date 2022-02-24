@@ -21,7 +21,7 @@ const command: Command = {
 	options: {
 		fr: [
 			{
-				name: "addfav",
+				name: "add-fav",
 				description: "Ajouter un pokémon à tes favoris",
 				type: "SUB_COMMAND",
 				options: [
@@ -30,11 +30,12 @@ const command: Command = {
 						description: "Le pokémon à ajouter",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 				],
 			},
 			{
-				name: "removefav",
+				name: "remove-fav",
 				description: "Retirer un pokémon de tes favoris",
 				type: "SUB_COMMAND",
 				options: [
@@ -43,6 +44,7 @@ const command: Command = {
 						description: "Le pokémon à retirer",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 				],
 			},
@@ -56,6 +58,7 @@ const command: Command = {
 						description: "Le pokémon à renommer",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 					{
 						name: "nickname",
@@ -133,6 +136,7 @@ const command: Command = {
 							"Une option pour trouver un pokémon grâce à son nom ou surnom",
 						type: "STRING",
 						required: false,
+						autocomplete: true,
 					},
 					{
 						name: "evolution",
@@ -146,7 +150,7 @@ const command: Command = {
 		],
 		en: [
 			{
-				name: "addfav",
+				name: "add-fav",
 				description: "Add a pokémon to your favorites",
 				type: "SUB_COMMAND",
 				options: [
@@ -155,11 +159,12 @@ const command: Command = {
 						description: "The pokémon to add",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 				],
 			},
 			{
-				name: "removefav",
+				name: "remove-fav",
 				description: "Remove a pokémon from your favorites",
 				type: "SUB_COMMAND",
 				options: [
@@ -168,6 +173,7 @@ const command: Command = {
 						description: "The pokémon to remove",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 				],
 			},
@@ -181,6 +187,7 @@ const command: Command = {
 						description: "The pokémon to rename",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 					{
 						name: "nickname",
@@ -256,6 +263,7 @@ const command: Command = {
 						description: "An option to find a pokémon by its name or nickname",
 						type: "STRING",
 						required: false,
+						autocomplete: true,
 					},
 					{
 						name: "evolution",
@@ -273,7 +281,7 @@ const command: Command = {
 		const subCommand = interaction.options.getSubcommand();
 
 		switch (subCommand) {
-			case "addfav": {
+			case "add-fav": {
 				const { pokemon, shiny, variationType } =
 					Util.pokedex.findByNameWithVariation(
 						interaction.options.getString("pokemon", true),
@@ -300,13 +308,13 @@ const command: Command = {
 
 				interaction.followUp(
 					translations.strings.favorite_added(
-						pokemon.formatName(shiny, variationType, translations.language),
+						pokemon.formatName(translations.language, shiny, variationType),
 					),
 				);
 				break;
 			}
 
-			case "removefav": {
+			case "remove-fav": {
 				const { pokemon, shiny, variationType } =
 					Util.pokedex.findByNameWithVariation(
 						interaction.options.getString("pokemon", true),
@@ -333,7 +341,7 @@ const command: Command = {
 
 				interaction.followUp(
 					translations.strings.favorite_removed(
-						pokemon.formatName(shiny, variationType, translations.language),
+						pokemon.formatName(translations.language, shiny, variationType),
 					),
 				);
 				break;
@@ -372,7 +380,7 @@ const command: Command = {
 
 				interaction.followUp(
 					translations.strings.nickname_updated(
-						pokemon.formatName(shiny, variationType, translations.language),
+						pokemon.formatName(translations.language, shiny, variationType),
 						nickname,
 					),
 				);
@@ -432,14 +440,18 @@ const command: Command = {
 
 						if (
 							interaction.options.getString("name", false) &&
-							!new RegExp(interaction.options.getString("name", false), "i").test(
+							!new RegExp(
+								interaction.options.getString("name", false),
+								"i",
+							).test(
 								Util.pokedex.findById(pkm.pokedex_id).names[
 									translations.language
 								],
 							) &&
-							!new RegExp(interaction.options.getString("name", false), "i").test(
-								pkm.users[user.id].nickname,
-							)
+							!new RegExp(
+								interaction.options.getString("name", false),
+								"i",
+							).test(pkm.users[user.id].nickname)
 						)
 							return false;
 
@@ -514,15 +526,15 @@ const command: Command = {
 									.map((p) =>
 										translations.strings.description(
 											p.data.formatName(
+												translations.language,
 												p.shiny,
 												p.variation,
-												translations.language,
 												"badge",
 											),
 											p.data.formatName(
+												translations.language,
 												p.shiny,
 												p.variation,
-												translations.language,
 												"raw",
 											),
 											interaction.options.getInteger("id", false) === 0

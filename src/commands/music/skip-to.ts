@@ -19,19 +19,19 @@ const command: Command = {
 		fr: [
 			{
 				name: "song",
-				description: "Le numéro de la musique à laquelle passer",
+				description: "La musique à laquelle passer",
 				type: "INTEGER",
 				required: true,
-				minValue: 1,
+				autocomplete: true,
 			},
 		],
 		en: [
 			{
 				name: "song",
-				description: "The number of the song to skip to",
+				description: "The song to skip to",
 				type: "INTEGER",
 				required: true,
-				minValue: 1,
+				autocomplete: true,
 			},
 		],
 	},

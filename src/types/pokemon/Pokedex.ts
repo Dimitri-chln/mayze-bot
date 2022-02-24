@@ -40,50 +40,43 @@ export default class Pokedex {
 					spDef: rawPokemon.base_stats.sp_def,
 					speed: rawPokemon.base_stats.speed,
 				},
-				megaEvolutions: rawPokemon.mega_evolutions.map(
-					(megaEvolution) => {
-						return {
-							suffix: megaEvolution.suffix,
-							names: megaEvolution.names,
-							types: megaEvolution.types,
-							ability: megaEvolution.ability,
-							megaStone: megaEvolution.mega_stone,
-							heightEu: megaEvolution.height_eu,
-							heightUs: megaEvolution.height_us,
-							weightEu: megaEvolution.weight_eu,
-							weightUs: megaEvolution.weight_us,
-							baseStats: {
-								hp: megaEvolution.base_stats.hp,
-								atk: megaEvolution.base_stats.atk,
-								def: megaEvolution.base_stats.def,
-								spAtk: megaEvolution.base_stats.sp_atk,
-								spDef: megaEvolution.base_stats.sp_def,
-								speed: megaEvolution.base_stats.speed,
-							},
-						};
-					},
-				),
+				megaEvolutions: rawPokemon.mega_evolutions.map((megaEvolution) => {
+					return {
+						suffix: megaEvolution.suffix,
+						names: megaEvolution.names,
+						types: megaEvolution.types,
+						ability: megaEvolution.ability,
+						megaStone: megaEvolution.mega_stone,
+						heightEu: megaEvolution.height_eu,
+						heightUs: megaEvolution.height_us,
+						weightEu: megaEvolution.weight_eu,
+						weightUs: megaEvolution.weight_us,
+						baseStats: {
+							hp: megaEvolution.base_stats.hp,
+							atk: megaEvolution.base_stats.atk,
+							def: megaEvolution.base_stats.def,
+							spAtk: megaEvolution.base_stats.sp_atk,
+							spDef: megaEvolution.base_stats.sp_def,
+							speed: megaEvolution.base_stats.speed,
+						},
+					};
+				}),
 				variations: rawPokemon.variations,
 				legendary: rawPokemon.legendary,
 				ultraBeast: rawPokemon.ultra_beast,
 				evolutionFrom: () => this.findByName(rawPokemon.evolution_from),
 				evolutions: () =>
-					rawPokemon.evolutions.map((evolution) =>
-						this.findByName(evolution),
-					),
+					rawPokemon.evolutions.map((evolution) => this.findByName(evolution)),
 				evolutionLine: () =>
 					evolutionLine(this.findById(rawPokemon.national_id)),
 				flatEvolutionLine: () =>
 					flatEvolutionLine(this.findById(rawPokemon.national_id)),
 				stringEvolutionLine: (language: Language) =>
-					stringEvolutionLine(
-						this.findById(rawPokemon.national_id),
-						language,
-					),
+					stringEvolutionLine(this.findById(rawPokemon.national_id), language),
 				formatName: (
-					shiny: boolean,
-					variation: VariationType,
 					language: Language,
+					shiny?: boolean,
+					variation?: VariationType,
 					format?: FormatType,
 				) =>
 					formatName(
@@ -94,11 +87,7 @@ export default class Pokedex {
 						format,
 					),
 				image: (shiny: boolean, variation: VariationType) =>
-					pokemonImage(
-						this.findById(rawPokemon.national_id),
-						shiny,
-						variation,
-					),
+					pokemonImage(this.findById(rawPokemon.national_id), shiny, variation),
 			};
 
 			return pokemon;
@@ -114,9 +103,7 @@ export default class Pokedex {
 	static alolaPokemons: Collection<number, Pokemon> = new Collection(
 		this.pokemons
 			.filter((pokemon) =>
-				pokemon.variations.some(
-					(variation) => variation.suffix === "alola",
-				),
+				pokemon.variations.some((variation) => variation.suffix === "alola"),
 			)
 			.map((pokemon) => [pokemon.nationalId, pokemon]),
 	);

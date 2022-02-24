@@ -47,9 +47,9 @@ export default interface Pokemon {
 	flatEvolutionLine(): Pokemon[];
 	stringEvolutionLine(language: Language): string;
 	formatName(
-		shiny: boolean,
-		variation: VariationType,
 		language: Language,
+		shiny?: boolean,
+		variation?: VariationType,
 		format?: FormatType,
 	): string;
 	image(shiny: boolean, variation: VariationType): string;
@@ -122,7 +122,7 @@ interface RawPokemonVariation {
 interface PokemonNames {
 	en: string;
 	fr: string;
-};
+}
 
 export type PokemonType =
 	| "Normal"

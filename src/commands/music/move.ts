@@ -19,33 +19,33 @@ const command: Command = {
 		fr: [
 			{
 				name: "song",
-				description: "Le numéro de la musique à déplacer",
+				description: "Le musique à déplacer",
 				type: "INTEGER",
 				required: true,
-				minValue: 1,
+				autocomplete: true,
 			},
 			{
-				name: "position",
+				name: "after",
 				description: "La position à laquelle déplacer la musique",
 				type: "INTEGER",
 				required: true,
-				minValue: 1,
+				autocomplete: true,
 			},
 		],
 		en: [
 			{
 				name: "song",
-				description: "The number of the song to move",
+				description: "The song to move",
 				type: "INTEGER",
 				required: true,
-				minValue: 1,
+				autocomplete: true,
 			},
 			{
-				name: "position",
+				name: "after",
 				description: "The position to move the song to",
 				type: "INTEGER",
 				required: true,
-				minValue: 1,
+				autocomplete: true,
 			},
 		],
 	},
@@ -59,13 +59,13 @@ const command: Command = {
 				translations.strings.invalid_song(queue.songs.length.toString()),
 			);
 
-		const position = interaction.options.getInteger("position", true);
-		if (position < 1 || position > queue.songs.length)
+		const after = interaction.options.getInteger("after", true);
+		if (after < 0 || after > queue.songs.length)
 			return interaction.followUp(
 				translations.strings.invalid_position(queue.songs.length.toString()),
 			);
 
-		const song = queue.move(songIndex, position);
+		const song = queue.move(songIndex, after);
 
 		interaction.followUp(translations.strings.moved(song.name));
 	},

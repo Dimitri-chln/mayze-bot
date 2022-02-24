@@ -23,6 +23,7 @@ const command: Command = {
 				description: "La commande pour laquelle obtenir une aide",
 				type: "STRING",
 				required: false,
+				autocomplete: true,
 			},
 		],
 		en: [
@@ -31,6 +32,7 @@ const command: Command = {
 				description: "The command to get help with",
 				type: "STRING",
 				required: false,
+				autocomplete: true,
 			},
 		],
 	},
@@ -41,7 +43,9 @@ const command: Command = {
 				(!cmd.guildIds || cmd.guildIds.includes(interaction.guild.id)) &&
 				cmd.category !== "admin",
 		);
-		const commandName = interaction.options.getString("command", false)?.toLowerCase();
+		const commandName = interaction.options
+			.getString("command", false)
+			?.toLowerCase();
 
 		if (!commandName) {
 			const categories: {

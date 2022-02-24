@@ -22,6 +22,7 @@ const command: Command = {
 				description: "Le numéro des musiques ou des intervalles (e.g. 4 6-13)",
 				type: "STRING",
 				required: false,
+				autocomplete: true,
 			},
 		],
 		en: [
@@ -30,6 +31,7 @@ const command: Command = {
 				description: "The song numbers or song intervals (e.g. 4 6-13)",
 				type: "STRING",
 				required: false,
+				autocomplete: true,
 			},
 		],
 	},

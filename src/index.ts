@@ -14,6 +14,7 @@ import ReactionCommand from "./types/structures/ReactionCommand";
 import Event from "./types/structures/Event";
 
 import PlayDl from "play-dl";
+import AutocompleteHandler from "./types/structures/AutocompleteHandler";
 
 // Database
 connectDatabase();
@@ -30,7 +31,7 @@ for (const directory of commandDirectories) {
 		Path.resolve(__dirname, "commands", directory),
 	).filter((file) => file.endsWith(".js") && file !== "__base.js");
 
-	commandFiles.forEach(async (file) => {
+	commandFiles.forEach((file) => {
 		const path = Path.resolve(__dirname, "commands", directory, file);
 		const command: Command = require(path).default ?? require(path);
 
@@ -45,9 +46,9 @@ for (const directory of commandDirectories) {
 // Message responses
 const messageResponseFiles = Fs.readdirSync(
 	Path.resolve(__dirname, "message-responses"),
-).filter((file) => file.endsWith(".js") && file !== "__base.js");
+).filter((file) => file.endsWith(".js"));
 
-messageResponseFiles.forEach(async (file) => {
+messageResponseFiles.forEach((file) => {
 	const path = Path.resolve(__dirname, "message-responses", file);
 	const messageResponse: MessageResponse =
 		require(path).default ?? require(path);
@@ -58,9 +59,9 @@ messageResponseFiles.forEach(async (file) => {
 // Reaction commands
 const reactionCommandsFiles = Fs.readdirSync(
 	Path.resolve(__dirname, "reaction-commands"),
-).filter((file) => file.endsWith(".js") && file !== "__base.js");
+).filter((file) => file.endsWith(".js"));
 
-reactionCommandsFiles.forEach(async (file) => {
+reactionCommandsFiles.forEach((file) => {
 	const path = Path.resolve(__dirname, "reaction-commands", file);
 	const reactionCommand: ReactionCommand =
 		require(path).default ?? require(path);
@@ -70,10 +71,10 @@ reactionCommandsFiles.forEach(async (file) => {
 
 // Events
 const eventFiles = Fs.readdirSync(Path.resolve(__dirname, "events")).filter(
-	(file) => file.endsWith(".js") && file !== "__base.js",
+	(file) => file.endsWith(".js"),
 );
 
-eventFiles.forEach(async (file) => {
+eventFiles.forEach((file) => {
 	const path = Path.resolve(__dirname, "events", file);
 	const event: Event = require(path).default ?? require(path);
 
@@ -86,6 +87,19 @@ eventFiles.forEach(async (file) => {
 			event.run(...args).catch(console.error),
 		);
 	}
+});
+
+// Autocomplete
+const autocompleteHandlerFiles = Fs.readdirSync(
+	Path.resolve(__dirname, "autocomplete-handlers"),
+).filter((file) => file.endsWith(".js"));
+
+autocompleteHandlerFiles.forEach((file) => {
+	const path = Path.resolve(__dirname, "autocomplete-handlers", file);
+	const autocompleteHandler: AutocompleteHandler =
+		require(path).default ?? require(path);
+
+	Util.autocompleteHandlers.set(autocompleteHandler.name, autocompleteHandler);
 });
 
 PlayDl.getFreeClientID().then((soundCloudClientId) => {

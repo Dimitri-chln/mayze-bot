@@ -29,6 +29,7 @@ const command: Command = {
 						description: "Le nom ou l'ID du pokémon",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 				],
 			},
@@ -82,7 +83,7 @@ const command: Command = {
 				],
 			},
 			{
-				name: "evoline",
+				name: "evo-line",
 				description: "Obtenir la ligne d'évolutions d'un pokémon",
 				type: "SUB_COMMAND",
 				options: [
@@ -92,6 +93,7 @@ const command: Command = {
 							"Le pokémon dont tu veux obtenir la ligne d'évolutions",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 				],
 			},
@@ -107,6 +109,7 @@ const command: Command = {
 						description: "The pokémon's name or ID",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 				],
 			},
@@ -160,7 +163,7 @@ const command: Command = {
 				],
 			},
 			{
-				name: "evoline",
+				name: "evo-line",
 				description: "Get the evolution line of a pokémon",
 				type: "SUB_COMMAND",
 				options: [
@@ -169,6 +172,7 @@ const command: Command = {
 						description: "The pokémon whose evolution line to get",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 				],
 			},
@@ -195,9 +199,9 @@ const command: Command = {
 					embeds: [
 						{
 							title: `${pokemon.formatName(
+								translations.language,
 								shiny,
 								variationType,
-								translations.language,
 							)} #${pokemon.nationalId.toString().padStart(3, "0")}`,
 							color: interaction.guild.me.displayColor,
 							image: {
@@ -353,9 +357,9 @@ const command: Command = {
 												translations.strings.description(
 													pokemonList.has(pkm),
 													pkm.formatName(
+														translations.language,
 														shiny,
 														megaEvolution.suffix,
-														translations.language,
 													),
 													pkm.nationalId.toString().padStart(3, "0"),
 												),
@@ -371,9 +375,9 @@ const command: Command = {
 										return translations.strings.description(
 											pokemonList.has(pkm),
 											pkm.formatName(
+												translations.language,
 												shiny,
 												variationType,
-												translations.language,
 											),
 											pkm.nationalId.toString().padStart(3, "0"),
 										);
@@ -388,10 +392,14 @@ const command: Command = {
 				break;
 			}
 
-			case "evoline": {
-				const pokemon = Util.pokedex.findByName(
-					interaction.options.getString("pokemon", true),
-				);
+			case "evo-line": {
+				const pokemon =
+					Util.pokedex.findByName(
+						interaction.options.getString("pokemon", true),
+					) ??
+					Util.pokedex.findById(
+						parseInt(interaction.options.getString("pokemon", true)),
+					);
 
 				if (!pokemon)
 					return interaction.followUp(translations.strings.invalid_pokemon());

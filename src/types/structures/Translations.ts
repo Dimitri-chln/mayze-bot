@@ -40,7 +40,7 @@ export default class Translations {
 					range: `${this.id}!A1:Z100`,
 				},
 				(err, res) => {
-					if (err) return n > 16 ? reject(err) : this.init(n + 1);
+					if (err) return n > 32 ? reject(err) : this.init(n + 1);
 
 					const data = res.data.values;
 

@@ -23,6 +23,7 @@ const command: Command = {
 				description: 'Le pokémon à chasser (utilise "none" pour réinitialiser)',
 				type: "STRING",
 				required: false,
+				autocomplete: true,
 			},
 		],
 		en: [
@@ -31,6 +32,7 @@ const command: Command = {
 				description: 'The pokémon to hunt (use "none" to reset)',
 				type: "STRING",
 				required: false,
+				autocomplete: true,
 			},
 		],
 	},

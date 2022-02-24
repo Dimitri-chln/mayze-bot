@@ -14,23 +14,27 @@ const command: Command = {
 	botPermissions: [],
 
 	options: {
-		fr: [],
-		en: [],
+		fr: [
+			{
+				name: "field",
+				description: "Un champ",
+				type: "STRING",
+				required: true,
+				autocomplete: true,
+			},
+		],
+		en: [
+			{
+				name: "field",
+				description: "A field",
+				type: "STRING",
+				required: true,
+				autocomplete: true,
+			},
+		],
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const roleId = (interaction.member as GuildMember).roles.cache.first().id;
-
-		interaction.channel.send({
-			content: `<@&${roleId}> 1 `,
-		});
-
-		interaction.channel.send({
-			content: `<@&${roleId}> 2`,
-			allowedMentions: {
-				roles: [roleId],
-			},
-		});
 	},
 };
 

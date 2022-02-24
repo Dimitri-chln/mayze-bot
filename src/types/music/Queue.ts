@@ -301,9 +301,13 @@ export default class Queue {
 		return relatedSongs;
 	}
 
-	move(oldSongIndex: number, newSongIndex: number) {
-		const movedSong = this.songs[oldSongIndex];
-		this.songs.splice(newSongIndex, 0, this.songs.splice(oldSongIndex, 1)[0]);
+	move(songIndex: number, after: number) {
+		const movedSong = this.songs[songIndex];
+		this.songs.splice(
+			songIndex > after ? after + 1 : after,
+			0,
+			this.songs.splice(songIndex, 1)[0],
+		);
 		return movedSong;
 	}
 

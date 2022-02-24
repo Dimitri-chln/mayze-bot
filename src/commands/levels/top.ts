@@ -62,10 +62,7 @@ const command: Command = {
 			| "voice_xp";
 
 		let { rows: top }: { rows: DatabaseLevel[] } = await Util.database.query(
-			`
-			SELECT * FROM level
-			ORDER BY ${leaderboard} DESC
-			`,
+			`SELECT * FROM level ORDER BY ${leaderboard} DESC`,
 		);
 
 		top = top.filter((user) =>

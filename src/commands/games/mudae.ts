@@ -72,6 +72,7 @@ const command: Command = {
 								description: "Le numéro de la série à retirer",
 								type: "INTEGER",
 								required: true,
+								autocomplete: true,
 							},
 						],
 					},
@@ -133,6 +134,7 @@ const command: Command = {
 								description: "The number of the series to remove",
 								type: "INTEGER",
 								required: true,
+								autocomplete: true,
 							},
 						],
 					},
@@ -161,7 +163,7 @@ const command: Command = {
 
 						const { rows: wishlist }: { rows: DatabaseMudaeWish[] } =
 							await Util.database.query(
-								"SELECT * FROM mudae_wish WHERE user_id = $1 ORDER BY id",
+								"SELECT * FROM mudae_wish WHERE user_id = $1 ORDER BY series ASC",
 								[interaction.user.id],
 							);
 
@@ -211,17 +213,12 @@ const command: Command = {
 					}
 
 					case "remove": {
-						const series = interaction.options.getInteger("series", true);
+						const seriesId = interaction.options.getInteger("series", true);
 
-						const { rows: wishlist }: { rows: DatabaseMudaeWish[] } =
-							await Util.database.query(
-								"SELECT * FROM mudae_wish WHERE user_id = $1 ORDER BY id",
-								[interaction.user.id],
-							);
-
-						await Util.database.query("DELETE FROM mudae_wish WHERE id = $1", [
-							wishlist[series - 1].id,
-						]);
+						await Util.database.query(
+							"DELETE FROM mudae_wish WHERE id = $1 AND user_id = $2",
+							[seriesId, interaction.user.id],
+						);
 
 						interaction.followUp(translations.strings.removed());
 						break;

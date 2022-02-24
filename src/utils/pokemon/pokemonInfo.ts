@@ -140,8 +140,8 @@ const imageSuffixes = {
 
 export function formatName(
 	pokemon: Pokemon,
-	shiny: boolean,
-	variation: VariationType,
+	shiny: boolean = false,
+	variation: VariationType = "default",
 	language: Language,
 	format: FormatType = "full",
 ) {
@@ -158,11 +158,15 @@ export function formatName(
 		const megaEvolution = pokemon.megaEvolutions.find(
 			(megaEvo) => megaEvo.suffix === variation,
 		);
+
+		if (!megaEvolution) return;
 		name = megaEvolution.names[language];
 	} else {
 		const pokemonVariation = pokemon.variations.find(
 			(v) => v.suffix === variation,
 		);
+
+		if (!pokemonVariation) return;
 		name = pokemonVariation.names[language];
 	}
 

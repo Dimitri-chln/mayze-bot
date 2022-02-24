@@ -43,6 +43,7 @@ const command: Command = {
 						description: "Le nom de la playlist à jouer",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 					{
 						name: "shuffle",
@@ -87,6 +88,7 @@ const command: Command = {
 						description: "Le nom de la playlist",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 				],
 			},
@@ -115,6 +117,7 @@ const command: Command = {
 						description: "The name of the playlist to play",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 					{
 						name: "shuffle",
@@ -159,6 +162,7 @@ const command: Command = {
 						description: "The name of the playlist",
 						type: "STRING",
 						required: true,
+						autocomplete: true,
 					},
 				],
 			},
@@ -245,7 +249,9 @@ const command: Command = {
 							interaction.channel as TextChannel,
 					  );
 
-				const shuffle = Boolean(interaction.options.getBoolean("shuffle", false));
+				const shuffle = Boolean(
+					interaction.options.getBoolean("shuffle", false),
+				);
 				const playlist = playlists.find((p) => p.name === playlistName);
 
 				if (!playlist)
@@ -282,7 +288,9 @@ const command: Command = {
 					);
 
 				const url = interaction.options.getString("url", true);
-				const isPrivate = Boolean(interaction.options.getBoolean("private", false));
+				const isPrivate = Boolean(
+					interaction.options.getBoolean("private", false),
+				);
 
 				switch (await PlayDl.validate(url)) {
 					case "yt_playlist":
@@ -309,6 +317,7 @@ const command: Command = {
 			case "remove": {
 				if (!playlists.some((p) => p.name === playlistName))
 					return interaction.followUp(translations.strings.invalid_playlist());
+
 				if (
 					!playlists.some(
 						(p) => p.name === playlistName && p.user_id === interaction.user.id,

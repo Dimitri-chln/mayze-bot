@@ -295,9 +295,9 @@ const command: Command = {
 													.map(
 														(pkm) =>
 															`\u00d7${pkm.number} ${pkm.data.formatName(
+																translations.language,
 																pkm.shiny,
 																pkm.variation,
-																translations.language,
 															)}`,
 													)
 													.join("\n")
@@ -313,9 +313,9 @@ const command: Command = {
 													.map(
 														(pkm) =>
 															`\u00d7${pkm.number} ${pkm.data.formatName(
+																translations.language,
 																pkm.shiny,
 																pkm.variation,
-																translations.language,
 															)}`,
 													)
 													.join("\n")
@@ -411,9 +411,9 @@ const command: Command = {
 																.map(
 																	(pkm) =>
 																		`\u00d7${pkm.number} ${pkm.data.formatName(
+																			translations.language,
 																			pkm.shiny,
 																			pkm.variation,
-																			translations.language,
 																		)}`,
 																)
 																.join("\n")
@@ -432,9 +432,9 @@ const command: Command = {
 																.map(
 																	(pkm) =>
 																		`\u00d7${pkm.number} ${pkm.data.formatName(
+																			translations.language,
 																			pkm.shiny,
 																			pkm.variation,
-																			translations.language,
 																		)}`,
 																)
 																.join("\n")
@@ -653,9 +653,9 @@ const command: Command = {
 															.map(
 																(pkm, i) =>
 																	`\u00d7${pkm.number} ${pkm.data.formatName(
+																		translations.language,
 																		pkm.shiny,
 																		pkm.variation,
-																		translations.language,
 																	)} - ${offerSuccess[i]
 																		.map((s) => (s ? "✅" : "❌"))
 																		.join(" ")}`,
@@ -673,9 +673,9 @@ const command: Command = {
 															.map(
 																(pkm, i) =>
 																	`×${pkm.number} ${pkm.data.formatName(
+																		translations.language,
 																		pkm.shiny,
 																		pkm.variation,
-																		translations.language,
 																	)} - ${demandSuccess[i]
 																		.map((s) => (s ? "✅" : "❌"))
 																		.join(" ")}`,
@@ -735,17 +735,17 @@ const command: Command = {
 								? (pokemon.number - pkm.users[user1.id].caught).toString()
 								: pokemon.number.toString()
 						} ${pokemon.data.formatName(
+							translations.language,
 							pokemon.shiny,
 							pokemon.variation,
-							translations.language,
 						)}**`,
 					);
 				if (pkm && pkm.users[user1.id].favorite)
 					errors1fav.push(
 						`**${pokemon.data.formatName(
+							translations.language,
 							pokemon.shiny,
 							pokemon.variation,
-							translations.language,
 						)}**`,
 					);
 			}
@@ -764,17 +764,17 @@ const command: Command = {
 								? (pokemon.number - pkm.users[user2.id].caught).toString()
 								: pokemon.number.toString()
 						} ${pokemon.data.formatName(
+							translations.language,
 							pokemon.shiny,
 							pokemon.variation,
-							translations.language,
 						)}**`,
 					);
 				if (pkm && pkm.users[user2.id].favorite)
 					errors2fav.push(
 						`**${pokemon.data.formatName(
+							translations.language,
 							pokemon.shiny,
 							pokemon.variation,
-							translations.language,
 						)}**`,
 					);
 			}

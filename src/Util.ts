@@ -17,6 +17,7 @@ import { Language } from "./types/structures/Translations";
 import Command from "./types/structures/Command";
 import MessageResponse from "./types/structures/MessageResponse";
 import ReactionCommand from "./types/structures/ReactionCommand";
+import AutocompleteHandler from "./types/structures/AutocompleteHandler";
 import Palette from "./types/canvas/Palette";
 import Canvas from "./types/canvas/Canvas";
 import Pokedex from "./types/pokemon/Pokedex";
@@ -75,6 +76,10 @@ export default class Util {
 	static readonly commands: Collection<string, Command> = new Collection();
 	static readonly messageResponses: MessageResponse[] = [];
 	static readonly reactionCommands: ReactionCommand[] = [];
+	static readonly autocompleteHandlers: Collection<
+		string,
+		AutocompleteHandler
+	> = new Collection();
 	static beta: boolean;
 	static owner: User;
 	static readonly palettes: Collection<string, Palette> = new Collection();
