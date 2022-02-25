@@ -184,7 +184,7 @@ export default class Canvas {
 		const borderSize = size / 16;
 		const fullSize = size + 2 * borderSize;
 
-		let image = new Jimp(fullSize, fullSize);
+		const image = new Jimp(fullSize, fullSize);
 
 		// Create the borders
 		const borderColor = Jimp.rgbaToInt(114, 137, 218, 255);
