@@ -46,7 +46,12 @@ const command: Command = {
 
 		const game = GAMES[Math.floor(Math.random() * GAMES.length)];
 
-		message.reply(`Le jeu sera **${game}** !`);
+		message.reply({
+			content: `Le jeu sera **${game}** !`,
+			allowedMentions: {
+				repliedUser: false,
+			},
+		});
 	},
 };
 
