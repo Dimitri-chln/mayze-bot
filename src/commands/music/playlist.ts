@@ -172,8 +172,8 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
-		const playlistName = interaction.options.getString("name");
-		if (!/^[\w-_]+$/.test(playlistName))
+		const playlistName = interaction.options.getString("name", false);
+		if (playlistName && !/^[\w-_]+$/.test(playlistName))
 			return interaction.followUp(translations.strings.invalid_name());
 
 		const { rows: playlists }: { rows: DatabasePlaylist[] } =

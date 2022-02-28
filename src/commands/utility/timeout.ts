@@ -29,7 +29,7 @@ const command: Command = {
 				name: "duration",
 				description: "La durée du timeout",
 				type: "STRING",
-				required: false,
+				required: true,
 			},
 		],
 		en: [
@@ -43,7 +43,7 @@ const command: Command = {
 				name: "duration",
 				description: "The timeout's duration",
 				type: "STRING",
-				required: false,
+				required: true,
 			},
 		],
 	},
@@ -60,19 +60,19 @@ const command: Command = {
 		)
 			return interaction.followUp(translations.strings.not_allowed());
 
-		const duration: number = dhms(
-			interaction.options.getString("duration", false),
+		const duration: number = Math.min(
+			dhms(interaction.options.getString("duration", true)),
+			28 * 60 * 1000, // 28 min
 		);
 
 		await member.timeout(
-			duration ?? 365 * 24 * 60 * 60 * 1000, // Defaults to 1 year
+			duration,
 			translations.strings.reason(interaction.user.tag),
 		);
 
 		interaction.followUp(
 			translations.strings.timed_out(
 				member.user.tag,
-				Boolean(duration),
 				formatTime(duration, translations.language),
 			),
 		);
