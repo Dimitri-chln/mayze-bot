@@ -62,7 +62,7 @@ const command: Command = {
 
 		const duration: number = Math.min(
 			dhms(interaction.options.getString("duration", true)),
-			28 * 60 * 1000, // 28 min
+			28 * 24 * 60 * 60 * 1000, // 28 days
 		);
 
 		await member.timeout(
