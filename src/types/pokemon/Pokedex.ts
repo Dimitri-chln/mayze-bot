@@ -24,13 +24,15 @@ export default class Pokedex {
 				names: rawPokemon.names,
 				nationalId: rawPokemon.national_id,
 				types: rawPokemon.types,
-				abilities: rawPokemon.abilities,
-				genderRatios: rawPokemon.gender_ratios,
 				catchRate: rawPokemon.catch_rate,
-				heightEu: rawPokemon.height_eu,
-				heightUs: rawPokemon.height_us,
-				weightEu: rawPokemon.weight_eu,
-				weightUs: rawPokemon.weight_us,
+				heightEu: `${rawPokemon.height} m`,
+				heightUs: `${Math.floor(rawPokemon.height * 3.281)}'${Math.round(
+					Math.round((rawPokemon.height * 3.281) % 12),
+				)
+					.toString()
+					.padStart(2, "0")}"`,
+				weightEu: `${rawPokemon.weight / 1000} kg`,
+				weightUs: `${rawPokemon.weight / 4536} lbs.`,
 				color: rawPokemon.color,
 				baseStats: {
 					hp: rawPokemon.base_stats.hp,
@@ -45,7 +47,6 @@ export default class Pokedex {
 						suffix: megaEvolution.suffix,
 						names: megaEvolution.names,
 						types: megaEvolution.types,
-						ability: megaEvolution.ability,
 						megaStone: megaEvolution.mega_stone,
 						heightEu: megaEvolution.height_eu,
 						heightUs: megaEvolution.height_us,

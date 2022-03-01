@@ -1,6 +1,6 @@
 {
 	"name": "mayze",
-	"version": "6.2.0",
+	"version": "6.3.0",
 	"description": "Le meilleur bot pour le meilleur clan",
 	"main": "dist/index.js",
 	"scripts": {

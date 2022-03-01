@@ -7,13 +7,9 @@ export interface RawPokemon {
 	names: RawPokemonNames;
 	national_id: number;
 	types: RawPokemonType[];
-	abilities: RawPokemonAbility[];
-	gender_ratios?: RawGenderRatios;
 	catch_rate: number;
-	height_eu: `${number} m`;
-	height_us: `${number}'${number}"`;
-	weight_eu: `${number} kg`;
-	weight_us: `${number} lbs.`;
+	height: number;
+	weight: number;
 	color: string;
 	base_stats: RawBaseStats;
 	evolution_from: string;
@@ -28,11 +24,9 @@ export default interface Pokemon {
 	names: PokemonNames;
 	nationalId: number;
 	types: PokemonType[];
-	abilities: PokemonAbility[];
-	genderRatios?: GenderRatios;
 	catchRate: number;
 	heightEu: `${number} m`;
-	heightUs: `${number}'${number}"`;
+	heightUs: `${number}'${string}"`;
 	weightEu: `${number} kg`;
 	weightUs: `${number} lbs.`;
 	color: string;
@@ -41,8 +35,8 @@ export default interface Pokemon {
 	variations: PokemonVariation[];
 	legendary: boolean;
 	ultraBeast: boolean;
-	evolutionFrom?(): Pokemon;
-	evolutions?(): Pokemon[];
+	evolutionFrom(): Pokemon;
+	evolutions(): Pokemon[];
 	evolutionLine(): EvolutionLine;
 	flatEvolutionLine(): Pokemon[];
 	stringEvolutionLine(language: Language): string;
@@ -80,16 +74,6 @@ type RawPokemonType =
 	| "Dark"
 	| "Fairy";
 
-interface RawPokemonAbility {
-	name: string;
-	hidden?: boolean;
-}
-
-interface RawGenderRatios {
-	male: number;
-	female: number;
-}
-
 interface RawBaseStats {
 	hp: number;
 	atk: number;
@@ -103,7 +87,6 @@ interface RawMegaEvolution {
 	suffix: "mega" | "megax" | "megay" | "primal";
 	names: RawPokemonNames;
 	types: RawPokemonType[];
-	ability: string;
 	mega_stone: string;
 	height_eu: `${number} m`;
 	height_us: `${number}'${number}"`;
@@ -116,7 +99,6 @@ interface RawPokemonVariation {
 	suffix: "alola";
 	names: RawPokemonNames;
 	types: RawPokemonType[];
-	abilities: RawPokemonAbility[];
 }
 
 interface PokemonNames {
@@ -144,16 +126,6 @@ export type PokemonType =
 	| "Dark"
 	| "Fairy";
 
-interface PokemonAbility {
-	name: string;
-	hidden?: boolean;
-}
-
-interface GenderRatios {
-	male: number;
-	female: number;
-}
-
 interface BaseStats {
 	hp: number;
 	atk: number;
@@ -167,7 +139,6 @@ export interface MegaEvolution {
 	suffix: "mega" | "megax" | "megay" | "primal";
 	names: PokemonNames;
 	types: PokemonType[];
-	ability: string;
 	megaStone: string;
 	heightEu: `${number} m`;
 	heightUs: `${number}'${number}"`;
@@ -180,5 +151,4 @@ export interface PokemonVariation {
 	suffix: "alola";
 	names: PokemonNames;
 	types: PokemonType[];
-	abilities: PokemonAbility[];
 }
