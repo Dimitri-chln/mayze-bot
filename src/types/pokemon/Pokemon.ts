@@ -1,6 +1,9 @@
-import { Snowflake } from "discord.js";
 import { EvolutionLine } from "../../utils/pokemon/pokemonEvolutionLine";
-import { FormatType, VariationType } from "../../utils/pokemon/pokemonInfo";
+import {
+	FormatType,
+	Variation,
+	VariationType,
+} from "../../utils/pokemon/pokemonInfo";
 import { Language } from "../structures/Translations";
 
 export interface RawPokemon {
@@ -45,16 +48,21 @@ export default interface Pokemon {
 	formatName(
 		language: Language,
 		shiny?: boolean,
-		variation?: VariationType,
+		variationType?: VariationType,
+		variation?: Variation,
 		format?: FormatType,
 	): string;
-	image(shiny: boolean, variation: VariationType): string;
+	image(
+		shiny?: boolean,
+		variationType?: VariationType,
+		variation?: Variation,
+	): string;
 }
 
-type RawPokemonNames = {
+interface RawPokemonNames {
 	en: string;
 	fr: string;
-};
+}
 
 type RawPokemonType =
 	| "Normal"
@@ -85,25 +93,25 @@ interface RawBaseStats {
 	speed: number;
 }
 
+interface RawPokemonVariation {
+	variation_type: "alola" | "galar";
+	variation: "default";
+	names: RawPokemonNames;
+	types: RawPokemonType[];
+}
+
 interface RawMegaEvolution {
-	suffix: "mega" | "megax" | "megay" | "primal";
+	variation_type: "mega";
+	variation: "megax" | "megay" | "primal";
 	names: RawPokemonNames;
 	types: RawPokemonType[];
 	mega_stone: string;
-	height_eu: `${number} m`;
-	height_us: `${number}'${number}"`;
-	weight_eu: `${number} kg`;
-	weight_us: `${number} lbs.`;
+	height: number;
+	weight: number;
 	base_stats: RawBaseStats;
 }
 
-interface RawPokemonVariation {
-	suffix: "alola";
-	names: RawPokemonNames;
-	types: RawPokemonType[];
-}
-
-interface PokemonNames {
+export interface PokemonNames {
 	en: string;
 	fr: string;
 }
@@ -128,7 +136,7 @@ export type PokemonType =
 	| "Dark"
 	| "Fairy";
 
-interface BaseStats {
+export interface BaseStats {
 	hp: number;
 	atk: number;
 	def: number;
@@ -137,20 +145,22 @@ interface BaseStats {
 	speed: number;
 }
 
+export interface PokemonVariation {
+	variationType: "alola" | "galar";
+	variation: "default";
+	names: PokemonNames;
+	types: PokemonType[];
+}
+
 export interface MegaEvolution {
-	suffix: "mega" | "megax" | "megay" | "primal";
+	variationType: "mega";
+	variation: "default" | "megax" | "megay" | "primal";
 	names: PokemonNames;
 	types: PokemonType[];
 	megaStone: string;
 	heightEu: `${number} m`;
-	heightUs: `${number}'${number}"`;
+	heightUs: `${number}'${string}"`;
 	weightEu: `${number} kg`;
 	weightUs: `${number} lbs.`;
 	baseStats: BaseStats;
-}
-
-export interface PokemonVariation {
-	suffix: "alola";
-	names: PokemonNames;
-	types: PokemonType[];
 }

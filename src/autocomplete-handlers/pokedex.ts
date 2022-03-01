@@ -21,7 +21,13 @@ const autocompleteHandler: AutocompleteHandler = {
 						.map((pokemon) => {
 							return {
 								name: pokemon.formatName(language, false, "default"),
-								value: pokemon.formatName(language, false, "default", "raw"),
+								value: pokemon.formatName(
+									language,
+									false,
+									"default",
+									"default",
+									"raw",
+								),
 							};
 						})
 						.concat(
@@ -31,37 +37,15 @@ const autocompleteHandler: AutocompleteHandler = {
 									name: pokemon.formatName(language, true, "default"),
 									value:
 										"Shiny " +
-										pokemon.formatName(language, true, "default", "raw"),
+										pokemon.formatName(
+											language,
+											true,
+											"default",
+											"default",
+											"raw",
+										),
 								};
 							}),
-						)
-						.concat(
-							// Alolan pokémons
-							pokemons
-								.filter((pokemon) =>
-									Util.pokedex.alolaPokemons.has(pokemon.nationalId),
-								)
-								.map((pokemon) => {
-									return {
-										name: pokemon.formatName(language, false, "alola"),
-										value: pokemon.formatName(language, true, "alola", "raw"),
-									};
-								}),
-						)
-						.concat(
-							// Shiny alolan pokémons
-							pokemons
-								.filter((pokemon) =>
-									Util.pokedex.alolaPokemons.has(pokemon.nationalId),
-								)
-								.map((pokemon) => {
-									return {
-										name: pokemon.formatName(language, true, "alola"),
-										value:
-											"Shiny " +
-											pokemon.formatName(language, true, "alola", "raw"),
-									};
-								}),
 						)
 						.concat(
 							// Mega pokémons
@@ -75,12 +59,14 @@ const autocompleteHandler: AutocompleteHandler = {
 											name: pokemon.formatName(
 												language,
 												false,
-												megaEvolution.suffix,
+												megaEvolution.variationType,
+												megaEvolution.variation,
 											),
 											value: pokemon.formatName(
 												language,
 												true,
-												megaEvolution.suffix,
+												megaEvolution.variationType,
+												megaEvolution.variation,
 												"raw",
 											),
 										};
@@ -99,18 +85,100 @@ const autocompleteHandler: AutocompleteHandler = {
 											name: pokemon.formatName(
 												language,
 												true,
-												megaEvolution.suffix,
+												megaEvolution.variationType,
+												megaEvolution.variation,
 											),
 											value:
 												"Shiny " +
 												pokemon.formatName(
 													language,
 													true,
-													megaEvolution.suffix,
+													megaEvolution.variationType,
+													megaEvolution.variation,
 													"raw",
 												),
 										};
 									});
+								}),
+						)
+						.concat(
+							// Alolan pokémons
+							pokemons
+								.filter((pokemon) =>
+									Util.pokedex.alolaPokemons.has(pokemon.nationalId),
+								)
+								.map((pokemon) => {
+									return {
+										name: pokemon.formatName(language, false, "alola"),
+										value: pokemon.formatName(
+											language,
+											true,
+											"alola",
+											"default",
+											"raw",
+										),
+									};
+								}),
+						)
+						.concat(
+							// Shiny alolan pokémons
+							pokemons
+								.filter((pokemon) =>
+									Util.pokedex.alolaPokemons.has(pokemon.nationalId),
+								)
+								.map((pokemon) => {
+									return {
+										name: pokemon.formatName(language, true, "alola"),
+										value:
+											"Shiny " +
+											pokemon.formatName(
+												language,
+												true,
+												"alola",
+												"default",
+												"raw",
+											),
+									};
+								}),
+						)
+						.concat(
+							// Galarian pokémons
+							pokemons
+								.filter((pokemon) =>
+									Util.pokedex.galarPokemons.has(pokemon.nationalId),
+								)
+								.map((pokemon) => {
+									return {
+										name: pokemon.formatName(language, false, "galar"),
+										value: pokemon.formatName(
+											language,
+											true,
+											"galar",
+											"default",
+											"raw",
+										),
+									};
+								}),
+						)
+						.concat(
+							// Shiny galarian pokémons
+							pokemons
+								.filter((pokemon) =>
+									Util.pokedex.galarPokemons.has(pokemon.nationalId),
+								)
+								.map((pokemon) => {
+									return {
+										name: pokemon.formatName(language, true, "galar"),
+										value:
+											"Shiny " +
+											pokemon.formatName(
+												language,
+												true,
+												"galar",
+												"default",
+												"raw",
+											),
+									};
 								}),
 						)
 				);
@@ -130,7 +198,13 @@ const autocompleteHandler: AutocompleteHandler = {
 				return pokemons.map((pokemon) => {
 					return {
 						name: pokemon.formatName(language, false, "default"),
-						value: pokemon.formatName(language, false, "default", "raw"),
+						value: pokemon.formatName(
+							language,
+							false,
+							"default",
+							"default",
+							"raw",
+						),
 					};
 				});
 			},

@@ -1,5 +1,5 @@
 import { Snowflake } from "discord.js";
-import { VariationType } from "../../utils/pokemon/pokemonInfo";
+import { VariationType, Variation } from "../../utils/pokemon/pokemonInfo";
 import { Language } from "./Translations";
 
 export interface DatabaseAfkUser {
@@ -110,9 +110,10 @@ export interface DatabasePlaylist {
 }
 
 export interface DatabasePokemon {
-	pokedex_id: number;
+	national_id: number;
 	shiny: boolean;
-	variation: VariationType;
+	variation_type: VariationType;
+	variation: Variation;
 	users: {
 		[K: Snowflake]: {
 			caught: number;

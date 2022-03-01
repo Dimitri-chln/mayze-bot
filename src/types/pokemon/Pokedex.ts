@@ -1,3 +1,5 @@
+import { Language } from "../structures/Translations";
+
 import {
 	evolutionLine,
 	flatEvolutionLine,
@@ -8,13 +10,14 @@ import Pokemon, {
 	PokemonVariation,
 	RawPokemon,
 } from "./Pokemon";
-import { Language } from "../structures/Translations";
 import {
 	formatName,
 	FormatType,
 	pokemonImage,
+	Variation,
 	VariationType,
 } from "../../utils/pokemon/pokemonInfo";
+
 import { Collection } from "discord.js";
 
 export default class Pokedex {
@@ -27,7 +30,7 @@ export default class Pokedex {
 				catchRate: rawPokemon.catch_rate,
 				heightEu: `${rawPokemon.height} m`,
 				heightUs: `${Math.floor(rawPokemon.height * 3.281)}'${Math.round(
-					Math.round((rawPokemon.height * 3.281) % 12),
+					(rawPokemon.height * 3.281) % 12,
 				)
 					.toString()
 					.padStart(2, "0")}"`,
@@ -42,27 +45,43 @@ export default class Pokedex {
 					spDef: rawPokemon.base_stats.sp_def,
 					speed: rawPokemon.base_stats.speed,
 				},
-				megaEvolutions: rawPokemon.mega_evolutions.map((megaEvolution) => {
-					return {
-						suffix: megaEvolution.suffix,
-						names: megaEvolution.names,
-						types: megaEvolution.types,
-						megaStone: megaEvolution.mega_stone,
-						heightEu: megaEvolution.height_eu,
-						heightUs: megaEvolution.height_us,
-						weightEu: megaEvolution.weight_eu,
-						weightUs: megaEvolution.weight_us,
-						baseStats: {
-							hp: megaEvolution.base_stats.hp,
-							atk: megaEvolution.base_stats.atk,
-							def: megaEvolution.base_stats.def,
-							spAtk: megaEvolution.base_stats.sp_atk,
-							spDef: megaEvolution.base_stats.sp_def,
-							speed: megaEvolution.base_stats.speed,
-						},
-					};
-				}),
-				variations: rawPokemon.variations,
+				megaEvolutions: rawPokemon.mega_evolutions.map(
+					(megaEvolution): MegaEvolution => {
+						return {
+							variationType: megaEvolution.variation_type,
+							variation: megaEvolution.variation,
+							names: megaEvolution.names,
+							types: megaEvolution.types,
+							megaStone: megaEvolution.mega_stone,
+							heightEu: `${megaEvolution.height} m`,
+							heightUs: `${Math.floor(
+								megaEvolution.height * 3.281,
+							)}'${Math.round((rawPokemon.height * 3.281) % 12)
+								.toString()
+								.padStart(2, "0")}"`,
+							weightEu: `${megaEvolution.weight / 1000} kg`,
+							weightUs: `${megaEvolution.weight / 4536} lbs.`,
+							baseStats: {
+								hp: megaEvolution.base_stats.hp,
+								atk: megaEvolution.base_stats.atk,
+								def: megaEvolution.base_stats.def,
+								spAtk: megaEvolution.base_stats.sp_atk,
+								spDef: megaEvolution.base_stats.sp_def,
+								speed: megaEvolution.base_stats.speed,
+							},
+						};
+					},
+				),
+				variations: rawPokemon.variations.map(
+					(rawPokemonVariation): PokemonVariation => {
+						return {
+							variationType: rawPokemonVariation.variation_type,
+							variation: rawPokemonVariation.variation,
+							names: rawPokemonVariation.names,
+							types: rawPokemonVariation.types,
+						};
+					},
+				),
 				legendary: rawPokemon.legendary,
 				ultraBeast: rawPokemon.ultra_beast,
 				generation: rawPokemon.generation,
@@ -78,18 +97,29 @@ export default class Pokedex {
 				formatName: (
 					language: Language,
 					shiny?: boolean,
-					variation?: VariationType,
+					variationType?: VariationType,
+					variation?: Variation,
 					format?: FormatType,
 				) =>
 					formatName(
 						this.findById(rawPokemon.national_id),
 						shiny,
+						variationType,
 						variation,
 						language,
 						format,
 					),
-				image: (shiny: boolean, variation: VariationType) =>
-					pokemonImage(this.findById(rawPokemon.national_id), shiny, variation),
+				image: (
+					shiny?: boolean,
+					variationType?: VariationType,
+					variation?: Variation,
+				) =>
+					pokemonImage(
+						this.findById(rawPokemon.national_id),
+						shiny,
+						variationType,
+						variation,
+					),
 			};
 
 			return pokemon;
@@ -105,7 +135,19 @@ export default class Pokedex {
 	static alolaPokemons: Collection<number, Pokemon> = new Collection(
 		this.pokemons
 			.filter((pokemon) =>
-				pokemon.variations.some((variation) => variation.suffix === "alola"),
+				pokemon.variations.some(
+					(variation) => variation.variationType === "alola",
+				),
+			)
+			.map((pokemon) => [pokemon.nationalId, pokemon]),
+	);
+
+	static galarPokemons: Collection<number, Pokemon> = new Collection(
+		this.pokemons
+			.filter((pokemon) =>
+				pokemon.variations.some(
+					(variation) => variation.variationType === "galar",
+				),
 			)
 			.map((pokemon) => [pokemon.nationalId, pokemon]),
 	);
@@ -125,10 +167,13 @@ export default class Pokedex {
 	static findByNameWithVariation(name: string): PokemonWithVariation {
 		const shiny = /\bshiny\b/i.test(name);
 
-		name = name.replace(/\bshiny\b/i, "").trim();
+		name = name
+			.replace(/\bshiny\b/i, "")
+			.replace(/ +/g, " ")
+			.trim();
 
 		let pokemon = this.findByName(name);
-		let variation: MegaEvolution | PokemonVariation;
+		let pokemonVariation: PokemonVariation | MegaEvolution;
 
 		// Mega evolutions
 		if (!pokemon) {
@@ -141,7 +186,7 @@ export default class Pokedex {
 			);
 
 			if (pokemon)
-				variation = pokemon.megaEvolutions.find((megaEvolution) =>
+				pokemonVariation = pokemon.megaEvolutions.find((megaEvolution) =>
 					Object.values(megaEvolution.names).some(
 						(n) => n.toLowerCase() === name?.toLowerCase(),
 					),
@@ -159,7 +204,7 @@ export default class Pokedex {
 			);
 
 			if (pokemon)
-				variation = pokemon.variations.find((variation) =>
+				pokemonVariation = pokemon.variations.find((variation) =>
 					Object.values(variation.names).some(
 						(n) => n.toLowerCase() === name?.toLowerCase(),
 					),
@@ -171,12 +216,11 @@ export default class Pokedex {
 		return {
 			pokemon: pokemon,
 			shiny: shiny,
-			variationType: variation?.suffix ?? "default",
-			variation: variation,
+			pokemonVariation: pokemonVariation,
 		};
 	}
 
-	static catchRates = this.pokemons.map(
+	static defaultCatchRates = this.pokemons.map(
 		(pokemon, i, dex) =>
 			pokemon.catchRate +
 			dex.slice(0, i).reduce((sum, p) => sum + p.catchRate, 0),
@@ -186,6 +230,5 @@ export default class Pokedex {
 interface PokemonWithVariation {
 	pokemon: Pokemon;
 	shiny: boolean;
-	variationType: VariationType;
-	variation: MegaEvolution | PokemonVariation;
+	pokemonVariation: PokemonVariation | MegaEvolution;
 }

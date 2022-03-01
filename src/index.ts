@@ -16,6 +16,31 @@ import Event from "./types/structures/Event";
 import PlayDl from "play-dl";
 import AutocompleteHandler from "./types/structures/AutocompleteHandler";
 
+// import { DatabasePokemon } from "./types/structures/Database";
+// setTimeout(
+// 	() =>
+// 		Util.database
+// 			.query("SELECT * FROM pokemon")
+// 			.then(({ rows }: { rows: DatabasePokemon[] }) => {
+// 				for (const row of rows) {
+// 					Util.database
+// 						.query("INSERT INTO pkm VALUES ($1, $2, $3, $4, $5)", [
+// 							row.pokedex_id,
+// 							row.shiny,
+// 							["megax", "megay", "primal"].includes(row.variation)
+// 								? "mega"
+// 								: row.variation,
+// 							["megax", "megay", "primal"].includes(row.variation)
+// 								? row.variation
+// 								: "default",
+// 							row.users,
+// 						])
+// 						.then(() => console.log(row.pokedex_id));
+// 				}
+// 			}),
+// 	10_000,
+// );
+
 // Database
 connectDatabase();
 

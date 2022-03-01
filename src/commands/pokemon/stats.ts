@@ -90,6 +90,10 @@ const command: Command = {
 										name: "Pokémons d'Alola",
 										value: "alola",
 									},
+									{
+										name: "Pokémons de Galar",
+										value: "galar",
+									},
 								],
 							},
 						],
@@ -167,6 +171,10 @@ const command: Command = {
 										name: "Alolan pokémons",
 										value: "alola",
 									},
+									{
+										name: "Galarian pokémons",
+										value: "galar",
+									},
 								],
 							},
 						],
@@ -198,7 +206,7 @@ const command: Command = {
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
 							FROM pokemon, jsonb_each(users)
-							WHERE shiny = false AND variation = 'default'
+							WHERE shiny = false AND variation_type = 'default'
 							`,
 						);
 						description += translations.strings.normal(
@@ -216,7 +224,7 @@ const command: Command = {
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
 							FROM pokemon, jsonb_each(users)
-							WHERE shiny AND variation = 'default'
+							WHERE shiny AND variation_type = 'default'
 							`,
 						);
 						description += translations.strings.shiny(
@@ -226,14 +234,14 @@ const command: Command = {
 						const { rows: allNormal }: { rows: DatabasePokemon[] } =
 							await Util.database.query(
 								`
-							SELECT pokedex_id, users
+							SELECT national_id, users
 							FROM pokemon
-							WHERE shiny = false AND variation = 'default'
+							WHERE shiny = false AND variation_type = 'default'
 							`,
 							);
 
 						const legendary = allNormal.filter(
-							(pokemon) => Util.pokedex.findById(pokemon.pokedex_id).legendary,
+							(pokemon) => Util.pokedex.findById(pokemon.national_id).legendary,
 						);
 						const legendaryTotal = legendary.reduce(
 							(total, pkm) =>
@@ -249,7 +257,8 @@ const command: Command = {
 						);
 
 						const ultraBeast = allNormal.filter(
-							(pokemon) => Util.pokedex.findById(pokemon.pokedex_id).ultraBeast,
+							(pokemon) =>
+								Util.pokedex.findById(pokemon.national_id).ultraBeast,
 						);
 						const ultraBeastTotal = ultraBeast.reduce(
 							(total, pkm) =>
@@ -267,14 +276,14 @@ const command: Command = {
 						const { rows: allShiny }: { rows: DatabasePokemon[] } =
 							await Util.database.query(
 								`
-							SELECT pokedex_id, users
+							SELECT national_id, users
 							FROM pokemon
-							WHERE shiny AND variation = 'default'
+							WHERE shiny AND variation_type = 'default'
 							`,
 							);
 
 						const legendaryShiny = allShiny.filter(
-							(pokemon) => Util.pokedex.findById(pokemon.pokedex_id).legendary,
+							(pokemon) => Util.pokedex.findById(pokemon.national_id).legendary,
 						);
 						const legendaryShinyTotal = legendaryShiny.reduce(
 							(total, pkm) =>
@@ -290,7 +299,8 @@ const command: Command = {
 						);
 
 						const ultraBeastShiny = allShiny.filter(
-							(pokemon) => Util.pokedex.findById(pokemon.pokedex_id).ultraBeast,
+							(pokemon) =>
+								Util.pokedex.findById(pokemon.national_id).ultraBeast,
 						);
 						const ultraBeastShinyTotal = ultraBeastShiny.reduce(
 							(total, pkm) =>
@@ -306,42 +316,6 @@ const command: Command = {
 						);
 
 						const {
-							rows: [alola],
-						}: {
-							rows: Omit<
-								DatabasePokemonWithCaughtStats,
-								keyof DatabasePokemon
-							>[];
-						} = await Util.database.query(
-							`
-							SELECT SUM((value -> 'caught')::int)::int AS total
-							FROM pokemon, jsonb_each(users)
-							WHERE shiny = false AND variation = 'alola'
-							`,
-						);
-						description += translations.strings.alola(
-							(alola.total ?? 0).toString(),
-						);
-
-						const {
-							rows: [alolaShiny],
-						}: {
-							rows: Omit<
-								DatabasePokemonWithCaughtStats,
-								keyof DatabasePokemon
-							>[];
-						} = await Util.database.query(
-							`
-							SELECT SUM((value -> 'caught')::int)::int AS total
-							FROM pokemon, jsonb_each(users)
-							WHERE shiny AND variation = 'alola'
-							`,
-						);
-						description += translations.strings.alola_shiny(
-							(alolaShiny.total ?? 0).toString(),
-						);
-
-						const {
 							rows: [mega],
 						}: {
 							rows: Omit<
@@ -352,7 +326,7 @@ const command: Command = {
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
 							FROM pokemon, jsonb_each(users)
-							WHERE shiny = false AND variation = ANY('{ "mega", "megax", "megay", "primal" }')
+							WHERE shiny = false AND variation_type = 'mega'
 							`,
 						);
 						description += translations.strings.mega(
@@ -370,11 +344,83 @@ const command: Command = {
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
 							FROM pokemon, jsonb_each(users)
-							WHERE shiny AND variation = ANY('{ "mega", "megax", "megay", "primal" }')
+							WHERE shiny AND variation = 'mega'
 							`,
 						);
 						description += translations.strings.mega_shiny(
 							(megaShiny.total ?? 0).toString(),
+						);
+
+						const {
+							rows: [alola],
+						}: {
+							rows: Omit<
+								DatabasePokemonWithCaughtStats,
+								keyof DatabasePokemon
+							>[];
+						} = await Util.database.query(
+							`
+							SELECT SUM((value -> 'caught')::int)::int AS total
+							FROM pokemon, jsonb_each(users)
+							WHERE shiny = false AND variation_type = 'alola'
+							`,
+						);
+						description += translations.strings.alola(
+							(alola.total ?? 0).toString(),
+						);
+
+						const {
+							rows: [alolaShiny],
+						}: {
+							rows: Omit<
+								DatabasePokemonWithCaughtStats,
+								keyof DatabasePokemon
+							>[];
+						} = await Util.database.query(
+							`
+							SELECT SUM((value -> 'caught')::int)::int AS total
+							FROM pokemon, jsonb_each(users)
+							WHERE shiny AND variation_type = 'alola'
+							`,
+						);
+						description += translations.strings.alola_shiny(
+							(alolaShiny.total ?? 0).toString(),
+						);
+
+						const {
+							rows: [galar],
+						}: {
+							rows: Omit<
+								DatabasePokemonWithCaughtStats,
+								keyof DatabasePokemon
+							>[];
+						} = await Util.database.query(
+							`
+							SELECT SUM((value -> 'caught')::int)::int AS total
+							FROM pokemon, jsonb_each(users)
+							WHERE shiny = false AND variation_type = 'galar'
+							`,
+						);
+						description += translations.strings.galar(
+							(galar.total ?? 0).toString(),
+						);
+
+						const {
+							rows: [galarShiny],
+						}: {
+							rows: Omit<
+								DatabasePokemonWithCaughtStats,
+								keyof DatabasePokemon
+							>[];
+						} = await Util.database.query(
+							`
+							SELECT SUM((value -> 'caught')::int)::int AS total
+							FROM pokemon, jsonb_each(users)
+							WHERE shiny AND variation_type = 'galar'
+							`,
+						);
+						description += translations.strings.galar_shiny(
+							(galarShiny.total ?? 0).toString(),
 						);
 
 						const {
@@ -434,7 +480,7 @@ const command: Command = {
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
 							FROM pokemon, jsonb_each(users)
-							WHERE pokedex_id = $1 AND shiny = false AND variation = 'default'
+							WHERE national_id = $1 AND shiny = false AND variation_type = 'default'
 							`,
 							[pokemon.nationalId],
 						);
@@ -454,7 +500,7 @@ const command: Command = {
 							`
 							SELECT SUM((value -> 'caught')::int)::int AS total
 							FROM pokemon, jsonb_each(users)
-							WHERE pokedex_id = $1 AND shiny = true AND variation = 'default'
+							WHERE national_id = $1 AND shiny = true AND variation_type = 'default'
 							`,
 							[pokemon.nationalId],
 						);
@@ -475,7 +521,7 @@ const command: Command = {
 								`
 								SELECT SUM((value -> 'caught')::int)::int AS total
 								FROM pokemon, jsonb_each(users)
-								WHERE pokedex_id = $1 AND shiny = false AND variation = 'alola'
+								WHERE national_id = $1 AND shiny = false AND variation_type = 'alola'
 								`,
 								[pokemon.nationalId],
 							);
@@ -495,7 +541,7 @@ const command: Command = {
 								`
 								SELECT SUM((value -> 'caught')::int)::int AS total
 								FROM pokemon, jsonb_each(users)
-								WHERE pokedex_id = $1 AND shiny = true AND variation = 'alola'
+								WHERE national_id = $1 AND shiny = true AND variation_type = 'alola'
 								`,
 								[pokemon.nationalId],
 							);
@@ -517,7 +563,7 @@ const command: Command = {
 								`
 								SELECT SUM((value -> 'caught')::int)::int AS total
 								FROM pokemon, jsonb_each(users)
-								WHERE pokedex_id = $1 AND shiny = false AND variation = ANY('{ "mega", "megax", "megay", "primal" }')
+								WHERE national_id = $1 AND shiny = false AND variation_type = 'mega'
 								`,
 								[pokemon.nationalId],
 							);
@@ -537,7 +583,7 @@ const command: Command = {
 								`
 								SELECT SUM((value -> 'caught')::int)::int AS total
 								FROM pokemon, jsonb_each(users)
-								WHERE pokedex_id = $1 AND shiny = false AND variation = ANY('{ "mega", "megax", "megay", "primal" }')
+								WHERE national_id = $1 AND shiny = false AND variation_type = 'mega'
 								`,
 								[pokemon.nationalId],
 							);
@@ -574,38 +620,40 @@ const command: Command = {
 						const shiny = Boolean(
 							interaction.options.getBoolean("shiny", false),
 						);
-						const variation: VariationType =
+
+						const variationType: VariationType =
 							(interaction.options.getString("variation", false) as
 								| "mega"
-								| "alola") ?? "default";
+								| "alola"
+								| "galar") ?? "default";
 
 						let { rows: pokemons }: { rows: DatabasePokemonWithCaughtStats[] } =
 							await Util.database.query(
 								`
-							SELECT pokedex_id, shiny, variation, SUM((value -> 'caught')::int)::int AS total
+							SELECT national_id, shiny, variation_type, SUM((value -> 'caught')::int)::int AS total
 							FROM pokemon, jsonb_each(users)
-							WHERE shiny = $1 AND variation = $2
-							GROUP BY pokedex_id, shiny, variation
-							ORDER BY total DESC, pokedex_id ASC
+							WHERE shiny = $1 AND variation_type = $2
+							GROUP BY (national_id, shiny, variation_type)
+							ORDER BY total DESC, national_id ASC
 							`,
-								[shiny, variation],
+								[shiny, variationType],
 							);
 
 						pokemons = pokemons.filter((pkm) => {
 							if (
 								interaction.options.getBoolean("legendary", false) &&
-								!Util.pokedex.findById(pkm.pokedex_id).legendary
+								!Util.pokedex.findById(pkm.national_id).legendary
 							)
 								return false;
 							if (
 								interaction.options.getBoolean("ultra-beast", false) &&
-								!Util.pokedex.findById(pkm.pokedex_id).ultraBeast
+								!Util.pokedex.findById(pkm.national_id).ultraBeast
 							)
 								return false;
 
 							if (
 								interaction.options.getInteger("generation", false) &&
-								Util.pokedex.findById(pkm.pokedex_id).generation !==
+								Util.pokedex.findById(pkm.national_id).generation !==
 									interaction.options.getInteger("generation", false)
 							)
 								return false;
@@ -650,11 +698,12 @@ const command: Command = {
 												translations.strings.most_caught_description(
 													(i + j + 1).toString(),
 													Util.pokedex
-														.findById(pokemon.pokedex_id)
+														.findById(pokemon.national_id)
 														.formatName(
 															translations.language,
 															shiny,
-															variation,
+															pokemon.variation_type,
+															pokemon.variation,
 														),
 													pokemon.total.toString(),
 												),

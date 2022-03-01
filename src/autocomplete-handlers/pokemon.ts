@@ -29,6 +29,7 @@ const autocompleteHandler: AutocompleteHandler = {
 							pokemon.data.formatName(
 								language,
 								pokemon.shiny,
+								pokemon.variationType,
 								pokemon.variation,
 							) + (pokemon.nickname ? ` - "${pokemon.nickname}"` : ""),
 						value:
@@ -36,6 +37,7 @@ const autocompleteHandler: AutocompleteHandler = {
 							pokemon.data.formatName(
 								language,
 								pokemon.shiny,
+								pokemon.variationType,
 								pokemon.variation,
 								"raw",
 							),
@@ -65,6 +67,7 @@ const autocompleteHandler: AutocompleteHandler = {
 							pokemon.data.formatName(
 								language,
 								pokemon.shiny,
+								pokemon.variationType,
 								pokemon.variation,
 							) + (pokemon.nickname ? ` - "${pokemon.nickname}"` : ""),
 						value:
@@ -72,6 +75,7 @@ const autocompleteHandler: AutocompleteHandler = {
 							pokemon.data.formatName(
 								language,
 								pokemon.shiny,
+								pokemon.variationType,
 								pokemon.variation,
 								"raw",
 							),
@@ -101,6 +105,7 @@ const autocompleteHandler: AutocompleteHandler = {
 							pokemon.data.formatName(
 								language,
 								pokemon.shiny,
+								pokemon.variationType,
 								pokemon.variation,
 							) + (pokemon.nickname ? ` - "${pokemon.nickname}"` : ""),
 						value:
@@ -108,6 +113,7 @@ const autocompleteHandler: AutocompleteHandler = {
 							pokemon.data.formatName(
 								language,
 								pokemon.shiny,
+								pokemon.variationType,
 								pokemon.variation,
 								"raw",
 							),
@@ -129,7 +135,13 @@ const autocompleteHandler: AutocompleteHandler = {
 				return pokemons.map((pokemon) => {
 					return {
 						name: pokemon.formatName(language, false, "default"),
-						value: pokemon.formatName(language, false, "default", "raw"),
+						value: pokemon.formatName(
+							language,
+							false,
+							"default",
+							"default",
+							"raw",
+						),
 					};
 				});
 			},
@@ -148,7 +160,13 @@ const autocompleteHandler: AutocompleteHandler = {
 				return pokemons.map((pokemon) => {
 					return {
 						name: pokemon.formatName(language, false, "default"),
-						value: pokemon.formatName(language, false, "default", "raw"),
+						value: pokemon.formatName(
+							language,
+							false,
+							"default",
+							"default",
+							"raw",
+						),
 					};
 				});
 			},

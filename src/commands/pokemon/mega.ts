@@ -39,7 +39,7 @@ const command: Command = {
 						choices: [
 							{
 								name: "Méga",
-								value: "mega",
+								value: "default",
 							},
 							{
 								name: "Méga X",
@@ -84,7 +84,7 @@ const command: Command = {
 						choices: [
 							{
 								name: "Mega",
-								value: "mega",
+								value: "default",
 							},
 							{
 								name: "Mega X",
@@ -130,12 +130,16 @@ const command: Command = {
 				if (!pokemon)
 					return interaction.followUp(translations.strings.invalid_pokemon());
 
-				const megaType = interaction.options.getString("type", true);
+				const megaType = interaction.options.getString("type", true) as
+					| "default"
+					| "megax"
+					| "megay"
+					| "primal";
 
 				const {
 					rows: [pokemonData],
 				}: { rows: DatabasePokemon[] } = await Util.database.query(
-					"SELECT * FROM pokemon WHERE pokedex_id = $1 AND shiny = $2 AND variation = 'default' AND users ? $3",
+					"SELECT * FROM pokemon WHERE national_id = $1 AND shiny = $2 AND variation_type = 'default' AND users ? $3",
 					[pokemon.nationalId, shiny, interaction.user.id],
 				);
 
@@ -143,7 +147,7 @@ const command: Command = {
 					return interaction.followUp(translations.strings.pokemon_not_owned());
 
 				const megaEvolution = pokemon.megaEvolutions.find(
-					(mega) => mega.suffix === megaType,
+					(mega) => mega.variation === megaType,
 				);
 
 				if (!megaEvolution)
@@ -179,19 +183,20 @@ const command: Command = {
 
 				Util.database.query(
 					`
-					INSERT INTO pokemon VALUES ($1, $2, $3, $4)
-					ON CONFLICT (pokedex_id, shiny, variation)
+					INSERT INTO pokemon VALUES ($1, $2, $3, $4, $5)
+					ON CONFLICT (national_id, shiny, variation_type, variation)
 					DO UPDATE SET users =
 						CASE
-							WHEN pokemon.users -> $5 IS NULL THEN jsonb_set(pokemon.users, '{${interaction.user.id}}', $6)
-							ELSE jsonb_set(pokemon.users, '{${interaction.user.id}, caught}', ((pokemon.users -> $5 -> 'caught')::int + 1)::text::jsonb)
+							WHEN pokemon.users -> $6 IS NULL THEN jsonb_set(pokemon.users, '{${interaction.user.id}}', $7)
+							ELSE jsonb_set(pokemon.users, '{${interaction.user.id}, caught}', ((pokemon.users -> $6 -> 'caught')::int + 1)::text::jsonb)
 						END
-					WHERE pokemon.pokedex_id = EXCLUDED.pokedex_id AND pokemon.shiny = EXCLUDED.shiny AND pokemon.variation = EXCLUDED.variation
+					WHERE pokemon.national_id = EXCLUDED.national_id AND pokemon.shiny = EXCLUDED.shiny AND pokemon.variation = EXCLUDED.variation
 					`,
 					[
 						pokemon.nationalId,
 						shiny,
-						megaEvolution.suffix,
+						megaEvolution.variationType,
+						megaEvolution.variation,
 						defaultData,
 						interaction.user.id,
 						defaultUserData,
@@ -206,7 +211,7 @@ const command: Command = {
 							WHEN (users -> $1 -> 'caught')::int = 1 THEN users - $1
 							ELSE jsonb_set(users, '{${interaction.user.id}, caught}', ((users -> $1 -> 'caught')::int - 1)::text::jsonb)
 						END
-					WHERE pokedex_id = $2 AND shiny = $3 AND variation = $4
+					WHERE national_id = $2 AND shiny = $3 AND variation_type = $4
 					`,
 					[interaction.user.id, pokemon.nationalId, shiny, "default"],
 				);
@@ -237,14 +242,21 @@ const command: Command = {
 				interaction.editReply({
 					embeds: [
 						reply.embeds[0]
-							.setThumbnail(pokemon.image(shiny, megaEvolution.suffix))
+							.setThumbnail(
+								pokemon.image(
+									shiny,
+									megaEvolution.variationType,
+									megaEvolution.variation,
+								),
+							)
 							.setDescription(
 								translations.strings.evolved(
 									pokemon.formatName(translations.language, shiny, "default"),
 									pokemon.formatName(
 										translations.language,
 										shiny,
-										megaEvolution.suffix,
+										megaEvolution.variationType,
+										megaEvolution.variation,
 									),
 								),
 							),

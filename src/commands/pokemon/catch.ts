@@ -11,6 +11,7 @@ import {
 	DatabasePokemon,
 	DatabaseUpgrades,
 } from "../../types/structures/Database";
+import { MegaEvolution } from "../../types/pokemon/Pokemon";
 
 const command: Command = {
 	name: "catch",
@@ -31,7 +32,8 @@ const command: Command = {
 
 	runInteraction: async (interaction, translations) => {
 		const SHINY_FREQUENCY = 0.004,
-			ALOLAN_FREQUENCY = 0.05,
+			ALOLA_FREQUENCY = 0.05,
+			GALAR_FREQUENCY = 0.05,
 			MEGA_GEM_FREQUENCY = 0.02;
 
 		const UPGRADES_BENEFITS = {
@@ -151,17 +153,25 @@ const command: Command = {
 					UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_probability) /
 						100);
 
-		const variation: VariationType =
+		const variationType: VariationType =
 			Util.pokedex.alolaPokemons.has(randomPokemon.nationalId) &&
-			Math.random() < ALOLAN_FREQUENCY
+			Math.random() < ALOLA_FREQUENCY
 				? "alola"
+				: Util.pokedex.galarPokemons.has(randomPokemon.nationalId) &&
+				  Math.random() < GALAR_FREQUENCY
+				? "galar"
 				: "default";
 
 		const catchReward = Math.round(
 			Util.config.CATCH_REWARD *
 				((255 / randomPokemon.catchRate) *
 					(shiny ? Util.config.SHINY_REWARD_MULTIPLIER : 1) *
-					(variation === "alola" ? Util.config.ALOLAN_REWARD_MULTIPLIER : 1)),
+					(variationType === "alola"
+						? Util.config.ALOLA_REWARD_MULTIPLIER
+						: 1) *
+					(variationType === "galar"
+						? Util.config.GALAR_REWARD_MULTIPLIER
+						: 1)),
 		);
 
 		const defaultUserData = {
@@ -176,20 +186,21 @@ const command: Command = {
 			rows: [{ caught: caughtTotal }],
 		} = await Util.database.query(
 			`
-			INSERT INTO pokemon VALUES ($1, $2, $3, $4)
-			ON CONFLICT (pokedex_id, shiny, variation)
+			INSERT INTO pokemon VALUES ($1, $2, $3, $4, $5)
+			ON CONFLICT (national_id, shiny, variation_type, variation)
 			DO UPDATE SET users =
 				CASE
-					WHEN pokemon.users -> $5 IS NULL THEN jsonb_set(pokemon.users, '{${interaction.user.id}}', $6)
-					ELSE jsonb_set(pokemon.users, '{${interaction.user.id}, caught}', ((pokemon.users -> $5 -> 'caught')::int + 1)::text::jsonb)
+					WHEN pokemon.users -> $6 IS NULL THEN jsonb_set(pokemon.users, '{${interaction.user.id}}', $7)
+					ELSE jsonb_set(pokemon.users, '{${interaction.user.id}, caught}', ((pokemon.users -> $6 -> 'caught')::int + 1)::text::jsonb)
 				END
-			WHERE pokemon.pokedex_id = EXCLUDED.pokedex_id AND pokemon.shiny = EXCLUDED.shiny AND pokemon.variation = EXCLUDED.variation
-			RETURNING (users -> $5 -> 'caught')::int AS caught
+			WHERE pokemon.national_id = EXCLUDED.national_id AND pokemon.shiny = EXCLUDED.shiny AND pokemon.variation = EXCLUDED.variation
+			RETURNING (users -> $6 -> 'caught')::int AS caught
 			`,
 			[
 				randomPokemon.nationalId,
 				shiny,
-				variation,
+				variationType,
+				"default",
 				defaultData,
 				interaction.user.id,
 				defaultUserData,
@@ -226,7 +237,7 @@ const command: Command = {
 						iconURL: pokeball,
 					},
 					image: {
-						url: randomPokemon.image(shiny, variation),
+						url: randomPokemon.image(shiny, variationType),
 					},
 					color: shiny
 						? 0xf3d508
@@ -237,9 +248,20 @@ const command: Command = {
 						translations.strings.caught_title(
 							interaction.user.toString(),
 							!shiny &&
-								(variation === "alola" ||
-									/^[aeiou]/i.test(randomPokemon.names[translations.language])),
-							randomPokemon.formatName(translations.language, shiny, variation),
+								/^[aeiou]/i.test(
+									randomPokemon.formatName(
+										translations.language,
+										shiny,
+										variationType,
+										"default",
+										"raw",
+									),
+								),
+							randomPokemon.formatName(
+								translations.language,
+								shiny,
+								variationType,
+							),
 							catchReward.toString(),
 						) + (megaGem ? translations.strings.mega_gem(megaGem) : ""),
 					footer: {
@@ -270,7 +292,7 @@ const command: Command = {
 						iconURL: interaction.guild.iconURL(),
 					},
 					thumbnail: {
-						url: randomPokemon.image(shiny, variation),
+						url: randomPokemon.image(shiny, variationType),
 					},
 					color: shiny
 						? 0xf3d508
@@ -280,9 +302,16 @@ const command: Command = {
 					description: translations.strings.caught_title_en(
 						interaction.user.toString(),
 						!shiny &&
-							(variation === "alola" ||
-								/^[aeiou]/i.test(randomPokemon.names.en)),
-						randomPokemon.formatName("en", shiny, variation),
+							/^[aeiou]/i.test(
+								randomPokemon.formatName(
+									translations.language,
+									shiny,
+									variationType,
+									"default",
+									"raw",
+								),
+							),
+						randomPokemon.formatName("en", shiny, variationType),
 					),
 					footer: {
 						text: "✨ Mayze ✨",
@@ -297,7 +326,8 @@ const command: Command = {
 
 	runMessage: async (message, args, translations) => {
 		const SHINY_FREQUENCY = 0.004,
-			ALOLAN_FREQUENCY = 0.05,
+			ALOLA_FREQUENCY = 0.05,
+			GALAR_FREQUENCY = 0.05,
 			MEGA_GEM_FREQUENCY = 0.02;
 
 		const UPGRADES_BENEFITS = {
@@ -414,17 +444,25 @@ const command: Command = {
 					UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_probability) /
 						100);
 
-		const variation: VariationType =
+		const variationType: VariationType =
 			Util.pokedex.alolaPokemons.has(randomPokemon.nationalId) &&
-			Math.random() < ALOLAN_FREQUENCY
+			Math.random() < ALOLA_FREQUENCY
 				? "alola"
+				: Util.pokedex.galarPokemons.has(randomPokemon.nationalId) &&
+				  Math.random() < GALAR_FREQUENCY
+				? "galar"
 				: "default";
 
 		const catchReward = Math.round(
 			Util.config.CATCH_REWARD *
 				((255 / randomPokemon.catchRate) *
 					(shiny ? Util.config.SHINY_REWARD_MULTIPLIER : 1) *
-					(variation === "alola" ? Util.config.ALOLAN_REWARD_MULTIPLIER : 1)),
+					(variationType === "alola"
+						? Util.config.ALOLA_REWARD_MULTIPLIER
+						: 1) *
+					(variationType === "galar"
+						? Util.config.GALAR_REWARD_MULTIPLIER
+						: 1)),
 		);
 
 		const defaultUserData = {
@@ -439,20 +477,21 @@ const command: Command = {
 			rows: [{ caught: caughtTotal }],
 		} = await Util.database.query(
 			`
-			INSERT INTO pokemon VALUES ($1, $2, $3, $4)
-			ON CONFLICT (pokedex_id, shiny, variation)
+			INSERT INTO pokemon VALUES ($1, $2, $3, $4, $5)
+			ON CONFLICT (national_id, shiny, variation_type, variation)
 			DO UPDATE SET users =
 				CASE
-					WHEN pokemon.users -> $5 IS NULL THEN jsonb_set(pokemon.users, '{${message.author.id}}', $6)
-					ELSE jsonb_set(pokemon.users, '{${message.author.id}, caught}', ((pokemon.users -> $5 -> 'caught')::int + 1)::text::jsonb)
+					WHEN pokemon.users -> $6 IS NULL THEN jsonb_set(pokemon.users, '{${message.author.id}}', $7)
+					ELSE jsonb_set(pokemon.users, '{${message.author.id}, caught}', ((pokemon.users -> $6 -> 'caught')::int + 1)::text::jsonb)
 				END
-			WHERE pokemon.pokedex_id = EXCLUDED.pokedex_id AND pokemon.shiny = EXCLUDED.shiny AND pokemon.variation = EXCLUDED.variation
-			RETURNING (users -> $5 -> 'caught')::int AS caught
+			WHERE pokemon.national_id = EXCLUDED.national_id AND pokemon.shiny = EXCLUDED.shiny AND pokemon.variation = EXCLUDED.variation
+			RETURNING (users -> $6 -> 'caught')::int AS caught
 			`,
 			[
 				randomPokemon.nationalId,
 				shiny,
-				variation,
+				variationType,
+				"default",
 				defaultData,
 				message.author.id,
 				defaultUserData,
@@ -489,7 +528,7 @@ const command: Command = {
 						iconURL: pokeball,
 					},
 					image: {
-						url: randomPokemon.image(shiny, variation),
+						url: randomPokemon.image(shiny, variationType),
 					},
 					color: shiny
 						? 0xf3d508
@@ -500,9 +539,20 @@ const command: Command = {
 						translations.strings.caught_title(
 							message.author.toString(),
 							!shiny &&
-								(variation === "alola" ||
-									/^[aeiou]/i.test(randomPokemon.names[translations.language])),
-							randomPokemon.formatName(translations.language, shiny, variation),
+								/^[aeiou]/i.test(
+									randomPokemon.formatName(
+										translations.language,
+										shiny,
+										variationType,
+										"default",
+										"raw",
+									),
+								),
+							randomPokemon.formatName(
+								translations.language,
+								shiny,
+								variationType,
+							),
 							catchReward.toString(),
 						) + (megaGem ? translations.strings.mega_gem(megaGem) : ""),
 					footer: {
@@ -532,7 +582,7 @@ const command: Command = {
 						iconURL: message.guild.iconURL(),
 					},
 					thumbnail: {
-						url: randomPokemon.image(shiny, variation),
+						url: randomPokemon.image(shiny, variationType),
 					},
 					color: shiny
 						? 0xf3d508
@@ -542,9 +592,16 @@ const command: Command = {
 					description: translations.strings.caught_title_en(
 						message.author.toString(),
 						!shiny &&
-							(variation === "alola" ||
-								/^[aeiou]/i.test(randomPokemon.names.en)),
-						randomPokemon.formatName("en", shiny, variation),
+							/^[aeiou]/i.test(
+								randomPokemon.formatName(
+									translations.language,
+									shiny,
+									variationType,
+									"default",
+									"raw",
+								),
+							),
+						randomPokemon.formatName("en", shiny, variationType),
 					),
 					footer: {
 						text: "✨ Mayze ✨",

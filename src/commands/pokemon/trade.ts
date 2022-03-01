@@ -8,9 +8,12 @@ import {
 	TextChannel,
 	User,
 } from "discord.js";
-import Pokemon from "../../types/pokemon/Pokemon";
+import Pokemon, {
+	MegaEvolution,
+	PokemonVariation,
+} from "../../types/pokemon/Pokemon";
 import { DatabasePokemon } from "../../types/structures/Database";
-import { VariationType } from "../../utils/pokemon/pokemonInfo";
+import { Variation, VariationType } from "../../utils/pokemon/pokemonInfo";
 
 const command: Command = {
 	name: "trade",
@@ -188,18 +191,19 @@ const command: Command = {
 					interaction.options
 						.getString("offer")
 						?.split(/, */)
-						?.map((input) => {
+						?.map((input): OfferOrDemand => {
 							const number = parseInt((input.match(/^(\d+) */) ?? [])[1]) || 1;
-							const pokemon = Util.pokedex.findByNameWithVariation(
-								input.replace(/^(\d+) */, ""),
-							);
+							const { pokemon, shiny, pokemonVariation } =
+								Util.pokedex.findByNameWithVariation(
+									input.replace(/^(\d+) */, ""),
+								) ?? {};
 
 							if (pokemon)
 								return {
-									data: pokemon.pokemon,
+									data: pokemon,
 									number,
-									shiny: pokemon.shiny,
-									variation: pokemon.variationType,
+									shiny: shiny,
+									pokemonVariation: pokemonVariation,
 								};
 							else
 								errors += translations.strings.invalid_pokemon(
@@ -215,7 +219,10 @@ const command: Command = {
 									(v) =>
 										p.data.nationalId === v.data.nationalId &&
 										p.shiny === v.shiny &&
-										p.variation === v.variation,
+										p.pokemonVariation?.variationType ===
+											v.pokemonVariation?.variationType &&
+										p.pokemonVariation?.variation ===
+											v.pokemonVariation?.variation,
 								),
 						) ?? [];
 
@@ -225,16 +232,17 @@ const command: Command = {
 						?.split(/, */)
 						?.map((input) => {
 							const number = parseInt((input.match(/^(\d+) */) ?? [])[1]) || 1;
-							const pokemon = Util.pokedex.findByNameWithVariation(
-								input.replace(/^(\d+) */, ""),
-							);
+							const { pokemon, shiny, pokemonVariation } =
+								Util.pokedex.findByNameWithVariation(
+									input.replace(/^(\d+) */, ""),
+								) ?? {};
 
 							if (pokemon)
 								return {
-									data: pokemon.pokemon,
+									data: pokemon,
 									number,
-									shiny: pokemon.shiny,
-									variation: pokemon.variationType,
+									shiny: shiny,
+									pokemonVariation: pokemonVariation,
 								};
 							else
 								errors += translations.strings.invalid_pokemon(
@@ -250,7 +258,10 @@ const command: Command = {
 									(v) =>
 										p.data.nationalId === v.data.nationalId &&
 										p.shiny === v.shiny &&
-										p.variation === v.variation,
+										p.pokemonVariation?.variationType ===
+											v.pokemonVariation?.variationType &&
+										p.pokemonVariation?.variation ===
+											v.pokemonVariation?.variation,
 								),
 						) ?? [];
 
@@ -297,7 +308,8 @@ const command: Command = {
 															`\u00d7${pkm.number} ${pkm.data.formatName(
 																translations.language,
 																pkm.shiny,
-																pkm.variation,
+																pkm.pokemonVariation?.variationType,
+																pkm.pokemonVariation?.variation,
 															)}`,
 													)
 													.join("\n")
@@ -315,7 +327,8 @@ const command: Command = {
 															`\u00d7${pkm.number} ${pkm.data.formatName(
 																translations.language,
 																pkm.shiny,
-																pkm.variation,
+																pkm.pokemonVariation?.variationType,
+																pkm.pokemonVariation?.variation,
 															)}`,
 													)
 													.join("\n")
@@ -369,12 +382,77 @@ const command: Command = {
 				collector.on("collect", async (buttonInteraction) => {
 					switch (buttonInteraction.customId) {
 						case "deny": {
+							cancelledBy = buttonInteraction.user;
+
 							await buttonInteraction.update({
 								content: trade.content,
-								embeds: trade.embeds,
+								embeds: [
+									{
+										author: {
+											name: translations.strings.author(
+												interaction.user.tag,
+												user.tag,
+											),
+											iconURL: interaction.user.displayAvatarURL({
+												dynamic: true,
+											}),
+										},
+										color: interaction.guild.me.displayColor,
+										// U+00d7 : ×
+										fields: [
+											{
+												name: translations.strings.offer(
+													interaction.user.username,
+													accepted[0],
+												),
+												value: `\`\`\`\n${
+													offer.length
+														? offer
+																.map(
+																	(pkm) =>
+																		`\u00d7${pkm.number} ${pkm.data.formatName(
+																			translations.language,
+																			pkm.shiny,
+																			pkm.pokemonVariation?.variationType,
+																			pkm.pokemonVariation?.variation,
+																		)}`,
+																)
+																.join("\n")
+														: "Ø"
+												}\n\`\`\``,
+												inline: true,
+											},
+											{
+												name: translations.strings.demand(
+													user.username,
+													accepted[1],
+												),
+												value: `\`\`\`\n${
+													demand.length
+														? demand
+																.map(
+																	(pkm) =>
+																		`\u00d7${pkm.number} ${pkm.data.formatName(
+																			translations.language,
+																			pkm.shiny,
+																			pkm.pokemonVariation?.variationType,
+																			pkm.pokemonVariation?.variation,
+																		)}`,
+																)
+																.join("\n")
+														: "Ø"
+												}\n\`\`\``,
+												inline: true,
+											},
+										],
+										footer: {
+											text: `✨ Mayze ✨ | ${translations.strings.footer()}`,
+										},
+									},
+								],
 								components: trade.components,
 							});
-							cancelledBy = buttonInteraction.user;
+
 							collector.stop();
 							break;
 						}
@@ -413,7 +491,8 @@ const command: Command = {
 																		`\u00d7${pkm.number} ${pkm.data.formatName(
 																			translations.language,
 																			pkm.shiny,
-																			pkm.variation,
+																			pkm.pokemonVariation?.variationType,
+																			pkm.pokemonVariation?.variation,
 																		)}`,
 																)
 																.join("\n")
@@ -434,7 +513,8 @@ const command: Command = {
 																		`\u00d7${pkm.number} ${pkm.data.formatName(
 																			translations.language,
 																			pkm.shiny,
-																			pkm.variation,
+																			pkm.pokemonVariation?.variationType,
+																			pkm.pokemonVariation?.variation,
 																		)}`,
 																)
 																.join("\n")
@@ -522,14 +602,15 @@ const command: Command = {
 										WHEN (users -> $1 -> 'caught')::int = $2 THEN users - $1
 										ELSE jsonb_set(users, '{${interaction.user.id}, caught}', ((users -> $1 -> 'caught')::int - $2)::text::jsonb)
 									END
-								WHERE pokedex_id = $3 AND shiny = $4 AND variation = $5
+								WHERE national_id = $3 AND shiny = $4 AND variation_type = $5 AND variation = $6
 								`,
 								[
 									interaction.user.id,
 									pkm.number,
 									pkm.data.nationalId,
 									pkm.shiny,
-									pkm.variation,
+									pkm.pokemonVariation?.variationType ?? "default",
+									pkm.pokemonVariation?.variation ?? "default",
 								],
 							)
 							.then(() => (s[0] = true))
@@ -546,7 +627,7 @@ const command: Command = {
 										WHEN users -> $1 IS NULL THEN jsonb_set(users, '{${user.id}}', $3)
 										ELSE jsonb_set(users, '{${user.id}, caught}', ((users -> $1 -> 'caught')::int + $2)::text::jsonb)
 									END
-								WHERE pokedex_id = $4 AND shiny = $5 AND variation = $6
+								WHERE national_id = $4 AND shiny = $5 AND variation_type = $6 AND variation = $7
 								`,
 								[
 									user.id,
@@ -554,7 +635,8 @@ const command: Command = {
 									defaultUserData,
 									pkm.data.nationalId,
 									pkm.shiny,
-									pkm.variation,
+									pkm.pokemonVariation?.variationType ?? "default",
+									pkm.pokemonVariation?.variation ?? "default",
 								],
 							)
 							.then(() => (s[1] = true))
@@ -583,14 +665,15 @@ const command: Command = {
 										WHEN (users -> $1 -> 'caught')::int = $2 THEN users - $1
 										ELSE jsonb_set(users, '{${user.id}, caught}', ((users -> $1 -> 'caught')::int - $2)::text::jsonb)
 									END
-								WHERE pokedex_id = $3 AND shiny = $4 AND variation = $5
+								WHERE national_id = $3 AND shiny = $4 AND variation_type = $5 AND variation = $6
 								`,
 								[
 									user.id,
 									pkm.number,
 									pkm.data.nationalId,
 									pkm.shiny,
-									pkm.variation,
+									pkm.pokemonVariation?.variationType ?? "default",
+									pkm.pokemonVariation?.variation ?? "default",
 								],
 							)
 							.then(() => (s[0] = true))
@@ -607,7 +690,7 @@ const command: Command = {
 										WHEN users -> $1 IS NULL THEN jsonb_set(users, '{${interaction.user.id}}', $3)
 										ELSE jsonb_set(users, '{${interaction.user.id}, caught}', ((users -> $1 -> 'caught')::int + $2)::text::jsonb)
 									END
-								WHERE pokedex_id = $4 AND shiny = $5 AND variation = $6
+								WHERE national_id = $4 AND shiny = $5 AND variation_type = $6 AND variation = $7
 								`,
 								[
 									interaction.user.id,
@@ -615,7 +698,8 @@ const command: Command = {
 									defaultUserData,
 									pkm.data.nationalId,
 									pkm.shiny,
-									pkm.variation,
+									pkm.pokemonVariation?.variationType ?? "default",
+									pkm.pokemonVariation?.variation ?? "default",
 								],
 							)
 							.then(() => (s[1] = true))
@@ -628,7 +712,7 @@ const command: Command = {
 
 					// Dummy request to await all other ones
 					await Util.database
-						.query("SELECT pokedex_id FROM pokemon WHERE pokedex_id = 0")
+						.query("SELECT national_id FROM pokemon WHERE national_id = 0")
 						.catch(console.error);
 
 					logChannel
@@ -655,7 +739,8 @@ const command: Command = {
 																	`\u00d7${pkm.number} ${pkm.data.formatName(
 																		translations.language,
 																		pkm.shiny,
-																		pkm.variation,
+																		pkm.pokemonVariation?.variationType,
+																		pkm.pokemonVariation?.variation,
 																	)} - ${offerSuccess[i]
 																		.map((s) => (s ? "✅" : "❌"))
 																		.join(" ")}`,
@@ -672,10 +757,11 @@ const command: Command = {
 													? demand
 															.map(
 																(pkm, i) =>
-																	`×${pkm.number} ${pkm.data.formatName(
+																	`\u00d7${pkm.number} ${pkm.data.formatName(
 																		translations.language,
 																		pkm.shiny,
-																		pkm.variation,
+																		pkm.pokemonVariation?.variationType,
+																		pkm.pokemonVariation?.variation,
 																	)} - ${demandSuccess[i]
 																		.map((s) => (s ? "✅" : "❌"))
 																		.join(" ")}`,
@@ -724,9 +810,11 @@ const command: Command = {
 			for (const pokemon of pokemons1) {
 				const pkm = user1Pokemons.find(
 					(p) =>
-						p.pokedex_id === pokemon.data.nationalId &&
+						p.national_id === pokemon.data.nationalId &&
 						p.shiny === pokemon.shiny &&
-						p.variation === pokemon.variation,
+						p.variation_type ===
+							(pokemon.pokemonVariation?.variationType ?? "default") &&
+						p.variation === (pokemon.pokemonVariation?.variation ?? "default"),
 				);
 				if (!pkm || pokemon.number > pkm.users[user1.id].caught)
 					errors1.push(
@@ -737,7 +825,8 @@ const command: Command = {
 						} ${pokemon.data.formatName(
 							translations.language,
 							pokemon.shiny,
-							pokemon.variation,
+							pokemon.pokemonVariation?.variationType,
+							pokemon.pokemonVariation?.variation,
 						)}**`,
 					);
 				if (pkm && pkm.users[user1.id].favorite)
@@ -745,7 +834,8 @@ const command: Command = {
 						`**${pokemon.data.formatName(
 							translations.language,
 							pokemon.shiny,
-							pokemon.variation,
+							pokemon.pokemonVariation?.variationType,
+							pokemon.pokemonVariation?.variation,
 						)}**`,
 					);
 			}
@@ -753,9 +843,11 @@ const command: Command = {
 			for (const pokemon of pokemons2) {
 				const pkm = user2Pokemons.find(
 					(p) =>
-						p.pokedex_id === pokemon.data.nationalId &&
+						p.national_id === pokemon.data.nationalId &&
 						p.shiny === pokemon.shiny &&
-						p.variation === pokemon.variation,
+						p.variation_type ===
+							(pokemon.pokemonVariation?.variationType ?? "default") &&
+						p.variation === (pokemon.pokemonVariation?.variation ?? "default"),
 				);
 				if (!pkm || pokemon.number > pkm.users[user2.id].caught)
 					errors2.push(
@@ -766,7 +858,8 @@ const command: Command = {
 						} ${pokemon.data.formatName(
 							translations.language,
 							pokemon.shiny,
-							pokemon.variation,
+							pokemon.pokemonVariation?.variationType,
+							pokemon.pokemonVariation?.variation,
 						)}**`,
 					);
 				if (pkm && pkm.users[user2.id].favorite)
@@ -774,7 +867,8 @@ const command: Command = {
 						`**${pokemon.data.formatName(
 							translations.language,
 							pokemon.shiny,
-							pokemon.variation,
+							pokemon.pokemonVariation?.variationType,
+							pokemon.pokemonVariation?.variation,
 						)}**`,
 					);
 			}
@@ -811,5 +905,5 @@ interface OfferOrDemand {
 	data: Pokemon;
 	number: number;
 	shiny: boolean;
-	variation: VariationType;
+	pokemonVariation: PokemonVariation | MegaEvolution;
 }

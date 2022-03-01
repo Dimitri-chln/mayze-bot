@@ -474,43 +474,6 @@ function testReminder(client: Client) {
 	];
 
 	new CronJob(
-		"0 45 15 * * 3",
-		() => {
-			userIds.forEach((userId) =>
-				client.users
-					.fetch(userId)
-					.then((u) => u.send(getMessage(15)).catch(console.error)),
-			);
-			setTimeout(
-				() =>
-					userIds.forEach((userId) =>
-						client.users.cache
-							.get(userId)
-							.send(getMessage(5))
-							.catch(console.error),
-					),
-				600_000,
-			);
-			setTimeout(
-				() =>
-					userIds.forEach((userId) =>
-						client.users.cache
-							.get(userId)
-							.send(getMessage(2))
-							.catch(console.error),
-					),
-				780_000,
-			);
-		},
-		null,
-		true,
-		null,
-		null,
-		false,
-		0,
-	);
-
-	new CronJob(
 		"0 45 13 * * 0",
 		() => {
 			userIds.forEach((userId) =>
@@ -550,7 +513,7 @@ function testReminder(client: Client) {
 	function getMessage(minutes: number) {
 		return `Test in ${minutes} minute${minutes > 1 ? "s" : ""}! <t:${
 			Math.round(Date.now() / 1000) + 60 * minutes
-		}:F>\nIn <#463399799807410176>, **Wednesday 6pm CEST and Sunday 4pm CEST**`;
+		}:F>\nIn <#463399799807410176>, **Sunday 4pm CEST**`;
 	}
 }
 
@@ -563,7 +526,7 @@ function questReminder(client: Client) {
 	];
 
 	new CronJob(
-		"0 55 2 * * 2",
+		"0 55 1 * * 2",
 		() => {
 			userIds.forEach((userId) =>
 				client.users
@@ -591,7 +554,7 @@ function questReminder(client: Client) {
 		**Neu mischen / Shuffle (dabei werden alle abgemeldet & müssen sich selber bei neuer Queststart wieder anmelden) ** ||everyone will be disabled and needs to sign up for quests by themeselves||
 		
 		**Wie viele Quests sollen wir diese Woche machen?** _In Abhängikeit der Stimmen starten wir heute Abend die neue Quests und geben gegen Mittag / Nachtmittag die Questreihenfolge an. Nutzt deshalb bitte auch die Möglichkeit anzugeben welche Quests ihr am liebsten als erstes, zweites oder drittes machen möchtet. Auch nochmal der generelle Reminder — bitte 400 <:Gold:882425044662353960> / 120 <:Gem:882425044637200395> je Questteilnahme spenden._ 
-		**How many quests should we do this week?** _Depending on the votes we‘ll announce it this afternoon which quests we‘ll do in which order, starting this evening. Therefore please use the option to choose which quests you‘d like to do first, second, third etc. Once again the general reminder — please donate 400 <:Gold:882425044662353960> / 120 <:Gem:882425044637200395> each quest participation._
+		**How many quests should we do this week?** _Depending on the votes we'll announce it this afternoon which quests we'll do in which order, starting this evening. Therefore please use the option to choose which quests you'd like to do first, second, third etc. Once again the general reminder — please donate 400 <:Gold:882425044662353960> / 120 <:Gem:882425044637200395> each quest participation._
 		
 		**Warten / Wait**
 		

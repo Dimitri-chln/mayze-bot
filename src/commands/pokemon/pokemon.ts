@@ -127,6 +127,12 @@ const command: Command = {
 						required: false,
 					},
 					{
+						name: "galar",
+						description: "Une option pour n'afficher que les pokémons de Galar",
+						type: "BOOLEAN",
+						required: false,
+					},
+					{
 						name: "mega",
 						description: "Une option pour n'afficher que les méga pokémons",
 						type: "BOOLEAN",
@@ -260,7 +266,13 @@ const command: Command = {
 					},
 					{
 						name: "alola",
-						description: "An option to display alolan pokémons only",
+						description: "An option to display Alolan pokémons only",
+						type: "BOOLEAN",
+						required: false,
+					},
+					{
+						name: "galar",
+						description: "An option to display Galarian pokémons only",
 						type: "BOOLEAN",
 						required: false,
 					},
@@ -302,7 +314,7 @@ const command: Command = {
 
 		switch (subCommand) {
 			case "add-fav": {
-				const { pokemon, shiny, variationType } =
+				const { pokemon, shiny, pokemonVariation } =
 					Util.pokedex.findByNameWithVariation(
 						interaction.options.getString("pokemon", true),
 					) ?? {};
@@ -311,8 +323,14 @@ const command: Command = {
 					return interaction.followUp(translations.strings.invalid_pokemon());
 
 				const { rows: pokemons } = await Util.database.query(
-					"SELECT * FROM pokemon WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3 AND users ? $4",
-					[pokemon.nationalId, shiny, variationType, interaction.user.id],
+					"SELECT * FROM pokemon WHERE national_id = $1 AND shiny = $2 AND variation_type = $3 AND variation = $4 AND users ? $5",
+					[
+						pokemon.nationalId,
+						shiny,
+						pokemonVariation?.variationType ?? "default",
+						pokemonVariation?.variation ?? "default",
+						interaction.user.id,
+					],
 				);
 
 				if (!pokemons.length)
@@ -321,21 +339,31 @@ const command: Command = {
 				await Util.database.query(
 					`
 					UPDATE pokemon SET users = jsonb_set(users, '{${interaction.user.id}, favorite}', TRUE::text::jsonb)
-					WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3
+					WHERE national_id = $1 AND shiny = $2 AND variation_type = $3 AND variation = $4
 					`,
-					[pokemon.nationalId, shiny, variationType],
+					[
+						pokemon.nationalId,
+						shiny,
+						pokemonVariation?.variationType ?? "default",
+						pokemonVariation?.variation ?? "default",
+					],
 				);
 
 				interaction.followUp(
 					translations.strings.favorite_added(
-						pokemon.formatName(translations.language, shiny, variationType),
+						pokemon.formatName(
+							translations.language,
+							shiny,
+							pokemonVariation?.variationType ?? "default",
+							pokemonVariation?.variation ?? "default",
+						),
 					),
 				);
 				break;
 			}
 
 			case "remove-fav": {
-				const { pokemon, shiny, variationType } =
+				const { pokemon, shiny, pokemonVariation } =
 					Util.pokedex.findByNameWithVariation(
 						interaction.options.getString("pokemon", true),
 					) ?? {};
@@ -344,8 +372,14 @@ const command: Command = {
 					return interaction.followUp(translations.strings.invalid_pokemon());
 
 				const { rows: pokemons } = await Util.database.query(
-					"SELECT * FROM pokemon WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3 AND users ? $4",
-					[pokemon.nationalId, shiny, variationType, interaction.user.id],
+					"SELECT * FROM pokemon WHERE national_id = $1 AND shiny = $2 AND variation_type = $3 AND variation = $4 AND users ? $5",
+					[
+						pokemon.nationalId,
+						shiny,
+						pokemonVariation?.variationType ?? "default",
+						pokemonVariation?.variation ?? "default",
+						interaction.user.id,
+					],
 				);
 
 				if (!pokemons.length)
@@ -354,21 +388,31 @@ const command: Command = {
 				await Util.database.query(
 					`
 					UPDATE pokemon SET users = jsonb_set(users, '{${interaction.user.id}, favorite}', FALSE::text::jsonb)
-					WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3
+					WHERE national_id = $1 AND shiny = $2 AND variation_type = $3 AND variation = $4
 					`,
-					[pokemon.nationalId, shiny, variationType],
+					[
+						pokemon.nationalId,
+						shiny,
+						pokemonVariation?.variationType ?? "default",
+						pokemonVariation?.variation ?? "default",
+					],
 				);
 
 				interaction.followUp(
 					translations.strings.favorite_removed(
-						pokemon.formatName(translations.language, shiny, variationType),
+						pokemon.formatName(
+							translations.language,
+							shiny,
+							pokemonVariation?.variationType ?? "default",
+							pokemonVariation?.variation ?? "default",
+						),
 					),
 				);
 				break;
 			}
 
 			case "nick": {
-				const { pokemon, shiny, variationType } =
+				const { pokemon, shiny, pokemonVariation } =
 					Util.pokedex.findByNameWithVariation(
 						interaction.options.getString("pokemon", true),
 					) ?? {};
@@ -377,8 +421,14 @@ const command: Command = {
 					return interaction.followUp(translations.strings.invalid_pokemon());
 
 				const { rows: pokemons } = await Util.database.query(
-					"SELECT * FROM pokemon WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3 AND users ? $4",
-					[pokemon.nationalId, shiny, variationType, interaction.user.id],
+					"SELECT * FROM pokemon WHERE national_id = $1 AND shiny = $2 AND variation_type = $3 AND variation = $4 AND users ? $5",
+					[
+						pokemon.nationalId,
+						shiny,
+						pokemonVariation?.variationType ?? "default",
+						pokemonVariation?.variation ?? "default",
+						interaction.user.id,
+					],
 				);
 
 				if (!pokemons.length)
@@ -393,14 +443,24 @@ const command: Command = {
 					UPDATE pokemon SET users = jsonb_set(users, '{${
 						interaction.user.id
 					}, nickname}', '${nickname ? `"${nickname}"` : null}'::jsonb)
-					WHERE pokedex_id = $1 AND shiny = $2 AND variation = $3
+					WHERE national_id = $1 AND shiny = $2 AND variation_type = $3 AND variation = $4
 					`,
-					[pokemon.nationalId, shiny, variationType],
+					[
+						pokemon.nationalId,
+						shiny,
+						pokemonVariation?.variationType ?? "default",
+						pokemonVariation?.variation ?? "default",
+					],
 				);
 
 				interaction.followUp(
 					translations.strings.nickname_updated(
-						pokemon.formatName(translations.language, shiny, variationType),
+						pokemon.formatName(
+							translations.language,
+							shiny,
+							pokemonVariation?.variationType ?? "default",
+							pokemonVariation?.variation ?? "default",
+						),
 						nickname,
 					),
 				);
@@ -432,19 +492,19 @@ const command: Command = {
 
 						if (
 							interaction.options.getBoolean("legendary", false) &&
-							!Util.pokedex.findById(pkm.pokedex_id).legendary
+							!Util.pokedex.findById(pkm.national_id).legendary
 						)
 							return false;
 
 						if (
 							interaction.options.getBoolean("ultra-beast", false) &&
-							!Util.pokedex.findById(pkm.pokedex_id).ultraBeast
+							!Util.pokedex.findById(pkm.national_id).ultraBeast
 						)
 							return false;
 
 						if (
 							interaction.options.getInteger("generation", false) &&
-							Util.pokedex.findById(pkm.pokedex_id).generation !==
+							Util.pokedex.findById(pkm.national_id).generation !==
 								interaction.options.getInteger("generation", false)
 						)
 							return false;
@@ -454,20 +514,26 @@ const command: Command = {
 
 						if (
 							interaction.options.getBoolean("alola", false) &&
-							pkm.variation !== "alola"
+							pkm.variation_type !== "alola"
+						)
+							return false;
+
+						if (
+							interaction.options.getBoolean("galar", false) &&
+							pkm.variation_type !== "galar"
 						)
 							return false;
 
 						if (
 							interaction.options.getBoolean("mega", false) &&
-							!["mega", "megax", "megay", "primal"].includes(pkm.variation)
+							pkm.variation_type !== "mega"
 						)
 							return false;
 
 						if (
 							interaction.options.getInteger("id", false) &&
 							interaction.options.getInteger("id", false) !== 0 &&
-							pkm.pokedex_id !== interaction.options.getInteger("id", false)
+							pkm.national_id !== interaction.options.getInteger("id", false)
 						)
 							return false;
 
@@ -477,7 +543,7 @@ const command: Command = {
 								interaction.options.getString("name", false),
 								"i",
 							).test(
-								Util.pokedex.findById(pkm.pokedex_id).names[
+								Util.pokedex.findById(pkm.national_id).names[
 									translations.language
 								],
 							) &&
@@ -496,7 +562,7 @@ const command: Command = {
 							!Util.pokedex
 								.findByName(interaction.options.getString("evolution", false))
 								.flatEvolutionLine()
-								.some((p) => p.nationalId === pkm.pokedex_id)
+								.some((p) => p.nationalId === pkm.national_id)
 						)
 							return false;
 
@@ -561,12 +627,14 @@ const command: Command = {
 											p.data.formatName(
 												translations.language,
 												p.shiny,
+												p.variationType,
 												p.variation,
 												"badge",
 											),
 											p.data.formatName(
 												translations.language,
 												p.shiny,
+												p.variationType,
 												p.variation,
 												"raw",
 											),
@@ -599,6 +667,7 @@ const command: Command = {
 						page.embeds[0].thumbnail = {
 							url: pokemonList.pokemons[0].data.image(
 								pokemonList.pokemons[0].shiny,
+								pokemonList.pokemons[0].variationType,
 								pokemonList.pokemons[0].variation,
 							),
 						};

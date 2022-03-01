@@ -83,6 +83,12 @@ const command: Command = {
 						required: false,
 					},
 					{
+						name: "galar",
+						description: "Pokémons de Galar uniquement",
+						type: "BOOLEAN",
+						required: false,
+					},
+					{
 						name: "mega",
 						description: "Pokémons méga uniquement",
 						type: "BOOLEAN",
@@ -171,6 +177,12 @@ const command: Command = {
 						required: false,
 					},
 					{
+						name: "galar",
+						description: "Galarian pokémons only",
+						type: "BOOLEAN",
+						required: false,
+					},
+					{
 						name: "mega",
 						description: "Mega pokémons only",
 						type: "BOOLEAN",
@@ -201,7 +213,7 @@ const command: Command = {
 		switch (subCommand) {
 			case "find": {
 				const input = interaction.options.getString("pokemon", true);
-				const { pokemon, shiny, variationType } =
+				const { pokemon, shiny, pokemonVariation } =
 					Util.pokedex.findByNameWithVariation(input) ?? {
 						pokemon: Util.pokedex.findById(parseInt(input)),
 						shiny: false,
@@ -217,11 +229,14 @@ const command: Command = {
 							title: `${pokemon.formatName(
 								translations.language,
 								shiny,
-								variationType,
+								pokemonVariation?.variationType ?? "default",
 							)} #${pokemon.nationalId.toString().padStart(3, "0")}`,
 							color: interaction.guild.me.displayColor,
 							image: {
-								url: pokemon.image(shiny, variationType),
+								url: pokemon.image(
+									shiny,
+									pokemonVariation?.variationType ?? "default",
+								),
 							},
 							fields: [
 								{
@@ -339,6 +354,12 @@ const command: Command = {
 						return false;
 
 					if (
+						interaction.options.getBoolean("galar", false) &&
+						!Util.pokedex.galarPokemons.has(pokemon.nationalId)
+					)
+						return false;
+
+					if (
 						interaction.options.getBoolean("mega", false) &&
 						!Util.pokedex.megaEvolvablePokemons.has(pokemon.nationalId)
 					)
@@ -350,8 +371,9 @@ const command: Command = {
 				const shiny = Boolean(interaction.options.getBoolean("shiny", false));
 
 				const pages: Page[] = [];
-				const page: (desc: string) => Page = (desc) => {
-					return {
+
+				if (!userPokedex.length)
+					pages.push({
 						embeds: [
 							{
 								author: {
@@ -361,59 +383,67 @@ const command: Command = {
 									}),
 								},
 								color: interaction.guild.me.displayColor,
-								description: desc,
+								description: translations.strings.no_pokemon(),
 							},
 						],
-					};
-				};
-				if (!userPokedex.length)
-					pages.push(page(translations.strings.no_pokemon()));
+					});
 
 				for (
 					let i = 0;
 					i < userPokedex.length;
 					i += Util.config.ITEMS_PER_PAGE
 				) {
-					pages.push(
-						page(
-							userPokedex
-								.slice(i, i + Util.config.ITEMS_PER_PAGE)
-								.map((pkm) => {
-									if (interaction.options.getBoolean("mega", false)) {
-										return pkm.megaEvolutions
-											.map((megaEvolution) =>
+					pages.push({
+						embeds: [
+							{
+								author: {
+									name: translations.strings.author(interaction.user.tag),
+									iconURL: interaction.user.displayAvatarURL({
+										dynamic: true,
+									}),
+								},
+								color: interaction.guild.me.displayColor,
+								description: userPokedex
+									.slice(i, i + Util.config.ITEMS_PER_PAGE)
+									.map((pkm) => {
+										if (interaction.options.getBoolean("mega", false)) {
+											return pkm.megaEvolutions.map((megaEvolution) =>
 												translations.strings.description(
 													pokemonList.has(pkm),
 													pkm.formatName(
 														translations.language,
 														shiny,
-														megaEvolution.suffix,
+														megaEvolution.variationType,
+														megaEvolution.variation,
 													),
 													pkm.nationalId.toString().padStart(3, "0"),
 												),
+											);
+										} else {
+											const variationType = interaction.options.getBoolean(
+												"alola",
 											)
-											.join("\n");
-									} else {
-										const variationType = interaction.options.getBoolean(
-											"alola",
-										)
-											? "alola"
-											: "default";
+												? "alola"
+												: interaction.options.getBoolean("galar")
+												? "galar"
+												: "default";
 
-										return translations.strings.description(
-											pokemonList.has(pkm),
-											pkm.formatName(
-												translations.language,
-												shiny,
-												variationType,
-											),
-											pkm.nationalId.toString().padStart(3, "0"),
-										);
-									}
-								})
-								.join("\n"),
-						),
-					);
+											return translations.strings.description(
+												pokemonList.has(pkm),
+												pkm.formatName(
+													translations.language,
+													shiny,
+													variationType,
+												),
+												pkm.nationalId.toString().padStart(3, "0"),
+											);
+										}
+									})
+									.flat(1)
+									.join("\n"),
+							},
+						],
+					});
 				}
 
 				pagination(interaction, pages);
