@@ -65,6 +65,7 @@ export default class Pokedex {
 				variations: rawPokemon.variations,
 				legendary: rawPokemon.legendary,
 				ultraBeast: rawPokemon.ultra_beast,
+				generation: rawPokemon.generation,
 				evolutionFrom: () => this.findByName(rawPokemon.evolution_from),
 				evolutions: () =>
 					rawPokemon.evolutions.map((evolution) => this.findByName(evolution)),

@@ -18,6 +18,7 @@ export interface RawPokemon {
 	variations: RawPokemonVariation[];
 	legendary: boolean;
 	ultra_beast: boolean;
+	generation: number;
 }
 
 export default interface Pokemon {
@@ -35,6 +36,7 @@ export default interface Pokemon {
 	variations: PokemonVariation[];
 	legendary: boolean;
 	ultraBeast: boolean;
+	generation: number;
 	evolutionFrom(): Pokemon;
 	evolutions(): Pokemon[];
 	evolutionLine(): EvolutionLine;

@@ -69,6 +69,14 @@ const command: Command = {
 						required: false,
 					},
 					{
+						name: "generation",
+						description: "Pokémons d'une certaine génération uniquement",
+						type: "INTEGER",
+						required: false,
+						minValue: 1,
+						maxValue: 8,
+					},
+					{
 						name: "alola",
 						description: "Pokémons d'Alola uniquement",
 						type: "BOOLEAN",
@@ -147,6 +155,14 @@ const command: Command = {
 						description: "Ultra beasts only",
 						type: "BOOLEAN",
 						required: false,
+					},
+					{
+						name: "generation",
+						description: "Pokémons from a specific generation only",
+						type: "INTEGER",
+						required: false,
+						minValue: 1,
+						maxValue: 8,
 					},
 					{
 						name: "alola",
@@ -290,26 +306,38 @@ const command: Command = {
 						!pokemonList.has(pokemon)
 					)
 						return false;
+
 					if (
 						interaction.options.getBoolean("uncaught", false) &&
 						pokemonList.has(pokemon)
 					)
 						return false;
+
 					if (
 						interaction.options.getBoolean("legendary", false) &&
 						!pokemon.legendary
 					)
 						return false;
+
 					if (
 						interaction.options.getBoolean("ultra-beast", false) &&
 						!pokemon.ultraBeast
 					)
 						return false;
+
+					if (
+						interaction.options.getInteger("generation", false) &&
+						pokemon.generation !==
+							interaction.options.getInteger("generation", false)
+					)
+						return false;
+
 					if (
 						interaction.options.getBoolean("alola", false) &&
 						!Util.pokedex.alolaPokemons.has(pokemon.nationalId)
 					)
 						return false;
+
 					if (
 						interaction.options.getBoolean("mega", false) &&
 						!Util.pokedex.megaEvolvablePokemons.has(pokemon.nationalId)

@@ -106,6 +106,15 @@ const command: Command = {
 						required: false,
 					},
 					{
+						name: "generation",
+						description:
+							"Une option pour n'afficher que lokémons d'une certaine génération",
+						type: "INTEGER",
+						required: false,
+						minValue: 1,
+						maxValue: 8,
+					},
+					{
 						name: "shiny",
 						description: "Une option pour n'afficher que les pokémons shiny",
 						type: "BOOLEAN",
@@ -233,6 +242,15 @@ const command: Command = {
 						description: "An option to display ultra beasts only",
 						type: "BOOLEAN",
 						required: false,
+					},
+					{
+						name: "generation",
+						description:
+							"An option to display pokémons from a specific generation only",
+						type: "INTEGER",
+						required: false,
+						minValue: 1,
+						maxValue: 8,
 					},
 					{
 						name: "shiny",
@@ -405,28 +423,41 @@ const command: Command = {
 							(pkm.shiny || pkm.variation !== "default")
 						)
 							return false;
+
 						if (
 							interaction.options.getBoolean("favorite", false) &&
 							!pkm.users[user.id].favorite
 						)
 							return false;
+
 						if (
 							interaction.options.getBoolean("legendary", false) &&
 							!Util.pokedex.findById(pkm.pokedex_id).legendary
 						)
 							return false;
+
 						if (
 							interaction.options.getBoolean("ultra-beast", false) &&
 							!Util.pokedex.findById(pkm.pokedex_id).ultraBeast
 						)
 							return false;
+
+						if (
+							interaction.options.getInteger("generation", false) &&
+							Util.pokedex.findById(pkm.pokedex_id).generation !==
+								interaction.options.getInteger("generation", false)
+						)
+							return false;
+
 						if (interaction.options.getBoolean("shiny", false) && !pkm.shiny)
 							return false;
+
 						if (
 							interaction.options.getBoolean("alola", false) &&
 							pkm.variation !== "alola"
 						)
 							return false;
+
 						if (
 							interaction.options.getBoolean("mega", false) &&
 							!["mega", "megax", "megay", "primal"].includes(pkm.variation)
