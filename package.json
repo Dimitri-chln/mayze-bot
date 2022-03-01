@@ -4,7 +4,6 @@
 	"description": "Le meilleur bot pour le meilleur clan",
 	"main": "dist/index.js",
 	"scripts": {
-		"postinstall": "tsc",
 		"start": "node .",
 		"build": "tsc",
 		"debug": "node debug"
