@@ -68,6 +68,15 @@ const command: Command = {
 								required: false,
 							},
 							{
+								name: "generation",
+								description:
+									"Ne montrer que les pokémons d'une certaine génération",
+								type: "INTEGER",
+								required: false,
+								minValue: 1,
+								maxValue: 8,
+							},
+							{
 								name: "variation",
 								description: "Ne montrer qu'un type de variation",
 								type: "STRING",
@@ -137,6 +146,14 @@ const command: Command = {
 								required: false,
 							},
 							{
+								name: "generation",
+								description: "Show pokémons from a specific generation only",
+								type: "INTEGER",
+								required: false,
+								minValue: 1,
+								maxValue: 8,
+							},
+							{
 								name: "variation",
 								description: "Show one variation type only",
 								type: "STRING",
@@ -168,8 +185,7 @@ const command: Command = {
 
 				switch (subCommand) {
 					case "global": {
-						let description = "",
-							total = 0;
+						let description = "";
 
 						const {
 							rows: [normal],
@@ -188,7 +204,6 @@ const command: Command = {
 						description += translations.strings.normal(
 							(normal.total ?? 0).toString(),
 						);
-						total += normal.total ?? 0;
 
 						const {
 							rows: [shiny],
@@ -207,7 +222,6 @@ const command: Command = {
 						description += translations.strings.shiny(
 							(shiny.total ?? 0).toString(),
 						);
-						total += shiny.total ?? 0;
 
 						const { rows: allNormal }: { rows: DatabasePokemon[] } =
 							await Util.database.query(
@@ -233,7 +247,6 @@ const command: Command = {
 						description += translations.strings.legendary(
 							legendaryTotal.toString(),
 						);
-						total += legendaryTotal;
 
 						const ultraBeast = allNormal.filter(
 							(pokemon) => Util.pokedex.findById(pokemon.pokedex_id).ultraBeast,
@@ -250,7 +263,6 @@ const command: Command = {
 						description += translations.strings.ultra_beast(
 							ultraBeastTotal.toString(),
 						);
-						total += ultraBeastTotal;
 
 						const { rows: allShiny }: { rows: DatabasePokemon[] } =
 							await Util.database.query(
@@ -276,7 +288,6 @@ const command: Command = {
 						description += translations.strings.legendary_shiny(
 							legendaryShinyTotal.toString(),
 						);
-						total += legendaryShinyTotal;
 
 						const ultraBeastShiny = allShiny.filter(
 							(pokemon) => Util.pokedex.findById(pokemon.pokedex_id).ultraBeast,
@@ -293,7 +304,6 @@ const command: Command = {
 						description += translations.strings.ultra_beast_shiny(
 							ultraBeastShinyTotal.toString(),
 						);
-						total += ultraBeastShinyTotal;
 
 						const {
 							rows: [alola],
@@ -312,7 +322,6 @@ const command: Command = {
 						description += translations.strings.alola(
 							(alola.total ?? 0).toString(),
 						);
-						total += alola.total ?? 0;
 
 						const {
 							rows: [alolaShiny],
@@ -331,7 +340,6 @@ const command: Command = {
 						description += translations.strings.alola_shiny(
 							(alolaShiny.total ?? 0).toString(),
 						);
-						total += alolaShiny.total ?? 0;
 
 						const {
 							rows: [mega],
@@ -350,7 +358,6 @@ const command: Command = {
 						description += translations.strings.mega(
 							(mega.total ?? 0).toString(),
 						);
-						total += mega.total ?? 0;
 
 						const {
 							rows: [megaShiny],
@@ -369,7 +376,20 @@ const command: Command = {
 						description += translations.strings.mega_shiny(
 							(megaShiny.total ?? 0).toString(),
 						);
-						total += megaShiny.total ?? 0;
+
+						const {
+							rows: [{ total }],
+						}: {
+							rows: Omit<
+								DatabasePokemonWithCaughtStats,
+								keyof DatabasePokemon
+							>[];
+						} = await Util.database.query(
+							`
+							SELECT SUM((value -> 'caught')::int)::int AS total
+							FROM pokemon, jsonb_each(users)
+							`,
+						);
 
 						description += translations.strings.total(total.toString());
 
@@ -580,6 +600,13 @@ const command: Command = {
 							if (
 								interaction.options.getBoolean("ultra-beast", false) &&
 								!Util.pokedex.findById(pkm.pokedex_id).ultraBeast
+							)
+								return false;
+
+							if (
+								interaction.options.getInteger("generation", false) &&
+								Util.pokedex.findById(pkm.pokedex_id).generation !==
+									interaction.options.getInteger("generation", false)
 							)
 								return false;
 
