@@ -4,6 +4,7 @@ import Util from "../../Util";
 
 import pagination, { Page } from "../../utils/misc/pagination";
 import PokemonList from "../../types/pokemon/PokemonList";
+import { VariationType } from "../../utils/pokemon/pokemonInfo";
 
 const command: Command = {
 	name: "pokedex",
@@ -313,18 +314,28 @@ const command: Command = {
 					[interaction.user.id],
 				);
 
+				const variationType: VariationType = interaction.options.getBoolean(
+					"mega",
+				)
+					? "mega"
+					: interaction.options.getBoolean("alola")
+					? "alola"
+					: interaction.options.getBoolean("galar")
+					? "galar"
+					: "default";
+
 				const pokemonList = new PokemonList(pokemons, interaction.user.id);
 
 				const userPokedex = Util.pokedex.pokemons.filter((pokemon) => {
 					if (
 						interaction.options.getBoolean("caught", false) &&
-						!pokemonList.has(pokemon)
+						!pokemonList.has(pokemon, variationType)
 					)
 						return false;
 
 					if (
 						interaction.options.getBoolean("uncaught", false) &&
-						pokemonList.has(pokemon)
+						pokemonList.has(pokemon, variationType)
 					)
 						return false;
 
@@ -409,7 +420,7 @@ const command: Command = {
 										if (interaction.options.getBoolean("mega", false)) {
 											return pkm.megaEvolutions.map((megaEvolution) =>
 												translations.strings.description(
-													pokemonList.has(pkm),
+													pokemonList.has(pkm, variationType),
 													pkm.formatName(
 														translations.language,
 														shiny,
