@@ -316,11 +316,12 @@ const command: Command = {
 
 				const variationType: VariationType = interaction.options.getBoolean(
 					"mega",
+					false,
 				)
 					? "mega"
-					: interaction.options.getBoolean("alola")
+					: interaction.options.getBoolean("alola", false)
 					? "alola"
-					: interaction.options.getBoolean("galar")
+					: interaction.options.getBoolean("galar", false)
 					? "galar"
 					: "default";
 
@@ -417,10 +418,10 @@ const command: Command = {
 								description: userPokedex
 									.slice(i, i + Util.config.ITEMS_PER_PAGE)
 									.map((pkm) => {
-										if (interaction.options.getBoolean("mega", false)) {
+										if (variationType === "mega") {
 											return pkm.megaEvolutions.map((megaEvolution) =>
 												translations.strings.description(
-													pokemonList.has(pkm, variationType),
+													pokemonList.has(pkm, "mega"),
 													pkm.formatName(
 														translations.language,
 														shiny,
@@ -431,16 +432,8 @@ const command: Command = {
 												),
 											);
 										} else {
-											const variationType = interaction.options.getBoolean(
-												"alola",
-											)
-												? "alola"
-												: interaction.options.getBoolean("galar")
-												? "galar"
-												: "default";
-
 											return translations.strings.description(
-												pokemonList.has(pkm),
+												pokemonList.has(pkm, variationType),
 												pkm.formatName(
 													translations.language,
 													shiny,
