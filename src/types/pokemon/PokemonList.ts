@@ -13,11 +13,16 @@ export default class PokemonList {
 		);
 	}
 
-	has(pokemon: Pokemon, variation: VariationType = "default") {
+	has(
+		pokemon: Pokemon,
+		shiny: boolean = false,
+		variationType: VariationType = "default",
+	) {
 		return this.pokemons.some(
 			(pkm) =>
 				pkm.data.nationalId === pokemon.nationalId &&
-				pkm.variation === variation,
+				pkm.shiny === shiny &&
+				pkm.variationType === variationType,
 		);
 	}
 }

@@ -314,6 +314,8 @@ const command: Command = {
 					[interaction.user.id],
 				);
 
+				const shiny = Boolean(interaction.options.getBoolean("shiny", false));
+
 				const variationType: VariationType = interaction.options.getBoolean(
 					"mega",
 					false,
@@ -330,13 +332,13 @@ const command: Command = {
 				const userPokedex = Util.pokedex.pokemons.filter((pokemon) => {
 					if (
 						interaction.options.getBoolean("caught", false) &&
-						!pokemonList.has(pokemon, variationType)
+						!pokemonList.has(pokemon, shiny, variationType)
 					)
 						return false;
 
 					if (
 						interaction.options.getBoolean("uncaught", false) &&
-						pokemonList.has(pokemon, variationType)
+						pokemonList.has(pokemon, shiny, variationType)
 					)
 						return false;
 
@@ -360,27 +362,25 @@ const command: Command = {
 						return false;
 
 					if (
-						interaction.options.getBoolean("alola", false) &&
+						variationType === "mega" &&
+						!Util.pokedex.megaEvolvablePokemons.has(pokemon.nationalId)
+					)
+						return false;
+
+					if (
+						variationType === "alola" &&
 						!Util.pokedex.alolaPokemons.has(pokemon.nationalId)
 					)
 						return false;
 
 					if (
-						interaction.options.getBoolean("galar", false) &&
+						variationType === "galar" &&
 						!Util.pokedex.galarPokemons.has(pokemon.nationalId)
-					)
-						return false;
-
-					if (
-						interaction.options.getBoolean("mega", false) &&
-						!Util.pokedex.megaEvolvablePokemons.has(pokemon.nationalId)
 					)
 						return false;
 
 					return true;
 				});
-
-				const shiny = Boolean(interaction.options.getBoolean("shiny", false));
 
 				const pages: Page[] = [];
 
@@ -421,7 +421,7 @@ const command: Command = {
 										if (variationType === "mega") {
 											return pkm.megaEvolutions.map((megaEvolution) =>
 												translations.strings.description(
-													pokemonList.has(pkm, "mega"),
+													pokemonList.has(pkm, shiny, "mega"),
 													pkm.formatName(
 														translations.language,
 														shiny,
@@ -433,7 +433,7 @@ const command: Command = {
 											);
 										} else {
 											return translations.strings.description(
-												pokemonList.has(pkm, variationType),
+												pokemonList.has(pkm, shiny, variationType),
 												pkm.formatName(
 													translations.language,
 													shiny,
