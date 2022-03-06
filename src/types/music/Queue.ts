@@ -61,7 +61,7 @@ export default class Queue {
 		this._stopped = false;
 		this.repeatSong = false;
 		this.repeatQueue = false;
-		this._volume = 0.25;
+		this._volume = 0.5;
 		this._idleTime = 900_000;
 		this._songDisplays = new Collection();
 		this._songDisplaysTimeout = setInterval(
@@ -165,6 +165,7 @@ export default class Queue {
 					if (this.audioPlayer.state.status === AudioPlayerStatus.Playing)
 						this.pause();
 
+					if (this._emptyTimeout) clearTimeout(this._emptyTimeout);
 					this._emptyTimeout = setTimeout(() => {
 						if (this.voiceChannel.members.size <= 1) this.stop();
 					}, this._idleTime);
@@ -459,6 +460,7 @@ export default class Queue {
 			await this._editSongDisplays({ song: previousSong, end: true });
 			this._running = false;
 
+			if (this._idleTimeout) clearTimeout(this._idleTimeout);
 			this._idleTimeout = setTimeout(() => {
 				if (this.songs.length > 0) return;
 
