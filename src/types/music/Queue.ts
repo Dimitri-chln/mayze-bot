@@ -35,10 +35,10 @@ export default class Queue {
 	private _stopped: boolean;
 	repeatSong: boolean;
 	repeatQueue: boolean;
-	private _idleTimeout?: NodeJS.Timeout;
-	private _emptyTimeout?: NodeJS.Timeout;
+	idleTimeout?: NodeJS.Timeout;
+	emptyTimeout?: NodeJS.Timeout;
 	private _volume: number;
-	private readonly _idleTime: number;
+	readonly idleTime: number;
 	private readonly _songDisplays: Collection<Snowflake, Message>;
 	private readonly _songDisplaysTimeout: NodeJS.Timeout;
 
@@ -62,7 +62,7 @@ export default class Queue {
 		this.repeatSong = false;
 		this.repeatQueue = false;
 		this._volume = 0.5;
-		this._idleTime = 900_000;
+		this.idleTime = 900_000;
 		this._songDisplays = new Collection();
 		this._songDisplaysTimeout = setInterval(
 			() => this._editSongDisplays(),
@@ -147,31 +147,6 @@ export default class Queue {
 				}
 			}
 		});
-
-		this.voiceChannel.client.on("voiceStateUpdate", (oldState, newState) => {
-			if (
-				oldState?.channel?.id === this.voiceChannel.id ||
-				newState?.channel?.id === this.voiceChannel.id
-			) {
-				if (this.voiceChannel.members.size > 1) {
-					// Resume when more users join the voice channel
-					if (this.audioPlayer.state.status === AudioPlayerStatus.Paused)
-						this.resume();
-
-					clearTimeout(this._emptyTimeout);
-					delete this._emptyTimeout;
-				} else {
-					// Auto pause if the voice channel is empty
-					if (this.audioPlayer.state.status === AudioPlayerStatus.Playing)
-						this.pause();
-
-					if (this._emptyTimeout) clearTimeout(this._emptyTimeout);
-					this._emptyTimeout = setTimeout(() => {
-						if (this.voiceChannel.members.size <= 1) this.stop();
-					}, this._idleTime);
-				}
-			}
-		});
 	}
 
 	get voiceConnection() {
@@ -234,16 +209,16 @@ export default class Queue {
 	}
 
 	pause() {
-		this.audioPlayer.pause(true);
+		return this.audioPlayer.pause(true);
 	}
 
 	resume() {
-		this.audioPlayer.unpause();
+		return this.audioPlayer.unpause();
 	}
 
 	stop() {
 		this._stopped = true;
-		this.audioPlayer.stop();
+		return this.audioPlayer.stop();
 	}
 
 	setVolume(percentage: number) {
@@ -434,9 +409,9 @@ export default class Queue {
 	}
 
 	private async _playSong(): Promise<void> {
-		if (this._idleTimeout) {
-			clearTimeout(this._idleTimeout);
-			delete this._idleTimeout;
+		if (this.idleTimeout) {
+			clearTimeout(this.idleTimeout);
+			delete this.idleTimeout;
 		}
 
 		// If the queue has been stopped
@@ -460,14 +435,14 @@ export default class Queue {
 			await this._editSongDisplays({ song: previousSong, end: true });
 			this._running = false;
 
-			if (this._idleTimeout) clearTimeout(this._idleTimeout);
-			this._idleTimeout = setTimeout(() => {
+			if (this.idleTimeout) clearTimeout(this.idleTimeout);
+			this.idleTimeout = setTimeout(() => {
 				if (this.songs.length > 0) return;
 
 				this.voiceConnection.destroy();
 				this.audioPlayer.stop();
 				Util.musicPlayer.delete(this.voiceChannel.guild.id);
-			}, this._idleTime);
+			}, this.idleTime);
 			return;
 		}
 
