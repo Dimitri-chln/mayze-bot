@@ -44,6 +44,17 @@ const command: Command = {
 			interaction.followUp(translations.strings.error(err));
 		}
 	},
+
+	runMessage: async (message, args, translations) => {
+		const expression = args.join(" ");
+
+		try {
+			eval(expression);
+		} catch (err) {
+			console.error(err);
+			message.reply(translations.strings.error(err));
+		}
+	},
 };
 
 export default command;

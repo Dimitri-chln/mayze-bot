@@ -14,6 +14,7 @@ const command: Command = {
 	usage: "",
 	userPermissions: ["SEND_MESSAGES", "MANAGE_MESSAGES"],
 	botPermissions: ["EMBED_LINKS"],
+	cooldown: 60,
 	guildIds: [Util.config.MAIN_GUILD_ID, "724530039781326869"],
 
 	options: {
