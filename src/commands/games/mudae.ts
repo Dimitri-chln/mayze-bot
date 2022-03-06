@@ -164,7 +164,7 @@ const command: Command = {
 						const { rows: wishlist }: { rows: DatabaseMudaeWish[] } =
 							await Util.database.query(
 								"SELECT * FROM mudae_wish WHERE user_id = $1 ORDER BY series ASC",
-								[interaction.user.id],
+								[user.id],
 							);
 
 						interaction.followUp({
