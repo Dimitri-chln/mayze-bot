@@ -9,33 +9,37 @@ const event: Event = {
 	once: false,
 
 	run: async (oldState: VoiceState, newState: VoiceState) => {
-		const queue = Util.musicPlayer.get(
-			oldState.channelId ?? newState.channelId,
-		);
+		const queue = Util.musicPlayer.get(oldState.guild.id ?? newState.guild.id);
 
 		if (
 			queue &&
 			(oldState?.channel?.id === queue.voiceChannel.id ||
 				newState?.channel?.id === queue.voiceChannel.id)
 		) {
-			if (queue.voiceChannel.members.size > 1) {
-				// Resume when more users join the voice channel
-				if (queue.audioPlayer.state.status === AudioPlayerStatus.Paused)
-					queue.resume();
+			if (queue.voiceChannel.members.size === 1) {
+				// Auto pause if the voice channel is empty
+				if (queue.audioPlayer.state.status === AudioPlayerStatus.Playing) {
+					if (queue.pause())
+						queue.textChannel.send(queue.translations.strings.auto_paused());
+				}
 
+				// Create empty timeout
+				if (queue.emptyTimeout) clearTimeout(queue.emptyTimeout);
+				queue.emptyTimeout = setTimeout(() => queue.stop(), queue.idleTime);
+			}
+
+			if (queue.voiceChannel.members.size === 2) {
+				// Resume when a user joins the voice channel
+				if (queue.audioPlayer.state.status === AudioPlayerStatus.Paused) {
+					if (queue.resume())
+						queue.textChannel.send(queue.translations.strings.auto_resumed());
+				}
+
+				// Cancel empty timeout
 				if (queue.emptyTimeout) {
 					clearTimeout(queue.emptyTimeout);
 					delete queue.emptyTimeout;
 				}
-			} else {
-				// Auto pause if the voice channel is empty
-				if (queue.audioPlayer.state.status === AudioPlayerStatus.Playing)
-					queue.pause();
-
-				if (queue.emptyTimeout) clearTimeout(queue.emptyTimeout);
-				queue.emptyTimeout = setTimeout(() => {
-					if (queue.voiceChannel.members.size <= 1) queue.stop();
-				}, queue.idleTime);
 			}
 		}
 	},

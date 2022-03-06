@@ -121,7 +121,12 @@ const command: Command = {
 
 				Util.roseLobby = new CronJob(date, () => {
 					announcementChannel
-						.send(translations.strings.annoucement(password))
+						.send({
+							content: translations.strings.annoucement(password),
+							allowedMentions: {
+								roles: [Util.config.ROSE_LOBBY_ROLE_ID],
+							},
+						})
 						.catch(console.error);
 
 					logChannel.messages.fetch({ limit: 1 }).then((messages) => {

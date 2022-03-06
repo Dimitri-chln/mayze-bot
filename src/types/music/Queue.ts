@@ -25,9 +25,9 @@ import PlayDl from "play-dl";
 import { LanguageTranslationsData } from "../structures/Translations";
 
 export default class Queue {
-	readonly voiceChannel: VoiceChannel;
+	voiceChannel: VoiceChannel;
 	readonly textChannel: TextChannel;
-	private readonly _translations: LanguageTranslationsData;
+	readonly translations: LanguageTranslationsData;
 	readonly audioPlayer: AudioPlayer;
 	songs: Song[];
 	private _running: boolean;
@@ -40,7 +40,7 @@ export default class Queue {
 	private _volume: number;
 	readonly idleTime: number;
 	private readonly _songDisplays: Collection<Snowflake, Message>;
-	private readonly _songDisplaysTimeout: NodeJS.Timeout;
+	private readonly _songDisplaysTimeout: NodeJS.Timer;
 
 	constructor(
 		voiceChannel: VoiceChannel,
@@ -49,7 +49,7 @@ export default class Queue {
 	) {
 		this.voiceChannel = voiceChannel;
 		this.textChannel = textChannel;
-		this._translations = translations;
+		this.translations = translations;
 		this.audioPlayer = createAudioPlayer({
 			behaviors: {
 				noSubscriber: NoSubscriberBehavior.Pause,
@@ -98,18 +98,16 @@ export default class Queue {
 						await Promise.race([
 							entersState(
 								this.voiceConnection,
-								VoiceConnectionStatus.Signalling,
-								5_000,
-							),
-							entersState(
-								this.voiceConnection,
 								VoiceConnectionStatus.Connecting,
 								5_000,
 							),
 						]);
 						// Seems to be reconnecting to a new channel - ignore disconnect
 						this.voiceConnection.subscribe(this.audioPlayer);
-					} catch (error) {
+						this.voiceChannel = this.voiceChannel.client.channels.cache.get(
+							this.voiceConnection.joinConfig.channelId,
+						) as VoiceChannel;
+					} catch (err) {
 						// Seems to be a real disconnect which SHOULDN'T be recovered from
 						this.stop();
 					}
@@ -117,6 +115,7 @@ export default class Queue {
 				}
 
 				case VoiceConnectionStatus.Destroyed: {
+					this.stop();
 					break;
 				}
 			}
@@ -146,6 +145,21 @@ export default class Queue {
 					break;
 				}
 			}
+		});
+
+		this.audioPlayer.on("error", (err) => {
+			console.error(err);
+			this.repeatSong = false;
+
+			this.textChannel.send(
+				this.translations.strings.stream_error(
+					this.nowPlaying.name,
+					err.name,
+					err.message,
+				),
+			);
+
+			this._playSong();
 		});
 	}
 
@@ -216,9 +230,10 @@ export default class Queue {
 		return this.audioPlayer.unpause();
 	}
 
-	stop() {
+	async stop() {
 		this._stopped = true;
-		return this.audioPlayer.stop();
+		await this._editSongDisplays({ song: this.nowPlaying, end: true });
+		this._delete();
 	}
 
 	setVolume(percentage: number) {
@@ -341,14 +356,8 @@ export default class Queue {
 	private async _editSongDisplays(
 		options: { song?: Song; end?: boolean } = {},
 	) {
-		if (!this._running) return;
-		if (
-			this.audioPlayer.state.status !== AudioPlayerStatus.Playing &&
-			!options.end
-		)
-			return;
-
 		const song = options.song ?? this.nowPlaying;
+		if (!song) return;
 
 		await Promise.all(
 			this._songDisplays.map(async (message) => {
@@ -358,14 +367,14 @@ export default class Queue {
 						embeds: [
 							{
 								author: {
-									name: this._translations.strings.author(),
+									name: this.translations.strings.author(),
 									iconURL: this.voiceChannel.guild.iconURL({ dynamic: true }),
 								},
 								thumbnail: {
 									url: song.thumbnail,
 								},
 								color: this.voiceChannel.guild.me.displayColor,
-								description: this._translations.strings.description(
+								description: this.translations.strings.description(
 									song.name,
 									song.url,
 									options.end
@@ -389,8 +398,8 @@ export default class Queue {
 									text:
 										"✨ Mayze ✨" +
 										(options.end
-											? this._translations.strings.footer_end()
-											: this._translations.strings.footer(
+											? this.translations.strings.footer_end()
+											: this.translations.strings.footer(
 													this.repeatSong,
 													this.repeatQueue,
 											  )),
@@ -408,19 +417,21 @@ export default class Queue {
 		);
 	}
 
+	private _delete() {
+		if (this.emptyTimeout) clearTimeout(this.emptyTimeout);
+		if (this.voiceConnection) this.voiceConnection.destroy();
+		if (this._songDisplaysTimeout) clearInterval(this._songDisplaysTimeout);
+		if (this.audioPlayer) this.audioPlayer.stop();
+		Util.musicPlayer.delete(this.voiceChannel.guild.id);
+	}
+
 	private async _playSong(): Promise<void> {
+		if (this._stopped) return;
+
+		// Clear the previous idle timeout
 		if (this.idleTimeout) {
 			clearTimeout(this.idleTimeout);
 			delete this.idleTimeout;
-		}
-
-		// If the queue has been stopped
-		if (this._stopped) {
-			this.voiceConnection.destroy();
-			this.audioPlayer.stop();
-			await this._editSongDisplays({ song: this.nowPlaying, end: true });
-			Util.musicPlayer.delete(this.voiceChannel.guild.id);
-			return;
 		}
 
 		let previousSong: Song;
@@ -432,17 +443,9 @@ export default class Queue {
 
 		// If there isn't any song in the queue
 		if (this.songs.length === 0) {
-			await this._editSongDisplays({ song: previousSong, end: true });
 			this._running = false;
-
-			if (this.idleTimeout) clearTimeout(this.idleTimeout);
-			this.idleTimeout = setTimeout(() => {
-				if (this.songs.length > 0) return;
-
-				this.voiceConnection.destroy();
-				this.audioPlayer.stop();
-				Util.musicPlayer.delete(this.voiceChannel.guild.id);
-			}, this.idleTime);
+			await this._editSongDisplays({ song: previousSong, end: true });
+			this.idleTimeout = setTimeout(() => this._delete(), this.idleTime);
 			return;
 		}
 
@@ -459,28 +462,31 @@ export default class Queue {
 			seek: this.nowPlaying.seek,
 		};
 
-		// Stream the song
-		const source = await PlayDl.stream(this.nowPlaying.url, streamOptions);
+		try {
+			// Stream the song
+			const source = await PlayDl.stream(this.nowPlaying.url, streamOptions);
 
-		const resource = createAudioResource(source.stream, {
-			inputType: source.type,
-			inlineVolume: true,
-		});
+			const resource = createAudioResource(source.stream, {
+				inputType: source.type,
+				inlineVolume: true,
+			});
 
-		resource.playStream.once("error", (err) => {
+			resource.volume.setVolumeLogarithmic(this._volume);
+
+			this.audioPlayer.play(resource);
+		} catch (err) {
+			console.error(err);
 			this.repeatSong = false;
 
 			this.textChannel.send(
-				this._translations.strings.stream_error(
+				this.translations.strings.stream_error(
 					this.nowPlaying.name,
 					err.name,
 					err.message,
 				),
 			);
-		});
 
-		resource.volume.setVolumeLogarithmic(this._volume);
-
-		this.audioPlayer.play(resource);
+			this._playSong();
+		}
 	}
 }

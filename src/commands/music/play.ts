@@ -53,12 +53,12 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const isPlaying = Util.musicPlayer.isPlaying(interaction.guild.id);
 
-		const queue = isPlaying
-			? Util.musicPlayer.get(interaction.guild.id)
-			: await Util.musicPlayer.create(
-					(interaction.member as GuildMember).voice.channel as VoiceChannel,
-					interaction.channel as TextChannel,
-			  );
+		const queue =
+			Util.musicPlayer.get(interaction.guild.id) ??
+			(await Util.musicPlayer.create(
+				(interaction.member as GuildMember).voice.channel as VoiceChannel,
+				interaction.channel as TextChannel,
+			));
 
 		let search = interaction.options.getString("song", true);
 		const shuffle = Boolean(interaction.options.getBoolean("shuffle", false));

@@ -21,7 +21,9 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		Util.musicPlayer.get(interaction.guild.id).stop();
+		Util.musicPlayer
+			.get(interaction.guild.id)
+			.stop();
 
 		interaction.followUp(translations.strings.stopped());
 	},
