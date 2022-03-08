@@ -336,14 +336,24 @@ const event: Event = {
 								user.send(`⏰ | ${reminder.content}`);
 							});
 
-							if (reminder.repeat) {
-								Util.database.query(
-									"UPDATE reminder SET timestamp = $1 WHERE id = $2",
-									[
-										new Date(timestamp.valueOf() + reminder.repeat),
-										reminder.id,
-									],
-								);
+							if (reminder.repeat && reminder.occurrences !== 0) {
+								// -1 stands for infinite occurrences
+								if (reminder.occurrences === -1)
+									Util.database.query(
+										"UPDATE reminder SET timestamp = $1 WHERE id = $2",
+										[
+											new Date(timestamp.valueOf() + reminder.repeat),
+											reminder.id,
+										],
+									);
+								else
+									Util.database.query(
+										"UPDATE reminder SET timestamp = $1, occurrences = occurrences - 1 WHERE id = $2",
+										[
+											new Date(timestamp.valueOf() + reminder.repeat),
+											reminder.id,
+										],
+									);
 							} else {
 								Util.database.query("DELETE FROM reminder WHERE id = $1", [
 									reminder.id,

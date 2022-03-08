@@ -135,6 +135,7 @@ export interface DatabaseReminder {
 	timestamp: string;
 	content: string;
 	repeat?: number;
+	occurrences?: number;
 }
 
 export interface DatabaseTradeBlock {

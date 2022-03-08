@@ -84,6 +84,13 @@ const command: Command = {
 								type: "STRING",
 								required: true,
 							},
+							{
+								name: "occurrences",
+								description: "Le nombre de répétitions du rappel",
+								type: "NUMBER",
+								required: false,
+								minValue: 1,
+							},
 						],
 					},
 				],
@@ -169,6 +176,13 @@ const command: Command = {
 								description: "The reminder",
 								type: "STRING",
 								required: true,
+							},
+							{
+								name: "occurrences",
+								description: "The number of times to repeat the reminder",
+								type: "NUMBER",
+								required: false,
+								minValue: 1,
 							},
 						],
 					},
@@ -282,6 +296,14 @@ const command: Command = {
 				if (!duration)
 					return interaction.followUp(translations.strings.invalid_duration());
 
+				const occurrences =
+					interaction.options.getNumber("occurrences", false) ?? -1;
+
+				if (occurrences < 1)
+					return interaction.followUp(
+						translations.strings.invalid_occurrences(),
+					);
+
 				const date = new Date(Date.now() + duration);
 
 				let content = interaction.options.getString("reminder", true);
@@ -289,8 +311,8 @@ const command: Command = {
 					content = content.replace(/^./, (a) => a.toUpperCase());
 
 				await Util.database.query(
-					"INSERT INTO reminder (user_id, timestamp, content, repeat) VALUES ($1, $2, $3, $4)",
-					[interaction.user.id, date, content, duration],
+					"INSERT INTO reminder (user_id, timestamp, content, repeat, occurrences) VALUES ($1, $2, $3, $4, $5)",
+					[interaction.user.id, date, content, duration, occurrences],
 				);
 
 				interaction.followUp(
