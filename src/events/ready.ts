@@ -336,7 +336,8 @@ const event: Event = {
 								user.send(`⏰ | ${reminder.content}`);
 							});
 
-							if (reminder.repeat && reminder.occurrences !== 0) {
+							// If occurrences is 1, delete the reminder as the last occurence has just been sent
+							if (reminder.repeat && reminder.occurrences !== 1) {
 								// -1 stands for infinite occurrences
 								if (reminder.occurrences === -1)
 									Util.database.query(
