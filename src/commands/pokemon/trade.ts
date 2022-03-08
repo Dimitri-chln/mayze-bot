@@ -364,6 +364,8 @@ const command: Command = {
 					fetchReply: true,
 				})) as Message;
 
+				interaction.followUp(user.toString());
+
 				const filter: CollectorFilter<[ButtonInteraction]> = (
 					buttonInteraction,
 				) =>
