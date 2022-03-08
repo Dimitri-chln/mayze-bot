@@ -9,7 +9,7 @@ const command: Command = {
 	aliases: [],
 	description: {
 		fr: "Obtenir la définition d'un mot",
-		en: "Get the definition of a word",
+		en: "Find the definition of a word",
 	},
 	usage: "",
 	userPermissions: [],
@@ -23,22 +23,6 @@ const command: Command = {
 				type: "STRING",
 				required: true,
 			},
-			{
-				name: "language",
-				description: "La langue dans laquelle chercher le mot",
-				type: "STRING",
-				required: false,
-				choices: [
-					{
-						name: "Français",
-						value: "fr",
-					},
-					{
-						name: "Anglais",
-						value: "en",
-					},
-				],
-			},
 		],
 		en: [
 			{
@@ -47,22 +31,6 @@ const command: Command = {
 				type: "STRING",
 				required: true,
 			},
-			{
-				name: "language",
-				description: "The language to search the word in",
-				type: "STRING",
-				required: false,
-				choices: [
-					{
-						name: "Français",
-						value: "fr",
-					},
-					{
-						name: "Anglais",
-						value: "en",
-					},
-				],
-			},
 		],
 	},
 
@@ -70,10 +38,8 @@ const command: Command = {
 		const apiURL = "https://api.dictionaryapi.dev/api/v2/entries";
 
 		const word = interaction.options.getString("word", true).toLowerCase();
-		const searchLanguage =
-			interaction.options.getString("language", false) ?? translations.language;
 
-		Axios.get(`${apiURL}/${searchLanguage}/${encodeURIComponent(word)}`)
+		Axios.get(`${apiURL}/${translations.language}/${encodeURIComponent(word)}`)
 			.then(async ({ data }: { data: DictionaryResult[] }) => {
 				interaction.followUp(
 					`__**${data[0].word.replace(/^./, (a: string) =>

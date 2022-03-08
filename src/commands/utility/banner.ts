@@ -41,14 +41,19 @@ const command: Command = {
 				{
 					author: {
 						name: translations.strings.author(user.tag),
-						iconURL: interaction.client.user.displayAvatarURL(),
+						iconURL: user.displayAvatarURL({ dynamic: true }),
 					},
 					color: interaction.guild.me.displayColor,
 					image: {
-						url: user.bannerURL({
-							size: 4096,
-							dynamic: true,
-						}),
+						url:
+							user.bannerURL({
+								size: 4096,
+								dynamic: true,
+							}) ??
+							`https://dummyimage.com/640x16:9/${user.hexAccentColor.replace(
+								"#",
+								"",
+							)}/00.png?text=%20`,
 					},
 					footer: {
 						text: "✨ Mayze ✨",
