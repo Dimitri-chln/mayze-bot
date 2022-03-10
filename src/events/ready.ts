@@ -492,6 +492,7 @@ function testReminder(client: Client) {
 					.fetch(userId)
 					.then((userId) => userId.send(getMessage(15)).catch(console.error)),
 			);
+
 			setTimeout(
 				() =>
 					userIds.forEach((userId) =>
@@ -502,6 +503,7 @@ function testReminder(client: Client) {
 					),
 				600_000,
 			);
+
 			setTimeout(
 				() =>
 					userIds.forEach((userId) =>
@@ -542,7 +544,7 @@ function questReminder(client: Client) {
 			userIds.forEach((userId) =>
 				client.users
 					.fetch(userId)
-					.then((userId) => userId.send(getMessage()).catch(console.error)),
+					.then((userId) => userId.send(getMessage(1)).catch(console.error)),
 			);
 		},
 		null,
@@ -553,31 +555,37 @@ function questReminder(client: Client) {
 		0,
 	);
 
-	function getMessage() {
+	new CronJob(
+		"0 30 10 * * 2",
+		() => {
+			userIds.forEach((userId) =>
+				client.users
+					.fetch(userId)
+					.then((userId) => userId.send(getMessage(2)).catch(console.error)),
+			);
+		},
+		null,
+		true,
+		null,
+		null,
+		false,
+		0,
+	);
+
+	function getMessage(number: number): string {
 		const f = (parts: TemplateStringsArray) => parts[0].replace(/\t*/g, "");
 
-		return f`
-		Hey!! There should be new quests now 👀 Remember to do the quest voting! 
+		const messages = {
+			1: f`
+				Hey!! There should be new quests now 👀 Remember to do the #abstimmungen📊voting 🎉
+				It’s not the most important aspect to have names but you find them in an alphabetical order here: https://thecrazymaffin.github.io/OutfitList/outfits.html as well as a document with most gem quests: https://bit.ly/3hV42rr — for more recent quests that might not be on the website yet, have a look at https://instagram.com/wov.outfits?utm_medium=copy_link they often share quests and their names or ask Marie#0005. ☺️
+			`,
+			2: f`
+				Awesome that you did the quest voting🥳 ~~if actually none of you did then pls have a liL REEEEEEEE & do it now~~ 👀👀 Would be best to announce the quests this week in about half an hour / remind people to vote now if unclear. Here is a link to the <#560041442287026178> & <#877886410168881172> to discuss who announces it. Have a good day 💗
+			`,
+		};
 
-		\`\`\`
-		**__Neue Questabstimmung / New quest voting__** @Mitglied / Member @Bots 
-		
-		**Neu mischen / Shuffle (dabei werden alle abgemeldet & müssen sich selber bei neuer Queststart wieder anmelden) ** ||everyone will be disabled and needs to sign up for quests by themeselves||
-		
-		**Wie viele Quests sollen wir diese Woche machen?** _In Abhängikeit der Stimmen starten wir heute Abend die neue Quests und geben gegen Mittag / Nachtmittag die Questreihenfolge an. Nutzt deshalb bitte auch die Möglichkeit anzugeben welche Quests ihr am liebsten als erstes, zweites oder drittes machen möchtet. Auch nochmal der generelle Reminder — bitte 400 <:Gold:882425044662353960> / 120 <:Gem:882425044637200395> je Questteilnahme spenden._ 
-		**How many quests should we do this week?** _Depending on the votes we'll announce it this afternoon which quests we'll do in which order, starting this evening. Therefore please use the option to choose which quests you'd like to do first, second, third etc. Once again the general reminder — please donate 400 <:Gold:882425044662353960> / 120 <:Gem:882425044637200395> each quest participation._
-		
-		**Warten / Wait**
-		
-		**1. Quest** \`name\` :Gold: _zuletzt gemacht 18/12/2020 last time done_
-		link
-		**2. Quest** \`name\` :Gem:
-		link
-		
-		**Ich hab vollständig abgestimmt / I fully voted**
-		_Hier, hab einen Keks! / So here, get a cookie!_ :cookie:
-		\`\`\`
-		`;
+		return messages[number];
 	}
 }
 
