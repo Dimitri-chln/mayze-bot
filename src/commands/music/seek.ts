@@ -40,11 +40,13 @@ const command: Command = {
 		if (!/(?:(\d+):)?([0-5]?\d):([0-5]\d)/.test(timestamp))
 			return interaction.followUp(translations.strings.invalid_timestamp());
 
-		const song = Util.musicPlayer
-			.get(interaction.guild.id)
-			.seek(Util.music.timeToMilliseconds(timestamp) / 1000);
-
-		interaction.followUp(translations.strings.seeked(timestamp, song.name));
+		const queue = Util.musicPlayer.get(interaction.guild.id);
+		if (queue.nowPlaying.live) {
+			interaction.followUp(translations.strings.live_video());
+		} else {
+			const song = queue.seek(Util.music.timeToMilliseconds(timestamp) / 1000);
+			interaction.followUp(translations.strings.seeked(timestamp, song.name));
+		}
 	},
 };
 

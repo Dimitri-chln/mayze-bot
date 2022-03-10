@@ -1,7 +1,7 @@
 import Event from "../types/structures/Event";
 import Util from "../Util";
 
-import { Collection, GuildMember } from "discord.js";
+import { GuildMember } from "discord.js";
 import { DatabaseMemberRoles } from "../types/structures/Database";
 
 const event: Event = {
@@ -11,6 +11,7 @@ const event: Event = {
 	run: async (member: GuildMember) => {
 		if (member.guild.id !== Util.config.MAIN_GUILD_ID) return;
 		if (member.user.bot) return;
+		if (!member.guild.me.permissions.has("MANAGE_ROLES")) return;
 
 		let roleIds = [
 			"735809874205737020",

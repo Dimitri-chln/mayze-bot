@@ -3,7 +3,6 @@ import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
 import { GuildMember, TextChannel, VoiceChannel } from "discord.js";
-import Axios from "axios";
 import PlayDl from "play-dl";
 import MusicUtil from "../../types/music/MusicUtil";
 

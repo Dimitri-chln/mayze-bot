@@ -55,7 +55,9 @@ export default class MusicUtil {
 
 				const songData: SongData = {
 					title: youtubeResult.title,
-					duration: youtubeResult.durationInSec * 1000,
+					duration: youtubeResult.live
+						? Infinity
+						: youtubeResult.durationInSec * 1000,
 					channel: {
 						name: youtubeResult.channel.name,
 					},
@@ -141,6 +143,7 @@ export default class MusicUtil {
 					},
 					url,
 					videos: (await youtubeResult.all_videos())
+						.filter((video) => !video.live)
 						.map((video, index) => {
 							if (index >= limit) return;
 
@@ -309,6 +312,8 @@ export default class MusicUtil {
 	}
 
 	static millisecondsToTime(ms: number) {
+		if (ms === Infinity) return "♾️";
+
 		const seconds = Math.floor((ms / 1_000) % 60);
 		const minutes = Math.floor((ms / 60_000) % 60);
 		const hours = Math.floor(ms / 3_600_000);
@@ -334,7 +339,7 @@ export default class MusicUtil {
 	}
 
 	static buildBar(value: number, maxValue: number) {
-		const percentage = value / maxValue > 1 ? 0 : value / maxValue;
+		const percentage = Math.min(value / maxValue, 1);
 		const progress = Math.round(20 * percentage);
 		const emptyProgress = Math.round(20 * (1 - percentage));
 

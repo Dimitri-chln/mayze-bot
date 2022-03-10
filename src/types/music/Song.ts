@@ -3,7 +3,7 @@ import Queue from "./Queue";
 
 export default class Song {
 	readonly name: string;
-	readonly duration: number;
+	readonly duration?: number;
 	readonly author: string;
 	readonly url: string;
 	readonly thumbnail: string;
@@ -27,7 +27,7 @@ export default class Song {
 
 export interface SongData {
 	title: string;
-	duration: number;
+	duration?: number;
 	channel: {
 		name: string;
 	};

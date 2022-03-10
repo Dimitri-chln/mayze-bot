@@ -179,11 +179,13 @@ export default class Queue {
 
 	get duration() {
 		return this.audioPlayer
-			? this.songs.reduce((sum, song) => sum + song.duration, 0) -
-					(this.audioPlayer.state.status === AudioPlayerStatus.Playing
+			? this.repeatSong || this.repeatQueue
+				? Infinity
+				: this.songs.reduce((sum, song) => sum + song.duration, 0) -
+				  (this.audioPlayer.state.status === AudioPlayerStatus.Playing
 						? this.audioPlayer.state.resource.playbackDuration
 						: 0) -
-					this.nowPlaying?.seek
+				  this.nowPlaying?.seek
 			: 0;
 	}
 
@@ -245,6 +247,8 @@ export default class Queue {
 
 	seek(seconds: number) {
 		const currentSong = this.nowPlaying;
+		if (currentSong.live) throw new Error("Can't use seek on live videos");
+
 		this._seek = seconds;
 		this.audioPlayer.stop();
 		return currentSong;
@@ -388,9 +392,7 @@ export default class Queue {
 										: this.repeatQueue
 										? song.name
 										: "Ø",
-									this.repeatSong || this.repeatQueue
-										? "♾️"
-										: options.end
+									options.end
 										? Util.music.millisecondsToTime(0)
 										: Util.music.millisecondsToTime(this.duration),
 								),
@@ -449,22 +451,15 @@ export default class Queue {
 			return;
 		}
 
-		// Live Video is unsupported
-		if (this.nowPlaying.live) {
-			this.repeatSong = false;
-			return this._playSong();
-		}
-
 		this.nowPlaying.seek = this._seek;
 		this._seek = null;
 
-		const streamOptions = {
-			seek: this.nowPlaying.seek,
-		};
-
 		try {
 			// Stream the song
-			const source = await PlayDl.stream(this.nowPlaying.url, streamOptions);
+			const source = await PlayDl.stream(this.nowPlaying.url, {
+				quality: 2,
+				seek: this.nowPlaying.seek,
+			});
 
 			const resource = createAudioResource(source.stream, {
 				inputType: source.type,
@@ -476,6 +471,7 @@ export default class Queue {
 			this.audioPlayer.play(resource);
 		} catch (err) {
 			console.error(err);
+			this._running = true;
 			this.repeatSong = false;
 
 			this.textChannel.send(
