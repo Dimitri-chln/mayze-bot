@@ -343,7 +343,9 @@ export default class Queue {
 
 	createProgressBar() {
 		const timePassed =
-			this.audioPlayer.state.status === AudioPlayerStatus.Playing
+			this.audioPlayer.state.status === AudioPlayerStatus.Playing ||
+			this.audioPlayer.state.status === AudioPlayerStatus.Paused ||
+			this.audioPlayer.state.status === AudioPlayerStatus.Buffering
 				? this.audioPlayer.state.resource.playbackDuration +
 				  (this.nowPlaying.seek ?? 0) * 1000
 				: 0;
