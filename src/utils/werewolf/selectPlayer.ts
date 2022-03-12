@@ -20,7 +20,7 @@ export default function selectPlayer(
 	players: Player[],
 	embedTitle: string,
 	number: number = 1,
-	timeout: number = 30_000,
+	timeout: number = 60_000,
 ): Promise<Player[]> {
 	return new Promise(async (resolve, reject) => {
 		if (number > 4) throw new Error("Number must be less or equal to 4");

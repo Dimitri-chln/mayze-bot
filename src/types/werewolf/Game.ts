@@ -164,6 +164,10 @@ export default class Game {
 			})
 			.catch(console.error);
 
+		setTimeout(() => {
+			if (!this.ended) this.startDay();
+		}, 60_000);
+
 		const filter: CollectorFilter<[Message]> = (message) => !message.author.bot;
 
 		const messageCollector = this.config.werewolvesChannel.createMessageCollector({
@@ -356,8 +360,6 @@ export default class Game {
 				witch.member.user.send(this._translations.strings.witch_no_attack()).catch(console.error);
 			}
 		}
-
-		if (!this.ended) this.startDay();
 	}
 
 	async startDay() {
