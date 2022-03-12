@@ -34,7 +34,7 @@ export default async function runCommand(command: Command, interaction: CommandI
 
 	if (missingBotPermissions.length)
 		return interaction
-			.followUp(translations.strings.bot_missing_perms(missingBotPermissions.join("`, `")))
+			.followUp(translations.strings.bot_missing_permissions(missingBotPermissions.join("`, `")))
 			.catch(console.error);
 
 	// Check if the user is in the same voice channel as the bot
