@@ -16,31 +16,21 @@ const autocompleteHandler: AutocompleteHandler = {
 			run: async (interaction, value) => {
 				const language = Util.guildConfigs.get(interaction.guild.id).language;
 
-				const { rows: pokemons }: { rows: DatabasePokemon[] } =
-					await Util.database.query("SELECT * FROM pokemon WHERE users ? $1", [
-						interaction.user.id,
-					]);
+				const { rows: pokemons }: { rows: DatabasePokemon[] } = await Util.database.query(
+					"SELECT * FROM pokemon WHERE users ? $1",
+					[interaction.user.id],
+				);
 
 				const pokemonList = new PokemonList(pokemons, interaction.user.id);
 
 				return pokemonList.pokemons.map((pokemon) => {
 					return {
 						name:
-							pokemon.data.formatName(
-								language,
-								pokemon.shiny,
-								pokemon.variationType,
-								pokemon.variation,
-							) + (pokemon.nickname ? ` - "${pokemon.nickname}"` : ""),
+							pokemon.data.formatName(language, pokemon.shiny, pokemon.variationType, pokemon.variation) +
+							(pokemon.nickname ? ` - "${pokemon.nickname}"` : ""),
 						value:
 							(pokemon.shiny ? "Shiny " : "") +
-							pokemon.data.formatName(
-								language,
-								pokemon.shiny,
-								pokemon.variationType,
-								pokemon.variation,
-								"raw",
-							),
+							pokemon.data.formatName(language, pokemon.shiny, pokemon.variationType, pokemon.variation, "raw"),
 					};
 				});
 			},
@@ -54,31 +44,21 @@ const autocompleteHandler: AutocompleteHandler = {
 			run: async (interaction, value) => {
 				const language = Util.guildConfigs.get(interaction.guild.id).language;
 
-				const { rows: pokemons }: { rows: DatabasePokemon[] } =
-					await Util.database.query("SELECT * FROM pokemon WHERE users ? $1", [
-						interaction.user.id,
-					]);
+				const { rows: pokemons }: { rows: DatabasePokemon[] } = await Util.database.query(
+					"SELECT * FROM pokemon WHERE users ? $1",
+					[interaction.user.id],
+				);
 
 				const pokemonList = new PokemonList(pokemons, interaction.user.id);
 
 				return pokemonList.pokemons.map((pokemon) => {
 					return {
 						name:
-							pokemon.data.formatName(
-								language,
-								pokemon.shiny,
-								pokemon.variationType,
-								pokemon.variation,
-							) + (pokemon.nickname ? ` - "${pokemon.nickname}"` : ""),
+							pokemon.data.formatName(language, pokemon.shiny, pokemon.variationType, pokemon.variation) +
+							(pokemon.nickname ? ` - "${pokemon.nickname}"` : ""),
 						value:
 							(pokemon.shiny ? "Shiny " : "") +
-							pokemon.data.formatName(
-								language,
-								pokemon.shiny,
-								pokemon.variationType,
-								pokemon.variation,
-								"raw",
-							),
+							pokemon.data.formatName(language, pokemon.shiny, pokemon.variationType, pokemon.variation, "raw"),
 					};
 				});
 			},
@@ -92,31 +72,21 @@ const autocompleteHandler: AutocompleteHandler = {
 			run: async (interaction, value) => {
 				const language = Util.guildConfigs.get(interaction.guild.id).language;
 
-				const { rows: pokemons }: { rows: DatabasePokemon[] } =
-					await Util.database.query("SELECT * FROM pokemon WHERE users ? $1", [
-						interaction.user.id,
-					]);
+				const { rows: pokemons }: { rows: DatabasePokemon[] } = await Util.database.query(
+					"SELECT * FROM pokemon WHERE users ? $1",
+					[interaction.user.id],
+				);
 
 				const pokemonList = new PokemonList(pokemons, interaction.user.id);
 
 				return pokemonList.pokemons.map((pokemon) => {
 					return {
 						name:
-							pokemon.data.formatName(
-								language,
-								pokemon.shiny,
-								pokemon.variationType,
-								pokemon.variation,
-							) + (pokemon.nickname ? ` - "${pokemon.nickname}"` : ""),
+							pokemon.data.formatName(language, pokemon.shiny, pokemon.variationType, pokemon.variation) +
+							(pokemon.nickname ? ` - "${pokemon.nickname}"` : ""),
 						value:
 							(pokemon.shiny ? "Shiny " : "") +
-							pokemon.data.formatName(
-								language,
-								pokemon.shiny,
-								pokemon.variationType,
-								pokemon.variation,
-								"raw",
-							),
+							pokemon.data.formatName(language, pokemon.shiny, pokemon.variationType, pokemon.variation, "raw"),
 					};
 				});
 			},
@@ -135,13 +105,7 @@ const autocompleteHandler: AutocompleteHandler = {
 				return pokemons.map((pokemon) => {
 					return {
 						name: pokemon.formatName(language, false, "default"),
-						value: pokemon.formatName(
-							language,
-							false,
-							"default",
-							"default",
-							"raw",
-						),
+						value: pokemon.formatName(language, false, "default", "default", "raw"),
 					};
 				});
 			},
@@ -160,13 +124,7 @@ const autocompleteHandler: AutocompleteHandler = {
 				return pokemons.map((pokemon) => {
 					return {
 						name: pokemon.formatName(language, false, "default"),
-						value: pokemon.formatName(
-							language,
-							false,
-							"default",
-							"default",
-							"raw",
-						),
+						value: pokemon.formatName(language, false, "default", "default", "raw"),
 					};
 				});
 			},

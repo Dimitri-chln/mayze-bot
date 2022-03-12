@@ -4,5 +4,6 @@
 	"semi": true,
 	"singleQuote": false,
 	"arrowParens": "always",
-	"useTabs": true
+	"useTabs": true,
+	"printWidth": 120
 }

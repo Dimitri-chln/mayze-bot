@@ -136,9 +136,7 @@ const command: Command = {
 					const parsedExpression = Math.parse(expression);
 					const result = parsedExpression.evaluate();
 
-					interaction.followUp(
-						`\`\`\`\n${parsedExpression.toString()}\n= ${result.toString()}\n\`\`\``,
-					);
+					interaction.followUp(`\`\`\`\n${parsedExpression.toString()}\n= ${result.toString()}\n\`\`\``);
 				} catch (err) {
 					console.error(err);
 					interaction.followUp(translations.strings.syntax_error(err.message));
@@ -148,16 +146,13 @@ const command: Command = {
 
 			case "solve": {
 				const expression = interaction.options.getString("expression", true);
-				const variable =
-					interaction.options.getString("variable", false) ?? "x";
+				const variable = interaction.options.getString("variable", false) ?? "x";
 
 				try {
 					const equation = Algebra.parse(expression) as Algebra.Equation;
 					const result = equation.solveFor(variable);
 
-					const resultString = Array.isArray(result)
-						? result.join(", ")
-						: result.toString();
+					const resultString = Array.isArray(result) ? result.join(", ") : result.toString();
 
 					interaction.followUp(
 						`\`\`\`\n${equation.toString()}\n${variable} = ${
@@ -173,8 +168,7 @@ const command: Command = {
 
 			case "derivative": {
 				const expression = interaction.options.getString("expression", true);
-				const variable =
-					interaction.options.getString("variable", false) ?? "x";
+				const variable = interaction.options.getString("variable", false) ?? "x";
 
 				try {
 					const parsedExpression = Math.parse(expression);

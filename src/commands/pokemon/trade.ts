@@ -2,16 +2,8 @@ import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
-import {
-	ButtonInteraction,
-	CollectorFilter,
-	TextChannel,
-	User,
-} from "discord.js";
-import Pokemon, {
-	MegaEvolution,
-	PokemonVariation,
-} from "../../types/pokemon/Pokemon";
+import { ButtonInteraction, CollectorFilter, TextChannel, User } from "discord.js";
+import Pokemon, { MegaEvolution, PokemonVariation } from "../../types/pokemon/Pokemon";
 import { DatabasePokemon } from "../../types/structures/Database";
 import { Variation, VariationType } from "../../utils/pokemon/pokemonInfo";
 
@@ -55,8 +47,7 @@ const command: Command = {
 			},
 			{
 				name: "block",
-				description:
-					"Bloquer un utilisateur pour l'empêcher d'échanger avec toi",
+				description: "Bloquer un utilisateur pour l'empêcher d'échanger avec toi",
 				type: "SUB_COMMAND",
 				options: [
 					{
@@ -137,15 +128,12 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const logChannel = interaction.client.channels.cache.get(
-			Util.config.TRADE_LOG_CHANNEL_ID,
-		) as TextChannel;
+		const logChannel = interaction.client.channels.cache.get(Util.config.TRADE_LOG_CHANNEL_ID) as TextChannel;
 
 		const subCommand = interaction.options.getSubcommand();
 
 		const user = interaction.options.getUser("user", true);
-		if (user.id === interaction.user.id)
-			return interaction.followUp(translations.strings.same_user());
+		if (user.id === interaction.user.id) return interaction.followUp(translations.strings.same_user());
 
 		switch (subCommand) {
 			case "block": {
@@ -163,10 +151,10 @@ const command: Command = {
 			}
 
 			case "unblock": {
-				Util.database.query(
-					"DELETE FROM trade_block WHERE user_id = $1 AND blocked_user_id = $2",
-					[interaction.user.id, user.id],
-				);
+				Util.database.query("DELETE FROM trade_block WHERE user_id = $1 AND blocked_user_id = $2", [
+					interaction.user.id,
+					user.id,
+				]);
 
 				interaction.followUp(translations.strings.unblocked(user.tag));
 				break;
@@ -175,15 +163,12 @@ const command: Command = {
 			case "start": {
 				const {
 					rows: [blocked],
-				} = await Util.database.query(
-					"SELECT * FROM trade_block WHERE user_id = $1 AND blocked_user_id = $2",
-					[user.id, interaction.user.id],
-				);
+				} = await Util.database.query("SELECT * FROM trade_block WHERE user_id = $1 AND blocked_user_id = $2", [
+					user.id,
+					interaction.user.id,
+				]);
 
-				if (blocked)
-					return interaction.followUp(
-						translations.strings.not_allowed(user.tag),
-					);
+				if (blocked) return interaction.followUp(translations.strings.not_allowed(user.tag));
 
 				let errors = "";
 
@@ -194,9 +179,7 @@ const command: Command = {
 						?.map((input): OfferOrDemand => {
 							const number = parseInt((input.match(/^(\d+) */) ?? [])[1]) || 1;
 							const { pokemon, shiny, pokemonVariation } =
-								Util.pokedex.findByNameWithVariation(
-									input.replace(/^(\d+) */, ""),
-								) ?? {};
+								Util.pokedex.findByNameWithVariation(input.replace(/^(\d+) */, "")) ?? {};
 
 							if (pokemon)
 								return {
@@ -205,10 +188,7 @@ const command: Command = {
 									shiny: shiny,
 									pokemonVariation: pokemonVariation,
 								};
-							else
-								errors += translations.strings.invalid_pokemon(
-									input.replace(/^(\d+) */, ""),
-								);
+							else errors += translations.strings.invalid_pokemon(input.replace(/^(\d+) */, ""));
 						})
 						?.filter((p) => p)
 						// Filter duplicates
@@ -219,10 +199,8 @@ const command: Command = {
 									(v) =>
 										p.data.nationalId === v.data.nationalId &&
 										p.shiny === v.shiny &&
-										p.pokemonVariation?.variationType ===
-											v.pokemonVariation?.variationType &&
-										p.pokemonVariation?.variation ===
-											v.pokemonVariation?.variation,
+										p.pokemonVariation?.variationType === v.pokemonVariation?.variationType &&
+										p.pokemonVariation?.variation === v.pokemonVariation?.variation,
 								),
 						) ?? [];
 
@@ -233,9 +211,7 @@ const command: Command = {
 						?.map((input) => {
 							const number = parseInt((input.match(/^(\d+) */) ?? [])[1]) || 1;
 							const { pokemon, shiny, pokemonVariation } =
-								Util.pokedex.findByNameWithVariation(
-									input.replace(/^(\d+) */, ""),
-								) ?? {};
+								Util.pokedex.findByNameWithVariation(input.replace(/^(\d+) */, "")) ?? {};
 
 							if (pokemon)
 								return {
@@ -244,10 +220,7 @@ const command: Command = {
 									shiny: shiny,
 									pokemonVariation: pokemonVariation,
 								};
-							else
-								errors += translations.strings.invalid_pokemon(
-									input.replace(/^(\d+) */, ""),
-								);
+							else errors += translations.strings.invalid_pokemon(input.replace(/^(\d+) */, ""));
 						})
 						?.filter((p) => p)
 						// Filter duplicates
@@ -258,10 +231,8 @@ const command: Command = {
 									(v) =>
 										p.data.nationalId === v.data.nationalId &&
 										p.shiny === v.shiny &&
-										p.pokemonVariation?.variationType ===
-											v.pokemonVariation?.variationType &&
-										p.pokemonVariation?.variation ===
-											v.pokemonVariation?.variation,
+										p.pokemonVariation?.variationType === v.pokemonVariation?.variationType &&
+										p.pokemonVariation?.variation === v.pokemonVariation?.variation,
 								),
 						) ?? [];
 
@@ -270,12 +241,7 @@ const command: Command = {
 
 				if (errors) return interaction.followUp(errors);
 
-				errors = await checkValidPokemons(
-					interaction.user,
-					offer,
-					user,
-					demand,
-				);
+				errors = await checkValidPokemons(interaction.user, offer, user, demand);
 
 				if (errors) return interaction.followUp(errors);
 
@@ -284,10 +250,7 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.strings.author(
-									interaction.user.tag,
-									user.tag,
-								),
+								name: translations.strings.author(interaction.user.tag, user.tag),
 								iconURL: interaction.user.displayAvatarURL({
 									dynamic: true,
 								}),
@@ -296,10 +259,7 @@ const command: Command = {
 							// U+00d7 : ×
 							fields: [
 								{
-									name: translations.strings.offer(
-										interaction.user.username,
-										false,
-									),
+									name: translations.strings.offer(interaction.user.username, false),
 									value: `\`\`\`\n${
 										offer.length
 											? offer
@@ -366,11 +326,8 @@ const command: Command = {
 
 				interaction.followUp(user.toString());
 
-				const filter: CollectorFilter<[ButtonInteraction]> = (
-					buttonInteraction,
-				) =>
-					buttonInteraction.user.id === interaction.user.id ||
-					buttonInteraction.user.id === user.id;
+				const filter: CollectorFilter<[ButtonInteraction]> = (buttonInteraction) =>
+					buttonInteraction.user.id === interaction.user.id || buttonInteraction.user.id === user.id;
 
 				const collector = trade.createMessageComponentCollector({
 					filter,
@@ -391,10 +348,7 @@ const command: Command = {
 								embeds: [
 									{
 										author: {
-											name: translations.strings.author(
-												interaction.user.tag,
-												user.tag,
-											),
+											name: translations.strings.author(interaction.user.tag, user.tag),
 											iconURL: interaction.user.displayAvatarURL({
 												dynamic: true,
 											}),
@@ -403,10 +357,7 @@ const command: Command = {
 										// U+00d7 : ×
 										fields: [
 											{
-												name: translations.strings.offer(
-													interaction.user.username,
-													accepted[0],
-												),
+												name: translations.strings.offer(interaction.user.username, accepted[0]),
 												value: `\`\`\`\n${
 													offer.length
 														? offer
@@ -425,10 +376,7 @@ const command: Command = {
 												inline: true,
 											},
 											{
-												name: translations.strings.demand(
-													user.username,
-													accepted[1],
-												),
+												name: translations.strings.demand(user.username, accepted[1]),
 												value: `\`\`\`\n${
 													demand.length
 														? demand
@@ -460,8 +408,7 @@ const command: Command = {
 						}
 
 						case "accept": {
-							const index =
-								buttonInteraction.user.id === interaction.user.id ? 0 : 1;
+							const index = buttonInteraction.user.id === interaction.user.id ? 0 : 1;
 							accepted[index] = true;
 
 							await buttonInteraction.update({
@@ -469,10 +416,7 @@ const command: Command = {
 								embeds: [
 									{
 										author: {
-											name: translations.strings.author(
-												interaction.user.tag,
-												user.tag,
-											),
+											name: translations.strings.author(interaction.user.tag, user.tag),
 											iconURL: interaction.user.displayAvatarURL({
 												dynamic: true,
 											}),
@@ -481,10 +425,7 @@ const command: Command = {
 										// U+00d7 : ×
 										fields: [
 											{
-												name: translations.strings.offer(
-													interaction.user.username,
-													accepted[0],
-												),
+												name: translations.strings.offer(interaction.user.username, accepted[0]),
 												value: `\`\`\`\n${
 													offer.length
 														? offer
@@ -503,10 +444,7 @@ const command: Command = {
 												inline: true,
 											},
 											{
-												name: translations.strings.demand(
-													user.username,
-													accepted[1],
-												),
+												name: translations.strings.demand(user.username, accepted[1]),
 												value: `\`\`\`\n${
 													demand.length
 														? demand
@@ -568,18 +506,11 @@ const command: Command = {
 						});
 
 					if (!accepted.every((v) => v)) {
-						interaction.followUp(
-							translations.strings.cancelled(cancelledBy?.username),
-						);
+						interaction.followUp(translations.strings.cancelled(cancelledBy?.username));
 						return;
 					}
 
-					const errorsNew = await checkValidPokemons(
-						interaction.user,
-						offer,
-						user,
-						demand,
-					);
+					const errorsNew = await checkValidPokemons(interaction.user, offer, user, demand);
 
 					if (errorsNew) {
 						interaction.followUp(errorsNew);
@@ -713,9 +644,7 @@ const command: Command = {
 					}
 
 					// Dummy request to await all other ones
-					await Util.database
-						.query("SELECT national_id FROM pokemon WHERE national_id = 0")
-						.catch(console.error);
+					await Util.database.query("SELECT national_id FROM pokemon WHERE national_id = 0").catch(console.error);
 
 					logChannel
 						.send({
@@ -743,9 +672,7 @@ const command: Command = {
 																		pkm.shiny,
 																		pkm.pokemonVariation?.variationType,
 																		pkm.pokemonVariation?.variation,
-																	)} - ${offerSuccess[i]
-																		.map((s) => (s ? "✅" : "❌"))
-																		.join(" ")}`,
+																	)} - ${offerSuccess[i].map((s) => (s ? "✅" : "❌")).join(" ")}`,
 															)
 															.join("\n")
 													: "Ø"
@@ -764,9 +691,7 @@ const command: Command = {
 																		pkm.shiny,
 																		pkm.pokemonVariation?.variationType,
 																		pkm.pokemonVariation?.variation,
-																	)} - ${demandSuccess[i]
-																		.map((s) => (s ? "✅" : "❌"))
-																		.join(" ")}`,
+																	)} - ${demandSuccess[i].map((s) => (s ? "✅" : "❌")).join(" ")}`,
 															)
 															.join("\n")
 													: "Ø"
@@ -794,15 +719,15 @@ const command: Command = {
 			user2: User,
 			pokemons2: OfferOrDemand[],
 		) {
-			const { rows: user1Pokemons }: { rows: DatabasePokemon[] } =
-				await Util.database.query("SELECT * FROM pokemon WHERE users ? $1", [
-					user1.id,
-				]);
+			const { rows: user1Pokemons }: { rows: DatabasePokemon[] } = await Util.database.query(
+				"SELECT * FROM pokemon WHERE users ? $1",
+				[user1.id],
+			);
 
-			const { rows: user2Pokemons }: { rows: DatabasePokemon[] } =
-				await Util.database.query("SELECT * FROM pokemon WHERE users ? $1", [
-					user2.id,
-				]);
+			const { rows: user2Pokemons }: { rows: DatabasePokemon[] } = await Util.database.query(
+				"SELECT * FROM pokemon WHERE users ? $1",
+				[user2.id],
+			);
 
 			const errors1 = [],
 				errors2 = [],
@@ -814,16 +739,13 @@ const command: Command = {
 					(p) =>
 						p.national_id === pokemon.data.nationalId &&
 						p.shiny === pokemon.shiny &&
-						p.variation_type ===
-							(pokemon.pokemonVariation?.variationType ?? "default") &&
+						p.variation_type === (pokemon.pokemonVariation?.variationType ?? "default") &&
 						p.variation === (pokemon.pokemonVariation?.variation ?? "default"),
 				);
 				if (!pkm || pokemon.number > pkm.users[user1.id].caught)
 					errors1.push(
 						`**${
-							pkm
-								? (pokemon.number - pkm.users[user1.id].caught).toString()
-								: pokemon.number.toString()
+							pkm ? (pokemon.number - pkm.users[user1.id].caught).toString() : pokemon.number.toString()
 						} ${pokemon.data.formatName(
 							translations.language,
 							pokemon.shiny,
@@ -847,16 +769,13 @@ const command: Command = {
 					(p) =>
 						p.national_id === pokemon.data.nationalId &&
 						p.shiny === pokemon.shiny &&
-						p.variation_type ===
-							(pokemon.pokemonVariation?.variationType ?? "default") &&
+						p.variation_type === (pokemon.pokemonVariation?.variationType ?? "default") &&
 						p.variation === (pokemon.pokemonVariation?.variation ?? "default"),
 				);
 				if (!pkm || pokemon.number > pkm.users[user2.id].caught)
 					errors2.push(
 						`**${
-							pkm
-								? (pokemon.number - pkm.users[user2.id].caught).toString()
-								: pokemon.number.toString()
+							pkm ? (pokemon.number - pkm.users[user2.id].caught).toString() : pokemon.number.toString()
 						} ${pokemon.data.formatName(
 							translations.language,
 							pokemon.shiny,
@@ -876,25 +795,13 @@ const command: Command = {
 			}
 
 			return (
-				(errors1.length
-					? translations.strings.not_enough(user1.username, errors1.join(", "))
-					: "") +
-				(errors2.length
-					? translations.strings.not_enough(user2.username, errors2.join(", "))
-					: "") +
+				(errors1.length ? translations.strings.not_enough(user1.username, errors1.join(", ")) : "") +
+				(errors2.length ? translations.strings.not_enough(user2.username, errors2.join(", ")) : "") +
 				(errors1fav.length
-					? translations.strings.favorite(
-							user1.username,
-							errors1fav.join(", "),
-							errors1fav.length > 1,
-					  )
+					? translations.strings.favorite(user1.username, errors1fav.join(", "), errors1fav.length > 1)
 					: "") +
 				(errors2fav.length
-					? translations.strings.favorite(
-							user2.username,
-							errors2fav.join(", "),
-							errors2fav.length > 1,
-					  )
+					? translations.strings.favorite(user2.username, errors2fav.join(", "), errors2fav.length > 1)
 					: "")
 			);
 		}

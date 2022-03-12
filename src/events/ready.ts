@@ -1,17 +1,8 @@
 import Event from "../types/structures/Event";
 import Util from "../Util";
 
-import {
-	ChatInputApplicationCommandData,
-	Client,
-	TextChannel,
-} from "discord.js";
-import {
-	DatabaseCanvas,
-	DatabaseGuildConfig,
-	DatabaseLevel,
-	DatabaseReminder,
-} from "../types/structures/Database";
+import { ChatInputApplicationCommandData, Client, TextChannel } from "discord.js";
+import { DatabaseCanvas, DatabaseGuildConfig, DatabaseLevel, DatabaseReminder } from "../types/structures/Database";
 import Palette from "../types/canvas/Palette";
 import Color from "../types/canvas/Color";
 import Canvas from "../types/canvas/Canvas";
@@ -55,8 +46,9 @@ const event: Event = {
 			.catch(console.error);
 
 		// Guild configs
-		const { rows: guildConfigs }: { rows: DatabaseGuildConfig[] } =
-			await Util.database.query("SELECT * FROM guild_config");
+		const { rows: guildConfigs }: { rows: DatabaseGuildConfig[] } = await Util.database.query(
+			"SELECT * FROM guild_config",
+		);
 
 		for (const guildConfig of guildConfigs) {
 			Util.guildConfigs.set(guildConfig.guild_id, {
@@ -69,13 +61,11 @@ const event: Event = {
 			client.guilds.cache
 				.filter((g) => !Util.guildConfigs.has(g.id))
 				.map(async (guild) => {
-					Util.database
-						.query("INSERT INTO guild_config VALUES ($1, $2)", [guild.id, "fr"])
-						.then(() =>
-							Util.guildConfigs.set(guild.id, {
-								language: "fr",
-							}),
-						);
+					Util.database.query("INSERT INTO guild_config VALUES ($1, $2)", [guild.id, "fr"]).then(() =>
+						Util.guildConfigs.set(guild.id, {
+							language: "fr",
+						}),
+					);
 				}),
 		);
 
@@ -83,9 +73,7 @@ const event: Event = {
 		console.log("Fetching global and admin application commands");
 		await client.application.commands.fetch();
 		await client.guilds.cache.get(Util.config.ADMIN_GUILD_ID).commands.fetch();
-		console.log(
-			"Fetched all global and admin application commands successfully",
-		);
+		console.log("Fetched all global and admin application commands successfully");
 
 		await Promise.all(
 			Util.commands.map(async (command) => {
@@ -99,16 +87,12 @@ const event: Event = {
 				if (Util.beta) {
 					const guild = client.guilds.cache.get(Util.config.TEST_GUILD_ID);
 					await guild.commands.fetch();
-					const applicationCommand = guild.commands.cache.find(
-						(cmd) => cmd.name === applicationCommandData.name,
-					);
+					const applicationCommand = guild.commands.cache.find((cmd) => cmd.name === applicationCommandData.name);
 
 					applicationCommandData.defaultPermission = false;
 
 					if (!applicationCommand) {
-						console.log(
-							`Creating the test application command /${applicationCommandData.name}`,
-						);
+						console.log(`Creating the test application command /${applicationCommandData.name}`);
 						guild.commands
 							.create(applicationCommandData)
 							.then((newApplicationCommand) =>
@@ -125,13 +109,8 @@ const event: Event = {
 							.catch(console.error);
 					}
 
-					if (
-						applicationCommand &&
-						!applicationCommand.equals(applicationCommandData)
-					) {
-						console.log(
-							`Editing the test application command /${applicationCommandData.name}`,
-						);
+					if (applicationCommand && !applicationCommand.equals(applicationCommandData)) {
+						console.log(`Editing the test application command /${applicationCommandData.name}`);
 						guild.commands
 							.edit(applicationCommand.id, applicationCommandData)
 							.then((newApplicationCommand) =>
@@ -151,16 +130,12 @@ const event: Event = {
 					// Admin commands
 					if (command.category === "admin") {
 						const guild = client.guilds.cache.get(Util.config.ADMIN_GUILD_ID);
-						const applicationCommand = guild.commands.cache.find(
-							(cmd) => cmd.name === applicationCommandData.name,
-						);
+						const applicationCommand = guild.commands.cache.find((cmd) => cmd.name === applicationCommandData.name);
 
 						applicationCommandData.defaultPermission = false;
 
 						if (!applicationCommand) {
-							console.log(
-								`Creating the admin application command /${applicationCommandData.name}`,
-							);
+							console.log(`Creating the admin application command /${applicationCommandData.name}`);
 							guild.commands
 								.create(applicationCommandData)
 								.then((newApplicationCommand) =>
@@ -177,13 +152,8 @@ const event: Event = {
 								.catch(console.error);
 						}
 
-						if (
-							applicationCommand &&
-							!applicationCommand.equals(applicationCommandData)
-						) {
-							console.log(
-								`Editing the admin application command /${applicationCommandData.name}`,
-							);
+						if (applicationCommand && !applicationCommand.equals(applicationCommandData)) {
+							console.log(`Editing the admin application command /${applicationCommandData.name}`);
 							guild.commands
 								.edit(applicationCommand.id, applicationCommandData)
 								.then((newApplicationCommand) =>
@@ -202,42 +172,28 @@ const event: Event = {
 					} else {
 						// Guild commands
 						if (command.guildIds) {
-							for (const guildId of command.guildIds.filter((id) =>
-								client.guilds.cache.has(id),
-							)) {
+							for (const guildId of command.guildIds.filter((id) => client.guilds.cache.has(id))) {
 								const guild = client.guilds.cache.get(guildId);
 								await guild.commands.fetch();
-								const applicationCommand = guild.commands.cache.find(
-									(cmd) => cmd.name === applicationCommandData.name,
-								);
+								const applicationCommand = guild.commands.cache.find((cmd) => cmd.name === applicationCommandData.name);
 
 								applicationCommandData.description =
-									command.description[
-										Util.guildConfigs.get(guildId).language
-									] ?? command.description.en;
+									command.description[Util.guildConfigs.get(guildId).language] ?? command.description.en;
 								applicationCommandData.options =
-									command.options[Util.guildConfigs.get(guildId).language] ??
-									command.options.en;
+									command.options[Util.guildConfigs.get(guildId).language] ?? command.options.en;
 
 								if (!applicationCommand) {
 									console.log(
 										`Creating the application command /${applicationCommandData.name} in the guild: ${guildId}`,
 									);
-									guild.commands
-										.create(applicationCommandData)
-										.catch(console.error);
+									guild.commands.create(applicationCommandData).catch(console.error);
 								}
 
-								if (
-									applicationCommand &&
-									!applicationCommand.equals(applicationCommandData)
-								) {
+								if (applicationCommand && !applicationCommand.equals(applicationCommandData)) {
 									console.log(
 										`Editing the application command /${applicationCommandData.name} in the guild: ${guildId}`,
 									);
-									guild.commands
-										.edit(applicationCommand.id, applicationCommandData)
-										.catch(console.error);
+									guild.commands.edit(applicationCommand.id, applicationCommandData).catch(console.error);
 								}
 							}
 
@@ -248,24 +204,13 @@ const event: Event = {
 							);
 
 							if (!applicationCommand) {
-								console.log(
-									`Creating the global application command /${applicationCommandData.name}`,
-								);
-								client.application.commands
-									.create(applicationCommandData)
-									.catch(console.error);
+								console.log(`Creating the global application command /${applicationCommandData.name}`);
+								client.application.commands.create(applicationCommandData).catch(console.error);
 							}
 
-							if (
-								applicationCommand &&
-								!applicationCommand.equals(applicationCommandData)
-							) {
-								console.log(
-									`Editing the global application command /${applicationCommandData.name}`,
-								);
-								client.application.commands
-									.edit(applicationCommand.id, applicationCommandData)
-									.catch(console.error);
+							if (applicationCommand && !applicationCommand.equals(applicationCommandData)) {
+								console.log(`Editing the global application command /${applicationCommandData.name}`);
+								client.application.commands.edit(applicationCommand.id, applicationCommandData).catch(console.error);
 							}
 						}
 					}
@@ -292,23 +237,16 @@ const event: Event = {
 							red.toString(16).padStart(2, "0") +
 							green.toString(16).padStart(2, "0") +
 							blue.toString(16).padStart(2, "0");
-						emoji = await emojis.create(
-							`https://dummyimage.com/256/${hex}?text=%20`,
-							`pl_${color.alias}`,
-						);
+						emoji = await emojis.create(`https://dummyimage.com/256/${hex}?text=%20`, `pl_${color.alias}`);
 					}
 
-					if (!Util.palettes.has(color.palette))
-						Util.palettes.set(color.palette, new Palette(color.palette));
+					if (!Util.palettes.has(color.palette)) Util.palettes.set(color.palette, new Palette(color.palette));
 
-					Util.palettes
-						.get(color.palette)
-						.add(new Color(color.name, color.alias, color.code, emoji));
+					Util.palettes.get(color.palette).add(new Color(color.name, color.alias, color.code, emoji));
 				}
 
 				emojis.cache.forEach((e) => {
-					if (!colors.some((c) => `pl_${c.alias}` === e.name))
-						e.delete().catch(console.error);
+					if (!colors.some((c) => `pl_${c.alias}` === e.name)) e.delete().catch(console.error);
 				});
 
 				Util.database
@@ -324,8 +262,7 @@ const event: Event = {
 		// Reminders
 		setInterval(async () => {
 			try {
-				const { rows: reminders }: { rows: DatabaseReminder[] } =
-					await Util.database.query("SELECT * FROM reminder");
+				const { rows: reminders }: { rows: DatabaseReminder[] } = await Util.database.query("SELECT * FROM reminder");
 
 				reminders.forEach(async (reminder) => {
 					const timestamp = new Date(reminder.timestamp);
@@ -340,25 +277,17 @@ const event: Event = {
 							if (reminder.repeat && reminder.occurrences !== 1) {
 								// -1 stands for infinite occurrences
 								if (reminder.occurrences === -1)
-									Util.database.query(
-										"UPDATE reminder SET timestamp = $1 WHERE id = $2",
-										[
-											new Date(timestamp.valueOf() + reminder.repeat),
-											reminder.id,
-										],
-									);
+									Util.database.query("UPDATE reminder SET timestamp = $1 WHERE id = $2", [
+										new Date(timestamp.valueOf() + reminder.repeat),
+										reminder.id,
+									]);
 								else
 									Util.database.query(
 										"UPDATE reminder SET timestamp = $1, occurrences = occurrences - 1 WHERE id = $2",
-										[
-											new Date(timestamp.valueOf() + reminder.repeat),
-											reminder.id,
-										],
+										[new Date(timestamp.valueOf() + reminder.repeat), reminder.id],
 									);
 							} else {
-								Util.database.query("DELETE FROM reminder WHERE id = $1", [
-									reminder.id,
-								]);
+								Util.database.query("DELETE FROM reminder WHERE id = $1", [reminder.id]);
 							}
 						}
 					} catch (err) {
@@ -373,30 +302,21 @@ const event: Event = {
 		// Voice xp
 		setInterval(() => {
 			client.guilds.cache.forEach(async (guild) => {
-				const translations = (await new Translations("index_level").init())
-					.data[Util.guildConfigs.get(guild.id).language];
+				const translations = (await new Translations("index_level").init()).data[
+					Util.guildConfigs.get(guild.id).language
+				];
 
 				guild.members.cache
 					.filter((m) => m.voice.channelId && !m.user.bot)
 					.forEach(async (member) => {
 						if (member.voice.channel.members.size < 2) return;
 
-						let newXP =
-							Util.config.BASE_VOICE_XP *
-							member.voice.channel.members.filter((m) => !m.user.bot).size;
+						let newXP = Util.config.BASE_VOICE_XP * member.voice.channel.members.filter((m) => !m.user.bot).size;
 
 						if (member.voice.deaf) newXP *= 0;
 						if (member.voice.mute) newXP *= 0.5;
-						if (
-							member.voice.streaming &&
-							member.voice.channel.members.filter((m) => !m.user.bot).size > 1
-						)
-							newXP *= 3;
-						if (
-							member.voice.selfVideo &&
-							member.voice.channel.members.filter((m) => !m.user.bot).size > 1
-						)
-							newXP *= 5;
+						if (member.voice.streaming && member.voice.channel.members.filter((m) => !m.user.bot).size > 1) newXP *= 3;
+						if (member.voice.selfVideo && member.voice.channel.members.filter((m) => !m.user.bot).size > 1) newXP *= 5;
 
 						try {
 							const {
@@ -414,15 +334,8 @@ const event: Event = {
 
 							const levelInfo = getLevel(xp);
 
-							if (
-								levelInfo.currentXP < newXP &&
-								member.guild.id === Util.config.MAIN_GUILD_ID
-							)
-								member.user.send(
-									translations.strings.voice_level_up(
-										levelInfo.level.toString(),
-									),
-								);
+							if (levelInfo.currentXP < newXP && member.guild.id === Util.config.MAIN_GUILD_ID)
+								member.user.send(translations.strings.voice_level_up(levelInfo.level.toString()));
 						} catch (err) {
 							console.error(err);
 						}
@@ -437,12 +350,8 @@ const event: Event = {
 		questReminder(client);
 
 		// Rose lobbies
-		const roseChannel = client.channels.cache.get(
-			Util.config.ROSE_LOBBY_LOG_CHANNEL_ID,
-		);
-		const announcementChannel = client.channels.cache.get(
-			Util.config.ROSE_LOBBY_ANNOUNCEMENT_CHANNEL_ID,
-		);
+		const roseChannel = client.channels.cache.get(Util.config.ROSE_LOBBY_LOG_CHANNEL_ID);
+		const announcementChannel = client.channels.cache.get(Util.config.ROSE_LOBBY_ANNOUNCEMENT_CHANNEL_ID);
 
 		(roseChannel as TextChannel).messages
 			.fetch({ limit: 1 })
@@ -469,49 +378,29 @@ const event: Event = {
 
 				Util.roseLobby.start();
 
-				console.log(
-					`Restarted rose lobby at ${date.toUTCString()} with password ${password}`,
-				);
+				console.log(`Restarted rose lobby at ${date.toUTCString()} with password ${password}`);
 			})
 			.catch(console.error);
 	},
 };
 
 function testReminder(client: Client) {
-	const userIds = [
-		"408671348005797898",
-		"463358584583880704",
-		"608623753399762964",
-	];
+	const userIds = ["408671348005797898", "463358584583880704", "608623753399762964"];
 
 	new CronJob(
 		"0 45 13 * * 0",
 		() => {
 			userIds.forEach((userId) =>
-				client.users
-					.fetch(userId)
-					.then((userId) => userId.send(getMessage(15)).catch(console.error)),
+				client.users.fetch(userId).then((userId) => userId.send(getMessage(15)).catch(console.error)),
 			);
 
 			setTimeout(
-				() =>
-					userIds.forEach((userId) =>
-						client.users.cache
-							.get(userId)
-							.send(getMessage(5))
-							.catch(console.error),
-					),
+				() => userIds.forEach((userId) => client.users.cache.get(userId).send(getMessage(5)).catch(console.error)),
 				600_000,
 			);
 
 			setTimeout(
-				() =>
-					userIds.forEach((userId) =>
-						client.users.cache
-							.get(userId)
-							.send(getMessage(2))
-							.catch(console.error),
-					),
+				() => userIds.forEach((userId) => client.users.cache.get(userId).send(getMessage(2)).catch(console.error)),
 				780_000,
 			);
 		},
@@ -531,20 +420,13 @@ function testReminder(client: Client) {
 }
 
 function questReminder(client: Client) {
-	const userIds = [
-		"707338588433416254",
-		"647154113360166912",
-		"465470734018543621",
-		"408671348005797898",
-	];
+	const userIds = ["707338588433416254", "647154113360166912", "465470734018543621", "408671348005797898"];
 
 	new CronJob(
 		"0 55 1 * * 2",
 		() => {
 			userIds.forEach((userId) =>
-				client.users
-					.fetch(userId)
-					.then((userId) => userId.send(getMessage(1)).catch(console.error)),
+				client.users.fetch(userId).then((userId) => userId.send(getMessage(1)).catch(console.error)),
 			);
 		},
 		null,
@@ -559,9 +441,7 @@ function questReminder(client: Client) {
 		"0 30 10 * * 2",
 		() => {
 			userIds.forEach((userId) =>
-				client.users
-					.fetch(userId)
-					.then((userId) => userId.send(getMessage(2)).catch(console.error)),
+				client.users.fetch(userId).then((userId) => userId.send(getMessage(2)).catch(console.error)),
 			);
 		},
 		null,

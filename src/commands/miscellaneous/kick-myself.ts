@@ -26,30 +26,19 @@ const command: Command = {
 		if ((interaction.member as GuildMember).premiumSinceTimestamp)
 			return interaction.followUp(translations.strings.boosting());
 
-		if (
-			(interaction.member as GuildMember).roles.highest.position >=
-			interaction.guild.me.roles.highest.position
-		)
+		if ((interaction.member as GuildMember).roles.highest.position >= interaction.guild.me.roles.highest.position)
 			return interaction.followUp(translations.strings.too_high_hierarchy());
 
-		(interaction.member as GuildMember)
-			.kick(translations.strings.reason())
-			.then(() => {
-				interaction.followUp(
-					translations.strings.kick_message(interaction.user.tag),
-				);
-			});
+		(interaction.member as GuildMember).kick(translations.strings.reason()).then(() => {
+			interaction.followUp(translations.strings.kick_message(interaction.user.tag));
+		});
 	},
 
 	runMessage: async (message, args, translations) => {
 		// Server booster
-		if (message.member.premiumSinceTimestamp)
-			return message.reply(translations.strings.boosting());
+		if (message.member.premiumSinceTimestamp) return message.reply(translations.strings.boosting());
 
-		if (
-			message.member.roles.highest.position >=
-			message.guild.me.roles.highest.position
-		)
+		if (message.member.roles.highest.position >= message.guild.me.roles.highest.position)
 			return message.reply(translations.strings.too_high_hierarchy());
 
 		message.member.kick(translations.strings.reason()).then(() => {

@@ -30,13 +30,10 @@ const event: Event = {
 
 			case "APPLICATION_COMMAND_AUTOCOMPLETE": {
 				if (interaction.isAutocomplete()) {
-					const autocompleteHandler = Util.autocompleteHandlers.get(
-						interaction.commandName,
-					);
+					const autocompleteHandler = Util.autocompleteHandlers.get(interaction.commandName);
 
 					if (autocompleteHandler) {
-						const subCommandGroup =
-							interaction.options.getSubcommandGroup(false);
+						const subCommandGroup = interaction.options.getSubcommandGroup(false);
 						const subCommand = interaction.options.getSubcommand(false);
 						const focusedOption = interaction.options.getFocused(true);
 
@@ -51,26 +48,17 @@ const event: Event = {
 							const results =
 								option.type === "STRING"
 									? await option.run(interaction, focusedOption.value as string)
-									: await option.run(
-											interaction,
-											focusedOption.value as number,
-									  );
+									: await option.run(interaction, focusedOption.value as number);
 
 							const finalResults = results
 								.filter((result) => {
 									switch (option.filterType) {
 										case "STARTS_WITH": {
-											return result.name
-												.toLowerCase()
-												.startsWith(
-													focusedOption.value.toString().toLowerCase(),
-												);
+											return result.name.toLowerCase().startsWith(focusedOption.value.toString().toLowerCase());
 										}
 
 										case "CONTAINS": {
-											return result.name
-												.toLowerCase()
-												.includes(focusedOption.value.toString().toLowerCase());
+											return result.name.toLowerCase().includes(focusedOption.value.toString().toLowerCase());
 										}
 									}
 								})

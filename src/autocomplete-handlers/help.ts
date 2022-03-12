@@ -12,11 +12,7 @@ const autocompleteHandler: AutocompleteHandler = {
 			filterType: "CONTAINS",
 			run: async (interaction, value) => {
 				const publicCommands = Util.commands
-					.filter(
-						(cmd) =>
-							(!cmd.guildIds || cmd.guildIds.includes(interaction.guild.id)) &&
-							cmd.category !== "admin",
-					)
+					.filter((cmd) => (!cmd.guildIds || cmd.guildIds.includes(interaction.guild.id)) && cmd.category !== "admin")
 					.sort((a, b) => a.name.localeCompare(b.name));
 
 				return publicCommands.map((cmd) => {

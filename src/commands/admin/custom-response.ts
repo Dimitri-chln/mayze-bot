@@ -157,8 +157,9 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
-		const { rows: responses }: { rows: DatabaseCustomResponse[] } =
-			await Util.database.query("SELECT * FROM custom_response");
+		const { rows: responses }: { rows: DatabaseCustomResponse[] } = await Util.database.query(
+			"SELECT * FROM custom_response",
+		);
 
 		switch (subCommand) {
 			case "add": {
@@ -166,10 +167,11 @@ const command: Command = {
 				const response = interaction.options.getString("response", true);
 				const triggerType = interaction.options.getInteger("type", false) ?? 0;
 
-				await Util.database.query(
-					"INSERT INTO custom_response (trigger, response, trigger_type) VALUES ($1, $2, $3)",
-					[trigger, response, triggerType],
-				);
+				await Util.database.query("INSERT INTO custom_response (trigger, response, trigger_type) VALUES ($1, $2, $3)", [
+					trigger,
+					response,
+					triggerType,
+				]);
 
 				interaction.followUp(translations.strings.response_added());
 				break;
@@ -179,15 +181,11 @@ const command: Command = {
 				const number = interaction.options.getInteger("response", true);
 
 				if (number < 1 || number > responses.length)
-					return interaction.followUp(
-						translations.strings.invalid_number(responses.length.toString()),
-					);
+					return interaction.followUp(translations.strings.invalid_number(responses.length.toString()));
 
 				const response = responses[number - 1];
 
-				await Util.database.query("DELETE FROM custom_response WHERE id = $1", [
-					response.id,
-				]);
+				await Util.database.query("DELETE FROM custom_response WHERE id = $1", [response.id]);
 
 				interaction.followUp(translations.strings.response_removed());
 				break;
@@ -205,11 +203,9 @@ const command: Command = {
 							description: responses
 								.map(
 									(response, i) =>
-										`\`${i + 1}.\` ${
-											translations.strings.trigger_types()[
-												response.trigger_type
-											]
-										} \`${response.trigger}\`\n\t→ \`${response.response}\``,
+										`\`${i + 1}.\` ${translations.strings.trigger_types()[response.trigger_type]} \`${
+											response.trigger
+										}\`\n\t→ \`${response.response}\``,
 								)
 								.join("\n"),
 							footer: {

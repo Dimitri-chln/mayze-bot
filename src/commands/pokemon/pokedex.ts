@@ -104,8 +104,7 @@ const command: Command = {
 				options: [
 					{
 						name: "pokemon",
-						description:
-							"Le pokémon dont tu veux obtenir la ligne d'évolutions",
+						description: "Le pokémon dont tu veux obtenir la ligne d'évolutions",
 						type: "STRING",
 						required: true,
 						autocomplete: true,
@@ -214,15 +213,13 @@ const command: Command = {
 		switch (subCommand) {
 			case "find": {
 				const input = interaction.options.getString("pokemon", true);
-				const { pokemon, shiny, pokemonVariation } =
-					Util.pokedex.findByNameWithVariation(input) ?? {
-						pokemon: Util.pokedex.findById(parseInt(input)),
-						shiny: false,
-						variationType: "default",
-					};
+				const { pokemon, shiny, pokemonVariation } = Util.pokedex.findByNameWithVariation(input) ?? {
+					pokemon: Util.pokedex.findById(parseInt(input)),
+					shiny: false,
+					variationType: "default",
+				};
 
-				if (!pokemon)
-					return interaction.followUp(translations.strings.invalid_pokemon());
+				if (!pokemon) return interaction.followUp(translations.strings.invalid_pokemon());
 
 				interaction.followUp({
 					embeds: [
@@ -234,20 +231,14 @@ const command: Command = {
 							)} #${pokemon.nationalId.toString().padStart(3, "0")}`,
 							color: interaction.guild.me.displayColor,
 							image: {
-								url: pokemon.image(
-									shiny,
-									pokemonVariation?.variationType ?? "default",
-								),
+								url: pokemon.image(shiny, pokemonVariation?.variationType ?? "default"),
 							},
 							fields: [
 								{
 									name: translations.strings.field_alternative_names(),
 									value: Object.keys(pokemon.names)
 										.filter((l) => l !== translations.language)
-										.map(
-											(l) =>
-												`${Util.config.LANGUAGE_FLAGS[l]} ${pokemon.names[l]}`,
-										)
+										.map((l) => `${Util.config.LANGUAGE_FLAGS[l]} ${pokemon.names[l]}`)
 										.join("\n"),
 									inline: true,
 								},
@@ -278,17 +269,11 @@ const command: Command = {
 									value:
 										pokemon.variations.length || pokemon.megaEvolutions.length
 											? pokemon.variations
-													.map(
-														(variation) =>
-															`• ${variation.names[translations.language]}`,
-													)
+													.map((variation) => `• ${variation.names[translations.language]}`)
 													.join("\n") +
 											  "\n" +
 											  pokemon.megaEvolutions
-													.map(
-														(megaEvolution) =>
-															`• ${megaEvolution.names[translations.language]}`,
-													)
+													.map((megaEvolution) => `• ${megaEvolution.names[translations.language]}`)
 													.join("\n")
 											: "∅",
 									inline: true,
@@ -309,17 +294,13 @@ const command: Command = {
 			}
 
 			case "list": {
-				const { rows: pokemons } = await Util.database.query(
-					"SELECT * FROM pokemon WHERE users ? $1",
-					[interaction.user.id],
-				);
+				const { rows: pokemons } = await Util.database.query("SELECT * FROM pokemon WHERE users ? $1", [
+					interaction.user.id,
+				]);
 
 				const shiny = Boolean(interaction.options.getBoolean("shiny", false));
 
-				const variationType: VariationType = interaction.options.getBoolean(
-					"mega",
-					false,
-				)
+				const variationType: VariationType = interaction.options.getBoolean("mega", false)
 					? "mega"
 					: interaction.options.getBoolean("alola", false)
 					? "alola"
@@ -330,54 +311,27 @@ const command: Command = {
 				const pokemonList = new PokemonList(pokemons, interaction.user.id);
 
 				const userPokedex = Util.pokedex.pokemons.filter((pokemon) => {
-					if (
-						interaction.options.getBoolean("caught", false) &&
-						!pokemonList.has(pokemon, shiny, variationType)
-					)
+					if (interaction.options.getBoolean("caught", false) && !pokemonList.has(pokemon, shiny, variationType))
 						return false;
 
-					if (
-						interaction.options.getBoolean("uncaught", false) &&
-						pokemonList.has(pokemon, shiny, variationType)
-					)
+					if (interaction.options.getBoolean("uncaught", false) && pokemonList.has(pokemon, shiny, variationType))
 						return false;
 
-					if (
-						interaction.options.getBoolean("legendary", false) &&
-						!pokemon.legendary
-					)
-						return false;
+					if (interaction.options.getBoolean("legendary", false) && !pokemon.legendary) return false;
 
-					if (
-						interaction.options.getBoolean("ultra-beast", false) &&
-						!pokemon.ultraBeast
-					)
-						return false;
+					if (interaction.options.getBoolean("ultra-beast", false) && !pokemon.ultraBeast) return false;
 
 					if (
 						interaction.options.getInteger("generation", false) &&
-						pokemon.generation !==
-							interaction.options.getInteger("generation", false)
+						pokemon.generation !== interaction.options.getInteger("generation", false)
 					)
 						return false;
 
-					if (
-						variationType === "mega" &&
-						!Util.pokedex.megaEvolvablePokemons.has(pokemon.nationalId)
-					)
-						return false;
+					if (variationType === "mega" && !Util.pokedex.megaEvolvablePokemons.has(pokemon.nationalId)) return false;
 
-					if (
-						variationType === "alola" &&
-						!Util.pokedex.alolaPokemons.has(pokemon.nationalId)
-					)
-						return false;
+					if (variationType === "alola" && !Util.pokedex.alolaPokemons.has(pokemon.nationalId)) return false;
 
-					if (
-						variationType === "galar" &&
-						!Util.pokedex.galarPokemons.has(pokemon.nationalId)
-					)
-						return false;
+					if (variationType === "galar" && !Util.pokedex.galarPokemons.has(pokemon.nationalId)) return false;
 
 					return true;
 				});
@@ -400,11 +354,7 @@ const command: Command = {
 						],
 					});
 
-				for (
-					let i = 0;
-					i < userPokedex.length;
-					i += Util.config.ITEMS_PER_PAGE
-				) {
+				for (let i = 0; i < userPokedex.length; i += Util.config.ITEMS_PER_PAGE) {
 					pages.push({
 						embeds: [
 							{
@@ -434,11 +384,7 @@ const command: Command = {
 										} else {
 											return translations.strings.description(
 												pokemonList.has(pkm, shiny, variationType),
-												pkm.formatName(
-													translations.language,
-													shiny,
-													variationType,
-												),
+												pkm.formatName(translations.language, shiny, variationType),
 												pkm.nationalId.toString().padStart(3, "0"),
 											);
 										}
@@ -456,27 +402,18 @@ const command: Command = {
 
 			case "evo-line": {
 				const pokemon =
-					Util.pokedex.findByName(
-						interaction.options.getString("pokemon", true),
-					) ??
-					Util.pokedex.findById(
-						parseInt(interaction.options.getString("pokemon", true)),
-					);
+					Util.pokedex.findByName(interaction.options.getString("pokemon", true)) ??
+					Util.pokedex.findById(parseInt(interaction.options.getString("pokemon", true)));
 
-				if (!pokemon)
-					return interaction.followUp(translations.strings.invalid_pokemon());
+				if (!pokemon) return interaction.followUp(translations.strings.invalid_pokemon());
 
-				const stringEvolutionLine = pokemon.stringEvolutionLine(
-					translations.language,
-				);
+				const stringEvolutionLine = pokemon.stringEvolutionLine(translations.language);
 
 				interaction.followUp({
 					embeds: [
 						{
 							author: {
-								name: translations.strings.evoline_title(
-									pokemon.names[translations.language] ?? pokemon.names.en,
-								),
+								name: translations.strings.evoline_title(pokemon.names[translations.language] ?? pokemon.names.en),
 								iconURL: interaction.client.user.displayAvatarURL(),
 							},
 							thumbnail: {

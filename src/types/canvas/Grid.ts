@@ -16,17 +16,11 @@ export default class Grid {
 	}
 
 	format() {
-		const blank = Util.client.guilds.cache
-			.get(Util.config.ADMIN_GUILD_ID)
-			.emojis.cache.find((e) => e.name === "blank");
-		let content = `**${this.canvas.name.replace(/^./, (a) =>
-			a.toUpperCase(),
-		)} - (${this.x}, ${this.y})**\n`;
+		const blank = Util.client.guilds.cache.get(Util.config.ADMIN_GUILD_ID).emojis.cache.find((e) => e.name === "blank");
+		let content = `**${this.canvas.name.replace(/^./, (a) => a.toUpperCase())} - (${this.x}, ${this.y})**\n`;
 
 		for (let i = 0; i < 7; i++) {
-			content += this.pixels[i]
-				.map((color) => (color ? color.emoji : blank))
-				.join("");
+			content += this.pixels[i].map((color) => (color ? color.emoji : blank)).join("");
 
 			if (i === 2) content += " ⬆️";
 			if (i === 3) content += ` **${this.y}** (y)`;

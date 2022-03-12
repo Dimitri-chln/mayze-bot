@@ -12,13 +12,10 @@ const messageResponse: MessageResponse = {
 		const DMcategory = DMGuild.channels.cache.get("744292272300097549");
 
 		if (message.channel.type === "DM") {
-			const msg = `${message.content}\n${message.attachments
-				.map((attachment) => attachment.url)
-				.join("\n")}`;
+			const msg = `${message.content}\n${message.attachments.map((attachment) => attachment.url).join("\n")}`;
 
 			let channel = DMGuild.channels.cache.find(
-				(c: TextChannel) =>
-					c.topic === message.author.id && c.parentId === DMcategory.id,
+				(c: TextChannel) => c.topic === message.author.id && c.parentId === DMcategory.id,
 			);
 
 			if (!channel) {
@@ -32,13 +29,9 @@ const messageResponse: MessageResponse = {
 			}
 			(channel as TextChannel).send(msg);
 		} else if (message.channel.parentId === DMcategory.id) {
-			const msg = `${message.content}\n${message.attachments
-				.map((attachment) => attachment.url)
-				.join("\n")}`;
+			const msg = `${message.content}\n${message.attachments.map((attachment) => attachment.url).join("\n")}`;
 
-			const user = await message.client.users.fetch(
-				(message.channel as TextChannel).topic,
-			);
+			const user = await message.client.users.fetch((message.channel as TextChannel).topic);
 
 			user.send(msg);
 		}

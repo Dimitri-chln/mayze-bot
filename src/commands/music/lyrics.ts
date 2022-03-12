@@ -48,14 +48,11 @@ const command: Command = {
 
 	runInteraction: async (interaction, translations) => {
 		const song =
-			interaction.options.getString("song", false) ??
-			Util.musicPlayer.get(interaction.guild.id)?.nowPlaying?.name;
+			interaction.options.getString("song", false) ?? Util.musicPlayer.get(interaction.guild.id)?.nowPlaying?.name;
 		const artist =
-			interaction.options.getString("artist", false) ??
-			Util.musicPlayer.get(interaction.guild.id)?.nowPlaying?.author;
+			interaction.options.getString("artist", false) ?? Util.musicPlayer.get(interaction.guild.id)?.nowPlaying?.author;
 
-		if (!song || !artist)
-			return interaction.followUp(translations.strings.no_song());
+		if (!song || !artist) return interaction.followUp(translations.strings.no_song());
 
 		const lyrics: string = await lyricsFinder(song, artist);
 		if (!lyrics) return interaction.followUp(translations.strings.no_lyrics());

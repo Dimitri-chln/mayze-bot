@@ -2,21 +2,13 @@ import Event from "../types/structures/Event";
 import Util from "../Util";
 import Translations from "../types/structures/Translations";
 
-import {
-	MessageReaction,
-	PartialMessageReaction,
-	User,
-	PartialUser,
-} from "discord.js";
+import { MessageReaction, PartialMessageReaction, User, PartialUser } from "discord.js";
 
 const event: Event = {
 	name: "messageReactionRemove",
 	once: false,
 
-	run: async (
-		reaction: MessageReaction | PartialMessageReaction,
-		user: User | PartialUser,
-	) => {
+	run: async (reaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => {
 		try {
 			if (reaction.message.partial) await reaction.message.fetch();
 		} catch (err) {
@@ -28,21 +20,13 @@ const event: Event = {
 		if (reaction.message.channel.type === "DM") return;
 
 		// Reaction commands
-		const language =
-			Util.guildConfigs.get(reaction.message.guild?.id)?.language ?? "fr";
+		const language = Util.guildConfigs.get(reaction.message.guild?.id)?.language ?? "fr";
 
 		for (const reactionCommand of Util.reactionCommands) {
-			const reactionCommandTranslations = await new Translations(
-				`reac_${reactionCommand.name}`,
-			).init();
+			const reactionCommandTranslations = await new Translations(`reac_${reactionCommand.name}`).init();
 
 			reactionCommand
-				.run(
-					reaction as MessageReaction,
-					user as User,
-					false,
-					reactionCommandTranslations[language],
-				)
+				.run(reaction as MessageReaction, user as User, false, reactionCommandTranslations[language])
 				.catch(console.error);
 		}
 

@@ -34,20 +34,11 @@ const command: Command = {
 							name: translations.strings.author(interaction.guild.name),
 							iconURL: interaction.guild.iconURL({ dynamic: true }),
 						},
-						title: translations.strings.title(
-							Util.music.millisecondsToTime(queue.duration),
-						),
+						title: translations.strings.title(Util.music.millisecondsToTime(queue.duration)),
 						color: interaction.guild.me.displayColor,
 						description: queue.songs
 							.slice(i, i + Util.config.ITEMS_PER_PAGE)
-							.map((song, j) =>
-								translations.strings.description(
-									i + j === 0,
-									(i + j).toString(),
-									song.name,
-									song.url,
-								),
-							)
+							.map((song, j) => translations.strings.description(i + j === 0, (i + j).toString(), song.name, song.url))
 							.join("\n"),
 					},
 				],

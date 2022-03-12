@@ -42,21 +42,16 @@ const command: Command = {
 		Axios.get(`${apiURL}/${translations.language}/${encodeURIComponent(word)}`)
 			.then(async ({ data }: { data: DictionaryResult[] }) => {
 				interaction.followUp(
-					`__**${data[0].word.replace(/^./, (a: string) =>
-						a.toUpperCase(),
-					)}**__: ${
+					`__**${data[0].word.replace(/^./, (a: string) => a.toUpperCase())}**__: ${
 						data[0].phonetics[0].text ? `(${data[0].phonetics[0].text})` : ""
 					}\n${data[0].meanings
 						.map(
 							(meaning) =>
-								`> __${meaning.partOfSpeech.replace(/^./, (a) =>
-									a.toUpperCase(),
-								)}:__ ${meaning.definitions[0].definition}${
-									meaning.definitions[0].synonyms &&
-									meaning.definitions[0].synonyms.length
-										? `\n*${translations.strings.synonyms()}: ${meaning.definitions[0].synonyms.join(
-												", ",
-										  )}*`
+								`> __${meaning.partOfSpeech.replace(/^./, (a) => a.toUpperCase())}:__ ${
+									meaning.definitions[0].definition
+								}${
+									meaning.definitions[0].synonyms && meaning.definitions[0].synonyms.length
+										? `\n*${translations.strings.synonyms()}: ${meaning.definitions[0].synonyms.join(", ")}*`
 										: ""
 								}`,
 						)
@@ -64,10 +59,7 @@ const command: Command = {
 				);
 			})
 			.catch(async (err) => {
-				if (
-					err.response.data.title &&
-					err.response.data.title === "No Definitions Found"
-				)
+				if (err.response.data.title && err.response.data.title === "No Definitions Found")
 					return interaction.followUp(translations.strings.invalid_word());
 
 				console.error(err);

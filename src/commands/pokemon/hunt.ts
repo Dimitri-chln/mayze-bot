@@ -43,26 +43,19 @@ const command: Command = {
 		if (!input) {
 			const {
 				rows: [huntedPokemonData],
-			} = await Util.database.query(
-				"SELECT * FROM pokemon_hunting WHERE user_id = $1",
-				[interaction.user.id],
-			);
+			} = await Util.database.query("SELECT * FROM pokemon_hunting WHERE user_id = $1", [interaction.user.id]);
 
 			if (huntedPokemonData) {
-				const huntedPokemon = Util.pokedex.findById(
-					huntedPokemonData.pokemon_id,
-				);
+				const huntedPokemon = Util.pokedex.findById(huntedPokemonData.pokemon_id);
 
 				const probability =
 					huntedPokemonData.hunt_count < 100
-						? (huntedPokemonData.hunt_count / 100) *
-						  (huntedPokemon.catchRate / 255)
+						? (huntedPokemonData.hunt_count / 100) * (huntedPokemon.catchRate / 255)
 						: 1;
 
 				return interaction.followUp(
 					translations.strings.hunt_info(
-						huntedPokemon.names[translations.language] ??
-							huntedPokemon.names.en,
+						huntedPokemon.names[translations.language] ?? huntedPokemon.names.en,
 						(Math.round(probability * 100 * 10_000) / 10_000).toString(),
 					),
 				);
@@ -72,25 +65,18 @@ const command: Command = {
 		}
 
 		if (input === "none") {
-			Util.database
-				.query("DELETE FROM pokemon_hunting WHERE user_id = $1", [
-					interaction.user.id,
-				])
-				.then(() => {
-					interaction.followUp(translations.strings.deleted());
-				});
+			Util.database.query("DELETE FROM pokemon_hunting WHERE user_id = $1", [interaction.user.id]).then(() => {
+				interaction.followUp(translations.strings.deleted());
+			});
 
 			return;
 		}
 
 		const pokemon = Util.pokedex.findByName(input);
-		if (!pokemon)
-			return interaction.followUp(translations.strings.invalid_pokemon());
+		if (!pokemon) return interaction.followUp(translations.strings.invalid_pokemon());
 
 		const reply = (await interaction.followUp({
-			content: translations.strings.confirmation(
-				pokemon.names[translations.language] ?? pokemon.names.en,
-			),
+			content: translations.strings.confirmation(pokemon.names[translations.language] ?? pokemon.names.en),
 			components: [
 				{
 					type: "ACTION_ROW",
@@ -136,9 +122,7 @@ const command: Command = {
 					);
 
 					buttonInteraction.update({
-						content: translations.strings.hunting(
-							pokemon.names[translations.language] ?? pokemon.names.en,
-						),
+						content: translations.strings.hunting(pokemon.names[translations.language] ?? pokemon.names.en),
 						components: [
 							{
 								type: "ACTION_ROW",

@@ -106,18 +106,14 @@ const command: Command = {
 
 		switch (subCommand) {
 			case "create": {
-				if (currentGame)
-					return interaction.followUp(translations.strings.already_running());
+				if (currentGame) return interaction.followUp(translations.strings.already_running());
 
 				const newGame: typeof currentGame = {
 					creator: interaction.member as GuildMember,
 					members: new Collection(),
 				};
 
-				newGame.members.set(
-					interaction.user.id,
-					interaction.member as GuildMember,
-				);
+				newGame.members.set(interaction.user.id, interaction.member as GuildMember);
 
 				Util.russianRouletteGames.set(interaction.channel.id, newGame);
 
@@ -142,34 +138,25 @@ const command: Command = {
 			}
 
 			case "join": {
-				if (!currentGame)
-					return interaction.followUp(translations.strings.no_game());
+				if (!currentGame) return interaction.followUp(translations.strings.no_game());
 
 				if (currentGame.members.has(interaction.user.id))
 					return interaction.followUp(translations.strings.already_joined());
 
-				currentGame.members.set(
-					interaction.user.id,
-					interaction.member as GuildMember,
-				);
+				currentGame.members.set(interaction.user.id, interaction.member as GuildMember);
 
-				interaction.followUp(
-					translations.strings.joined(interaction.user.toString()),
-				);
+				interaction.followUp(translations.strings.joined(interaction.user.toString()));
 				break;
 			}
 
 			case "delete": {
-				if (!currentGame)
-					return interaction.followUp(translations.strings.no_game());
+				if (!currentGame) return interaction.followUp(translations.strings.no_game());
 
 				if (
 					currentGame.creator.id !== interaction.user.id &&
 					!(interaction.member as GuildMember).permissions.has("KICK_MEMBERS")
 				)
-					return interaction.followUp(
-						translations.strings.deletion_not_allowed(),
-					);
+					return interaction.followUp(translations.strings.deletion_not_allowed());
 
 				Util.russianRouletteGames.delete(interaction.channel.id);
 
@@ -178,21 +165,15 @@ const command: Command = {
 			}
 
 			case "start": {
-				if (!currentGame)
-					return interaction.followUp(translations.strings.no_game());
+				if (!currentGame) return interaction.followUp(translations.strings.no_game());
 
 				if (
 					currentGame.creator.id !== interaction.user.id &&
 					!(interaction.member as GuildMember).permissions.has("KICK_MEMBERS")
 				)
-					return interaction.followUp(
-						translations.strings.starting_not_allowed(),
-					);
+					return interaction.followUp(translations.strings.starting_not_allowed());
 
-				if (currentGame.members.size < 2)
-					return interaction.followUp(
-						translations.strings.not_enough_players(),
-					);
+				if (currentGame.members.size < 2) return interaction.followUp(translations.strings.not_enough_players());
 
 				const embed = new MessageEmbed()
 					.setAuthor({
@@ -232,22 +213,15 @@ const command: Command = {
 				const deadPlayer = currentGame.members.random();
 
 				interaction.editReply({
-					embeds: [
-						embed.setDescription(
-							translations.strings.dead(deadPlayer.user.tag),
-						),
-					],
+					embeds: [embed.setDescription(translations.strings.dead(deadPlayer.user.tag))],
 				});
 
-				const gameOption = interaction.options.getString("option", false) as
-					| "kick"
-					| "timeout";
+				const gameOption = interaction.options.getString("option", false) as "kick" | "timeout";
 
 				switch (gameOption) {
 					case "kick": {
 						if (
-							deadPlayer.roles.highest.position <
-								interaction.guild.me.roles.highest.position &&
+							deadPlayer.roles.highest.position < interaction.guild.me.roles.highest.position &&
 							!deadPlayer.premiumSinceTimestamp
 						)
 							deadPlayer.kick(translations.strings.reason());
@@ -255,10 +229,7 @@ const command: Command = {
 					}
 
 					case "timeout": {
-						if (
-							deadPlayer.roles.highest.position <
-							interaction.guild.me.roles.highest.position
-						)
+						if (deadPlayer.roles.highest.position < interaction.guild.me.roles.highest.position)
 							deadPlayer.timeout(5 * 60 * 1000, translations.strings.reason());
 						break;
 					}

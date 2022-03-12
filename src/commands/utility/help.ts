@@ -39,13 +39,9 @@ const command: Command = {
 
 	runInteraction: async (interaction, translations) => {
 		const publicCommands = Util.commands.filter(
-			(cmd) =>
-				(!cmd.guildIds || cmd.guildIds.includes(interaction.guild.id)) &&
-				cmd.category !== "admin",
+			(cmd) => (!cmd.guildIds || cmd.guildIds.includes(interaction.guild.id)) && cmd.category !== "admin",
 		);
-		const commandName = interaction.options
-			.getString("command", false)
-			?.toLowerCase();
+		const commandName = interaction.options.getString("command", false)?.toLowerCase();
 
 		if (!commandName) {
 			const categories: {
@@ -85,8 +81,7 @@ const command: Command = {
 			});
 		} else {
 			const command = publicCommands.get(commandName);
-			if (!command)
-				return interaction.followUp(translations.strings.invalid_command());
+			if (!command) return interaction.followUp(translations.strings.invalid_command());
 
 			interaction.followUp({
 				embeds: [
@@ -100,9 +95,7 @@ const command: Command = {
 							command.name,
 							command.category.replace(/^./, (a) => a.toUpperCase()),
 							command.description[translations.language],
-							command.userPermissions.length
-								? command.userPermissions.join("`, `")
-								: "∅",
+							command.userPermissions.length ? command.userPermissions.join("`, `") : "∅",
 							formatTime((command.cooldown ?? 2) * 1000),
 						),
 						footer: {

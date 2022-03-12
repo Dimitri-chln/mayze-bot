@@ -41,10 +41,7 @@ const command: Command = {
 
 		const { rows } = await Util.database.query(`SELECT * FROM ${table}`);
 
-		const attachment = new MessageAttachment(
-			Buffer.from(JSON.stringify(rows, null, 4)),
-			`${table}.json`,
-		);
+		const attachment = new MessageAttachment(Buffer.from(JSON.stringify(rows, null, 4)), `${table}.json`);
 
 		interaction.followUp({
 			files: [attachment],

@@ -194,10 +194,7 @@ const command: Command = {
 			switch (buttonInteraction.customId) {
 				case "confirm": {
 					buttonInteraction.update({
-						content: translations.strings.updating(
-							members.size.toString(),
-							members.size > 1,
-						),
+						content: translations.strings.updating(members.size.toString(), members.size > 1),
 						components: [
 							{
 								type: "ACTION_ROW",

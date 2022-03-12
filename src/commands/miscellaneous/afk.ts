@@ -33,10 +33,7 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const message =
-			interaction.options
-				.getString("message")
-				?.replace(/^./, (a) => a.toUpperCase()) ?? "";
+		const message = interaction.options.getString("message")?.replace(/^./, (a) => a.toUpperCase()) ?? "";
 
 		Util.database.query(
 			`
@@ -48,9 +45,7 @@ const command: Command = {
 			[interaction.user.id, new Date().toISOString(), message],
 		);
 
-		interaction.followUp(
-			translations.strings.afk_message(interaction.user.toString(), message),
-		);
+		interaction.followUp(translations.strings.afk_message(interaction.user.toString(), message));
 	},
 };
 

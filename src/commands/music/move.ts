@@ -55,15 +55,11 @@ const command: Command = {
 
 		const songIndex = interaction.options.getInteger("song", true);
 		if (songIndex < 1 || songIndex > queue.songs.length)
-			return interaction.followUp(
-				translations.strings.invalid_song(queue.songs.length.toString()),
-			);
+			return interaction.followUp(translations.strings.invalid_song(queue.songs.length.toString()));
 
 		const after = interaction.options.getInteger("after", true);
 		if (after < 0 || after > queue.songs.length)
-			return interaction.followUp(
-				translations.strings.invalid_position(queue.songs.length.toString()),
-			);
+			return interaction.followUp(translations.strings.invalid_position(queue.songs.length.toString()));
 
 		const song = queue.move(songIndex, after);
 

@@ -13,19 +13,13 @@ const event: Event = {
 		if (member.user.bot) return;
 		if (!member.guild.me.permissions.has("MANAGE_ROLES")) return;
 
-		let roleIds = [
-			"735809874205737020",
-			"735810286719598634",
-			"735810462872109156",
-			"759694957132513300",
-		];
+		let roleIds = ["735809874205737020", "735810286719598634", "735810462872109156", "759694957132513300"];
 
 		const {
 			rows: [memberRoles],
-		}: { rows: DatabaseMemberRoles[] } = await Util.database.query(
-			"SELECT * FROM member_roles WHERE user_id = $1",
-			[member.user.id],
-		);
+		}: { rows: DatabaseMemberRoles[] } = await Util.database.query("SELECT * FROM member_roles WHERE user_id = $1", [
+			member.user.id,
+		]);
 
 		if (memberRoles) roleIds = roleIds.concat(memberRoles.roles);
 

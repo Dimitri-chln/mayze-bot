@@ -36,9 +36,7 @@ const command: Command = {
 		const question = interaction.options.getString("question", true);
 
 		const randomReply =
-			translations.strings.answers()[
-				Math.floor(Math.random() * translations.strings.answers().length)
-			];
+			translations.strings.answers()[Math.floor(Math.random() * translations.strings.answers().length)];
 
 		interaction.followUp(translations.strings.reply(question, randomReply));
 	},

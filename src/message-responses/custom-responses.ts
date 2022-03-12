@@ -1,10 +1,7 @@
 import MessageResponse from "../types/structures/MessageResponse";
 import Util from "../Util";
 
-import {
-	DatabaseCustomResponse,
-	TriggerType,
-} from "../types/structures/Database";
+import { DatabaseCustomResponse, TriggerType } from "../types/structures/Database";
 import { TextChannel } from "discord.js";
 import parseArgs from "../utils/misc/parseArgs";
 
@@ -71,42 +68,35 @@ const messageResponse: MessageResponse = {
 			},
 		};
 
-		const { rows: customResponses }: { rows: DatabaseCustomResponse[] } =
-			await Util.database.query("SELECT * FROM custom_response");
+		const { rows: customResponses }: { rows: DatabaseCustomResponse[] } = await Util.database.query(
+			"SELECT * FROM custom_response",
+		);
 
 		customResponses.forEach((customResponse) => {
 			switch (customResponse.trigger_type) {
 				case TriggerType.CONTAINS: {
-					if (message.content.toLowerCase().includes(customResponse.trigger))
-						respond(customResponse.response);
+					if (message.content.toLowerCase().includes(customResponse.trigger)) respond(customResponse.response);
 					break;
 				}
 
 				case TriggerType.EQUAL: {
-					if (message.content.toLowerCase() === customResponse.trigger)
-						respond(customResponse.response);
+					if (message.content.toLowerCase() === customResponse.trigger) respond(customResponse.response);
 					break;
 				}
 
 				case TriggerType.REGEX: {
-					if (
-						new RegExp(customResponse.trigger, "i").test(
-							message.content.toLowerCase(),
-						)
-					)
+					if (new RegExp(customResponse.trigger, "i").test(message.content.toLowerCase()))
 						respond(customResponse.response);
 					break;
 				}
 
 				case TriggerType.STARTS_WITH: {
-					if (message.content.toLowerCase().startsWith(customResponse.trigger))
-						respond(customResponse.response);
+					if (message.content.toLowerCase().startsWith(customResponse.trigger)) respond(customResponse.response);
 					break;
 				}
 
 				case TriggerType.ENDS_WITH: {
-					if (message.content.toLowerCase().endsWith(customResponse.trigger))
-						respond(customResponse.response);
+					if (message.content.toLowerCase().endsWith(customResponse.trigger)) respond(customResponse.response);
 					break;
 				}
 
@@ -117,20 +107,12 @@ const messageResponse: MessageResponse = {
 
 		async function respond(response: string) {
 			message.channel
-				.send(
-					response.replace(/\{.*?\}/g, (a) =>
-						parseMessage(a.replace(/[\{\}]/g, "").split(".")),
-					),
-				)
+				.send(response.replace(/\{.*?\}/g, (a) => parseMessage(a.replace(/[\{\}]/g, "").split("."))))
 				.catch(console.error);
 		}
 
-		function parseMessage(
-			properties: string[],
-			data = customResponseData,
-		): string {
-			if (properties.length === 1 && typeof data[properties[0]] === "string")
-				return data[properties[0]];
+		function parseMessage(properties: string[], data = customResponseData): string {
+			if (properties.length === 1 && typeof data[properties[0]] === "string") return data[properties[0]];
 
 			return parseMessage(properties.slice(1), data[properties[0]]);
 		}

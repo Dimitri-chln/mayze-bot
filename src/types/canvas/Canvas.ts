@@ -15,11 +15,7 @@ export default class Canvas {
 	private _owner: CanvasOwner;
 	private _users: Collection<Snowflake, User>;
 
-	constructor(
-		name: string,
-		client: Client,
-		palettes: Collection<string, Palette>,
-	) {
+	constructor(name: string, client: Client, palettes: Collection<string, Palette>) {
 		this.name = name;
 		this.palettes = palettes;
 		Util.database
@@ -31,11 +27,7 @@ export default class Canvas {
 					id: canvas.owner_id,
 				};
 				this._users = new Collection(
-					await Promise.all(
-						canvas.users.map((userId) =>
-							Promise.all([userId, client.users.fetch(userId)]),
-						),
-					),
+					await Promise.all(canvas.users.map((userId) => Promise.all([userId, client.users.fetch(userId)]))),
 				);
 			});
 	}
@@ -54,11 +46,7 @@ export default class Canvas {
 			data.push(row);
 		}
 
-		database.query("INSERT INTO canvas VALUES ($1, $2, $3)", [
-			name,
-			size,
-			JSON.stringify(data),
-		]);
+		database.query("INSERT INTO canvas VALUES ($1, $2, $3)", [name, size, JSON.stringify(data)]);
 
 		return new Canvas(name, client, palettes);
 	}
@@ -94,16 +82,10 @@ export default class Canvas {
 	 */
 	async addUser(user: User) {
 		// Remove users from all other canvas
-		await Util.database.query(
-			"UPDATE canvas SET users = array_diff(users, $1)",
-			[[user.id]],
-		);
+		await Util.database.query("UPDATE canvas SET users = array_diff(users, $1)", [[user.id]]);
 
 		// Add user to the new canvas
-		await Util.database.query(
-			"UPDATE canvas SET users = users || $1 WHERE name = $2",
-			[[user.id], this.name],
-		);
+		await Util.database.query("UPDATE canvas SET users = users || $1 WHERE name = $2", [[user.id], this.name]);
 
 		for (const canvas of Util.canvas.values()) canvas._users.delete(user.id);
 
@@ -114,24 +96,19 @@ export default class Canvas {
 	 * Modify a pixel in the canvas.
 	 */
 	async setPixel(x: number, y: number, color: Color) {
-		if (x < 0 || x >= this.size || y < 0 || y >= this.size)
-			throw new Error("InvalidCoordinates");
+		if (x < 0 || x >= this.size || y < 0 || y >= this.size) throw new Error("InvalidCoordinates");
 
 		let data = await this.data;
 		data[y][x] = color.alias;
 
-		Util.database.query("UPDATE canvas SET data = $1 WHERE name = $2", [
-			JSON.stringify(data),
-			this.name,
-		]);
+		Util.database.query("UPDATE canvas SET data = $1 WHERE name = $2", [JSON.stringify(data), this.name]);
 	}
 
 	/**
 	 * Get a 7x7 grid of the canvas around the selected pixel.
 	 */
 	async viewGrid(x: number, y: number): Promise<Grid> {
-		if (x < 0 || x >= this.size || y < 0 || y >= this.size)
-			throw new Error("InvalidCoordinates");
+		if (x < 0 || x >= this.size || y < 0 || y >= this.size) throw new Error("InvalidCoordinates");
 
 		let data = await this.data;
 		let grid: Color[][] = [];
@@ -159,11 +136,9 @@ export default class Canvas {
 	 * Display an image of the Canvas.
 	 */
 	async view(x: number, y: number, zoom: number | "default") {
-		if (zoom && zoom !== "default" && (zoom < 1 || zoom > this.size))
-			throw new Error("InvalidZoom");
+		if (zoom && zoom !== "default" && (zoom < 1 || zoom > this.size)) throw new Error("InvalidZoom");
 		if (zoom === "default") zoom = this.size;
-		if (x < 0 || x >= this.size || y < 0 || y >= this.size)
-			throw new Error("InvalidCoordinates");
+		if (x < 0 || x >= this.size || y < 0 || y >= this.size) throw new Error("InvalidCoordinates");
 
 		let data = await this.data;
 		let newData = [];
@@ -171,8 +146,7 @@ export default class Canvas {
 		for (let yShift = y; yShift < zoom; yShift++) {
 			let row = [];
 
-			for (let xShift = x; xShift < zoom; xShift++)
-				row.push(data[y + yShift] ? data[y + yShift][x + xShift] : null);
+			for (let xShift = x; xShift < zoom; xShift++) row.push(data[y + yShift] ? data[y + yShift][x + xShift] : null);
 
 			newData.push(row);
 		}
@@ -189,18 +163,15 @@ export default class Canvas {
 		// Create the borders
 		const borderColor = Jimp.rgbaToInt(114, 137, 218, 255);
 		for (let yBorder = 0; yBorder < borderSize; yBorder++) {
-			for (let xBorder = 0; xBorder < fullSize; xBorder++)
-				image.setPixelColor(borderColor, xBorder, yBorder);
+			for (let xBorder = 0; xBorder < fullSize; xBorder++) image.setPixelColor(borderColor, xBorder, yBorder);
 		}
 
 		for (let yBorder = fullSize - borderSize; yBorder < fullSize; yBorder++) {
-			for (let xBorder = 0; xBorder < fullSize; xBorder++)
-				image.setPixelColor(borderColor, xBorder, yBorder);
+			for (let xBorder = 0; xBorder < fullSize; xBorder++) image.setPixelColor(borderColor, xBorder, yBorder);
 		}
 
 		for (let yBorder = borderSize; yBorder < fullSize - borderSize; yBorder++) {
-			for (let xBorder = 0; xBorder < borderSize; xBorder++)
-				image.setPixelColor(borderColor, xBorder, yBorder);
+			for (let xBorder = 0; xBorder < borderSize; xBorder++) image.setPixelColor(borderColor, xBorder, yBorder);
 		}
 
 		for (let yBorder = borderSize; yBorder < fullSize - borderSize; yBorder++) {
@@ -213,26 +184,15 @@ export default class Canvas {
 			for (let xPixel = 0; xPixel < data.length; xPixel++) {
 				let color =
 					data[yPixel] && data[yPixel][xPixel]
-						? this.palettes
-								.find((palette) => palette.has(data[yPixel][xPixel]))
-								.get(data[yPixel][xPixel])
+						? this.palettes.find((palette) => palette.has(data[yPixel][xPixel])).get(data[yPixel][xPixel])
 						: 0x000000;
 				if (color instanceof Color)
-					color = Jimp.rgbaToInt(
-						color.red,
-						color.green,
-						color.blue,
-						color.alias === "blnk" ? 128 : 255,
-					);
+					color = Jimp.rgbaToInt(color.red, color.green, color.blue, color.alias === "blnk" ? 128 : 255);
 
 				// Make it <pixelSize> large
 				for (let i = 0; i < pixelSize; i++) {
 					for (let j = 0; j < pixelSize; j++) {
-						image.setPixelColor(
-							color,
-							borderSize + xPixel * pixelSize + i,
-							borderSize + yPixel * pixelSize + j,
-						);
+						image.setPixelColor(color, borderSize + xPixel * pixelSize + i, borderSize + yPixel * pixelSize + j);
 					}
 				}
 			}

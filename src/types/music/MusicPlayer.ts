@@ -1,10 +1,4 @@
-import {
-	Client,
-	Collection,
-	Snowflake,
-	TextChannel,
-	VoiceChannel,
-} from "discord.js";
+import { Client, Collection, Snowflake, TextChannel, VoiceChannel } from "discord.js";
 import Translations from "../structures/Translations";
 import Util from "../../Util";
 import Queue from "./Queue";
@@ -19,16 +13,11 @@ export default class MusicPlayer {
 	}
 
 	isPlaying(guildId: Snowflake) {
-		return this._queues.some(
-			(queue) =>
-				queue.voiceChannel.guild.id === guildId && queue.songs.length > 0,
-		);
+		return this._queues.some((queue) => queue.voiceChannel.guild.id === guildId && queue.songs.length > 0);
 	}
 
 	get(guildId: Snowflake) {
-		return this._queues.find(
-			(queue) => queue.voiceChannel.guild.id === guildId,
-		);
+		return this._queues.find((queue) => queue.voiceChannel.guild.id === guildId);
 	}
 
 	delete(guildId: Snowflake) {
@@ -37,10 +26,7 @@ export default class MusicPlayer {
 
 	async create(voiceChannel: VoiceChannel, textChannel: TextChannel) {
 		const translationsData = await new Translations("music_queue").init();
-		const translations =
-			translationsData.data[
-				Util.guildConfigs.get(voiceChannel.guild.id).language
-			];
+		const translations = translationsData.data[Util.guildConfigs.get(voiceChannel.guild.id).language];
 
 		const queue = new Queue(voiceChannel, textChannel, translations);
 		this._queues.set(voiceChannel.guild.id, queue);

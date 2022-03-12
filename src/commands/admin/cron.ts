@@ -51,8 +51,7 @@ const command: Command = {
 
 		if (!date) return interaction.followUp(translations.strings.invalid_date());
 
-		if (date.valueOf() < Date.now())
-			return interaction.followUp(translations.strings.date_passed());
+		if (date.valueOf() < Date.now()) return interaction.followUp(translations.strings.date_passed());
 
 		const taskString = interaction.options.getString("task", true);
 		const task = eval(`async () => { ${taskString} }`);

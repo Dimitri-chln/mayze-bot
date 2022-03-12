@@ -44,8 +44,7 @@ const command: Command = {
 
 				const regex = /\[?\s*\{\n.{0,2000}\},?\n\]?/gsy;
 				const fallbackRegex = /.{0,2000}/gsy;
-				const matches =
-					resString.match(regex) ?? resString.match(fallbackRegex);
+				const matches = resString.match(regex) ?? resString.match(fallbackRegex);
 
 				const pages: Page[] = [];
 				const page: (desc: string) => Page = (desc) => {
@@ -58,10 +57,7 @@ const command: Command = {
 										dynamic: true,
 									}),
 								},
-								title: translations.strings.title(
-									res.rowCount.toString(),
-									res.rowCount > 1,
-								),
+								title: translations.strings.title(res.rowCount.toString(), res.rowCount > 1),
 								color: interaction.guild.me.displayColor,
 								description: desc,
 							},
@@ -79,10 +75,7 @@ const command: Command = {
 										dynamic: true,
 									}),
 								},
-								title: translations.strings.title(
-									res.rowCount.toString(),
-									res.rowCount > 1,
-								),
+								title: translations.strings.title(res.rowCount.toString(), res.rowCount > 1),
 								color: interaction.guild.me.displayColor,
 								description: `\`\`\`json\n${match}\n\`\`\``,
 							},

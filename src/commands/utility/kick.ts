@@ -48,38 +48,25 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const member = interaction.guild.members.cache.get(
-			interaction.options.getUser("user", true).id,
-		);
+		const member = interaction.guild.members.cache.get(interaction.options.getUser("user", true).id);
 
 		const reason = interaction.options.getString("reason", false);
 
 		if (
-			member.roles.highest.position >=
-				(interaction.member as GuildMember).roles.highest.position &&
+			member.roles.highest.position >= (interaction.member as GuildMember).roles.highest.position &&
 			interaction.user.id !== Util.owner.id
 		)
 			return interaction.followUp(translations.strings.not_allowed());
 
 		// Server booster
-		if (member.premiumSinceTimestamp)
-			return interaction.followUp(
-				translations.strings.boosting(member.user.tag),
-			);
+		if (member.premiumSinceTimestamp) return interaction.followUp(translations.strings.boosting(member.user.tag));
 
-		if (
-			member.roles.highest.position >=
-			interaction.guild.me.roles.highest.position
-		)
-			return interaction.followUp(
-				translations.strings.too_high_hierarchy(member.user.tag),
-			);
+		if (member.roles.highest.position >= interaction.guild.me.roles.highest.position)
+			return interaction.followUp(translations.strings.too_high_hierarchy(member.user.tag));
 
-		member
-			.kick(translations.strings.reason(interaction.user.tag, reason))
-			.then((m) => {
-				interaction.followUp(translations.strings.kicked(m.user.tag));
-			});
+		member.kick(translations.strings.reason(interaction.user.tag, reason)).then((m) => {
+			interaction.followUp(translations.strings.kicked(m.user.tag));
+		});
 	},
 };
 

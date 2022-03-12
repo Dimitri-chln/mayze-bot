@@ -4,53 +4,34 @@ import Command from "../../types/structures/Command";
 import Translations from "../../types/structures/Translations";
 import { DatabaseUpgrades } from "../../types/structures/Database";
 
-export default async function runMessageCommand(
-	command: Command,
-	message: Message,
-	args: string[],
-) {
+export default async function runMessageCommand(command: Command, message: Message, args: string[]) {
 	const language = Util.guildConfigs.get(message.guild.id).language;
-	const translations = (await new Translations("run-command").init()).data[
-		language
-	];
+	const translations = (await new Translations("run-command").init()).data[language];
 	const NOW = Date.now();
 
-	const commandTranslations = await new Translations(
-		`cmd_${command.name}`,
-	).init();
+	const commandTranslations = await new Translations(`cmd_${command.name}`).init();
 
 	// Check admin permissions
-	if (command.category === "admin" && message.author.id !== Util.owner.id)
-		return;
+	if (command.category === "admin" && message.author.id !== Util.owner.id) return;
 
 	// Check user permissions
 	const missingUserPermissions = command.userPermissions.filter(
-		(permission) =>
-			!message.member.permissionsIn(message.channel.id).has(permission),
+		(permission) => !message.member.permissionsIn(message.channel.id).has(permission),
 	);
 
 	if (missingUserPermissions.length && message.author.id !== Util.owner.id)
 		return message
-			.reply(
-				translations.strings.user_missing_permissions(
-					missingUserPermissions.join("`, `"),
-				),
-			)
+			.reply(translations.strings.user_missing_permissions(missingUserPermissions.join("`, `")))
 			.catch(console.error);
 
 	// Check bot permissions
 	const missingBotPermissions = command.botPermissions.filter(
-		(permission) =>
-			!message.guild.me.permissionsIn(message.channel.id).has(permission),
+		(permission) => !message.guild.me.permissionsIn(message.channel.id).has(permission),
 	);
 
 	if (missingBotPermissions.length)
 		return message
-			.reply(
-				translations.strings.bot_missing_perms(
-					missingBotPermissions.join("`, `"),
-				),
-			)
+			.reply(translations.strings.bot_missing_perms(missingBotPermissions.join("`, `")))
 			.catch(console.error);
 
 	// Check if the user is in the same voice channel as the bot
@@ -58,8 +39,7 @@ export default async function runMessageCommand(
 		command.voice &&
 		(!message.member.voice.channelId ||
 			(Util.musicPlayer.get(message.guild.id) &&
-				message.member.voice.channelId !==
-					Util.musicPlayer.get(message.guild.id).voiceChannel.id))
+				message.member.voice.channelId !== Util.musicPlayer.get(message.guild.id).voiceChannel.id))
 	)
 		return message.reply(translations.strings.not_in_vc());
 
@@ -77,14 +57,12 @@ export default async function runMessageCommand(
 			[message.author.id],
 		);
 
-		if (userUpgrades)
-			cooldownReduction += 30 * userUpgrades.catch_cooldown_reduction;
+		if (userUpgrades) cooldownReduction += 30 * userUpgrades.catch_cooldown_reduction;
 	}
 
 	const cooldownAmount = ((command.cooldown ?? 2) - cooldownReduction) * 1000;
 	if (command.cooldowns.has(message.author.id)) {
-		const expirationTime =
-			command.cooldowns.get(message.author.id) + cooldownAmount;
+		const expirationTime = command.cooldowns.get(message.author.id) + cooldownAmount;
 
 		if (NOW < expirationTime) {
 			const timeLeft = Math.ceil((expirationTime - NOW) / 1000);
@@ -93,19 +71,15 @@ export default async function runMessageCommand(
 				.replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
 				.replace(/00h |00m /g, "");
 
-			return message
-				.reply(translations.strings.cooldown(timeLeftHumanized, command.name))
-				.catch(console.error);
+			return message.reply(translations.strings.cooldown(timeLeftHumanized, command.name)).catch(console.error);
 		}
 	}
 
 	command.cooldowns.set(message.author.id, NOW);
 	setTimeout(() => command.cooldowns.delete(message.author.id), cooldownAmount);
 
-	command
-		.runMessage(message, args, commandTranslations.data[language])
-		.catch((err) => {
-			console.error(err);
-			message.reply(translations.strings.error()).catch(console.error);
-		});
+	command.runMessage(message, args, commandTranslations.data[language]).catch((err) => {
+		console.error(err);
+		message.reply(translations.strings.error()).catch(console.error);
+	});
 }

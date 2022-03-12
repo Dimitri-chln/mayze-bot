@@ -19,12 +19,9 @@ const messageResponse: MessageResponse = {
 		const characterSeries = embed.description.includes("Claims:")
 			? embed.description.split("\nClaims:")[0].replace(/\n/g, " ")
 			: embed.description.split("\n**")[0].replace(/\n/g, " ");
-		const [, kakeraValue] = embed.description.match(
-			/\*\*(\d+)\*\*<:kakera:469835869059153940>/m,
-		);
+		const [, kakeraValue] = embed.description.match(/\*\*(\d+)\*\*<:kakera:469835869059153940>/m);
 
-		const { rows: wishes }: { rows: DatabaseMudaeWish[] } =
-			await Util.database.query(`SELECT * FROM mudae_wish`);
+		const { rows: wishes }: { rows: DatabaseMudaeWish[] } = await Util.database.query(`SELECT * FROM mudae_wish`);
 
 		wishes.forEach(async (wish) => {
 			const regex = wish.regex

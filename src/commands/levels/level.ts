@@ -44,17 +44,15 @@ const command: Command = {
 
 		const user = interaction.options.getUser("user", false) ?? interaction.user;
 
-		let { rows: chatLeaderboard }: { rows: DatabaseLevel[] } =
-			await Util.database.query("SELECT * FROM level ORDER BY chat_xp DESC");
-		let { rows: voiceLeaderboard }: { rows: DatabaseLevel[] } =
-			await Util.database.query("SELECT * FROM level ORDER BY voice_xp DESC");
+		let { rows: chatLeaderboard }: { rows: DatabaseLevel[] } = await Util.database.query(
+			"SELECT * FROM level ORDER BY chat_xp DESC",
+		);
+		let { rows: voiceLeaderboard }: { rows: DatabaseLevel[] } = await Util.database.query(
+			"SELECT * FROM level ORDER BY voice_xp DESC",
+		);
 
-		chatLeaderboard = chatLeaderboard.filter((u) =>
-			interaction.guild.members.cache.has(u.user_id),
-		);
-		voiceLeaderboard = voiceLeaderboard.filter((u) =>
-			interaction.guild.members.cache.has(u.user_id),
-		);
+		chatLeaderboard = chatLeaderboard.filter((u) => interaction.guild.members.cache.has(u.user_id));
+		voiceLeaderboard = voiceLeaderboard.filter((u) => interaction.guild.members.cache.has(u.user_id));
 
 		const userChatData = chatLeaderboard.find((u) => u.user_id === user.id);
 		const chatXp = userChatData ? userChatData.chat_xp : 0;
@@ -80,17 +78,8 @@ const command: Command = {
 							value: translations.strings.description(
 								chatLevel.level.toString(),
 								chatRank.toString(),
-								xpBar.full.repeat(
-									Math.round(
-										(chatLevel.currentXP / chatLevel.neededXP) * barSize,
-									),
-								) +
-									xpBar.empty.repeat(
-										barSize -
-											Math.round(
-												(chatLevel.currentXP / chatLevel.neededXP) * barSize,
-											),
-									),
+								xpBar.full.repeat(Math.round((chatLevel.currentXP / chatLevel.neededXP) * barSize)) +
+									xpBar.empty.repeat(barSize - Math.round((chatLevel.currentXP / chatLevel.neededXP) * barSize)),
 								chatLevel.currentXP.toString(),
 								chatLevel.neededXP.toString(),
 							),
@@ -101,17 +90,8 @@ const command: Command = {
 							value: translations.strings.description(
 								voiceLevel.level.toString(),
 								voiceRank.toString(),
-								xpBar.full.repeat(
-									Math.round(
-										(voiceLevel.currentXP / voiceLevel.neededXP) * barSize,
-									),
-								) +
-									xpBar.empty.repeat(
-										barSize -
-											Math.round(
-												(voiceLevel.currentXP / voiceLevel.neededXP) * barSize,
-											),
-									),
+								xpBar.full.repeat(Math.round((voiceLevel.currentXP / voiceLevel.neededXP) * barSize)) +
+									xpBar.empty.repeat(barSize - Math.round((voiceLevel.currentXP / voiceLevel.neededXP) * barSize)),
 								voiceLevel.currentXP.toString(),
 								voiceLevel.neededXP.toString(),
 							),

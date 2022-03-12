@@ -11,10 +11,9 @@ const autocompleteHandler: AutocompleteHandler = {
 			type: "STRING",
 			filterType: "CONTAINS",
 			run: async (interaction, value) => {
-				const { rows: tables }: { rows: { table_name: string }[] } =
-					await Util.database.query(
-						"SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'",
-					);
+				const { rows: tables }: { rows: { table_name: string }[] } = await Util.database.query(
+					"SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'",
+				);
 
 				return tables.map((table) => {
 					return {

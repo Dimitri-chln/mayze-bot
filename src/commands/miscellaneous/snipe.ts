@@ -55,11 +55,8 @@ const command: Command = {
 
 		switch (subCommand) {
 			case "message": {
-				const snipedMessage = Util.sniping.deletedMessages.get(
-					interaction.channel.id,
-				);
-				if (!snipedMessage)
-					return interaction.followUp(translations.strings.no_message());
+				const snipedMessage = Util.sniping.deletedMessages.get(interaction.channel.id);
+				if (!snipedMessage) return interaction.followUp(translations.strings.no_message());
 
 				interaction.followUp({
 					embeds: [
@@ -73,28 +70,21 @@ const command: Command = {
 							color: interaction.guild.me.displayColor,
 							description: snipedMessage.content,
 							image: {
-								url: snipedMessage.attachments.size
-									? `attachment://${snipedMessage.attachments.first().name}`
-									: null,
+								url: snipedMessage.attachments.size ? `attachment://${snipedMessage.attachments.first().name}` : null,
 							},
 							footer: {
 								text: "✨ Mayze ✨",
 							},
 						},
 					],
-					files: Array.from(snipedMessage.attachments).map(
-						(attachment) => attachment[1],
-					),
+					files: Array.from(snipedMessage.attachments).map((attachment) => attachment[1]),
 				});
 				break;
 			}
 
 			case "edit": {
-				const snipedMessage = Util.sniping.editedMessages.get(
-					interaction.channel.id,
-				);
-				if (!snipedMessage)
-					return interaction.followUp(translations.strings.no_message());
+				const snipedMessage = Util.sniping.editedMessages.get(interaction.channel.id);
+				if (!snipedMessage) return interaction.followUp(translations.strings.no_message());
 
 				interaction.followUp({
 					embeds: [
@@ -117,21 +107,17 @@ const command: Command = {
 			}
 
 			case "reaction": {
-				const snipedReaction = Util.sniping.messageReactions.get(
-					interaction.channel.id,
-				);
-				if (!snipedReaction)
-					return interaction.followUp(translations.strings.no_reaction());
+				const snipedReaction = Util.sniping.messageReactions.get(interaction.channel.id);
+				if (!snipedReaction) return interaction.followUp(translations.strings.no_reaction());
 
 				interaction.followUp({
 					embeds: [
 						{
 							author: {
 								name: snipedReaction.reaction.message.author.tag,
-								iconURL:
-									snipedReaction.reaction.message.author.displayAvatarURL({
-										dynamic: true,
-									}),
+								iconURL: snipedReaction.reaction.message.author.displayAvatarURL({
+									dynamic: true,
+								}),
 							},
 							thumbnail: {
 								url: snipedReaction.reaction.emoji.url,

@@ -38,9 +38,7 @@ const command: Command = {
 				try {
 					const res = await Minecraft.ping(serverIP);
 					const isOnline = (pingResult: typeof res) =>
-						/^Bienvenue sur le serveur de .+!$/.test(
-							pingResult.description?.text,
-						);
+						/^Bienvenue sur le serveur de .+!$/.test(pingResult.description?.text);
 
 					page.embeds.push({
 						author: {
@@ -64,12 +62,7 @@ const command: Command = {
 						},
 					});
 
-					page.files.push(
-						new MessageAttachment(
-							Buffer.from(res.favicon.slice(22), "base64"),
-							"favicon.png",
-						),
-					);
+					page.files.push(new MessageAttachment(Buffer.from(res.favicon.slice(22), "base64"), "favicon.png"));
 				} catch (err) {
 					page.embeds.push({
 						author: {

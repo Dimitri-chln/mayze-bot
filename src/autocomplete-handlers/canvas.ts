@@ -16,12 +16,9 @@ const autocompleteHandler: AutocompleteHandler = {
 				const userCanvas = Util.canvas.filter(
 					(canvas) =>
 						canvas.owner.type === CanvasOwnerType.EVERYONE ||
-						(canvas.owner.type === CanvasOwnerType.GUILD &&
-							canvas.owner.id === interaction.guild.id) ||
-						(canvas.owner.type === CanvasOwnerType.CHANNEL &&
-							canvas.owner.id === interaction.channel.id) ||
-						(canvas.owner.type === CanvasOwnerType.USER &&
-							canvas.owner.id === interaction.user.id),
+						(canvas.owner.type === CanvasOwnerType.GUILD && canvas.owner.id === interaction.guild.id) ||
+						(canvas.owner.type === CanvasOwnerType.CHANNEL && canvas.owner.id === interaction.channel.id) ||
+						(canvas.owner.type === CanvasOwnerType.USER && canvas.owner.id === interaction.user.id),
 				);
 
 				return userCanvas.map((canvas) => {

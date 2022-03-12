@@ -13,11 +13,10 @@ const autocompleteHandler: AutocompleteHandler = {
 			type: "STRING",
 			filterType: "CONTAINS",
 			run: async (interaction, value) => {
-				const { rows: playlists }: { rows: DatabasePlaylist[] } =
-					await Util.database.query(
-						"SELECT * FROM playlist WHERE NOT PRIVATE OR user_id = $1 ORDER BY name ASC",
-						[interaction.user.id],
-					);
+				const { rows: playlists }: { rows: DatabasePlaylist[] } = await Util.database.query(
+					"SELECT * FROM playlist WHERE NOT PRIVATE OR user_id = $1 ORDER BY name ASC",
+					[interaction.user.id],
+				);
 
 				return playlists.map((playlist) => {
 					return {
@@ -34,11 +33,10 @@ const autocompleteHandler: AutocompleteHandler = {
 			type: "STRING",
 			filterType: "CONTAINS",
 			run: async (interaction, value) => {
-				const { rows: playlists }: { rows: DatabasePlaylist[] } =
-					await Util.database.query(
-						"SELECT * FROM playlist WHERE user_id = $1 ORDER BY name ASC",
-						[interaction.user.id],
-					);
+				const { rows: playlists }: { rows: DatabasePlaylist[] } = await Util.database.query(
+					"SELECT * FROM playlist WHERE user_id = $1 ORDER BY name ASC",
+					[interaction.user.id],
+				);
 
 				return playlists.map((playlist) => {
 					return {

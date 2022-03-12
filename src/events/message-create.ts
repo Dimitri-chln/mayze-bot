@@ -34,14 +34,9 @@ const event: Event = {
 					})
 					.filter((p) => p);
 
-				if (
-					!prefixes.some((p) => message.content.toLowerCase().startsWith(p))
-				) {
+				if (!prefixes.some((p) => message.content.toLowerCase().startsWith(p))) {
 					if (Util.xpMessages.has(message.author.id)) {
-						Util.xpMessages.set(
-							message.author.id,
-							Util.xpMessages.get(message.author.id) + 1,
-						);
+						Util.xpMessages.set(message.author.id, Util.xpMessages.get(message.author.id) + 1);
 					} else {
 						Util.xpMessages.set(message.author.id, 1);
 						setTimeout(() => {
@@ -50,8 +45,7 @@ const event: Event = {
 					}
 
 					const newXP = Math.round(
-						(Math.sqrt(message.content.length) * Util.config.XP_MULTIPLIER) /
-							Util.xpMessages.get(message.author.id),
+						(Math.sqrt(message.content.length) * Util.config.XP_MULTIPLIER) / Util.xpMessages.get(message.author.id),
 					);
 
 					try {
@@ -70,15 +64,9 @@ const event: Event = {
 
 						const levelInfo = getLevel(xp);
 
-						if (
-							levelInfo.currentXP < newXP &&
-							message.guild.id === Util.config.MAIN_GUILD_ID
-						)
+						if (levelInfo.currentXP < newXP && message.guild.id === Util.config.MAIN_GUILD_ID)
 							message.channel.send(
-								translations.strings.chat_level_up(
-									message.author.toString(),
-									levelInfo.level.toString(),
-								),
+								translations.strings.chat_level_up(message.author.toString(), levelInfo.level.toString()),
 							);
 					} catch (err) {
 						console.error(err);
@@ -93,19 +81,11 @@ const event: Event = {
 		for (const messageResponse of Util.messageResponses) {
 			if (messageResponse.noBot && message.author.bot) continue;
 			if (messageResponse.noDM && message.channel.type === "DM") continue;
-			if (
-				messageResponse.guildIds &&
-				!messageResponse.guildIds.includes(message.guild?.id)
-			)
-				continue;
+			if (messageResponse.guildIds && !messageResponse.guildIds.includes(message.guild?.id)) continue;
 
-			const messageResponseTranslations = await new Translations(
-				`resp_${messageResponse.name}`,
-			).init();
+			const messageResponseTranslations = await new Translations(`resp_${messageResponse.name}`).init();
 
-			messageResponse
-				.run(message, messageResponseTranslations.data[language])
-				.catch(console.error);
+			messageResponse.run(message, messageResponseTranslations.data[language]).catch(console.error);
 		}
 
 		// Message commands
@@ -115,20 +95,13 @@ const event: Event = {
 			!message.author.bot &&
 			message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
 		) {
-			const input = message.content
-				.slice(Util.prefix.length)
-				.trim()
-				.split(/ +/g);
+			const input = message.content.slice(Util.prefix.length).trim().split(/ +/g);
 			const commandName = input.shift().toLowerCase();
 			const args = parseArgs(input.join(" "));
 
 			const command =
-				Util.commands.get(commandName) ??
-				Util.commands.find(
-					(cmd) => cmd.aliases && cmd.aliases.includes(commandName),
-				);
-			if (command && command.runMessage)
-				runMessageCommand(command, message, args);
+				Util.commands.get(commandName) ?? Util.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
+			if (command && command.runMessage) runMessageCommand(command, message, args);
 		}
 	},
 };

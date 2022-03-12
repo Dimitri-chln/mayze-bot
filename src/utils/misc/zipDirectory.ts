@@ -1,10 +1,7 @@
 import Fs from "fs";
 import archiver from "archiver";
 
-export default function zipDirectory(
-	source: string,
-	out: string,
-): Promise<void> {
+export default function zipDirectory(source: string, out: string): Promise<void> {
 	const archive = archiver("zip", { zlib: { level: 9 } });
 	const stream = Fs.createWriteStream(out);
 

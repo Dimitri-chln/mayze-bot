@@ -196,8 +196,7 @@ export function pokemonImage(
 	variationType: VariationType = "default",
 	variation: Variation = "default",
 ) {
-	const url = (n: number) =>
-		`https://assets.poketwo.net/${shiny ? "shiny" : "images"}/${n}.png?v=26`;
+	const url = (n: number) => `https://assets.poketwo.net/${shiny ? "shiny" : "images"}/${n}.png?v=26`;
 
 	if (variationType === "default") return url(pokemon.nationalId);
 	else return url(imageSuffixes[variationType][variation][pokemon.nationalId]);

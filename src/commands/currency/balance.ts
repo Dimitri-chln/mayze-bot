@@ -43,10 +43,9 @@ const command: Command = {
 
 		const {
 			rows: [userCurrency],
-		}: { rows: DatabaseUserMoney[] } = await Util.database.query(
-			"SELECT * FROM currency WHERE user_id = $1",
-			[user.id],
-		);
+		}: { rows: DatabaseUserMoney[] } = await Util.database.query("SELECT * FROM currency WHERE user_id = $1", [
+			user.id,
+		]);
 
 		const { money, last_daily } = userCurrency ?? {
 			money: 0,
@@ -54,9 +53,7 @@ const command: Command = {
 		};
 
 		const nextDaily =
-			last_daily && Date.parse(last_daily) > MIDNIGHT.valueOf()
-				? MIDNIGHT.valueOf() + DAY_IN_MS.valueOf()
-				: NOW;
+			last_daily && Date.parse(last_daily) > MIDNIGHT.valueOf() ? MIDNIGHT.valueOf() + DAY_IN_MS.valueOf() : NOW;
 
 		interaction.followUp({
 			embeds: [

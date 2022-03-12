@@ -69,20 +69,11 @@ const command: Command = {
 			case "dz_playlist":
 			case "dz_album": {
 				// If the link is a playlist
-				const playlist = await queue.playlist(
-					search,
-					interaction.member as GuildMember,
-					{
-						shuffle,
-					},
-				);
+				const playlist = await queue.playlist(search, interaction.member as GuildMember, {
+					shuffle,
+				});
 
-				interaction.followUp(
-					translations.strings.playlist(
-						playlist.videos.length.toString(),
-						shuffle,
-					),
-				);
+				interaction.followUp(translations.strings.playlist(playlist.videos.length.toString(), shuffle));
 				break;
 			}
 
@@ -90,21 +81,13 @@ const command: Command = {
 				// Otherwise
 				try {
 					const playedIn = queue.duration;
-					const song = await queue.play(
-						search,
-						interaction.member as GuildMember,
-					);
+					const song = await queue.play(search, interaction.member as GuildMember);
 
 					interaction.followUp(
-						translations.strings.playing(
-							isPlaying,
-							MusicUtil.millisecondsToTime(playedIn),
-							song.name,
-						),
+						translations.strings.playing(isPlaying, MusicUtil.millisecondsToTime(playedIn), song.name),
 					);
 				} catch (err) {
-					if (err === "InvalidSong")
-						interaction.followUp(translations.strings.invalid_song());
+					if (err === "InvalidSong") interaction.followUp(translations.strings.invalid_song());
 					else throw err;
 				}
 			}

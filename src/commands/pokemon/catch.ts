@@ -7,10 +7,7 @@ import CatchRates from "../../types/pokemon/CatchRates";
 import PokemonList from "../../types/pokemon/PokemonList";
 import { pokeball } from "../../assets/image-urls.json";
 import { VariationType } from "../../utils/pokemon/pokemonInfo";
-import {
-	DatabasePokemon,
-	DatabaseUpgrades,
-} from "../../types/structures/Database";
+import { DatabasePokemon, DatabaseUpgrades } from "../../types/structures/Database";
 import { MegaEvolution } from "../../types/pokemon/Pokemon";
 
 const command: Command = {
@@ -42,23 +39,18 @@ const command: Command = {
 			shiny_probability: (tier: number) => 2 * tier,
 		};
 
-		const { rows: caughtPokemonsData }: { rows: DatabasePokemon[] } =
-			await Util.database.query(
-				"SELECT * FROM pokemon WHERE users ? $1 AND variation = 'default'",
-				[interaction.user.id],
-			);
-
-		const pokemonList = new PokemonList(
-			caughtPokemonsData,
-			interaction.user.id,
+		const { rows: caughtPokemonsData }: { rows: DatabasePokemon[] } = await Util.database.query(
+			"SELECT * FROM pokemon WHERE users ? $1 AND variation = 'default'",
+			[interaction.user.id],
 		);
+
+		const pokemonList = new PokemonList(caughtPokemonsData, interaction.user.id);
 
 		const {
 			rows: [userUpgrades],
-		}: { rows: DatabaseUpgrades[] } = await Util.database.query(
-			"SELECT * FROM upgrades WHERE user_id = $1",
-			[interaction.user.id],
-		);
+		}: { rows: DatabaseUpgrades[] } = await Util.database.query("SELECT * FROM upgrades WHERE user_id = $1", [
+			interaction.user.id,
+		]);
 
 		const upgrades = userUpgrades ?? {
 			user_id: interaction.user.id,
@@ -78,24 +70,17 @@ const command: Command = {
 		{
 			const {
 				rows: [userHunt],
-			} = await Util.database.query(
-				"SELECT * FROM pokemon_hunting WHERE user_id = $1",
-				[interaction.user.id],
-			);
+			} = await Util.database.query("SELECT * FROM pokemon_hunting WHERE user_id = $1", [interaction.user.id]);
 
 			if (userHunt) {
 				const huntedPokemon = Util.pokedex.findById(userHunt.pokemon_id);
 
-				let probability = Math.min(
-					((userHunt.hunt_count + 1) / 100) * (huntedPokemon.catchRate / 255),
-					1,
-				);
+				let probability = Math.min(((userHunt.hunt_count + 1) / 100) * (huntedPokemon.catchRate / 255), 1);
 
 				if (Math.random() < probability) {
-					await Util.database.query(
-						"UPDATE pokemon_hunting SET hunt_count = 0 WHERE user_id = $1",
-						[interaction.user.id],
-					);
+					await Util.database.query("UPDATE pokemon_hunting SET hunt_count = 0 WHERE user_id = $1", [
+						interaction.user.id,
+					]);
 
 					randomPokemon = huntedPokemon;
 				} else {
@@ -113,19 +98,11 @@ const command: Command = {
 			// Mega Gems
 			if (
 				Math.random() <
-				MEGA_GEM_FREQUENCY *
-					(1 +
-						UPGRADES_BENEFITS.mega_gem_probability(
-							upgrades.mega_gem_probability,
-						) /
-							100)
+				MEGA_GEM_FREQUENCY * (1 + UPGRADES_BENEFITS.mega_gem_probability(upgrades.mega_gem_probability) / 100)
 			) {
 				const megaPokemon = Util.pokedex.megaEvolvablePokemons.random();
 
-				megaGem =
-					megaPokemon.megaEvolutions[
-						Math.floor(Math.random() * megaPokemon.megaEvolutions.length)
-					].megaStone;
+				megaGem = megaPokemon.megaEvolutions[Math.floor(Math.random() * megaPokemon.megaEvolutions.length)].megaStone;
 
 				const defaultData = {};
 				defaultData[interaction.user.id] = 1;
@@ -147,18 +124,12 @@ const command: Command = {
 		}
 
 		const shiny =
-			Math.random() <
-			SHINY_FREQUENCY *
-				(1 +
-					UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_probability) /
-						100);
+			Math.random() < SHINY_FREQUENCY * (1 + UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_probability) / 100);
 
 		const variationType: VariationType =
-			Util.pokedex.alolaPokemons.has(randomPokemon.nationalId) &&
-			Math.random() < ALOLA_FREQUENCY
+			Util.pokedex.alolaPokemons.has(randomPokemon.nationalId) && Math.random() < ALOLA_FREQUENCY
 				? "alola"
-				: Util.pokedex.galarPokemons.has(randomPokemon.nationalId) &&
-				  Math.random() < GALAR_FREQUENCY
+				: Util.pokedex.galarPokemons.has(randomPokemon.nationalId) && Math.random() < GALAR_FREQUENCY
 				? "galar"
 				: "default";
 
@@ -166,12 +137,8 @@ const command: Command = {
 			Util.config.CATCH_REWARD *
 				((255 / randomPokemon.catchRate) *
 					(shiny ? Util.config.SHINY_REWARD_MULTIPLIER : 1) *
-					(variationType === "alola"
-						? Util.config.ALOLA_REWARD_MULTIPLIER
-						: 1) *
-					(variationType === "galar"
-						? Util.config.GALAR_REWARD_MULTIPLIER
-						: 1)),
+					(variationType === "alola" ? Util.config.ALOLA_REWARD_MULTIPLIER : 1) *
+					(variationType === "galar" ? Util.config.GALAR_REWARD_MULTIPLIER : 1)),
 		);
 
 		const defaultUserData = {
@@ -196,22 +163,11 @@ const command: Command = {
 			WHERE pokemon.national_id = EXCLUDED.national_id AND pokemon.shiny = EXCLUDED.shiny AND pokemon.variation = EXCLUDED.variation
 			RETURNING (users -> $6 -> 'caught')::int AS caught
 			`,
-			[
-				randomPokemon.nationalId,
-				shiny,
-				variationType,
-				"default",
-				defaultData,
-				interaction.user.id,
-				defaultUserData,
-			],
+			[randomPokemon.nationalId, shiny, variationType, "default", defaultData, interaction.user.id, defaultUserData],
 		);
 
 		Util.database
-			.query(
-				"UPDATE pokemon_hunting SET hunt_count = hunt_count + 1 WHERE user_id = $1",
-				[interaction.user.id],
-			)
+			.query("UPDATE pokemon_hunting SET hunt_count = hunt_count + 1 WHERE user_id = $1", [interaction.user.id])
 			.catch(console.error);
 
 		Util.database
@@ -230,10 +186,7 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name:
-							caughtTotal > 1
-								? translations.strings.caught()
-								: translations.strings.caught_new(),
+						name: caughtTotal > 1 ? translations.strings.caught() : translations.strings.caught_new(),
 						iconURL: pokeball,
 					},
 					image: {
@@ -249,19 +202,9 @@ const command: Command = {
 							interaction.user.toString(),
 							!shiny &&
 								/^[aeiou]/i.test(
-									randomPokemon.formatName(
-										translations.language,
-										shiny,
-										variationType,
-										"default",
-										"raw",
-									),
+									randomPokemon.formatName(translations.language, shiny, variationType, "default", "raw"),
 								),
-							randomPokemon.formatName(
-								translations.language,
-								shiny,
-								variationType,
-							),
+							randomPokemon.formatName(translations.language, shiny, variationType),
 							catchReward.toString(),
 						) + (megaGem ? translations.strings.mega_gem(megaGem) : ""),
 					footer: {
@@ -277,17 +220,13 @@ const command: Command = {
 
 		if (Util.beta) return;
 
-		const logChannel = interaction.client.channels.cache.get(
-			"839538540206882836",
-		) as TextChannel;
+		const logChannel = interaction.client.channels.cache.get("839538540206882836") as TextChannel;
 
 		logChannel.send({
 			embeds: [
 				{
 					author: {
-						name: `#${(interaction.channel as TextChannel).name} (${
-							interaction.guild.name
-						})`,
+						name: `#${(interaction.channel as TextChannel).name} (${interaction.guild.name})`,
 						url: reply.url,
 						iconURL: interaction.guild.iconURL(),
 					},
@@ -302,15 +241,7 @@ const command: Command = {
 					description: translations.strings.caught_title_en(
 						interaction.user.toString(),
 						!shiny &&
-							/^[aeiou]/i.test(
-								randomPokemon.formatName(
-									translations.language,
-									shiny,
-									variationType,
-									"default",
-									"raw",
-								),
-							),
+							/^[aeiou]/i.test(randomPokemon.formatName(translations.language, shiny, variationType, "default", "raw")),
 						randomPokemon.formatName("en", shiny, variationType),
 					),
 					footer: {
@@ -336,20 +267,18 @@ const command: Command = {
 			shiny_probability: (tier: number) => 2 * tier,
 		};
 
-		const { rows: caughtPokemonsData }: { rows: DatabasePokemon[] } =
-			await Util.database.query(
-				"SELECT * FROM pokemon WHERE users ? $1 AND variation = 'default'",
-				[message.author.id],
-			);
+		const { rows: caughtPokemonsData }: { rows: DatabasePokemon[] } = await Util.database.query(
+			"SELECT * FROM pokemon WHERE users ? $1 AND variation = 'default'",
+			[message.author.id],
+		);
 
 		const pokemonList = new PokemonList(caughtPokemonsData, message.author.id);
 
 		const {
 			rows: [userUpgrades],
-		}: { rows: DatabaseUpgrades[] } = await Util.database.query(
-			"SELECT * FROM upgrades WHERE user_id = $1",
-			[message.author.id],
-		);
+		}: { rows: DatabaseUpgrades[] } = await Util.database.query("SELECT * FROM upgrades WHERE user_id = $1", [
+			message.author.id,
+		]);
 
 		const upgrades = userUpgrades ?? {
 			user_id: message.author.id,
@@ -369,24 +298,17 @@ const command: Command = {
 		{
 			const {
 				rows: [userHunt],
-			} = await Util.database.query(
-				"SELECT * FROM pokemon_hunting WHERE user_id = $1",
-				[message.author.id],
-			);
+			} = await Util.database.query("SELECT * FROM pokemon_hunting WHERE user_id = $1", [message.author.id]);
 
 			if (userHunt) {
 				const huntedPokemon = Util.pokedex.findById(userHunt.pokemon_id);
 
-				let probability = Math.min(
-					((userHunt.hunt_count + 1) / 100) * (huntedPokemon.catchRate / 255),
-					1,
-				);
+				let probability = Math.min(((userHunt.hunt_count + 1) / 100) * (huntedPokemon.catchRate / 255), 1);
 
 				if (Math.random() < probability) {
-					await Util.database.query(
-						"UPDATE pokemon_hunting SET hunt_count = 0 WHERE user_id = $1",
-						[message.author.id],
-					);
+					await Util.database.query("UPDATE pokemon_hunting SET hunt_count = 0 WHERE user_id = $1", [
+						message.author.id,
+					]);
 
 					randomPokemon = huntedPokemon;
 				} else {
@@ -404,19 +326,11 @@ const command: Command = {
 			// Mega Gems
 			if (
 				Math.random() <
-				MEGA_GEM_FREQUENCY *
-					(1 +
-						UPGRADES_BENEFITS.mega_gem_probability(
-							upgrades.mega_gem_probability,
-						) /
-							100)
+				MEGA_GEM_FREQUENCY * (1 + UPGRADES_BENEFITS.mega_gem_probability(upgrades.mega_gem_probability) / 100)
 			) {
 				const megaPokemon = Util.pokedex.megaEvolvablePokemons.random();
 
-				megaGem =
-					megaPokemon.megaEvolutions[
-						Math.floor(Math.random() * megaPokemon.megaEvolutions.length)
-					].megaStone;
+				megaGem = megaPokemon.megaEvolutions[Math.floor(Math.random() * megaPokemon.megaEvolutions.length)].megaStone;
 
 				const defaultData = {};
 				defaultData[message.author.id] = 1;
@@ -438,18 +352,12 @@ const command: Command = {
 		}
 
 		const shiny =
-			Math.random() <
-			SHINY_FREQUENCY *
-				(1 +
-					UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_probability) /
-						100);
+			Math.random() < SHINY_FREQUENCY * (1 + UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_probability) / 100);
 
 		const variationType: VariationType =
-			Util.pokedex.alolaPokemons.has(randomPokemon.nationalId) &&
-			Math.random() < ALOLA_FREQUENCY
+			Util.pokedex.alolaPokemons.has(randomPokemon.nationalId) && Math.random() < ALOLA_FREQUENCY
 				? "alola"
-				: Util.pokedex.galarPokemons.has(randomPokemon.nationalId) &&
-				  Math.random() < GALAR_FREQUENCY
+				: Util.pokedex.galarPokemons.has(randomPokemon.nationalId) && Math.random() < GALAR_FREQUENCY
 				? "galar"
 				: "default";
 
@@ -457,12 +365,8 @@ const command: Command = {
 			Util.config.CATCH_REWARD *
 				((255 / randomPokemon.catchRate) *
 					(shiny ? Util.config.SHINY_REWARD_MULTIPLIER : 1) *
-					(variationType === "alola"
-						? Util.config.ALOLA_REWARD_MULTIPLIER
-						: 1) *
-					(variationType === "galar"
-						? Util.config.GALAR_REWARD_MULTIPLIER
-						: 1)),
+					(variationType === "alola" ? Util.config.ALOLA_REWARD_MULTIPLIER : 1) *
+					(variationType === "galar" ? Util.config.GALAR_REWARD_MULTIPLIER : 1)),
 		);
 
 		const defaultUserData = {
@@ -487,22 +391,11 @@ const command: Command = {
 			WHERE pokemon.national_id = EXCLUDED.national_id AND pokemon.shiny = EXCLUDED.shiny AND pokemon.variation = EXCLUDED.variation
 			RETURNING (users -> $6 -> 'caught')::int AS caught
 			`,
-			[
-				randomPokemon.nationalId,
-				shiny,
-				variationType,
-				"default",
-				defaultData,
-				message.author.id,
-				defaultUserData,
-			],
+			[randomPokemon.nationalId, shiny, variationType, "default", defaultData, message.author.id, defaultUserData],
 		);
 
 		Util.database
-			.query(
-				"UPDATE pokemon_hunting SET hunt_count = hunt_count + 1 WHERE user_id = $1",
-				[message.author.id],
-			)
+			.query("UPDATE pokemon_hunting SET hunt_count = hunt_count + 1 WHERE user_id = $1", [message.author.id])
 			.catch(console.error);
 
 		Util.database
@@ -521,10 +414,7 @@ const command: Command = {
 			embeds: [
 				{
 					author: {
-						name:
-							caughtTotal > 1
-								? translations.strings.caught()
-								: translations.strings.caught_new(),
+						name: caughtTotal > 1 ? translations.strings.caught() : translations.strings.caught_new(),
 						iconURL: pokeball,
 					},
 					image: {
@@ -540,19 +430,9 @@ const command: Command = {
 							message.author.toString(),
 							!shiny &&
 								/^[aeiou]/i.test(
-									randomPokemon.formatName(
-										translations.language,
-										shiny,
-										variationType,
-										"default",
-										"raw",
-									),
+									randomPokemon.formatName(translations.language, shiny, variationType, "default", "raw"),
 								),
-							randomPokemon.formatName(
-								translations.language,
-								shiny,
-								variationType,
-							),
+							randomPokemon.formatName(translations.language, shiny, variationType),
 							catchReward.toString(),
 						) + (megaGem ? translations.strings.mega_gem(megaGem) : ""),
 					footer: {
@@ -567,17 +447,13 @@ const command: Command = {
 
 		if (Util.beta) return;
 
-		const logChannel = message.client.channels.cache.get(
-			"839538540206882836",
-		) as TextChannel;
+		const logChannel = message.client.channels.cache.get("839538540206882836") as TextChannel;
 
 		logChannel.send({
 			embeds: [
 				{
 					author: {
-						name: `#${(message.channel as TextChannel).name} (${
-							message.guild.name
-						})`,
+						name: `#${(message.channel as TextChannel).name} (${message.guild.name})`,
 						url: reply.url,
 						iconURL: message.guild.iconURL(),
 					},
@@ -592,15 +468,7 @@ const command: Command = {
 					description: translations.strings.caught_title_en(
 						message.author.toString(),
 						!shiny &&
-							/^[aeiou]/i.test(
-								randomPokemon.formatName(
-									translations.language,
-									shiny,
-									variationType,
-									"default",
-									"raw",
-								),
-							),
+							/^[aeiou]/i.test(randomPokemon.formatName(translations.language, shiny, variationType, "default", "raw")),
 						randomPokemon.formatName("en", shiny, variationType),
 					),
 					footer: {

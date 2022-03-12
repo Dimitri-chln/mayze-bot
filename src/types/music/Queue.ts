@@ -10,14 +10,7 @@ import {
 	entersState,
 	NoSubscriberBehavior,
 } from "@discordjs/voice";
-import {
-	Collection,
-	GuildMember,
-	Message,
-	Snowflake,
-	TextChannel,
-	VoiceChannel,
-} from "discord.js";
+import { Collection, GuildMember, Message, Snowflake, TextChannel, VoiceChannel } from "discord.js";
 import Song from "./Song";
 import Util from "../../Util";
 import { PlaylistOptions } from "./MusicUtil";
@@ -42,11 +35,7 @@ export default class Queue {
 	private readonly _songDisplays: Collection<Snowflake, Message>;
 	private readonly _songDisplaysTimeout: NodeJS.Timer;
 
-	constructor(
-		voiceChannel: VoiceChannel,
-		textChannel: TextChannel,
-		translations: LanguageTranslationsData,
-	) {
+	constructor(voiceChannel: VoiceChannel, textChannel: TextChannel, translations: LanguageTranslationsData) {
 		this.voiceChannel = voiceChannel;
 		this.textChannel = textChannel;
 		this.translations = translations;
@@ -64,16 +53,12 @@ export default class Queue {
 		this._volume = 0.5;
 		this.idleTime = 900_000;
 		this._songDisplays = new Collection();
-		this._songDisplaysTimeout = setInterval(
-			() => this._editSongDisplays(),
-			10_000,
-		);
+		this._songDisplaysTimeout = setInterval(() => this._editSongDisplays(), 10_000);
 
 		joinVoiceChannel({
 			guildId: voiceChannel.guild.id,
 			channelId: voiceChannel.id,
-			adapterCreator: voiceChannel.guild
-				.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator,
+			adapterCreator: voiceChannel.guild.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator,
 			selfDeaf: true,
 		});
 
@@ -95,13 +80,7 @@ export default class Queue {
 
 				case VoiceConnectionStatus.Disconnected: {
 					try {
-						await Promise.race([
-							entersState(
-								this.voiceConnection,
-								VoiceConnectionStatus.Connecting,
-								5_000,
-							),
-						]);
+						await Promise.race([entersState(this.voiceConnection, VoiceConnectionStatus.Connecting, 5_000)]);
 						// Seems to be reconnecting to a new channel - ignore disconnect
 						this.voiceConnection.subscribe(this.audioPlayer);
 						this.voiceChannel = this.voiceChannel.client.channels.cache.get(
@@ -151,13 +130,7 @@ export default class Queue {
 			console.error(err);
 			this.repeatSong = false;
 
-			this.textChannel.send(
-				this.translations.strings.stream_error(
-					this.nowPlaying.name,
-					err.name,
-					err.message,
-				),
-			);
+			this.textChannel.send(this.translations.strings.stream_error(this.nowPlaying.name, err.name, err.message));
 
 			this._playSong();
 		});
@@ -172,9 +145,7 @@ export default class Queue {
 	}
 
 	get volume() {
-		return this.audioPlayer.state.status === AudioPlayerStatus.Playing
-			? this._volume * 100
-			: null;
+		return this.audioPlayer.state.status === AudioPlayerStatus.Playing ? this._volume * 100 : null;
 	}
 
 	get duration() {
@@ -201,19 +172,9 @@ export default class Queue {
 		return song;
 	}
 
-	async playlist(
-		search: string,
-		member: GuildMember,
-		options?: Partial<PlaylistOptions>,
-	) {
+	async playlist(search: string, member: GuildMember, options?: Partial<PlaylistOptions>) {
 		// Search the playlist
-		const playlist = await Util.music.playlist(
-			search,
-			this,
-			member.user,
-			options?.maxSongs,
-			options?.shuffle,
-		);
+		const playlist = await Util.music.playlist(search, this, member.user, options?.maxSongs, options?.shuffle);
 		this.songs.push(...playlist.videos);
 
 		if (!this._running) {
@@ -286,11 +247,7 @@ export default class Queue {
 	}
 
 	async fillQueue(number: number) {
-		const relatedSongs = await Util.music.relatedSongs(
-			this.songs,
-			Math.max(number - this.songs.length, 0),
-			this,
-		);
+		const relatedSongs = await Util.music.relatedSongs(this.songs, Math.max(number - this.songs.length, 0), this);
 
 		this.songs.push(...relatedSongs);
 		return relatedSongs;
@@ -298,11 +255,7 @@ export default class Queue {
 
 	move(songIndex: number, after: number) {
 		const movedSong = this.songs[songIndex];
-		this.songs.splice(
-			songIndex > after ? after + 1 : after,
-			0,
-			this.songs.splice(songIndex, 1)[0],
-		);
+		this.songs.splice(songIndex > after ? after + 1 : after, 0, this.songs.splice(songIndex, 1)[0]);
 		return movedSong;
 	}
 
@@ -346,8 +299,7 @@ export default class Queue {
 			this.audioPlayer.state.status === AudioPlayerStatus.Playing ||
 			this.audioPlayer.state.status === AudioPlayerStatus.Paused ||
 			this.audioPlayer.state.status === AudioPlayerStatus.Buffering
-				? this.audioPlayer.state.resource.playbackDuration +
-				  (this.nowPlaying.seek ?? 0) * 1000
+				? this.audioPlayer.state.resource.playbackDuration + (this.nowPlaying.seek ?? 0) * 1000
 				: 0;
 		const timeEnd = this.nowPlaying.duration;
 
@@ -359,9 +311,7 @@ export default class Queue {
 		this._editSongDisplays();
 	}
 
-	private async _editSongDisplays(
-		options: { song?: Song; end?: boolean } = {},
-	) {
+	private async _editSongDisplays(options: { song?: Song; end?: boolean } = {}) {
 		const song = options.song ?? this.nowPlaying;
 		if (!song) return;
 
@@ -383,38 +333,24 @@ export default class Queue {
 								description: this.translations.strings.description(
 									song.name,
 									song.url,
-									options.end
-										? Util.music.buildBar(song.duration, song.duration)
-										: this.createProgressBar(),
+									options.end ? Util.music.buildBar(song.duration, song.duration) : this.createProgressBar(),
 									song.requestedBy.tag,
-									this.repeatSong
-										? song.name
-										: this.songs[1]
-										? this.songs[1].name
-										: this.repeatQueue
-										? song.name
-										: "Ø",
-									options.end
-										? Util.music.millisecondsToTime(0)
-										: Util.music.millisecondsToTime(this.duration),
+									this.repeatSong ? song.name : this.songs[1] ? this.songs[1].name : this.repeatQueue ? song.name : "Ø",
+									options.end ? Util.music.millisecondsToTime(0) : Util.music.millisecondsToTime(this.duration),
 								),
 								footer: {
 									text:
 										"✨ Mayze ✨" +
 										(options.end
 											? this.translations.strings.footer_end()
-											: this.translations.strings.footer(
-													this.repeatSong,
-													this.repeatQueue,
-											  )),
+											: this.translations.strings.footer(this.repeatSong, this.repeatQueue)),
 								},
 							},
 						],
 					})
 					.catch((err) => {
 						// Unknown message
-						if (err.code === 10008)
-							this._songDisplays.delete(message.channel.id);
+						if (err.code === 10008) this._songDisplays.delete(message.channel.id);
 						else console.error(err);
 					});
 			}),
@@ -476,13 +412,7 @@ export default class Queue {
 			this._running = true;
 			this.repeatSong = false;
 
-			this.textChannel.send(
-				this.translations.strings.stream_error(
-					this.nowPlaying.name,
-					err.name,
-					err.message,
-				),
-			);
+			this.textChannel.send(this.translations.strings.stream_error(this.nowPlaying.name, err.name, err.message));
 
 			this._playSong();
 		}

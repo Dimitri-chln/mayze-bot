@@ -44,10 +44,10 @@ const command: Command = {
 				{
 					author: {
 						name: role.name,
-						iconURL: `https://dummyimage.com/50/${role.hexColor.replace(
+						iconURL: `https://dummyimage.com/50/${role.hexColor.replace("#", "")}/${role.hexColor.replace(
 							"#",
 							"",
-						)}/${role.hexColor.replace("#", "")}.png?text=%20`,
+						)}.png?text=%20`,
 					},
 					color: interaction.guild.me.displayColor,
 					description: translations.strings.description(

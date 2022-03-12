@@ -49,11 +49,7 @@ const command: Command = {
 							user.bannerURL({
 								size: 4096,
 								dynamic: true,
-							}) ??
-							`https://dummyimage.com/640x16:9/${user.hexAccentColor.replace(
-								"#",
-								"",
-							)}/00.png?text=%20`,
+							}) ?? `https://dummyimage.com/640x16:9/${user.hexAccentColor.replace("#", "")}/00.png?text=%20`,
 					},
 					footer: {
 						text: "✨ Mayze ✨",

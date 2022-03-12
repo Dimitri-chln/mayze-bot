@@ -27,9 +27,9 @@ const commandDirectories = Fs.readdirSync(Path.resolve(__dirname, "commands"), {
 	.map((dirent) => dirent.name);
 
 for (const directory of commandDirectories) {
-	const commandFiles = Fs.readdirSync(
-		Path.resolve(__dirname, "commands", directory),
-	).filter((file) => file.endsWith(".js") && file !== "__base.js");
+	const commandFiles = Fs.readdirSync(Path.resolve(__dirname, "commands", directory)).filter(
+		(file) => file.endsWith(".js") && file !== "__base.js",
+	);
 
 	commandFiles.forEach((file) => {
 		const path = Path.resolve(__dirname, "commands", directory, file);
@@ -44,60 +44,51 @@ for (const directory of commandDirectories) {
 }
 
 // Message responses
-const messageResponseFiles = Fs.readdirSync(
-	Path.resolve(__dirname, "message-responses"),
-).filter((file) => file.endsWith(".js"));
+const messageResponseFiles = Fs.readdirSync(Path.resolve(__dirname, "message-responses")).filter((file) =>
+	file.endsWith(".js"),
+);
 
 messageResponseFiles.forEach((file) => {
 	const path = Path.resolve(__dirname, "message-responses", file);
-	const messageResponse: MessageResponse =
-		require(path).default ?? require(path);
+	const messageResponse: MessageResponse = require(path).default ?? require(path);
 
 	Util.messageResponses.push(messageResponse);
 });
 
 // Reaction commands
-const reactionCommandsFiles = Fs.readdirSync(
-	Path.resolve(__dirname, "reaction-commands"),
-).filter((file) => file.endsWith(".js"));
+const reactionCommandsFiles = Fs.readdirSync(Path.resolve(__dirname, "reaction-commands")).filter((file) =>
+	file.endsWith(".js"),
+);
 
 reactionCommandsFiles.forEach((file) => {
 	const path = Path.resolve(__dirname, "reaction-commands", file);
-	const reactionCommand: ReactionCommand =
-		require(path).default ?? require(path);
+	const reactionCommand: ReactionCommand = require(path).default ?? require(path);
 
 	Util.reactionCommands.push(reactionCommand);
 });
 
 // Events
-const eventFiles = Fs.readdirSync(Path.resolve(__dirname, "events")).filter(
-	(file) => file.endsWith(".js"),
-);
+const eventFiles = Fs.readdirSync(Path.resolve(__dirname, "events")).filter((file) => file.endsWith(".js"));
 
 eventFiles.forEach((file) => {
 	const path = Path.resolve(__dirname, "events", file);
 	const event: Event = require(path).default ?? require(path);
 
 	if (event.once) {
-		Util.client.once(event.name, (...args) =>
-			event.run(...args).catch(console.error),
-		);
+		Util.client.once(event.name, (...args) => event.run(...args).catch(console.error));
 	} else {
-		Util.client.on(event.name, (...args) =>
-			event.run(...args).catch(console.error),
-		);
+		Util.client.on(event.name, (...args) => event.run(...args).catch(console.error));
 	}
 });
 
 // Autocomplete
-const autocompleteHandlerFiles = Fs.readdirSync(
-	Path.resolve(__dirname, "autocomplete-handlers"),
-).filter((file) => file.endsWith(".js"));
+const autocompleteHandlerFiles = Fs.readdirSync(Path.resolve(__dirname, "autocomplete-handlers")).filter((file) =>
+	file.endsWith(".js"),
+);
 
 autocompleteHandlerFiles.forEach((file) => {
 	const path = Path.resolve(__dirname, "autocomplete-handlers", file);
-	const autocompleteHandler: AutocompleteHandler =
-		require(path).default ?? require(path);
+	const autocompleteHandler: AutocompleteHandler = require(path).default ?? require(path);
 
 	Util.autocompleteHandlers.set(autocompleteHandler.name, autocompleteHandler);
 });

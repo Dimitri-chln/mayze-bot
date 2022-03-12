@@ -35,8 +35,7 @@ const command: Command = {
 							},
 							{
 								name: "regex",
-								description:
-									"Une option pour afficher le regex à côté du nom des séries",
+								description: "Une option pour afficher le regex à côté du nom des séries",
 								type: "BOOLEAN",
 								required: false,
 							},
@@ -55,8 +54,7 @@ const command: Command = {
 							},
 							{
 								name: "regex",
-								description:
-									"Un regex pour faire aussi correspondre les noms alternatifs",
+								description: "Un regex pour faire aussi correspondre les noms alternatifs",
 								type: "STRING",
 								required: false,
 							},
@@ -98,8 +96,7 @@ const command: Command = {
 							},
 							{
 								name: "regex",
-								description:
-									"An option to display the regex next to the series' name",
+								description: "An option to display the regex next to the series' name",
 								type: "BOOLEAN",
 								required: false,
 							},
@@ -155,17 +152,13 @@ const command: Command = {
 
 				switch (subCommand) {
 					case "list": {
-						const user =
-							interaction.options.getUser("user", false) ?? interaction.user;
-						const displayRegex = Boolean(
-							interaction.options.getBoolean("regex", false),
-						);
+						const user = interaction.options.getUser("user", false) ?? interaction.user;
+						const displayRegex = Boolean(interaction.options.getBoolean("regex", false));
 
-						const { rows: wishlist }: { rows: DatabaseMudaeWish[] } =
-							await Util.database.query(
-								"SELECT * FROM mudae_wish WHERE user_id = $1 ORDER BY series ASC",
-								[user.id],
-							);
+						const { rows: wishlist }: { rows: DatabaseMudaeWish[] } = await Util.database.query(
+							"SELECT * FROM mudae_wish WHERE user_id = $1 ORDER BY series ASC",
+							[user.id],
+						);
 
 						interaction.followUp({
 							embeds: [
@@ -182,11 +175,7 @@ const command: Command = {
 											.map(
 												(w, i) =>
 													`\`${i + 1}.\` ${w.series}${
-														displayRegex
-															? ` - *${
-																	w.regex ? w.regex : w.series.toLowerCase()
-															  }*`
-															: ""
+														displayRegex ? ` - *${w.regex ? w.regex : w.series.toLowerCase()}*` : ""
 													}`,
 											)
 											.join("\n") ?? translations.strings.no_wish(),
@@ -203,10 +192,11 @@ const command: Command = {
 						const series = interaction.options.getString("series", true);
 						const regex = interaction.options.getString("regex", false);
 
-						await Util.database.query(
-							"INSERT INTO mudae_wish (user_id, series, regex) VALUES ($1, $2, $3)",
-							[interaction.user.id, series, regex],
-						);
+						await Util.database.query("INSERT INTO mudae_wish (user_id, series, regex) VALUES ($1, $2, $3)", [
+							interaction.user.id,
+							series,
+							regex,
+						]);
 
 						interaction.followUp(translations.strings.added());
 						break;
@@ -215,10 +205,10 @@ const command: Command = {
 					case "remove": {
 						const seriesId = interaction.options.getInteger("series", true);
 
-						await Util.database.query(
-							"DELETE FROM mudae_wish WHERE id = $1 AND user_id = $2",
-							[seriesId, interaction.user.id],
-						);
+						await Util.database.query("DELETE FROM mudae_wish WHERE id = $1 AND user_id = $2", [
+							seriesId,
+							interaction.user.id,
+						]);
 
 						interaction.followUp(translations.strings.removed());
 						break;

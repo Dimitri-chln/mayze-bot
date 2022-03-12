@@ -68,8 +68,7 @@ const command: Command = {
 					},
 					{
 						name: "each",
-						description:
-							"Créer un rappel qui se répétera à intervalles réguliers",
+						description: "Créer un rappel qui se répétera à intervalles réguliers",
 						type: "SUB_COMMAND",
 						options: [
 							{
@@ -161,8 +160,7 @@ const command: Command = {
 					},
 					{
 						name: "each",
-						description:
-							"Create a reminder that will repeat based on a duration",
+						description: "Create a reminder that will repeat based on a duration",
 						type: "SUB_COMMAND",
 						options: [
 							{
@@ -208,132 +206,93 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const subCommand = interaction.options.getSubcommand();
 
-		const { rows: reminders } = await Util.database.query(
-			"SELECT * FROM reminder WHERE user_id = $1",
-			[interaction.user.id],
-		);
+		const { rows: reminders } = await Util.database.query("SELECT * FROM reminder WHERE user_id = $1", [
+			interaction.user.id,
+		]);
 
 		switch (subCommand) {
 			case "in": {
-				const duration: number = dhms(
-					interaction.options.getString("duration", true),
-				);
+				const duration: number = dhms(interaction.options.getString("duration", true));
 
-				if (!duration)
-					return interaction.followUp(translations.strings.invalid_duration());
+				if (!duration) return interaction.followUp(translations.strings.invalid_duration());
 
 				const date = new Date(Date.now() + duration);
 
 				let content = interaction.options.getString("reminder", true);
-				if (!/^https?:\/\//.test(content))
-					content = content.replace(/^./, (a) => a.toUpperCase());
+				if (!/^https?:\/\//.test(content)) content = content.replace(/^./, (a) => a.toUpperCase());
 
-				await Util.database.query(
-					"INSERT INTO reminder (user_id, timestamp, content) VALUES ($1, $2, $3)",
-					[interaction.user.id, date, content],
-				);
+				await Util.database.query("INSERT INTO reminder (user_id, timestamp, content) VALUES ($1, $2, $3)", [
+					interaction.user.id,
+					date,
+					content,
+				]);
 
-				interaction.followUp(
-					translations.strings.created(
-						formatTime(duration, translations.language),
-						content,
-					),
-				);
+				interaction.followUp(translations.strings.created(formatTime(duration, translations.language), content));
 				break;
 			}
 
 			case "on": {
 				const input = interaction.options.getString("date", true).trim();
 				const match =
-					input.match(
-						/^(\d{1,2})-(\d{1,2})-(\d+)(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/,
-					) ??
-					input.match(
-						/^(\d{1,2})\/(\d{1,2})\/(\d+)(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/,
-					);
+					input.match(/^(\d{1,2})-(\d{1,2})-(\d+)(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/) ??
+					input.match(/^(\d{1,2})\/(\d{1,2})\/(\d+)(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/);
 
 				const date = match
 					? new Date(
 							`${match[2]}-${match[1]}-${match[3]}${
-								match[4] && match[5]
-									? ` ${match[4]}:${match[5]}${match[6] ? `:${match[6]}` : ""}`
-									: ""
+								match[4] && match[5] ? ` ${match[4]}:${match[5]}${match[6] ? `:${match[6]}` : ""}` : ""
 							}`,
 					  )
 					: new Date(input);
 
-				if (!date)
-					return interaction.followUp(translations.strings.invalid_date());
+				if (!date) return interaction.followUp(translations.strings.invalid_date());
 
 				const duration = date.valueOf() - Date.now();
 
-				if (duration < 0)
-					return interaction.reply(translations.strings.date_passed());
+				if (duration < 0) return interaction.reply(translations.strings.date_passed());
 
 				let content = interaction.options.getString("reminder", true);
-				if (!/^https?:\/\//.test(content))
-					content = content.replace(/^./, (a) => a.toUpperCase());
+				if (!/^https?:\/\//.test(content)) content = content.replace(/^./, (a) => a.toUpperCase());
 
-				await Util.database.query(
-					"INSERT INTO reminder (user_id, timestamp, content) VALUES ($1, $2, $3)",
-					[interaction.user.id, date, content],
-				);
+				await Util.database.query("INSERT INTO reminder (user_id, timestamp, content) VALUES ($1, $2, $3)", [
+					interaction.user.id,
+					date,
+					content,
+				]);
 
-				interaction.followUp(
-					translations.strings.created(
-						formatTime(duration, translations.language),
-						content,
-					),
-				);
+				interaction.followUp(translations.strings.created(formatTime(duration, translations.language), content));
 				break;
 			}
 
 			case "each": {
-				const duration: number = dhms(
-					interaction.options.getString("duration", true),
-				);
+				const duration: number = dhms(interaction.options.getString("duration", true));
 
-				if (!duration)
-					return interaction.followUp(translations.strings.invalid_duration());
+				if (!duration) return interaction.followUp(translations.strings.invalid_duration());
 
-				const occurrences =
-					interaction.options.getNumber("occurrences", false) ?? -1;
+				const occurrences = interaction.options.getNumber("occurrences", false) ?? -1;
 
-				if (occurrences < 1)
-					return interaction.followUp(
-						translations.strings.invalid_occurrences(),
-					);
+				if (occurrences < 1) return interaction.followUp(translations.strings.invalid_occurrences());
 
 				const date = new Date(Date.now() + duration);
 
 				let content = interaction.options.getString("reminder", true);
-				if (!/^https?:\/\//.test(content))
-					content = content.replace(/^./, (a) => a.toUpperCase());
+				if (!/^https?:\/\//.test(content)) content = content.replace(/^./, (a) => a.toUpperCase());
 
 				await Util.database.query(
 					"INSERT INTO reminder (user_id, timestamp, content, repeat, occurrences) VALUES ($1, $2, $3, $4, $5)",
 					[interaction.user.id, date, content, duration, occurrences],
 				);
 
-				interaction.followUp(
-					translations.strings.created(
-						formatTime(duration, translations.language),
-						content,
-					),
-				);
+				interaction.followUp(translations.strings.created(formatTime(duration, translations.language), content));
 				break;
 			}
 
 			case "remove": {
 				const number = interaction.options.getInteger("reminder", true);
 				if (number < 1 || number > reminders.length)
-					return interaction.followUp(
-						translations.strings.invalid_number(reminders.length.toString()),
-					);
+					return interaction.followUp(translations.strings.invalid_number(reminders.length.toString()));
 
-				await Util.database.query("DELETE FROM reminder WHERE id = $1", [
-					reminders[number - 1].id,
-				]);
+				await Util.database.query("DELETE FROM reminder WHERE id = $1", [reminders[number - 1].id]);
 
 				interaction.followUp(translations.strings.removed());
 				break;
@@ -350,15 +309,11 @@ const command: Command = {
 								}),
 							},
 							color: interaction.guild.me.displayColor,
-							description: reminders.length
-								? null
-								: translations.strings.no_reminder(),
+							description: reminders.length ? null : translations.strings.no_reminder(),
 							fields: reminders.map((reminder, i) => {
 								return {
 									name: `\`${i + 1}.\` ${reminder.content}`,
-									value: `<t:${Math.round(
-										Date.parse(reminder.timestamp) / 1000,
-									)}:R>`,
+									value: `<t:${Math.round(Date.parse(reminder.timestamp) / 1000)}:R>`,
 									inline: true,
 								};
 							}),

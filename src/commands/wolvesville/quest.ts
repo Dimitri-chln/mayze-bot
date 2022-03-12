@@ -53,21 +53,15 @@ const command: Command = {
 
 	runInteraction: async (interaction, translations) => {
 		if (
-			!(interaction.member as GuildMember).roles.cache.has(
-				"696751852267765872" /* Chef */,
-			) &&
-			!(interaction.member as GuildMember).roles.cache.has(
-				"696751614177837056" /* Sous-chef */,
-			)
+			!(interaction.member as GuildMember).roles.cache.has("696751852267765872" /* Chef */) &&
+			!(interaction.member as GuildMember).roles.cache.has("696751614177837056" /* Sous-chef */)
 		)
 			return interaction.followUp(translations.strings.not_allowed());
 
 		if (interaction.channel.id !== "707304882662801490" /* Bureau */)
 			return interaction.followUp(translations.strings.wrong_channel());
 
-		const questChannel = interaction.client.channels.cache.get(
-			"689385764219387905",
-		) as TextChannel;
+		const questChannel = interaction.client.channels.cache.get("689385764219387905") as TextChannel;
 
 		interaction.followUp(translations.strings.await_image());
 
@@ -83,18 +77,10 @@ const command: Command = {
 
 		const imageURL = collected.first().attachments.first().url;
 		const votes = interaction.options.getBoolean("single", false) ? "⋅" : "∴";
-		const reactions = [
-			"1️⃣",
-			"2️⃣",
-			"3️⃣",
-			"4️⃣",
-			"5️⃣",
-			"6️⃣",
-			"7️⃣",
-			"8️⃣",
-			"9️⃣",
-			"🔟",
-		].slice(0, interaction.options.getInteger("votes", false) ?? 3);
+		const reactions = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"].slice(
+			0,
+			interaction.options.getInteger("votes", false) ?? 3,
+		);
 
 		const memberRole = interaction.guild.roles.cache.get("689169027922526235");
 
@@ -120,10 +106,7 @@ const command: Command = {
 		reactions.forEach(async (e) => await msg.react(e).catch(console.error));
 		await msg.react("🔄").catch(console.error);
 
-		collected
-			.first()
-			.react(Util.config.EMOJIS.check.data.id)
-			.catch(console.error);
+		collected.first().react(Util.config.EMOJIS.check.data.id).catch(console.error);
 	},
 };
 

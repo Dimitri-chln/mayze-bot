@@ -3,11 +3,7 @@ import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
 import pagination, { Page } from "../../utils/misc/pagination";
-import {
-	ButtonInteraction,
-	CollectorFilter,
-	MessageAttachment,
-} from "discord.js";
+import { ButtonInteraction, CollectorFilter, MessageAttachment } from "discord.js";
 import { CanvasOwnerType } from "../../types/structures/Database";
 
 const command: Command = {
@@ -227,16 +223,14 @@ const command: Command = {
 				options: [
 					{
 						name: "x",
-						description:
-							"The x coordinate of the pixel in the top left corner of the image",
+						description: "The x coordinate of the pixel in the top left corner of the image",
 						type: "INTEGER",
 						required: false,
 						minValue: 0,
 					},
 					{
 						name: "y",
-						description:
-							"The y coordinate of the pixel in the top left corner of the image",
+						description: "The y coordinate of the pixel in the top left corner of the image",
 						type: "INTEGER",
 						required: false,
 						minValue: 0,
@@ -280,12 +274,9 @@ const command: Command = {
 		const userCanvas = Util.canvas.filter(
 			(canvas) =>
 				canvas.owner.type === CanvasOwnerType.EVERYONE ||
-				(canvas.owner.type === CanvasOwnerType.GUILD &&
-					canvas.owner.id === interaction.guild.id) ||
-				(canvas.owner.type === CanvasOwnerType.CHANNEL &&
-					canvas.owner.id === interaction.channel.id) ||
-				(canvas.owner.type === CanvasOwnerType.USER &&
-					canvas.owner.id === interaction.user.id),
+				(canvas.owner.type === CanvasOwnerType.GUILD && canvas.owner.id === interaction.guild.id) ||
+				(canvas.owner.type === CanvasOwnerType.CHANNEL && canvas.owner.id === interaction.channel.id) ||
+				(canvas.owner.type === CanvasOwnerType.USER && canvas.owner.id === interaction.user.id),
 		);
 
 		switch (subCommand) {
@@ -299,12 +290,7 @@ const command: Command = {
 							},
 							color: interaction.guild.me.displayColor,
 							description: userCanvas
-								.map(
-									(canvas) =>
-										`\`${canvas.name.replace(/-\d{18}/, "")}\` - **${
-											canvas.size
-										}x${canvas.size}**`,
-								)
+								.map((canvas) => `\`${canvas.name.replace(/-\d{18}/, "")}\` - **${canvas.size}x${canvas.size}**`)
 								.join("\n"),
 							footer: {
 								text: "✨ Mayze ✨",
@@ -316,15 +302,10 @@ const command: Command = {
 			}
 
 			case "join": {
-				const canvasName = interaction.options
-					.getString("canvas")
-					.toLowerCase();
-				const newCanvas = userCanvas.find(
-					(canvas) => canvas.name === canvasName,
-				);
+				const canvasName = interaction.options.getString("canvas").toLowerCase();
+				const newCanvas = userCanvas.find((canvas) => canvas.name === canvasName);
 
-				if (!newCanvas)
-					return interaction.followUp(translations.strings.invalid_canvas());
+				if (!newCanvas) return interaction.followUp(translations.strings.invalid_canvas());
 
 				await newCanvas.addUser(interaction.user);
 
@@ -333,11 +314,8 @@ const command: Command = {
 			}
 
 			case "palettes": {
-				const canvas = Util.canvas.find((c) =>
-					c.users.has(interaction.user.id),
-				);
-				if (!canvas)
-					return interaction.followUp(translations.strings.not_in_canvas());
+				const canvas = Util.canvas.find((c) => c.users.has(interaction.user.id));
+				if (!canvas) return interaction.followUp(translations.strings.not_in_canvas());
 
 				const pages: Page[] = [];
 
@@ -353,12 +331,7 @@ const command: Command = {
 								color: interaction.guild.me.displayColor,
 								description: palette
 									.all()
-									.map(
-										(color, alias) =>
-											`${color.emoji.toString()} \`${alias}\` - **${
-												color.name
-											}** \`${color.hex}\``,
-									)
+									.map((color, alias) => `${color.emoji.toString()} \`${alias}\` - **${color.name}** \`${color.hex}\``)
 									.join("\n"),
 							},
 						],
@@ -372,28 +345,21 @@ const command: Command = {
 			}
 
 			case "place": {
-				const canvas = Util.canvas.find((c) =>
-					c.users.has(interaction.user.id),
-				);
-				if (!canvas)
-					return interaction.followUp(translations.strings.not_in_canvas());
+				const canvas = Util.canvas.find((c) => c.users.has(interaction.user.id));
+				if (!canvas) return interaction.followUp(translations.strings.not_in_canvas());
 
 				let x = interaction.options.getInteger("x", true);
 				let y = interaction.options.getInteger("y", true);
 
 				if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
-					return interaction.followUp(
-						translations.strings.invalid_coordinates(),
-					);
+					return interaction.followUp(translations.strings.invalid_coordinates());
 
 				const colorName = interaction.options.getString("color", true);
 
 				if (!canvas.palettes.some((palette) => palette.has(colorName)))
 					return interaction.followUp(translations.strings.invalid_color());
 
-				const color = canvas.palettes
-					.find((palette) => palette.has(colorName))
-					.get(colorName);
+				const color = canvas.palettes.find((palette) => palette.has(colorName)).get(colorName);
 
 				await canvas.setPixel(x, y, color);
 
@@ -410,10 +376,7 @@ const command: Command = {
 								}),
 							},
 							color: interaction.guild.me.displayColor,
-							description: translations.strings.pixel_placed(
-								color.emoji.toString(),
-								color.alias,
-							),
+							description: translations.strings.pixel_placed(color.emoji.toString(), color.alias),
 							footer: {
 								text: "✨ Mayze ✨",
 							},
@@ -424,19 +387,14 @@ const command: Command = {
 			}
 
 			case "place-chain": {
-				const canvas = Util.canvas.find((c) =>
-					c.users.has(interaction.user.id),
-				);
-				if (!canvas)
-					return interaction.followUp(translations.strings.not_in_canvas());
+				const canvas = Util.canvas.find((c) => c.users.has(interaction.user.id));
+				if (!canvas) return interaction.followUp(translations.strings.not_in_canvas());
 
 				let x = interaction.options.getInteger("x", true);
 				let y = interaction.options.getInteger("y", true);
 
 				if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
-					return interaction.followUp(
-						translations.strings.invalid_coordinates(),
-					);
+					return interaction.followUp(translations.strings.invalid_coordinates());
 
 				let palette = Util.palettes.get("default");
 				let color = palette.get("blnk");
@@ -559,9 +517,9 @@ const command: Command = {
 					fetchReply: true,
 				})) as Message;
 
-				const filter: CollectorFilter<[ButtonInteraction]> = (
-					buttonInteraction,
-				) => buttonInteraction.user.id === interaction.user.id;
+				const filter: CollectorFilter<[ButtonInteraction]> = (buttonInteraction) =>
+					buttonInteraction.user.id === interaction.user.id;
+
 				const collector = reply.createMessageComponentCollector({
 					componentType: "BUTTON",
 					filter,
@@ -830,9 +788,8 @@ const command: Command = {
 						});
 				});
 
-				const selectMenuFilter: CollectorFilter<[SelectMenuInteraction]> = (
-					selectMenuInteraction,
-				) => selectMenuInteraction.user.id === interaction.user.id;
+				const selectMenuFilter: CollectorFilter<[SelectMenuInteraction]> = (selectMenuInteraction) =>
+					selectMenuInteraction.user.id === interaction.user.id;
 
 				const selectMenuCollector = reply.createMessageComponentCollector({
 					componentType: "SELECT_MENU",
@@ -972,19 +929,14 @@ const command: Command = {
 			}
 
 			case "view": {
-				const canvas = Util.canvas.find((c) =>
-					c.users.has(interaction.user.id),
-				);
-				if (!canvas)
-					return interaction.followUp(translations.strings.not_in_canvas());
+				const canvas = Util.canvas.find((c) => c.users.has(interaction.user.id));
+				if (!canvas) return interaction.followUp(translations.strings.not_in_canvas());
 
 				let x = interaction.options.getInteger("x", false) ?? 0;
 				let y = interaction.options.getInteger("y", false) ?? 0;
 
 				if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
-					return interaction.followUp(
-						translations.strings.invalid_coordinates(),
-					);
+					return interaction.followUp(translations.strings.invalid_coordinates());
 
 				const zoom = interaction.options.getInteger("zoom", false) ?? "default";
 				if (zoom && zoom !== "default" && (zoom < 1 || zoom > canvas.size))
@@ -1022,19 +974,14 @@ const command: Command = {
 			}
 
 			case "view-nav": {
-				const canvas = Util.canvas.find((c) =>
-					c.users.has(interaction.user.id),
-				);
-				if (!canvas)
-					return interaction.followUp(translations.strings.not_in_canvas());
+				const canvas = Util.canvas.find((c) => c.users.has(interaction.user.id));
+				if (!canvas) return interaction.followUp(translations.strings.not_in_canvas());
 
 				let x = interaction.options.getInteger("x", true);
 				let y = interaction.options.getInteger("y", true);
 
 				if (x < 0 || y < 0 || x >= canvas.size || y >= canvas.size)
-					return interaction.followUp(
-						translations.strings.invalid_coordinates(),
-					);
+					return interaction.followUp(translations.strings.invalid_coordinates());
 
 				let grid = await canvas.viewGrid(x, y);
 
@@ -1133,9 +1080,8 @@ const command: Command = {
 					fetchReply: true,
 				})) as Message;
 
-				const filter: CollectorFilter<[ButtonInteraction]> = (
-					buttonInteraction,
-				) => buttonInteraction.user.id === interaction.user.id;
+				const filter: CollectorFilter<[ButtonInteraction]> = (buttonInteraction) =>
+					buttonInteraction.user.id === interaction.user.id;
 				const collector = reply.createMessageComponentCollector({
 					componentType: "BUTTON",
 					filter,

@@ -30,9 +30,7 @@ const command: Command = {
 					color: interaction.guild.me.displayColor,
 					description: translations.strings.description(
 						Util.owner.tag,
-						Math.round(
-							(Date.now() - interaction.client.uptime) / 1000,
-						).toString(),
+						Math.round((Date.now() - interaction.client.uptime) / 1000).toString(),
 					),
 					footer: {
 						text: "✨ Mayze ✨",

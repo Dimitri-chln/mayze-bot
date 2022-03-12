@@ -1,7 +1,4 @@
-import {
-	ApplicationCommandOptionChoice,
-	AutocompleteInteraction,
-} from "discord.js";
+import { ApplicationCommandOptionChoice, AutocompleteInteraction } from "discord.js";
 
 export default interface AutocompleteHandler {
 	name: string;
@@ -14,10 +11,7 @@ interface AutocompleteHandlerStringOption {
 	name: string;
 	type: "STRING";
 	filterType: "STARTS_WITH" | "CONTAINS";
-	run: (
-		interaction: AutocompleteInteraction,
-		value: string,
-	) => Promise<ApplicationCommandOptionChoice[]>;
+	run: (interaction: AutocompleteInteraction, value: string) => Promise<ApplicationCommandOptionChoice[]>;
 }
 
 interface AutocompleteHandlerNumberOption {
@@ -26,12 +20,7 @@ interface AutocompleteHandlerNumberOption {
 	name: string;
 	type: "NUMBER";
 	filterType: "STARTS_WITH" | "CONTAINS";
-	run: (
-		interaction: AutocompleteInteraction,
-		value: number,
-	) => Promise<ApplicationCommandOptionChoice[]>;
+	run: (interaction: AutocompleteInteraction, value: number) => Promise<ApplicationCommandOptionChoice[]>;
 }
 
-type AutocompleteHandlerOption =
-	| AutocompleteHandlerStringOption
-	| AutocompleteHandlerNumberOption;
+type AutocompleteHandlerOption = AutocompleteHandlerStringOption | AutocompleteHandlerNumberOption;

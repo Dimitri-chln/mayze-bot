@@ -1,12 +1,7 @@
 import MessageResponse from "../types/structures/MessageResponse";
 import Util from "../Util";
 
-import {
-	CollectorFilter,
-	MessageReaction,
-	TextChannel,
-	User,
-} from "discord.js";
+import { CollectorFilter, MessageReaction, TextChannel, User } from "discord.js";
 import pagination, { Page } from "../utils/misc/pagination";
 
 const messageResponse: MessageResponse = {
@@ -23,10 +18,7 @@ const messageResponse: MessageResponse = {
 
 		let user: User;
 
-		const filter: CollectorFilter<[MessageReaction, User]> = (
-			reaction,
-			reactingUser,
-		) => {
+		const filter: CollectorFilter<[MessageReaction, User]> = (reaction, reactingUser) => {
 			user = reactingUser;
 			return reaction.emoji.name === "🔎" && !user.bot;
 		};
@@ -40,7 +32,7 @@ const messageResponse: MessageResponse = {
 		if (!collected.size) {
 			message.reactions.removeAll();
 			return;
-		};
+		}
 
 		const pins = message.content.match(pinRegex);
 
@@ -56,9 +48,7 @@ const messageResponse: MessageResponse = {
 						},
 						color: message.guild.me.displayColor,
 						thumbnail: {
-							url: `https://cdn.discordapp.com/emojis/${pin.match(
-								/\d{18}/,
-							)}.png`,
+							url: `https://cdn.discordapp.com/emojis/${pin.match(/\d{18}/)}.png`,
 						},
 					},
 				],

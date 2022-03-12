@@ -8,21 +8,12 @@ export default class PokemonList {
 	readonly pokemons: CaughtPokemon[];
 
 	constructor(pokemonList: DatabasePokemon[], userId: Snowflake) {
-		this.pokemons = pokemonList.map(
-			(pokemonData) => new CaughtPokemon(pokemonData, userId),
-		);
+		this.pokemons = pokemonList.map((pokemonData) => new CaughtPokemon(pokemonData, userId));
 	}
 
-	has(
-		pokemon: Pokemon,
-		shiny: boolean = false,
-		variationType: VariationType = "default",
-	) {
+	has(pokemon: Pokemon, shiny: boolean = false, variationType: VariationType = "default") {
 		return this.pokemons.some(
-			(pkm) =>
-				pkm.data.nationalId === pokemon.nationalId &&
-				pkm.shiny === shiny &&
-				pkm.variationType === variationType,
+			(pkm) => pkm.data.nationalId === pokemon.nationalId && pkm.shiny === shiny && pkm.variationType === variationType,
 		);
 	}
 }

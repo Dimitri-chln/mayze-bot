@@ -11,22 +11,15 @@ const messageResponse: MessageResponse = {
 	run: async (message, translations) => {
 		if (message.author.id !== "432610292342587392" /* Mudae */) return;
 
-		const pinChannel = message.client.channels.cache.get(
-			"788428208298000435",
-		) as TextChannel;
-		const legendaryRegex =
-			/Félicitations, vous venez de gagner un\.\.\. Un\.\.\. <:.+?:(\d{18})> \*\*(\w+?)\*\*\?!/m;
+		const pinChannel = message.client.channels.cache.get("788428208298000435") as TextChannel;
+		const legendaryRegex = /Félicitations, vous venez de gagner un\.\.\. Un\.\.\. <:.+?:(\d{18})> \*\*(\w+?)\*\*\?!/m;
 		const ultraBeastRegex = /un <:.+?:(\d{18})> \*\*(\w+?)\*\*\. Euh, QUOI \?/m;
-		const shinyRegex =
-			/<:.+?:(\d{18})> \*\*(\w+?) <:shinySparkles:653808283244560402>\*\*/m;
+		const shinyRegex = /<:.+?:(\d{18})> \*\*(\w+?) <:shinySparkles:653808283244560402>\*\*/m;
 		// https://cdn.discordapp.com/emojis/653808283244560402.png?v=1
 
-		const [, legendaryEmoji, legendaryPokemon] =
-			message.content.match(legendaryRegex) || [];
-		const [, ultraBeastEmoji, ultraBeastPokemon] =
-			message.content.match(ultraBeastRegex) || [];
-		const [, shinyEmoji, shinyPokemon] =
-			message.content.match(shinyRegex) || [];
+		const [, legendaryEmoji, legendaryPokemon] = message.content.match(legendaryRegex) || [];
+		const [, ultraBeastEmoji, ultraBeastPokemon] = message.content.match(ultraBeastRegex) || [];
+		const [, shinyEmoji, shinyPokemon] = message.content.match(shinyRegex) || [];
 
 		const emoji = legendaryEmoji ?? ultraBeastEmoji ?? shinyEmoji;
 		const pokemon = legendaryPokemon ?? ultraBeastPokemon ?? shinyPokemon;
@@ -51,9 +44,9 @@ const messageResponse: MessageResponse = {
 					thumbnail: {
 						url: `https://cdn.discordapp.com/emojis/${emoji}.png?v=1`,
 					},
-					description: `a attrapé un ${
-						shinyPokemon ? "⭐ " : ""
-					}**[${pokemon}](${message.url})** dans ${message.channel.toString()} !`,
+					description: `a attrapé un ${shinyPokemon ? "⭐ " : ""}**[${pokemon}](${
+						message.url
+					})** dans ${message.channel.toString()} !`,
 					footer: {
 						text: "✨ Mayze ✨",
 					},

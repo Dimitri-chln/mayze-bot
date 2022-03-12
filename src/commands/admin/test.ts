@@ -34,8 +34,7 @@ const command: Command = {
 		],
 	},
 
-	runInteraction: async (interaction, translations) => {
-	},
+	runInteraction: async (interaction, translations) => {},
 };
 
 export default command;

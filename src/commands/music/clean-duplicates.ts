@@ -23,9 +23,7 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const songs = Util.musicPlayer.get(interaction.guild.id).cleanDuplicates();
 
-		interaction.followUp(
-			translations.strings.removed(songs.length.toString(), songs.length > 1),
-		);
+		interaction.followUp(translations.strings.removed(songs.length.toString(), songs.length > 1));
 	},
 };
 

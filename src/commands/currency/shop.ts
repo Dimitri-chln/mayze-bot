@@ -154,16 +154,13 @@ const command: Command = {
 
 		const {
 			rows: [upgradesData],
-		}: { rows: DatabaseUpgrades[] } = await Util.database.query(
-			"SELECT * FROM upgrades WHERE user_id = $1",
-			[interaction.user.id],
-		);
+		}: { rows: DatabaseUpgrades[] } = await Util.database.query("SELECT * FROM upgrades WHERE user_id = $1", [
+			interaction.user.id,
+		]);
 
 		const {
 			rows: [money],
-		} = await Util.database.query("SELECT * FROM currency WHERE user_id = $1", [
-			interaction.user.id,
-		]);
+		} = await Util.database.query("SELECT * FROM currency WHERE user_id = $1", [interaction.user.id]);
 
 		const upgrades = upgradesData ?? {
 			user_id: interaction.user.id,
@@ -192,77 +189,50 @@ const command: Command = {
 									name: translations.strings.catch_cooldown_reduction(),
 									value: translations.strings.field_cooldown(
 										upgrades.catch_cooldown_reduction.toString(),
-										UPGRADES_BENEFITS.catch_cooldown_reduction(
-											upgrades.catch_cooldown_reduction,
-										).toString(),
+										UPGRADES_BENEFITS.catch_cooldown_reduction(upgrades.catch_cooldown_reduction).toString(),
 										(Util.commands.get("catch").cooldown / 60).toString(),
 										(
 											Util.commands.get("catch").cooldown / 60 -
-											UPGRADES_BENEFITS.catch_cooldown_reduction(
-												upgrades.catch_cooldown_reduction,
-											)
+											UPGRADES_BENEFITS.catch_cooldown_reduction(upgrades.catch_cooldown_reduction)
 										).toString(),
-										UPGRADES_PRICES.catch_cooldown_reduction(
-											upgrades.catch_cooldown_reduction,
-										).toString(),
-										upgrades.catch_cooldown_reduction >=
-											UPGRADES_MAX_TIER.catch_cooldown_reduction,
+										UPGRADES_PRICES.catch_cooldown_reduction(upgrades.catch_cooldown_reduction).toString(),
+										upgrades.catch_cooldown_reduction >= UPGRADES_MAX_TIER.catch_cooldown_reduction,
 									),
 								},
 								{
 									name: translations.strings.new_pokemon_probability(),
 									value: translations.strings.field(
 										upgrades.new_pokemon_probability.toString(),
-										UPGRADES_BENEFITS.new_pokemon_probability(
-											upgrades.new_pokemon_probability,
-										).toString(),
-										UPGRADES_PRICES.new_pokemon_probability(
-											upgrades.new_pokemon_probability,
-										).toString(),
-										upgrades.new_pokemon_probability >=
-											UPGRADES_MAX_TIER.new_pokemon_probability,
+										UPGRADES_BENEFITS.new_pokemon_probability(upgrades.new_pokemon_probability).toString(),
+										UPGRADES_PRICES.new_pokemon_probability(upgrades.new_pokemon_probability).toString(),
+										upgrades.new_pokemon_probability >= UPGRADES_MAX_TIER.new_pokemon_probability,
 									),
 								},
 								{
 									name: translations.strings.legendary_ub_probability(),
 									value: translations.strings.field(
 										upgrades.legendary_ub_probability.toString(),
-										UPGRADES_BENEFITS.legendary_ub_probability(
-											upgrades.legendary_ub_probability,
-										).toString(),
-										UPGRADES_PRICES.legendary_ub_probability(
-											upgrades.legendary_ub_probability,
-										).toString(),
-										upgrades.legendary_ub_probability >=
-											UPGRADES_MAX_TIER.legendary_ub_probability,
+										UPGRADES_BENEFITS.legendary_ub_probability(upgrades.legendary_ub_probability).toString(),
+										UPGRADES_PRICES.legendary_ub_probability(upgrades.legendary_ub_probability).toString(),
+										upgrades.legendary_ub_probability >= UPGRADES_MAX_TIER.legendary_ub_probability,
 									),
 								},
 								{
 									name: translations.strings.mega_gem_probability(),
 									value: translations.strings.field(
 										upgrades.mega_gem_probability.toString(),
-										UPGRADES_BENEFITS.mega_gem_probability(
-											upgrades.mega_gem_probability,
-										).toString(),
-										UPGRADES_PRICES.mega_gem_probability(
-											upgrades.mega_gem_probability,
-										).toString(),
-										upgrades.mega_gem_probability >=
-											UPGRADES_MAX_TIER.mega_gem_probability,
+										UPGRADES_BENEFITS.mega_gem_probability(upgrades.mega_gem_probability).toString(),
+										UPGRADES_PRICES.mega_gem_probability(upgrades.mega_gem_probability).toString(),
+										upgrades.mega_gem_probability >= UPGRADES_MAX_TIER.mega_gem_probability,
 									),
 								},
 								{
 									name: translations.strings.shiny_probability(),
 									value: translations.strings.field(
 										upgrades.shiny_probability.toString(),
-										UPGRADES_BENEFITS.shiny_probability(
-											upgrades.shiny_probability,
-										).toString(),
-										UPGRADES_PRICES.shiny_probability(
-											upgrades.shiny_probability,
-										).toString(),
-										upgrades.shiny_probability >=
-											UPGRADES_MAX_TIER.shiny_probability,
+										UPGRADES_BENEFITS.shiny_probability(upgrades.shiny_probability).toString(),
+										UPGRADES_PRICES.shiny_probability(upgrades.shiny_probability).toString(),
+										upgrades.shiny_probability >= UPGRADES_MAX_TIER.shiny_probability,
 									),
 								},
 							],
@@ -281,23 +251,21 @@ const command: Command = {
 
 				const upgradeCost = Math.round(
 					(number *
-						(UPGRADES_PRICES[upgrade](upgrades[upgrade]) +
-							UPGRADES_PRICES[upgrade](upgrades[upgrade] + number - 1))) /
+						(UPGRADES_PRICES[upgrade](upgrades[upgrade]) + UPGRADES_PRICES[upgrade](upgrades[upgrade] + number - 1))) /
 						2,
 				);
 
 				if (upgrades[upgrade] + number > UPGRADES_MAX_TIER[upgrade])
 					return interaction.followUp(translations.strings.max_tier_reached());
 
-				if (money.money < upgradeCost)
-					return interaction.followUp(translations.strings.not_enough_money());
+				if (money.money < upgradeCost) return interaction.followUp(translations.strings.not_enough_money());
 
 				upgrades[upgrade] += number;
 
-				await Util.database.query(
-					"UPDATE currency SET money = money - $2 WHERE user_id = $1",
-					[interaction.user.id, upgradeCost],
-				);
+				await Util.database.query("UPDATE currency SET money = money - $2 WHERE user_id = $1", [
+					interaction.user.id,
+					upgradeCost,
+				]);
 
 				await Util.database.query(
 					`
@@ -314,24 +282,18 @@ const command: Command = {
 					Object.values(upgrades),
 				);
 
-				interaction.followUp(
-					translations.strings.new_tier(
-						upgrades[upgrade],
-						upgradeCost.toString(),
-					),
-				);
+				interaction.followUp(translations.strings.new_tier(upgrades[upgrade], upgradeCost.toString()));
 				break;
 			}
 
 			case "reset": {
 				let invested = 0;
 
-				for (const upgrade of Object.keys(
-					UPGRADES_PRICES,
-				) as (keyof UpgradeInfo<unknown>)[]) {
-					invested += Array.from(Array(upgrades[upgrade]), (_, i) =>
-						UPGRADES_PRICES[upgrade](i),
-					).reduce((sum, price) => sum + price, 0);
+				for (const upgrade of Object.keys(UPGRADES_PRICES) as (keyof UpgradeInfo<unknown>)[]) {
+					invested += Array.from(Array(upgrades[upgrade]), (_, i) => UPGRADES_PRICES[upgrade](i)).reduce(
+						(sum, price) => sum + price,
+						0,
+					);
 				}
 
 				const refundCost = Math.round(Util.config.SHOP_RESET_COST * invested);
@@ -347,20 +309,12 @@ const command: Command = {
 							title: translations.strings.refund_title(),
 							color: interaction.guild.me.displayColor,
 							description: `\`\`\`\n${
-								translations.strings.invested().padEnd(30, " ") +
-								invested.toLocaleString().padStart(10, " ")
+								translations.strings.invested().padEnd(30, " ") + invested.toLocaleString().padStart(10, " ")
 							}\n${
 								translations.strings
-									.refund_cost(
-										(100 * Util.config.SHOP_RESET_COST).toString(),
-										refundCost.toString(),
-									)
-									.padEnd(30, " ") +
-								refundCost.toLocaleString().padStart(10, " ")
-							}\n${
-								translations.strings.total().padEnd(30, " ") +
-								refund.toLocaleString().padStart(10, " ")
-							}\n\`\`\``,
+									.refund_cost((100 * Util.config.SHOP_RESET_COST).toString(), refundCost.toString())
+									.padEnd(30, " ") + refundCost.toLocaleString().padStart(10, " ")
+							}\n${translations.strings.total().padEnd(30, " ") + refund.toLocaleString().padStart(10, " ")}\n\`\`\``,
 							footer: {
 								text: "✨ Mayze ✨",
 							},
@@ -388,9 +342,8 @@ const command: Command = {
 					fetchReply: true,
 				})) as Message;
 
-				const filter: CollectorFilter<[ButtonInteraction]> = (
-					buttonInteraction,
-				) => buttonInteraction.user.id === interaction.user.id;
+				const filter: CollectorFilter<[ButtonInteraction]> = (buttonInteraction) =>
+					buttonInteraction.user.id === interaction.user.id;
 
 				try {
 					const buttonInteraction = await reply.awaitMessageComponent({
@@ -401,10 +354,10 @@ const command: Command = {
 
 					switch (buttonInteraction.customId) {
 						case "confirm": {
-							await Util.database.query(
-								"UPDATE currency SET money = money + $2 WHERE user_id = $1",
-								[interaction.user.id, refund],
-							);
+							await Util.database.query("UPDATE currency SET money = money + $2 WHERE user_id = $1", [
+								interaction.user.id,
+								refund,
+							]);
 
 							await Util.database.query(
 								`

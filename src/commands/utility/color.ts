@@ -53,10 +53,7 @@ const command: Command = {
 						RGBToDec(color).toString(),
 					),
 					thumbnail: {
-						url: `https://dummyimage.com/100/${RGBToHex(color).replace(
-							"#",
-							"",
-						)}/00.png?text=%20`,
+						url: `https://dummyimage.com/100/${RGBToHex(color).replace("#", "")}/00.png?text=%20`,
 					},
 					footer: {
 						text: "✨ Mayze ✨",
@@ -129,8 +126,7 @@ const command: Command = {
 		});
 
 		const messageFilter: CollectorFilter<[Message]> = (msg) =>
-			msg.author.id === interaction.user.id &&
-			/^(r|g|b)\s*=\s*(\d+)$/i.test(msg.content);
+			msg.author.id === interaction.user.id && /^(r|g|b)\s*=\s*(\d+)$/i.test(msg.content);
 
 		const messageCollector = interaction.channel.createMessageCollector({
 			filter: messageFilter,
@@ -174,10 +170,7 @@ const command: Command = {
 							RGBToDec(color).toString(),
 						),
 						thumbnail: {
-							url: `https://dummyimage.com/100/${RGBToHex(color).replace(
-								"#",
-								"",
-							)}/00.png?text=%20`,
+							url: `https://dummyimage.com/100/${RGBToHex(color).replace("#", "")}/00.png?text=%20`,
 						},
 						footer: {
 							text: "✨ Mayze ✨",
@@ -264,28 +257,13 @@ const command: Command = {
 
 			switch (colorUpdate.toLowerCase()) {
 				case "r":
-					color[0] =
-						parseInt(value) < 0
-							? 0
-							: parseInt(value) > 255
-							? 255
-							: parseInt(value);
+					color[0] = parseInt(value) < 0 ? 0 : parseInt(value) > 255 ? 255 : parseInt(value);
 					break;
 				case "g":
-					color[1] =
-						parseInt(value) < 0
-							? 0
-							: parseInt(value) > 255
-							? 255
-							: parseInt(value);
+					color[1] = parseInt(value) < 0 ? 0 : parseInt(value) > 255 ? 255 : parseInt(value);
 					break;
 				case "b":
-					color[2] =
-						parseInt(value) < 0
-							? 0
-							: parseInt(value) > 255
-							? 255
-							: parseInt(value);
+					color[2] = parseInt(value) < 0 ? 0 : parseInt(value) > 255 ? 255 : parseInt(value);
 					break;
 			}
 
@@ -305,10 +283,7 @@ const command: Command = {
 							RGBToDec(color).toString(),
 						),
 						thumbnail: {
-							url: `https://dummyimage.com/100/${RGBToHex(color).replace(
-								"#",
-								"",
-							)}/00.png?text=%20`,
+							url: `https://dummyimage.com/100/${RGBToHex(color).replace("#", "")}/00.png?text=%20`,
 						},
 						footer: {
 							text: "✨ Mayze ✨",

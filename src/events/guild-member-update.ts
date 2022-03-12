@@ -7,10 +7,7 @@ const event: Event = {
 	name: "guildMemberUpdate",
 	once: false,
 
-	run: async (
-		oldMember: GuildMember | PartialGuildMember,
-		newMember: GuildMember | PartialGuildMember,
-	) => {
+	run: async (oldMember: GuildMember | PartialGuildMember, newMember: GuildMember | PartialGuildMember) => {
 		if (newMember.guild.id !== Util.config.MAIN_GUILD_ID) return;
 		if (newMember.user.bot) return;
 
@@ -24,9 +21,7 @@ const event: Event = {
 				`,
 				[
 					newMember.user.id,
-					newMember.roles.cache
-						.filter((role) => role.id !== newMember.guild.id)
-						.map((role) => role.id),
+					newMember.roles.cache.filter((role) => role.id !== newMember.guild.id).map((role) => role.id),
 				],
 			);
 		}

@@ -1,5 +1,5 @@
 {
-	"composition": [
+	"setup": [
 		{
 			"werewolves": 0,
 			"villagers": 0
@@ -69,34 +69,17 @@
 			"villagers": 12
 		}
 	],
+
 	"villagerRoles": {
-		"fr": [
-			"Villageois simple",
-			"Sorcière",
-			"Chasseur",
-			"Petite fille",
-			"Chaman",
-			"Ange",
-			"Cupidon"
-		],
-		"en": [
-			"Villager",
-			"Witch",
-			"Avenger",
-			"Little girl",
-			"Shaman",
-			"Angel",
-			"Cupid"
-		]
+		"fr": ["Villageois simple", "Sorcière", "Chasseur", "Petite fille", "Chaman", "Ange", "Cupidon"],
+		"en": ["Villager", "Witch", "Avenger", "Little girl", "Shaman", "Angel", "Cupid"]
 	},
+
 	"werewolfRoles": {
-		"fr": [
-			"Loup-garou"
-		],
-		"en": [
-			"Werewolf"
-		]
+		"fr": ["Loup-garou"],
+		"en": ["Werewolf"]
 	},
+
 	"roles": {
 		"villager": {
 			"fr": "Villageois simple",

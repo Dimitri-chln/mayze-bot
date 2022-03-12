@@ -57,17 +57,13 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const leaderboard = interaction.options.getString("leaderboard", true) as
-			| "chat_xp"
-			| "voice_xp";
+		const leaderboard = interaction.options.getString("leaderboard", true) as "chat_xp" | "voice_xp";
 
 		let { rows: top }: { rows: DatabaseLevel[] } = await Util.database.query(
 			`SELECT * FROM level ORDER BY ${leaderboard} DESC`,
 		);
 
-		top = top.filter((user) =>
-			interaction.guild.members.cache.has(user.user_id),
-		);
+		top = top.filter((user) => interaction.guild.members.cache.has(user.user_id));
 
 		const pages: Page[] = [];
 
@@ -76,10 +72,7 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: translations.strings.author(
-								interaction.guild.name,
-								leaderboard === "chat_xp",
-							),
+							name: translations.strings.author(interaction.guild.name, leaderboard === "chat_xp"),
 							iconURL: interaction.guild.iconURL({
 								dynamic: true,
 							}),
@@ -95,10 +88,7 @@ const command: Command = {
 				embeds: [
 					{
 						author: {
-							name: translations.strings.author(
-								interaction.guild.name,
-								leaderboard === "chat_xp",
-							),
+							name: translations.strings.author(interaction.guild.name, leaderboard === "chat_xp"),
 							iconURL: interaction.guild.iconURL({
 								dynamic: true,
 							}),
@@ -109,8 +99,7 @@ const command: Command = {
 							.map((user, j) =>
 								translations.strings.description(
 									(i + j + 1).toString(),
-									interaction.guild.members.cache.get(user.user_id).user
-										.username,
+									interaction.guild.members.cache.get(user.user_id).user.username,
 									getLevel(user[leaderboard]).level.toString(),
 								),
 							)

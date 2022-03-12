@@ -39,8 +39,7 @@ const command: Command = {
 			},
 			{
 				name: "regex",
-				description:
-					"Ne supprimer que les messages qui correspondent au regex donné",
+				description: "Ne supprimer que les messages qui correspondent au regex donné",
 				type: "STRING",
 				required: false,
 			},
@@ -89,21 +88,13 @@ const command: Command = {
 		if (bot) messages = messages.filter((msg) => msg.author.bot);
 
 		const regex = interaction.options.getString("regex", false);
-		if (regex)
-			messages = messages.filter((msg) =>
-				new RegExp(regex, "i").test(msg.content),
-			);
+		if (regex) messages = messages.filter((msg) => new RegExp(regex, "i").test(msg.content));
 
-		const reply = await interaction.followUp(
-			translations.strings.deleted(number.toString(), number > 1),
-		);
+		const reply = await interaction.followUp(translations.strings.deleted(number.toString(), number > 1));
 
 		messages.delete(reply.id);
 
-		await (interaction.channel as TextChannel).bulkDelete(
-			messages.first(number),
-			true,
-		);
+		await (interaction.channel as TextChannel).bulkDelete(messages.first(number), true);
 	},
 };
 

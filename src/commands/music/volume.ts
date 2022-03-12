@@ -44,18 +44,13 @@ const command: Command = {
 		const queue = Util.musicPlayer.get(interaction.guild.id);
 
 		if (!volume) {
-			interaction.followUp(
-				translations.strings.volume(queue.volume.toString()),
-			);
+			interaction.followUp(translations.strings.volume(queue.volume.toString()));
 		} else {
-			if (volume < 0 || volume > 200)
-				return interaction.followUp(translations.strings.invalid_volume());
+			if (volume < 0 || volume > 200) return interaction.followUp(translations.strings.invalid_volume());
 
 			queue.setVolume(volume);
 
-			interaction.followUp(
-				translations.strings.volume_changed(volume.toString()),
-			);
+			interaction.followUp(translations.strings.volume_changed(volume.toString()));
 		}
 	},
 };

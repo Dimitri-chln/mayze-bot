@@ -18,11 +18,7 @@ export default function pagination(
 	options?: PaginationOptions,
 ): Promise<Message>;
 
-export default function pagination(
-	message: Message,
-	pages: Page[],
-	options?: PaginationOptions,
-): Promise<Message>;
+export default function pagination(message: Message, pages: Page[], options?: PaginationOptions): Promise<Message>;
 
 export default async function pagination(
 	interactionOrMessage: CommandInteraction | Message,
@@ -72,8 +68,7 @@ export default async function pagination(
 			? interactionOrMessage.user
 			: options.user ?? interactionOrMessage.author;
 
-	const filter: CollectorFilter<[ButtonInteraction]> = (buttonInteraction) =>
-		buttonInteraction.user.id === user.id;
+	const filter: CollectorFilter<[ButtonInteraction]> = (buttonInteraction) => buttonInteraction.user.id === user.id;
 
 	const collector = currentPage.createMessageComponentCollector({
 		componentType: "BUTTON",

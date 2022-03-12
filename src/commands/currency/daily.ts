@@ -26,26 +26,18 @@ const command: Command = {
 
 		const {
 			rows: [userCurrency],
-		} = await Util.database.query("SELECT * FROM currency WHERE user_id = $1", [
-			interaction.user.id,
-		]);
+		} = await Util.database.query("SELECT * FROM currency WHERE user_id = $1", [interaction.user.id]);
 
-		const lastDaily = userCurrency
-			? new Date(userCurrency.last_daily)
-			: new Date(0);
+		const lastDaily = userCurrency ? new Date(userCurrency.last_daily) : new Date(0);
 
 		if (lastDaily.valueOf() > MIDNIGHT.valueOf()) {
-			const timeLeft = Math.ceil(
-				(MIDNIGHT.valueOf() + DAY_IN_MS.valueOf() - NOW.valueOf()) / 1000,
-			);
+			const timeLeft = Math.ceil((MIDNIGHT.valueOf() + DAY_IN_MS.valueOf() - NOW.valueOf()) / 1000);
 			const timeLeftHumanized = new Date((timeLeft % 86_400) * 1000)
 				.toUTCString()
 				.replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s")
 				.replace(/00h |00m /g, "");
 
-			return interaction.followUp(
-				translations.strings.cooldown(timeLeftHumanized),
-			);
+			return interaction.followUp(translations.strings.cooldown(timeLeftHumanized));
 		}
 
 		const {
@@ -60,11 +52,7 @@ const command: Command = {
 			WHERE currency.user_id = EXCLUDED.user_id
 			RETURNING money
 			`,
-			[
-				interaction.user.id,
-				Util.config.DAILY_REWARD,
-				new Date(NOW).toISOString(),
-			],
+			[interaction.user.id, Util.config.DAILY_REWARD, new Date(NOW).toISOString()],
 		);
 
 		interaction.followUp({
@@ -77,10 +65,7 @@ const command: Command = {
 						}),
 					},
 					color: interaction.guild.me.displayColor,
-					description: translations.strings.description(
-						Util.config.DAILY_REWARD.toString(),
-						money.toString(),
-					),
+					description: translations.strings.description(Util.config.DAILY_REWARD.toString(), money.toString()),
 					footer: {
 						text: "✨ Mayze ✨",
 					},

@@ -42,19 +42,11 @@ const command: Command = {
 		const songIndex = interaction.options.getInteger("song", true);
 
 		if (songIndex < 1 || songIndex > queue.songs.length)
-			return interaction.followUp(
-				translations.strings.invalid_number((length - 1).toString()),
-			);
+			return interaction.followUp(translations.strings.invalid_number((length - 1).toString()));
 
 		const song = queue.skipTo(songIndex);
 
-		interaction.followUp(
-			translations.strings.skipped(
-				songIndex.toString(),
-				songIndex > 1,
-				song.name,
-			),
-		);
+		interaction.followUp(translations.strings.skipped(songIndex.toString(), songIndex > 1, song.name));
 	},
 };
 

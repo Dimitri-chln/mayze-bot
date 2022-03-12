@@ -10,12 +10,7 @@ export default class Color {
 	green: number;
 	blue: number;
 
-	constructor(
-		name: string,
-		alias: string,
-		color: ColorCode,
-		emoji: GuildEmoji,
-	) {
+	constructor(name: string, alias: string, color: ColorCode, emoji: GuildEmoji) {
 		this.name = name;
 		this.alias = alias;
 		this.emoji = emoji;

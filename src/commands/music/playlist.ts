@@ -13,8 +13,7 @@ const command: Command = {
 		fr: "Sauvegarder et jouer des playlists",
 		en: "Save and play playlists",
 	},
-	usage:
-		"list [-me] | play <name> [-shuffle] | add <name> <url> [-private] | remove <name>",
+	usage: "list [-me] | play <name> [-shuffle] | add <name> <url> [-private] | remove <name>",
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS", "CONNECT", "SPEAK", "USE_EXTERNAL_EMOJIS"],
 
@@ -176,11 +175,10 @@ const command: Command = {
 		if (playlistName && !/^[\w-_]+$/.test(playlistName))
 			return interaction.followUp(translations.strings.invalid_name());
 
-		const { rows: playlists }: { rows: DatabasePlaylist[] } =
-			await Util.database.query(
-				"SELECT * FROM playlist WHERE NOT private OR user_id = $1 ORDER BY name ASC",
-				[interaction.user.id],
-			);
+		const { rows: playlists }: { rows: DatabasePlaylist[] } = await Util.database.query(
+			"SELECT * FROM playlist WHERE NOT private OR user_id = $1 ORDER BY name ASC",
+			[interaction.user.id],
+		);
 
 		switch (subCommand) {
 			case "list": {
@@ -190,9 +188,7 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.strings.author(
-									me ? interaction.user.tag : interaction.client.user.tag,
-								),
+								name: translations.strings.author(me ? interaction.user.tag : interaction.client.user.tag),
 								iconURL: me
 									? interaction.user.displayAvatarURL({ dynamic: true })
 									: interaction.client.user.displayAvatarURL(),
@@ -202,29 +198,19 @@ const command: Command = {
 								(
 									await Promise.all(
 										playlists
-											.filter((p) =>
-												me ? p.user_id === interaction.user.id : true,
-											)
+											.filter((p) => (me ? p.user_id === interaction.user.id : true))
 											.map(
 												async (playlist, i) =>
-													`\`${i + 1}.\` [${playlist.name}](${
-														playlist.url
-													}) - **${
+													`\`${i + 1}.\` [${playlist.name}](${playlist.url}) - **${
 														(
-															await interaction.client.users.fetch(
-																playlist.user_id,
-															)
+															await interaction.client.users.fetch(playlist.user_id)
 														).tag
 													}**${playlist.private ? " - 🚫" : ""}`,
 											),
 									)
 								).join("\n") ?? translations.strings.no_playlist(),
 							footer: {
-								text:
-									"✨ Mayze ✨" +
-									(playlists.some((p) => p.private)
-										? translations.strings.footer_private()
-										: ""),
+								text: "✨ Mayze ✨" + (playlists.some((p) => p.private) ? translations.strings.footer_private() : ""),
 							},
 						},
 					],
@@ -249,48 +235,30 @@ const command: Command = {
 							interaction.channel as TextChannel,
 					  );
 
-				const shuffle = Boolean(
-					interaction.options.getBoolean("shuffle", false),
-				);
+				const shuffle = Boolean(interaction.options.getBoolean("shuffle", false));
 				const playlist = playlists.find((p) => p.name === playlistName);
 
-				if (!playlist)
-					return interaction.followUp(translations.strings.invalid_playlist());
+				if (!playlist) return interaction.followUp(translations.strings.invalid_playlist());
 
-				const resultPlaylist = await queue.playlist(
-					playlist.url,
-					interaction.member as GuildMember,
-					{
-						shuffle,
-					},
-				);
+				const resultPlaylist = await queue.playlist(playlist.url, interaction.member as GuildMember, {
+					shuffle,
+				});
 
-				interaction.followUp(
-					translations.strings.playlist(
-						resultPlaylist.videos.length.toString(),
-						shuffle,
-					),
-				);
+				interaction.followUp(translations.strings.playlist(resultPlaylist.videos.length.toString(), shuffle));
 				break;
 			}
 
 			case "add": {
 				const {
 					rows: [existingPlaylist],
-				}: { rows: DatabasePlaylist[] } = await Util.database.query(
-					"SELECT * FROM playlist WHERE name = $1",
-					[playlistName],
-				);
+				}: { rows: DatabasePlaylist[] } = await Util.database.query("SELECT * FROM playlist WHERE name = $1", [
+					playlistName,
+				]);
 
-				if (existingPlaylist)
-					return interaction.followUp(
-						translations.strings.playlist_already_exists(),
-					);
+				if (existingPlaylist) return interaction.followUp(translations.strings.playlist_already_exists());
 
 				const url = interaction.options.getString("url", true);
-				const isPrivate = Boolean(
-					interaction.options.getBoolean("private", false),
-				);
+				const isPrivate = Boolean(interaction.options.getBoolean("private", false));
 
 				switch (await PlayDl.validate(url)) {
 					case "yt_playlist":
@@ -305,10 +273,12 @@ const command: Command = {
 						return interaction.followUp(translations.strings.invalid_url());
 				}
 
-				await Util.database.query(
-					"INSERT INTO playlist VALUES ($1, $2, $3, $4)",
-					[playlistName, url, interaction.user.id, isPrivate],
-				);
+				await Util.database.query("INSERT INTO playlist VALUES ($1, $2, $3, $4)", [
+					playlistName,
+					url,
+					interaction.user.id,
+					isPrivate,
+				]);
 
 				interaction.followUp(translations.strings.playlist_created());
 				break;
@@ -318,17 +288,13 @@ const command: Command = {
 				if (!playlists.some((p) => p.name === playlistName))
 					return interaction.followUp(translations.strings.invalid_playlist());
 
-				if (
-					!playlists.some(
-						(p) => p.name === playlistName && p.user_id === interaction.user.id,
-					)
-				)
+				if (!playlists.some((p) => p.name === playlistName && p.user_id === interaction.user.id))
 					return interaction.followUp(translations.strings.not_allowed());
 
-				await Util.database.query(
-					`DELETE FROM playlist WHERE user_id = $1 AND name = $2`,
-					[interaction.user.id, playlistName],
-				);
+				await Util.database.query(`DELETE FROM playlist WHERE user_id = $1 AND name = $2`, [
+					interaction.user.id,
+					playlistName,
+				]);
 
 				interaction.followUp(translations.strings.playlist_deleted());
 				break;

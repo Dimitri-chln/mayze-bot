@@ -42,22 +42,15 @@ function isDeezerAlbum(result: Deezer): result is DeezerAlbum {
 }
 
 export default class MusicUtil {
-	static async search(
-		search: string,
-		queue: Queue,
-		requestedBy: User,
-	): Promise<Song> {
+	static async search(search: string, queue: Queue, requestedBy: User): Promise<Song> {
 		switch (await PlayDl.validate(search)) {
 			case "yt_video": {
 				const youtubeResult = (await PlayDl.video_info(search)).video_details;
-				if (!youtubeResult || youtubeResult.type !== "video")
-					throw "InvalidYoutube";
+				if (!youtubeResult || youtubeResult.type !== "video") throw "InvalidYoutube";
 
 				const songData: SongData = {
 					title: youtubeResult.title,
-					duration: youtubeResult.live
-						? Infinity
-						: youtubeResult.durationInSec * 1000,
+					duration: youtubeResult.live ? Infinity : youtubeResult.durationInSec * 1000,
 					channel: {
 						name: youtubeResult.channel.name,
 					},
@@ -71,26 +64,16 @@ export default class MusicUtil {
 
 			case "sp_track": {
 				const spotifyResult = await PlayDl.spotify(search);
-				if (!spotifyResult || !isSpotifyTrack(spotifyResult))
-					throw "InvalidSpotify";
+				if (!spotifyResult || !isSpotifyTrack(spotifyResult)) throw "InvalidSpotify";
 
-				return this.search(
-					`${spotifyResult.artists[0].name} - ${spotifyResult.name}`,
-					queue,
-					requestedBy,
-				);
+				return this.search(`${spotifyResult.artists[0].name} - ${spotifyResult.name}`, queue, requestedBy);
 			}
 
 			case "dz_track": {
 				const deezerResult = await PlayDl.deezer(search);
-				if (!deezerResult || !isDeezerTrack(deezerResult))
-					throw "InvalidDeezer";
+				if (!deezerResult || !isDeezerTrack(deezerResult)) throw "InvalidDeezer";
 
-				return this.search(
-					`${deezerResult.artist.name} - ${deezerResult.title}`,
-					queue,
-					requestedBy,
-				);
+				return this.search(`${deezerResult.artist.name} - ${deezerResult.title}`, queue, requestedBy);
 			}
 
 			case "search": {
@@ -171,18 +154,13 @@ export default class MusicUtil {
 			case "sp_playlist":
 			case "sp_album": {
 				const spotifyResult = await PlayDl.spotify(url);
-				if (
-					!spotifyResult ||
-					(!isSpotifyPlaylist(spotifyResult) && !isSpotifyAlbum(spotifyResult))
-				)
+				if (!spotifyResult || (!isSpotifyPlaylist(spotifyResult) && !isSpotifyAlbum(spotifyResult)))
 					throw "InvalidPlaylist";
 
 				const playlistData: PlaylistData = {
 					title: spotifyResult.name,
 					channel: {
-						name: isSpotifyPlaylist(spotifyResult)
-							? spotifyResult.owner.name
-							: spotifyResult.artists[0].name,
+						name: isSpotifyPlaylist(spotifyResult) ? spotifyResult.owner.name : spotifyResult.artists[0].name,
 					},
 					url,
 					videos: (
@@ -193,11 +171,7 @@ export default class MusicUtil {
 								if (limit !== -1 && index >= limit) return;
 
 								try {
-									const result = await this.search(
-										`${track.artists[0].name} - ${track.name}`,
-										queue,
-										requestedBy,
-									);
+									const result = await this.search(`${track.artists[0].name} - ${track.name}`, queue, requestedBy);
 
 									return result;
 								} catch (err) {
@@ -216,18 +190,12 @@ export default class MusicUtil {
 			case "dz_playlist":
 			case "dz_album": {
 				const deezerResult = await PlayDl.deezer(url);
-				if (
-					!deezerResult ||
-					(!isDeezerPlaylist(deezerResult) && !isDeezerAlbum(deezerResult))
-				)
-					throw "InvalidPlaylist";
+				if (!deezerResult || (!isDeezerPlaylist(deezerResult) && !isDeezerAlbum(deezerResult))) throw "InvalidPlaylist";
 
 				const playlistData: PlaylistData = {
 					title: deezerResult.title,
 					channel: {
-						name: isDeezerPlaylist(deezerResult)
-							? deezerResult.creator.name
-							: deezerResult.artist.name,
+						name: isDeezerPlaylist(deezerResult) ? deezerResult.creator.name : deezerResult.artist.name,
 					},
 					url,
 					videos: (
@@ -238,11 +206,7 @@ export default class MusicUtil {
 								if (limit !== -1 && index >= limit) return;
 
 								try {
-									const result = await this.search(
-										`${track.artist.name} - ${track.title}`,
-										queue,
-										requestedBy,
-									);
+									const result = await this.search(`${track.artist.name} - ${track.title}`, queue, requestedBy);
 
 									return result;
 								} catch (err) {
@@ -267,9 +231,7 @@ export default class MusicUtil {
 		const relatedSongs: Song[] = [];
 
 		const breakIntoParts = (num: number, parts: number) =>
-			[...Array(parts)].map(
-				(_, i) => 0 | (num / parts + Number(i < num % parts)),
-			);
+			[...Array(parts)].map((_, i) => 0 | (num / parts + Number(i < num % parts)));
 
 		const numberOfRelatedVideos = breakIntoParts(number, songs.length);
 
@@ -280,12 +242,7 @@ export default class MusicUtil {
 				await Promise.all(
 					videoInfo.related_videos
 						.slice(0, numberOfRelatedVideos[i])
-						.map(
-							async (relatedVideo) =>
-								(
-									await PlayDl.video_info(relatedVideo)
-								).video_details,
-						),
+						.map(async (relatedVideo) => (await PlayDl.video_info(relatedVideo)).video_details),
 				)
 			).map(
 				(relatedVideo) =>
@@ -329,13 +286,7 @@ export default class MusicUtil {
 		const items = time.split(":");
 		if (items.length > 3) throw "InvalidTime";
 
-		return (
-			items.reduceRight(
-				(prev, curr, i, arr) =>
-					prev + parseInt(curr) * 60 ** (arr.length - 1 - i),
-				0,
-			) * 1000
-		);
+		return items.reduceRight((prev, curr, i, arr) => prev + parseInt(curr) * 60 ** (arr.length - 1 - i), 0) * 1000;
 	}
 
 	static buildBar(value: number, maxValue: number) {
@@ -357,10 +308,7 @@ export default class MusicUtil {
 		const clone = [...array];
 		const shuffled = [];
 
-		while (clone.length > 0)
-			shuffled.push(
-				clone.splice(Math.floor(Math.random() * clone.length), 1)[0],
-			);
+		while (clone.length > 0) shuffled.push(clone.splice(Math.floor(Math.random() * clone.length), 1)[0]);
 
 		return shuffled;
 	}

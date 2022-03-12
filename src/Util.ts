@@ -1,13 +1,4 @@
-import {
-	Client,
-	Collection,
-	GuildMember,
-	Intents,
-	Message,
-	MessageReaction,
-	Snowflake,
-	User,
-} from "discord.js";
+import { Client, Collection, GuildMember, Intents, Message, MessageReaction, Snowflake, User } from "discord.js";
 
 import Pg from "pg";
 import { google as Google } from "googleapis";
@@ -28,6 +19,7 @@ import findMember from "./utils/misc/findMember";
 
 import config from "./config.json";
 import MusicUtil from "./types/music/MusicUtil";
+import Game from "./types/werewolf/Game";
 
 export default class Util {
 	static readonly prefix = config.PREFIX;
@@ -71,15 +63,11 @@ export default class Util {
 	);
 
 	static readonly availableLanguages: Language[] = ["fr", "en"];
-	static readonly guildConfigs: Collection<Snowflake, GuildConfig> =
-		new Collection();
+	static readonly guildConfigs: Collection<Snowflake, GuildConfig> = new Collection();
 	static readonly commands: Collection<string, Command> = new Collection();
 	static readonly messageResponses: MessageResponse[] = [];
 	static readonly reactionCommands: ReactionCommand[] = [];
-	static readonly autocompleteHandlers: Collection<
-		string,
-		AutocompleteHandler
-	> = new Collection();
+	static readonly autocompleteHandlers: Collection<string, AutocompleteHandler> = new Collection();
 	static beta: boolean;
 	static owner: User;
 	static readonly palettes: Collection<string, Palette> = new Collection();
@@ -99,12 +87,9 @@ export default class Util {
 
 	static pokedex = Pokedex;
 
-	static readonly amongUsGames: Collection<Snowflake, AmongUsGame> =
-		new Collection();
-	static readonly russianRouletteGames: Collection<
-		Snowflake,
-		RussianRouletteGame
-	> = new Collection();
+	static readonly amongUsGames: Collection<Snowflake, AmongUsGame> = new Collection();
+	static readonly russianRouletteGames: Collection<Snowflake, RussianRouletteGame> = new Collection();
+	static readonly werewolfGames: Collection<Snowflake, Game> = new Collection();
 }
 
 interface GuildConfig {

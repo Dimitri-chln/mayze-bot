@@ -23,12 +23,7 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const songs = Util.musicPlayer.get(interaction.guild.id).shuffle();
 
-		interaction.followUp(
-			translations.strings.shuffled(
-				(songs.length - 1).toString(),
-				songs.length > 2,
-			),
-		);
+		interaction.followUp(translations.strings.shuffled((songs.length - 1).toString(), songs.length > 2));
 	},
 };
 

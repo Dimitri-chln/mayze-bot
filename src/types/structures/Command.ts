@@ -35,13 +35,6 @@ export default interface Command {
 	path?: string;
 	category?: string;
 	cooldowns?: Collection<Snowflake, number>;
-	runInteraction(
-		interaction: CommandInteraction,
-		translations: LanguageTranslationsData,
-	): Promise<any>;
-	runMessage?(
-		message: Message,
-		args: string[],
-		translations: LanguageTranslationsData,
-	): Promise<any>;
+	runInteraction(interaction: CommandInteraction, translations: LanguageTranslationsData): Promise<any>;
+	runMessage?(message: Message, args: string[], translations: LanguageTranslationsData): Promise<any>;
 }

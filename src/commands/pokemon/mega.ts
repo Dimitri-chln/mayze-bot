@@ -115,26 +115,16 @@ const command: Command = {
 
 		const {
 			rows: [{ gems }],
-		} = await Util.database.query(
-			"SELECT * FROM mega_gems WHERE user_id = $1",
-			[interaction.user.id],
-		);
+		} = await Util.database.query("SELECT * FROM mega_gems WHERE user_id = $1", [interaction.user.id]);
 
 		switch (subCommand) {
 			case "evolve": {
 				const { pokemon, shiny } =
-					Util.pokedex.findByNameWithVariation(
-						interaction.options.getString("pokemon", true),
-					) ?? {};
+					Util.pokedex.findByNameWithVariation(interaction.options.getString("pokemon", true)) ?? {};
 
-				if (!pokemon)
-					return interaction.followUp(translations.strings.invalid_pokemon());
+				if (!pokemon) return interaction.followUp(translations.strings.invalid_pokemon());
 
-				const megaType = interaction.options.getString("type", true) as
-					| "default"
-					| "megax"
-					| "megay"
-					| "primal";
+				const megaType = interaction.options.getString("type", true) as "default" | "megax" | "megay" | "primal";
 
 				const {
 					rows: [pokemonData],
@@ -143,22 +133,14 @@ const command: Command = {
 					[pokemon.nationalId, shiny, interaction.user.id],
 				);
 
-				if (!pokemonData)
-					return interaction.followUp(translations.strings.pokemon_not_owned());
+				if (!pokemonData) return interaction.followUp(translations.strings.pokemon_not_owned());
 
-				const megaEvolution = pokemon.megaEvolutions.find(
-					(mega) => mega.variation === megaType,
-				);
+				const megaEvolution = pokemon.megaEvolutions.find((mega) => mega.variation === megaType);
 
-				if (!megaEvolution)
-					return interaction.followUp(
-						translations.strings.invalid_mega_evolution(),
-					);
+				if (!megaEvolution) return interaction.followUp(translations.strings.invalid_mega_evolution());
 
 				if (!gems[megaEvolution.megaStone])
-					return interaction.followUp(
-						translations.strings.no_mega_gem(megaEvolution.megaStone),
-					);
+					return interaction.followUp(translations.strings.no_mega_gem(megaEvolution.megaStone));
 
 				Util.database.query(
 					`
@@ -229,9 +211,7 @@ const command: Command = {
 							thumbnail: {
 								url: pokemon.image(shiny, "default"),
 							},
-							description: translations.strings.evolving(
-								pokemon.formatName(translations.language, shiny, "default"),
-							),
+							description: translations.strings.evolving(pokemon.formatName(translations.language, shiny, "default")),
 						},
 					],
 					fetchReply: true,
@@ -242,13 +222,7 @@ const command: Command = {
 				interaction.editReply({
 					embeds: [
 						reply.embeds[0]
-							.setThumbnail(
-								pokemon.image(
-									shiny,
-									megaEvolution.variationType,
-									megaEvolution.variation,
-								),
-							)
+							.setThumbnail(pokemon.image(shiny, megaEvolution.variationType, megaEvolution.variation))
 							.setDescription(
 								translations.strings.evolved(
 									pokemon.formatName(translations.language, shiny, "default"),
@@ -280,13 +254,7 @@ const command: Command = {
 							color: interaction.guild.me.displayColor,
 							// U+00d7 : ×
 							description: `\`\`\`\n${gemList
-								.map((group) =>
-									group
-										.map(([gem, number]) =>
-											`${gem} \u00d7${number}`.padEnd(20, " "),
-										)
-										.join(" "),
-								)
+								.map((group) => group.map(([gem, number]) => `${gem} \u00d7${number}`.padEnd(20, " ")).join(" "))
 								.join("\n")}\n\`\`\``,
 							footer: {
 								text: "✨ Mayze ✨",

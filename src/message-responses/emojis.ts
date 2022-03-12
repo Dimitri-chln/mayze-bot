@@ -15,9 +15,7 @@ const messageResponse: MessageResponse = {
 
 		if (reactionRegex.test(message.content)) {
 			const [, emojiName] = message.content.match(reactionRegex);
-			const emoji = message.client.emojis.cache.find(
-				(e) => e.name === emojiName,
-			);
+			const emoji = message.client.emojis.cache.find((e) => e.name === emojiName);
 			if (!emoji || !emoji.available) return;
 
 			message.delete().catch(console.error);
@@ -28,14 +26,10 @@ const messageResponse: MessageResponse = {
 				})
 				.catch(console.error);
 		} else if (emojiRegex.test(message.content)) {
-			const emojiNames = message.content
-				.match(emojiRegex)
-				.map((e) => e.match(/[\w-_]+/)[0]);
+			const emojiNames = message.content.match(emojiRegex).map((e) => e.match(/[\w-_]+/)[0]);
 			if (
 				!emojiNames.every((emojiName) =>
-					message.client.emojis.cache.find(
-						(emoji) => emoji.name === emojiName && emoji.available,
-					),
+					message.client.emojis.cache.find((emoji) => emoji.name === emojiName && emoji.available),
 				)
 			)
 				return;
@@ -44,19 +38,13 @@ const messageResponse: MessageResponse = {
 			const newMsg = message.content
 				.replace(
 					emojiRegex,
-					(a) =>
-						`${message.client.emojis.cache
-							.find((e) => e.name === a.match(/[\w-_]+/)[0])
-							.toString()}`,
+					(a) => `${message.client.emojis.cache.find((e) => e.name === a.match(/[\w-_]+/)[0]).toString()}`,
 				)
 				.trim();
 
-			const webhook = await message.client.fetchWebhook(
-				Util.guildConfigs.get(message.guild.id).webhookId,
-			);
+			const webhook = await message.client.fetchWebhook(Util.guildConfigs.get(message.guild.id).webhookId);
 
-			if (webhook.channelId !== message.channel.id)
-				await webhook.edit({ channel: message.channel.id });
+			if (webhook.channelId !== message.channel.id) await webhook.edit({ channel: message.channel.id });
 
 			webhook.send({
 				content: newMsg,

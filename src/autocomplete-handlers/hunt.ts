@@ -19,13 +19,7 @@ const autocompleteHandler: AutocompleteHandler = {
 					.map((pokemon) => {
 						return {
 							name: pokemon.formatName(language, false, "default"),
-							value: pokemon.formatName(
-								language,
-								false,
-								"default",
-								"default",
-								"raw",
-							),
+							value: pokemon.formatName(language, false, "default", "default", "raw"),
 						};
 					})
 					.concat([{ name: "none", value: "none" }]);

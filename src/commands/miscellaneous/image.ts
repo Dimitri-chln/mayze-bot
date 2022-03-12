@@ -61,9 +61,7 @@ const command: Command = {
 				if (!Util.config.IMAGE_GENERATION_TYPES.includes(type))
 					return interaction.followUp(translations.strings.invalid_type());
 
-				const image = await Jimp.read(
-					interaction.user.displayAvatarURL({ format: "png", size: 4096 }),
-				);
+				const image = await Jimp.read(interaction.user.displayAvatarURL({ format: "png", size: 4096 }));
 				const width = image.getWidth();
 				const height = image.getHeight();
 
@@ -97,8 +95,7 @@ const command: Command = {
 
 				for (let y = 0; y < height; y++) {
 					for (let x = 0; x < width; x++) {
-						if (distanceFromCenter(x, y, width, height) > 0.9 * (width / 2))
-							image.setPixelColor(color(x, y), x, y);
+						if (distanceFromCenter(x, y, width, height) > 0.9 * (width / 2)) image.setPixelColor(color(x, y), x, y);
 					}
 				}
 

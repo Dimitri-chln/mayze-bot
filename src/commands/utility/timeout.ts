@@ -49,13 +49,10 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const member = interaction.guild.members.cache.get(
-			interaction.options.getUser("user", true).id,
-		);
+		const member = interaction.guild.members.cache.get(interaction.options.getUser("user", true).id);
 
 		if (
-			member.roles.highest.position >=
-				(interaction.member as GuildMember).roles.highest.position &&
+			member.roles.highest.position >= (interaction.member as GuildMember).roles.highest.position &&
 			interaction.user.id !== Util.owner.id
 		)
 			return interaction.followUp(translations.strings.not_allowed());
@@ -65,17 +62,9 @@ const command: Command = {
 			28 * 24 * 60 * 60 * 1000, // 28 days
 		);
 
-		await member.timeout(
-			duration,
-			translations.strings.reason(interaction.user.tag),
-		);
+		await member.timeout(duration, translations.strings.reason(interaction.user.tag));
 
-		interaction.followUp(
-			translations.strings.timed_out(
-				member.user.tag,
-				formatTime(duration, translations.language),
-			),
-		);
+		interaction.followUp(translations.strings.timed_out(member.user.tag, formatTime(duration, translations.language)));
 	},
 };
 

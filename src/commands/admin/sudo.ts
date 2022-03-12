@@ -49,12 +49,9 @@ const command: Command = {
 		const user = interaction.options.getUser("user", true);
 		const message = interaction.options.getString("message", true);
 
-		const webhook = await interaction.client.fetchWebhook(
-			Util.guildConfigs.get(interaction.guild.id).webhookId,
-		);
+		const webhook = await interaction.client.fetchWebhook(Util.guildConfigs.get(interaction.guild.id).webhookId);
 
-		if (webhook.channelId !== interaction.channel.id)
-			await webhook.edit({ channel: interaction.channel.id });
+		if (webhook.channelId !== interaction.channel.id) await webhook.edit({ channel: interaction.channel.id });
 
 		webhook.send({
 			avatarURL: user.displayAvatarURL(),

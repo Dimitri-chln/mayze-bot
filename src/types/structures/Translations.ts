@@ -6,8 +6,7 @@ import { sleep } from "../../utils/misc/sleep";
 export type Language = "fr" | "en";
 
 export default class Translations {
-	static readonly cache: Collection<string, TranslationsData> =
-		new Collection();
+	static readonly cache: Collection<string, TranslationsData> = new Collection();
 
 	readonly id: string;
 	readonly data: TranslationsData;
@@ -16,13 +15,10 @@ export default class Translations {
 		this.id = id;
 		this.data =
 			Translations.cache.get(this.id) ??
-			Util.config.LANGUAGES.reduce(
-				(data: TranslationsData, language: Language) => {
-					data[language] = { language, strings: {} };
-					return data;
-				},
-				{},
-			);
+			Util.config.LANGUAGES.reduce((data: TranslationsData, language: Language) => {
+				data[language] = { language, strings: {} };
+				return data;
+			}, {});
 	}
 
 	init(n: number = 0): Promise<this> {
@@ -49,9 +45,7 @@ export default class Translations {
 						if (!Util.config.LANGUAGES.includes(language)) continue;
 
 						for (let row = 1; row < data.length; row++) {
-							this.data[language].strings[data[row][0]] = (
-								...args: (string | boolean)[]
-							) => {
+							this.data[language].strings[data[row][0]] = (...args: (string | boolean)[]) => {
 								args = args.map((a) =>
 									a
 										? a
@@ -65,9 +59,7 @@ export default class Translations {
 										: a,
 								);
 
-								let text = data[row][column]
-									.replace(/\\n/g, "\n")
-									.replace(/\\t/g, "\t");
+								let text = data[row][column].replace(/\\n/g, "\n").replace(/\\t/g, "\t");
 
 								try {
 									text = JSON.parse(text);
@@ -75,20 +67,14 @@ export default class Translations {
 
 								if (typeof text !== "string") return text;
 
-								text = text.replace(
-									/\{\d+?\}/g,
-									(a) => args[parseInt(a.replace(/[{}]/g, "")) - 1] as string,
-								);
+								text = text.replace(/\{\d+?\}/g, (a) => args[parseInt(a.replace(/[{}]/g, "")) - 1] as string);
 
 								while (/\[\d+?\?[^\[\]]*?:[^\[\]]*?\]/gs.test(text)) {
-									text = text.replace(
-										/\[\d+?\?[^\[\]]*?:[^\[\]]*?\]/gs,
-										(a) => {
-											let m = a.match(/\[(\d+?)\?([^\[\]]*?):([^\[\]]*?)\]/s);
-											if (args[parseInt(m[1]) - 1]) return m[2];
-											else return m[3];
-										},
-									);
+									text = text.replace(/\[\d+?\?[^\[\]]*?:[^\[\]]*?\]/gs, (a) => {
+										let m = a.match(/\[(\d+?)\?([^\[\]]*?):([^\[\]]*?)\]/s);
+										if (args[parseInt(m[1]) - 1]) return m[2];
+										else return m[3];
+									});
 								}
 
 								text = text

@@ -11,8 +11,7 @@ const autocompleteHandler: AutocompleteHandler = {
 			type: "STRING",
 			filterType: "CONTAINS",
 			run: async (interaction, value) => {
-				const songs =
-					Util.musicPlayer.get(interaction.guild.id)?.songs?.slice(1) ?? [];
+				const songs = Util.musicPlayer.get(interaction.guild.id)?.songs?.slice(1) ?? [];
 
 				return songs.map((song, i) => {
 					return {

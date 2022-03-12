@@ -1,9 +1,5 @@
 import { EvolutionLine } from "../../utils/pokemon/pokemonEvolutionLine";
-import {
-	FormatType,
-	Variation,
-	VariationType,
-} from "../../utils/pokemon/pokemonInfo";
+import { FormatType, Variation, VariationType } from "../../utils/pokemon/pokemonInfo";
 import { Language } from "../structures/Translations";
 
 export interface RawPokemon {
@@ -52,11 +48,7 @@ export default interface Pokemon {
 		variation?: Variation,
 		format?: FormatType,
 	): string;
-	image(
-		shiny?: boolean,
-		variationType?: VariationType,
-		variation?: Variation,
-	): string;
+	image(shiny?: boolean, variationType?: VariationType, variation?: Variation): string;
 }
 
 interface RawPokemonNames {

@@ -36,13 +36,10 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
-		const member = interaction.guild.members.cache.get(
-			interaction.options.getUser("user", true).id,
-		);
+		const member = interaction.guild.members.cache.get(interaction.options.getUser("user", true).id);
 
 		if (
-			member.roles.highest.position >=
-				(interaction.member as GuildMember).roles.highest.position &&
+			member.roles.highest.position >= (interaction.member as GuildMember).roles.highest.position &&
 			interaction.user.id !== Util.owner.id
 		)
 			return interaction.followUp(translations.strings.not_allowed());
@@ -51,9 +48,7 @@ const command: Command = {
 
 		if (!member.roles.cache.has(jailedRole.id)) {
 			const unJailedRoles = member.roles.cache.filter((role) =>
-				interaction.guild.roles.cache.some(
-					(r) => r.name === role.name + " (Jailed)",
-				),
+				interaction.guild.roles.cache.some((r) => r.name === role.name + " (Jailed)"),
 			);
 			const jailedRoles = interaction.guild.roles.cache.filter((role) =>
 				member.roles.cache.some((r) => role.name === r.name + " (Jailed)"),
@@ -66,9 +61,7 @@ const command: Command = {
 			return interaction.followUp(translations.strings.jailed(member.user.tag));
 		} else {
 			const jailedRoles = member.roles.cache.filter((role) =>
-				interaction.guild.roles.cache.some(
-					(r) => role.name === r.name + " (Jailed)",
-				),
+				interaction.guild.roles.cache.some((r) => role.name === r.name + " (Jailed)"),
 			);
 			const unJailedRoles = interaction.guild.roles.cache.filter((role) =>
 				member.roles.cache.some((r) => r.name === role.name + " (Jailed)"),
@@ -78,9 +71,7 @@ const command: Command = {
 			await member.roles.add(unJailedRoles).catch(console.error);
 			await member.roles.remove(jailedRoles).catch(console.error);
 
-			return interaction.followUp(
-				translations.strings.unjailed(member.user.tag),
-			);
+			return interaction.followUp(translations.strings.unjailed(member.user.tag));
 		}
 	},
 };

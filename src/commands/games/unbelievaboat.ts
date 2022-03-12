@@ -52,10 +52,7 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const unbClient = new UnbClient(process.env.UNB_TOKEN);
 		const user = interaction.options.getUser("user", false) ?? interaction.user;
-		const unbUser = await unbClient.getUserBalance(
-			interaction.guild.id,
-			user.id,
-		);
+		const unbUser = await unbClient.getUserBalance(interaction.guild.id, user.id);
 
 		const subCommand = interaction.options.getSubcommand();
 

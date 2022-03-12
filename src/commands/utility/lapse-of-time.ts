@@ -39,30 +39,20 @@ const command: Command = {
 
 		const input = interaction.options.getString("date", true).trim();
 		const match =
-			input.match(
-				/^(\d{1,2})-(\d{1,2})-(\d+)(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/,
-			) ??
-			input.match(
-				/^(\d{1,2})\/(\d{1,2})\/(\d+)(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/,
-			);
+			input.match(/^(\d{1,2})-(\d{1,2})-(\d+)(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/) ??
+			input.match(/^(\d{1,2})\/(\d{1,2})\/(\d+)(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/);
 
 		const date = match
 			? new Date(
 					`${match[2]}-${match[1]}-${match[3]}${
-						match[4] && match[5]
-							? ` ${match[4]}:${match[5]}${match[6] ? `:${match[6]}` : ""}`
-							: ""
+						match[4] && match[5] ? ` ${match[4]}:${match[5]}${match[6] ? `:${match[6]}` : ""}` : ""
 					}`,
 			  )
 			: new Date(input);
-		if (!date.valueOf())
-			return interaction.followUp(translations.strings.invalid_date());
+		if (!date.valueOf()) return interaction.followUp(translations.strings.invalid_date());
 
 		const lapseOfTime = NOW - date.valueOf();
-		const lapseOfTimeString = formatTime(
-			Math.abs(lapseOfTime),
-			translations.language,
-		);
+		const lapseOfTimeString = formatTime(Math.abs(lapseOfTime), translations.language);
 
 		interaction.followUp(
 			translations.strings.response(

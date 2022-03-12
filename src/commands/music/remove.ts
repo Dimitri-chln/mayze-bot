@@ -41,8 +41,7 @@ const command: Command = {
 
 		const input = interaction.options.getString("songs", false);
 
-		if (input && !checkRegex.test(input))
-			return interaction.followUp(translations.strings.invalid_input());
+		if (input && !checkRegex.test(input)) return interaction.followUp(translations.strings.invalid_input());
 
 		const queue = Util.musicPlayer.get(interaction.guild.id);
 
@@ -51,9 +50,7 @@ const command: Command = {
 					.split(" ")
 					.map((part) => {
 						if (/\d+-\d+/.test(part)) {
-							const [, left, right] = part
-								.match(/(\d+)-(\d+)/)
-								.map((a) => parseInt(a));
+							const [, left, right] = part.match(/(\d+)-(\d+)/).map((a) => parseInt(a));
 
 							const start = Math.min(left, right);
 							const end = Math.max(left, right);
@@ -68,21 +65,12 @@ const command: Command = {
 			: [queue.songs.length - 1];
 
 		if (songIndexes.some((s) => s === 0 || s >= queue.songs.length))
-			return interaction.followUp(
-				translations.strings.invalid_numbers(
-					(queue.songs.length - 1).toString(),
-				),
-			);
+			return interaction.followUp(translations.strings.invalid_numbers((queue.songs.length - 1).toString()));
 
 		const songs = queue.remove(songIndexes);
 
 		interaction.followUp(
-			translations.strings.removed(
-				songs.length.toString(),
-				songs.length > 1,
-				songs.length === 1,
-				songs[0].name,
-			),
+			translations.strings.removed(songs.length.toString(), songs.length > 1, songs.length === 1, songs[0].name),
 		);
 	},
 };

@@ -11,8 +11,7 @@ const messageResponse: MessageResponse = {
 
 	run: async (message, translations) => {
 		const mentionned = message.mentions.users;
-		const { rows: afkUsers }: { rows: DatabaseAfkUser[] } =
-			await Util.database.query("SELECT * FROM afk");
+		const { rows: afkUsers }: { rows: DatabaseAfkUser[] } = await Util.database.query("SELECT * FROM afk");
 
 		afkUsers.forEach((afkUser) => {
 			if (mentionned.has(afkUser.user_id))
@@ -20,29 +19,18 @@ const messageResponse: MessageResponse = {
 					.send(
 						translations.strings.reply(
 							mentionned.get(afkUser.user_id).tag,
-							formatTime(
-								Date.now() - Date.parse(afkUser.timestamp),
-								translations.language,
-							),
+							formatTime(Date.now() - Date.parse(afkUser.timestamp), translations.language),
 							afkUser.message,
 						),
 					)
 					.catch(console.error);
 
-			if (
-				message.author.id === afkUser.user_id &&
-				Date.now() - Date.parse(afkUser.timestamp) > 60_000
-			) {
-				Util.database
-					.query("DELETE FROM afk WHERE user_id = $1", [message.author.id])
-					.catch(console.error);
+			if (message.author.id === afkUser.user_id && Date.now() - Date.parse(afkUser.timestamp) > 60_000) {
+				Util.database.query("DELETE FROM afk WHERE user_id = $1", [message.author.id]).catch(console.error);
 
 				message.react("👋").catch(console.error);
 
-				setTimeout(
-					() => message.reactions.cache.get("👋").remove().catch(console.error),
-					4_000,
-				);
+				setTimeout(() => message.reactions.cache.get("👋").remove().catch(console.error), 4_000);
 			}
 		});
 	},
