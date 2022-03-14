@@ -13,7 +13,7 @@ export default async function runCommand(command: Command, interaction: CommandI
 	const translations = (await new Translations("run-command").init()).data[language];
 	const commandTranslations = await new Translations(`cmd_${command.name}`).init();
 
-	if (interaction.channel.type === "DM") return interaction.followUp(translations.command_in_dm());
+	if (interaction.channel.type === "DM") return interaction.followUp(translations.strings.command_in_dm());
 
 	const NOW = Date.now();
 
