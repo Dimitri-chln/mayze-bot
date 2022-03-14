@@ -5,11 +5,17 @@ import Translations from "../../types/structures/Translations";
 import { DatabaseUpgrades } from "../../types/structures/Database";
 
 export default async function runCommand(command: Command, interaction: CommandInteraction) {
-	const language = Util.guildConfigs.get(interaction.guild.id).language;
-	const translations = (await new Translations("run-command").init()).data[language];
-	const NOW = Date.now();
+	const language =
+		interaction.channel.type === "DM"
+			? interaction.locale.slice(0, 2)
+			: Util.guildConfigs.get(interaction.guild.id).language;
 
+	const translations = (await new Translations("run-command").init()).data[language];
 	const commandTranslations = await new Translations(`cmd_${command.name}`).init();
+
+	if (interaction.channel.type === "DM") return interaction.followUp(translations.command_in_dm());
+
+	const NOW = Date.now();
 
 	// Check admin permissions
 	if (command.category === "admin" && interaction.user.id !== Util.owner.id) return;
