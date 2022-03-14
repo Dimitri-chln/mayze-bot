@@ -1,13 +1,13 @@
 import { CommandInteraction, GuildMember, Permissions } from "discord.js";
 import Util from "../../Util";
 import Command from "../../types/structures/Command";
-import Translations from "../../types/structures/Translations";
+import Translations, { Language } from "../../types/structures/Translations";
 import { DatabaseUpgrades } from "../../types/structures/Database";
 
 export default async function runCommand(command: Command, interaction: CommandInteraction) {
 	const language =
 		interaction.channel.type === "DM"
-			? interaction.locale.slice(0, 2)
+			? (interaction.locale.slice(0, 2) as Language)
 			: Util.guildConfigs.get(interaction.guild.id).language;
 
 	const translations = (await new Translations("run-command").init()).data[language];
