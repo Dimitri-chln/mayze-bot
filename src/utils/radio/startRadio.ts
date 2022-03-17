@@ -29,6 +29,7 @@ export default async function startRadio() {
 		inputType: source.type,
 		inlineVolume: true,
 	});
+	resource.volume.setVolumeLogarithmic(0.5);
 
 	audioPlayer.play(resource);
 
