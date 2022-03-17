@@ -58,7 +58,7 @@ export default class Queue {
 		joinVoiceChannel({
 			guildId: voiceChannel.guild.id,
 			channelId: voiceChannel.id,
-			adapterCreator: voiceChannel.guild.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator,
+			adapterCreator: voiceChannel.guild.voiceAdapterCreator,
 			selfDeaf: true,
 		});
 

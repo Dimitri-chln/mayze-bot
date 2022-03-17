@@ -15,6 +15,7 @@ import Event from "./types/structures/Event";
 
 import PlayDl from "play-dl";
 import AutocompleteHandler from "./types/structures/AutocompleteHandler";
+import startRadio from "./utils/radio/startRadio";
 
 // Database
 connectDatabase();
@@ -111,3 +112,6 @@ PlayDl.getFreeClientID().then((soundCloudClientId) => {
 		Util.client.login(process.env.TOKEN);
 	});
 });
+
+// Radio
+startRadio();
