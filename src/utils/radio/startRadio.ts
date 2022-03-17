@@ -1,11 +1,21 @@
 import Discord from "discord.js";
 import PlayDl from "play-dl";
-import { joinVoiceChannel, createAudioPlayer, createAudioResource, getVoiceConnection } from "@discordjs/voice";
+import {
+	joinVoiceChannel,
+	createAudioPlayer,
+	createAudioResource,
+	getVoiceConnection,
+	NoSubscriberBehavior,
+} from "@discordjs/voice";
 import Axios from "axios";
 
 export default async function startRadio() {
 	// Audio player creation
-	const audioPlayer = createAudioPlayer();
+	const audioPlayer = createAudioPlayer({
+		behaviors: {
+			noSubscriber: NoSubscriberBehavior.Play,
+		},
+	});
 	const CHANNEL_ID = "gamechops";
 
 	const res = await Axios.get(`https://www.youtube.com/c/${CHANNEL_ID}/live`);
