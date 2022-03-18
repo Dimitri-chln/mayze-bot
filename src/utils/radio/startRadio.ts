@@ -7,6 +7,7 @@ import {
 	getVoiceConnection,
 	NoSubscriberBehavior,
 	AudioPlayerStatus,
+	AudioResource,
 } from "@discordjs/voice";
 import Axios from "axios";
 
@@ -76,12 +77,16 @@ export default async function startRadio() {
 
 	radioClient.login(process.env.RADIO_TOKEN);
 
-	async function playLive(channelId: string) {
+	async function playLive(channelId: string): Promise<AudioResource | NodeJS.Timeout> {
 		const res = await Axios.get(`https://www.youtube.com/c/${channelId}/live`);
 		const [, liveURL] =
 			res.data.match(/<link rel="canonical" href="(https:\/\/www.youtube.com\/watch\?v=[\w-_]+)">/) ?? [];
 
-		if (!liveURL) return console.log(`${channelId} is not live`);
+		if (!liveURL) {
+			// If the channel isn't live at the moment try again after 15min
+			console.log(`${channelId} is not live`);
+			return setTimeout(() => playLive(channelId), 900_000);
+		}
 
 		const source = await PlayDl.stream(liveURL);
 		const resource = createAudioResource(source.stream, {
@@ -93,5 +98,7 @@ export default async function startRadio() {
 		audioPlayer.play(resource);
 
 		console.log("Radio started playing");
+
+		return resource;
 	}
 }
