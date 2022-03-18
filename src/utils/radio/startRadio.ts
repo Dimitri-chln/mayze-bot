@@ -6,32 +6,27 @@ import {
 	createAudioResource,
 	getVoiceConnection,
 	NoSubscriberBehavior,
+	AudioPlayerStatus,
 } from "@discordjs/voice";
 import Axios from "axios";
 
 export default async function startRadio() {
+	const CHANNEL_ID = "gamechops";
+
 	// Audio player creation
 	const audioPlayer = createAudioPlayer({
 		behaviors: {
 			noSubscriber: NoSubscriberBehavior.Play,
 		},
 	});
-	const CHANNEL_ID = "gamechops";
 
-	const res = await Axios.get(`https://www.youtube.com/c/${CHANNEL_ID}/live`);
-	const [, liveURL] =
-		res.data.match(/<link rel="canonical" href="(https:\/\/www.youtube.com\/watch\?v=[\w-_]+)">/) ?? [];
+	// Start playing the live video
+	playLive(CHANNEL_ID);
 
-	if (!liveURL) return console.log(`${CHANNEL_ID} is not live`);
-
-	const source = await PlayDl.stream(liveURL);
-	const resource = createAudioResource(source.stream, {
-		inputType: source.type,
-		inlineVolume: true,
+	// Restart playing the live video if in idle state
+	audioPlayer.on("stateChange", (oldState, newState) => {
+		if (newState.status === AudioPlayerStatus.Idle) playLive(CHANNEL_ID);
 	});
-	resource.volume.setVolumeLogarithmic(0.5);
-
-	audioPlayer.play(resource);
 
 	// Radio client creation
 	const intents = new Discord.Intents([
@@ -80,4 +75,23 @@ export default async function startRadio() {
 	});
 
 	radioClient.login(process.env.RADIO_TOKEN);
+
+	async function playLive(channelId: string) {
+		const res = await Axios.get(`https://www.youtube.com/c/${channelId}/live`);
+		const [, liveURL] =
+			res.data.match(/<link rel="canonical" href="(https:\/\/www.youtube.com\/watch\?v=[\w-_]+)">/) ?? [];
+
+		if (!liveURL) return console.log(`${channelId} is not live`);
+
+		const source = await PlayDl.stream(liveURL);
+		const resource = createAudioResource(source.stream, {
+			inputType: source.type,
+			inlineVolume: true,
+		});
+
+		resource.volume.setVolumeLogarithmic(0.5);
+		audioPlayer.play(resource);
+
+		console.log("Radio started playing");
+	}
 }
