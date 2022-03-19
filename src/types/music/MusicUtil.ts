@@ -57,7 +57,7 @@ export default class MusicUtil {
 		switch (await PlayDl.validate(search)) {
 			case "yt_video": {
 				const youtubeResult = (await PlayDl.video_info(search)).video_details;
-				if (!youtubeResult || youtubeResult.type !== "video") throw "InvalidYoutube";
+				if (!youtubeResult || youtubeResult.type !== "video") throw "InvalidYouTube";
 
 				const songData: SongData = {
 					title: youtubeResult.title,
@@ -146,7 +146,7 @@ export default class MusicUtil {
 				const youtubeResult = await PlayDl.playlist_info(url, {
 					incomplete: true,
 				});
-				if (!youtubeResult) throw "InvalidPlaylist";
+				if (!youtubeResult) throw "InvalidYouTubePlaylist";
 
 				const playlistData: PlaylistData = {
 					title: youtubeResult.title,
@@ -184,7 +184,7 @@ export default class MusicUtil {
 			case "sp_album": {
 				const spotifyResult = await PlayDl.spotify(url);
 				if (!spotifyResult || (!isSpotifyPlaylist(spotifyResult) && !isSpotifyAlbum(spotifyResult)))
-					throw "InvalidPlaylist";
+					throw "InvalidSpotifyPlaylist";
 
 				const playlistData: PlaylistData = {
 					title: spotifyResult.name,
@@ -200,7 +200,7 @@ export default class MusicUtil {
 								if (limit !== -1 && index >= limit) return;
 
 								try {
-									const result = await this.search(`${track.artists[0].name} - ${track.name}`, queue, requestedBy);
+									const result = await this.search(track.url, queue, requestedBy);
 
 									return result;
 								} catch (err) {
@@ -219,7 +219,8 @@ export default class MusicUtil {
 			case "dz_playlist":
 			case "dz_album": {
 				const deezerResult = await PlayDl.deezer(url);
-				if (!deezerResult || (!isDeezerPlaylist(deezerResult) && !isDeezerAlbum(deezerResult))) throw "InvalidPlaylist";
+				if (!deezerResult || (!isDeezerPlaylist(deezerResult) && !isDeezerAlbum(deezerResult)))
+					throw "InvalidDeezerPlaylist";
 
 				const playlistData: PlaylistData = {
 					title: deezerResult.title,
@@ -235,7 +236,7 @@ export default class MusicUtil {
 								if (limit !== -1 && index >= limit) return;
 
 								try {
-									const result = await this.search(`${track.artist.name} - ${track.title}`, queue, requestedBy);
+									const result = await this.search(track.url, queue, requestedBy);
 
 									return result;
 								} catch (err) {
@@ -253,7 +254,7 @@ export default class MusicUtil {
 
 			case "so_playlist": {
 				const soundcloudResult = await PlayDl.soundcloud(url);
-				if (!soundcloudResult || !isSoundCloudPlaylist(soundcloudResult)) throw "InvalidPlaylist";
+				if (!soundcloudResult || !isSoundCloudPlaylist(soundcloudResult)) throw "InvalidSoundCloudPlaylist";
 
 				const playlistData: PlaylistData = {
 					title: soundcloudResult.name,
