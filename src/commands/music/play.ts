@@ -67,7 +67,8 @@ const command: Command = {
 			case "sp_playlist":
 			case "sp_album":
 			case "dz_playlist":
-			case "dz_album": {
+			case "dz_album":
+			case "so_playlist": {
 				// If the link is a playlist
 				const playlist = await queue.playlist(search, interaction.member as GuildMember, {
 					shuffle,
