@@ -10,6 +10,9 @@ import PlayDl, {
 	DeezerAlbum,
 	DeezerPlaylist,
 	DeezerTrack,
+	SoundCloud,
+	SoundCloudPlaylist,
+	SoundCloudTrack,
 	Spotify,
 	SpotifyAlbum,
 	SpotifyPlaylist,
@@ -39,6 +42,14 @@ function isDeezerPlaylist(result: Deezer): result is DeezerPlaylist {
 
 function isDeezerAlbum(result: Deezer): result is DeezerAlbum {
 	return result.type === "album";
+}
+
+function isSoundCloudTrack(result: SoundCloud): result is SoundCloudTrack {
+	return result.type === "track";
+}
+
+function isSoundCloudPlaylist(result: SoundCloud): result is SoundCloudPlaylist {
+	return result.type === "playlist";
 }
 
 export default class MusicUtil {
@@ -74,6 +85,24 @@ export default class MusicUtil {
 				if (!deezerResult || !isDeezerTrack(deezerResult)) throw "InvalidDeezer";
 
 				return this.search(`${deezerResult.artist.name} - ${deezerResult.title}`, queue, requestedBy);
+			}
+
+			case "so_track": {
+				const soundcloudResult = await PlayDl.soundcloud(search);
+				if (!soundcloudResult || !isSoundCloudTrack(soundcloudResult)) throw "InvalidSoundCloud";
+
+				const songData: SongData = {
+					title: soundcloudResult.name,
+					duration: soundcloudResult.durationInMs,
+					channel: {
+						name: soundcloudResult.user.name,
+					},
+					url: soundcloudResult.url,
+					thumbnail: soundcloudResult.thumbnail,
+					live: false,
+				};
+
+				return new Song(songData, queue, requestedBy);
 			}
 
 			case "search": {
@@ -207,6 +236,40 @@ export default class MusicUtil {
 
 								try {
 									const result = await this.search(`${track.artist.name} - ${track.title}`, queue, requestedBy);
+
+									return result;
+								} catch (err) {
+									return;
+								}
+							}),
+						)
+					).filter((v) => v),
+				};
+
+				if (shuffle) playlistData.videos = this.shuffle(playlistData.videos);
+
+				return new Playlist(playlistData, queue, requestedBy);
+			}
+
+			case "so_playlist": {
+				const soundcloudResult = await PlayDl.soundcloud(url);
+				if (!soundcloudResult || !isSoundCloudPlaylist(soundcloudResult)) throw "InvalidPlaylist";
+
+				const playlistData: PlaylistData = {
+					title: soundcloudResult.name,
+					channel: {
+						name: soundcloudResult.user.name,
+					},
+					url,
+					videos: (
+						await Promise.all(
+							(
+								await soundcloudResult.all_tracks()
+							).map(async (track, index) => {
+								if (limit !== -1 && index >= limit) return;
+
+								try {
+									const result = await this.search(track.url, queue, requestedBy);
 
 									return result;
 								} catch (err) {
