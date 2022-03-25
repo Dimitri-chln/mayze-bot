@@ -6,15 +6,15 @@ import Util from "./Util";
 import Fs from "fs";
 import Path from "path";
 import Discord from "discord.js";
+import PlayDl from "play-dl";
 
-import connectDatabase from "./utils/misc/connectDatabase";
 import Command from "./types/structures/Command";
 import MessageResponse from "./types/structures/MessageResponse";
 import ReactionCommand from "./types/structures/ReactionCommand";
 import Event from "./types/structures/Event";
-
-import PlayDl from "play-dl";
 import AutocompleteHandler from "./types/structures/AutocompleteHandler";
+
+import connectDatabase from "./utils/misc/connectDatabase";
 import startRadio from "./utils/radio/startRadio";
 
 // Database
@@ -94,8 +94,8 @@ autocompleteHandlerFiles.forEach((file) => {
 	Util.autocompleteHandlers.set(autocompleteHandler.name, autocompleteHandler);
 });
 
-PlayDl.getFreeClientID().then((soundCloudClientId) => {
-	PlayDl.setToken({
+PlayDl.getFreeClientID().then(async (soundCloudClientId) => {
+	await PlayDl.setToken({
 		youtube: {
 			cookie: process.env.YOUTUBE_COOKIE,
 		},
@@ -108,9 +108,9 @@ PlayDl.getFreeClientID().then((soundCloudClientId) => {
 		soundcloud: {
 			client_id: soundCloudClientId,
 		},
-	}).then(() => {
-		Util.client.login(process.env.TOKEN);
 	});
+
+	Util.client.login(process.env.TOKEN);
 });
 
 // Radio
