@@ -203,7 +203,7 @@ const command: Command = {
 							},
 						],
 						allowedMentions: {
-							roles: [ingameRole.id],
+							parse: ["roles"],
 						},
 					})
 					.catch(console.error)) as Message;
