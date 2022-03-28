@@ -408,7 +408,9 @@ const command: Command = {
 								},
 								color: interaction.guild.me.displayColor,
 								description: ingameRole.members.size
-									? ingameRole.members.map((m, i) => `\`${i + 1}.\` ${m.user.tag}`).join("\n")
+									? Array.from(ingameRole.members)
+											.map(([, m], i) => `\`${i + 1}.\` ${m.user.tag}`)
+											.join("\n")
 									: translations.strings.no_player(),
 								footer: {
 									text: "🐺 Mayze 🐺",
