@@ -9,10 +9,10 @@ export interface DatabaseAfkUser {
 }
 
 export enum CanvasOwnerType {
-	"EVERYONE",
-	"GUILD",
-	"CHANNEL",
-	"USER",
+	EVERYONE = 1,
+	GUILD = 2,
+	CHANNEL = 3,
+	USER = 4,
 }
 
 export interface DatabaseCanvas {
@@ -26,9 +26,9 @@ export interface DatabaseCanvas {
 }
 
 export enum ClanMemberRank {
-	"MEMBER",
-	"CO-LEADER",
-	"LEADER",
+	MEMBER = 1,
+	CO_LEADER = 2,
+	LEADER = 3,
 }
 
 export interface DatabaseClanMember {
@@ -52,11 +52,11 @@ export interface DatabaseUserMoney {
 }
 
 export enum TriggerType {
-	"CONTAINS",
-	"EQUAL",
-	"REGEX",
-	"STARTS_WITH",
-	"ENDS_WITH",
+	CONTAINS = 1,
+	EQUAL = 2,
+	REGEX = 3,
+	STARTS_WITH = 4,
+	ENDS_WITH = 5,
 }
 
 export interface DatabaseCustomResponse {

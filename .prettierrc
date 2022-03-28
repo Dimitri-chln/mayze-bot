@@ -4,6 +4,7 @@
 	"semi": true,
 	"singleQuote": false,
 	"arrowParens": "always",
+	"quoteProps": "consistent",
 	"useTabs": true,
 	"printWidth": 120
 }

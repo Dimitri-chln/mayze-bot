@@ -42,23 +42,23 @@ const command: Command = {
 						choices: [
 							{
 								name: "Contient",
-								value: 0,
-							},
-							{
-								name: "Égal à",
 								value: 1,
 							},
 							{
-								name: "Regex",
+								name: "Égal à",
 								value: 2,
 							},
 							{
-								name: "Commence par",
+								name: "Regex",
 								value: 3,
 							},
 							{
-								name: "Finit par",
+								name: "Commence par",
 								value: 4,
+							},
+							{
+								name: "Finit par",
+								value: 5,
 							},
 						],
 					},
@@ -110,23 +110,23 @@ const command: Command = {
 						choices: [
 							{
 								name: "Contains",
-								value: 0,
-							},
-							{
-								name: "Equal to",
 								value: 1,
 							},
 							{
-								name: "Regex",
+								name: "Equal to",
 								value: 2,
 							},
 							{
-								name: "Starts with",
+								name: "Regex",
 								value: 3,
 							},
 							{
-								name: "Ends with",
+								name: "Starts with",
 								value: 4,
+							},
+							{
+								name: "Ends with",
+								value: 5,
 							},
 						],
 					},
