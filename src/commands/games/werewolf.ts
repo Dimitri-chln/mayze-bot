@@ -202,6 +202,9 @@ const command: Command = {
 								],
 							},
 						],
+						allowedMentions: {
+							roles: [ingameRole.id],
+						},
 					})
 					.catch(console.error)) as Message;
 
@@ -225,8 +228,10 @@ const command: Command = {
 							ephemeral: true,
 						});
 					} else {
-						playingMembers.set(interaction.user.id, interaction.member as GuildMember);
-						buttonInteraction.reply(translations.strings.playing(interaction.user.tag, playingMembers.size.toString()));
+						playingMembers.set(buttonInteraction.user.id, buttonInteraction.member as GuildMember);
+						buttonInteraction.reply(
+							translations.strings.playing(buttonInteraction.user.tag, playingMembers.size.toString()),
+						);
 					}
 				});
 
