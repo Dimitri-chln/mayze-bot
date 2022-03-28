@@ -33,11 +33,16 @@ const messageResponse: MessageResponse = {
 							author: {
 								name: message.author.tag,
 								iconURL: message.author.displayAvatarURL({ dynamic: true }),
-								url: message.url,
 							},
 							title: `#${(message.channel as TextChannel).name}`,
 							color: message.guild.me.displayColor,
 							description: message.content,
+							fields: [
+								{
+									name: "\u200b",
+									value: translations.strings.link(message.url),
+								},
+							],
 							image: {
 								url: message.attachments.first()?.url,
 							},
