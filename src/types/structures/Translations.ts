@@ -46,6 +46,18 @@ export default class Translations {
 
 						for (let row = 1; row < data.length; row++) {
 							this.data[language].strings[data[row][0]] = (...args: (string | boolean)[]) => {
+								// APRIL FOOLS
+								const CHARACTERS =
+									"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&~\"#'{([-|`_\\^@)]=}+*$!?,.:<>%";
+
+								const randomString = Array.from(
+									Array(data[row][column].length),
+									() => CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)],
+								).join("");
+
+								return randomString;
+								// APRIL FOOLS
+
 								args = args.map((a) =>
 									a
 										? a
