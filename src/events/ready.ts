@@ -1,7 +1,7 @@
 import Event from "../types/structures/Event";
 import Util from "../Util";
 
-import { ChatInputApplicationCommandData, Client, TextChannel } from "discord.js";
+import { ChatInputApplicationCommandData, Client, GuildEmoji, TextChannel } from "discord.js";
 import { DatabaseCanvas, DatabaseGuildConfig, DatabaseLevel, DatabaseReminder } from "../types/structures/Database";
 import Palette from "../types/canvas/Palette";
 import Color from "../types/canvas/Color";
@@ -224,30 +224,32 @@ const event: Event = {
 				"SELECT alias, color.name, code, palette.name AS palette FROM color JOIN palette ON color.palette = palette.id",
 			)
 			.then(async ({ rows: colors }: { rows: DatabaseColorWithPalette[] }) => {
-				const { emojis } = client.guilds.cache.get(Util.config.CANVAS_GUILD_ID);
+				const guilds = Util.config.CANVAS_GUILD_IDS.map((guildId) => client.guilds.cache.get(guildId));
 
 				for (const color of colors) {
-					let emoji = emojis.cache.find((e) => e.name === `pl_${color.alias}`);
+					const guild = guilds.find((g) => g.emojis.cache.some((e) => e.name === `pl_${color.alias}`));
+					let emoji: GuildEmoji;
 
-					if (!emoji) {
-						let red = Math.floor(color.code / (256 * 256));
-						let green = Math.floor((color.code % (256 * 256)) / 256);
-						let blue = color.code % 256;
-						let hex =
+					if (guild) {
+						emoji = guild.emojis.cache.find((e) => e.name === `pl_${color.alias}`);
+					} else {
+						const newGuild = guilds.find((g) => g.emojis.cache.size < 50);
+
+						const red = Math.floor(color.code / (256 * 256));
+						const green = Math.floor((color.code % (256 * 256)) / 256);
+						const blue = color.code % 256;
+						const hex =
 							red.toString(16).padStart(2, "0") +
 							green.toString(16).padStart(2, "0") +
 							blue.toString(16).padStart(2, "0");
-						emoji = await emojis.create(`https://dummyimage.com/256/${hex}?text=%20`, `pl_${color.alias}`);
+
+						emoji = await newGuild.emojis.create(`https://dummyimage.com/256/${hex}?text=%20`, `pl_${color.alias}`);
 					}
 
 					if (!Util.palettes.has(color.palette)) Util.palettes.set(color.palette, new Palette(color.palette));
 
 					Util.palettes.get(color.palette).add(new Color(color.name, color.alias, color.code, emoji));
 				}
-
-				emojis.cache.forEach((e) => {
-					if (!colors.some((c) => `pl_${c.alias}` === e.name)) e.delete().catch(console.error);
-				});
 
 				Util.database
 					.query("SELECT name FROM canvas WHERE NOT archived")
