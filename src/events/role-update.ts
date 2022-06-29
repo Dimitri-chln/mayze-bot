@@ -2,6 +2,7 @@ import Event from "../types/structures/Event";
 import Util from "../Util";
 
 import { Role, TextChannel } from "discord.js";
+import groupArrayBy from "../utils/misc/groupArrayBy";
 
 const event: Event = {
 	name: "roleUpdate",
@@ -29,7 +30,7 @@ const event: Event = {
 					},
 					color: Util.config.MAIN_COLOR,
 					description: Array.from(colorRoles)
-						.map(([, role], i) => `\`${i + 1}.\`${role.toString()}`)
+						.map(([, role], i) => `\`${i + 1}.\` ${role.toString()}`)
 						.join("\n"),
 					footer: {
 						text: "✨ Mayze ✨",

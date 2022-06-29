@@ -1,4 +1,4 @@
-export default function groupArrayBy(array: any[], n: number): any[][] {
+export default function groupArrayBy(array: Array<T>, n: number): Array<T[]> {
 	const groups = [[]];
 
 	for (let i = 0, j = 0; i < array.length; i++) {
@@ -11,3 +11,5 @@ export default function groupArrayBy(array: any[], n: number): any[][] {
 
 	return groups;
 }
+
+type T = any;
