@@ -8,8 +8,8 @@ const command: Command = {
 	name: "color",
 	aliases: [],
 	description: {
-		fr: "Tester et visualiser des codes couleurs hexadécimaux",
-		en: "Test and visualize hexadecimal color codes",
+		fr: "Modifier la couleur de ton pseudo",
+		en: "Modify the color of your nickname",
 	},
 	usage: "",
 	userPermissions: [],
