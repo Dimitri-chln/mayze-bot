@@ -19,7 +19,7 @@ const event: Event = {
 
 		const colorRoles = newRole.guild.roles.cache
 			.filter((role) => role.rawPosition > bottomRole.rawPosition && role.rawPosition < topRole.rawPosition)
-			.sort((a, b) => b.position - a.position);
+			.sort((a, b) => b.rawPosition - a.rawPosition);
 
 		message.edit({
 			embeds: [
