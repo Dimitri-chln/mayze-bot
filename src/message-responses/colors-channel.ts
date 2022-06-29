@@ -6,7 +6,7 @@ const messageResponse: MessageResponse = {
 
 	run: async (message, translations) => {
 		if (message.channel.id !== Util.config.COLORS_CHANNEL_ID) return;
-		if (message.embeds.length && message.embeds[0].title === "Couleurs disponibles") return;
+		if (message.embeds.length && message.embeds[0]?.author?.name === "Couleurs disponibles") return;
 
 		if (message.deletable) message.delete();
 	},
