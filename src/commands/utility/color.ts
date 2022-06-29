@@ -52,7 +52,7 @@ const command: Command = {
 		await (interaction.member as GuildMember).roles.remove(colorRoles);
 		await (interaction.member as GuildMember).roles.add(role);
 
-		interaction.followUp(translations.strings.updated());
+		interaction.followUp({ content: translations.strings.updated(), ephemeral: true });
 	},
 };
 
