@@ -9,10 +9,7 @@ const messageResponse: MessageResponse = {
 	run: async (message, translations) => {
 		if (message.channel.id !== Util.config.COLORS_CHANNEL_ID) return;
 
-		if (message.deletable) {
-			await sleep(4_000);
-			message.delete();
-		}
+		if (message.deletable) message.delete();
 	},
 };
 
