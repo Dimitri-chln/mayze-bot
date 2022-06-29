@@ -15,6 +15,7 @@ const command: Command = {
 	userPermissions: [],
 	botPermissions: ["EMBED_LINKS"],
 	guildIds: [Util.config.MAIN_GUILD_ID],
+	ephemeralReply: true,
 
 	options: {
 		fr: [

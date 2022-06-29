@@ -16,10 +16,11 @@ const event: Event = {
 
 			case "APPLICATION_COMMAND": {
 				if (interaction.isCommand()) {
-					await interaction.deferReply();
-
 					const command = Util.commands.get(interaction.commandName);
-					if (command) runCommand(command, interaction).catch(console.error);
+					if (!command) return;
+
+					await interaction.deferReply({ ephemeral: command.ephemeralReply });
+					runCommand(command, interaction).catch(console.error);
 				}
 
 				if (interaction.isContextMenu()) {
