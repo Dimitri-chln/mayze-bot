@@ -15,8 +15,8 @@ const autocompleteHandler: AutocompleteHandler = {
 				const bottomRole = interaction.guild.roles.cache.get("735809874205737020");
 
 				const roles = interaction.guild.roles.cache
-					.filter((role) => role.position > bottomRole.position && role.position < topRole.position)
-					.sort((a, b) => b.position - a.position);
+					.filter((role) => role.rawPosition > bottomRole.rawPosition && role.rawPosition < topRole.rawPosition)
+					.sort((a, b) => b.rawPosition - a.rawPosition);
 
 				return roles.map((role) => {
 					return {

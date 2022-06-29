@@ -46,7 +46,7 @@ const command: Command = {
 		const bottomRole = interaction.guild.roles.cache.get("735809874205737020");
 
 		const colorRoles = interaction.guild.roles.cache.filter(
-			(role) => role.position > bottomRole.position && role.position < topRole.position,
+			(role) => role.rawPosition > bottomRole.rawPosition && role.rawPosition < topRole.rawPosition,
 		);
 
 		await (interaction.member as GuildMember).roles.remove(colorRoles);

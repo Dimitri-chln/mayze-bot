@@ -18,7 +18,7 @@ const event: Event = {
 		const bottomRole = newRole.guild.roles.cache.get("735809874205737020");
 
 		const colorRoles = newRole.guild.roles.cache
-			.filter((role) => role.position > bottomRole.position && role.position < topRole.position)
+			.filter((role) => role.rawPosition > bottomRole.rawPosition && role.rawPosition < topRole.rawPosition)
 			.sort((a, b) => b.position - a.position);
 
 		message.edit({
