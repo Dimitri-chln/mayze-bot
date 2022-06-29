@@ -1,8 +1,6 @@
 import MessageResponse from "../types/structures/MessageResponse";
 import Util from "../Util";
 
-import { sleep } from "../utils/misc/sleep";
-
 const messageResponse: MessageResponse = {
 	name: "colors-channel",
 
