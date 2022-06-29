@@ -2,7 +2,6 @@ import Event from "../types/structures/Event";
 import Util from "../Util";
 
 import { Role, TextChannel } from "discord.js";
-import groupArrayBy from "../utils/misc/groupArrayBy";
 
 const event: Event = {
 	name: "roleUpdate",
