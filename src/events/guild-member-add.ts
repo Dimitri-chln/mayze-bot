@@ -13,7 +13,13 @@ const event: Event = {
 		if (member.user.bot) return;
 		if (!member.guild.me.permissions.has("MANAGE_ROLES")) return;
 
-		let roleIds = ["735809874205737020", "735810286719598634", "735810462872109156", "759694957132513300"];
+		let roleIds = [
+			"818531980480086086", // Couleurs
+			"735809874205737020", // Clan
+			"735810286719598634", // Ranks
+			"735810462872109156", // Rôles custom
+			"759694957132513300", // Loup garou
+		];
 
 		const {
 			rows: [memberRoles],
