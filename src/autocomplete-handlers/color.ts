@@ -18,9 +18,9 @@ const autocompleteHandler: AutocompleteHandler = {
 					.filter((role) => role.rawPosition > bottomRole.rawPosition && role.rawPosition < topRole.rawPosition)
 					.sort((a, b) => b.rawPosition - a.rawPosition);
 
-				return roles.map((role) => {
+				return Array.from(roles).map(([, role], i) => {
 					return {
-						name: role.name,
+						name: `${i + 1} - ${role.name}`,
 						value: role.id,
 					};
 				});
