@@ -1,14 +1,12 @@
 import {
 	ApplicationCommandOptionData,
-	Awaitable,
 	Collection,
 	CommandInteraction,
 	Message,
 	PermissionString,
 	Snowflake,
 } from "discord.js";
-import Util from "../../Util";
-import Translations, { LanguageTranslationsData } from "./Translations";
+import { LanguageTranslationsData } from "./Translations";
 
 interface CommandDescription {
 	fr: string;
@@ -32,6 +30,7 @@ export default interface Command {
 	readonly usage?: string;
 	readonly cooldown?: number;
 	readonly guildIds?: Snowflake[];
+	readonly ephemeralReply?: boolean;
 	path?: string;
 	category?: string;
 	cooldowns?: Collection<Snowflake, number>;
