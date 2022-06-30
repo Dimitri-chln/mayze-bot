@@ -2,8 +2,8 @@ import Util from "../../Util";
 import { TextChannel } from "discord.js";
 
 export default async function updateColorRoles() {
-	const channel = Util.mainGuild.channels.cache.get(Util.config.COLORS_CHANNEL_ID) as TextChannel;
-	const message = await channel.messages.fetch(Util.config.COLORS_MESSAGE_ID);
+	const channel = Util.mainGuild.channels.cache.get(Util.config.COLOR_CHANNEL_ID) as TextChannel;
+	const message = await channel.messages.fetch(Util.config.COLOR_MESSAGE_ID);
 
 	message.edit({
 		embeds: [
