@@ -1,7 +1,7 @@
 import Event from "../types/structures/Event";
 import Util from "../Util";
 
-import { Interaction } from "discord.js";
+import { GuildMember, Interaction } from "discord.js";
 import runCommand from "../utils/misc/runCommand";
 
 const event: Event = {
@@ -75,6 +75,21 @@ const event: Event = {
 			}
 
 			case "MESSAGE_COMPONENT": {
+				if (interaction.isSelectMenu()) {
+					if (interaction.customId.startsWith("color_select_menu")) {
+						// Collègues
+						if ((interaction.member as GuildMember).roles.cache.has("689169136374644752"))
+							return interaction.followUp({ content: "T'es puni", ephemeral: true });
+
+						const roleId = interaction.values[0];
+						const role = interaction.guild.roles.cache.get(roleId);
+
+						await (interaction.member as GuildMember).roles.remove(Util.colorRoles);
+						await (interaction.member as GuildMember).roles.add(role);
+
+						interaction.reply({ content: "Ta couleur a été modifiée avec succès", ephemeral: true });
+					}
+				}
 				break;
 			}
 		}

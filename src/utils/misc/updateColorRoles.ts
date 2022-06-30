@@ -47,10 +47,10 @@ export default async function updateColorRoles() {
 					{
 						type: "SELECT_MENU",
 						customId: `color_select_menu_${i}`,
-						placeholder: "Choisis une couleur",
-						options: roleGroup.map((role) => {
+						placeholder: `Couleurs ${25 * i + 1} à ${25 * i + 25}`,
+						options: roleGroup.map((role, j) => {
 							return {
-								label: role.name,
+								label: `${25 * i + j + 1} - ${role.name}`,
 								value: role.id,
 							};
 						}),
