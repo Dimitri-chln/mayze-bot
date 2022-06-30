@@ -39,6 +39,11 @@ const command: Command = {
 	},
 
 	runInteraction: async (interaction, translations) => {
+		if ((interaction.member as GuildMember).roles.cache.has("689169136374644752")) {
+			interaction.followUp({ content: "T'es puni", ephemeral: true });
+			return;
+		}
+
 		const roleId = interaction.options.getString("name", true);
 		const role = interaction.guild.roles.cache.get(roleId);
 
