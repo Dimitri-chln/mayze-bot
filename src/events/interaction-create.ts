@@ -87,7 +87,10 @@ const event: Event = {
 						await (interaction.member as GuildMember).roles.remove(Util.colorRoles);
 						await (interaction.member as GuildMember).roles.add(role);
 
-						interaction.reply({ content: "Ta couleur a été modifiée avec succès", ephemeral: true });
+						interaction.reply({
+							content: `Ta couleur a été modifiée en ${role.toString()} avec succès`,
+							ephemeral: true,
+						});
 					}
 				}
 				break;
