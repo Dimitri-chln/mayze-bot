@@ -131,6 +131,8 @@ export default class Util {
 			}
 		});
 
+		colorGroups.push(colorGroup);
+
 		return colorGroups;
 	}
 }
