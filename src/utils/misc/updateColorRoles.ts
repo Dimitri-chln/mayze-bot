@@ -13,11 +13,18 @@ export default async function updateColorRoles() {
 					iconURL: Util.mainGuild.iconURL({ dynamic: true }),
 				},
 				color: Util.config.MAIN_COLOR,
-				fields: Util.colorGroups.map((group, i) => {
+				fields: Util.colorGroups.map((group) => {
 					return {
 						name: "\u200b",
-						value: Array.from(group)
-							.map(([, role], j) => `\`${i + j + 1}.\` ${role.toString()}`)
+						value: group
+							.map(
+								(role) =>
+									`\`${
+										Array.from(Util.colorRoles)
+											.map((r) => r[0])
+											.indexOf(role.id) + 1
+									}.\` ${role.toString()}`,
+							)
 							.join("\n"),
 						inline: true,
 					};
