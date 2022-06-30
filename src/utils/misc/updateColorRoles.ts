@@ -47,7 +47,7 @@ export default async function updateColorRoles() {
 					{
 						type: "SELECT_MENU",
 						customId: `color_select_menu_${i}`,
-						placeholder: `Couleurs ${25 * i + 1} à ${25 * i + 25}`,
+						placeholder: `Couleurs ${25 * i + 1} à ${25 * i + roleGroup.length}`,
 						options: roleGroup.map((role, j) => {
 							return {
 								label: `${25 * i + j + 1} - ${role.name}`,
