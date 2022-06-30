@@ -124,14 +124,14 @@ export default class Util {
 
 		colorRoles.forEach((role) => {
 			if (role.name === "──────────") {
-				colorGroups.push(colorGroup);
+				colorGroups.push(colorGroup.clone());
 				colorGroup.clear();
 			} else {
 				colorGroup.set(role.id, role);
 			}
 		});
 
-		colorGroups.push(colorGroup);
+		colorGroups.push(colorGroup.clone());
 
 		return colorGroups;
 	}
