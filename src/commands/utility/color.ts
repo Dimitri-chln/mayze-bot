@@ -42,14 +42,7 @@ const command: Command = {
 		const roleId = interaction.options.getString("name", true);
 		const role = interaction.guild.roles.cache.get(roleId);
 
-		const topRole = interaction.guild.roles.cache.get("818531980480086086");
-		const bottomRole = interaction.guild.roles.cache.get("735809874205737020");
-
-		const colorRoles = interaction.guild.roles.cache.filter(
-			(role) => role.rawPosition > bottomRole.rawPosition && role.rawPosition < topRole.rawPosition,
-		);
-
-		await (interaction.member as GuildMember).roles.remove(colorRoles);
+		await (interaction.member as GuildMember).roles.remove(Util.colorRoles);
 		await (interaction.member as GuildMember).roles.add(role);
 
 		interaction.followUp({ content: translations.strings.updated(), ephemeral: true });

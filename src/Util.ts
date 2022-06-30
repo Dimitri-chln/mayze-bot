@@ -90,6 +90,21 @@ export default class Util {
 	static readonly amongUsGames: Collection<Snowflake, AmongUsGame> = new Collection();
 	static readonly russianRouletteGames: Collection<Snowflake, RussianRouletteGame> = new Collection();
 	static readonly werewolfGames: Collection<Snowflake, Game> = new Collection();
+
+	static get mainGuild() {
+		return this.client.guilds.cache.get(this.config.MAIN_GUILD_ID);
+	}
+
+	static get colorRoles() {
+		const topRole = this.mainGuild.roles.cache.get("818531980480086086");
+		const bottomRole = this.mainGuild.roles.cache.get("735809874205737020");
+
+		const colorRoles = this.mainGuild.roles.cache
+			.filter((role) => role.rawPosition > bottomRole.rawPosition && role.rawPosition < topRole.rawPosition)
+			.sort((a, b) => b.rawPosition - a.rawPosition);
+
+		return colorRoles;
+	}
 }
 
 interface GuildConfig {
