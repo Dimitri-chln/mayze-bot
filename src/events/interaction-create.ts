@@ -79,7 +79,7 @@ const event: Event = {
 					if (interaction.customId.startsWith("color_select_menu")) {
 						// Collègues
 						if ((interaction.member as GuildMember).roles.cache.has("689169136374644752"))
-							return interaction.followUp({ content: "T'es puni", ephemeral: true });
+							return interaction.reply({ content: "Désolé, tu es puni", ephemeral: true });
 
 						const roleId = interaction.values[0];
 						const role = interaction.guild.roles.cache.get(roleId);
