@@ -100,10 +100,38 @@ export default class Util {
 		const bottomRole = this.mainGuild.roles.cache.get("735809874205737020");
 
 		const colorRoles = this.mainGuild.roles.cache
-			.filter((role) => role.rawPosition > bottomRole.rawPosition && role.rawPosition < topRole.rawPosition)
+			.filter(
+				(role) =>
+					role.rawPosition > bottomRole.rawPosition &&
+					role.rawPosition < topRole.rawPosition &&
+					role.name !== "──────────",
+			)
 			.sort((a, b) => b.rawPosition - a.rawPosition);
 
 		return colorRoles;
+	}
+
+	static get colorGroups() {
+		const topRole = this.mainGuild.roles.cache.get("818531980480086086");
+		const bottomRole = this.mainGuild.roles.cache.get("735809874205737020");
+
+		const colorRoles = this.mainGuild.roles.cache
+			.filter((role) => role.rawPosition > bottomRole.rawPosition && role.rawPosition < topRole.rawPosition)
+			.sort((a, b) => b.rawPosition - a.rawPosition);
+
+		const colorGroups: typeof colorRoles[] = [];
+		let colorGroup: typeof colorRoles = new Collection();
+
+		colorRoles.forEach((role) => {
+			if (role.name === "──────────") {
+				colorGroups.push(colorGroup);
+				colorGroup.clear();
+			} else {
+				colorGroup.set(role.id, role);
+			}
+		});
+
+		return colorGroups;
 	}
 }
 
