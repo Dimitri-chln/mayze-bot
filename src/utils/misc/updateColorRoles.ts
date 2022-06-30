@@ -1,9 +1,15 @@
 import Util from "../../Util";
-import { TextChannel } from "discord.js";
+import { Role, TextChannel } from "discord.js";
+import groupArrayBy from "./groupArrayBy";
 
 export default async function updateColorRoles() {
 	const channel = Util.mainGuild.channels.cache.get(Util.config.COLOR_CHANNEL_ID) as TextChannel;
 	const message = await channel.messages.fetch(Util.config.COLOR_MESSAGE_ID);
+
+	const colorRolesGroups: Role[][] = groupArrayBy(
+		Array.from(Util.colorRoles).map((r) => r[1]),
+		25,
+	);
 
 	message.edit({
 		embeds: [
@@ -34,5 +40,23 @@ export default async function updateColorRoles() {
 				},
 			},
 		],
+		components: colorRolesGroups.map((roleGroup, i) => {
+			return {
+				type: "ACTION_ROW",
+				components: [
+					{
+						type: "SELECT_MENU",
+						customId: `color_select_menu_${i}`,
+						placeholder: "Choisis une couleur",
+						options: roleGroup.map((role) => {
+							return {
+								label: role.name,
+								value: role.id,
+							};
+						}),
+					},
+				],
+			};
+		}),
 	});
 }
