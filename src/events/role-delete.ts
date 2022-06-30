@@ -5,7 +5,7 @@ import { Role } from "discord.js";
 import updateColorRoles from "../utils/misc/updateColorRoles";
 
 const event: Event = {
-	name: "roleUpdate",
+	name: "roleDelete",
 	once: false,
 
 	run: async (oldRole: Role, newRole: Role) => {
