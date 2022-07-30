@@ -109,36 +109,7 @@ export default async function pagination(
 		}
 
 		if (buttonInteraction.customId === "back" || buttonInteraction.customId === "next") {
-			buttonInteraction
-				.update({
-					embeds: pages[page].embeds,
-					components: [
-						{
-							type: "ACTION_ROW",
-							components: [
-								{
-									type: "BUTTON",
-									customId: "back",
-									emoji: emojis[0],
-									style: "SECONDARY",
-								},
-								{
-									type: "BUTTON",
-									customId: "next",
-									emoji: emojis[1],
-									style: "SECONDARY",
-								},
-								{
-									type: "BUTTON",
-									customId: "toggle_restrict",
-									emoji: emojis[2],
-									style: restricted ? "DANGER" : "SUCCESS",
-								},
-							],
-						},
-					],
-				})
-				.catch(console.error);
+			buttonInteraction.update(pages[page]).catch(console.error);
 		}
 	});
 
