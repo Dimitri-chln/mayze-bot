@@ -139,7 +139,7 @@ export default async function pagination(
 								type: "BUTTON",
 								customId: "toggle_restrict",
 								emoji: emojis[2],
-								style: "SECONDARY",
+								style: "DANGER",
 								disabled: true,
 							},
 						],
