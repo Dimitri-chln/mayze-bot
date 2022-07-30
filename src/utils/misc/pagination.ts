@@ -60,7 +60,7 @@ export default async function pagination(
 						type: "BUTTON",
 						customId: "toggle_restrict",
 						emoji: emojis[2],
-						style: "SECONDARY",
+						style: "DANGER",
 					},
 				],
 			},
@@ -93,11 +93,9 @@ export default async function pagination(
 		switch (buttonInteraction.customId) {
 			case "back":
 				page = page > 0 ? --page : pages.length - 1;
-				buttonInteraction.update(pages[page]).catch(console.error);
 				break;
 			case "next":
 				page = page + 1 < pages.length ? ++page : 0;
-				buttonInteraction.update(pages[page]).catch(console.error);
 				break;
 			case "toggle_restrict":
 				restricted = !restricted;
@@ -108,6 +106,39 @@ export default async function pagination(
 					})
 					.catch(console.error);
 				break;
+		}
+
+		if (buttonInteraction.customId === "back" || buttonInteraction.customId === "next") {
+			buttonInteraction
+				.update({
+					embeds: pages[page].embeds,
+					components: [
+						{
+							type: "ACTION_ROW",
+							components: [
+								{
+									type: "BUTTON",
+									customId: "back",
+									emoji: emojis[0],
+									style: "SECONDARY",
+								},
+								{
+									type: "BUTTON",
+									customId: "next",
+									emoji: emojis[1],
+									style: "SECONDARY",
+								},
+								{
+									type: "BUTTON",
+									customId: "toggle_restrict",
+									emoji: emojis[2],
+									style: restricted ? "DANGER" : "SUCCESS",
+								},
+							],
+						},
+					],
+				})
+				.catch(console.error);
 		}
 	});
 
