@@ -102,7 +102,10 @@ export default async function pagination(
 			case "toggle_restrict":
 				restricted = !restricted;
 				buttonInteraction
-					.reply(restricted ? translationsData.strings.enabled() : translationsData.strings.disabled())
+					.reply({
+						content: restricted ? translationsData.strings.enabled() : translationsData.strings.disabled(),
+						ephemeral: true,
+					})
 					.catch(console.error);
 				break;
 		}
