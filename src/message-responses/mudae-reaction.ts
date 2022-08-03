@@ -15,6 +15,8 @@ const messageResponse: MessageResponse = {
 		const imRegex = /\d+ \/ \d+/;
 		if (imRegex.test(embed.footer?.text)) return;
 
+		if (message.components.length) return;
+
 		message.react("❤️");
 	},
 };
