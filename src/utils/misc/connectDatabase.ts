@@ -6,7 +6,13 @@ export default function connectDatabase() {
 		connectionString: process.env.DATABASE_URL,
 	};
 
-	Util.database = new Client(connectionString);
+	Util.database = new Client({
+		host: "localhost",
+		port: 5432,
+		user: "postgres",
+		password: process.env.DATABASE_PASSWORD,
+		database: "mayze"
+	});
 
 	Util.database.once("error", (err) => {
 		console.error(err);
