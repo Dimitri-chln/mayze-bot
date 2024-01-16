@@ -2,16 +2,11 @@ import Util from "../../Util";
 import { Client, ClientConfig } from "pg";
 
 export default function connectDatabase() {
-	const clientConfig: ClientConfig = {
-		host: "localhost",
-		port: 5432,
-		user: "postgres",
-		database: "mayze",
+	const connectionString: ClientConfig = {
+		connectionString: process.env.DATABASE_CONNECTION_STRING,
 	};
 
-	if (process.env.DATABASE_PASSWORD) clientConfig.password = process.env.DATABASE_PASSWORD;
-
-	Util.database = new Client(clientConfig);
+	Util.database = new Client(connectionString);
 
 	Util.database.once("error", (err) => {
 		console.error(err);
