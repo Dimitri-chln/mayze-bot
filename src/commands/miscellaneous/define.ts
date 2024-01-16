@@ -51,7 +51,7 @@ const command: Command = {
 									meaning.definitions[0].definition
 								}${
 									meaning.definitions[0].synonyms && meaning.definitions[0].synonyms.length
-										? `\n*${translations.strings.synonyms()}: ${meaning.definitions[0].synonyms.join(", ")}*`
+										? `\n*${translations.strings.synonyms(meaning.definitions[0].synonyms.join(", "))}*`
 										: ""
 								}`,
 						)

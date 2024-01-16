@@ -4,7 +4,6 @@ import { Client, ClientConfig } from "pg";
 export default function connectDatabase() {
 	const connectionString: ClientConfig = {
 		connectionString: process.env.DATABASE_URL,
-		ssl: process.env.ENVIRONMENT === "PRODUCTION",
 	};
 
 	Util.database = new Client(connectionString);

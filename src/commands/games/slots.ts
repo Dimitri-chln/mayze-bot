@@ -100,7 +100,10 @@ const command: Command = {
 					return;
 
 				const duration = Math.ceil(Math.random() * 10) * 60 * 1000;
-				(interaction.member as GuildMember).timeout(duration, translations.strings.reason());
+
+				(interaction.member as GuildMember).roles.add("695330946844721312").catch(console.error);
+				await sleep(duration);
+				(interaction.member as GuildMember).roles.remove("695330946844721312").catch(console.error);
 				break;
 			}
 
@@ -162,7 +165,9 @@ const command: Command = {
 
 				const member = collected.first().mentions.members.first();
 
-				await member.timeout(120_000);
+				(member as GuildMember).roles.add("695330946844721312").catch(console.error);
+				await sleep(120_000);
+				(member as GuildMember).roles.remove("695330946844721312").catch(console.error);
 
 				interaction.followUp(translations.strings.timed_out(member.user.tag));
 				break;

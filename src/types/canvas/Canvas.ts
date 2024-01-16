@@ -18,6 +18,7 @@ export default class Canvas {
 	constructor(name: string, client: Client, palettes: Collection<string, Palette>) {
 		this.name = name;
 		this.palettes = palettes;
+
 		Util.database
 			.query("SELECT * FROM canvas WHERE name = $1", [name])
 			.then(async ({ rows: [canvas] }: { rows: DatabaseCanvas[] }) => {
@@ -32,21 +33,29 @@ export default class Canvas {
 			});
 	}
 
-	static create(
+	static async create(
 		name: string,
 		client: Client,
-		database: Pg.Client,
 		palettes: Collection<string, Palette>,
 		size: number,
+		ownerType?: CanvasOwnerType,
+		ownerId?: Snowflake,
 	) {
 		const data = [];
+
 		for (let y = 0; y < size; y++) {
 			let row = [];
 			for (let x = 0; x < size; x++) row.push("blnk");
 			data.push(row);
 		}
 
-		database.query("INSERT INTO canvas VALUES ($1, $2, $3)", [name, size, JSON.stringify(data)]);
+		await Util.database.query("INSERT INTO canvas VALUES ($1, $2, $3, $4, $5)", [
+			name,
+			size,
+			JSON.stringify(data),
+			ownerType,
+			ownerId,
+		]);
 
 		return new Canvas(name, client, palettes);
 	}

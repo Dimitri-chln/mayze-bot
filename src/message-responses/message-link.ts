@@ -10,7 +10,7 @@ const messageResponse: MessageResponse = {
 	guildIds: [Util.config.MAIN_GUILD_ID],
 
 	run: async (message, translations) => {
-		const regex = /https:\/\/(?:cdn\.)?discord(?:app)?\.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})/;
+		const regex = /https:\/\/(?:cdn\.)?discord(?:app)?\.com\/channels\/(\d{18,20})\/(\d{18,20})\/(\d{18,20})/;
 		if (!regex.test(message.content)) return;
 
 		const [, guildId, channelId, messageId] = message.content.match(regex);

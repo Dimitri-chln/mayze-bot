@@ -39,7 +39,7 @@ const command: Command = {
 		const user = interaction.options.getUser("user", true);
 
 		interaction.followUp(
-			translations.strings.gift(
+			translations.strings.reply(
 				user.toString(),
 				getGift(gifts[translations.language] ?? gifts.fr),
 				interaction.user.username,

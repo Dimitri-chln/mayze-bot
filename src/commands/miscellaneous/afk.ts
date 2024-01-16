@@ -17,7 +17,7 @@ const command: Command = {
 		fr: [
 			{
 				name: "message",
-				description: "Le message a envoyer lorsque tu es mentionné",
+				description: "Le message à envoyer lorsque tu es mentionné",
 				type: "STRING",
 				required: false,
 			},
@@ -45,7 +45,7 @@ const command: Command = {
 			[interaction.user.id, new Date().toISOString(), message],
 		);
 
-		interaction.followUp(translations.strings.afk_message(interaction.user.toString(), message));
+		interaction.followUp(translations.strings.reply(interaction.user.toString(), message));
 	},
 };
 

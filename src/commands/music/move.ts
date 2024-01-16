@@ -68,9 +68,3 @@ const command: Command = {
 };
 
 export default command;
-
-const commmand = {
-	run: async (message, args, options, language, languageCode) => {},
-};
-
-module.exports = command;

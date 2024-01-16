@@ -23,18 +23,6 @@ const command: Command = {
 				type: "SUB_COMMAND",
 				options: [
 					{
-						name: "trigger",
-						description: "Le texte qui déclenche la réponse",
-						type: "STRING",
-						required: true,
-					},
-					{
-						name: "response",
-						description: "La réponse à envoyer",
-						type: "STRING",
-						required: true,
-					},
-					{
 						name: "type",
 						description: "Le type de déclencheur",
 						type: "INTEGER",
@@ -62,6 +50,18 @@ const command: Command = {
 							},
 						],
 					},
+					{
+						name: "trigger",
+						description: "Le texte qui déclenche la réponse",
+						type: "STRING",
+						required: true,
+					},
+					{
+						name: "response",
+						description: "La réponse à envoyer",
+						type: "STRING",
+						required: true,
+					},
 				],
 			},
 			{
@@ -79,7 +79,7 @@ const command: Command = {
 				],
 			},
 			{
-				name: "get",
+				name: "list",
 				description: "Obtenir la liste de toutes les réponses personnalisées",
 				type: "SUB_COMMAND",
 			},
@@ -90,18 +90,6 @@ const command: Command = {
 				description: "Add a custom response",
 				type: "SUB_COMMAND",
 				options: [
-					{
-						name: "trigger",
-						description: "The text that triggers the response",
-						type: "STRING",
-						required: true,
-					},
-					{
-						name: "response",
-						description: "The response to send",
-						type: "STRING",
-						required: true,
-					},
 					{
 						name: "type",
 						description: "The type of the trigger",
@@ -129,6 +117,18 @@ const command: Command = {
 								value: 5,
 							},
 						],
+					},
+					{
+						name: "trigger",
+						description: "The text that triggers the response",
+						type: "STRING",
+						required: true,
+					},
+					{
+						name: "response",
+						description: "The response to send",
+						type: "STRING",
+						required: true,
 					},
 				],
 			},
@@ -167,10 +167,10 @@ const command: Command = {
 				const response = interaction.options.getString("response", true);
 				const triggerType = interaction.options.getInteger("type", false) ?? 0;
 
-				await Util.database.query("INSERT INTO custom_response (trigger, response, trigger_type) VALUES ($1, $2, $3)", [
+				await Util.database.query("INSERT INTO custom_response (trigger_type, trigger, response) VALUES ($1, $2, $3)", [
+					triggerType,
 					trigger,
 					response,
-					triggerType,
 				]);
 
 				interaction.followUp(translations.strings.response_added());

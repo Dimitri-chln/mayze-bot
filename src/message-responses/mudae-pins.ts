@@ -11,7 +11,7 @@ const messageResponse: MessageResponse = {
 	run: async (message, translations) => {
 		if (message.author.id !== "432610292342587392" /* Mudae */) return;
 
-		const pinRegex = /<:(?:logo)?pin\d{1,4}:\d{18}>/g;
+		const pinRegex = /<:(?:logo)?pin\d{1,4}:\d{18,20}>/g;
 		if (!pinRegex.test(message.content)) return;
 
 		message.react("🔎");
@@ -48,7 +48,7 @@ const messageResponse: MessageResponse = {
 						},
 						color: message.guild.me.displayColor,
 						thumbnail: {
-							url: `https://cdn.discordapp.com/emojis/${pin.match(/\d{18}/)}.png`,
+							url: `https://cdn.discordapp.com/emojis/${pin.match(/\d{18,20}/)}.png`,
 						},
 					},
 				],

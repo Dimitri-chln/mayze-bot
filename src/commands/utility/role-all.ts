@@ -193,7 +193,7 @@ const command: Command = {
 
 			switch (buttonInteraction.customId) {
 				case "confirm": {
-					buttonInteraction.update({
+					await buttonInteraction.update({
 						content: translations.strings.updating(members.size.toString(), members.size > 1),
 						components: [
 							{

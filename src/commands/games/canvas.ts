@@ -20,6 +20,11 @@ const command: Command = {
 	options: {
 		fr: [
 			{
+				name: "list",
+				description: "Obtenir la liste de tous les canevas",
+				type: "SUB_COMMAND",
+			},
+			{
 				name: "join",
 				description: "Rejoindre un canevas",
 				type: "SUB_COMMAND",
@@ -32,11 +37,6 @@ const command: Command = {
 						autocomplete: true,
 					},
 				],
-			},
-			{
-				name: "list",
-				description: "Obtenir la liste de tous les canevas",
-				type: "SUB_COMMAND",
 			},
 			{
 				name: "palettes",
@@ -106,7 +106,7 @@ const command: Command = {
 					},
 					{
 						name: "y",
-						description: "L'ordonnées du pixel en haut à gauche de l'image",
+						description: "L'ordonnée du pixel en haut à gauche de l'image",
 						type: "INTEGER",
 						required: false,
 						minValue: 0,
@@ -144,6 +144,11 @@ const command: Command = {
 		],
 		en: [
 			{
+				name: "list",
+				description: "Get the list of all available canvas",
+				type: "SUB_COMMAND",
+			},
+			{
 				name: "join",
 				description: "Join a canvas",
 				type: "SUB_COMMAND",
@@ -156,11 +161,6 @@ const command: Command = {
 						autocomplete: true,
 					},
 				],
-			},
-			{
-				name: "list",
-				description: "Get the list of all available canvas",
-				type: "SUB_COMMAND",
 			},
 			{
 				name: "palettes",
@@ -289,8 +289,11 @@ const command: Command = {
 								iconURL: interaction.client.user.displayAvatarURL(),
 							},
 							color: interaction.guild.me.displayColor,
+							// U+00d7 : ×
 							description: userCanvas
-								.map((canvas) => `\`${canvas.name.replace(/-\d{18}/, "")}\` - **${canvas.size}x${canvas.size}**`)
+								.map(
+									(canvas) => `\`${canvas.name.replace(/-\d{18,20}/, "")}\` - **${canvas.size}\u00d7${canvas.size}**`,
+								)
 								.join("\n"),
 							footer: {
 								text: "✨ Mayze ✨",
@@ -951,11 +954,14 @@ const command: Command = {
 				interaction.followUp({
 					embeds: [
 						{
-							title: translations.strings.view_title(
-								canvas.name.replace(/^./, (a) => a.toUpperCase()),
-								canvas.size.toString(),
-								((endLoad - startLoad) / 1000).toString(),
-							),
+							author: {
+								name: translations.strings.view_title(
+									canvas.name.replace(/^./, (a) => a.toUpperCase()),
+									canvas.size.toString(),
+									((endLoad - startLoad) / 1000).toString(),
+								),
+								iconURL: interaction.client.user.displayAvatarURL(),
+							},
 							color: interaction.guild.me.displayColor,
 							image: {
 								url: "attachment://canvas.png",

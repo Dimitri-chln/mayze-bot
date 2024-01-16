@@ -178,7 +178,7 @@ const command: Command = {
 														displayRegex ? ` - *${w.regex ? w.regex : w.series.toLowerCase()}*` : ""
 													}`,
 											)
-											.join("\n") ?? translations.strings.no_wish(),
+											.join("\n") ?? `*${translations.strings.no_wish()}*`,
 									footer: {
 										text: "✨ Mayze ✨",
 									},

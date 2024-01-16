@@ -30,7 +30,7 @@ const event: Event = {
 							iconURL: client.user.displayAvatarURL(),
 						},
 						color: 0x010101,
-						description: `• **Ping:** \`${client.ws.ping}\`ms`,
+						description: `• **Ping:** \`${client.ws.ping}\` ms`,
 						footer: {
 							text: "✨ Mayze ✨",
 						},

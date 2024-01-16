@@ -158,11 +158,52 @@ export function hsvToRgb(h: number, s: number, v: number) {
 	return [r * 255, g * 255, b * 255];
 }
 
-function hue2rgb(p: number, q: number, t: number) {
+export function hue2rgb(p: number, q: number, t: number) {
 	if (t < 0) t += 1;
 	if (t > 1) t -= 1;
 	if (t < 1 / 6) return p + (q - p) * 6 * t;
 	if (t < 1 / 2) return q;
 	if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
 	return p;
+}
+
+// Self defined color converters
+
+export function hexToRGB(hexColor: string) {
+	const hexColorRegex = /#(\d|[a-f]){6}/i;
+
+	if (!hexColorRegex.test(hexColor)) return;
+
+	const red = parseInt(hexColor.slice(1, 3), 16);
+	const green = parseInt(hexColor.slice(3, 5), 16);
+	const blue = parseInt(hexColor.slice(5), 16);
+
+	return [red, green, blue];
+}
+
+export function decToRGB(decColor: number) {
+	if (typeof decColor !== "number" || isNaN(decColor)) return;
+
+	const red = Math.floor(decColor / (256 * 256));
+	const green = Math.floor((decColor % red) / 256);
+	const blue = decColor % green;
+
+	return [red, green, blue];
+}
+
+export function RGBToHex(RGBColor: number[]) {
+	if (RGBColor.length !== 3) return "#000000";
+
+	return (
+		"#" +
+		RGBColor[0].toString(16).replace(/^(.)$/, "0$1") +
+		RGBColor[1].toString(16).replace(/^(.)$/, "0$1") +
+		RGBColor[2].toString(16).replace(/^(.)$/, "0$1")
+	);
+}
+
+export function RGBToDec(RGBColor: number[]) {
+	if (RGBColor.length !== 3) return 0;
+
+	return 256 * 256 * RGBColor[0] + 256 * RGBColor[1] + RGBColor[2];
 }

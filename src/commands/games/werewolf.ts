@@ -5,6 +5,7 @@ import Util from "../../Util";
 import { Collection, GuildMember } from "discord.js";
 import Game from "../../types/werewolf/Game";
 import composition from "../../assets/werewolf-composition.json";
+import shuffle from "../../utils/misc/shuffle";
 
 const command: Command = {
 	name: "werewolf",
@@ -203,7 +204,7 @@ const command: Command = {
 							},
 						],
 						allowedMentions: {
-							parse: ["roles"],
+							roles: [ingameRole.id],
 						},
 					})
 					.catch(console.error)) as Message;
@@ -385,8 +386,7 @@ const command: Command = {
 									},
 									{
 										name: translations.strings.fields()[1],
-										value: players
-											.sort(() => Math.random() - 0.5)
+										value: shuffle(players)
 											.map((player) => `• ${player.role}`)
 											.join("\n"),
 										inline: true,

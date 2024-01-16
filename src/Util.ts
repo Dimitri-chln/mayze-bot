@@ -12,18 +12,16 @@ import AutocompleteHandler from "./types/structures/AutocompleteHandler";
 import Palette from "./types/canvas/Palette";
 import Canvas from "./types/canvas/Canvas";
 import Pokedex from "./types/pokemon/Pokedex";
-
 import MusicPlayer from "./types/music/MusicPlayer";
 import parseArgs from "./utils/misc/parseArgs";
 import findMember from "./utils/misc/findMember";
-
 import config from "./config.json";
 import MusicUtil from "./types/music/MusicUtil";
 import Game from "./types/werewolf/Game";
 
 export default class Util {
-	static readonly prefix = config.PREFIX;
 	static readonly config = config;
+	static readonly prefix = config.PREFIX;
 
 	static readonly client = new Client({
 		intents: new Intents([
@@ -119,7 +117,7 @@ export default class Util {
 			.filter((role) => role.rawPosition > bottomRole.rawPosition && role.rawPosition < topRole.rawPosition)
 			.sort((a, b) => b.rawPosition - a.rawPosition);
 
-		const colorGroups: typeof colorRoles[] = [];
+		const colorGroups: (typeof colorRoles)[] = [];
 		let colorGroup: typeof colorRoles = new Collection();
 
 		colorRoles.forEach((role) => {

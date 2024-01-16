@@ -276,8 +276,8 @@ const command: Command = {
 				await Util.database.query("INSERT INTO playlist VALUES ($1, $2, $3, $4)", [
 					playlistName,
 					url,
-					interaction.user.id,
 					isPrivate,
+					interaction.user.id,
 				]);
 
 				interaction.followUp(translations.strings.playlist_created());

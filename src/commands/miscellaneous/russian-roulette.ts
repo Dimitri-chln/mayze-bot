@@ -177,7 +177,7 @@ const command: Command = {
 
 				const embed = new MessageEmbed()
 					.setAuthor({
-						name: "La partie de roulette russe a commencé!",
+						name: translations.strings.started(),
 						iconURL: interaction.user.displayAvatarURL({
 							dynamic: true,
 						}),

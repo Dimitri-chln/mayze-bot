@@ -3,8 +3,8 @@ import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
 const command: Command = {
-	name: "clean-duplicates",
-	aliases: ["cleanduplicates", "clean-dupes", "cleandupes"],
+	name: "clear-duplicates",
+	aliases: ["clearduplicates", "clear-dupes", "cleardupes"],
 	description: {
 		fr: "Supprimer les musiques en double dans la queue",
 		en: "Delete the songs that are twice or more in the queue",
@@ -23,7 +23,7 @@ const command: Command = {
 	runInteraction: async (interaction, translations) => {
 		const songs = Util.musicPlayer.get(interaction.guild.id).cleanDuplicates();
 
-		interaction.followUp(translations.strings.removed(songs.length.toString(), songs.length > 1));
+		interaction.followUp(translations.strings.cleared(songs.length.toString(), songs.length > 1));
 	},
 };
 

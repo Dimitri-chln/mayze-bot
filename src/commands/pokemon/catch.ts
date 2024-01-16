@@ -8,7 +8,6 @@ import PokemonList from "../../types/pokemon/PokemonList";
 import { pokeball } from "../../assets/image-urls.json";
 import { VariationType } from "../../utils/pokemon/pokemonInfo";
 import { DatabasePokemon, DatabaseUpgrades } from "../../types/structures/Database";
-import { MegaEvolution } from "../../types/pokemon/Pokemon";
 
 const command: Command = {
 	name: "catch",

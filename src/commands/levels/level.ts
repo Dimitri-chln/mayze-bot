@@ -74,7 +74,7 @@ const command: Command = {
 					color: interaction.guild.me.displayColor,
 					fields: [
 						{
-							name: translations.strings.chat_title(),
+							name: translations.strings.text_title(),
 							value: translations.strings.description(
 								chatLevel.level.toString(),
 								chatRank.toString(),

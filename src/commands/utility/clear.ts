@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
-import { Collection, TextChannel } from "discord.js";
+import { TextChannel } from "discord.js";
 
 const command: Command = {
 	name: "clear",
@@ -38,7 +38,7 @@ const command: Command = {
 				required: false,
 			},
 			{
-				name: "regex",
+				name: "pattern",
 				description: "Ne supprimer que les messages qui correspondent au regex donné",
 				type: "STRING",
 				required: false,
@@ -66,7 +66,7 @@ const command: Command = {
 				required: false,
 			},
 			{
-				name: "regex",
+				name: "pattern",
 				description: "Delete only messages matching the given regex",
 				type: "STRING",
 				required: false,
@@ -85,12 +85,12 @@ const command: Command = {
 		if (user) messages = messages.filter((msg) => msg.author.id === user.id);
 
 		const bot = interaction.options.getBoolean("bot", false);
-		if (bot) messages = messages.filter((msg) => msg.author.bot);
+		if (bot !== null) messages = messages.filter((msg) => msg.author.bot === bot);
 
 		const regex = interaction.options.getString("regex", false);
 		if (regex) messages = messages.filter((msg) => new RegExp(regex, "i").test(msg.content));
 
-		const reply = await interaction.followUp(translations.strings.deleted(number.toString(), number > 1));
+		const reply = await interaction.followUp(translations.strings.cleared(number.toString(), number > 1));
 
 		messages.delete(reply.id);
 

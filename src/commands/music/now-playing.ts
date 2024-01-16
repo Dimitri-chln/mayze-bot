@@ -21,7 +21,6 @@ const command: Command = {
 
 	runInteraction: async (interaction, translations) => {
 		const queue = Util.musicPlayer.get(interaction.guild.id);
-		const song = queue.nowPlaying;
 
 		const reply = (await interaction.followUp({
 			content: translations.strings.loading(),

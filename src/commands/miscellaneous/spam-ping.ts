@@ -5,7 +5,7 @@ import Util from "../../Util";
 import { TextChannel } from "discord.js";
 
 const command: Command = {
-	name: "mass-ping",
+	name: "spam-ping",
 	aliases: [],
 	description: {
 		fr: "Mentionner un utilisateur en boucle",
@@ -31,7 +31,7 @@ const command: Command = {
 				type: "INTEGER",
 				required: true,
 				minValue: 1,
-				maxValue: 1000,
+				maxValue: 100,
 			},
 			{
 				name: "message",
@@ -53,7 +53,7 @@ const command: Command = {
 				type: "INTEGER",
 				required: true,
 				minValue: 1,
-				maxValue: 1000,
+				maxValue: 100,
 			},
 			{
 				name: "message",
@@ -69,7 +69,7 @@ const command: Command = {
 		const number = interaction.options.getInteger("number", true);
 		const message = interaction.options.getString("message", false);
 
-		if (number < 1 || (!message && number > 1000) || (message && number > 100))
+		if (number < 1 || (!message && number > 100) || (message && number > 100))
 			return interaction.followUp(translations.strings.invalid_number(Boolean(message)));
 
 		interaction.followUp(translations.strings.sending());
@@ -82,7 +82,7 @@ const command: Command = {
 
 		if (!message) await (interaction.channel as TextChannel).bulkDelete(await Promise.all(messages));
 
-		interaction.editReply(translations.strings.done());
+		interaction.editReply(translations.strings.sent());
 	},
 };
 

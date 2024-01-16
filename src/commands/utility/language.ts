@@ -20,16 +20,7 @@ const command: Command = {
 				description: "La nouvelle langue du bot",
 				type: "STRING",
 				required: true,
-				choices: [
-					{
-						name: "Français",
-						value: "fr",
-					},
-					{
-						name: "Anglais",
-						value: "en",
-					},
-				],
+				autocomplete: true,
 			},
 		],
 		en: [
@@ -38,16 +29,7 @@ const command: Command = {
 				description: "The new bot's language",
 				type: "STRING",
 				required: true,
-				choices: [
-					{
-						name: "French",
-						value: "fr",
-					},
-					{
-						name: "English",
-						value: "en",
-					},
-				],
+				autocomplete: true,
 			},
 		],
 	},
@@ -70,7 +52,7 @@ const command: Command = {
 			language: newLanguage,
 		});
 
-		interaction.followUp(translations.strings.language_updated());
+		interaction.followUp(translations.strings.changed());
 	},
 };
 

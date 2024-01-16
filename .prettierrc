@@ -6,5 +6,15 @@
 	"arrowParens": "always",
 	"quoteProps": "consistent",
 	"useTabs": true,
-	"printWidth": 120
+	"printWidth": 120,
+
+	"overrides": [
+		{
+			"files": "translations.ts",
+			"options": {
+				"quoteProps": "preserve",
+				"printWidth": 1000
+			}
+		}
+	]
 }

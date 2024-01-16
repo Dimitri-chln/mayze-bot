@@ -17,6 +17,7 @@ import Translations, { Language, LanguageTranslationsData } from "../structures/
 import PlayerList from "./PlayerList";
 import Util from "../../Util";
 import { sleep } from "../../utils/misc/sleep";
+import shuffle from "../../utils/misc/shuffle";
 
 export default class Game {
 	readonly guild: Guild;
@@ -66,8 +67,8 @@ export default class Game {
 			.catch(console.error);
 
 		const setup = composition.setup[this._members.size];
-		const werewolves = composition.werewolfRoles[this.language].sort(() => Math.random() - 0.5);
-		const villagers = composition.villagerRoles[this.language].sort(() => Math.random() - 0.5);
+		const werewolves = shuffle(composition.werewolfRoles[this.language]);
+		const villagers = shuffle(composition.villagerRoles[this.language]);
 		let index = 0;
 
 		while (this._members.size) {

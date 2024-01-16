@@ -17,84 +17,86 @@ import AutocompleteHandler from "./types/structures/AutocompleteHandler";
 import connectDatabase from "./utils/misc/connectDatabase";
 import startRadio from "./utils/radio/startRadio";
 
-// Database
-connectDatabase();
+(async function main() {
+	// Database
+	connectDatabase();
 
-// Commands
-const commandDirectories = Fs.readdirSync(Path.resolve(__dirname, "commands"), {
-	withFileTypes: true,
-})
-	.filter((dirent) => dirent.isDirectory() && dirent.name !== "disabled")
-	.map((dirent) => dirent.name);
+	// Commands
+	const commandDirectories = Fs.readdirSync(Path.resolve(__dirname, "commands"), {
+		withFileTypes: true,
+	})
+		.filter((dirent) => dirent.isDirectory() && dirent.name !== "disabled")
+		.map((dirent) => dirent.name);
 
-for (const directory of commandDirectories) {
-	const commandFiles = Fs.readdirSync(Path.resolve(__dirname, "commands", directory)).filter(
-		(file) => file.endsWith(".js") && file !== "__base.js",
+	for (const directory of commandDirectories) {
+		const commandFiles = Fs.readdirSync(Path.resolve(__dirname, "commands", directory)).filter(
+			(file) => file.endsWith(".js") && file !== "__base.js",
+		);
+
+		commandFiles.forEach((file) => {
+			const path = Path.resolve(__dirname, "commands", directory, file);
+			const command: Command = require(path).default ?? require(path);
+
+			command.category = directory;
+			command.path = path;
+			command.cooldowns = new Discord.Collection();
+
+			Util.commands.set(command.name, command);
+		});
+	}
+
+	// Message responses
+	const messageResponseFiles = Fs.readdirSync(Path.resolve(__dirname, "message-responses")).filter((file) =>
+		file.endsWith(".js"),
 	);
 
-	commandFiles.forEach((file) => {
-		const path = Path.resolve(__dirname, "commands", directory, file);
-		const command: Command = require(path).default ?? require(path);
+	messageResponseFiles.forEach((file) => {
+		const path = Path.resolve(__dirname, "message-responses", file);
+		const messageResponse: MessageResponse = require(path).default ?? require(path);
 
-		command.category = directory;
-		command.path = path;
-		command.cooldowns = new Discord.Collection();
-
-		Util.commands.set(command.name, command);
+		Util.messageResponses.push(messageResponse);
 	});
-}
 
-// Message responses
-const messageResponseFiles = Fs.readdirSync(Path.resolve(__dirname, "message-responses")).filter((file) =>
-	file.endsWith(".js"),
-);
+	// Reaction commands
+	const reactionCommandsFiles = Fs.readdirSync(Path.resolve(__dirname, "reaction-commands")).filter((file) =>
+		file.endsWith(".js"),
+	);
 
-messageResponseFiles.forEach((file) => {
-	const path = Path.resolve(__dirname, "message-responses", file);
-	const messageResponse: MessageResponse = require(path).default ?? require(path);
+	reactionCommandsFiles.forEach((file) => {
+		const path = Path.resolve(__dirname, "reaction-commands", file);
+		const reactionCommand: ReactionCommand = require(path).default ?? require(path);
 
-	Util.messageResponses.push(messageResponse);
-});
+		Util.reactionCommands.push(reactionCommand);
+	});
 
-// Reaction commands
-const reactionCommandsFiles = Fs.readdirSync(Path.resolve(__dirname, "reaction-commands")).filter((file) =>
-	file.endsWith(".js"),
-);
+	// Events
+	const eventFiles = Fs.readdirSync(Path.resolve(__dirname, "events")).filter((file) => file.endsWith(".js"));
 
-reactionCommandsFiles.forEach((file) => {
-	const path = Path.resolve(__dirname, "reaction-commands", file);
-	const reactionCommand: ReactionCommand = require(path).default ?? require(path);
+	eventFiles.forEach((file) => {
+		const path = Path.resolve(__dirname, "events", file);
+		const event: Event = require(path).default ?? require(path);
 
-	Util.reactionCommands.push(reactionCommand);
-});
+		if (event.once) {
+			Util.client.once(event.name, (...args) => event.run(...args).catch(console.error));
+		} else {
+			Util.client.on(event.name, (...args) => event.run(...args).catch(console.error));
+		}
+	});
 
-// Events
-const eventFiles = Fs.readdirSync(Path.resolve(__dirname, "events")).filter((file) => file.endsWith(".js"));
+	// Autocomplete
+	const autocompleteHandlerFiles = Fs.readdirSync(Path.resolve(__dirname, "autocomplete-handlers")).filter((file) =>
+		file.endsWith(".js"),
+	);
 
-eventFiles.forEach((file) => {
-	const path = Path.resolve(__dirname, "events", file);
-	const event: Event = require(path).default ?? require(path);
+	autocompleteHandlerFiles.forEach((file) => {
+		const path = Path.resolve(__dirname, "autocomplete-handlers", file);
+		const autocompleteHandler: AutocompleteHandler = require(path).default ?? require(path);
 
-	if (event.once) {
-		Util.client.once(event.name, (...args) => event.run(...args).catch(console.error));
-	} else {
-		Util.client.on(event.name, (...args) => event.run(...args).catch(console.error));
-	}
-});
+		Util.autocompleteHandlers.set(autocompleteHandler.name, autocompleteHandler);
+	});
 
-// Autocomplete
-const autocompleteHandlerFiles = Fs.readdirSync(Path.resolve(__dirname, "autocomplete-handlers")).filter((file) =>
-	file.endsWith(".js"),
-);
-
-autocompleteHandlerFiles.forEach((file) => {
-	const path = Path.resolve(__dirname, "autocomplete-handlers", file);
-	const autocompleteHandler: AutocompleteHandler = require(path).default ?? require(path);
-
-	Util.autocompleteHandlers.set(autocompleteHandler.name, autocompleteHandler);
-});
-
-PlayDl.getFreeClientID().then(async (soundCloudClientId) => {
+	// Music
+	const soundCloudClientId = await PlayDl.getFreeClientID();
 	await PlayDl.setToken({
 		youtube: {
 			cookie: process.env.YOUTUBE_COOKIE,
@@ -110,8 +112,9 @@ PlayDl.getFreeClientID().then(async (soundCloudClientId) => {
 		},
 	});
 
+	// Login to Discord
 	Util.client.login(process.env.TOKEN);
-});
 
-// Radio
-startRadio();
+	// Radio
+	// startRadio();
+})();

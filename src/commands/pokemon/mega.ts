@@ -202,7 +202,7 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.strings.evolving_title(interaction.user.tag),
+								name: translations.strings.evolving_author(interaction.user.tag),
 								iconURL: interaction.user.displayAvatarURL({
 									dynamic: true,
 								}),
@@ -246,7 +246,7 @@ const command: Command = {
 					embeds: [
 						{
 							author: {
-								name: translations.strings.author(interaction.user.tag),
+								name: translations.strings.list_author(interaction.user.tag),
 								iconURL: interaction.user.displayAvatarURL({
 									dynamic: true,
 								}),

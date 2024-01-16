@@ -3,7 +3,7 @@ import Command from "../../types/structures/Command";
 import Util from "../../Util";
 
 const command: Command = {
-	name: "8ball",
+	name: "8-ball",
 	aliases: [],
 	description: {
 		fr: "Demander quelque chose à Mayze",

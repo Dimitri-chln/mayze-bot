@@ -59,7 +59,7 @@ const command: Command = {
 
 		job.start();
 
-		interaction.followUp(translations.strings.saved());
+		interaction.followUp(translations.strings.scheduled());
 	},
 };
 

@@ -1,3 +1,4 @@
+import shuffle from "../../utils/misc/shuffle";
 import Player from "./Player";
 
 export default class PlayerList {
@@ -40,6 +41,6 @@ export default class PlayerList {
 	}
 
 	shuffle() {
-		this._players.sort(() => Math.random() - 0.5);
+		shuffle(this._players);
 	}
 }

@@ -11,22 +11,10 @@ const messageResponse: MessageResponse = {
 		if (!Util.guildConfigs.get(message.guild.id).webhookId) return;
 
 		const emojiRegex = /(?<!<a?):[\w-_]+:(?!>)/g;
-		const reactionRegex = /^\+:[\w-_]+:$/;
 
-		if (reactionRegex.test(message.content)) {
-			const [, emojiName] = message.content.match(reactionRegex);
-			const emoji = message.client.emojis.cache.find((e) => e.name === emojiName);
-			if (!emoji || !emoji.available) return;
-
-			message.delete().catch(console.error);
-			message.channel.messages
-				.fetch({ limit: 1 })
-				.then((messages) => {
-					messages.first().react(emoji).catch(console.error);
-				})
-				.catch(console.error);
-		} else if (emojiRegex.test(message.content)) {
+		if (emojiRegex.test(message.content)) {
 			const emojiNames = message.content.match(emojiRegex).map((e) => e.match(/[\w-_]+/)[0]);
+
 			if (
 				!emojiNames.every((emojiName) =>
 					message.client.emojis.cache.find((emoji) => emoji.name === emojiName && emoji.available),
@@ -35,6 +23,7 @@ const messageResponse: MessageResponse = {
 				return;
 
 			message.delete().catch(console.error);
+
 			const newMsg = message.content
 				.replace(
 					emojiRegex,
