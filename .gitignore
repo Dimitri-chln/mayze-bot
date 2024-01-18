@@ -11,5 +11,5 @@ dist/
 .env
 
 # Logs and debug
-error.log
+out.log
 debug.js
