@@ -7,6 +7,6 @@
 		"target": "es2021",
 		"downlevelIteration": true
 	},
-	"include": ["src/**/*", "src/assets/**/*.json", "src/downloads/.ts"],
+	"include": ["src/**/*", "src/assets/**/*.json"],
 	"exclude": ["node_modules/**/*"]
 }
