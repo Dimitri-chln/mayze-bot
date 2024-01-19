@@ -813,6 +813,11 @@ const translations: AllTranslations = {
 							"description": ["Show your playlists only", "Ne montrer que tes playlists"],
 						},
 					},
+					"data": {
+						"author": ["{1}'s playlists", "Playlists de {1}"],
+						"no_playlist": ["*No playlist*", "*Pas de playlist*"],
+						"footer_private": [" | 🚫 means that the playlist is private", " | 🚫 signifie que la playlist est privée"],
+					},
 				},
 				"play": {
 					"name": ["play", "jouer"],
@@ -826,6 +831,52 @@ const translations: AllTranslations = {
 							"name": ["shuffle", "mélanger"],
 							"description": ["Shuffle the playlist before playing it", "Mélanger la playlist avant de la jouer"],
 						},
+					},
+					"data": {
+						"invalid_name": ["The playlist's name can only conatain letters, numbers, - and _", "Le nom de la playlist ne peut contenir que des lettres, chiffres, - et _"],
+						"not_in_vc": ["You aren't in the same voice channel as me", "Tu n'es pas dans le même salon vocal que moi"],
+						"invalid_playlist": ["There is no playlist with this name or it's private", "Il n'y a pas de playlist avec ce nom ou elle est privée"],
+						"playlist": ["<a:blackCheck:803603780666523699> | **Playlist added[2? and shuffled:]**\n> {1} songs have been added to the queue", "<a:blackCheck:803603780666523699> | **Playlist ajoutée[2? et mélangée:]**\n> {1} musiques ont été ajoutées à la queue"],
+					},
+				},
+				"add": {
+					"name": ["add", "ajouter"],
+					"description": ["Save a new playlist", "Sauvegarder une nouvelle playlist"],
+					"options": {
+						"name": {
+							"name": ["name", "nom"],
+							"description": ["The name to give to the playlist", "Le nom à donner à la playlist"],
+						},
+						"url": {
+							"name": ["url", "url"],
+							"description": ["The link to the playlist", "Le lien de la playlist"],
+						},
+						"private": {
+							"name": ["private", "privé"],
+							"description": ["Save the playlist privately", "Sauvegarder la playlist en privé"],
+						},
+					},
+					"data": {
+						"invalid_name": ["The playlist's name can only conatain letters, numbers, - and _", "Le nom de la playlist ne peut contenir que des lettres, chiffres, - et _"],
+						"playlist_already_exists": ["A playlist with this name already exists", "Une playlist avec ce nom existe déjà"],
+						"invalid_url": ["The link is invalid", "Le lien est invalide"],
+						"playlist_created": ["<a:blackCheck:803603780666523699> | **Playlist created**", "<a:blackCheck:803603780666523699> | **Playlist créée**"],
+					},
+				},
+				"remove": {
+					"name": ["remove", "retirer"],
+					"description": ["Remove a saved playlist", "Retirer une playlist sauvegardée"],
+					"options": {
+						"name": {
+							"name": ["name", "nom"],
+							"description": ["The name of the playlist to remove", "Le nom de la playlist à retirer"],
+						},
+					},
+					"data": {
+						"invalid_name": ["The playlist's name can only conatain letters, numbers, - and _", "Le nom de la playlist ne peut contenir que des lettres, chiffres, - et _"],
+						"invalid_playlist": ["There is no playlist with this name or it's private", "Il n'y a pas de playlist avec ce nom ou elle est privée"],
+						"not_allowed": ["You aren't allowed to delete this playlist", "Tu ne peux pas supprimer cette playlist"],
+						"playlist_deleted": ["<a:blackCheck:803603780666523699> | **Playlist deleted**", "<a:blackCheck:803603780666523699> | **Playlist supprimée**"],
 					},
 				},
 			},
