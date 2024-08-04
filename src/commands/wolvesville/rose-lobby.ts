@@ -13,7 +13,7 @@ const command: Command = {
 		en: "Create and manage rose lobbies",
 	},
 	usage: "",
-	userPermissions: ["ADMINISTRATOR", "KICK_MEMBERS"],
+	userPermissions: ["KICK_MEMBERS"],
 	botPermissions: ["ADD_REACTIONS", "USE_EXTERNAL_EMOJIS", "MANAGE_ROLES"],
 	guildIds: [Util.config.MAIN_GUILD_ID],
 
