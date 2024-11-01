@@ -1,0 +1,45 @@
+import { CommandData } from "../../structures/commands/Command";
+import { ApplicationCommandOptionType, PermissionFlagsBits, PermissionsBitField, User } from "discord.js";
+import Util from "../../Util";
+
+const command: CommandData = {
+	name: "avatar",
+	aliases: ["pfp", "pp"],
+	userPermissions: new PermissionsBitField(),
+	botPermissions: new PermissionsBitField([PermissionFlagsBits.EmbedLinks]),
+
+	options: [
+		{
+			type: ApplicationCommandOptionType.User,
+			name: "user",
+			description: undefined,
+			required: false,
+		},
+	],
+
+	async run(input, args, localizations) {
+		const user = (args.get("user") as User) ?? input.user;
+
+		input.reply({
+			embeds: [
+				{
+					author: {
+						name: localizations.author.format(input.locale, user.tag),
+						icon_url: user.displayAvatarURL(),
+					},
+					color: input.guild.members.me.displayColor,
+					image: {
+						url: user.displayAvatarURL({
+							size: 4096,
+						}),
+					},
+					footer: {
+						text: Util.config.DEFAULT_EMBED_FOOTER_TEXT,
+					},
+				},
+			],
+		});
+	},
+};
+
+export default command;

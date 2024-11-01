@@ -1,9 +1,9 @@
 import {
-	ApplicationCommandOptionData,
+	ApplicationCommandOption,
 	Collection,
 	CommandInteraction,
 	Message,
-	PermissionString,
+	PermissionsString,
 	Snowflake,
 } from "discord.js";
 import { LanguageTranslationsData } from "./Translations";
@@ -14,16 +14,16 @@ interface CommandDescription {
 }
 
 interface CommandOptions {
-	fr: ApplicationCommandOptionData[];
-	en: ApplicationCommandOptionData[];
+	fr: ApplicationCommandOption[];
+	en: ApplicationCommandOption[];
 }
 
 export default interface Command {
 	readonly name: string;
 	readonly aliases?: string[];
 	readonly description: CommandDescription;
-	readonly userPermissions: PermissionString[];
-	readonly botPermissions: PermissionString[];
+	readonly userPermissions: PermissionsString[];
+	readonly botPermissions: PermissionsString[];
 	readonly options: CommandOptions;
 	readonly voice?: boolean;
 	readonly voicePlaying?: boolean;

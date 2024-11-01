@@ -353,8 +353,8 @@ export default class MusicUtil {
 		return items.reduceRight((prev, curr, i, arr) => prev + parseInt(curr) * 60 ** (arr.length - 1 - i), 0) * 1000;
 	}
 
-	static buildBar(value: number, maxValue: number) {
-		const percentage = Math.min(value / maxValue, 1);
+	static buildBar(value: number, max_value: number) {
+		const percentage = Math.min(value / max_value, 1);
 		const progress = Math.round(20 * percentage);
 		const emptyProgress = Math.round(20 * (1 - percentage));
 
@@ -363,7 +363,7 @@ export default class MusicUtil {
 
 		return `[${progressText}](https://mayze.xyz)${emptyProgressText}\n${this.millisecondsToTime(
 			value,
-		)}/${this.millisecondsToTime(maxValue)}`;
+		)}/${this.millisecondsToTime(max_value)}`;
 	}
 
 	static shuffle(array: Array<any>): Array<any> {

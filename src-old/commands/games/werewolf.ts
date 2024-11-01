@@ -387,7 +387,7 @@ const command: Command = {
 									{
 										name: translations.strings.fields()[1],
 										value: shuffle(players)
-											.map((player) => `• ${player.role}`)
+											.map((player) => `- ${player.role}`)
 											.join("\n"),
 										inline: true,
 									},

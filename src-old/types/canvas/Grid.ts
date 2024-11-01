@@ -17,7 +17,7 @@ export default class Grid {
 
 	format() {
 		const blank = Util.client.guilds.cache.get(Util.config.ADMIN_GUILD_ID).emojis.cache.find((e) => e.name === "blank");
-		let content = `**${this.canvas.name.replace(/^./, (a) => a.toUpperCase())} - (${this.x}, ${this.y})**\n`;
+		let content = `**${this.canvas.name.replace(/^./, (match) => match.toUpperCase())} - (${this.x}, ${this.y})**\n`;
 
 		for (let i = 0; i < 7; i++) {
 			content += this.pixels[i].map((color) => (color ? color.emoji : blank)).join("");

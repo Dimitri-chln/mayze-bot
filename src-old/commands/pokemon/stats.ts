@@ -71,8 +71,8 @@ const command: Command = {
 								description: "Ne montrer que les pokémons d'une certaine génération",
 								type: "INTEGER",
 								required: false,
-								minValue: 1,
-								maxValue: 8,
+								min_value: 1,
+								max_value: 8,
 							},
 							{
 								name: "variation",
@@ -152,8 +152,8 @@ const command: Command = {
 								description: "Show pokémons from a specific generation only",
 								type: "INTEGER",
 								required: false,
-								minValue: 1,
-								maxValue: 8,
+								min_value: 1,
+								max_value: 8,
 							},
 							{
 								name: "variation",

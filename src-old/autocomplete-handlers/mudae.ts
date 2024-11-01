@@ -21,7 +21,7 @@ const autocompleteHandler: AutocompleteHandler = {
 				return wishlist.map((wish) => {
 					return {
 						name: wish.series,
-						value: wish.id,
+						value: wish.id,		// Change this to the index in the list
 					};
 				});
 			},

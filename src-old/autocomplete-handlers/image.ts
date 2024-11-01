@@ -15,7 +15,7 @@ const autocompleteHandler: AutocompleteHandler = {
 
 				return types.map((type) => {
 					return {
-						name: type.replace(/^./, (a) => a.toUpperCase()),
+						name: type.replace(/^./, (match) => match.toUpperCase()),
 						value: type,
 					};
 				});

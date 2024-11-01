@@ -4095,16 +4095,7 @@
 			"speed": 55
 		},
 		"evolution_from": null,
-		"evolutions": [
-			"Vaporeon",
-			"Jolteon",
-			"Flareon",
-			"Espeon",
-			"Umbreon",
-			"Leafeon",
-			"Glaceon",
-			"Sylveon"
-		],
+		"evolutions": ["Vaporeon", "Jolteon", "Flareon", "Espeon", "Umbreon", "Leafeon", "Glaceon", "Sylveon"],
 		"mega_evolutions": [],
 		"variations": [],
 		"legendary": false,
